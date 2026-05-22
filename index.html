@@ -28,30 +28,28 @@ body{
 .portada{
     width:100%;
     height:100vh;
-    /* Se utiliza la URL directa de GitHub con los espacios convertidos en %20 */
     background-image: url("https://raw.githubusercontent.com/urbanextiendas/urbanex/main/Puerta%20al%20comercio.png");
     background-size:cover;
-    background-position:center;
+    background-position:center; /* Centrado por defecto en PC */
     background-repeat:no-repeat;
     position:relative;
 }
 
-/* CAPA OSCURA */
-
+/* CAPA OSCURA CORREGIDA */
 .portada::before{
     content:"";
     position:absolute;
     inset:0;
-    background:
-    linear-gradient(
+    /* Se redujo la opacidad a .10 y .20 para que la imagen NO se vea opaca */
+    background: linear-gradient(
         to bottom,
-        rgba(0,0,0,.15),
-        rgba(0,0,0,.45)
+        rgba(0,0,0,.10),
+        rgba(0,0,0,.20)
     );
+    z-index: 1;
 }
 
 /* ÁREA CLICKEABLE DE LA PUERTA */
-
 .puerta-link{
     position:absolute;
     top:18%;
@@ -61,18 +59,24 @@ body{
     z-index:5;
     display:block;
     cursor:pointer;
-    /* Se asegura que no tenga estilos visuales por defecto del navegador */
     background-color: rgba(255, 255, 255, 0);
 }
 
-/* RESPONSIVE */
-
+/* RESPONSIVE OPTIMIZADO PARA CELULARES */
 @media(max-width:768px){
+
+    .portada{
+        /* Muerde los lados de la imagen pero se enfoca estrictamente 
+           en el centro exacto vertical para que aparezcan las puertas */
+        background-position: 50% center; 
+    }
+
     .puerta-link{
-        top:23%;
-        left:30%;
-        width:40%;
-        height:48%;
+        /* Coordenadas adaptadas para encajar con el nuevo encuadre del celular */
+        top: 20%;
+        left: 20%;
+        width: 60%;
+        height: 65%;
     }
 }
 
