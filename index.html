@@ -1,66 +1,148 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comercio Interactivo Responsivo</title>
-    <style>
-        /* Centra el contenido en la pantalla */
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
-            font-family: sans-serif;
-        }
 
-        /* Contenedor principal adaptable */
-        .contenedor-interactivo {
-            position: relative;
-            width: 100%;
-            max-width: 800px; /* Ancho máximo en computadora */
-            height: auto;
-            display: inline-block;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-        /* Hace que la imagen ocupe el 100% del ancho disponible sin perder proporción */
-        .contenedor-interactivo img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
+<title>Loja</title>
 
-        /* Enlace invisible posicionado exactamente sobre la puerta en porcentajes */
-        .enlace-puerta {
-            position: absolute;
-            /* EJEMPLO DE COORDENADAS EN % (Debe ajustarlas según su imagen) */
-            top: 30%;       /* Distancia desde el borde superior */
-            left: 40%;      /* Distancia desde el borde izquierdo */
-            width: 20%;     /* Ancho de la puerta */
-            height: 50%;    /* Alto de la puerta */
-            
-            background-color: rgba(255, 255, 255, 0); /* Totalmente invisible */
-            cursor: pointer;
-            outline: none;
-            transition: background-color 0.3s ease;
-        }
+<style>
 
-        /* Efecto opcional para que el usuario sepa que es interactivo al pasar el mouse (PC) o pulsar (Móvil) */
-        .enlace-puerta:hover {
-            background-color: rgba(255, 255, 255, 0.15); /* Destello sutil */
-        }
-    </style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+}
+
+/* ========================= */
+/* CONTENEDOR */
+/* ========================= */
+
+.portada{
+
+    position:relative;
+
+    width:100vw;
+    height:100vh;
+
+    overflow:hidden;
+
+    background:#000;
+}
+
+/* ========================= */
+/* IMAGEN */
+/* ========================= */
+
+.portada img{
+
+    width:100%;
+    height:100%;
+
+    display:block;
+
+    object-fit:cover;
+
+    /* IMPORTANTE */
+    object-position:center center;
+}
+
+/* ========================= */
+/* ÁREA CLICKEABLE */
+/* ========================= */
+
+.puerta{
+
+    position:absolute;
+
+    z-index:10;
+
+    display:block;
+
+    cursor:pointer;
+
+    /* DESKTOP */
+
+    left:38%;
+    top:16%;
+
+    width:24%;
+    height:60%;
+}
+
+/* ========================= */
+/* CELULAR */
+/* ========================= */
+
+@media (max-width:768px){
+
+    .portada img{
+
+        /* AQUÍ ESTÁ EL CAMBIO IMPORTANTE */
+
+        object-fit:cover;
+
+        /* BAJA LA IMAGEN */
+        object-position:50% 50%;
+    }
+
+    .puerta{
+
+        /* AJUSTADO AL CELULAR */
+
+        left:20%;
+        top:22%;
+
+        width:60%;
+        height:52%;
+    }
+}
+
+/* ========================= */
+/* CELULARES PEQUEÑOS */
+/* ========================= */
+
+@media (max-width:480px){
+
+    .portada img{
+
+        object-position:50% 50%;
+    }
+
+    .puerta{
+
+        left:18%;
+        top:23%;
+
+        width:64%;
+        height:50%;
+    }
+}
+
+</style>
+
 </head>
+
 <body>
 
-    <div class="contenedor-interactivo">
-        <img src="https://raw.githubusercontent.com/urbanextiendas/urbanex/main/Puerta%20al%20comercio.png" alt="Puerta al Comercio">
-        
-        <a href="https://www.enlace-de-destino.com" class="enlace-puerta" title="Entrar al comercio"></a>
-    </div>
+<div class="portada">
+
+    <img src="Puerta al comercio.png" alt="Portada">
+
+    <!-- CAMBIE interior.html -->
+
+    <a href="interior.html" class="puerta"></a>
+
+</div>
 
 </body>
 </html>
