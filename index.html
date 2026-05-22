@@ -32,7 +32,6 @@ html, body {
 /* ================================================== */
 .portada{
     width: 100%;
-    /* Se recalculó el alto restando los nuevos 24px del pie de página */
     height: calc(100vh - 24px);
     height: calc(100svh - 24px); 
     position: relative;
@@ -47,7 +46,10 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: fill; 
+    /* Se cambia a cover para evitar el estiramiento vertical en PC */
+    object-fit: cover; 
+    /* Ajusta el eje vertical al 25% para BAJAR la imagen y centrar las puertas */
+    object-position: center 25%;
     display: block;
 }
 
@@ -70,10 +72,11 @@ html, body {
 /* ================================================== */
 .puerta-link{
     position:absolute;
-    top: 18%;
-    left: 38%;
-    width: 24%;
-    height: 58%;
+    /* Coordenadas ajustadas para el nuevo encuadre centrado */
+    top: 14%;
+    left: 37.5%;
+    width: 25%;
+    height: 64%;
     z-index: 10; 
     display:block;
     cursor:pointer;
@@ -85,11 +88,12 @@ html, body {
 /* ================================================== */
 @media(max-width:768px){
     .portada-img {
-        object-fit: cover;
+        /* En celulares se centra completamente la imagen */
         object-position: center center;
     }
 
     .puerta-link{
+        /* Coordenadas adaptadas para el encuadre móvil */
         top: 22%;
         left: 25%;
         width: 50%;
@@ -98,15 +102,13 @@ html, body {
 }
 
 /* ================================================== */
-/* PIE DE PÁGINA (HAZLO MÁS ANGOSTO)                  */
+/* PIE DE PÁGINA (FOOTER)                             */
 /* ================================================== */
 .pie-pagina {
     width: 100%;
-    /* Se redujo la altura de 40px a 24px */
     height: 24px;
     background-color: #000000;
     color: #8c8c8c;
-    /* Se ajustó el tamaño del texto para que armonice con la barra angosta */
     font-size: 11px;
     display: flex;
     justify-content: center;
