@@ -95,6 +95,11 @@ html, body {
         width: 50%;
         height: 56%;
     }
+
+    /* Ocultar banderines en celular para proteger el diseño */
+    .banderin {
+        display: none !important;
+    }
 }
 
 /* ================================================== */
@@ -116,6 +121,64 @@ html, body {
     z-index: 5;
 }
 
+/* ================================================== */
+/* BANDERINES LATERALES AGREGADOS                     */
+/* ================================================== */
+.banderin {
+    position: absolute;
+    top: 0;
+    width: 80px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 40px;
+    color: #dfb15b;
+    font-family: 'Times New Roman', Times, serif;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.banderin-izq {
+    left: 0;
+    border-right: 1px solid rgba(223, 177, 91, 0.3);
+}
+
+.banderin-der {
+    right: 0;
+    border-left: 1px solid rgba(223, 177, 91, 0.3);
+}
+
+.banderin .titulo-loja {
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.banderin .texto-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: 0px;
+    line-height: 1.8;
+    text-align: center;
+}
+
+.banderin .texto-vertical span {
+    display: block;
+    text-transform: uppercase;
+}
+
+.banderin .texto-vertical .espacio {
+    margin-bottom: 20px;
+}
+
 </style>
 
 </head>
@@ -123,8 +186,72 @@ html, body {
 <body>
 
 <section class="portada">
+    <div class="banderin banderin-izq">
+        <div class="titulo-loja">LOJA</div>
+        <div class="texto-vertical">
+            <span>L</span>
+            <span>O</span>
+            <span>J</span>
+            <span class="espacio">A</span>
+            <span>C</span>
+            <span>E</span>
+            <span>N</span>
+            <span>T</span>
+            <span>R</span>
+            <span class="espacio">O</span>
+            <span>C</span>
+            <span>O</span>
+            <span>M</span>
+            <span>E</span>
+            <span>R</span>
+            <span>C</span>
+            <span>I</span>
+            <span class="espacio">A</span>
+            <span>L</span>
+            <span>D</span>
+            <span>I</span>
+            <span>G</span>
+            <span>I</span>
+            <span>T</span>
+            <span>A</span>
+            <span>L</span>
+        </div>
+    </div>
+
     <img src="imagenes/Portada.png" alt="Portada" class="portada-img">
     <a href="interior.html" class="puerta-link"></a>
+
+    <div class="banderin banderin-der">
+        <div class="titulo-loja">LOJA</div>
+        <div class="texto-vertical">
+            <span>L</span>
+            <span>O</span>
+            <span>J</span>
+            <span class="espacio">A</span>
+            <span>C</span>
+            <span>E</span>
+            <span>N</span>
+            <span>T</span>
+            <span>R</span>
+            <span class="espacio">O</span>
+            <span>C</span>
+            <span>O</span>
+            <span>M</span>
+            <span>E</span>
+            <span>R</span>
+            <span>C</span>
+            <span>I</span>
+            <span class="espacio">A</span>
+            <span>L</span>
+            <span>D</span>
+            <span>I</span>
+            <span>G</span>
+            <span>I</span>
+            <span>T</span>
+            <span>A</span>
+            <span>L</span>
+        </div>
+    </div>
 </section>
 
 <footer class="pie-pagina">
