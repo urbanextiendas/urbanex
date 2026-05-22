@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
 <title>Loja</title>
 
@@ -35,6 +35,8 @@ body{
     height:100vh;
 
     overflow:hidden;
+
+    background:#000;
 }
 
 /* ========================= */
@@ -46,10 +48,12 @@ body{
     width:100%;
     height:100%;
 
-    object-fit:cover;
-    object-position:center;
-
     display:block;
+
+    object-fit:cover;
+
+    /* IMPORTANTE */
+    object-position:center center;
 }
 
 /* ========================= */
@@ -60,54 +64,46 @@ body{
 
     position:absolute;
 
-    z-index:5;
+    z-index:10;
 
     display:block;
 
+    cursor:pointer;
+
     /* DESKTOP */
 
-    left:39%;
-    top:14%;
+    left:38%;
+    top:16%;
 
-    width:22%;
-    height:67%;
-}
-
-/* ========================= */
-/* TABLET */
-/* ========================= */
-
-@media(max-width:1024px){
-
-    .puerta{
-
-        left:35%;
-        top:16%;
-
-        width:30%;
-        height:63%;
-    }
+    width:24%;
+    height:60%;
 }
 
 /* ========================= */
 /* CELULAR */
 /* ========================= */
 
-@media(max-width:768px){
+@media (max-width:768px){
 
     .portada img{
 
-        object-fit:contain;
-        background:#000;
+        /* AQUÍ ESTÁ EL CAMBIO IMPORTANTE */
+
+        object-fit:cover;
+
+        /* BAJA LA IMAGEN */
+        object-position:50% 50%;
     }
 
     .puerta{
 
-        left:28%;
+        /* AJUSTADO AL CELULAR */
+
+        left:20%;
         top:22%;
 
-        width:44%;
-        height:48%;
+        width:60%;
+        height:52%;
     }
 }
 
@@ -115,15 +111,20 @@ body{
 /* CELULARES PEQUEÑOS */
 /* ========================= */
 
-@media(max-width:480px){
+@media (max-width:480px){
+
+    .portada img{
+
+        object-position:50% 50%;
+    }
 
     .puerta{
 
-        left:26%;
+        left:18%;
         top:23%;
 
-        width:48%;
-        height:46%;
+        width:64%;
+        height:50%;
     }
 }
 
@@ -136,6 +137,8 @@ body{
 <div class="portada">
 
     <img src="Puerta al comercio.png" alt="Portada">
+
+    <!-- CAMBIE interior.html -->
 
     <a href="interior.html" class="puerta"></a>
 
