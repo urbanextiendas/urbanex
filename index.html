@@ -3,124 +3,71 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Loja - Portal del Comercio</title>
+<title>Loja</title>
 
 <style>
 
-/* Estilos Globales para asegurar responsividad total */
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
 
-body, html {
-    width: 100%;
-    height: 100%;
-    overflow: hidden; /* Evita scrolls accidentales en móviles */
-    background: #000;
-    font-family: Arial, Helvetica, sans-serif;
+body{
+    overflow:hidden;
+    background:#000;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
-/* ================================================== */
-/* PORTADA - ESTRUCTURA RESPONSIVA INTELIGENTE */
-/* ================================================== */
+/* ========================= */
+/* PORTADA */
+/* ========================= */
 
 .portada{
-    width: 100%;
-    height: 100vh;
+    width:100%;
+    height:100vh;
+
+    /* Su imagen original desde GitHub */
+    background-image: url("https://raw.githubusercontent.com/urbanextiendas/urbanex/main/Puerta%20al%20comercio.png");
+
+    /* 'contain' obliga a que la imagen se muestre completa en el celular sin cortes */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Imagen de fondo compartida para asegurar la perspectiva */
-.portada-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    z-index: -1;
-}
-
-/* --- CAPA OSCURA UNIFICADA Y SUAVE --- */
-.portada::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    /* Opacidad reducida para no verse opaca */
-    background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,.08),
-        rgba(0,0,0,.15)
-    );
-    z-index: 1;
-}
-
-/* --- ÁREA CLICKEABLE UNIFICADA --- */
+/* ÁREA CLICKEABLE DE LA PUERTA (COMPUTADOR) */
 .puerta-link{
     position:absolute;
+
+    top:18%;
+    left:38%;
+
+    width:24%;
+    height:58%;
+
+    z-index:5;
     display:block;
     cursor:pointer;
-    z-index:5;
-    background-color: rgba(255, 255, 255, 0); /* Totalmente invisible */
+    background-color: rgba(255, 255, 255, 0);
 }
 
-
-/* ================================================== */
-/* CONFIGURACIÓN PARA COMPUTADORAS (PANTALLAS ANCHAS) */
-/* ================================================== */
-@media (min-width: 1025px) {
-
-    .portada-bg {
-        /* Muestra el panorama ultra-ancho original */
-        background-image: url("https://raw.githubusercontent.com/urbanextiendas/urbanex/main/Puerta%20al%20comercio.png");
-        background-position: center;
-    }
+/* RESPONSIVE EXACTO PARA CELULARES (PANTALLAS VERTICALES) */
+@media(max-width:768px){
 
     .puerta-link{
-        /* Coordenadas precisas para el portal central en PC */
-        top: 20%;
-        left: 36%;
-        width: 28%;
-        height: 65%;
-    }
-}
-
-
-/* ================================================== */
-/* CONFIGURACIÓN PARA CELULARES (PANTALLAS VERTICALES) */
-/* ================================================== */
-@media (max-width: 1024px) {
-
-    .portada-bg {
-        /* ÚNICAMENTE PARA MÓVILES: UTILIZA LA VERSIÓN ADAPTADA VERTICALMENTE */
-        /* Esta imagen redistribuye los elementos para que el portal sea el foco y la ciudad siga visible */
-        background-image: url("https://replicate.delivery/xpbkg/9N6H6Z3g8pT1O5R5h6N6/output.png");
-        /* Centrado estricto y cover para no estirar */
-        background-size: cover;
-        background-position: 50% center;
-    }
-
-    .puerta-link{
-        /* Coordenadas adaptadas para el portal más grande y centrado en celular */
-        top: 25%;
-        left: 20%;
-        width: 60%;
-        height: 55%;
-    }
-}
-
-/* Ajustes menores para tablets */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .puerta-link{
-        width: 40%;
-        left: 30%;
+        /* Coordenadas recalculadas para cuando la imagen se encoge en el centro del celular */
+        top: 37%;
+        left: 38%;
+        width: 24%;
+        height: 26%;
     }
 }
 
@@ -130,10 +77,9 @@ body, html {
 
 <body>
 
-    <section class="portada">
-        <a href="#" class="puerta-link" title="Ingresar al Comercio"></a>
-        <div class="portada-bg"></div>
-    </section>
+<section class="portada">
+    <a href="interior.html" class="puerta-link" title="Ingresar al Comercio"></a>
+</section>
 
 </body>
 </html>
