@@ -22,7 +22,7 @@ html, body {
     width: 100%;
     min-height: 100%;
     background: #000;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Times New Roman', Times, serif, Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
 }
@@ -32,7 +32,6 @@ html, body {
 /* ================================================== */
 .portada{
     width: 100%;
-    /* Se recalculó el alto restando los nuevos 24px del pie de página */
     height: calc(100vh - 24px);
     height: calc(100svh - 24px); 
     position: relative;
@@ -58,11 +57,154 @@ html, body {
     inset:0;
     background: linear-gradient(
         to bottom,
-        rgba(0,0,0,.10),
-        rgba(0,0,0,.25)
+        rgba(0,0,0,.20),
+        rgba(0,0,0,.40)
     );
     z-index: 1;
     pointer-events: none;
+}
+
+/* ================================================== */
+/* CAPAS DE TEXTO PROFESIONAL Y LEGIBLE               */
+/* ================================================== */
+
+/* Encabezado Superior (Arco de la puerta) */
+.header-branding {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.header-branding h1 {
+    color: #e5c158;
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.9), 0 4px 10px rgba(0,0,0,0.7);
+    margin-bottom: 4px;
+}
+
+.header-branding p {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+}
+
+/* Eslogan Izquierdo (Sobre pilar izquierdo) */
+.slogan-lateral {
+    position: absolute;
+    top: 40%;
+    left: 5%;
+    width: 25%;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.slogan-lateral h2 {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    line-height: 1.4;
+    text-transform: uppercase;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.95);
+}
+
+.slogan-lateral h2 span {
+    color: #e5c158;
+    display: block;
+    font-size: 26px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+/* Características / Beneficios (Sobre pilar derecho) */
+.caracteristicas-lista {
+    position: absolute;
+    top: 35%;
+    right: 5%;
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.item-caracteristica {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 8px 12px;
+    border-radius: 6px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-left: 2px solid #e5c158;
+}
+
+.item-caracteristica svg {
+    width: 20px;
+    height: 20px;
+    fill: #e5c158;
+    flex-shrink: 0;
+}
+
+.item-caracteristica span {
+    color: #ffffff;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+/* Botón de Registro Superior Derecho */
+.registro-contenedor {
+    position: absolute;
+    top: 4%;
+    right: 4%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 12;
+}
+
+.registro-texto {
+    color: #ffffff;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+}
+
+.btn-registro {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid #e5c158;
+    color: #e5c158;
+    text-decoration: none;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease;
+}
+
+.btn-registro:hover {
+    background: #e5c158;
+    color: #000000;
+    box-shadow: 0 0 15px rgba(229, 193, 88, 0.4);
 }
 
 /* ================================================== */
@@ -78,6 +220,28 @@ html, body {
     display:block;
     cursor:pointer;
     background-color: rgba(255, 255, 255, 0);
+    transition: transform 0.3s ease;
+}
+
+/* Elemento visual para invitar a hacer clic */
+.puerta-link::after {
+    content: "ENTRAR";
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #e5c158;
+    letter-spacing: 3px;
+    font-size: 14px;
+    border-bottom: 1px solid #e5c158;
+    padding-bottom: 4px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    text-shadow: 0 2px 4px #000;
+}
+
+.puerta-link:hover::after {
+    opacity: 1;
 }
 
 /* ================================================== */
@@ -95,18 +259,46 @@ html, body {
         width: 50%;
         height: 56%;
     }
+
+    .header-branding h1 {
+        font-size: 22px;
+    }
+
+    .header-branding p {
+        font-size: 11px;
+    }
+
+    /* Ocultar elementos laterales en móvil para evitar saturación y mantener limpieza */
+    .slogan-lateral, .caracteristicas-lista {
+        display: none;
+    }
+
+    .registro-contenedor {
+        top: auto;
+        bottom: 5%;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .btn-registro {
+        padding: 6px 14px;
+        font-size: 11px;
+    }
 }
 
 /* ================================================== */
-/* PIE DE PÁGINA (HAZLO MÁS ANGOSTO)                  */
+/* PIE DE PÁGINA                                      */
 /* ================================================== */
 .pie-pagina {
     width: 100%;
-    /* Se redujo la altura de 40px a 24px */
     height: 24px;
     background-color: #000000;
     color: #8c8c8c;
-    /* Se ajustó el tamaño del texto para que armonice con la barra angosta */
     font-size: 11px;
     display: flex;
     justify-content: center;
@@ -114,6 +306,7 @@ html, body {
     text-align: center;
     border-top: 1px solid #1a1a1a;
     z-index: 5;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 </style>
@@ -124,6 +317,40 @@ html, body {
 
 <section class="portada">
     <img src="imagenes/Portada.png" alt="Portada" class="portada-img">
+
+    <div class="header-branding">
+        <h1>Loja</h1>
+        <p>Centro Comercial Digital</p>
+    </div>
+
+    <div class="slogan-lateral">
+        <h2>Todos los comercios <span>de Loja</span> en un solo lugar</h2>
+    </div>
+
+    <div class="caracteristicas-lista">
+        <div class="item-caracteristica">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            <span>Cerca de ti</span>
+        </div>
+        <div class="item-caracteristica">
+            <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+            <span>Las mejores ofertas</span>
+        </div>
+        <div class="item-caracteristica">
+            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            <span>Negocios confiables</span>
+        </div>
+        <div class="item-caracteristica">
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+            <span>Comunidad local</span>
+        </div>
+    </div>
+
+    <div class="registro-contenedor">
+        <span class="registro-texto">¿Eres propietario?</span>
+        <a href="registro.html" class="btn-registro">Registra tu negocio</a>
+    </div>
+
     <a href="interior.html" class="puerta-link"></a>
 </section>
 
