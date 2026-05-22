@@ -9,17 +9,17 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
 /* ================================================== */
-/* RESETEO GLOBAL (HABILITA EL GESTO DE REFRESCAR)   */
+/* RESETEO GLOBAL Y FUENTES BASE                      */
 /* ================================================== */
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 html, body {
@@ -32,7 +32,7 @@ html, body {
 }
 
 /* ================================================== */
-/* PORTADA (AJUSTE EXACTO PARA CUALQUIER PANTALLA)    */
+/* PORTADA Y CAPAS DE ENTORNO                         */
 /* ================================================== */
 .portada{
     width: 100%;
@@ -43,7 +43,6 @@ html, body {
     background-color: #000;
 }
 
-/* Control adaptativo de la imagen */
 .portada-img {
     position: absolute;
     top: 0;
@@ -54,35 +53,34 @@ html, body {
     display: block;
 }
 
-/* CAPA OSCURA DE CONTRASTE REFINADO */
+/* Capa de contraste que mejora la legibilidad sin alterar el arte original */
 .portada::before{
-    content:"";
-    position:absolute;
-    inset:0;
+    content: "";
+    position: absolute;
+    inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(0,0,0,.40) 0%,
-        rgba(0,0,0,.15) 40%,
-        rgba(0,0,0,.20) 70%,
-        rgba(0,0,0,.60) 100%
+        rgba(0,0,0,0.45) 0%,
+        rgba(0,0,0,0.10) 30%,
+        rgba(0,0,0,0.10) 70%,
+        rgba(0,0,0,0.55) 100%
     );
     z-index: 1;
     pointer-events: none;
 }
 
 /* ================================================== */
-/* TIPOGRAFÍA Y CAPAS DEL DISEÑO DE ESCRITORIO       */
+/* COMPORTAMIENTO PARA COMPUTADORES (ESCRITORIO)     */
 /* ================================================== */
 
-/* Encabezado Superior (Arco de la puerta) */
+/* Identidad Central Superior */
 .header-branding {
     position: absolute;
     top: 5%;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    width: 90%;
-    max-width: 650px;
+    width: 40%;
     z-index: 3;
     pointer-events: none;
 }
@@ -90,12 +88,12 @@ html, body {
 .header-branding h1 {
     font-family: 'Cinzel', 'Times New Roman', serif;
     color: #e5c158;
-    font-size: 34px;
+    font-size: 38px;
     font-weight: 600;
-    letter-spacing: 6px;
+    letter-spacing: 7px;
     text-transform: uppercase;
     text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 4px 12px rgba(0,0,0,0.8);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .header-branding p {
@@ -108,44 +106,50 @@ html, body {
     text-shadow: 0 2px 5px rgba(0,0,0,0.95);
 }
 
-/* Eslogan Lateral Izquierdo (Sobre pilar izquierdo) */
-.slogan-lateral {
+/* Eslogan en móvil se oculta en escritorio para usar la estructura lateral */
+.slogan-movil {
+    display: none;
+}
+
+/* Eslogan Lateral Izquierdo (Ubicación exacta del render) */
+.slogan-lateral-pc {
     position: absolute;
-    top: 42%;
-    left: 4%;
-    width: 26%;
+    top: 15%;
+    left: 28%;
+    width: 13%;
+    text-align: center;
     z-index: 3;
     pointer-events: none;
 }
 
-.slogan-lateral h2 {
+.slogan-lateral-pc h2 {
     font-family: 'Cinzel', 'Times New Roman', serif;
     color: #ffffff;
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 400;
-    letter-spacing: 1.5px;
-    line-height: 1.5;
+    letter-spacing: 1px;
+    line-height: 1.6;
     text-transform: uppercase;
-    text-shadow: 0 3px 8px rgba(0,0,0,0.98);
+    text-shadow: 0 3px 6px rgba(0,0,0,0.95);
 }
 
-.slogan-lateral h2 span {
+.slogan-lateral-pc h2 span {
     color: #e5c158;
-    display: block;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
-    margin: 4px 0;
+    display: block;
+    margin: 6px 0;
 }
 
-/* Características / Beneficios (Sobre pilar derecho) */
+/* Características / Beneficios Derecho (Ubicación exacta del render) */
 .caracteristicas-lista {
     position: absolute;
-    top: 36%;
-    right: 4%;
-    width: 26%;
+    top: 38%;
+    right: 18%;
+    width: 22%;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
     z-index: 3;
     pointer-events: none;
 }
@@ -153,14 +157,10 @@ html, body {
 .item-caracteristica {
     display: flex;
     align-items: center;
-    gap: 14px;
-    background: rgba(0, 0, 0, 0.55);
-    padding: 10px 16px;
+    gap: 16px;
+    background: linear-gradient(90deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.65) 20%, rgba(0,0,0,0.65) 90%, rgba(0,0,0,0.0) 100%);
+    padding: 8px 12px;
     border-radius: 4px;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    border-left: 3px solid #e5c158;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 }
 
 .item-caracteristica svg {
@@ -168,23 +168,24 @@ html, body {
     height: 18px;
     fill: #e5c158;
     flex-shrink: 0;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8));
 }
 
 .item-caracteristica span {
     font-family: 'Cinzel', 'Times New Roman', serif;
     color: #ffffff;
-    font-size: 11.5px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-weight: 600;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.95);
 }
 
-/* Botón de Registro Superior Derecho */
+/* Barra de Registro Superior Derecha */
 .registro-contenedor {
     position: absolute;
-    top: 4.5%;
-    right: 4%;
+    top: 5%;
+    right: 18%;
     display: flex;
     align-items: center;
     gap: 15px;
@@ -193,50 +194,47 @@ html, body {
 
 .registro-texto {
     color: #ffffff;
-    font-size: 12.5px;
+    font-size: 13px;
     letter-spacing: 1px;
     text-shadow: 0 2px 4px rgba(0,0,0,0.95);
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .btn-registro {
     display: inline-block;
-    padding: 9px 18px;
+    padding: 8px 18px;
     border: 1px solid #e5c158;
     color: #e5c158;
     text-decoration: none;
-    font-size: 12.5px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 1px;
     border-radius: 4px;
-    background: rgba(0, 0, 0, 0.7);
-    font-weight: 400;
+    background: rgba(0, 0, 0, 0.6);
     transition: all 0.3s ease;
 }
 
 .btn-registro:hover {
     background: #e5c158;
     color: #000000;
-    box-shadow: 0 0 15px rgba(229, 193, 88, 0.5);
+    box-shadow: 0 0 12px rgba(229, 193, 88, 0.4);
 }
 
-/* ================================================== */
-/* ÁREA CLICKEABLE DE LA PUERTA                       */
-/* ================================================== */
+/* Área Interactiva de la Puerta Central */
 .puerta-link{
-    position:absolute;
+    position: absolute;
     top: 18%;
-    left: 38%;
-    width: 24%;
+    left: 41%;
+    width: 18%;
     height: 58%;
     z-index: 10; 
-    display:block;
-    cursor:pointer;
+    display: block;
+    cursor: pointer;
     background-color: rgba(255, 255, 255, 0);
 }
 
 .puerta-link::after {
-    content: "ENTRAR";
+    content: "INGRESA";
     position: absolute;
     bottom: 8%;
     left: 50%;
@@ -257,14 +255,57 @@ html, body {
 }
 
 /* ================================================== */
-/* REDISEÑO EXCLUSIVO DE ALTA GAMA PARA SMARTPHONES    */
+/* DISPOSITIVOS MÓVILES (SMARTPHONES Y TABLETS)        */
 /* ================================================== */
+@media(max-width:1024px){
+    /* Ajustes intermedios para portátiles pequeños o tablets */
+    .slogan-lateral-pc { left: 22%; width: 18%; top: 20%; }
+    .caracteristicas-lista { right: 10%; width: 28%; }
+    .registro-contenedor { right: 5%; }
+}
+
 @media(max-width:768px){
+    /* Imagen en formato cover para pantallas verticales */
     .portada-img {
         object-fit: cover;
         object-position: center center;
     }
 
+    /* Ocultación del módulo lateral exclusivo de PC */
+    .slogan-lateral-pc {
+        display: none;
+    }
+
+    /* Activación y estilizado del eslogan adaptado a móvil */
+    .slogan-movil {
+        display: inline-block;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 6px 14px;
+        border-radius: 20px;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        border: 1px solid rgba(229, 193, 88, 0.15);
+        margin-top: 6px;
+        width: auto;
+    }
+
+    .slogan-movil h2 {
+        font-family: 'Cinzel', 'Times New Roman', serif;
+        color: #ffffff;
+        font-size: 11px;
+        letter-spacing: 1px;
+        line-height: 1.4;
+        text-transform: uppercase;
+    }
+
+    .slogan-movil h2 span {
+        color: #e5c158;
+        display: inline;
+        font-size: 11.5px;
+        font-weight: 700;
+    }
+
+    /* Ajuste del marco táctil de la puerta en pantallas táctiles */
     .puerta-link{
         top: 22%;
         left: 20%;
@@ -273,63 +314,32 @@ html, body {
     }
     
     .puerta-link::after {
+        content: "INGRESAR";
         opacity: 1;
         font-size: 11px;
         bottom: 2%;
     }
 
-    /* Contenedor Superior Unificado: Evita encimarse con la arquitectura de la puerta */
+    /* Encabezado Superior Unificado */
     .header-branding {
         top: 4%;
-        width: 95%;
+        width: 90%;
     }
 
     .header-branding h1 {
-        font-size: 26px;
+        font-size: 24px;
         letter-spacing: 4px;
-        margin-bottom: 2px;
     }
 
     .header-branding p {
-        font-size: 11px;
+        font-size: 10.5px;
         letter-spacing: 2px;
-        margin-bottom: 8px;
     }
 
-    /* MEJORA CLAVE: El eslogan ahora se segmenta elegantemente en dos líneas,
-       con tipografía controlada, fondo traslúcido estilizado y tamaño armónico */
-    .slogan-lateral {
-        position: relative;
-        top: auto;
-        left: auto;
-        margin: 0 auto;
-        width: auto;
-        display: inline-block;
-        background: rgba(0, 0, 0, 0.45);
-        padding: 6px 16px;
-        border-radius: 20px;
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-        border: 1px solid rgba(229, 193, 88, 0.15);
-    }
-
-    .slogan-lateral h2 {
-        font-size: 11px;
-        letter-spacing: 1.5px;
-        line-height: 1.4;
-    }
-
-    .slogan-lateral h2 span {
-        display: inline;
-        font-size: 12px;
-        font-weight: 700;
-        margin: 0 4px;
-    }
-
-    /* Distribución balanceada de beneficios en la sección del suelo reflectante */
+    /* Reubicación horizontal de los beneficios en la base del render */
     .caracteristicas-lista {
         top: auto;
-        bottom: 12%;
+        bottom: 11%;
         left: 5%;
         width: 90%;
         flex-direction: row;
@@ -339,7 +349,7 @@ html, body {
     }
 
     .item-caracteristica {
-        padding: 6px 10px;
+        padding: 5px 8px;
         border-left: none;
         border-bottom: 2px solid #e5c158;
         background: rgba(0, 0, 0, 0.75);
@@ -356,7 +366,7 @@ html, body {
         letter-spacing: 1px;
     }
 
-    /* Sección de conversión inferior limpia y espaciada */
+    /* Módulo de registro adaptado formalmente en la zona inferior */
     .registro-contenedor {
         top: auto;
         bottom: 2.5%;
@@ -366,29 +376,27 @@ html, body {
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         width: 95%;
     }
 
     .registro-texto {
-        font-size: 11.5px;
+        font-size: 11px;
         letter-spacing: 0.5px;
     }
 
     .btn-registro {
         padding: 6px 12px;
-        font-size: 11px;
+        font-size: 10.5px;
         letter-spacing: 0.5px;
     }
 }
 
-/* Ajustes de precisión para pantallas muy compactas (ej. iPhone SE) */
 @media(max-width:375px) {
-    .header-branding h1 { font-size: 22px; }
-    .slogan-lateral h2 { font-size: 10px; }
-    .slogan-lateral h2 span { font-size: 11px; }
+    .header-branding h1 { font-size: 21px; }
+    .slogan-movil h2 { font-size: 10px; }
     .item-caracteristica span { font-size: 8px; }
-    .caracteristicas-lista { bottom: 13%; }
+    .caracteristicas-lista { bottom: 12%; }
 }
 
 /* ================================================== */
@@ -422,9 +430,13 @@ html, body {
         <h1>Loja</h1>
         <p>Centro Comercial Digital</p>
         
-        <div class="slogan-lateral">
+        <div class="slogan-movil">
             <h2>Todos los comercios <span>de Loja</span> en un solo lugar</h2>
         </div>
+    </div>
+
+    <div class="slogan-lateral-pc">
+        <h2>Todos los comercios <span>de Loja</span> en un solo lugar</h2>
     </div>
 
     <div class="caracteristicas-lista">
@@ -447,8 +459,8 @@ html, body {
     </div>
 
     <div class="registro-contenedor">
-        <span class="registro-texto">¿Eres propietario?</span>
-        <a href="registro.html" class="btn-registro">Registra tu negocio</a>
+        <span class="registro-texto">¿Es propietario?</span>
+        <a href="registro.html" class="btn-registro">Registre su negocio</a>
     </div>
 
     <a href="interior.html" class="puerta-link"></a>
