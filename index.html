@@ -3,22 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imagen Interactiva</title>
+    <title>Comercio Interactivo Responsivo</title>
+    <style>
+        /* Centra el contenido en la pantalla */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: sans-serif;
+        }
+
+        /* Contenedor principal adaptable */
+        .contenedor-interactivo {
+            position: relative;
+            width: 100%;
+            max-width: 800px; /* Ancho máximo en computadora */
+            height: auto;
+            display: inline-block;
+        }
+
+        /* Hace que la imagen ocupe el 100% del ancho disponible sin perder proporción */
+        .contenedor-interactivo img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Enlace invisible posicionado exactamente sobre la puerta en porcentajes */
+        .enlace-puerta {
+            position: absolute;
+            /* EJEMPLO DE COORDENADAS EN % (Debe ajustarlas según su imagen) */
+            top: 30%;       /* Distancia desde el borde superior */
+            left: 40%;      /* Distancia desde el borde izquierdo */
+            width: 20%;     /* Ancho de la puerta */
+            height: 50%;    /* Alto de la puerta */
+            
+            background-color: rgba(255, 255, 255, 0); /* Totalmente invisible */
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Efecto opcional para que el usuario sepa que es interactivo al pasar el mouse (PC) o pulsar (Móvil) */
+        .enlace-puerta:hover {
+            background-color: rgba(255, 255, 255, 0.15); /* Destello sutil */
+        }
+    </style>
 </head>
 <body>
 
-    <!-- El atributo usemap vincula la imagen con el mapa interactivo -->
-    <img src="Puerta al comercio.png" alt="Puerta al comercio" usemap="#mapa-puerta">
-
-    <!-- Definición del mapa interactivo -->
-    <map name="mapa-puerta">
-        <!-- 
-            shape="rect" define una zona interactiva rectangular.
-            coords="x1, y1, x2, y2" representa las esquinas superior-izquierda e inferior-derecha de la puerta en píxeles.
-            href es la dirección de la página a la que desea redirigir.
-        -->
-        <area shape="rect" coords="100,150,300,450" href="https://www.enlace-de-destino.com" alt="Entrar al comercio">
-    </map>
+    <div class="contenedor-interactivo">
+        <img src="https://raw.githubusercontent.com/urbanextiendas/urbanex/main/Puerta%20al%20comercio.png" alt="Puerta al Comercio">
+        
+        <a href="https://www.enlace-de-destino.com" class="enlace-puerta" title="Entrar al comercio"></a>
+    </div>
 
 </body>
 </html>
