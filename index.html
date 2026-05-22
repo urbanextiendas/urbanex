@@ -28,11 +28,17 @@ body{
 .portada{
     width:100%;
     height:100vh;
-    /* Mantiene la ruta exacta del repositorio en GitHub */
-    background-image: url("https://raw.githubusercontent.com/urbanextiendas/urbanex/main/Centro%20comercial.png");
+    
+    /* Se cambió el nombre y la ruta de la imagen según lo solicitado */
+    background-image: url("imagenes/Portada.png");
+    
+    /* Mantiene la imagen ocupando toda la pantalla en cualquier dispositivo */
     background-size: cover;
-    background-position: center;
+    
+    /* Centra la imagen horizontal y verticalmente para que las puertas no se pierdan en móviles */
+    background-position: center center;
     background-repeat: no-repeat;
+    
     position: relative;
 }
 
@@ -46,7 +52,7 @@ body{
         rgba(0,0,0,.10),
         rgba(0,0,0,.25)
     );
-    z-index: 1; /* Capa intermedia por encima del fondo pero por debajo del enlace */
+    z-index: 1;
 }
 
 /* ÁREA CLICKEABLE DE LA PUERTA (COMPUTADORA) */
@@ -56,7 +62,7 @@ body{
     left:38%;
     width:24%;
     height:58%;
-    z-index:10; /* Prioridad alta para garantizar que el clic funcione siempre */
+    z-index:10; /* Asegura que quede por encima de la capa oscura */
     display:block;
     cursor:pointer;
     background-color: rgba(255, 255, 255, 0); /* Totalmente transparente */
@@ -65,6 +71,7 @@ body{
 /* RESPONSIVE AJUSTADO PARA EL ENCUADRE EN CELULARES */
 @media(max-width:768px){
     .puerta-link{
+        /* Coordenadas adaptadas para mantener el enlace exactamente sobre las puertas en pantallas móviles */
         top: 20%;
         left: 25%;
         width: 50%;
