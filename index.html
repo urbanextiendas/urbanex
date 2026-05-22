@@ -7,6 +7,10 @@
 
 <title>Urbanex</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
 
 /* ================================================== */
@@ -22,7 +26,7 @@ html, body {
     width: 100%;
     min-height: 100%;
     background: #000;
-    font-family: 'Times New Roman', Times, serif, Arial, Helvetica, sans-serif;
+    font-family: 'Montserrat', sans-serif;
     display: flex;
     flex-direction: column;
 }
@@ -50,22 +54,24 @@ html, body {
     display: block;
 }
 
-/* CAPA OSCURA REFINADA PARA MEJORAR CONTRASTE DE TEXTOS */
+/* CAPA OSCURA DE CONTRASTE REFINADO */
 .portada::before{
     content:"";
     position:absolute;
     inset:0;
     background: linear-gradient(
         to bottom,
-        rgba(0,0,0,.30),
-        rgba(0,0,0,.50)
+        rgba(0,0,0,.40) 0%,
+        rgba(0,0,0,.15) 40%,
+        rgba(0,0,0,.20) 70%,
+        rgba(0,0,0,.60) 100%
     );
     z-index: 1;
     pointer-events: none;
 }
 
 /* ================================================== */
-/* CAPAS DE TEXTO PROFESIONAL Y LEGIBLE (ESCRITORIO)  */
+/* TIPOGRAFÍA Y CAPAS DEL DISEÑO DE ESCRITORIO       */
 /* ================================================== */
 
 /* Encabezado Superior (Arco de la puerta) */
@@ -76,34 +82,36 @@ html, body {
     transform: translateX(-50%);
     text-align: center;
     width: 90%;
-    max-width: 600px;
+    max-width: 650px;
     z-index: 3;
     pointer-events: none;
 }
 
 .header-branding h1 {
+    font-family: 'Cinzel', 'Times New Roman', serif;
     color: #e5c158;
-    font-size: 32px;
-    font-weight: 400;
-    letter-spacing: 4px;
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: 6px;
     text-transform: uppercase;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 4px 10px rgba(0,0,0,0.8);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 4px 12px rgba(0,0,0,0.8);
     margin-bottom: 4px;
 }
 
 .header-branding p {
+    font-family: 'Cinzel', 'Times New Roman', serif;
     color: #ffffff;
-    font-size: 14px;
-    font-weight: 300;
-    letter-spacing: 2px;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.95);
+    text-shadow: 0 2px 5px rgba(0,0,0,0.95);
 }
 
 /* Eslogan Lateral Izquierdo (Sobre pilar izquierdo) */
 .slogan-lateral {
     position: absolute;
-    top: 40%;
+    top: 42%;
     left: 4%;
     width: 26%;
     z-index: 3;
@@ -111,27 +119,28 @@ html, body {
 }
 
 .slogan-lateral h2 {
+    font-family: 'Cinzel', 'Times New Roman', serif;
     color: #ffffff;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 400;
-    letter-spacing: 1px;
-    line-height: 1.4;
+    letter-spacing: 1.5px;
+    line-height: 1.5;
     text-transform: uppercase;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.95);
+    text-shadow: 0 3px 8px rgba(0,0,0,0.98);
 }
 
 .slogan-lateral h2 span {
     color: #e5c158;
     display: block;
-    font-size: 26px;
-    font-weight: bold;
-    margin: 5px 0;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 4px 0;
 }
 
 /* Características / Beneficios (Sobre pilar derecho) */
 .caracteristicas-lista {
     position: absolute;
-    top: 35%;
+    top: 36%;
     right: 4%;
     width: 26%;
     display: flex;
@@ -144,36 +153,37 @@ html, body {
 .item-caracteristica {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 10px 14px;
-    border-radius: 6px;
+    gap: 14px;
+    background: rgba(0, 0, 0, 0.55);
+    padding: 10px 16px;
+    border-radius: 4px;
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border-left: 3px solid #e5c158;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 }
 
 .item-caracteristica svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     fill: #e5c158;
     flex-shrink: 0;
 }
 
 .item-caracteristica span {
+    font-family: 'Cinzel', 'Times New Roman', serif;
     color: #ffffff;
-    font-size: 12px;
+    font-size: 11.5px;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-weight: bold;
+    letter-spacing: 2px;
+    font-weight: 600;
     text-shadow: 0 1px 3px rgba(0,0,0,0.9);
 }
 
 /* Botón de Registro Superior Derecho */
 .registro-contenedor {
     position: absolute;
-    top: 4%;
+    top: 4.5%;
     right: 4%;
     display: flex;
     align-items: center;
@@ -183,22 +193,24 @@ html, body {
 
 .registro-texto {
     color: #ffffff;
-    font-size: 13px;
+    font-size: 12.5px;
     letter-spacing: 1px;
     text-shadow: 0 2px 4px rgba(0,0,0,0.95);
+    font-weight: 300;
 }
 
 .btn-registro {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 9px 18px;
     border: 1px solid #e5c158;
     color: #e5c158;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 12.5px;
     text-transform: uppercase;
     letter-spacing: 1px;
     border-radius: 4px;
     background: rgba(0, 0, 0, 0.7);
+    font-weight: 400;
     transition: all 0.3s ease;
 }
 
@@ -230,8 +242,9 @@ html, body {
     left: 50%;
     transform: translateX(-50%);
     color: #e5c158;
+    font-family: 'Cinzel', serif;
     letter-spacing: 4px;
-    font-size: 14px;
+    font-size: 13px;
     border-bottom: 1px solid #e5c158;
     padding-bottom: 4px;
     opacity: 0;
@@ -244,67 +257,79 @@ html, body {
 }
 
 /* ================================================== */
-/* OPTIMIZACIÓN EXCLUSIVA PARA DISPOSITIVOS MÓVILES    */
+/* REDISEÑO EXCLUSIVO DE ALTA GAMA PARA SMARTPHONES    */
 /* ================================================== */
 @media(max-width:768px){
-    /* Se cambia a 'cover' para que la imagen abarque perfectamente la pantalla vertical */
     .portada-img {
         object-fit: cover;
         object-position: center center;
     }
 
-    /* Redefinición del arco de entrada en el móvil */
     .puerta-link{
         top: 22%;
-        left: 22%;
-        width: 56%;
+        left: 20%;
+        width: 60%;
         height: 54%;
     }
     
     .puerta-link::after {
-        opacity: 1; /* Siempre visible en móvil ya que no existe el hover */
-        font-size: 12px;
-        bottom: 4%;
+        opacity: 1;
+        font-size: 11px;
+        bottom: 2%;
     }
 
-    /* Título principal adaptado al arco superior móvil */
+    /* Contenedor Superior Unificado: Evita encimarse con la arquitectura de la puerta */
     .header-branding {
         top: 4%;
+        width: 95%;
     }
 
     .header-branding h1 {
-        font-size: 24px;
-        letter-spacing: 3px;
+        font-size: 26px;
+        letter-spacing: 4px;
+        margin-bottom: 2px;
     }
 
     .header-branding p {
         font-size: 11px;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
+        margin-bottom: 8px;
     }
 
-    /* UBICACIÓN CLAVE: El eslogan se coloca en la franja superior de la puerta */
+    /* MEJORA CLAVE: El eslogan ahora se segmenta elegantemente en dos líneas,
+       con tipografía controlada, fondo traslúcido estilizado y tamaño armónico */
     .slogan-lateral {
-        top: 14%;
-        left: 5%;
-        width: 90%;
-        text-align: center;
+        position: relative;
+        top: auto;
+        left: auto;
+        margin: 0 auto;
+        width: auto;
+        display: inline-block;
+        background: rgba(0, 0, 0, 0.45);
+        padding: 6px 16px;
+        border-radius: 20px;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        border: 1px solid rgba(229, 193, 88, 0.15);
     }
 
     .slogan-lateral h2 {
-        font-size: 13px;
-        letter-spacing: 1px;
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        line-height: 1.4;
     }
 
     .slogan-lateral h2 span {
         display: inline;
-        font-size: 14px;
-        margin: 0 5px;
+        font-size: 12px;
+        font-weight: 700;
+        margin: 0 4px;
     }
 
-    /* UBICACIÓN CLAVE: Los beneficios se alinean horizontalmente abajo de la puerta */
+    /* Distribución balanceada de beneficios en la sección del suelo reflectante */
     .caracteristicas-lista {
         top: auto;
-        bottom: 14%;
+        bottom: 12%;
         left: 5%;
         width: 90%;
         flex-direction: row;
@@ -314,54 +339,56 @@ html, body {
     }
 
     .item-caracteristica {
-        padding: 5px 8px;
+        padding: 6px 10px;
         border-left: none;
         border-bottom: 2px solid #e5c158;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(0, 0, 0, 0.75);
+        border-radius: 2px;
     }
 
     .item-caracteristica svg {
-        width: 13px;
-        height: 13px;
-        gap: 6px;
+        width: 12px;
+        height: 12px;
     }
 
     .item-caracteristica span {
         font-size: 9px;
-        letter-spacing: 0.5px;
+        letter-spacing: 1px;
     }
 
-    /* UBICACIÓN CLAVE: Registro de negocio toma la base oscura inferior */
+    /* Sección de conversión inferior limpia y espaciada */
     .registro-contenedor {
         top: auto;
-        bottom: 3%;
+        bottom: 2.5%;
         left: 50%;
         right: auto;
         transform: translateX(-50%);
         flex-direction: row;
         justify-content: center;
-        gap: 10px;
-        width: 90%;
+        align-items: center;
+        gap: 12px;
+        width: 95%;
     }
 
     .registro-texto {
-        font-size: 11px;
+        font-size: 11.5px;
+        letter-spacing: 0.5px;
     }
 
     .btn-registro {
-        padding: 6px 14px;
+        padding: 6px 12px;
         font-size: 11px;
+        letter-spacing: 0.5px;
     }
 }
 
-/* Ajuste fino para pantallas extremadamente pequeñas */
-@media(max-width:380px){
-    .caracteristicas-lista {
-        bottom: 16%;
-    }
-    .item-caracteristica span {
-        font-size: 8px;
-    }
+/* Ajustes de precisión para pantallas muy compactas (ej. iPhone SE) */
+@media(max-width:375px) {
+    .header-branding h1 { font-size: 22px; }
+    .slogan-lateral h2 { font-size: 10px; }
+    .slogan-lateral h2 span { font-size: 11px; }
+    .item-caracteristica span { font-size: 8px; }
+    .caracteristicas-lista { bottom: 13%; }
 }
 
 /* ================================================== */
@@ -394,10 +421,10 @@ html, body {
     <div class="header-branding">
         <h1>Loja</h1>
         <p>Centro Comercial Digital</p>
-    </div>
-
-    <div class="slogan-lateral">
-        <h2>Todos los comercios <span>de Loja</span> en un solo lugar</h2>
+        
+        <div class="slogan-lateral">
+            <h2>Todos los comercios <span>de Loja</span> en un solo lugar</h2>
+        </div>
     </div>
 
     <div class="caracteristicas-lista">
