@@ -7,32 +7,28 @@
 
 <title>Urbanex</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-
 <style>
 
 /* ================================================== */
-/* RESETEO GLOBAL Y FUENTES BASE                      */
+/* RESETEO GLOBAL (HABILITA EL GESTO DE REFRESCAR)   */
 /* ================================================== */
 *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 html, body {
     width: 100%;
     min-height: 100%;
     background: #000;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Times New Roman', Times, serif, Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
 }
 
 /* ================================================== */
-/* PORTADA Y CAPAS DE ENTORNO                         */
+/* PORTADA (AJUSTE EXACTO PARA CUALQUIER PANTALLA)    */
 /* ================================================== */
 .portada{
     width: 100%;
@@ -43,6 +39,7 @@ html, body {
     background-color: #000;
 }
 
+/* Control adaptativo de la imagen */
 .portada-img {
     position: absolute;
     top: 0;
@@ -53,103 +50,93 @@ html, body {
     display: block;
 }
 
-/* Capa de contraste que mejora la legibilidad sin alterar el arte original */
+/* CAPA OSCURA REFINADA PARA MEJORAR CONTRASTE DE TEXTOS */
 .portada::before{
-    content: "";
-    position: absolute;
-    inset: 0;
+    content:"";
+    position:absolute;
+    inset:0;
     background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.45) 0%,
-        rgba(0,0,0,0.10) 30%,
-        rgba(0,0,0,0.10) 70%,
-        rgba(0,0,0,0.55) 100%
+        rgba(0,0,0,.30),
+        rgba(0,0,0,.50)
     );
     z-index: 1;
     pointer-events: none;
 }
 
 /* ================================================== */
-/* COMPORTAMIENTO PARA COMPUTADORES (ESCRITORIO)     */
+/* CAPAS DE TEXTO PROFESIONAL Y LEGIBLE (ESCRITORIO)  */
 /* ================================================== */
 
-/* Identidad Central Superior */
+/* Encabezado Superior (Arco de la puerta) */
 .header-branding {
     position: absolute;
     top: 5%;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    width: 40%;
+    width: 90%;
+    max-width: 600px;
     z-index: 3;
     pointer-events: none;
 }
 
 .header-branding h1 {
-    font-family: 'Cinzel', 'Times New Roman', serif;
     color: #e5c158;
-    font-size: 38px;
-    font-weight: 600;
-    letter-spacing: 7px;
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 4px 12px rgba(0,0,0,0.8);
-    margin-bottom: 2px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 4px 10px rgba(0,0,0,0.8);
+    margin-bottom: 4px;
 }
 
 .header-branding p {
-    font-family: 'Cinzel', 'Times New Roman', serif;
     color: #ffffff;
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 3px;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.95);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.95);
 }
 
-/* Eslogan en móvil se oculta en escritorio para usar la estructura lateral */
-.slogan-movil {
-    display: none;
-}
-
-/* Eslogan Lateral Izquierdo (Ubicación exacta del render) */
-.slogan-lateral-pc {
+/* Eslogan Lateral Izquierdo (Sobre pilar izquierdo) */
+.slogan-lateral {
     position: absolute;
-    top: 15%;
-    left: 28%;
-    width: 13%;
-    text-align: center;
+    top: 40%;
+    left: 4%;
+    width: 26%;
     z-index: 3;
     pointer-events: none;
 }
 
-.slogan-lateral-pc h2 {
-    font-family: 'Cinzel', 'Times New Roman', serif;
+.slogan-lateral h2 {
     color: #ffffff;
-    font-size: 19px;
+    font-size: 22px;
     font-weight: 400;
     letter-spacing: 1px;
-    line-height: 1.6;
+    line-height: 1.4;
     text-transform: uppercase;
-    text-shadow: 0 3px 6px rgba(0,0,0,0.95);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.95);
 }
 
-.slogan-lateral-pc h2 span {
+.slogan-lateral h2 span {
     color: #e5c158;
-    font-size: 22px;
-    font-weight: 700;
     display: block;
-    margin: 6px 0;
+    font-size: 26px;
+    font-weight: bold;
+    margin: 5px 0;
 }
 
-/* Características / Beneficios Derecho (Ubicación exacta del render) */
+/* Características / Beneficios (Sobre pilar derecho) */
 .caracteristicas-lista {
     position: absolute;
-    top: 38%;
-    right: 18%;
-    width: 22%;
+    top: 35%;
+    right: 4%;
+    width: 26%;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
     z-index: 3;
     pointer-events: none;
 }
@@ -157,35 +144,37 @@ html, body {
 .item-caracteristica {
     display: flex;
     align-items: center;
-    gap: 16px;
-    background: linear-gradient(90deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.65) 20%, rgba(0,0,0,0.65) 90%, rgba(0,0,0,0.0) 100%);
-    padding: 8px 12px;
-    border-radius: 4px;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 14px;
+    border-radius: 6px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-left: 3px solid #e5c158;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 .item-caracteristica svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     fill: #e5c158;
     flex-shrink: 0;
-    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8));
 }
 
 .item-caracteristica span {
-    font-family: 'Cinzel', 'Times New Roman', serif;
     color: #ffffff;
     font-size: 12px;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.95);
+    letter-spacing: 1.5px;
+    font-weight: bold;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.9);
 }
 
-/* Barra de Registro Superior Derecha */
+/* Botón de Registro Superior Derecho */
 .registro-contenedor {
     position: absolute;
-    top: 5%;
-    right: 18%;
+    top: 4%;
+    right: 4%;
     display: flex;
     align-items: center;
     gap: 15px;
@@ -197,52 +186,52 @@ html, body {
     font-size: 13px;
     letter-spacing: 1px;
     text-shadow: 0 2px 4px rgba(0,0,0,0.95);
-    font-weight: 400;
 }
 
 .btn-registro {
     display: inline-block;
-    padding: 8px 18px;
+    padding: 10px 20px;
     border: 1px solid #e5c158;
     color: #e5c158;
     text-decoration: none;
-    font-size: 12px;
+    font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 1px;
     border-radius: 4px;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.7);
     transition: all 0.3s ease;
 }
 
 .btn-registro:hover {
     background: #e5c158;
     color: #000000;
-    box-shadow: 0 0 12px rgba(229, 193, 88, 0.4);
+    box-shadow: 0 0 15px rgba(229, 193, 88, 0.5);
 }
 
-/* Área Interactiva de la Puerta Central */
+/* ================================================== */
+/* ÁREA CLICKEABLE DE LA PUERTA                       */
+/* ================================================== */
 .puerta-link{
-    position: absolute;
+    position:absolute;
     top: 18%;
-    left: 41%;
-    width: 18%;
+    left: 38%;
+    width: 24%;
     height: 58%;
     z-index: 10; 
-    display: block;
-    cursor: pointer;
+    display:block;
+    cursor:pointer;
     background-color: rgba(255, 255, 255, 0);
 }
 
 .puerta-link::after {
-    content: "INGRESA";
+    content: "ENTRAR";
     position: absolute;
     bottom: 8%;
     left: 50%;
     transform: translateX(-50%);
     color: #e5c158;
-    font-family: 'Cinzel', serif;
     letter-spacing: 4px;
-    font-size: 13px;
+    font-size: 14px;
     border-bottom: 1px solid #e5c158;
     padding-bottom: 4px;
     opacity: 0;
@@ -255,91 +244,67 @@ html, body {
 }
 
 /* ================================================== */
-/* DISPOSITIVOS MÓVILES (SMARTPHONES Y TABLETS)        */
+/* OPTIMIZACIÓN EXCLUSIVA PARA DISPOSITIVOS MÓVILES    */
 /* ================================================== */
-@media(max-width:1024px){
-    /* Ajustes intermedios para portátiles pequeños o tablets */
-    .slogan-lateral-pc { left: 22%; width: 18%; top: 20%; }
-    .caracteristicas-lista { right: 10%; width: 28%; }
-    .registro-contenedor { right: 5%; }
-}
-
 @media(max-width:768px){
-    /* Imagen en formato cover para pantallas verticales */
+    /* Se cambia a 'cover' para que la imagen abarque perfectamente la pantalla vertical */
     .portada-img {
         object-fit: cover;
         object-position: center center;
     }
 
-    /* Ocultación del módulo lateral exclusivo de PC */
-    .slogan-lateral-pc {
-        display: none;
-    }
-
-    /* Activación y estilizado del eslogan adaptado a móvil */
-    .slogan-movil {
-        display: inline-block;
-        background: rgba(0, 0, 0, 0.5);
-        padding: 6px 14px;
-        border-radius: 20px;
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-        border: 1px solid rgba(229, 193, 88, 0.15);
-        margin-top: 6px;
-        width: auto;
-    }
-
-    .slogan-movil h2 {
-        font-family: 'Cinzel', 'Times New Roman', serif;
-        color: #ffffff;
-        font-size: 11px;
-        letter-spacing: 1px;
-        line-height: 1.4;
-        text-transform: uppercase;
-    }
-
-    .slogan-movil h2 span {
-        color: #e5c158;
-        display: inline;
-        font-size: 11.5px;
-        font-weight: 700;
-    }
-
-    /* Ajuste del marco táctil de la puerta en pantallas táctiles */
+    /* Redefinición del arco de entrada en el móvil */
     .puerta-link{
         top: 22%;
-        left: 20%;
-        width: 60%;
+        left: 22%;
+        width: 56%;
         height: 54%;
     }
     
     .puerta-link::after {
-        content: "INGRESAR";
-        opacity: 1;
-        font-size: 11px;
-        bottom: 2%;
+        opacity: 1; /* Siempre visible en móvil ya que no existe el hover */
+        font-size: 12px;
+        bottom: 4%;
     }
 
-    /* Encabezado Superior Unificado */
+    /* Título principal adaptado al arco superior móvil */
     .header-branding {
         top: 4%;
-        width: 90%;
     }
 
     .header-branding h1 {
         font-size: 24px;
-        letter-spacing: 4px;
+        letter-spacing: 3px;
     }
 
     .header-branding p {
-        font-size: 10.5px;
-        letter-spacing: 2px;
+        font-size: 11px;
+        letter-spacing: 1px;
     }
 
-    /* Reubicación horizontal de los beneficios en la base del render */
+    /* UBICACIÓN CLAVE: El eslogan se coloca en la franja superior de la puerta */
+    .slogan-lateral {
+        top: 14%;
+        left: 5%;
+        width: 90%;
+        text-align: center;
+    }
+
+    .slogan-lateral h2 {
+        font-size: 13px;
+        letter-spacing: 1px;
+    }
+
+    .slogan-lateral h2 span {
+        display: inline;
+        font-size: 14px;
+        margin: 0 5px;
+    }
+
+    /* UBICACIÓN CLAVE: Los beneficios se alinean horizontalmente abajo de la puerta */
     .caracteristicas-lista {
         top: auto;
-        bottom: 11%;
+        bottom: 14%;
         left: 5%;
         width: 90%;
         flex-direction: row;
@@ -352,51 +317,51 @@ html, body {
         padding: 5px 8px;
         border-left: none;
         border-bottom: 2px solid #e5c158;
-        background: rgba(0, 0, 0, 0.75);
-        border-radius: 2px;
+        background: rgba(0, 0, 0, 0.7);
     }
 
     .item-caracteristica svg {
-        width: 12px;
-        height: 12px;
+        width: 13px;
+        height: 13px;
+        gap: 6px;
     }
 
     .item-caracteristica span {
         font-size: 9px;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
     }
 
-    /* Módulo de registro adaptado formalmente en la zona inferior */
+    /* UBICACIÓN CLAVE: Registro de negocio toma la base oscura inferior */
     .registro-contenedor {
         top: auto;
-        bottom: 2.5%;
+        bottom: 3%;
         left: 50%;
         right: auto;
         transform: translateX(-50%);
         flex-direction: row;
         justify-content: center;
-        align-items: center;
         gap: 10px;
-        width: 95%;
+        width: 90%;
     }
 
     .registro-texto {
         font-size: 11px;
-        letter-spacing: 0.5px;
     }
 
     .btn-registro {
-        padding: 6px 12px;
-        font-size: 10.5px;
-        letter-spacing: 0.5px;
+        padding: 6px 14px;
+        font-size: 11px;
     }
 }
 
-@media(max-width:375px) {
-    .header-branding h1 { font-size: 21px; }
-    .slogan-movil h2 { font-size: 10px; }
-    .item-caracteristica span { font-size: 8px; }
-    .caracteristicas-lista { bottom: 12%; }
+/* Ajuste fino para pantallas extremadamente pequeñas */
+@media(max-width:380px){
+    .caracteristicas-lista {
+        bottom: 16%;
+    }
+    .item-caracteristica span {
+        font-size: 8px;
+    }
 }
 
 /* ================================================== */
@@ -429,13 +394,9 @@ html, body {
     <div class="header-branding">
         <h1>Loja</h1>
         <p>Centro Comercial Digital</p>
-        
-        <div class="slogan-movil">
-            <h2>Todos los comercios <span>de Loja</span> en un solo lugar</h2>
-        </div>
     </div>
 
-    <div class="slogan-lateral-pc">
+    <div class="slogan-lateral">
         <h2>Todos los comercios <span>de Loja</span> en un solo lugar</h2>
     </div>
 
@@ -459,8 +420,8 @@ html, body {
     </div>
 
     <div class="registro-contenedor">
-        <span class="registro-texto">¿Es propietario?</span>
-        <a href="registro.html" class="btn-registro">Registre su negocio</a>
+        <span class="registro-texto">¿Eres propietario?</span>
+        <a href="registro.html" class="btn-registro">Registra tu negocio</a>
     </div>
 
     <a href="interior.html" class="puerta-link"></a>
