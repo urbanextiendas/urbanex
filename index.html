@@ -10,7 +10,7 @@
 <style>
 
 /* ================================================== */
-/* CONFIGURACIÓN GLOBAL Y RESETEO (PERMITE REFRESCO)  */
+/* RESETEO GLOBAL (HABILITA EL GESTO DE REFRESCAR)   */
 /* ================================================== */
 *{
     margin:0;
@@ -20,35 +20,42 @@
 
 html, body {
     width: 100%;
-    /* Se cambia 'height: 100vh' y 'overflow: hidden' por min-height. 
-       Esto libera la pantalla en el celular para que funcione el gesto de refrescar */
+    /* Libera las restricciones rígidas de altura para que el navegador 
+       del celular pueda detectar el deslizamiento hacia abajo y refrescar */
     min-height: 100%;
     background: #000;
     font-family: Arial, Helvetica, sans-serif;
+    /* Optimiza el comportamiento del scroll táctil en dispositivos móviles */
+    -webkit-overflow-scrolling: touch;
 }
 
 /* ================================================== */
-/* PORTADA (AJUSTE DE IMAGEN EN CUALQUIER PANTALLA)   */
+/* PORTADA (AJUSTE RESPONSIVO EN CUALQUIER PANTALLA)  */
 /* ================================================== */
 .portada{
     width: 100%;
-    /* Asegura que ocupe exactamente el alto de la pantalla del dispositivo */
-    height: 100vh; 
+    /* Usa 'svh' (alto de pantalla corto) en navegadores modernos para evitar 
+       que las barras de navegación del celular corten o invisibilicen la imagen */
+    height: 100vh;
+    height: 100svh; 
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
 }
 
-/* La etiqueta img nativa con object-fit garantiza la visibilidad en celulares */
+/* Imagen optimizada como objeto adaptativo */
 .portada-img {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* 'cover' expande la imagen para llenar la pantalla sin deformar la perspectiva */
-    object-fit: cover; 
-    /* Centra el eje horizontal y vertical (mantiene las puertas visibles) */
-    object-position: center center; 
+    /* Obliga a la imagen a cubrir la pantalla completa sin deformar la perspectiva */
+    object-fit: cover;
+    /* Mantiene el pasillo central y las puertas alineadas en el centro del dispositivo */
+    object-position: center center;
     display: block;
 }
 
@@ -63,7 +70,8 @@ html, body {
         rgba(0,0,0,.25)
     );
     z-index: 1;
-    pointer-events: none; /* Evita bloquear interacciones táctiles en el celular */
+    /* Permite que los gestos táctiles pasen a través de la capa sin bloquear el scroll */
+    pointer-events: none; 
 }
 
 /* ================================================== */
@@ -75,22 +83,23 @@ html, body {
     left:38%;
     width:24%;
     height:58%;
-    z-index:10; /* Queda por encima de la imagen y de la capa oscura */
+    /* Se posiciona por encima de la imagen y de la capa oscura */
+    z-index: 10; 
     display:block;
     cursor:pointer;
     background-color: rgba(255, 255, 255, 0); /* Invisible */
 }
 
 /* ================================================== */
-/* RESPONSIVE AJUSTADO PARA PANTALLAS MÓVILES        */
+/* RESPONSIVE AJUSTADO PARA PANTALLAS MÓVILES         */
 /* ================================================== */
 @media(max-width:768px){
     .puerta-link{
-        /* Coordenadas adaptadas para el encuadre vertical automático del celular */
-        top: 20%;
+        /* Coordenadas adaptadas para el encuadre proporcional del celular */
+        top: 22%;
         left: 25%;
         width: 50%;
-        height: 60%;
+        height: 56%;
     }
 }
 
