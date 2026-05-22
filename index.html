@@ -1,148 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <!-- Esta línea es la más importante para que se adapte al celular -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Optimizada para Móvil</title>
+    <style>
+        /* Estilos básicos para asegurar una buena visualización en móviles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 16px; /* Tamaño de letra cómodo para leer en pantallas pequeñas */
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            padding: 15px; /* Evita que el texto toque los bordes físicos del teléfono */
+        }
 
-<title>Loja</title>
+        /* Contenedor principal que limita el ancho en pantallas grandes pero ocupa el 100% en móviles */
+        .contenedor {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
-<style>
+        /* Las imágenes deben ser adaptables para que no se desborden de la pantalla */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+        h1 {
+            font-size: 1.8rem; /* Tamaño de título escalable y adecuado para móvil */
+            margin-bottom: 15px;
+        }
 
-html,
-body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
-}
-
-/* ========================= */
-/* CONTENEDOR */
-/* ========================= */
-
-.portada{
-
-    position:relative;
-
-    width:100vw;
-    height:100vh;
-
-    overflow:hidden;
-
-    background:#000;
-}
-
-/* ========================= */
-/* IMAGEN */
-/* ========================= */
-
-.portada img{
-
-    width:100%;
-    height:100%;
-
-    display:block;
-
-    object-fit:cover;
-
-    /* IMPORTANTE */
-    object-position:center center;
-}
-
-/* ========================= */
-/* ÁREA CLICKEABLE */
-/* ========================= */
-
-.puerta{
-
-    position:absolute;
-
-    z-index:10;
-
-    display:block;
-
-    cursor:pointer;
-
-    /* DESKTOP */
-
-    left:38%;
-    top:16%;
-
-    width:24%;
-    height:60%;
-}
-
-/* ========================= */
-/* CELULAR */
-/* ========================= */
-
-@media (max-width:768px){
-
-    .portada img{
-
-        /* AQUÍ ESTÁ EL CAMBIO IMPORTANTE */
-
-        object-fit:cover;
-
-        /* BAJA LA IMAGEN */
-        object-position:50% 50%;
-    }
-
-    .puerta{
-
-        /* AJUSTADO AL CELULAR */
-
-        left:20%;
-        top:22%;
-
-        width:60%;
-        height:52%;
-    }
-}
-
-/* ========================= */
-/* CELULARES PEQUEÑOS */
-/* ========================= */
-
-@media (max-width:480px){
-
-    .portada img{
-
-        object-position:50% 50%;
-    }
-
-    .puerta{
-
-        left:18%;
-        top:23%;
-
-        width:64%;
-        height:50%;
-    }
-}
-
-</style>
-
+        p {
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="portada">
-
-    <img src="Puerta al comercio.png" alt="Portada">
-
-    <!-- CAMBIE interior.html -->
-
-    <a href="interior.html" class="puerta"></a>
-
-</div>
+    <div class="contenedor">
+        <h1>Título de la Página</h1>
+        <p>Este es un ejemplo de estructura HTML optimizada para teléfonos móviles. El texto se ajustará automáticamente al ancho de la pantalla de su dispositivo sin necesidad de hacer zoom.</p>
+    </div>
 
 </body>
 </html>
