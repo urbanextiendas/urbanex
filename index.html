@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Loja</title>
 
@@ -15,10 +15,13 @@
     box-sizing:border-box;
 }
 
-body{
-    overflow:hidden;
-    background:#000;
-    font-family:Arial, Helvetica, sans-serif;
+body, html {
+    /* Asegura el correcto funcionamiento del scroll y refresco en móviles */
+    width: 100%;
+    height: 100%;
+    background: #000;
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-overflow-scrolling: touch; /* Suaviza el gesto táctil en iOS */
 }
 
 /* ========================= */
@@ -26,20 +29,19 @@ body{
 /* ========================= */
 
 .portada{
-    width:100%;
-    height:100vh;
-    
-    /* Se cambió el nombre y la ruta de la imagen según lo solicitado */
-    background-image: url("imagenes/Portada.png");
-    
-    /* Mantiene la imagen ocupando toda la pantalla en cualquier dispositivo */
-    background-size: cover;
-    
-    /* Centra la imagen horizontal y verticalmente para que las puertas no se pierdan en móviles */
-    background-position: center center;
-    background-repeat: no-repeat;
-    
+    width: 100%;
+    height: 100vh;
     position: relative;
+    overflow: hidden;
+}
+
+/* Control absoluto de la imagen para evitar fallos en celulares */
+.portada-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta la imagen a pantalla completa sin deformarla */
+    object-position: center center; /* Mantiene las puertas siempre visibles en el centro */
+    display: block;
 }
 
 /* CAPA OSCURA REFINADA */
@@ -53,6 +55,7 @@ body{
         rgba(0,0,0,.25)
     );
     z-index: 1;
+    pointer-events: none; /* Permite que los gestos pasen a través de la capa */
 }
 
 /* ÁREA CLICKEABLE DE LA PUERTA (COMPUTADORA) */
@@ -62,16 +65,16 @@ body{
     left:38%;
     width:24%;
     height:58%;
-    z-index:10; /* Asegura que quede por encima de la capa oscura */
+    z-index:10; /* Prioridad por encima de la capa oscura */
     display:block;
     cursor:pointer;
     background-color: rgba(255, 255, 255, 0); /* Totalmente transparente */
 }
 
-/* RESPONSIVE AJUSTADO PARA EL ENCUADRE EN CELULARES */
+/* RESPONSIVE AJUSTADO PARA PANTALLAS MÓVILES */
 @media(max-width:768px){
     .puerta-link{
-        /* Coordenadas adaptadas para mantener el enlace exactamente sobre las puertas en pantallas móviles */
+        /* Coordenadas adaptadas para el encuadre vertical del celular */
         top: 20%;
         left: 25%;
         width: 50%;
@@ -86,6 +89,8 @@ body{
 <body>
 
 <section class="portada">
+    <img src="imagenes/Portada.png" alt="Portada" class="portada-img">
+    
     <a href="interior.html" class="puerta-link"></a>
 </section>
 
