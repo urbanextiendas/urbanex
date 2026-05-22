@@ -20,46 +20,42 @@
 
 html, body {
     width: 100%;
-    /* Libera las restricciones rígidas de altura para que el navegador 
-       del celular pueda detectar el deslizamiento hacia abajo y refrescar */
+    /* Se quita 'overflow: hidden' para que el navegador del celular */
+    /* detecte el arrastre hacia abajo y permita refrescar la página */
     min-height: 100%;
     background: #000;
     font-family: Arial, Helvetica, sans-serif;
-    /* Optimiza el comportamiento del scroll táctil en dispositivos móviles */
-    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
 }
 
 /* ================================================== */
-/* PORTADA (AJUSTE RESPONSIVO EN CUALQUIER PANTALLA)  */
+/* PORTADA (ESTRUCTURA DE IMAGEN A PANTALLA COMPLETA) */
 /* ================================================== */
 .portada{
     width: 100%;
-    /* Usa 'svh' (alto de pantalla corto) en navegadores modernos para evitar 
-       que las barras de navegación del celular corten o invisibilicen la imagen */
-    height: 100vh;
-    height: 100svh; 
+    /* Ocupa el alto disponible restando el espacio del pie de página */
+    height: calc(100vh - 40px);
+    height: calc(100svh - 40px); 
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     overflow: hidden;
 }
 
-/* Imagen optimizada como objeto adaptativo */
+/* Imagen nativa: soluciona el problema de invisibilidad en celulares */
 .portada-img {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* Obliga a la imagen a cubrir la pantalla completa sin deformar la perspectiva */
+    /* 'cover' expande la imagen cubriendo la pantalla sin deformarla */
     object-fit: cover;
-    /* Mantiene el pasillo central y las puertas alineadas en el centro del dispositivo */
+    /* Mantiene las puertas y el pasillo alineados en el centro exacto */
     object-position: center center;
     display: block;
 }
 
-/* CAPA OSCURA REFINADA */
+/* CAPA OSCURA */
 .portada::before{
     content:"";
     position:absolute;
@@ -70,8 +66,7 @@ html, body {
         rgba(0,0,0,.25)
     );
     z-index: 1;
-    /* Permite que los gestos táctiles pasen a través de la capa sin bloquear el scroll */
-    pointer-events: none; 
+    pointer-events: none; /* Evita bloquear las interacciones táctiles */
 }
 
 /* ================================================== */
@@ -83,24 +78,37 @@ html, body {
     left:38%;
     width:24%;
     height:58%;
-    /* Se posiciona por encima de la imagen y de la capa oscura */
     z-index: 10; 
     display:block;
     cursor:pointer;
     background-color: rgba(255, 255, 255, 0); /* Invisible */
 }
 
-/* ================================================== */
-/* RESPONSIVE AJUSTADO PARA PANTALLAS MÓVILES         */
-/* ================================================== */
+/* RESPONSIVE AJUSTADO PARA EL ENCUADRE EN CELULARES */
 @media(max-width:768px){
     .puerta-link{
-        /* Coordenadas adaptadas para el encuadre proporcional del celular */
         top: 22%;
         left: 25%;
         width: 50%;
         height: 56%;
     }
+}
+
+/* ================================================== */
+/* PIE DE PÁGINA (FOOTER)                             */
+/* ================================================== */
+.pie-pagina {
+    width: 100%;
+    height: 40px;
+    background-color: #000000;
+    color: #8c8c8c;
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-top: 1px solid #1a1a1a;
+    z-index: 5;
 }
 
 </style>
@@ -114,6 +122,10 @@ html, body {
     
     <a href="interior.html" class="puerta-link"></a>
 </section>
+
+<footer class="pie-pagina">
+    <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
+</footer>
 
 </body>
 </html>
