@@ -1,148 +1,200 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Centro Comercial Digital</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-
-<title>Loja</title>
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html,
-body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
-}
-
-/* ========================= */
-/* CONTENEDOR */
-/* ========================= */
-
-.portada{
-
-    position:relative;
-
-    width:100vw;
-    height:100vh;
-
-    overflow:hidden;
-
-    background:#000;
-}
-
-/* ========================= */
-/* IMAGEN */
-/* ========================= */
-
-.portada img{
-
-    width:100%;
-    height:100%;
-
-    display:block;
-
-    object-fit:cover;
-
-    /* IMPORTANTE */
-    object-position:center center;
-}
-
-/* ========================= */
-/* ÁREA CLICKEABLE */
-/* ========================= */
-
-.puerta{
-
-    position:absolute;
-
-    z-index:10;
-
-    display:block;
-
-    cursor:pointer;
-
-    /* DESKTOP */
-
-    left:38%;
-    top:16%;
-
-    width:24%;
-    height:60%;
-}
-
-/* ========================= */
-/* CELULAR */
-/* ========================= */
-
-@media (max-width:768px){
-
-    .portada img{
-
-        /* AQUÍ ESTÁ EL CAMBIO IMPORTANTE */
-
-        object-fit:cover;
-
-        /* BAJA LA IMAGEN */
-        object-position:50% 50%;
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .puerta{
-
-        /* AJUSTADO AL CELULAR */
-
-        left:20%;
-        top:22%;
-
-        width:60%;
-        height:52%;
-    }
-}
-
-/* ========================= */
-/* CELULARES PEQUEÑOS */
-/* ========================= */
-
-@media (max-width:480px){
-
-    .portada img{
-
-        object-position:50% 50%;
+    body {
+      font-family: Arial, sans-serif;
+      background: #050505;
+      color: white;
     }
 
-    .puerta{
-
-        left:18%;
-        top:23%;
-
-        width:64%;
-        height:50%;
+    .portada {
+      width: 100%;
+      height: 100vh;
+      background-image: linear-gradient(
+          rgba(0, 0, 0, 0.35),
+          rgba(0, 0, 0, 0.65)
+        ),
+        url("portada.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
-}
 
-</style>
+    .contenido-portada {
+      margin-top: 340px;
+    }
 
+    .boton-entrar {
+      display: inline-block;
+      padding: 18px 70px;
+      background: linear-gradient(135deg, #d8a74a, #f2c66d);
+      color: #1a1206;
+      text-decoration: none;
+      font-size: 22px;
+      font-weight: bold;
+      border-radius: 40px;
+      box-shadow: 0 0 25px rgba(242, 198, 109, 0.55);
+      transition: 0.3s ease;
+    }
+
+    .boton-entrar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 40px rgba(242, 198, 109, 0.85);
+    }
+
+    .tienda {
+      padding: 80px 8%;
+      background: #0b0b0b;
+    }
+
+    .tienda h1 {
+      text-align: center;
+      margin-bottom: 50px;
+      color: #f2c66d;
+      font-size: 42px;
+    }
+
+    .grid-productos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+    }
+
+    .producto {
+      background: #151515;
+      border: 1px solid rgba(242, 198, 109, 0.25);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: 0.3s ease;
+    }
+
+    .producto:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 25px rgba(242, 198, 109, 0.25);
+    }
+
+    .producto img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .producto-info {
+      padding: 22px;
+    }
+
+    .producto-info h2 {
+      color: #f2c66d;
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+
+    .producto-info p {
+      color: #ccc;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .precio {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 18px;
+      color: white;
+    }
+
+    .btn-comprar {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      background: #d8a74a;
+      color: #111;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .portada {
+        height: 85vh;
+        background-position: center;
+      }
+
+      .contenido-portada {
+        margin-top: 260px;
+      }
+
+      .boton-entrar {
+        font-size: 18px;
+        padding: 15px 48px;
+      }
+
+      .tienda h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="portada">
+  <section class="portada">
+    <div class="contenido-portada">
+      <a href="#tienda" class="boton-entrar">ENTRAR</a>
+    </div>
+  </section>
 
-    <img src="Puerta al comercio.png" alt="Portada">
+  <section id="tienda" class="tienda">
+    <h1>Tiendas disponibles</h1>
 
-    <!-- CAMBIE interior.html -->
+    <div class="grid-productos">
 
-    <a href="interior.html" class="puerta"></a>
+      <div class="producto">
+        <img src="producto1.jpg" alt="Producto 1">
+        <div class="producto-info">
+          <h2>Nombre del comercio</h2>
+          <p>Descripción breve del negocio o producto destacado.</p>
+          <div class="precio">Desde $10.00</div>
+          <a href="#" class="btn-comprar">Ver tienda</a>
+        </div>
+      </div>
 
-</div>
+      <div class="producto">
+        <img src="producto2.jpg" alt="Producto 2">
+        <div class="producto-info">
+          <h2>Nombre del comercio</h2>
+          <p>Descripción breve del negocio o producto destacado.</p>
+          <div class="precio">Desde $15.00</div>
+          <a href="#" class="btn-comprar">Ver tienda</a>
+        </div>
+      </div>
+
+      <div class="producto">
+        <img src="producto3.jpg" alt="Producto 3">
+        <div class="producto-info">
+          <h2>Nombre del comercio</h2>
+          <p>Descripción breve del negocio o producto destacado.</p>
+          <div class="precio">Desde $20.00</div>
+          <a href="#" class="btn-comprar">Ver tienda</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
 
 </body>
 </html>
