@@ -3,44 +3,52 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Loja</title>
 
 <style>
 
+/* ================================================== */
+/* CONFIGURACIÓN GLOBAL Y RESETEO (PERMITE REFRESCO)  */
+/* ================================================== */
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
 
-body, html {
-    /* Asegura el correcto funcionamiento del scroll y refresco en móviles */
+html, body {
     width: 100%;
-    height: 100%;
+    /* Se cambia 'height: 100vh' y 'overflow: hidden' por min-height. 
+       Esto libera la pantalla en el celular para que funcione el gesto de refrescar */
+    min-height: 100%;
     background: #000;
     font-family: Arial, Helvetica, sans-serif;
-    -webkit-overflow-scrolling: touch; /* Suaviza el gesto táctil en iOS */
 }
 
-/* ========================= */
-/* PORTADA */
-/* ========================= */
-
+/* ================================================== */
+/* PORTADA (AJUSTE DE IMAGEN EN CUALQUIER PANTALLA)   */
+/* ================================================== */
 .portada{
     width: 100%;
-    height: 100vh;
+    /* Asegura que ocupe exactamente el alto de la pantalla del dispositivo */
+    height: 100vh; 
     position: relative;
     overflow: hidden;
 }
 
-/* Control absoluto de la imagen para evitar fallos en celulares */
+/* La etiqueta img nativa con object-fit garantiza la visibilidad en celulares */
 .portada-img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ajusta la imagen a pantalla completa sin deformarla */
-    object-position: center center; /* Mantiene las puertas siempre visibles en el centro */
+    /* 'cover' expande la imagen para llenar la pantalla sin deformar la perspectiva */
+    object-fit: cover; 
+    /* Centra el eje horizontal y vertical (mantiene las puertas visibles) */
+    object-position: center center; 
     display: block;
 }
 
@@ -55,26 +63,30 @@ body, html {
         rgba(0,0,0,.25)
     );
     z-index: 1;
-    pointer-events: none; /* Permite que los gestos pasen a través de la capa */
+    pointer-events: none; /* Evita bloquear interacciones táctiles en el celular */
 }
 
-/* ÁREA CLICKEABLE DE LA PUERTA (COMPUTADORA) */
+/* ================================================== */
+/* ÁREA CLICKEABLE DE LA PUERTA (COMPUTADORA)         */
+/* ================================================== */
 .puerta-link{
     position:absolute;
     top:18%;
     left:38%;
     width:24%;
     height:58%;
-    z-index:10; /* Prioridad por encima de la capa oscura */
+    z-index:10; /* Queda por encima de la imagen y de la capa oscura */
     display:block;
     cursor:pointer;
-    background-color: rgba(255, 255, 255, 0); /* Totalmente transparente */
+    background-color: rgba(255, 255, 255, 0); /* Invisible */
 }
 
-/* RESPONSIVE AJUSTADO PARA PANTALLAS MÓVILES */
+/* ================================================== */
+/* RESPONSIVE AJUSTADO PARA PANTALLAS MÓVILES        */
+/* ================================================== */
 @media(max-width:768px){
     .puerta-link{
-        /* Coordenadas adaptadas para el encuadre vertical del celular */
+        /* Coordenadas adaptadas para el encuadre vertical automático del celular */
         top: 20%;
         left: 25%;
         width: 50%;
