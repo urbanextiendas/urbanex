@@ -77,7 +77,7 @@
             grid-template-areas: 
                 "header header header"
                 "aside-left main aside-right";
-            height: calc(100vh - 25px);
+            height: calc(100vh - 24px); /* Ajustado para el nuevo tamaño del footer (24px) */
             position: relative;
             overflow: hidden;
         }
@@ -672,19 +672,21 @@
         }
 
         /* ================================================== */
-        /* PIE DE PÁGINA (FOOTER)                             */
+        /* PIE DE PÁGINA (FOOTER REPLICADO DE INDEX)          */
         /* ================================================== */
         .pie-pagina {
             width: 100%;
-            height: 25px;
+            height: 24px;
             background-color: #000000;
-            color: #666666;
-            font-size: 9px;
+            color: #8c8c8c;
+            font-size: 11px;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            z-index: 10;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+            z-index: 5;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         /* ================================================== */
@@ -731,20 +733,20 @@
                 width: calc(100% - 24px);
                 display: flex;
                 flex-direction: row;
-                overflow-x: auto; /* Permite deslizar los filtros de lado sin tapar la foto */
+                overflow-x: auto;
                 gap: 8px;
                 background: rgba(10, 10, 10, 0.85);
                 padding: 5px;
-                border-radius: 30px; /* Estilo cápsula moderna */
+                border-radius: 30px;
                 -webkit-overflow-scrolling: touch;
             }
 
             .bottom-filter-bar::-webkit-scrollbar {
-                display: none; /* Estética limpia sin barras visibles */
+                display: none;
             }
 
             .filter-pill {
-                flex: 0 0 auto; /* Evita que colapsen o se estiren */
+                flex: 0 0 auto;
                 padding: 6px 14px;
                 border-radius: 20px;
                 background: rgba(0, 0, 0, 0.5);
@@ -763,7 +765,6 @@
             .welcome-billboard { top: 25px; }
             .welcome-billboard h2 { font-size: 18px; letter-spacing: 4px; }
             
-            /* Ajuste de fuentes para mantener nitidez en celulares */
             .filter-label { font-size: 10px; }
             .filter-sub { font-size: 8px; }
         }
@@ -780,7 +781,6 @@
 
     <!-- BARRA SUPERIOR TRASLÚCIDA -->
     <header class="header-top">
-        <!-- Logotipo funcional que sirve para regresar al inicio -->
         <a href="index.html" class="brand-box" title="Volver al Inicio">
             <svg class="brand-icon-svg" viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H7c0 2.76 2.24 5 5 5s5-2.24 5-5h-2c0 1.66-1.34 3-3 3z"/></svg>
             <div class="brand-text">
@@ -790,7 +790,7 @@
         </a>
 
         <div class="search-wrapper">
-            <input type="text" class="search-input" placeholder="¿Qué producto o servicio busca hoy?">
+            <input type="text" class="search-input" placeholder="¿Qué negocio o servicio busca hoy?">
             <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         </div>
 
@@ -877,7 +877,6 @@
         <div class="interactive-showcase showcase-salud" title="Sección Salud"></div>
         <div class="interactive-showcase showcase-moda" title="Sección Moda"></div>
 
-        <!-- FILTROS TRASLÚCIDOS INFERIORES MODERADOS PARA MÓVILES -->
         <div class="bottom-filter-bar">
             <div class="filter-pill">
                 <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
@@ -910,7 +909,7 @@
         </div>
     </main>
 
-    <!-- PANEL LATERAL DERECHO TRASLÚCIDO REFINADO -->
+    <!-- PANEL LATERAL DERECHO TRASLÚCIDO -->
     <aside class="aside-showcase-list">
         <div class="showcase-header">
             <h2>DESTACADOS</h2>
@@ -925,7 +924,6 @@
         </div>
 
         <div class="shops-scroll-area">
-            <!-- Tarjeta 1 -->
             <div class="shop-card">
                 <div class="shop-thumb-wrapper">
                     <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=120&q=80" alt="La Terraza Gourmet" class="shop-thumb">
@@ -940,7 +938,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Tarjeta 2 -->
             <div class="shop-card">
                 <div class="shop-thumb-wrapper">
                     <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=120&q=80" alt="Café Central Loja" class="shop-thumb">
@@ -964,8 +961,9 @@
 
 </div>
 
+<!-- PIE DE PÁGINA REPLICADO EXACTAMENTE DESDE INDEX -->
 <footer class="pie-pagina">
-    <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
+    <p>&copy; 2026 NeoDat. Todos los derechos reservados.</p>
 </footer>
 
 </body>
