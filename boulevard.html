@@ -690,25 +690,26 @@
         }
 
         /* ================================================== */
-        /* RESPONSIVIDAD REFINADA (EVITA MANCHAS EN LA IMAGEN)*/
+        /* RESPONSIVIDAD REFINADA (CON PARCHE FIJO PARA TABLET)*/
         /* ================================================== */
         @media (max-width: 1024px) {
-            body { overflow-y: auto; height: auto; }
+            body { overflow: hidden; height: 100vh; }
             .dashboard-container {
                 grid-template-columns: 1fr;
-                grid-template-rows: auto auto 1fr auto;
+                grid-template-rows: auto auto 1fr 220px;
                 grid-template-areas: 
                     "header"
                     "aside-left"
                     "main"
                     "aside-right";
-                height: auto;
+                height: calc(100vh - 24px);
             }
 
             .aside-categories {
                 border-right: none;
                 border-bottom: 1px solid var(--border-color);
                 padding: 12px;
+                overflow-y: visible;
             }
 
             .section-title { display: none; }
@@ -722,9 +723,9 @@
 
             .category-item button { width: auto; white-space: nowrap; padding: 6px 12px; }
             
-            .main-boulevard { min-height: 380px; height: 45vh; }
+            .main-boulevard { height: 100%; position: relative; }
 
-            /* PERMANECE FLOTANTE PERO RE-DISEÑADO ULTRA-COMPACTO */
+            /* PERMANECE FLOTANTE Y ADAPTADO ULTRA-COMPACTO */
             .bottom-filter-bar {
                 position: absolute;
                 bottom: 12px;
@@ -752,13 +753,28 @@
                 background: rgba(0, 0, 0, 0.5);
             }
 
-            .aside-showcase-list { border-left: none; border-top: 1px solid var(--border-color); }
-            .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+            .aside-showcase-list { 
+                border-left: none; 
+                border-top: 1px solid var(--border-color); 
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            .shops-scroll-area { 
+                flex: 1;
+                max-height: none; 
+                display: grid; 
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+                gap: 10px; 
+                overflow-y: auto;
+            }
         }
 
         @media (max-width: 640px) {
+            body { overflow-y: auto; height: auto; }
             .dashboard-container {
                 grid-template-rows: auto auto auto auto;
+                height: auto;
             }
             .header-top { 
                 flex-direction: column; 
@@ -791,6 +807,9 @@
             
             .filter-label { font-size: 10px; }
             .filter-sub { font-size: 8px; }
+            
+            .aside-showcase-list { height: auto; }
+            .shops-scroll-area { display: flex; flex-direction: column; overflow-y: visible; }
         }
     </style>
 </head>
