@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Urbanex - Centro Comercial Digital de Loja</title>
     
     <!-- Tipografías Premium de Alta Definición -->
@@ -12,7 +12,7 @@
 
     <style>
         /* ================================================== */
-        /* VARIABLES DE DISEÑO PREMIUM (CON ENFOQUE TRASLÚCIDO)*/
+        /* VARIABLES DE DISEÑO PREMIUM                        */
         /* ================================================== */
         :root {
             --bg-main: #020202;
@@ -31,7 +31,7 @@
         }
 
         /* ================================================== */
-        /* RESETEO GLOBAL                                     */
+        /* RESETEO GLOBAL Y CONTROL DE FLUJO                  */
         /* ================================================== */
         * {
             margin: 0;
@@ -39,7 +39,6 @@
             box-sizing: border-box;
         }
 
-        /* Control de barras de desplazamiento imperceptibles pero funcionales */
         ::-webkit-scrollbar {
             width: 4px;
             height: 4px;
@@ -58,17 +57,16 @@
         body {
             width: 100%;
             height: 100vh;
+            height: -webkit-fill-available;
             background-color: var(--bg-main);
             font-family: var(--font-sans);
             color: var(--text-main);
-            overflow: hidden;
+            overflow: hidden; /* Evita scrolls parásitos en la raíz global */
             display: flex;
             flex-direction: column;
         }
 
-        /* ================================================== */
-        /* CONTENEDOR PRINCIPAL INTERCONECTADO                */
-        /* ================================================== */
+        /* CONTENEDOR PRINCIPAL INTERCONECTADO */
         .dashboard-container {
             flex: 1;
             display: grid;
@@ -82,7 +80,6 @@
             overflow: hidden;
         }
 
-        /* CAPA DE FONDO GLOBAL PARA EL EFECTO TRASLÚCIDO COMPLETO */
         .global-background-underlay {
             position: absolute;
             inset: 0;
@@ -128,11 +125,6 @@
             text-shadow: 0 0 10px rgba(229, 193, 88, 0.6);
         }
 
-        .brand-box:hover .brand-icon-svg {
-            fill: #fff;
-            filter: drop-shadow(0 0 5px rgba(229, 193, 88, 0.6));
-        }
-
         .brand-icon-svg {
             width: 24px;
             height: 24px;
@@ -147,7 +139,6 @@
             font-weight: 700;
             letter-spacing: 2px;
             line-height: 1;
-            transition: var(--transition-smooth);
         }
 
         .brand-text p {
@@ -207,7 +198,6 @@
             font-size: 11px;
             color: #ffffff;
             font-weight: 500;
-            cursor: pointer;
         }
 
         .location-indicator svg {
@@ -259,7 +249,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
         }
 
         .profile-avatar svg {
@@ -328,7 +317,6 @@
             border-radius: 6px;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: var(--transition-smooth);
         }
 
         .category-item button svg {
@@ -663,11 +651,6 @@
             font-size: 11.5px;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition-smooth);
-        }
-
-        .btn-view-all-shops:hover {
-            background: #f1cd6b;
         }
 
         /* ================================================== */
@@ -684,7 +667,7 @@
             align-items: center;
             text-align: center;
             border-top: 1px solid #1a1a1a;
-            z-index: 5;
+            z-index: 15;
             font-family: Arial, Helvetica, sans-serif;
         }
 
@@ -693,76 +676,52 @@
         /* ================================================== */
         @media (min-width: 641px) and (max-width: 1024px) {
             body {
-                overflow-y: auto; /* Permite desplazamiento si el contenido vertical excede */
-                height: auto;
+                overflow: hidden; /* Garantiza que la ventana física permanezca fija */
+                height: 100vh;
             }
 
             .dashboard-container {
-                grid-template-columns: 240px 1fr;
-                grid-template-rows: 60px 1fr auto;
+                grid-template-columns: 220px 1fr 240px; /* Mantiene las 3 columnas comprimidas de forma óptima */
+                grid-template-rows: 60px 1fr;
                 grid-template-areas: 
-                    "header header"
-                    "aside-left main"
-                    "aside-right aside-right"; /* Pasa abajo con elegancia */
-                height: auto;
-                min-height: calc(100vh - 24px);
+                    "header header header"
+                    "aside-left main aside-right";
+                height: calc(100vh - 24px); /* Se ajusta exactamente al tamaño útil restando el footer */
+                overflow: hidden;
             }
 
-            /* Mantiene la integridad visual del menú izquierdo */
+            /* Habilitar scrolls internos e independientes para evitar cortes */
             .aside-categories {
-                border-right: 1px solid var(--border-color);
-                border-bottom: none;
-                height: auto;
+                padding: 14px 8px;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
-            /* El mapa central conserva altura óptima en tabletas */
-            .main-boulevard {
-                height: 550px;
-            }
-
-            /* Reestructuración del panel derecho para ocupar el ancho completo inferior */
             .aside-showcase-list {
-                border-left: none;
-                border-top: 1px solid var(--border-color);
-                padding: 20px;
-                background: rgba(10, 10, 10, 0.85);
+                overflow: hidden;
             }
 
-            .showcase-header {
-                padding: 0 0 12px 0;
-            }
-
-            /* Ocultamos selectores innecesarios para optimizar espacio */
-            .sort-box {
-                display: none;
-            }
-
-            /* Distribución de las tarjetas en columnas balanceadas */
             .shops-scroll-area {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-                padding: 12px 0;
-                overflow-y: visible;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                padding: 8px;
             }
 
-            .shop-card {
-                height: 70px;
-                background: rgba(255, 255, 255, 0.03);
-            }
+            /* Ajustes dimensionales sutiles para elementos internos en Tablet */
+            .category-name { font-size: 10.5px; }
+            .shop-title { font-size: 11px; }
+            .welcome-billboard h2 { font-size: 20px; letter-spacing: 4px; }
 
-            .shop-thumb-wrapper {
-                width: 70px;
-                height: 70px;
+            /* Ajuste de barra de filtros inferior para evitar desbordamiento */
+            .bottom-filter-bar {
+                width: calc(100% - 16px);
+                bottom: 12px;
+                gap: 4px;
+                padding: 4px;
             }
-
-            .action-footer-box {
-                border-top: none;
-                padding: 12px 0 0 0;
-                max-width: 320px;
-                margin: 0 auto;
-                width: 100%;
-            }
+            .filter-pill { padding: 6px 8px; }
+            .filter-label { font-size: 9.5px; }
+            .filter-sub { font-size: 8px; }
         }
 
         /* ================================================== */
@@ -819,23 +778,13 @@
                 background: rgba(10, 10, 10, 0.85);
                 padding: 5px;
                 border-radius: 30px;
-                -webkit-overflow-scrolling: touch;
-                z-index: 5;
-            }
-
-            .bottom-filter-bar::-webkit-scrollbar {
-                display: none;
             }
 
             .filter-pill {
                 flex: 0 0 auto;
                 padding: 6px 14px;
                 border-radius: 20px;
-                background: rgba(0, 0, 0, 0.5);
             }
-
-            .filter-label { font-size: 10px; }
-            .filter-sub { font-size: 8px; }
 
             .aside-showcase-list { border-left: none; border-top: 1px solid var(--border-color); }
             .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
@@ -846,12 +795,12 @@
 
 <div class="dashboard-container">
     
-    <!-- IMAGEN CENTRAL CON EXTENSIÓN BAJO PANELES TRASLÚCIDOS -->
+    <!-- IMAGEN CENTRAL -->
     <div class="global-background-underlay">
         <img src="imagenes/Boulevard.png" alt="Bulevar Comercial de Loja">
     </div>
 
-    <!-- BARRA SUPERIOR TRASLÚCIDA -->
+    <!-- BARRA SUPERIOR -->
     <header class="header-top">
         <a href="index.html" class="brand-box" title="Volver al Inicio">
             <svg class="brand-icon-svg" viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H7c0 2.76 2.24 5 5 5s5-2.24 5-5h-2c0 1.66-1.34 3-3 3z"/></svg>
@@ -884,7 +833,7 @@
         </div>
     </header>
 
-    <!-- MENÚ LATERAL IZQUIERDO TRASLÚCIDO -->
+    <!-- MENÚ LATERAL IZQUIERDO -->
     <aside class="aside-categories">
         <h2 class="section-title">Categorías</h2>
         <ul class="categories-list">
@@ -981,7 +930,7 @@
         </div>
     </main>
 
-    <!-- PANEL LATERAL DERECHO TRASLÚCIDO -->
+    <!-- PANEL LATERAL DERECHO -->
     <aside class="aside-showcase-list">
         <div class="showcase-header">
             <h2>DESTACADOS</h2>
@@ -990,7 +939,7 @@
 
         <div class="sort-box">
             <select class="sort-select">
-                <option>Ordenar por: Mayor Calificación</option>
+                <option>Ordenar por: Calificación</option>
                 <option>Cercanía</option>
             </select>
         </div>
