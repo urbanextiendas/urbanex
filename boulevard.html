@@ -57,11 +57,13 @@
 
         body {
             width: 100%;
-            height: 100vh;
+            min-height: 100vh; /* Permite que la página tenga altura mínima */
+            /*height: 100vh;*/
             background-color: var(--bg-main);
             font-family: var(--font-sans);
             color: var(--text-main);
-            overflow: hidden;
+            overflow-y: auto; /* IMPORTANTE: Esto permite el scroll y el refresco */
+            /*overflow: hidden;*/
             display: flex;
             flex-direction: column;
         }
@@ -77,9 +79,11 @@
             grid-template-areas: 
                 "header header header"
                 "aside-left main aside-right";
-            height: calc(100vh - 24px); /* Ajustado para el nuevo tamaño del footer (24px) */
+            height: auto; /* Cambiado de calc(100vh - 24px) a auto */
+            /*height: calc(100vh - 24px);*/ /* Ajustado para el nuevo tamaño del footer (24px) */
             position: relative;
-            overflow: hidden;
+            overflow: visible; /* Cambiado de hidden a visible */
+            /*overflow: hidden;*/
         }
 
         /* CAPA DE FONDO GLOBAL PARA EL EFECTO TRASLÚCIDO COMPLETO */
@@ -673,7 +677,7 @@
         }
 
         /* AJUSTE ESPECÍFICO PARA TABLETS (768px - 1023px) */
-        @media (min-width: 641px) and (max-width: 1023px) {
+        @media (min-width: 768px) and (max-width: 1024px) {
             .dashboard-container {
                 grid-template-columns: 200px 1fr 240px; /* Reducimos anchos de paneles laterales */
             }
