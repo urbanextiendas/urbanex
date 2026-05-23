@@ -794,46 +794,6 @@
                 gap: 10px !important;      /* Espacio reducido y uniforme */
                 order: 2; 
             }
-
-            /* Estructura base de la medalla */
-.icon-wrapper {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, #4a5a7a, #101520);
-    border: 2px solid #e5c158;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 0 10px rgba(229, 193, 88, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    flex-shrink: 0;
-}
-
-/* Dibujamos el icono de Comida (Ejemplo) */
-.icon-comida::after {
-    content: "🍴"; /* Puedes usar emojis o caracteres Unicode premium */
-    font-size: 20px;
-    color: #e5c158;
-    text-shadow: 0 0 5px rgba(229, 193, 88, 0.5);
-}
-
-/* Efecto hover premium */
-.category-item button:hover .icon-wrapper {
-    transform: scale(1.1);
-    box-shadow: 0 6px 15px rgba(229, 193, 88, 0.4);
-}
-
-/* Estado activo: se vuelve dorado sólido */
-.category-item.active .icon-wrapper {
-    background: #e5c158;
-    border-color: #fff;
-}
-
-.category-item.active .icon-wrapper::after {
-    color: #000;
-    text-shadow: none;
-}
             
             /* Asegura que el corazón no tenga márgenes que lo separen */
             .icon-corazon {
@@ -890,7 +850,7 @@
         <ul class="categories-list">
             <li class="category-item active">
                 <button>
-                    <div class="icon-wrapper icon-comida"></div>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm7-3h-1v5h1V6zm0-4h-3v11h3V2zm2 19H14v-2h6v2z"/></svg></div>
                     <div class="category-text-info">
                         <span class="category-name">Comida y Bebida</span>
                         <span class="category-count">128 locales</span>
