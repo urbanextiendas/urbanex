@@ -58,12 +58,10 @@
         body {
             width: 100%;
             min-height: 100vh; /* Permite que la página tenga altura mínima */
-            /*height: 100vh;*/
             background-color: var(--bg-main);
             font-family: var(--font-sans);
             color: var(--text-main);
             overflow-y: auto; /* IMPORTANTE: Esto permite el scroll y el refresco */
-            /*overflow: hidden;*/
             display: flex;
             flex-direction: column;
         }
@@ -80,7 +78,6 @@
                 "header header header"
                 "aside-left main aside-right";
             height: auto; /* Cambiado de calc(100vh - 24px) a auto */
-            /*height: calc(100vh - 24px);*/ /* Ajustado para el nuevo tamaño del footer (24px) */
             position: relative;
             overflow: visible; /* Cambiado de hidden a visible */
             /*overflow: hidden;*/
@@ -314,8 +311,8 @@
         }
 
         .category-item button .icon-container {
-            width: 36px;
-            height: 36px;
+            width: 26px;
+            height: 26px;
             display: flex;
             align-items: center;
             justify-content: center;
