@@ -26,6 +26,7 @@
             --text-dark: #595959;
             --font-serif: 'Cinzel', serif;
             --font-sans: 'Montserrat', sans-serif;
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* ================================================== */
@@ -124,10 +125,12 @@
             font-size: 12px;
             outline: none;
             font-family: var(--font-sans);
+            transition: var(--transition-smooth);
         }
 
         .search-input:focus {
             border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(229, 193, 88, 0.1);
         }
 
         .search-icon {
@@ -153,6 +156,11 @@
             font-size: 11px;
             color: #d9d9d9;
             cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .location-indicator:hover {
+            color: var(--gold);
         }
 
         .location-indicator svg {
@@ -172,6 +180,11 @@
             width: 18px;
             height: 18px;
             fill: #d9d9d9;
+            transition: var(--transition-smooth);
+        }
+
+        .tool-icon:hover svg {
+            fill: var(--gold);
         }
 
         .badge-count {
@@ -200,12 +213,22 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .profile-avatar:hover {
+            background: var(--gold);
         }
 
         .profile-avatar svg {
             width: 14px;
             height: 14px;
             fill: var(--gold);
+            transition: var(--transition-smooth);
+        }
+
+        .profile-avatar:hover svg {
+            fill: #000000;
         }
 
         /* ================================================== */
@@ -249,6 +272,11 @@
             gap: 10px;
             cursor: pointer;
             text-align: left;
+            transition: var(--transition-smooth);
+        }
+
+        .category-item button:hover:not(.active) {
+            background: #111111;
         }
 
         .category-item button .icon-container {
@@ -259,12 +287,14 @@
             justify-content: center;
             border-radius: 4px;
             background: #141414;
+            transition: var(--transition-smooth);
         }
 
         .category-item button svg {
             width: 13px;
             height: 13px;
             fill: var(--text-muted);
+            transition: var(--transition-smooth);
         }
 
         .category-text-info {
@@ -321,7 +351,7 @@
         .boulevard-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 60%, rgba(0,0,0,0.7) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 60%, rgba(0,0,0,0.7) 100%);
             pointer-events: none;
         }
 
@@ -341,6 +371,7 @@
             font-size: 18px;
             letter-spacing: 4px;
             text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
 
         .welcome-billboard p {
@@ -348,20 +379,26 @@
             color: #cccccc;
             margin-top: 3px;
             letter-spacing: 0.5px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
         }
 
-        /* ZONAS INTERACTIVAS CONFIGURADAS */
+        /* ZONAS INTERACTIVAS CONFIGURADAS MANTENIENDO EL MAPEO */
         .interactive-showcase {
             position: absolute;
             z-index: 3;
             cursor: pointer;
             background: rgba(255, 255, 255, 0);
+            transition: var(--transition-smooth);
+        }
+        .interactive-showcase:hover {
+            background: rgba(229, 193, 88, 0.05);
+            box-shadow: inset 0 0 15px rgba(229, 193, 88, 0.2);
         }
         .showcase-comida { top: 15%; left: 3%; width: 14%; height: 40%; }
         .showcase-salud { top: 25%; left: 22%; width: 8%; height: 30%; }
         .showcase-moda { top: 18%; right: 14%; width: 12%; height: 40%; }
 
-        /* FILTROS METRICOS INFERIORES ACCESIBLES */
+        /* FILTROS MÉTRICOS INFERIORES */
         .bottom-filter-bar {
             position: absolute;
             bottom: 20px;
@@ -389,6 +426,12 @@
             align-items: center;
             gap: 8px;
             cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .filter-pill:hover {
+            border-color: var(--gold);
+            background: #17130c;
         }
 
         .filter-icon-box svg {
@@ -459,6 +502,13 @@
             color: #d9d9d9;
             font-size: 11px;
             outline: none;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            transition: var(--transition-smooth);
+        }
+
+        .sort-select:focus {
+            border-color: var(--gold);
         }
 
         .shops-scroll-area {
@@ -470,7 +520,7 @@
             gap: 8px;
         }
 
-        /* TARJETAS DE COMERCIO REFORMADAS (MINI MUESTRAS WEB) */
+        /* TARJETAS DE COMERCIO REFORMADAS */
         .shop-card {
             background: var(--bg-cards);
             border: 1px solid #1a1a1a;
@@ -479,6 +529,13 @@
             display: flex;
             cursor: pointer;
             height: 64px;
+            transition: var(--transition-smooth);
+        }
+
+        .shop-card:hover {
+            border-color: #332912;
+            transform: translateX(2px);
+            background: #17130b;
         }
 
         .shop-thumb-wrapper {
@@ -500,6 +557,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            min-width: 0;
         }
 
         .shop-title {
@@ -565,6 +623,12 @@
             font-weight: 600;
             cursor: pointer;
             text-align: center;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-view-all-shops:hover {
+            background: #f1cd6b;
+            box-shadow: 0 4px 12px rgba(229, 193, 88, 0.2);
         }
 
         /* ================================================== */
@@ -766,7 +830,7 @@
         </ul>
     </aside>
 
-    <!-- CUADRO CENTRAL: SU IMAGEN ORIGINAL RESTAURADA -->
+    <!-- CUADRO CENTRAL: SU IMAGEN ORIGINAL PRESERVADA -->
     <main class="main-boulevard">
         <img src="imagenes/Boulevard.png" alt="Pasillo Comercial" class="boulevard-img">
         <div class="boulevard-overlay"></div>
@@ -776,7 +840,7 @@
             <p>a tu centro comercial digital</p>
         </div>
 
-        <!-- Capas interactivas mapeadas sobre su imagen original -->
+        <!-- Capas interactivas mapeadas sobre la imagen original -->
         <div class="interactive-showcase showcase-comida" title="Comida y Bebida"></div>
         <div class="interactive-showcase showcase-salud" title="Salud y Farmacia"></div>
         <div class="interactive-showcase showcase-moda" title="Moda y Accesorios"></div>
