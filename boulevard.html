@@ -122,6 +122,20 @@
             cursor: pointer;
             transition: var(--transition-smooth);
             user-select: none;
+            /* CORRECCIÓN: Contenedor para logo grande sin desplazar */
+            position: relative;
+            height: 60px;
+            width: 120px;
+        }
+
+        .brand-box img {
+            height: 120px;
+            width: auto;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
         }
 
         .brand-box:hover .brand-text h1 {
@@ -757,7 +771,7 @@
         }
 
         @media (max-width: 640px) {
-            .header-top { flex-direction: column; height: auto; padding: 12px; gap: 10px; }
+            .header-top { flex-direction: column; height: auto; padding: 45px 12px 12px 12px; gap: 10px; }
             .search-wrapper { width: 100%; margin: 0; order: 3; }
             .user-tools { width: 100%; justify-content: space-between; order: 2; }
             
@@ -767,24 +781,6 @@
             
             .filter-label { font-size: 10px; }
             .filter-sub { font-size: 8px; }
-        }
-        @media (max-width: 640px) {
-            /* Ajustamos el contenedor del logo para que no fuerce el tamaño del header */
-            .brand-box {
-                height: auto !important; 
-                max-height: 100px; /* Aquí controlas qué tan grande se ve */
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        
-            /* Forzamos a la imagen a adaptarse a esa altura sin expandir el margen */
-            .brand-box img {
-                height: 100px !important; /* Mantenemos un tamaño grande */
-                width: auto !important;
-                object-fit: contain;
-                display: block !important;
-            }
         }
     </style>
 </head>
@@ -801,7 +797,7 @@
     <header class="header-top">
         <!-- Reemplazo del texto por la imagen -->
         <a href="index.html" class="brand-box" title="Volver al Inicio">
-            <img src="imagenes/Urba0.png" alt="Logo Urbanex" style="height: 120px; width: auto; display: block;">
+            <img src="imagenes/Urba0.png" alt="Logo Urbanex">
         </a>
 
         <div class="search-wrapper">
