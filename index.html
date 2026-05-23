@@ -29,7 +29,7 @@ html, body {
 }
 
 /* ================================================== */
-/* CONTENEDOR DE TRANSICIÓN ULTRA EFICIENTE          */
+/* CONTENEDOR OPTIMIZADO PARA RESPUESTA INSTANTÁNEA   */
 /* ================================================== */
 .portada{
     width: 100%;
@@ -38,30 +38,16 @@ html, body {
     position: relative;
     overflow: hidden;
     background-color: #000;
-    /* Optimización: Transición acelerada a 400ms con aceleración intensa */
-    transition: transform 0.4s cubic-bezier(0.215, 0.610, 0.355, 1), opacity 0.35s ease-in-out;
+    /* Transición ultra veloz nativa */
+    transition: transform 0.2s ease-out, opacity 0.15s ease-in-out;
     will-change: transform, opacity;
 }
 
-/* Efecto de zoom veloz al hacer clic */
+/* Efecto inmediato al accionar la entrada */
 .transicion-activa {
-    transform: scale(1.08);
+    transform: scale(1.05);
     opacity: 0;
     pointer-events: none;
-}
-
-/* Velo negro instantáneo */
-.velo-transicion {
-    position: fixed;
-    inset: 0;
-    background: #000;
-    z-index: 9999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.35s ease-out;
-}
-.velo-transicion.activo {
-    opacity: 1;
 }
 
 /* Control adaptativo de la imagen */
@@ -104,7 +90,7 @@ html, body {
     max-width: 600px;
     z-index: 3;
     pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition: opacity 0.1s ease;
 }
 
 .header-branding h1 {
@@ -134,7 +120,7 @@ html, body {
     width: 26%;
     z-index: 3;
     pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition: opacity 0.1s ease;
 }
 
 .slogan-lateral h2 {
@@ -166,7 +152,7 @@ html, body {
     gap: 16px;
     z-index: 3;
     pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition: opacity 0.1s ease;
 }
 
 .item-caracteristica {
@@ -207,7 +193,7 @@ html, body {
     align-items: center;
     gap: 15px;
     z-index: 12;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.1s ease;
 }
 
 .registro-texto {
@@ -237,13 +223,12 @@ html, body {
     box-shadow: 0 0 15px rgba(229, 193, 88, 0.5);
 }
 
-/* Desvanecimiento veloz de la interfaz */
+/* Desvanecimiento instantáneo de textos */
 .ocultar-interfaz .header-branding,
 .ocultar-interfaz .slogan-lateral,
 .ocultar-interfaz .caracteristicas-lista,
 .ocultar-interfaz .registro-contenedor {
     opacity: 0;
-    transform: translateY(-8px);
 }
 
 /* ================================================== */
@@ -273,7 +258,7 @@ html, body {
     border-bottom: 1px solid #e5c158;
     padding-bottom: 4px;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s ease;
     text-shadow: 0 2px 4px #000;
 }
 
@@ -415,14 +400,13 @@ html, body {
 
 </style>
 
-<!-- Pre-carga de la siguiente página para agilizar la navegación -->
+<!-- Pre-renderizado prioritario en segundo plano para ejecución inmediata -->
+<link rel="prerender" href="boulevard.html">
 <link rel="prefetch" href="boulevard.html">
 
 </head>
 
 <body>
-
-<div class="velo-transicion" id="veloTransicion"></div>
 
 <section class="portada" id="seccionPortada">
     <img src="imagenes/Portada.png" alt="Portada" class="portada-img">
@@ -460,7 +444,8 @@ html, body {
         <a href="registro.html" class="btn-registro">Registre su negocio</a>
     </div>
 
-    <a href="javascript:void(0);" class="puerta-link" onclick="ejecutarTransicionVeloz()"></a>
+    <!-- Enlace directo con acción instantánea en paralelo -->
+    <a href="boulevard.html" class="puerta-link" onclick="instantePremium(event)"></a>
 </section>
 
 <footer class="pie-pagina">
@@ -468,18 +453,11 @@ html, body {
 </footer>
 
 <script>
-function ejecutarTransicionVeloz() {
-    const portada = document.getElementById('seccionPortada');
-    const velo = document.getElementById('veloTransicion');
-
-    // Ocultación inmediata de la interfaz y disparo simultáneo de la animación
-    portada.classList.add('ocultar-interfaz', 'transicion-activa');
-    velo.classList.add('activo');
-
-    // Redirección optimizada a los 380ms para máxima fluidez
-    setTimeout(() => {
-        window.location.href = "boulevard.html";
-    }, 380); 
+function instantePremium(e) {
+    // Dispara el efecto visual de forma inmediata en la capa actual
+    document.getElementById('seccionPortada').classList.add('ocultar-interfaz', 'transicion-activa');
+    
+    // No detiene el enlace (preventDefault), permitiendo que el navegador cambie de página al instante
 }
 </script>
 
