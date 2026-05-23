@@ -741,18 +741,18 @@
         @media (max-width: 640px) {
             .header-top { flex-direction: column; height: auto; padding: 12px; gap: 10px; }
             .search-wrapper { width: 100%; margin: 0; order: 3; }
-            /* Ajuste para que los iconos queden juntos */
+        /* Alineación a la derecha y elementos compactos */
             .user-tools { 
-                width: auto; 
-                justify-content: center; 
-                gap: 6px !important; /* Reduce el espacio entre elementos a 6px */
+                width: 100%;             /* Asegura que el contenedor ocupe el ancho para alinear */
+                justify-content: flex-end; /* Alinea todo el grupo a la derecha */
+                gap: 8px !important;      /* Espacio reducido y uniforme */
                 order: 2; 
             }
             
-            /* Aseguramos que el corazón no tenga margen extra */
+            /* Asegura que el corazón no tenga márgenes que lo separen */
             .icon-corazon {
                 margin-right: 0 !important;
-            }              
+            }             
             .main-boulevard { min-height: 280px; height: 40vh; }
             .welcome-billboard { top: 25px; }
             .welcome-billboard h2 { font-size: 18px; letter-spacing: 4px; }
