@@ -322,12 +322,17 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Mejora el efecto al pasar el mouse */
-        .category-item button:hover .icon-container {
-            transform: scale(1.1);
-            border-color: var(--gold);
-            background: rgba(229, 193, 88, 0.1);
-        }
+ /* Efecto hover sofisticado */
+.category-item button:hover .icon-container {
+    background: rgba(229, 193, 88, 0.15);
+    border-color: var(--gold);
+    box-shadow: 0 0 15px rgba(229, 193, 88, 0.2);
+}
+
+.category-item.active .icon-container {
+    background: var(--gold);
+    border-color: var(--gold);
+}
         
         /* Icono activo más brillante y definido */
         .category-item.active button .icon-container {
@@ -337,12 +342,13 @@
         }
 
         /* Asegura que el SVG siempre esté limpio y bien posicionado */
-        .category-item button svg {
-            width: 18px;
-            height: 18px;
-            fill: var(--gold);
-            transition: fill 0.3s ease;
-        }
+.category-item button svg {
+    width: 18px; 
+    height: 18px;
+    stroke: var(--gold); /* Usamos stroke en lugar de fill para más elegancia */
+    fill: none;
+    transition: all 0.3s ease;
+}
 
         .category-text-info {
             display: flex;
@@ -371,22 +377,28 @@
 
   /* Contenedor del icono (limpio, sin degradados forzados) */
 .icon-container {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: transparent; /* Fondo transparente para integrar el icono */
-}      
+    /* Efecto de cristal pulido */
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(229, 193, 88, 0.3);
+    border-radius: 10px;
+    transition: all 0.4s ease;
+}     
 
         .category-item.active button .icon-container {
             background: var(--gold);
             border-color: var(--gold);
         }
 
-        .category-item.active button svg {
-            fill: #000000;
-        }
+.category-item.active button svg {
+    stroke: #000; /* Contraste negro sobre dorado */
+}
 
         .category-item.active .category-name {
             color: var(--gold);
