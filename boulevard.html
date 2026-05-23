@@ -768,6 +768,14 @@
             .filter-label { font-size: 10px; }
             .filter-sub { font-size: 8px; }
         }
+        @media (max-width: 640px) {
+            /* Esta regla elimina el desplazamiento forzado por la altura de la imagen */
+            .brand-box img {
+                height: 50px !important; 
+                width: auto !important;
+                display: block !important;
+            }
+        }
     </style>
 </head>
 <body>
