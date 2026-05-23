@@ -314,21 +314,39 @@
         }
 
         .category-item button .icon-container {
-            width: 26px;
-            height: 26px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 6px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: var(--transition-smooth);
+            border-radius: 12px;
+            /* Fondo semi-transparente con ligero brillo */
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
+        /* Mejora el efecto al pasar el mouse */
+        .category-item button:hover .icon-container {
+            transform: scale(1.1);
+            border-color: var(--gold);
+            background: rgba(229, 193, 88, 0.1);
+        }
+        
+        /* Icono activo más brillante y definido */
+        .category-item.active button .icon-container {
+            background: var(--gold);
+            border: none;
+            box-shadow: 0 0 15px rgba(229, 193, 88, 0.4);
+        }
+
+        /* Asegura que el SVG siempre esté limpio y bien posicionado */
         .category-item button svg {
-            width: 14px;
-            height: 14px;
+            width: 18px;
+            height: 18px;
             fill: #ffffff;
+            transition: fill 0.3s ease;
         }
 
         .category-text-info {
@@ -368,6 +386,13 @@
         .category-item.active .category-name {
             color: var(--gold);
             font-weight: 600;
+        }
+
+        /* Ajuste del botón para que se sienta más "Clickable" */
+        .category-item button {
+            gap: 14px; /* Mayor separación entre icono y texto */
+            padding: 10px;
+            border-radius: 12px;
         }
 
         /* ================================================== */
