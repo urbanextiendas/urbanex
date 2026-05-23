@@ -769,10 +769,20 @@
             .filter-sub { font-size: 8px; }
         }
         @media (max-width: 640px) {
-            /* Esta regla elimina el desplazamiento forzado por la altura de la imagen */
+            /* Ajustamos el contenedor del logo para que no fuerce el tamaño del header */
+            .brand-box {
+                height: auto !important; 
+                max-height: 100px; /* Aquí controlas qué tan grande se ve */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        
+            /* Forzamos a la imagen a adaptarse a esa altura sin expandir el margen */
             .brand-box img {
-                height: 50px !important; 
+                height: 100px !important; /* Mantenemos un tamaño grande */
                 width: auto !important;
+                object-fit: contain;
                 display: block !important;
             }
         }
