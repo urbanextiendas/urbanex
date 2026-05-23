@@ -3,159 +3,1043 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gastronomía - Urbanex Loja</title>
-
-    <!-- Preconexión para fuentes optimizadas -->
+    <title>Loja - Guía Gastronómica Digital</title>
+    
+    <!-- Tipografías Premium de Alta Definición -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        /* ==========================================================================
-           CONFIGURACIÓN GLOBAL Y VARIABLES DE DISEÑO (ESTILO URBANEX)
-           ========================================================================== */
+        /* ================================================== */
+        /* VARIABLES DE DISEÑO PREMIUM (CON ENFOQUE TRASLÚCIDO)*/
+        /* ================================================== */
         :root {
-            --color-bg: #000000;
-            --color-gold: #e5c158;
-            --color-border: #1a1a1a;
-            --color-text: #ffffff;
-            --color-text-dim: #8c8c8c;
-            --font-primary: 'Montserrat', sans-serif;
-            --font-secondary: 'Cinzel', serif;
+            --bg-main: #020202;
+            --bg-panels-glass: rgba(6, 6, 6, 0.65);
+            --bg-cards-glass: rgba(20, 20, 20, 0.5);
+            --gold: #e5c158;
+            --gold-dim: #a68b44;
+            --border-color: rgba(229, 193, 88, 0.15);
+            --text-main: #ffffff;
+            --text-muted: #e0e0e0;
+            --text-dark: #aaaaaa;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --blur-effect: blur(20px);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            background-color: var(--color-bg); 
-            color: var(--color-text); 
-            font-family: var(--font-primary); 
-            min-height: 100vh;
+        /* ================================================== */
+        /* RESETEO GLOBAL                                     */
+        /* ================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Control de barras de desplazamiento imperceptibles pero funcionales */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(229, 193, 88, 0.2);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh; /* Permite que la página tenga altura mínima */
+            background-color: var(--bg-main);
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            overflow-y: auto; /* IMPORTANTE: Esto permite el scroll y el refresco */
             display: flex;
             flex-direction: column;
         }
 
-        /* ==========================================================================
-           GRID DE ESTRUCTURA: HEADER, SIDEBAR, CONTENT Y FOOTER
-           ========================================================================== */
-        .page-container {
+        /* ================================================== */
+        /* CONTENEDOR PRINCIPAL INTERCONECTADO                */
+        /* ================================================== */
+        .dashboard-container {
+            flex: 1;
             display: grid;
-            grid-template-columns: 200px 1fr;
-            grid-template-rows: 60px 1fr 24px;
-            min-height: 100vh;
+            grid-template-rows: 60px 1fr;
+            grid-template-columns: 240px 1fr 290px;
+            grid-template-areas: 
+                "header header header"
+                "aside-left main aside-right";
+            height: auto; /* Cambiado de calc(100vh - 24px) a auto */
+            position: relative;
+            overflow: visible; /* Cambiado de hidden a visible */
+            /*overflow: hidden;*/
         }
 
-        /* HEADER */
-        .site-header {
-            grid-column: 1 / span 2;
-            border-bottom: 1px solid var(--color-border);
+        /* CAPA DE FONDO GLOBAL PARA EL EFECTO TRASLÚCIDO COMPLETO */
+        .global-background-underlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .global-background-underlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* ================================================== */
+        /* BARRA SUPERIOR (HEADER TRASLÚCIDO)                 */
+        /* ================================================== */
+        .header-top {
+            grid-area: header;
+            background: var(--bg-panels-glass);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            padding: 0 25px;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
         }
-        .logo { height: 30px; }
 
-        /* SIDEBAR (MENÚ LATERAL) */
-        .site-sidebar {
-            border-right: 1px solid var(--color-border);
-            padding: 30px 20px;
-            font-family: sans-serif;
-            font-size: 11px;
-            color: var(--color-text);
+        /* Enlace de retorno al inicio con diseño profesional */
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            user-select: none;
+        }
+
+        .brand-box:hover .brand-text h1 {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(229, 193, 88, 0.6);
+        }
+
+        .brand-box:hover .brand-icon-svg {
+            fill: #fff;
+            filter: drop-shadow(0 0 5px rgba(229, 193, 88, 0.6));
+        }
+
+        .brand-icon-svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--gold);
+            transition: var(--transition-smooth);
+        }
+
+        .brand-text h1 {
+            font-family: var(--font-serif);
+            color: var(--gold);
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            line-height: 1;
+            transition: var(--transition-smooth);
+        }
+
+        .brand-text p {
+            font-size: 8px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            color: #ffffff;
+            font-weight: 500;
+            margin-top: 2px;
         }
 
-        /* CONTENIDO PRINCIPAL */
-        .main-content {
-            padding: 40px;
+        .search-wrapper {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-input {
             width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 8px 40px 8px 16px;
+            color: var(--text-main);
+            font-size: 12px;
+            outline: none;
+            font-family: var(--font-sans);
+            transition: var(--transition-smooth);
+            text-align: center; /* Esto centrará el texto dentro del input */
         }
 
-        /* CONTENEDOR IMAGEN CON BORDE DORADO (REFERENCIA: {F1B6C5AA-E449-43B8-AFA1-4FFE3ED1E6E1}.jpg) */
-        .hero-wrapper {
-            border: 1px solid var(--color-gold);
+        .search-input:focus {
+            border-color: var(--gold);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            fill: var(--text-dark);
+        }
+
+        .user-tools {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .location-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #ffffff;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .location-indicator svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold);
+        }
+
+        .tool-icon {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        /* Agrega esta regla específica a tu CSS */
+        .tool-icon:nth-child(2) {
+            margin-right: 14px; /* Ajusta este valor para darle la separación exacta que buscas */
+        }
+        
+        .tool-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+            transition: var(--transition-smooth);
+        }
+
+        .tool-icon:hover svg {
+            fill: var(--gold);
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .profile-avatar svg {
+            width: 13px;
+            height: 13px;
+            fill: var(--gold);
+        }
+
+        /* ================================================== */
+        /* MENÚ LATERAL IZQUIERDO TRASLÚCIDO                  */
+        /* ================================================== */
+        .aside-categories {
+            grid-area: aside-left;
+            background: var(--bg-panels-glass);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-right: 1px solid var(--border-color);
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            z-index: 5;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-bottom: 14px;
+            padding-left: 6px;
+            font-weight: 700;
+        }
+
+        .categories-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            list-style: none;
+        }
+
+.category-item button {
+    width: 100%;
+    background: rgba(10, 10, 10, 0.6); /* Fondo oscuro similar a la referencia */
+    border: 1px solid rgba(229, 193, 88, 0.2); /* Borde dorado tenue */
+    padding: 10px 14px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition-smooth);
+}
+
+        .category-item button:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .category-item button .icon-container {
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            /* Fondo semi-transparente con ligero brillo */
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Mejora el efecto al pasar el mouse */
+        .category-item button:hover .icon-container {
+            transform: scale(1.1);
+            border-color: var(--gold);
+            background: rgba(229, 193, 88, 0.1);
+        }
+        
+        /* Icono activo más brillante y definido */
+        .category-item.active button .icon-container {
+            background: var(--gold);
+            border: none;
+            box-shadow: 0 0 15px rgba(229, 193, 88, 0.4);
+        }
+
+        /* Asegura que el SVG siempre esté limpio y bien posicionado */
+        .category-item button svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--gold);
+            transition: fill 0.3s ease;
+        }
+
+        .category-text-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .category-name {
+            color: #ffffff;
+            font-size: 11.5px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .category-count {
+            color: var(--text-dark);
+            font-size: 9px;
+        }
+
+.category-item.active button {
+    border: 1px solid var(--gold);
+    background: rgba(229, 193, 88, 0.05);
+}
+
+  /* Contenedor del icono (limpio, sin degradados forzados) */
+.icon-container {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent; /* Fondo transparente para integrar el icono */
+}      
+
+        .category-item.active button .icon-container {
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .category-item.active button svg {
+            fill: #000000;
+        }
+
+        .category-item.active .category-name {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* Ajuste del botón para que se sienta más "Clickable" */
+        .category-item button {
+            gap: 14px; /* Mayor separación entre icono y texto */
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        /* ================================================== */
+        /* CENTRAL: VISTA DEL BULEVAR                         */
+        /* ================================================== */
+        .main-boulevard {
+            grid-area: main;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            z-index: 2;
+        }
+
+        .boulevard-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 40%, transparent 70%, rgba(0,0,0,0.6) 100%);
+            pointer-events: none;
+        }
+
+        .welcome-billboard {
+            position: absolute;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 90%;
+            pointer-events: none;
+        }
+
+        .welcome-billboard h2 {
+            font-family: var(--font-serif);
+            color: var(--text-main);
+            font-size: 24px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+        }
+
+        .welcome-billboard p {
+            font-size: 10px;
+            color: var(--gold);
+            font-weight: 600;
+            margin-top: 6px;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+        }
+
+        /* MAPEO DE ZONAS INTERACTIVAS */
+        
+        .interactive-showcase:hover {
+            background: rgba(229, 193, 88, 0.02);
+            box-shadow: inset 0 0 15px rgba(229, 193, 88, 0.15);
+        }
+        .showcase-comida { top: 15%; left: 3%; width: 14%; height: 40%; }
+        .showcase-salud { top: 25%; left: 22%; width: 8%; height: 30%; }
+        .showcase-moda { top: 18%; right: 14%; width: 12%; height: 40%; }
+
+        /* FILTROS TRASLÚCIDOS INFERIORES */
+        .bottom-filter-bar {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 10, 10, 0.75);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 6px;
+            display: flex;
+            gap: 6px;
+            width: calc(100% - 30px);
+            max-width: 760px;
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            z-index: 5;
+        }
+
+        .filter-pill {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 8px;
-            padding: 4px;
-            margin-bottom: 30px;
-            background: #050505;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            min-width: 0;
         }
-        .hero-img {
-            width: 100%;
-            height: auto;
+
+        .filter-pill:hover {
+            border-color: var(--gold);
+            background: rgba(229, 193, 88, 0.08);
+        }
+
+        .filter-icon-box svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold);
             display: block;
-            border-radius: 4px;
         }
 
-        /* TARJETA DE INFORMACIÓN DEL LOCAL */
-        .restaurant-card {
-            border: 1px solid var(--color-border);
-            border-radius: 8px;
-            padding: 25px;
-            max-width: 450px;
-            background: rgba(10, 10, 10, 0.8);
+        .filter-label-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
         }
-        .restaurant-title {
-            font-family: var(--font-secondary);
-            color: var(--color-gold);
-            font-size: 20px;
-            margin-bottom: 15px;
+
+        .filter-label {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .filter-sub {
+            font-size: 8.5px;
+            color: var(--text-dark);
+        }
+
+        /* ================================================== */
+        /* PANEL LATERAL DERECHO TRASLÚCIDO                   */
+        /* ================================================== */
+        .aside-showcase-list {
+            grid-area: aside-right;
+            background: var(--bg-panels-glass);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .showcase-header {
+            padding: 20px 14px 8px 14px;
+        }
+
+        .showcase-header h2 {
+            font-family: var(--font-serif);
+            color: var(--gold);
+            font-size: 13px;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
-        .restaurant-detail {
-            font-size: 14px;
-            color: var(--color-text-dim);
+
+        .showcase-stats {
+            font-size: 10px;
+            color: #ffffff;
+            margin-top: 1px;
         }
 
-        /* FOOTER */
-        .site-footer {
-            grid-column: 1 / span 2;
+        .sort-box {
+            padding: 0 14px 10px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sort-select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 6px 10px;
+            color: #ffffff;
+            font-size: 11px;
+            outline: none;
+            cursor: pointer;
+            font-family: var(--font-sans);
+        }
+
+        .shops-scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .shop-card {
+            background: var(--bg-cards-glass);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            cursor: pointer;
+            height: 64px;
+            transition: var(--transition-smooth);
+        }
+
+        .shop-card:hover {
+            border-color: rgba(229, 193, 88, 0.4);
+            background: rgba(229, 193, 88, 0.08);
+            transform: translateX(2px);
+        }
+
+        .shop-thumb-wrapper {
+            width: 64px;
+            height: 64px;
+            flex-shrink: 0;
+        }
+
+        .shop-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .shop-details {
+            flex: 1;
+            padding: 6px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .shop-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .shop-segment {
+            font-size: 9.5px;
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        .shop-rating-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 2px;
+        }
+
+        .star-icon {
+            width: 10px;
+            height: 10px;
+            fill: var(--gold);
+        }
+
+        .rating-value {
+            font-size: 10px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .rating-count {
+            font-size: 9.5px;
+            color: var(--text-dark);
+        }
+
+        .status-indicator {
+            margin-left: auto;
+            font-size: 9.5px;
+            font-weight: 600;
+            color: #2ed573;
+        }
+
+        .action-footer-box {
+            padding: 10px 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-view-all-shops {
+            width: 100%;
+            background: var(--gold);
+            border: none;
+            border-radius: 6px;
+            padding: 8px;
+            color: #000000;
+            font-family: var(--font-sans);
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-view-all-shops:hover {
+            background: #f1cd6b;
+        }
+
+        /* ================================================== */
+        /* PIE DE PÁGINA (FOOTER REPLICADO DE INDEX)          */
+        /* ================================================== */
+        .pie-pagina {
+            width: 100%;
             height: 24px;
             background-color: #000000;
-            color: var(--color-text-dim);
+            color: #8c8c8c;
             font-size: 11px;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-top: 1px solid var(--color-border);
-            font-family: Arial, sans-serif;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+            z-index: 5;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* AJUSTE ESPECÍFICO PARA TABLETS (768px - 1023px) */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 200px 1fr 240px; /* Reducimos anchos de paneles laterales */
+            }
+        
+            .brand-text h1 {
+                font-size: 14px; /* Reducimos ligeramente el logo para que no choque */
+            }
+        
+            .user-tools {
+                gap: 12px; /* Reducimos el espacio entre iconos para que quepan */
+            }
+        
+            .search-wrapper {
+                max-width: 250px; /* Acortamos el buscador para dejar aire */
+            }
+        }
+        
+        /* ================================================== */
+        /* RESPONSIVIDAD REFINADA (EVITA MANCHAS EN LA IMAGEN)*/
+        /* ================================================== */
+        @media (max-width: 1024px) {
+            body { overflow-y: auto; height: auto; }
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto 1fr auto;
+                grid-template-areas: 
+                    "header"
+                    "aside-left"
+                    "main"
+                    "aside-right";
+                height: auto;
+            }
+
+            .aside-categories {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 12px;
+            }
+
+            .section-title { display: none; }
+
+            .categories-list {
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 8px;
+                padding-bottom: 4px;
+            }
+
+            .category-item button { width: auto; white-space: nowrap; padding: 6px 12px; }
+            
+            .main-boulevard { min-height: 380px; height: 45vh; }
+
+            /* PERMANECE FLOTANTE PERO RE-DISEÑADO ULTRA-COMPACTO */
+            .bottom-filter-bar {
+                position: absolute;
+                bottom: 12px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: calc(100% - 24px);
+                display: flex;
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 8px;
+                background: rgba(10, 10, 10, 0.85);
+                padding: 5px;
+                border-radius: 30px;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .bottom-filter-bar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .filter-pill {
+                flex: 0 0 auto;
+                padding: 6px 14px;
+                border-radius: 20px;
+                background: rgba(0, 0, 0, 0.5);
+            }
+
+            .aside-showcase-list { border-left: none; border-top: 1px solid var(--border-color); }
+            .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+        }
+
+        @media (max-width: 640px) {
+            .header-top { flex-direction: column; height: auto; padding: 12px; gap: 10px; }
+            .search-wrapper { width: 100%; margin: 0; order: 3; }
+        /* Alineación a la derecha y elementos compactos */
+            .user-tools { 
+                width: 100%;             /* Asegura que el contenedor ocupe el ancho para alinear */
+                justify-content: flex-end; /* Alinea todo el grupo a la derecha */
+                gap: 10px !important;      /* Espacio reducido y uniforme */
+                order: 2; 
+            }
+            
+            /* Asegura que el corazón no tenga márgenes que lo separen */
+            .icon-corazon {
+                margin-right: 0 !important;
+            }             
+            .main-boulevard { min-height: 280px; height: 40vh; }
+            .welcome-billboard { top: 25px; }
+            .welcome-billboard h2 { font-size: 18px; letter-spacing: 4px; }
+            
+            .filter-label { font-size: 10px; }
+            .filter-sub { font-size: 8px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="page-container">
-        
-        <!-- HEADER -->
-        <header class="site-header">
-            <img src="imagenes/logo.png" alt="Urbanex" class="logo">
-        </header>
-
-        <!-- SIDEBAR -->
-        <aside class="site-sidebar">
-            <p>MENÚ</p>
-        </aside>
-
-        <!-- CONTENIDO PRINCIPAL -->
-        <main class="main-content">
-            
-            <div class="hero-wrapper">
-                <img src="imagenes/Gastronomía.png" alt="Banner Gastronomía" class="hero-img">
-            </div>
-
-            <section class="restaurant-card">
-                <h2 class="restaurant-title">NOMBRE DEL RESTAURANTE</h2>
-                <p class="restaurant-detail">Especialidad: Comida Típica Lojana</p>
-            </section>
-
-        </main>
-
-        <!-- FOOTER -->
-        <footer class="site-footer">
-            <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
-        </footer>
-
+<div class="dashboard-container">
+    
+    <!-- IMAGEN CENTRAL CON EXTENSIÓN BAJO PANELES TRASLÚCIDOS -->
+    <div class="global-background-underlay">
+        <img src="imagenes/Gastronomía.png" alt="Gastronomía de Loja">
     </div>
+
+    <!-- BARRA SUPERIOR TRASLÚCIDA -->
+    <header class="header-top">
+        <!-- Reemplazo del texto por la imagen -->
+        <a href="index.html" class="brand-box" title="Volver al Inicio">
+            <img src="imagenes/logo.png" alt="Logo Urbanex" style="height: 60px; width: auto; display: block;">
+        </a>
+
+        <div class="search-wrapper">
+            <input type="text" class="search-input" placeholder="¿Qué restaurante, cafetería o plato busca?">
+            <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        </div>
+
+        <div class="user-tools">
+            <div class="location-indicator">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <span>Loja, Ecuador</span>
+            </div>
+            <!-- Busca esto en tu header -->
+            <div class="tool-icon icon-corazon">
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+            <div class="profile-avatar">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- MENÚ LATERAL IZQUIERDO TRASLÚCIDO -->
+    <aside class="aside-categories">
+        <h2 class="section-title">Categorías</h2>
+        <ul class="categories-list">
+            <li class="category-item active">
+                <button>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm7-3h-1v5h1V6zm0-4h-3v11h3V2zm2 19H14v-2h6v2z"/></svg></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Restaurantes</span>
+                        <span class="category-count">48 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M18.5 3H6c-1.66 0-3 1.34-3 3v5c0 2.76 2.24 5 5 5h3c2.76 0 5-2.24 5-5V8h2.5C20.43 8 22 6.43 22 4.5S20.43 3 18.5 3zM14 11c0 1.65-1.35 3-3 3H8c-1.65 0-3-1.35-3-3V5h9v6zm4.5-5H16V5h2.5c.55 0 1 .45 1 1s-.45 1-1 1zM3 19h16v2H3z"/></svg></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Cafeterías</span>
+                        <span class="category-count">32 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Comida rápida</span>
+                        <span class="category-count">27 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M12 2C8.14 2 5 5.14 5 9c0 1.57.52 3.02 1.4 4.18L4 22h16l-2.4-8.82C18.48 12.02 19 10.57 19 9c0-3.86-3.14-7-7-7zm0 2c2.76 0 5 2.24 5 5 0 1.2-.43 2.3-1.14 3.16l-.37.45L17.38 20H6.62l1.89-7.39-.37-.45C7.43 11.3 7 10.2 7 9c0-2.76 2.24-5 5-5z"/></svg></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Panaderías y Repostería</span>
+                        <span class="category-count">21 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M7 2h10l-1 7.2c-.28 2.02-1.86 3.62-3.8 3.93V20h4v2H8v-2h4v-6.87c-1.94-.31-3.52-1.91-3.8-3.93L7 2zm2.3 2 .72 5.02C10.19 10.15 11.03 11 12 11s1.81-.85 1.98-1.98L14.7 4H9.3z"/></svg></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Bares y Coctelería</span>
+                        <span class="category-count">18 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M12 2C8.69 2 6 4.69 6 8c0 1.82.82 3.45 2.1 4.55L12 22l3.9-9.45C17.18 11.45 18 9.82 18 8c0-3.31-2.69-6-6-6zm0 8.5A2.5 2.5 0 1 1 12 5a2.5 2.5 0 0 1 0 5.5z"/></svg></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Heladerías</span>
+                        <span class="category-count">14 locales</span>
+                    </div>
+                </button>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- ÁREA CENTRAL INTERACTIVA -->
+    <main class="main-boulevard">
+        <div class="boulevard-overlay"></div>
+
+        <div class="welcome-billboard">
+            <h2>GASTRONOMÍA</h2>
+            <p>RESTAURANTES, CAFETERÍAS Y SABORES DE LOJA EN UN SOLO LUGAR</p>
+        </div>
+
+        <div class="bottom-filter-bar">
+            <div class="filter-pill">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+                <div class="filter-label-group">
+                    <span class="filter-label">Abiertos Ahora</span>
+                    <span class="filter-sub">64 locales</span>
+                </div>
+            </div>
+            <div class="filter-pill">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+                <div class="filter-label-group">
+                    <span class="filter-label">Cerca de mí</span>
+                    <span class="filter-sub">38 opciones</span>
+                </div>
+            </div>
+            <div class="filter-pill">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/></svg></div>
+                <div class="filter-label-group">
+                    <span class="filter-label">Delivery</span>
+                    <span class="filter-sub">41 locales</span>
+                </div>
+            </div>
+            <div class="filter-pill">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg></div>
+                <div class="filter-label-group">
+                    <span class="filter-label">Reservas</span>
+                    <span class="filter-sub">23 disponibles</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PANEL LATERAL DERECHO TRASLÚCIDO -->
+    <aside class="aside-showcase-list">
+        <div class="showcase-header">
+            <h2>SABORES DESTACADOS</h2>
+            <div class="showcase-stats">Recomendados gastronómicos del mes</div>
+        </div>
+
+        <div class="sort-box">
+            <select class="sort-select">
+                <option>Ordenar por: Mayor Calificación</option>
+                <option>Cercanía</option>
+                <option>Precio promedio</option>
+                <option>Disponibilidad para reservar</option>
+            </select>
+        </div>
+
+        <div class="shops-scroll-area">
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=120&q=80" alt="La Terraza Gourmet" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">La Terraza Gourmet</div>
+                    <div class="shop-segment">Restaurante · Cocina de autor</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <span class="rating-value">4.9</span> <span class="rating-count">(312)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=120&q=80" alt="Café Central Loja" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">Café Central Loja</div>
+                    <div class="shop-segment">Cafetería · Café de especialidad</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <span class="rating-value">4.8</span> <span class="rating-count">(245)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=120&q=80" alt="Pizza Urbana" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">Pizza Urbana</div>
+                    <div class="shop-segment">Comida rápida · Artesanal</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <span class="rating-value">4.7</span> <span class="rating-count">(198)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?auto=format&fit=crop&w=120&q=80" alt="Dulce Estación" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">Dulce Estación</div>
+                    <div class="shop-segment">Repostería · Postres</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <span class="rating-value">4.7</span> <span class="rating-count">(164)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-footer-box">
+            <button class="btn-view-all-shops">Explorar Directorio Gastronómico</button>
+        </div>
+    </aside>
+
+</div>
+
+<!-- PIE DE PÁGINA REPLICADO EXACTAMENTE DESDE INDEX -->
+<footer class="pie-pagina">
+    <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
+</footer>
 
 </body>
 </html>
