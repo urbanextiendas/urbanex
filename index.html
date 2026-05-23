@@ -1,429 +1,967 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Urbanex</title>
-
-<style>
-
-/* ================================================== */
-/* RESETEO GLOBAL (HABILITA EL GESTO DE REFRESCAR)   */
-/* ================================================== */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html, body {
-    width: 100%;
-    min-height: 100%;
-    background: #000;
-    font-family: 'Times New Roman', Times, serif, Arial, Helvetica, sans-serif;
-    display: flex;
-    flex-direction: column;
-}
-
-/* ================================================== */
-/* PORTADA (AJUSTE EXACTO PARA CUALQUIER PANTALLA)    */
-/* ================================================== */
-.portada{
-    width: 100%;
-    height: calc(100vh - 24px);
-    height: calc(100svh - 24px); 
-    position: relative;
-    overflow: hidden;
-    background-color: #000;
-}
-
-/* Control adaptativo de la imagen */
-.portada-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: fill; 
-    display: block;
-}
-
-/* CAPA OSCURA REFINADA PARA MEJORAR CONTRASTE DE TEXTOS */
-.portada::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,.30),
-        rgba(0,0,0,.50)
-    );
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* ================================================== */
-/* CAPAS DE TEXTO PROFESIONAL Y LEGIBLE (ESCRITORIO)  */
-/* ================================================== */
-
-/* Encabezado Superior (Arco de la puerta) */
-.header-branding {
-    position: absolute;
-    top: 5%;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    width: 90%;
-    max-width: 600px;
-    z-index: 3;
-    pointer-events: none;
-}
-
-.header-branding h1 {
-    color: #e5c158;
-    font-size: 32px;
-    font-weight: 400;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 4px 10px rgba(0,0,0,0.8);
-    margin-bottom: 4px;
-}
-
-.header-branding p {
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 300;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.95);
-}
-
-/* Eslogan Lateral Izquierdo (Sobre pilar izquierdo) */
-.slogan-lateral {
-    position: absolute;
-    top: 40%;
-    left: 4%;
-    width: 26%;
-    z-index: 3;
-    pointer-events: none;
-}
-
-.slogan-lateral h2 {
-    color: #ffffff;
-    font-size: 22px;
-    font-weight: 400;
-    letter-spacing: 1px;
-    line-height: 1.4;
-    text-transform: uppercase;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.95);
-}
-
-.slogan-lateral h2 span {
-    color: #e5c158;
-    display: block;
-    font-size: 26px;
-    font-weight: bold;
-    margin: 5px 0;
-}
-
-/* Características / Beneficios (Sobre pilar derecho) */
-.caracteristicas-lista {
-    position: absolute;
-    top: 35%;
-    right: 4%;
-    width: 26%;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    z-index: 3;
-    pointer-events: none;
-}
-
-.item-caracteristica {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 10px 14px;
-    border-radius: 6px;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    border-left: 3px solid #e5c158;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-
-.item-caracteristica svg {
-    width: 20px;
-    height: 20px;
-    fill: #e5c158;
-    flex-shrink: 0;
-}
-
-.item-caracteristica span {
-    color: #ffffff;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-weight: bold;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.9);
-}
-
-/* Botón de Registro Superior Derecho */
-.registro-contenedor {
-    position: absolute;
-    top: 4%;
-    right: 4%;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    z-index: 12;
-}
-
-.registro-texto {
-    color: #ffffff;
-    font-size: 13px;
-    letter-spacing: 1px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.95);
-}
-
-.btn-registro {
-    display: inline-block;
-    padding: 10px 20px;
-    border: 1px solid #e5c158;
-    color: #e5c158;
-    text-decoration: none;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-radius: 4px;
-    background: rgba(0, 0, 0, 0.7);
-    transition: all 0.3s ease;
-}
-
-.btn-registro:hover {
-    background: #e5c158;
-    color: #000000;
-    box-shadow: 0 0 15px rgba(229, 193, 88, 0.5);
-}
-
-/* ================================================== */
-/* ÁREA CLICKEABLE DE LA PUERTA                       */
-/* ================================================== */
-.puerta-link{
-    position:absolute;
-    top: 18%;
-    left: 38%;
-    width: 24%;
-    height: 58%;
-    z-index: 10; 
-    display:block;
-    cursor:pointer;
-    background-color: rgba(255, 255, 255, 0);
-}
-
-.puerta-link::after {
-    content: "ENTRAR";
-    position: absolute;
-    bottom: 8%;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #e5c158;
-    letter-spacing: 4px;
-    font-size: 14px;
-    border-bottom: 1px solid #e5c158;
-    padding-bottom: 4px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    text-shadow: 0 2px 4px #000;
-}
-
-.puerta-link:hover::after {
-    opacity: 1;
-}
-
-/* ================================================== */
-/* OPTIMIZACIÓN EXCLUSIVA PARA DISPOSITIVOS MÓVILES    */
-/* ================================================== */
-@media(max-width:768px){
-    .portada-img {
-        object-fit: cover;
-        object-position: center center;
-    }
-
-    .puerta-link{
-        top: 22%;
-        left: 22%;
-        width: 56%;
-        height: 54%;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja - Centro Comercial Digital</title>
     
-    .puerta-link::after {
-        opacity: 1; /* Siempre visible en móvil ya que no existe el hover */
-        font-size: 12px;
-        bottom: 4%;
-    }
+    <!-- Tipografías Premium de Alta Definición -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    .header-branding {
-        top: 4%;
-    }
+    <style>
+        /* ================================================== */
+        /* VARIABLES DE DISEÑO PREMIUM (CON ENFOQUE TRASLÚCIDO)*/
+        /* ================================================== */
+        :root {
+            --bg-main: #020202;
+            --bg-panels-glass: rgba(6, 6, 6, 0.65);
+            --bg-cards-glass: rgba(20, 20, 20, 0.5);
+            --gold: #e5c158;
+            --gold-dim: #a68b44;
+            --border-color: rgba(229, 193, 88, 0.15);
+            --text-main: #ffffff;
+            --text-muted: #e0e0e0;
+            --text-dark: #aaaaaa;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --blur-effect: blur(20px);
+        }
 
-    .header-branding h1 {
-        font-size: 24px;
-        letter-spacing: 3px;
-    }
+        /* ================================================== */
+        /* RESETEO GLOBAL                                     */
+        /* ================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .header-branding p {
-        font-size: 11px;
-        letter-spacing: 1px;
-    }
+        /* Control de barras de desplazamiento imperceptibles pero funcionales */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(229, 193, 88, 0.2);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
+        }
 
-    /* UBICACIÓN CLAVE: El eslogan se coloca en la franja superior de la puerta */
-    .slogan-lateral {
-        top: 14%;
-        left: 5%;
-        width: 90%;
-        text-align: center;
-    }
+        body {
+            width: 100%;
+            height: 100vh;
+            background-color: var(--bg-main);
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .slogan-lateral h2 {
-        font-size: 13px;
-        letter-spacing: 1px;
-    }
+        /* ================================================== */
+        /* CONTENEDOR PRINCIPAL INTERCONECTADO                */
+        /* ================================================== */
+        .dashboard-container {
+            flex: 1;
+            display: grid;
+            grid-template-rows: 60px 1fr;
+            grid-template-columns: 240px 1fr 290px;
+            grid-template-areas: 
+                "header header header"
+                "aside-left main aside-right";
+            height: calc(100vh - 24px); /* Ajustado para el nuevo tamaño del footer (24px) */
+            position: relative;
+            overflow: hidden;
+        }
 
-    .slogan-lateral h2 span {
-        display: inline;
-        font-size: 14px;
-        margin: 0 5px;
-    }
+        /* CAPA DE FONDO GLOBAL PARA EL EFECTO TRASLÚCIDO COMPLETO */
+        .global-background-underlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
 
-    /* UBICACIÓN CLAVE: Los beneficios se alinean horizontalmente abajo de la puerta */
-    .caracteristicas-lista {
-        top: auto;
-        bottom: 14%;
-        left: 5%;
-        width: 90%;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 6px;
-    }
+        .global-background-underlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
 
-    .item-caracteristica {
-        padding: 5px 8px;
-        border-left: none;
-        border-bottom: 2px solid #e5c158;
-        background: rgba(0, 0, 0, 0.7);
-    }
+        /* ================================================== */
+        /* BARRA SUPERIOR (HEADER TRASLÚCIDO)                 */
+        /* ================================================== */
+        .header-top {
+            grid-area: header;
+            background: var(--bg-panels-glass);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+        }
 
-    .item-caracteristica svg {
-        width: 13px;
-        height: 13px;
-        gap: 6px;
-    }
+        /* Enlace de retorno al inicio con diseño profesional */
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            user-select: none;
+        }
 
-    .item-caracteristica span {
-        font-size: 9px;
-        letter-spacing: 0.5px;
-    }
+        .brand-box:hover .brand-text h1 {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(229, 193, 88, 0.6);
+        }
 
-    /* UBICACIÓN CLAVE: Registro de negocio toma la base oscura inferior */
-    .registro-contenedor {
-        top: auto;
-        bottom: 3%;
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
-        flex-direction: row;
-        justify-content: center;
-        gap: 10px;
-        width: 90%;
-    }
+        .brand-box:hover .brand-icon-svg {
+            fill: #fff;
+            filter: drop-shadow(0 0 5px rgba(229, 193, 88, 0.6));
+        }
 
-    .registro-texto {
-        font-size: 11px;
-    }
+        .brand-icon-svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--gold);
+            transition: var(--transition-smooth);
+        }
 
-    .btn-registro {
-        padding: 6px 14px;
-        font-size: 11px;
-    }
-}
+        .brand-text h1 {
+            font-family: var(--font-serif);
+            color: var(--gold);
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            line-height: 1;
+            transition: var(--transition-smooth);
+        }
 
-/* Ajuste fino para pantallas extremadamente pequeñas */
-@media(max-width:380px){
-    .caracteristicas-lista {
-        bottom: 16%;
-    }
-    .item-caracteristica span {
-        font-size: 8px;
-    }
-}
+        .brand-text p {
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ffffff;
+            font-weight: 500;
+            margin-top: 2px;
+        }
 
-/* ================================================== */
-/* PIE DE PÁGINA                                      */
-/* ================================================== */
-.pie-pagina {
-    width: 100%;
-    height: 24px;
-    background-color: #000000;
-    color: #8c8c8c;
-    font-size: 11px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border-top: 1px solid #1a1a1a;
-    z-index: 5;
-    font-family: Arial, Helvetica, sans-serif;
-}
+        .search-wrapper {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 20px;
+            position: relative;
+        }
 
-</style>
+        .search-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 8px 40px 8px 16px;
+            color: var(--text-main);
+            font-size: 12px;
+            outline: none;
+            font-family: var(--font-sans);
+            transition: var(--transition-smooth);
+        }
 
+        .search-input:focus {
+            border-color: var(--gold);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            fill: var(--text-dark);
+        }
+
+        .user-tools {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .location-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #ffffff;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .location-indicator svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold);
+        }
+
+        .tool-icon {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .tool-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+            transition: var(--transition-smooth);
+        }
+
+        .tool-icon:hover svg {
+            fill: var(--gold);
+        }
+
+        .badge-count {
+            position: absolute;
+            top: -4px;
+            right: -5px;
+            background: #e63946;
+            color: #fff;
+            font-size: 8px;
+            font-weight: 700;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .profile-avatar svg {
+            width: 13px;
+            height: 13px;
+            fill: var(--gold);
+        }
+
+        /* ================================================== */
+        /* MENÚ LATERAL IZQUIERDO TRASLÚCIDO                  */
+        /* ================================================== */
+        .aside-categories {
+            grid-area: aside-left;
+            background: var(--bg-panels-glass);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-right: 1px solid var(--border-color);
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            z-index: 5;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-bottom: 14px;
+            padding-left: 6px;
+            font-weight: 700;
+        }
+
+        .categories-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            list-style: none;
+        }
+
+        .category-item button {
+            width: 100%;
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 8px 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            text-align: left;
+            transition: var(--transition-smooth);
+        }
+
+        .category-item button:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .category-item button .icon-container {
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition-smooth);
+        }
+
+        .category-item button svg {
+            width: 14px;
+            height: 14px;
+            fill: #ffffff;
+        }
+
+        .category-text-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .category-name {
+            color: #ffffff;
+            font-size: 11.5px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .category-count {
+            color: var(--text-dark);
+            font-size: 9px;
+        }
+
+        .category-item.active button {
+            background: rgba(229, 193, 88, 0.12);
+            border-color: rgba(229, 193, 88, 0.25);
+        }
+
+        .category-item.active button .icon-container {
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .category-item.active button svg {
+            fill: #000000;
+        }
+
+        .category-item.active .category-name {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* ================================================== */
+        /* CENTRAL: VISTA DEL BULEVAR                         */
+        /* ================================================== */
+        .main-boulevard {
+            grid-area: main;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            z-index: 2;
+        }
+
+        .boulevard-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 40%, transparent 70%, rgba(0,0,0,0.6) 100%);
+            pointer-events: none;
+        }
+
+        .welcome-billboard {
+            position: absolute;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 90%;
+            pointer-events: none;
+        }
+
+        .welcome-billboard h2 {
+            font-family: var(--font-serif);
+            color: var(--text-main);
+            font-size: 24px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+        }
+
+        .welcome-billboard p {
+            font-size: 10px;
+            color: var(--gold);
+            font-weight: 600;
+            margin-top: 6px;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+        }
+
+        /* MAPEO DE ZONAS INTERACTIVAS */
+        .interactive-showcase {
+            position: absolute;
+            z-index: 3;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0);
+            transition: var(--transition-smooth);
+        }
+        .interactive-showcase:hover {
+            background: rgba(229, 193, 88, 0.02);
+            box-shadow: inset 0 0 15px rgba(229, 193, 88, 0.15);
+        }
+        .showcase-comida { top: 15%; left: 3%; width: 14%; height: 40%; }
+        .showcase-salud { top: 25%; left: 22%; width: 8%; height: 30%; }
+        .showcase-moda { top: 18%; right: 14%; width: 12%; height: 40%; }
+
+        /* FILTROS TRASLÚCIDOS INFERIORES */
+        .bottom-filter-bar {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 10, 10, 0.75);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 6px;
+            display: flex;
+            gap: 6px;
+            width: calc(100% - 30px);
+            max-width: 760px;
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            z-index: 5;
+        }
+
+        .filter-pill {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            min-width: 0;
+        }
+
+        .filter-pill:hover {
+            border-color: var(--gold);
+            background: rgba(229, 193, 88, 0.08);
+        }
+
+        .filter-icon-box svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold);
+            display: block;
+        }
+
+        .filter-label-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .filter-label {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .filter-sub {
+            font-size: 8.5px;
+            color: var(--text-dark);
+        }
+
+        /* ================================================== */
+        /* PANEL LATERAL DERECHO TRASLÚCIDO                   */
+        /* ================================================== */
+        .aside-showcase-list {
+            grid-area: aside-right;
+            background: var(--bg-panels-glass);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .showcase-header {
+            padding: 20px 14px 8px 14px;
+        }
+
+        .showcase-header h2 {
+            font-family: var(--font-serif);
+            color: var(--gold);
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .showcase-stats {
+            font-size: 10px;
+            color: #ffffff;
+            margin-top: 1px;
+        }
+
+        .sort-box {
+            padding: 0 14px 10px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sort-select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 6px 10px;
+            color: #ffffff;
+            font-size: 11px;
+            outline: none;
+            cursor: pointer;
+            font-family: var(--font-sans);
+        }
+
+        .shops-scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .shop-card {
+            background: var(--bg-cards-glass);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            cursor: pointer;
+            height: 64px;
+            transition: var(--transition-smooth);
+        }
+
+        .shop-card:hover {
+            border-color: rgba(229, 193, 88, 0.4);
+            background: rgba(229, 193, 88, 0.08);
+            transform: translateX(2px);
+        }
+
+        .shop-thumb-wrapper {
+            width: 64px;
+            height: 64px;
+            flex-shrink: 0;
+        }
+
+        .shop-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .shop-details {
+            flex: 1;
+            padding: 6px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .shop-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .shop-segment {
+            font-size: 9.5px;
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        .shop-rating-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 2px;
+        }
+
+        .star-icon {
+            width: 10px;
+            height: 10px;
+            fill: var(--gold);
+        }
+
+        .rating-value {
+            font-size: 10px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .rating-count {
+            font-size: 9.5px;
+            color: var(--text-dark);
+        }
+
+        .status-indicator {
+            margin-left: auto;
+            font-size: 9.5px;
+            font-weight: 600;
+            color: #2ed573;
+        }
+
+        .action-footer-box {
+            padding: 10px 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-view-all-shops {
+            width: 100%;
+            background: var(--gold);
+            border: none;
+            border-radius: 6px;
+            padding: 8px;
+            color: #000000;
+            font-family: var(--font-sans);
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-view-all-shops:hover {
+            background: #f1cd6b;
+        }
+
+        /* ================================================== */
+        /* PIE DE PÁGINA (FOOTER REPLICADO DE INDEX)          */
+        /* ================================================== */
+        .pie-pagina {
+            width: 100%;
+            height: 24px;
+            background-color: #000000;
+            color: #8c8c8c;
+            font-size: 11px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+            z-index: 5;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* ================================================== */
+        /* RESPONSIVIDAD REFINADA (EVITA MANCHAS EN LA IMAGEN)*/
+        /* ================================================== */
+        @media (max-width: 1024px) {
+            body { overflow-y: auto; height: auto; }
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto 1fr auto;
+                grid-template-areas: 
+                    "header"
+                    "aside-left"
+                    "main"
+                    "aside-right";
+                height: auto;
+            }
+
+            .aside-categories {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 12px;
+            }
+
+            .section-title { display: none; }
+
+            .categories-list {
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 8px;
+                padding-bottom: 4px;
+            }
+
+            .category-item button { width: auto; white-space: nowrap; padding: 6px 12px; }
+            
+            .main-boulevard { min-height: 380px; height: 45vh; }
+
+            /* PERMANECE FLOTANTE PERO RE-DISEÑADO ULTRA-COMPACTO */
+            .bottom-filter-bar {
+                position: absolute;
+                bottom: 12px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: calc(100% - 24px);
+                display: flex;
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 8px;
+                background: rgba(10, 10, 10, 0.85);
+                padding: 5px;
+                border-radius: 30px;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .bottom-filter-bar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .filter-pill {
+                flex: 0 0 auto;
+                padding: 6px 14px;
+                border-radius: 20px;
+                background: rgba(0, 0, 0, 0.5);
+            }
+
+            .aside-showcase-list { border-left: none; border-top: 1px solid var(--border-color); }
+            .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+        }
+
+        @media (max-width: 640px) {
+            .header-top { flex-direction: column; height: auto; padding: 12px; gap: 10px; }
+            .search-wrapper { width: 100%; margin: 0; order: 3; }
+            .user-tools { width: 100%; justify-content: space-between; order: 2; }
+            
+            .main-boulevard { min-height: 280px; height: 40vh; }
+            .welcome-billboard { top: 25px; }
+            .welcome-billboard h2 { font-size: 18px; letter-spacing: 4px; }
+            
+            .filter-label { font-size: 10px; }
+            .filter-sub { font-size: 8px; }
+        }
+    </style>
 </head>
-
 <body>
 
-<section class="portada">
-    <img src="imagenes/Urba0.png" alt="Portada" class="portada-img">
-
-    <div class="header-branding">
-        <h1>Loja</h1>
-        <p>Centro Comercial Digital</p>
+<div class="dashboard-container">
+    
+    <!-- IMAGEN CENTRAL CON EXTENSIÓN BAJO PANELES TRASLÚCIDOS -->
+    <div class="global-background-underlay">
+        <img src="imagenes/Boulevard.png" alt="Bulevar Comercial de Loja">
     </div>
 
-    <div class="slogan-lateral">
-        <h2>Todos los comercios <span>de Loja</span> en un solo lugar</h2>
-    </div>
+    <!-- BARRA SUPERIOR TRASLÚCIDA -->
+    <header class="header-top">
+        <a href="index.html" class="brand-box" title="Volver al Inicio">
+            <svg class="brand-icon-svg" viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H7c0 2.76 2.24 5 5 5s5-2.24 5-5h-2c0 1.66-1.34 3-3 3z"/></svg>
+            <div class="brand-text">
+                <h1>LOJA</h1>
+                <p>Centro Comercial Digital</p>
+            </div>
+        </a>
 
-    <div class="caracteristicas-lista">
-        <div class="item-caracteristica">
-            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-            <span>Cerca de usted</span>
+        <div class="search-wrapper">
+            <input type="text" class="search-input" placeholder="¿Qué negocio o servicio busca hoy?">
+            <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         </div>
-        <div class="item-caracteristica">
-            <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
-            <span>Las mejores ofertas</span>
-        </div>
-        <div class="item-caracteristica">
-            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-            <span>Negocios confiables</span>
-        </div>
-        <div class="item-caracteristica">
-            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
-            <span>Comunidad local</span>
-        </div>
-    </div>
 
-    <div class="registro-contenedor">
-        <span class="registro-texto">¿Es propietario?</span>
-        <a href="registro.html" class="btn-registro">Registre su negocio</a>
-    </div>
+        <div class="user-tools">
+            <div class="location-indicator">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <span>Loja, Ecuador</span>
+            </div>
+            <div class="tool-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+            <div class="tool-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1s-1.5-.24-1.5.76v.92C7.64 6.36 6 8.92 6 12v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
+                <div class="badge-count">2</div>
+            </div>
+            <div class="profile-avatar">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+        </div>
+    </header>
 
-    <a href="interior.html" class="puerta-link"></a>
-</section>
+    <!-- MENÚ LATERAL IZQUIERDO TRASLÚCIDO -->
+    <aside class="aside-categories">
+        <h2 class="section-title">Categorías</h2>
+        <ul class="categories-list">
+            <li class="category-item active">
+                <button>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm7-3h-1v5h1V6zm0-4h-3v11h3V2zm2 19H14v-2h6v2z"/></svg></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Comida y Bebida</span>
+                        <span class="category-count">128 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H5v-4h4V5h4v4h4v4z"/></svg></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Salud y Farmacias</span>
+                        <span class="category-count">96 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M22.46 6c-.77-2.3-2.89-4-5.46-4H7c-2.57 0-4.69 1.7-5.46 4L.55 9H23.5l-1.04-3zM2 11v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-9H2zm7 8H5v-4h4v4zm10 0h-4v-4h4v4z"/></svg></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Parqueaderos</span>
+                        <span class="category-count">34 zonas</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2v1h2c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h2V4c0-1.1.9-2 2-2zm4 7H8v10h8V9zm-4 2c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z"/></svg></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Moda y Accesorios</span>
+                        <span class="category-count">112 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M4 10h3v7H4zm6.5 0h3v7h-3zM2 22h19v-3H2zm15-12h3v7h-3zM11.5 2L2 7v2h19V7z"/></svg></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Bancos y Cajeros</span>
+                        <span class="category-count">45 puntos</span>
+                    </div>
+                </button>
+            </li>
+        </ul>
+    </aside>
 
+    <!-- ÁREA CENTRAL INTERACTIVA -->
+    <main class="main-boulevard">
+        <div class="boulevard-overlay"></div>
+
+        <div class="welcome-billboard">
+            <h2>BIENVENIDO</h2>
+            <p>TODOS LOS COMERCIOS DE LOJA EN UN SOLO LUGAR</p>
+        </div>
+
+        <div class="interactive-showcase showcase-comida" title="Sección Gastronómica"></div>
+        <div class="interactive-showcase showcase-salud" title="Sección Salud"></div>
+        <div class="interactive-showcase showcase-moda" title="Sección Moda"></div>
+
+        <div class="bottom-filter-bar">
+            <div class="filter-pill">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+                <div class="filter-label-group">
+                    <span class="filter-label">Abiertos Ahora</span>
+                    <span class="filter-sub">184 locales</span>
+                </div>
+            </div>
+            <div class="filter-pill">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+                <div class="filter-label-group">
+                    <span class="filter-label">Cerca de mí</span>
+                    <span class="filter-sub">92 locales</span>
+                </div>
+            </div>
+            <div class="filter-pill">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/></svg></div>
+                <div class="filter-label-group">
+                    <span class="filter-label">A Domicilio</span>
+                    <span class="filter-sub">115 locales</span>
+                </div>
+            </div>
+            <div class="filter-pill">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg></div>
+                <div class="filter-label-group">
+                    <span class="filter-label">Ofertas</span>
+                    <span class="filter-sub">42 promos</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PANEL LATERAL DERECHO TRASLÚCIDO -->
+    <aside class="aside-showcase-list">
+        <div class="showcase-header">
+            <h2>DESTACADOS</h2>
+            <div class="showcase-stats">Recomendados del mes</div>
+        </div>
+
+        <div class="sort-box">
+            <select class="sort-select">
+                <option>Ordenar por: Mayor Calificación</option>
+                <option>Cercanía</option>
+            </select>
+        </div>
+
+        <div class="shops-scroll-area">
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=120&q=80" alt="La Terraza Gourmet" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">La Terraza Gourmet</div>
+                    <div class="shop-segment">Alta Cocina</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <span class="rating-value">4.9</span> <span class="rating-count">(312)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=120&q=80" alt="Café Central Loja" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">Café Central Loja</div>
+                    <div class="shop-segment">Café de Especialidad</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <span class="rating-value">4.8</span> <span class="rating-count">(245)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-footer-box">
+            <button class="btn-view-all-shops">Explorar Directorio Completo</button>
+        </div>
+    </aside>
+
+</div>
+
+<!-- PIE DE PÁGINA REPLICADO EXACTAMENTE DESDE INDEX -->
 <footer class="pie-pagina">
     <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
 </footer>
