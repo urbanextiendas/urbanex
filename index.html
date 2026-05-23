@@ -25,10 +25,11 @@ html, body {
     font-family: 'Times New Roman', Times, serif, Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
 }
 
 /* ================================================== */
-/* PORTADA (AJUSTE EXACTO PARA CUALQUIER PANTALLA)    */
+/* CONTENEDOR DE TRANSICIÓN DE LUJO                   */
 /* ================================================== */
 .portada{
     width: 100%;
@@ -37,6 +38,28 @@ html, body {
     position: relative;
     overflow: hidden;
     background-color: #000;
+    transition: transform 1.4s cubic-bezier(0.25, 1, 0.3, 1), opacity 1.2s ease-in-out;
+}
+
+/* Clase que activa el efecto cinematográfico al hacer clic */
+.transicion-activa {
+    transform: scale(1.15);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Capa de destello negro para un cierre suave */
+.velo-transicion {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.2s ease-in-out;
+}
+.velo-transicion.activo {
+    opacity: 1;
 }
 
 /* Control adaptativo de la imagen */
@@ -79,6 +102,7 @@ html, body {
     max-width: 600px;
     z-index: 3;
     pointer-events: none;
+    transition: transform 1s ease, opacity 0.8s ease;
 }
 
 .header-branding h1 {
@@ -108,6 +132,7 @@ html, body {
     width: 26%;
     z-index: 3;
     pointer-events: none;
+    transition: transform 1s ease, opacity 0.8s ease;
 }
 
 .slogan-lateral h2 {
@@ -139,6 +164,7 @@ html, body {
     gap: 16px;
     z-index: 3;
     pointer-events: none;
+    transition: transform 1s ease, opacity 0.8s ease;
 }
 
 .item-caracteristica {
@@ -179,6 +205,7 @@ html, body {
     align-items: center;
     gap: 15px;
     z-index: 12;
+    transition: opacity 0.5s ease;
 }
 
 .registro-texto {
@@ -206,6 +233,15 @@ html, body {
     background: #e5c158;
     color: #000000;
     box-shadow: 0 0 15px rgba(229, 193, 88, 0.5);
+}
+
+/* Desvanecimiento de elementos de la interfaz durante la animación */
+.ocultar-interfaz .header-branding,
+.ocultar-interfaz .slogan-lateral,
+.ocultar-interfaz .caracteristicas-lista,
+.ocultar-interfaz .registro-contenedor {
+    opacity: 0;
+    transform: translateY(-20px);
 }
 
 /* ================================================== */
@@ -247,13 +283,11 @@ html, body {
 /* OPTIMIZACIÓN EXCLUSIVA PARA DISPOSITIVOS MÓVILES    */
 /* ================================================== */
 @media(max-width:768px){
-    /* Se cambia a 'cover' para que la imagen abarque perfectamente la pantalla vertical */
     .portada-img {
         object-fit: cover;
         object-position: center center;
     }
 
-    /* Redefinición del arco de entrada en el móvil */
     .puerta-link{
         top: 22%;
         left: 22%;
@@ -262,12 +296,11 @@ html, body {
     }
     
     .puerta-link::after {
-        opacity: 1; /* Siempre visible en móvil ya que no existe el hover */
+        opacity: 1; 
         font-size: 12px;
         bottom: 4%;
     }
 
-    /* Título principal adaptado al arco superior móvil */
     .header-branding {
         top: 4%;
     }
@@ -282,7 +315,6 @@ html, body {
         letter-spacing: 1px;
     }
 
-    /* UBICACIÓN CLAVE: El eslogan se coloca en la franja superior de la puerta */
     .slogan-lateral {
         top: 14%;
         left: 5%;
@@ -301,7 +333,6 @@ html, body {
         margin: 0 5px;
     }
 
-    /* UBICACIÓN CLAVE: Los beneficios se alinean horizontalmente abajo de la puerta */
     .caracteristicas-lista {
         top: auto;
         bottom: 14%;
@@ -331,7 +362,6 @@ html, body {
         letter-spacing: 0.5px;
     }
 
-    /* UBICACIÓN CLAVE: Registro de negocio toma la base oscura inferior */
     .registro-contenedor {
         top: auto;
         bottom: 3%;
@@ -354,7 +384,6 @@ html, body {
     }
 }
 
-/* Ajuste fino para pantallas extremadamente pequeñas */
 @media(max-width:380px){
     .caracteristicas-lista {
         bottom: 16%;
@@ -388,7 +417,10 @@ html, body {
 
 <body>
 
-<section class="portada">
+<!-- Velo oscuro para la transición fluida -->
+<div class="velo-transicion" id="veloTransicion"></div>
+
+<section class="portada" id="seccionPortada">
     <img src="imagenes/Portada.png" alt="Portada" class="portada-img">
 
     <div class="header-branding">
@@ -424,12 +456,34 @@ html, body {
         <a href="registro.html" class="btn-registro">Registre su negocio</a>
     </div>
 
-    <a href="interior.html" class="puerta-link"></a>
+    <!-- Se cambia el comportamiento directo por una función de JavaScript -->
+    <a href="javascript:void(0);" class="puerta-link" onclick="ejecutarTransicionLujosa()"></a>
 </section>
 
 <footer class="pie-pagina">
     <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
 </footer>
+
+<script>
+function ejecutarTransicionLujosa() {
+    const portada = document.getElementById('seccionPortada');
+    const velo = document.getElementById('veloTransicion');
+
+    // Desvanece los textos informativos primero para limpiar la toma
+    portada.classList.add('ocultar-interfaz');
+
+    // Inicia el zoom in cinemático y el oscurecimiento del fondo
+    setTimeout(() => {
+        portada.classList.add('transicion-activa');
+        velo.classList.add('activo');
+    }, 150);
+
+    // Redirección exacta tras completarse el efecto premium
+    setTimeout(() => {
+        window.location.href = "boulevard.html";
+    }, 1350); 
+}
+</script>
 
 </body>
 </html>
