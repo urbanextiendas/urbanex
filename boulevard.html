@@ -690,9 +690,63 @@
         }
 
         /* ================================================== */
-        /* RESPONSIVIDAD REFINADA (EVITA MANCHAS EN LA IMAGEN)*/
+        /* RESPONSIVIDAD PARA TABLETS (RANGO MEDIANO)         */
         /* ================================================== */
-        @media (max-width: 1024px) {
+        @media (min-width: 641px) and (max-width: 1024px) {
+            body {
+                overflow: hidden; /* Mantiene la app fija sin scroll general en tablet */
+                height: 100vh;
+            }
+
+            .dashboard-container {
+                grid-template-columns: 200px 1fr; /* Oculta el panel derecho sobrante y ajusta el izquierdo */
+                grid-template-rows: 60px 1fr;
+                grid-template-areas: 
+                    "header header"
+                    "aside-left main";
+                height: calc(100vh - 24px);
+            }
+
+            .aside-showcase-list {
+                display: none; /* Remueve el tercer panel lateral para dar espacio a la imagen central */
+            }
+
+            .aside-categories {
+                border-right: 1px solid var(--border-color);
+                padding: 16px 10px;
+            }
+
+            .category-name {
+                font-size: 11px;
+            }
+
+            .main-boulevard {
+                height: 100%;
+            }
+
+            .bottom-filter-bar {
+                width: calc(100% - 20px);
+                bottom: 16px;
+                gap: 4px;
+            }
+
+            .filter-pill {
+                padding: 6px 8px;
+            }
+
+            .filter-label {
+                font-size: 9.5px;
+            }
+            
+            .filter-sub {
+                font-size: 8px;
+            }
+        }
+
+        /* ================================================== */
+        /* RESPONSIVIDAD PARA MÓVILES                         */
+        /* ================================================== */
+        @media (max-width: 640px) {
             body { overflow-y: auto; height: auto; }
             .dashboard-container {
                 grid-template-columns: 1fr;
@@ -704,6 +758,10 @@
                     "aside-right";
                 height: auto;
             }
+
+            .header-top { flex-direction: column; height: auto; padding: 12px; gap: 10px; }
+            .search-wrapper { width: 100%; margin: 0; order: 3; }
+            .user-tools { width: 100%; justify-content: space-between; order: 2; }
 
             .aside-categories {
                 border-right: none;
@@ -722,7 +780,9 @@
 
             .category-item button { width: auto; white-space: nowrap; padding: 6px 12px; }
             
-            .main-boulevard { min-height: 380px; height: 45vh; }
+            .main-boulevard { min-height: 280px; height: 40vh; }
+            .welcome-billboard { top: 25px; }
+            .welcome-billboard h2 { font-size: 18px; letter-spacing: 4px; }
 
             /* PERMANECE FLOTANTE PERO RE-DISEÑADO ULTRA-COMPACTO */
             .bottom-filter-bar {
@@ -739,6 +799,7 @@
                 padding: 5px;
                 border-radius: 30px;
                 -webkit-overflow-scrolling: touch;
+                z-index: 5;
             }
 
             .bottom-filter-bar::-webkit-scrollbar {
@@ -752,21 +813,11 @@
                 background: rgba(0, 0, 0, 0.5);
             }
 
-            .aside-showcase-list { border-left: none; border-top: 1px solid var(--border-color); }
-            .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
-        }
-
-        @media (max-width: 640px) {
-            .header-top { flex-direction: column; height: auto; padding: 12px; gap: 10px; }
-            .search-wrapper { width: 100%; margin: 0; order: 3; }
-            .user-tools { width: 100%; justify-content: space-between; order: 2; }
-            
-            .main-boulevard { min-height: 280px; height: 40vh; }
-            .welcome-billboard { top: 25px; }
-            .welcome-billboard h2 { font-size: 18px; letter-spacing: 4px; }
-            
             .filter-label { font-size: 10px; }
             .filter-sub { font-size: 8px; }
+
+            .aside-showcase-list { border-left: none; border-top: 1px solid var(--border-color); }
+            .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
         }
     </style>
 </head>
@@ -845,7 +896,7 @@
             </li>
             <li class="category-item">
                 <button>
-                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2v1h2c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h2V4c0-1.1.9-2 2-2zm4 7H8v10h8V9zm-4 2c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z"/></svg></div>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2v1h2c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h2V4c0-1.1.9-2 2-2zm6 7H8v10h8V9zm-4 2c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z"/></svg></div>
                     <div class="category-text-info">
                         <span class="category-name">Moda y Accesorios</span>
                         <span class="category-count">112 locales</span>
