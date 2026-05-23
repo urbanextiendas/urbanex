@@ -794,6 +794,46 @@
                 gap: 10px !important;      /* Espacio reducido y uniforme */
                 order: 2; 
             }
+
+            /* Estructura base de la medalla */
+.icon-wrapper {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #4a5a7a, #101520);
+    border: 2px solid #e5c158;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 0 10px rgba(229, 193, 88, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Dibujamos el icono de Comida (Ejemplo) */
+.icon-comida::after {
+    content: "🍴"; /* Puedes usar emojis o caracteres Unicode premium */
+    font-size: 20px;
+    color: #e5c158;
+    text-shadow: 0 0 5px rgba(229, 193, 88, 0.5);
+}
+
+/* Efecto hover premium */
+.category-item button:hover .icon-wrapper {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(229, 193, 88, 0.4);
+}
+
+/* Estado activo: se vuelve dorado sólido */
+.category-item.active .icon-wrapper {
+    background: #e5c158;
+    border-color: #fff;
+}
+
+.category-item.active .icon-wrapper::after {
+    color: #000;
+    text-shadow: none;
+}
             
             /* Asegura que el corazón no tenga márgenes que lo separen */
             .icon-corazon {
