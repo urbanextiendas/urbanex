@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gastronomía - Urbanex Loja</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Sidebar de Categorías (Consistente en toda la web) -->
+    <aside class="aside-categories">
+        <h2>Categorías</h2>
+        <ul class="categories-list">
+            <li class="category-item active"><button onclick="window.location.href='gastronomia.html'">Gastronomía</button></li>
+            <li class="category-item"><button onclick="window.location.href='salud.html'">Salud y Bienestar</button></li>
+            <li class="category-item"><button onclick="window.location.href='movilidad.html'">Movilidad</button></li>
+            <li class="category-item"><button onclick="window.location.href='hogar.html'">Hogar y Tecnología</button></li>
+            <li class="category-item"><button onclick="window.location.href='turismo.html'">Turismo y Hospedaje</button></li>
+            <li class="category-item"><button onclick="window.location.href='finanzas.html'">Finanzas</button></li>
+            <li class="category-item"><button onclick="window.location.href='comercio.html'">Comercio y Educación</button></li>
+        </ul>
+    </aside>
+
+    <!-- Área Principal de Contenido -->
+    <main class="main-boulevard">
+        
+        <!-- Cabecera de filtros: Micro-categorías -->
+        <section class="micro-categories">
+            <h1 class="page-title">Gastronomía en Loja</h1>
+            <div class="filter-chips">
+                <button class="chip active">Todos</button>
+                <button class="chip">Restaurantes</button>
+                <button class="chip">Cafeterías</button>
+                <button class="chip">Bares y Discotecas</button>
+                <button class="chip">Comida Rápida</button>
+                <button class="chip">Comida Típica</button>
+            </div>
+        </section>
+
+        <!-- Resultados de búsqueda -->
+        <section class="results-grid">
+            <!-- Ejemplo de tarjeta de local -->
+            <article class="business-card">
+                <div class="card-image"></div>
+                <div class="card-content">
+                    <h3>Nombre del Restaurante</h3>
+                    <p>Especialidad: Comida Típica Lojana</p>
+                    <span class="location-tag">Sector: Centro</span>
+                </div>
+            </article>
+            <!-- Repetir este bloque para cada local -->
+        </section>
+        
+    </main>
+
+</body>
+</html>
