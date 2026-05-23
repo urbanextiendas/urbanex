@@ -10,7 +10,7 @@
 <style>
 
 /* ================================================== */
-/* RESETEO GLOBAL (HABILITA EL GESTO DE REFRESCAR)   */
+/* RESETEO GLOBAL                                     */
 /* ================================================== */
 *{
     margin:0;
@@ -22,14 +22,13 @@ html, body {
     width: 100%;
     min-height: 100%;
     background: #000;
-    /* Tipografía mejorada para un look profesional */
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     display: flex;
     flex-direction: column;
 }
 
 /* ================================================== */
-/* PORTADA (AJUSTE EXACTO PARA CUALQUIER PANTALLA)    */
+/* PORTADA                                            */
 /* ================================================== */
 .portada{
     width: 100%;
@@ -40,14 +39,14 @@ html, body {
     background-color: #000;
 }
 
-/* Control adaptativo de la imagen */
+/* Imagen Urba0.png cargada */
 .portada-img {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Cambiado para mejor visualización */
+    object-fit: cover;
     display: block;
 }
 
@@ -66,7 +65,7 @@ html, body {
 }
 
 /* ================================================== */
-/* CAPAS DE TEXTO PROFESIONAL Y LEGIBLE (ESCRITORIO)  */
+/* CAPAS DE TEXTO PROFESIONAL Y LEGIBLE               */
 /* ================================================== */
 
 /* Encabezado Superior (Bajado a solicitud) */
@@ -101,7 +100,7 @@ html, body {
     text-shadow: 0 2px 4px rgba(0,0,0,0.95);
 }
 
-/* Eslogan Lateral Izquierdo (Sobre pilar izquierdo) */
+/* Eslogan Lateral Izquierdo */
 .slogan-lateral {
     position: absolute;
     top: 40%;
@@ -129,7 +128,7 @@ html, body {
     margin: 5px 0;
 }
 
-/* Características / Beneficios (Sobre pilar derecho) */
+/* Características / Beneficios */
 .caracteristicas-lista {
     position: absolute;
     top: 35%;
@@ -209,9 +208,7 @@ html, body {
     box-shadow: 0 0 15px rgba(229, 193, 88, 0.5);
 }
 
-/* ================================================== */
-/* ÁREA CLICKEABLE DE LA PUERTA                       */
-/* ================================================== */
+/* Área Clickeable de la Puerta */
 .puerta-link{
     position:absolute;
     top: 18%;
@@ -244,123 +241,16 @@ html, body {
     opacity: 1;
 }
 
-/* ================================================== */
-/* OPTIMIZACIÓN EXCLUSIVA PARA DISPOSITIVOS MÓVILES    */
-/* ================================================== */
+/* Responsive */
 @media(max-width:768px){
-    .portada-img {
-        object-fit: cover;
-        object-position: center center;
-    }
-
-    .puerta-link{
-        top: 22%;
-        left: 22%;
-        width: 56%;
-        height: 54%;
-    }
-    
-    .puerta-link::after {
-        opacity: 1;
-        font-size: 12px;
-        bottom: 4%;
-    }
-
-    .header-branding {
-        top: 4%;
-    }
-
-    .header-branding h1 {
-        font-size: 24px;
-        letter-spacing: 3px;
-    }
-
-    .header-branding p {
-        font-size: 11px;
-        letter-spacing: 1px;
-    }
-
-    .slogan-lateral {
-        top: 14%;
-        left: 5%;
-        width: 90%;
-        text-align: center;
-    }
-
-    .slogan-lateral h2 {
-        font-size: 13px;
-        letter-spacing: 1px;
-    }
-
-    .slogan-lateral h2 span {
-        display: inline;
-        font-size: 14px;
-        margin: 0 5px;
-    }
-
-    .caracteristicas-lista {
-        top: auto;
-        bottom: 14%;
-        left: 5%;
-        width: 90%;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 6px;
-    }
-
-    .item-caracteristica {
-        padding: 5px 8px;
-        border-left: none;
-        border-bottom: 2px solid #e5c158;
-        background: rgba(0, 0, 0, 0.7);
-    }
-
-    .item-caracteristica svg {
-        width: 13px;
-        height: 13px;
-        gap: 6px;
-    }
-
-    .item-caracteristica span {
-        font-size: 9px;
-        letter-spacing: 0.5px;
-    }
-
-    .registro-contenedor {
-        top: auto;
-        bottom: 3%;
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
-        flex-direction: row;
-        justify-content: center;
-        gap: 10px;
-        width: 90%;
-    }
-
-    .registro-texto {
-        font-size: 11px;
-    }
-
-    .btn-registro {
-        padding: 6px 14px;
-        font-size: 11px;
-    }
+    .portada-img { object-fit: cover; }
+    .puerta-link{ top: 22%; left: 22%; width: 56%; height: 54%; }
+    .header-branding { top: 4%; }
+    .header-branding h1 { font-size: 24px; }
+    .header-branding p { font-size: 11px; }
 }
 
-@media(max-width:380px){
-    .caracteristicas-lista {
-        bottom: 16%;
-    }
-    .item-caracteristica span {
-        font-size: 8px;
-    }
-}
-
-/* ================================================== */
-/* PIE DE PÁGINA                                      */
-/* ================================================== */
+/* Pie de página */
 .pie-pagina {
     width: 100%;
     height: 24px;
@@ -370,16 +260,12 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
     border-top: 1px solid #1a1a1a;
     z-index: 5;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 </style>
-
 </head>
-
 <body>
 
 <section class="portada">
