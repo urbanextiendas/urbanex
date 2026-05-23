@@ -5,148 +5,157 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gastronomía - Urbanex Loja</title>
 
-    <!-- Tipografías Premium desde Google Fonts -->
+    <!-- Preconexión para fuentes optimizadas -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* ================================================== */
-        /* VARIABLES DE DISEÑO PREMIUM (SISTEMA URBANEX)      */
-        /* ================================================== */
+        /* ==========================================================================
+           CONFIGURACIÓN GLOBAL Y VARIABLES DE DISEÑO (ESTILO URBANEX)
+           ========================================================================== */
         :root {
-            --bg-main: #020202;
-            --bg-panels-glass: rgba(6, 6, 6, 0.65);
-            --bg-cards-glass: rgba(20, 20, 20, 0.5);
-            --gold: #e5c158;
-            --border-color: rgba(229, 193, 88, 0.15);
-            --text-main: #ffffff;
-            --text-dark: #aaaaaa;
-            --blur-effect: blur(20px);
-            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --color-bg: #000000;
+            --color-gold: #e5c158;
+            --color-border: #1a1a1a;
+            --color-text: #ffffff;
+            --color-text-dim: #8c8c8c;
+            --font-primary: 'Montserrat', sans-serif;
+            --font-secondary: 'Cinzel', serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body { 
-            background-color: var(--bg-main); 
-            font-family: 'Montserrat', sans-serif; 
-            color: var(--text-main); 
+            background-color: var(--color-bg); 
+            color: var(--color-text); 
+            font-family: var(--font-primary); 
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* Contenedor Grid Principal */
-        .page-wrapper {
+        /* ==========================================================================
+           GRID DE ESTRUCTURA: HEADER, SIDEBAR, CONTENT Y FOOTER
+           ========================================================================== */
+        .page-container {
             display: grid;
+            grid-template-columns: 200px 1fr;
             grid-template-rows: 60px 1fr 24px;
-            grid-template-columns: 240px 1fr;
             min-height: 100vh;
         }
 
-        /* HEADER INTEGRADO */
-        .header-main {
+        /* HEADER */
+        .site-header {
             grid-column: 1 / span 2;
-            background: var(--bg-panels-glass);
-            backdrop-filter: var(--blur-effect);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--color-border);
             display: flex;
             align-items: center;
-            padding: 0 20px;
-            z-index: 10;
+            padding: 0 25px;
+        }
+        .logo { height: 30px; }
+
+        /* SIDEBAR (MENÚ LATERAL) */
+        .site-sidebar {
+            border-right: 1px solid var(--color-border);
+            padding: 30px 20px;
+            font-family: sans-serif;
+            font-size: 11px;
+            color: var(--color-text);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* RUTA CORREGIDA: Se usa /imagenes/ para apuntar siempre a la raíz */
-        .logo-branding { height: 40px; }
-
-        /* SIDEBAR DE CATEGORÍAS */
-        .sidebar {
-            background: var(--bg-panels-glass);
-            backdrop-filter: var(--blur-effect);
-            border-right: 1px solid var(--border-color);
-            padding: 20px;
-        }
-
-        /* ÁREA CENTRAL DE CONTENIDO */
-        .content-area {
+        /* CONTENIDO PRINCIPAL */
+        .main-content {
             padding: 40px;
-            overflow-y: auto;
+            width: 100%;
         }
 
-        .category-hero-container {
+        /* CONTENEDOR IMAGEN CON BORDE DORADO (REFERENCIA: {F1B6C5AA-E449-43B8-AFA1-4FFE3ED1E6E1}.jpg) */
+        .hero-wrapper {
+            border: 1px solid var(--color-gold);
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 30px;
+            background: #050505;
+        }
+        .hero-img {
             width: 100%;
-            height: 300px;
-            margin-bottom: 40px;
-            border-radius: 12px;
-            border: 1px solid var(--gold);
-            overflow: hidden;
+            height: auto;
             display: block;
+            border-radius: 4px;
         }
 
-        /* RUTA CORREGIDA: Se asegura carga absoluta desde la raíz */
-        .category-hero-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        /* TARJETA DE INFORMACIÓN DEL LOCAL */
+        .restaurant-card {
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 25px;
+            max-width: 450px;
+            background: rgba(10, 10, 10, 0.8);
         }
-
-        .grid-restaurantes {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+        .restaurant-title {
+            font-family: var(--font-secondary);
+            color: var(--color-gold);
+            font-size: 20px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
         }
-
-        .card-local {
-            background: var(--bg-cards-glass);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
+        .restaurant-detail {
+            font-size: 14px;
+            color: var(--color-text-dim);
         }
 
         /* FOOTER */
-        .footer-main {
+        .site-footer {
             grid-column: 1 / span 2;
-            background-color: #000;
-            color: #8c8c8c;
+            height: 24px;
+            background-color: #000000;
+            color: var(--color-text-dim);
             font-size: 11px;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-top: 1px solid #1a1a1a;
+            border-top: 1px solid var(--color-border);
+            font-family: Arial, sans-serif;
         }
     </style>
 </head>
 <body>
 
-<div class="page-wrapper">
-    <header class="header-main">
-        <a href="/index.html">
-            <img src="/imagenes/logo.png" alt="Logo Urbanex" class="logo-branding">
-        </a>
-    </header>
+    <div class="page-container">
+        
+        <!-- HEADER -->
+        <header class="site-header">
+            <img src="imagenes/logo.png" alt="Urbanex" class="logo">
+        </header>
 
-    <aside class="sidebar">
-        <h2 style="color: var(--gold); font-size: 10px; text-transform: uppercase; margin-bottom: 20px;">Menú</h2>
-    </aside>
+        <!-- SIDEBAR -->
+        <aside class="site-sidebar">
+            <p>MENÚ</p>
+        </aside>
 
-    <main class="content-area">
-        <!-- Banner de Gastronomía con ruta absoluta -->
-        <div class="category-hero-container">
-            <img src="/imagenes/Gastronomía.png" alt="Categoría Gastronomía">
-        </div>
-
-        <div class="grid-restaurantes">
-            <div class="card-local">
-                <h3 style="font-family: 'Cinzel', serif; color: var(--gold);">Nombre del Restaurante</h3>
-                <p style="font-size: 12px; margin-top: 10px;">Especialidad: Comida Típica Lojana</p>
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+            
+            <div class="hero-wrapper">
+                <img src="imagenes/Gastronomía.png" alt="Banner Gastronomía" class="hero-img">
             </div>
-        </div>
-    </main>
 
-    <footer class="footer-main">
-        &copy; 2026 Urbanex. Todos los derechos reservados.
-    </footer>
-</div>
+            <section class="restaurant-card">
+                <h2 class="restaurant-title">NOMBRE DEL RESTAURANTE</h2>
+                <p class="restaurant-detail">Especialidad: Comida Típica Lojana</p>
+            </section>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="site-footer">
+            <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
+        </footer>
+
+    </div>
 
 </body>
 </html>
