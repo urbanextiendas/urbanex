@@ -3,56 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gastronomía - Urbanex Loja</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Gastronomía en Loja</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f9; }
+        header { text-align: center; margin-bottom: 30px; }
+        .filter-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
+        .filter-btn { padding: 10px 20px; border: 1px solid #ddd; background: #fff; cursor: pointer; border-radius: 5px; transition: 0.3s; }
+        .filter-btn:hover { background: #007bff; color: #fff; border-color: #007bff; }
+        .card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
+        .card h2 { margin-top: 0; color: #333; }
+        .info { margin: 10px 0; color: #666; }
+        .info strong { color: #333; }
+    </style>
 </head>
 <body>
 
-    <!-- Sidebar de Categorías (Consistente en toda la web) -->
-    <aside class="aside-categories">
-        <h2>Categorías</h2>
-        <ul class="categories-list">
-            <li class="category-item active"><button onclick="window.location.href='gastronomia.html'">Gastronomía</button></li>
-            <li class="category-item"><button onclick="window.location.href='salud.html'">Salud y Bienestar</button></li>
-            <li class="category-item"><button onclick="window.location.href='movilidad.html'">Movilidad</button></li>
-            <li class="category-item"><button onclick="window.location.href='hogar.html'">Hogar y Tecnología</button></li>
-            <li class="category-item"><button onclick="window.location.href='turismo.html'">Turismo y Hospedaje</button></li>
-            <li class="category-item"><button onclick="window.location.href='finanzas.html'">Finanzas</button></li>
-            <li class="category-item"><button onclick="window.location.href='comercio.html'">Comercio y Educación</button></li>
-        </ul>
-    </aside>
+<header>
+    <h1>Gastronomía en Loja</h1>
+</header>
 
-    <!-- Área Principal de Contenido -->
-    <main class="main-boulevard">
-        
-        <!-- Cabecera de filtros: Micro-categorías -->
-        <section class="micro-categories">
-            <h1 class="page-title">Gastronomía en Loja</h1>
-            <div class="filter-chips">
-                <button class="chip active">Todos</button>
-                <button class="chip">Restaurantes</button>
-                <button class="chip">Cafeterías</button>
-                <button class="chip">Bares y Discotecas</button>
-                <button class="chip">Comida Rápida</button>
-                <button class="chip">Comida Típica</button>
-            </div>
-        </section>
+<nav class="filter-nav">
+    <button class="filter-btn">Todos</button>
+    <button class="filter-btn">Restaurantes</button>
+    <button class="filter-btn">Cafeterías</button>
+    <button class="filter-btn">Bares y Discotecas</button>
+    <button class="filter-btn">Comida Rápida</button>
+    <button class="filter-btn">Comida Típica</button>
+</nav>
 
-        <!-- Resultados de búsqueda -->
-        <section class="results-grid">
-            <!-- Ejemplo de tarjeta de local -->
-            <article class="business-card">
-                <div class="card-image"></div>
-                <div class="card-content">
-                    <h3>Nombre del Restaurante</h3>
-                    <p>Especialidad: Comida Típica Lojana</p>
-                    <span class="location-tag">Sector: Centro</span>
-                </div>
-            </article>
-            <!-- Repetir este bloque para cada local -->
-        </section>
-        
-    </main>
+<main>
+    <div class="card">
+        <h2>Nombre del Restaurante</h2>
+        <p class="info"><strong>Especialidad:</strong> Comida Típica Lojana</p>
+        <p class="info"><strong>Sector:</strong> Centro</p>
+    </div>
+</main>
 
 </body>
 </html>
