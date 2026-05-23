@@ -741,17 +741,18 @@
         @media (max-width: 640px) {
             .header-top { flex-direction: column; height: auto; padding: 12px; gap: 10px; }
             .search-wrapper { width: 100%; margin: 0; order: 3; }
-            .user-tools { width: 100%; justify-content: space-between; order: 2; }
-
-            /* Reducimos el gap general en el contenedor de herramientas para el celular */
-            .user-tools {
-                gap: 0px; /* Ajusta este valor (menos píxeles = más juntos) */
+            /* Ajuste para que los iconos queden juntos */
+            .user-tools { 
+                width: auto; 
+                justify-content: center; 
+                gap: 6px !important; /* Reduce el espacio entre elementos a 6px */
+                order: 2; 
             }
-        
-            /* Ajustamos el margen del corazón para que no esté separado de más */
+            
+            /* Aseguramos que el corazón no tenga margen extra */
             .icon-corazon {
-                margin-right: 0px !important; /* Valor menor para acercarlo en móvil */
-            }            
+                margin-right: 0 !important;
+            }              
             .main-boulevard { min-height: 280px; height: 40vh; }
             .welcome-billboard { top: 25px; }
             .welcome-billboard h2 { font-size: 18px; letter-spacing: 4px; }
