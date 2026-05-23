@@ -16,8 +16,8 @@
         /* ================================================== */
         :root {
             --bg-main: #020202;
-            --bg-panels-glass: rgba(6, 6, 6, 0.75);
-            --bg-cards-glass: rgba(20, 20, 20, 0.55);
+            --bg-panels-glass: rgba(6, 6, 6, 0.65);
+            --bg-cards-glass: rgba(20, 20, 20, 0.5);
             --gold: #e5c158;
             --gold-dim: #a68b44;
             --border-color: rgba(229, 193, 88, 0.15);
@@ -31,7 +31,7 @@
         }
 
         /* ================================================== */
-        /* RESETEO GLOBAL YFIJACIÓN DE PANTALLA               */
+        /* RESETEO GLOBAL                                     */
         /* ================================================== */
         * {
             margin: 0;
@@ -39,9 +39,10 @@
             box-sizing: border-box;
         }
 
+        /* Control de barras de desplazamiento imperceptibles pero funcionales */
         ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
+            width: 4px;
+            height: 4px;
         }
         ::-webkit-scrollbar-track {
             background: transparent;
@@ -54,9 +55,9 @@
             background: var(--gold);
         }
 
-        html, body {
+        body {
             width: 100%;
-            height: 100%;
+            height: 100vh;
             background-color: var(--bg-main);
             font-family: var(--font-sans);
             color: var(--text-main);
@@ -66,7 +67,7 @@
         }
 
         /* ================================================== */
-        /* CONTENEDOR PRINCIPAL ESCALABLE                    */
+        /* CONTENEDOR PRINCIPAL INTERCONECTADO                */
         /* ================================================== */
         .dashboard-container {
             flex: 1;
@@ -76,12 +77,12 @@
             grid-template-areas: 
                 "header header header"
                 "aside-left main aside-right";
-            height: calc(100vh - 24px);
+            height: calc(100vh - 24px); /* Ajustado para el nuevo tamaño del footer (24px) */
             position: relative;
             overflow: hidden;
-            isolation: isolate;
         }
 
+        /* CAPA DE FONDO GLOBAL PARA EL EFECTO TRASLÚCIDO COMPLETO */
         .global-background-underlay {
             position: absolute;
             inset: 0;
@@ -112,6 +113,7 @@
             z-index: 10;
         }
 
+        /* Enlace de retorno al inicio con diseño profesional */
         .brand-box {
             display: flex;
             align-items: center;
@@ -281,7 +283,6 @@
             flex-direction: column;
             z-index: 5;
             overflow-y: auto;
-            min-height: 0;
         }
 
         .section-title {
@@ -328,7 +329,7 @@
             border-radius: 6px;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            flex-shrink: 0;
+            transition: var(--transition-smooth);
         }
 
         .category-item button svg {
@@ -385,8 +386,6 @@
             overflow: hidden;
             background: transparent;
             z-index: 2;
-            min-width: 0;
-            min-height: 0;
         }
 
         .boulevard-overlay {
@@ -424,6 +423,7 @@
             text-shadow: 0 2px 6px rgba(0,0,0,0.9);
         }
 
+        /* MAPEO DE ZONAS INTERACTIVAS */
         .interactive-showcase {
             position: absolute;
             z-index: 3;
@@ -431,16 +431,15 @@
             background: rgba(255, 255, 255, 0);
             transition: var(--transition-smooth);
         }
-        
         .interactive-showcase:hover {
             background: rgba(229, 193, 88, 0.02);
             box-shadow: inset 0 0 15px rgba(229, 193, 88, 0.15);
         }
-        
         .showcase-comida { top: 15%; left: 3%; width: 14%; height: 40%; }
         .showcase-salud { top: 25%; left: 22%; width: 8%; height: 30%; }
         .showcase-moda { top: 18%; right: 14%; width: 12%; height: 40%; }
 
+        /* FILTROS TRASLÚCIDOS INFERIORES */
         .bottom-filter-bar {
             position: absolute;
             bottom: 20px;
@@ -483,7 +482,6 @@
             height: 14px;
             fill: var(--gold);
             display: block;
-            flex-shrink: 0;
         }
 
         .filter-label-group {
@@ -519,12 +517,10 @@
             flex-direction: column;
             z-index: 5;
             overflow: hidden;
-            min-height: 0;
         }
 
         .showcase-header {
             padding: 20px 14px 8px 14px;
-            flex-shrink: 0;
         }
 
         .showcase-header h2 {
@@ -544,7 +540,6 @@
         .sort-box {
             padding: 0 14px 10px 14px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            flex-shrink: 0;
         }
 
         .sort-select {
@@ -567,7 +562,6 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            min-height: 0;
         }
 
         .shop-card {
@@ -578,7 +572,6 @@
             display: flex;
             cursor: pointer;
             height: 64px;
-            flex-shrink: 0;
             transition: var(--transition-smooth);
         }
 
@@ -635,7 +628,6 @@
             width: 10px;
             height: 10px;
             fill: var(--gold);
-            flex-shrink: 0;
         }
 
         .rating-value {
@@ -659,7 +651,6 @@
         .action-footer-box {
             padding: 10px 14px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            flex-shrink: 0;
         }
 
         .btn-view-all-shops {
@@ -681,7 +672,7 @@
         }
 
         /* ================================================== */
-        /* PIE DE PÁGINA (FOOTER REGULAR)                     */
+        /* PIE DE PÁGINA (FOOTER REPLICADO DE INDEX)          */
         /* ================================================== */
         .pie-pagina {
             width: 100%;
@@ -694,280 +685,112 @@
             align-items: center;
             text-align: center;
             border-top: 1px solid #1a1a1a;
-            z-index: 15;
+            z-index: 5;
             font-family: Arial, Helvetica, sans-serif;
-            flex-shrink: 0;
         }
 
         /* ================================================== */
-        /* MEDIA QUERIES SEGMENTADAS (EVITA ENCLAVAMIENTOS)    */
+        /* RESPONSIVIDAD REFINADA (EVITA MANCHAS EN LA IMAGEN)*/
         /* ================================================== */
-
-        /* DISPOSITIVOS MEDIANOS: TABLETS (PORTRAIT & LANDSCAPE) */
-        @media (min-width: 641px) and (max-width: 1024px) {
-            html, body {
-                height: 100%;
-                overflow: hidden;
-            }
-
-            .dashboard-container {
-                grid-template-columns: 220px 1fr;
-                grid-template-rows: 60px 1fr 140px;
-                grid-template-areas: 
-                    "header header"
-                    "aside-left main"
-                    "aside-right aside-right";
-                height: calc(100vh - 24px);
-            }
-
-            .aside-categories {
-                border-right: 1px solid var(--border-color);
-                border-bottom: none;
-                padding: 15px 10px;
-            }
-
-            .categories-list {
-                flex-direction: column;
-                gap: 6px;
-            }
-
-            .category-item button {
-                padding: 10px 8px;
-            }
-
-            .main-boulevard {
-                height: 100%;
-            }
-
-            .welcome-billboard h2 {
-                font-size: 20px;
-                letter-spacing: 4px;
-            }
-
-            /* Barra inferior táctil horizontal para tablets */
-            .bottom-filter-bar {
-                bottom: 15px;
-                width: calc(100% - 24px);
-                overflow-x: auto;
-                overflow-y: hidden;
-                display: flex;
-                flex-direction: row;
-                background: rgba(10, 10, 10, 0.9);
-                border-radius: 20px;
-                padding: 6px;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .bottom-filter-bar::-webkit-scrollbar {
-                display: none;
-            }
-
-            .filter-pill {
-                flex: 1 0 160px;
-                padding: 6px 12px;
-                background: rgba(0, 0, 0, 0.5);
-                border-radius: 14px;
-            }
-
-            /* Transformación del bloque derecho en dock inferior fluido */
-            .aside-showcase-list {
-                border-left: none;
-                border-top: 1px solid var(--border-color);
-                flex-direction: row;
-                align-items: center;
-                padding: 0 14px;
-                gap: 15px;
-            }
-
-            .showcase-header {
-                padding: 0;
-                min-width: 110px;
-            }
-
-            .showcase-header h2 {
-                font-size: 11px;
-            }
-
-            .showcase-stats {
-                font-size: 9px;
-            }
-
-            .sort-box {
-                padding: 0;
-                border-bottom: none;
-                min-width: 150px;
-            }
-
-            /* Contenedor de comercios horizontal con Scroll nativo acelerado */
-            .shops-scroll-area {
-                flex: 1;
-                flex-direction: row;
-                overflow-x: auto;
-                overflow-y: hidden;
-                padding: 0;
-                gap: 10px;
-                align-items: center;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .shops-scroll-area::-webkit-scrollbar {
-                height: 3px;
-            }
-
-            .shop-card {
-                flex: 0 0 240px;
-                height: 54px;
-            }
-            
-            .shop-thumb-wrapper {
-                width: 54px;
-                height: 54px;
-            }
-
-            .action-footer-box {
-                padding: 0;
-                border-top: none;
-                min-width: 150px;
-            }
-
-            .btn-view-all-shops {
-                padding: 10px;
-                font-size: 11px;
-            }
-        }
-
-        /* DISPOSITIVOS MÓVILES COMPACTOS */
-        @media (max-width: 640px) {
-            html, body {
-                overflow-y: auto;
-                height: auto;
-            }
-
+        @media (max-width: 1024px) {
+            body { overflow-y: auto; height: auto; }
             .dashboard-container {
                 grid-template-columns: 1fr;
-                grid-template-rows: auto auto 350px auto;
+                grid-template-rows: auto auto 1fr auto;
                 grid-template-areas: 
                     "header"
                     "aside-left"
                     "main"
                     "aside-right";
                 height: auto;
-                overflow: visible;
-            }
-
-            .header-top {
-                flex-direction: column;
-                height: auto;
-                padding: 12px;
-                gap: 12px;
-            }
-
-            .search-wrapper {
-                width: 100%;
-                margin: 0;
-                order: 3;
-            }
-
-            .user-tools {
-                width: 100%;
-                justify-content: space-between;
-                order: 2;
             }
 
             .aside-categories {
                 border-right: none;
                 border-bottom: 1px solid var(--border-color);
-                padding: 10px;
-                overflow: visible;
+                padding: 12px;
             }
+
+            .section-title { display: none; }
 
             .categories-list {
                 flex-direction: row;
                 overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                padding-bottom: 4px;
                 gap: 8px;
+                padding-bottom: 4px;
             }
 
-            .categories-list::-webkit-scrollbar {
-                display: none;
-            }
-
-            .category-item {
-                flex: 0 0 auto;
-            }
-
-            .category-item button {
-                width: auto;
-                padding: 6px 12px;
-            }
-
-            .main-boulevard {
-                height: 350px;
-                min-height: 350px;
-            }
-
-            .welcome-billboard {
-                top: 20px;
-            }
-
-            .welcome-billboard h2 {
-                font-size: 18px;
-                letter-spacing: 3px;
-            }
-
-            .bottom-filter-bar {
-                bottom: 10px;
-                width: calc(100% - 16px);
-                overflow-x: auto;
-                flex-direction: row;
-                gap: 6px;
-                padding: 4px;
-            }
+            .category-item button { width: auto; white-space: nowrap; padding: 6px 12px; }
             
+            .main-boulevard { min-height: 380px; height: 45vh; }
+
+            /* PERMANECE FLOTANTE PERO RE-DISEÑADO ULTRA-COMPACTO */
+            .bottom-filter-bar {
+                position: absolute;
+                bottom: 12px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: calc(100% - 24px);
+                display: flex;
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 8px;
+                background: rgba(10, 10, 10, 0.85);
+                padding: 5px;
+                border-radius: 30px;
+                -webkit-overflow-scrolling: touch;
+            }
+
             .bottom-filter-bar::-webkit-scrollbar {
                 display: none;
             }
 
             .filter-pill {
-                flex: 0 0 140px;
-                padding: 6px 10px;
+                flex: 0 0 auto;
+                padding: 6px 14px;
+                border-radius: 20px;
+                background: rgba(0, 0, 0, 0.5);
             }
 
-            .aside-showcase-list {
-                border-left: none;
-                border-top: 1px solid var(--border-color);
-                height: auto;
-                overflow: visible;
-                padding: 16px 12px;
-            }
+            .aside-showcase-list { border-left: none; border-top: 1px solid var(--border-color); }
+            .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+        }
 
-            .showcase-header {
-                padding: 0 0 10px 0;
+        @media (max-width: 640px) {
+            .dashboard-container {
+                grid-template-rows: auto auto auto auto;
             }
-
-            .sort-box {
-                padding: 0 0 12px 0;
+            .header-top { 
+                flex-direction: column; 
+                height: auto; 
+                padding: 15px 12px; 
+                gap: 14px; 
+            }
+            .brand-box {
                 width: 100%;
+                justify-content: center;
+                order: 1;
             }
-
-            .shops-scroll-area {
-                flex-direction: column;
-                overflow: visible;
-                padding: 0;
-                gap: 10px;
-                width: 100%;
+            .search-wrapper { 
+                width: 100%; 
+                margin: 0; 
+                order: 2; 
             }
-
-            .shop-card {
-                width: 100%;
-                height: 64px;
+            .user-tools { 
+                width: 100%; 
+                justify-content: space-between; 
+                order: 3; 
+                padding-top: 4px;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
             }
-
-            .action-footer-box {
-                padding: 12px 0 0 0;
-                width: 100%;
-            }
+            
+            .main-boulevard { min-height: 320px; height: 50vh; }
+            .welcome-billboard { top: 20px; width: 95%; }
+            .welcome-billboard h2 { font-size: 16px; letter-spacing: 3px; }
+            .welcome-billboard p { font-size: 9px; letter-spacing: 1px; }
+            
+            .filter-label { font-size: 10px; }
+            .filter-sub { font-size: 8px; }
         }
     </style>
 </head>
