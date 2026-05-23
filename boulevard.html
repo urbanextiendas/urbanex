@@ -322,17 +322,12 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
- /* Efecto hover sofisticado */
-.category-item button:hover .icon-container {
-    background: rgba(229, 193, 88, 0.15);
-    border-color: var(--gold);
-    box-shadow: 0 0 15px rgba(229, 193, 88, 0.2);
-}
-
-.category-item.active .icon-container {
-    background: var(--gold);
-    border-color: var(--gold);
-}
+        /* Mejora el efecto al pasar el mouse */
+        .category-item button:hover .icon-container {
+            transform: scale(1.1);
+            border-color: var(--gold);
+            background: rgba(229, 193, 88, 0.1);
+        }
         
         /* Icono activo más brillante y definido */
         .category-item.active button .icon-container {
@@ -342,13 +337,12 @@
         }
 
         /* Asegura que el SVG siempre esté limpio y bien posicionado */
-.category-item button svg {
-    width: 18px; 
-    height: 18px;
-    stroke: var(--gold); /* Usamos stroke en lugar de fill para más elegancia */
-    fill: none;
-    transition: all 0.3s ease;
-}
+        .category-item button svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--gold);
+            transition: fill 0.3s ease;
+        }
 
         .category-text-info {
             display: flex;
@@ -377,28 +371,22 @@
 
   /* Contenedor del icono (limpio, sin degradados forzados) */
 .icon-container {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Efecto de cristal pulido */
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(229, 193, 88, 0.3);
-    border-radius: 10px;
-    transition: all 0.4s ease;
-}     
+    background: transparent; /* Fondo transparente para integrar el icono */
+}      
 
         .category-item.active button .icon-container {
             background: var(--gold);
             border-color: var(--gold);
         }
 
-.category-item.active button svg {
-    stroke: #000; /* Contraste negro sobre dorado */
-}
+        .category-item.active button svg {
+            fill: #000000;
+        }
 
         .category-item.active .category-name {
             color: var(--gold);
@@ -870,10 +858,7 @@
         <ul class="categories-list">
             <li class="category-item active">
                 <button>
-                    <div class="icon-container"><!-- Reemplazo del SVG dentro de tu .icon-container -->
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M18 10c0-3.31-2.69-6-6-6s-6 2.69-6 6c0 2.22 1.21 4.15 3 5.19V20h6v-4.81c1.79-1.04 3-2.97 3-5.19z"/>
-</svg></div>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm7-3h-1v5h1V6zm0-4h-3v11h3V2zm2 19H14v-2h6v2z"/></svg></div>
                     <div class="category-text-info">
                         <span class="category-name">Comida y Bebida</span>
                         <span class="category-count">128 locales</span>
