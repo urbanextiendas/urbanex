@@ -22,14 +22,14 @@ html, body {
     width: 100%;
     min-height: 100%;
     background: #000;
-    font-family: 'Times New Roman', Times, serif, Arial, Helvetica, sans-serif;
+    /* Tipografía mejorada para un look profesional */
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
 }
 
 /* ================================================== */
-/* CONTENEDOR OPTIMIZADO PARA RESPUESTA INSTANTÁNEA   */
+/* PORTADA (AJUSTE EXACTO PARA CUALQUIER PANTALLA)    */
 /* ================================================== */
 .portada{
     width: 100%;
@@ -38,16 +38,6 @@ html, body {
     position: relative;
     overflow: hidden;
     background-color: #000;
-    /* Transición ultra veloz nativa */
-    transition: transform 0.2s ease-out, opacity 0.15s ease-in-out;
-    will-change: transform, opacity;
-}
-
-/* Efecto inmediato al accionar la entrada */
-.transicion-activa {
-    transform: scale(1.05);
-    opacity: 0;
-    pointer-events: none;
 }
 
 /* Control adaptativo de la imagen */
@@ -57,7 +47,7 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: fill; 
+    object-fit: cover; /* Cambiado para mejor visualización */
     display: block;
 }
 
@@ -79,10 +69,10 @@ html, body {
 /* CAPAS DE TEXTO PROFESIONAL Y LEGIBLE (ESCRITORIO)  */
 /* ================================================== */
 
-/* Encabezado Superior (Arco de la puerta) */
+/* Encabezado Superior (Bajado a solicitud) */
 .header-branding {
     position: absolute;
-    top: 5%;
+    top: 80%;
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
@@ -90,14 +80,13 @@ html, body {
     max-width: 600px;
     z-index: 3;
     pointer-events: none;
-    transition: opacity 0.1s ease;
 }
 
 .header-branding h1 {
     color: #e5c158;
-    font-size: 32px;
-    font-weight: 400;
-    letter-spacing: 4px;
+    font-size: 40px;
+    font-weight: 600;
+    letter-spacing: 5px;
     text-transform: uppercase;
     text-shadow: 0 2px 4px rgba(0,0,0,0.95), 0 4px 10px rgba(0,0,0,0.8);
     margin-bottom: 4px;
@@ -105,9 +94,9 @@ html, body {
 
 .header-branding p {
     color: #ffffff;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 300;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     text-transform: uppercase;
     text-shadow: 0 2px 4px rgba(0,0,0,0.95);
 }
@@ -120,7 +109,6 @@ html, body {
     width: 26%;
     z-index: 3;
     pointer-events: none;
-    transition: opacity 0.1s ease;
 }
 
 .slogan-lateral h2 {
@@ -152,7 +140,6 @@ html, body {
     gap: 16px;
     z-index: 3;
     pointer-events: none;
-    transition: opacity 0.1s ease;
 }
 
 .item-caracteristica {
@@ -193,7 +180,6 @@ html, body {
     align-items: center;
     gap: 15px;
     z-index: 12;
-    transition: opacity 0.1s ease;
 }
 
 .registro-texto {
@@ -223,14 +209,6 @@ html, body {
     box-shadow: 0 0 15px rgba(229, 193, 88, 0.5);
 }
 
-/* Desvanecimiento instantáneo de textos */
-.ocultar-interfaz .header-branding,
-.ocultar-interfaz .slogan-lateral,
-.ocultar-interfaz .caracteristicas-lista,
-.ocultar-interfaz .registro-contenedor {
-    opacity: 0;
-}
-
 /* ================================================== */
 /* ÁREA CLICKEABLE DE LA PUERTA                       */
 /* ================================================== */
@@ -258,7 +236,7 @@ html, body {
     border-bottom: 1px solid #e5c158;
     padding-bottom: 4px;
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.3s ease;
     text-shadow: 0 2px 4px #000;
 }
 
@@ -283,7 +261,7 @@ html, body {
     }
     
     .puerta-link::after {
-        opacity: 1; 
+        opacity: 1;
         font-size: 12px;
         bottom: 4%;
     }
@@ -400,16 +378,12 @@ html, body {
 
 </style>
 
-<!-- Pre-renderizado prioritario en segundo plano para ejecución inmediata -->
-<link rel="prerender" href="boulevard.html">
-<link rel="prefetch" href="boulevard.html">
-
 </head>
 
 <body>
 
-<section class="portada" id="seccionPortada">
-    <img src="imagenes/Portada.png" alt="Portada" class="portada-img">
+<section class="portada">
+    <img src="imagenes/Urba0.png" alt="Portada" class="portada-img">
 
     <div class="header-branding">
         <h1>Loja</h1>
@@ -444,22 +418,12 @@ html, body {
         <a href="registro.html" class="btn-registro">Registre su negocio</a>
     </div>
 
-    <!-- Enlace directo con acción instantánea en paralelo -->
-    <a href="boulevard.html" class="puerta-link" onclick="instantePremium(event)"></a>
+    <a href="interior.html" class="puerta-link"></a>
 </section>
 
 <footer class="pie-pagina">
     <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
 </footer>
-
-<script>
-function instantePremium(e) {
-    // Dispara el efecto visual de forma inmediata en la capa actual
-    document.getElementById('seccionPortada').classList.add('ocultar-interfaz', 'transicion-activa');
-    
-    // No detiene el enlace (preventDefault), permitiendo que el navegador cambie de página al instante
-}
-</script>
 
 </body>
 </html>
