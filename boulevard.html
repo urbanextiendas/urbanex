@@ -292,19 +292,17 @@
             list-style: none;
         }
 
-        .category-item button {
-            width: 100%;
-            background: transparent;
-            border: 1px solid transparent;
-            padding: 8px 10px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            text-align: left;
-            transition: var(--transition-smooth);
-        }
+.category-item button {
+    width: 100%;
+    background: rgba(10, 10, 10, 0.6); /* Fondo oscuro similar a la referencia */
+    border: 1px solid rgba(229, 193, 88, 0.2); /* Borde dorado tenue */
+    padding: 10px 14px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition-smooth);
+}
 
         .category-item button:hover:not(.active) {
             background: rgba(255, 255, 255, 0.05);
@@ -342,7 +340,7 @@
         .category-item button svg {
             width: 18px;
             height: 18px;
-            fill: #ffffff;
+            fill: var(--gold);
             transition: fill 0.3s ease;
         }
 
@@ -366,10 +364,20 @@
             font-size: 9px;
         }
 
-        .category-item.active button {
-            background: rgba(229, 193, 88, 0.12);
-            border-color: rgba(229, 193, 88, 0.25);
-        }
+.category-item.active button {
+    border: 1px solid var(--gold);
+    background: rgba(229, 193, 88, 0.05);
+}
+
+  /* Contenedor del icono (limpio, sin degradados forzados) */
+.icon-container {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent; /* Fondo transparente para integrar el icono */
+}      
 
         .category-item.active button .icon-container {
             background: var(--gold);
