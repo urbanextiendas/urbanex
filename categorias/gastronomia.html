@@ -4,64 +4,178 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gastronomía - Urbanex Loja</title>
+
+    <!-- Tipografías Premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
     <style>
+        /* ================================================== */
+        /* VARIABLES DE DISEÑO PREMIUM (BASADAS EN INDEX.HTML)*/
+        /* ================================================== */
         :root {
             --bg-main: #020202;
             --bg-panels-glass: rgba(6, 6, 6, 0.65);
+            --bg-cards-glass: rgba(20, 20, 20, 0.5);
             --gold: #e5c158;
+            --border-color: rgba(229, 193, 88, 0.15);
             --text-main: #ffffff;
+            --text-dark: #aaaaaa;
             --blur-effect: blur(20px);
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: var(--bg-main); font-family: 'Montserrat', sans-serif; color: var(--text-main); }
+        body { 
+            background-color: var(--bg-main); 
+            font-family: 'Montserrat', sans-serif; 
+            color: var(--text-main); 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-        .container { min-height: 100vh; display: grid; grid-template-rows: 80px 1fr 24px; }
+        /* ================================================== */
+        /* ESTRUCTURA DEL DASHBOARD (REPLICADA)              */
+        /* ================================================== */
+        .dashboard-container {
+            display: grid;
+            grid-template-rows: 60px 1fr;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
 
-        /* Header consistente */
-        header { background: var(--bg-panels-glass); backdrop-filter: var(--blur-effect); border-bottom: 1px solid rgba(229, 193, 88, 0.15); display: flex; align-items: center; padding: 0 40px; }
-        .logo-img { height: 45px; }
+        /* Header (Como en index.html) */
+        .header-top {
+            grid-column: 1 / span 2;
+            background: var(--bg-panels-glass);
+            backdrop-filter: var(--blur-effect);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 10;
+        }
 
-        /* Sección de Contenido */
-        .main-content { display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
-        .hero-banner { width: 100%; max-width: 900px; margin-bottom: 30px; border-radius: 12px; overflow: hidden; border: 1px solid var(--gold); }
-        .hero-banner img { width: 100%; height: auto; display: block; }
-        
-        .title-section { font-family: 'Cinzel', serif; color: var(--gold); margin-bottom: 20px; letter-spacing: 3px; }
+        .brand-box { text-decoration: none; cursor: pointer; }
+        .logo-img { height: 40px; width: auto; }
 
-        .grid-restaurantes { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; width: 100%; max-width: 1000px; }
-        .card { background: var(--bg-panels-glass); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
-        
-        .pie-pagina { background: #000; color: #8c8c8c; font-size: 11px; text-align: center; padding: 5px; }
+        /* Menú Lateral (Como en index.html) */
+        .aside-categories {
+            background: var(--bg-panels-glass);
+            backdrop-filter: var(--blur-effect);
+            border-right: 1px solid var(--border-color);
+            padding: 20px 12px;
+        }
+
+        /* Contenido Central */
+        .main-content {
+            padding: 40px;
+            background: radial-gradient(circle at top right, rgba(229, 193, 88, 0.05), transparent 60%);
+        }
+
+        /* Banner de Categoría */
+        .category-hero {
+            width: 100%;
+            height: 300px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--gold);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .category-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Grid de Locales */
+        .shops-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .shop-card {
+            background: var(--bg-cards-glass);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: var(--transition-smooth);
+        }
+
+        .shop-card:hover {
+            border-color: var(--gold);
+            background: rgba(229, 193, 88, 0.05);
+        }
+
+        .shop-card h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        /* Footer (Replicado de index.html) */
+        .pie-pagina {
+            grid-column: 1 / span 2;
+            height: 24px;
+            background-color: #000;
+            color: #8c8c8c;
+            font-size: 11px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        /* Responsividad Móvil */
+        @media (max-width: 768px) {
+            .dashboard-container { grid-template-columns: 1fr; }
+            .aside-categories { display: none; }
+            .main-content { padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <a href="boulevard.html"><img src="imagenes/logo.png" alt="Urbanex" class="logo-img"></a>
+<div class="dashboard-container">
+    <header class="header-top">
+        <a href="index.html" class="brand-box">
+            <img src="imagenes/logo.png" alt="Urbanex" class="logo-img">
+        </a>
     </header>
 
+    <aside class="aside-categories">
+        <!-- Reutilización del estilo de navegación lateral de index.html -->
+        <h2 style="font-size: 10px; color: var(--gold); margin-bottom: 20px; text-transform: uppercase;">Categorías</h2>
+        <div style="color: #fff; font-size: 14px;">← Volver al Bulevar</div>
+    </aside>
+
     <main class="main-content">
-        <div class="hero-banner">
-            <img src="imagenes/Gastronomía.png" alt="Gastronomía en Loja">
+        <div class="category-hero">
+            <img src="imagenes/Gastronomía.png" alt="Gastronomía">
         </div>
-        
-        <h2 class="title-section">RESTAURANTES DESTACADOS</h2>
-        
-        <div class="grid-restaurantes">
-            <div class="card">
+
+        <div class="shops-grid">
+            <!-- Bloque repetible para cada local -->
+            <div class="shop-card">
                 <h3>Nombre del Restaurante</h3>
-                <p style="color:var(--gold); font-size: 12px; margin: 10px 0;">Especialidad: Comida Típica Lojana</p>
-                <p style="font-size: 12px;">Sector: Centro</p>
+                <p style="font-size: 12px; margin-bottom: 5px;">Especialidad: Comida Típica Lojana</p>
+                <p style="font-size: 12px; color: var(--text-dark);">Sector: Centro</p>
             </div>
+            <div class="shop-card">
+                <h3>Otro Local de Comida</h3>
+                <p style="font-size: 12px; margin-bottom: 5px;">Especialidad: Fast Food</p>
+                <p style="font-size: 12px; color: var(--text-dark);">Sector: Norte</p>
             </div>
+        </div>
     </main>
 
     <footer class="pie-pagina">
-        &copy; 2026 Urbanex. Todos los derechos reservados.
+        <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
     </footer>
 </div>
 
