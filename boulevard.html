@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urbanex - Centro Comercial Digital de Loja</title>
+    <title>Loja - Centro Comercial Digital</title>
     
     <!-- Tipografías Premium de Alta Definición -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght=500;700&family=Montserrat:wght=300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         /* ================================================== */
-        /* VARIABLES DE DISEÑO PREMIUM                        */
+        /* VARIABLES DE DISEÑO PREMIUM (CON ENFOQUE TRASLÚCIDO)*/
         /* ================================================== */
         :root {
             --bg-main: #020202;
@@ -31,7 +31,7 @@
         }
 
         /* ================================================== */
-        /* RESETEO GLOBAL Y CONTROL DE FLUJO                  */
+        /* RESETEO GLOBAL                                     */
         /* ================================================== */
         * {
             margin: 0;
@@ -39,9 +39,10 @@
             box-sizing: border-box;
         }
 
+        /* Control de barras de desplazamiento imperceptibles pero funcionales */
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 4px;
+            height: 4px;
         }
         ::-webkit-scrollbar-track {
             background: transparent;
@@ -54,31 +55,34 @@
             background: var(--gold);
         }
 
-        html, body {
-            min-height: 100vh;
+        body {
+            width: 100%;
+            height: 100vh;
             background-color: var(--bg-main);
             font-family: var(--font-sans);
             color: var(--text-main);
-        }
-
-        body {
+            overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
-        /* CONTENEDOR PRINCIPAL INTERCONECTADO */
+        /* ================================================== */
+        /* CONTENEDOR PRINCIPAL INTERCONECTADO                */
+        /* ================================================== */
         .dashboard-container {
             flex: 1;
             display: grid;
             grid-template-rows: 60px 1fr;
-            grid-template-columns: 260px 1fr 300px;
+            grid-template-columns: 240px 1fr 290px;
             grid-template-areas: 
                 "header header header"
                 "aside-left main aside-right";
+            height: calc(100vh - 24px); /* Ajustado para el nuevo tamaño del footer (24px) */
             position: relative;
-            min-height: calc(100vh - 24px);
+            overflow: hidden;
         }
 
+        /* CAPA DE FONDO GLOBAL PARA EL EFECTO TRASLÚCIDO COMPLETO */
         .global-background-underlay {
             position: absolute;
             inset: 0;
@@ -109,6 +113,7 @@
             z-index: 10;
         }
 
+        /* Enlace de retorno al inicio con diseño profesional */
         .brand-box {
             display: flex;
             align-items: center;
@@ -122,6 +127,11 @@
         .brand-box:hover .brand-text h1 {
             color: #fff;
             text-shadow: 0 0 10px rgba(229, 193, 88, 0.6);
+        }
+
+        .brand-box:hover .brand-icon-svg {
+            fill: #fff;
+            filter: drop-shadow(0 0 5px rgba(229, 193, 88, 0.6));
         }
 
         .brand-icon-svg {
@@ -138,6 +148,7 @@
             font-weight: 700;
             letter-spacing: 2px;
             line-height: 1;
+            transition: var(--transition-smooth);
         }
 
         .brand-text p {
@@ -197,6 +208,7 @@
             font-size: 11px;
             color: #ffffff;
             font-weight: 500;
+            cursor: pointer;
         }
 
         .location-indicator svg {
@@ -248,6 +260,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
         }
 
         .profile-avatar svg {
@@ -265,10 +278,11 @@
             backdrop-filter: var(--blur-effect);
             -webkit-backdrop-filter: var(--blur-effect);
             border-right: 1px solid var(--border-color);
-            padding: 24px 16px;
+            padding: 20px 12px;
             display: flex;
             flex-direction: column;
             z-index: 5;
+            overflow-y: auto;
         }
 
         .section-title {
@@ -276,7 +290,7 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             color: var(--gold);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             padding-left: 6px;
             font-weight: 700;
         }
@@ -284,7 +298,7 @@
         .categories-list {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
             list-style: none;
         }
 
@@ -292,11 +306,11 @@
             width: 100%;
             background: transparent;
             border: 1px solid transparent;
-            padding: 10px 12px;
+            padding: 8px 10px;
             border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             cursor: pointer;
             text-align: left;
             transition: var(--transition-smooth);
@@ -307,19 +321,20 @@
         }
 
         .category-item button .icon-container {
-            width: 32px;
-            height: 32px;
+            width: 26px;
+            height: 26px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 6px;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition-smooth);
         }
 
         .category-item button svg {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             fill: #ffffff;
         }
 
@@ -331,7 +346,7 @@
 
         .category-name {
             color: #ffffff;
-            font-size: 13px;
+            font-size: 11.5px;
             font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
@@ -340,7 +355,7 @@
 
         .category-count {
             color: var(--text-dark);
-            font-size: 10px;
+            font-size: 9px;
         }
 
         .category-item.active button {
@@ -368,9 +383,9 @@
         .main-boulevard {
             grid-area: main;
             position: relative;
+            overflow: hidden;
             background: transparent;
             z-index: 2;
-            min-height: 500px;
         }
 
         .boulevard-overlay {
@@ -382,7 +397,7 @@
 
         .welcome-billboard {
             position: absolute;
-            top: 40px;
+            top: 35px;
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
@@ -393,18 +408,18 @@
         .welcome-billboard h2 {
             font-family: var(--font-serif);
             color: var(--text-main);
-            font-size: 28px;
-            letter-spacing: 8px;
+            font-size: 24px;
+            letter-spacing: 6px;
             text-transform: uppercase;
             text-shadow: 0 2px 10px rgba(0,0,0,0.9);
         }
 
         .welcome-billboard p {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--gold);
             font-weight: 600;
-            margin-top: 8px;
-            letter-spacing: 3px;
+            margin-top: 6px;
+            letter-spacing: 2px;
             text-shadow: 0 2px 6px rgba(0,0,0,0.9);
         }
 
@@ -427,17 +442,17 @@
         /* FILTROS TRASLÚCIDOS INFERIORES */
         .bottom-filter-bar {
             position: absolute;
-            bottom: 30px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(10, 10, 10, 0.75);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 8px;
+            border-radius: 12px;
+            padding: 6px;
             display: flex;
-            gap: 8px;
-            width: calc(100% - 40px);
-            max-width: 800px;
+            gap: 6px;
+            width: calc(100% - 30px);
+            max-width: 760px;
             backdrop-filter: var(--blur-effect);
             -webkit-backdrop-filter: var(--blur-effect);
             z-index: 5;
@@ -447,11 +462,11 @@
             flex: 1;
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 10px 14px;
+            border-radius: 8px;
+            padding: 8px 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             cursor: pointer;
             transition: var(--transition-smooth);
             min-width: 0;
@@ -463,8 +478,8 @@
         }
 
         .filter-icon-box svg {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             fill: var(--gold);
             display: block;
         }
@@ -476,7 +491,7 @@
         }
 
         .filter-label {
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 600;
             color: #ffffff;
             white-space: nowrap;
@@ -485,7 +500,7 @@
         }
 
         .filter-sub {
-            font-size: 9px;
+            font-size: 8.5px;
             color: var(--text-dark);
         }
 
@@ -501,28 +516,29 @@
             display: flex;
             flex-direction: column;
             z-index: 5;
+            overflow: hidden;
         }
 
         .showcase-header {
-            padding: 24px 16px 8px 16px;
+            padding: 20px 14px 8px 14px;
         }
 
         .showcase-header h2 {
             font-family: var(--font-serif);
             color: var(--gold);
-            font-size: 14px;
+            font-size: 13px;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
 
         .showcase-stats {
-            font-size: 11px;
+            font-size: 10px;
             color: #ffffff;
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         .sort-box {
-            padding: 0 16px 12px 16px;
+            padding: 0 14px 10px 14px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -531,19 +547,21 @@
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
-            padding: 8px 12px;
+            padding: 6px 10px;
             color: #ffffff;
-            font-size: 12px;
+            font-size: 11px;
             outline: none;
             cursor: pointer;
             font-family: var(--font-sans);
         }
 
         .shops-scroll-area {
-            padding: 16px;
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 14px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .shop-card {
@@ -553,7 +571,7 @@
             overflow: hidden;
             display: flex;
             cursor: pointer;
-            height: 70px;
+            height: 64px;
             transition: var(--transition-smooth);
         }
 
@@ -564,8 +582,8 @@
         }
 
         .shop-thumb-wrapper {
-            width: 70px;
-            height: 70px;
+            width: 64px;
+            height: 64px;
             flex-shrink: 0;
         }
 
@@ -577,7 +595,7 @@
 
         .shop-details {
             flex: 1;
-            padding: 8px 12px;
+            padding: 6px 10px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -585,7 +603,7 @@
         }
 
         .shop-title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: #ffffff;
             white-space: nowrap;
@@ -594,7 +612,7 @@
         }
 
         .shop-segment {
-            font-size: 10px;
+            font-size: 9.5px;
             color: var(--gold);
             font-weight: 500;
         }
@@ -603,37 +621,36 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         .star-icon {
-            width: 11px;
-            height: 11px;
+            width: 10px;
+            height: 10px;
             fill: var(--gold);
         }
 
         .rating-value {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             color: #ffffff;
         }
 
         .rating-count {
-            font-size: 10px;
+            font-size: 9.5px;
             color: var(--text-dark);
         }
 
         .status-indicator {
             margin-left: auto;
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 600;
             color: #2ed573;
         }
 
         .action-footer-box {
-            padding: 16px;
+            padding: 10px 14px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: auto;
         }
 
         .btn-view-all-shops {
@@ -641,16 +658,21 @@
             background: var(--gold);
             border: none;
             border-radius: 6px;
-            padding: 10px;
+            padding: 8px;
             color: #000000;
             font-family: var(--font-sans);
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 600;
             cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-view-all-shops:hover {
+            background: #f1cd6b;
         }
 
         /* ================================================== */
-        /* PIE DE PÁGINA                                      */
+        /* PIE DE PÁGINA (FOOTER REPLICADO DE INDEX)          */
         /* ================================================== */
         .pie-pagina {
             width: 100%;
@@ -663,38 +685,30 @@
             align-items: center;
             text-align: center;
             border-top: 1px solid #1a1a1a;
-            z-index: 15;
+            z-index: 5;
             font-family: Arial, Helvetica, sans-serif;
         }
 
         /* ================================================== */
-        /* DISPOSITIVOS MEDIANOS / TABLETS                    */
+        /* RESPONSIVIDAD REFINADA (EVITA MANCHAS EN LA IMAGEN)*/
         /* ================================================== */
         @media (max-width: 1024px) {
+            body { overflow-y: auto; height: auto; }
             .dashboard-container {
                 grid-template-columns: 1fr;
-                grid-template-rows: auto auto auto auto;
+                grid-template-rows: auto auto 1fr auto;
                 grid-template-areas: 
                     "header"
                     "aside-left"
                     "main"
                     "aside-right";
-                min-height: auto;
+                height: auto;
             }
-
-            .header-top { 
-                flex-direction: column; 
-                height: auto; 
-                padding: 16px; 
-                gap: 14px; 
-            }
-            .search-wrapper { width: 100%; margin: 0; order: 3; }
-            .user-tools { width: 100%; justify-content: space-between; order: 2; }
 
             .aside-categories {
                 border-right: none;
                 border-bottom: 1px solid var(--border-color);
-                padding: 16px;
+                padding: 12px;
             }
 
             .section-title { display: none; }
@@ -702,42 +716,57 @@
             .categories-list {
                 flex-direction: row;
                 overflow-x: auto;
-                gap: 10px;
+                gap: 8px;
                 padding-bottom: 4px;
-                -webkit-overflow-scrolling: touch;
             }
 
-            .category-item button { width: auto; white-space: nowrap; padding: 8px 16px; }
+            .category-item button { width: auto; white-space: nowrap; padding: 6px 12px; }
             
-            .main-boulevard { min-height: 400px; height: 50vh; }
-            .welcome-billboard { top: 30px; }
-            .welcome-billboard h2 { font-size: 22px; letter-spacing: 4px; }
+            .main-boulevard { min-height: 380px; height: 45vh; }
 
+            /* PERMANECE FLOTANTE PERO RE-DISEÑADO ULTRA-COMPACTO */
             .bottom-filter-bar {
                 position: absolute;
-                bottom: 20px;
+                bottom: 12px;
                 left: 50%;
                 transform: translateX(-50%);
-                width: calc(100% - 32px);
+                width: calc(100% - 24px);
                 display: flex;
                 flex-direction: row;
                 overflow-x: auto;
-                gap: 10px;
+                gap: 8px;
                 background: rgba(10, 10, 10, 0.85);
-                padding: 8px;
+                padding: 5px;
                 border-radius: 30px;
                 -webkit-overflow-scrolling: touch;
             }
 
+            .bottom-filter-bar::-webkit-scrollbar {
+                display: none;
+            }
+
             .filter-pill {
                 flex: 0 0 auto;
-                padding: 8px 16px;
+                padding: 6px 14px;
                 border-radius: 20px;
+                background: rgba(0, 0, 0, 0.5);
             }
 
             .aside-showcase-list { border-left: none; border-top: 1px solid var(--border-color); }
-            .shops-scroll-area { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
-            .action-footer-box { margin-top: 0; }
+            .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+        }
+
+        @media (max-width: 640px) {
+            .header-top { flex-direction: column; height: auto; padding: 12px; gap: 10px; }
+            .search-wrapper { width: 100%; margin: 0; order: 3; }
+            .user-tools { width: 100%; justify-content: space-between; order: 2; }
+            
+            .main-boulevard { min-height: 280px; height: 40vh; }
+            .welcome-billboard { top: 25px; }
+            .welcome-billboard h2 { font-size: 18px; letter-spacing: 4px; }
+            
+            .filter-label { font-size: 10px; }
+            .filter-sub { font-size: 8px; }
         }
     </style>
 </head>
@@ -745,17 +774,17 @@
 
 <div class="dashboard-container">
     
-    <!-- IMAGEN CENTRAL -->
+    <!-- IMAGEN CENTRAL CON EXTENSIÓN BAJO PANELES TRASLÚCIDOS -->
     <div class="global-background-underlay">
         <img src="imagenes/Boulevard.png" alt="Bulevar Comercial de Loja">
     </div>
 
-    <!-- BARRA SUPERIOR -->
+    <!-- BARRA SUPERIOR TRASLÚCIDA -->
     <header class="header-top">
         <a href="index.html" class="brand-box" title="Volver al Inicio">
             <svg class="brand-icon-svg" viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H7c0 2.76 2.24 5 5 5s5-2.24 5-5h-2c0 1.66-1.34 3-3 3z"/></svg>
             <div class="brand-text">
-                <h1>URBANEX</h1>
+                <h1>LOJA</h1>
                 <p>Centro Comercial Digital</p>
             </div>
         </a>
@@ -783,7 +812,7 @@
         </div>
     </header>
 
-    <!-- MENÚ LATERAL IZQUIERDO -->
+    <!-- MENÚ LATERAL IZQUIERDO TRASLÚCIDO -->
     <aside class="aside-categories">
         <h2 class="section-title">Categorías</h2>
         <ul class="categories-list">
@@ -816,7 +845,7 @@
             </li>
             <li class="category-item">
                 <button>
-                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2v1h2c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h2V4c0-1.1.9-2 2-2zm6 7H8v10h8V9zm-4 2c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z"/></svg></div>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2v1h2c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h2V4c0-1.1.9-2 2-2zm4 7H8v10h8V9zm-4 2c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z"/></svg></div>
                     <div class="category-text-info">
                         <span class="category-name">Moda y Accesorios</span>
                         <span class="category-count">112 locales</span>
@@ -880,7 +909,7 @@
         </div>
     </main>
 
-    <!-- PANEL LATERAL DERECHO -->
+    <!-- PANEL LATERAL DERECHO TRASLÚCIDO -->
     <aside class="aside-showcase-list">
         <div class="showcase-header">
             <h2>DESTACADOS</h2>
@@ -889,7 +918,7 @@
 
         <div class="sort-box">
             <select class="sort-select">
-                <option>Ordenar por: Calificación</option>
+                <option>Ordenar por: Mayor Calificación</option>
                 <option>Cercanía</option>
             </select>
         </div>
@@ -932,6 +961,7 @@
 
 </div>
 
+<!-- PIE DE PÁGINA REPLICADO EXACTAMENTE DESDE INDEX -->
 <footer class="pie-pagina">
     <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
 </footer>
