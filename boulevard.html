@@ -1,724 +1,685 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Urbanex - Boulevard</title>
-
-<!-- Importación de tipografías premium -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
-
-/* ================================================== */
-/* RESETEO GLOBAL Y CONFIGURACIÓN BASE                */
-/* ================================================== */
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    width: 100%;
-    height: 100%;
-    background: #0d0d0d;
-    font-family: 'Montserrat', sans-serif;
-    color: #ffffff;
-    overflow-x: hidden;
-}
-
-/* ================================================== */
-/* ESTRUCTURA CONTENEDORA DEL INTERFAZ                */
-/* ================================================== */
-.dashboard-container {
-    width: 100%;
-    height: calc(100vh - 24px);
-    height: calc(100svh - 24px);
-    display: grid;
-    grid-template-rows: 70px 1fr;
-    grid-template-columns: 280px 1fr 340px;
-    grid-template-areas: 
-        "header header header"
-        "aside-left main aside-right";
-    position: relative;
-    background-color: #000;
-}
-
-/* Fondo del pasillo comercial central */
-.main-boulevard {
-    grid-area: main;
-    position: relative;
-    overflow: hidden;
-}
-
-.boulevard-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center center;
-    z-index: 1;
-}
-
-.boulevard-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.6) 100%);
-    z-index: 2;
-    pointer-events: none;
-}
-
-/* ================================================== */
-/* BARRA SUPERIOR (HEADER)                            */
-/* ================================================== */
-.header-top {
-    grid-area: header;
-    background: #070707;
-    border-bottom: 1px solid #1a140a;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-    z-index: 10;
-}
-
-/* Logo Loja Identidad */
-.brand-box {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.brand-icon-svg {
-    width: 32px;
-    height: 32px;
-    fill: #e5c158;
-}
-
-.brand-text h1 {
-    font-family: 'Cinzel', serif;
-    color: #e5c158;
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    line-height: 1;
-}
-
-.brand-text p {
-    font-size: 8.5px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #a6a6a6;
-    margin-top: 2px;
-}
-
-/* Buscador Central */
-.search-wrapper {
-    flex: 1;
-    max-width: 550px;
-    margin: 0 30px;
-    position: relative;
-}
-
-.search-input {
-    width: 100%;
-    background: #121212;
-    border: 1px solid #2d2618;
-    border-radius: 20px;
-    padding: 10px 45px 10px 20px;
-    color: #ffffff;
-    font-size: 13px;
-    outline: none;
-    transition: border-color 0.3s;
-}
-
-.search-input:focus {
-    border-color: #e5c158;
-}
-
-.search-icon {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
-    fill: #8c8c8c;
-}
-
-/* Menú de herramientas derecho */
-.user-tools {
-    display: flex;
-    align-items: center;
-    gap: 22px;
-}
-
-.location-indicator {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: #d9d9d9;
-    cursor: pointer;
-}
-
-.location-indicator svg {
-    width: 16px;
-    height: 16px;
-    fill: #e5c158;
-}
-
-.tool-icon {
-    position: relative;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-
-.tool-icon svg {
-    width: 20px;
-    height: 20px;
-    fill: #d9d9d9;
-    transition: fill 0.2s;
-}
-
-.tool-icon:hover svg {
-    fill: #e5c158;
-}
-
-.badge-count {
-    position: absolute;
-    top: -5px;
-    right: -6px;
-    background: #d63031;
-    color: #fff;
-    font-size: 9px;
-    font-weight: 700;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.profile-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #1a1a1a;
-    border: 1px solid #e5c158;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.profile-avatar svg {
-    width: 16px;
-    height: 16px;
-    fill: #e5c158;
-}
-
-/* ================================================== */
-/* MENÚ LATERAL IZQUIERDO: CATEGORÍAS                 */
-/* ================================================== */
-.aside-categories {
-    grid-area: aside-left;
-    background: #070707;
-    border-right: 1px solid #1a140a;
-    padding: 20px 14px;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    z-index: 5;
-}
-
-.section-title {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #8c8c8c;
-    margin-bottom: 15px;
-    padding-left: 8px;
-    font-weight: 600;
-}
-
-.categories-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    list-style: none;
-}
-
-.category-item button {
-    width: 100%;
-    background: transparent;
-    border: 1px solid transparent;
-    padding: 10px 12px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.2s;
-}
-
-.category-item button .icon-container {
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    background: #141414;
-    border: 1px solid #262626;
-}
-
-.category-item button svg {
-    width: 16px;
-    height: 16px;
-    fill: #a6a6a6;
-}
-
-.category-text-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.category-name {
-    color: #d9d9d9;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.category-count {
-    color: #666;
-    font-size: 10px;
-    margin-top: 1px;
-}
-
-/* Estado Activo: Comida y Bebida de la imagen de referencia */
-.category-item.active button {
-    background: linear-gradient(135deg, #2d2210 0%, #171209 100%);
-    border-color: #8c7030;
-}
-
-.category-item.active button .icon-container {
-    background: #e5c158;
-    border-color: #e5c158;
-}
-
-.category-item.active button svg {
-    fill: #000000;
-}
-
-.category-item.active .category-name {
-    color: #e5c158;
-    font-weight: 600;
-}
-
-.category-item.active .category-count {
-    color: #a68b44;
-}
-
-.category-item:not(.active) button:hover {
-    background: #121212;
-}
-
-.btn-all-categories {
-    margin-top: auto;
-    background: transparent;
-    border: none;
-    color: #e5c158;
-    font-size: 12px;
-    cursor: pointer;
-    padding: 15px 0 5px 8px;
-    text-align: left;
-    font-weight: 500;
-}
-
-.btn-all-categories:hover {
-    text-decoration: underline;
-}
-
-/* ================================================== */
-/* CASILLAS TÁCTILES LUMINOSAS (ZONAS SOBRE EL PASILLO)*/
-/* ================================================== */
-.interactive-showcase {
-    position: absolute;
-    z-index: 3;
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0); /* Capa invisible calibrada sobre los letreros */
-}
-
-/* Coordinación con letreros luminosos de la imagen */
-.showcase-comida { top: 15%; left: 3%; width: 14%; height: 40%; }
-.showcase-salud { top: 25%; left: 22%; width: 8%; height: 30%; }
-.showcase-moda { top: 18%; right: 14%; width: 12%; height: 40%; }
-
-/* ================================================== */
-/* MENÚ DE FILTROS METRICOS INFERIORES                */
-/* ================================================== */
-.bottom-filter-bar {
-    position: absolute;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(7, 7, 7, 0.85);
-    border: 1px solid #2d2618;
-    border-radius: 12px;
-    padding: 10px;
-    display: flex;
-    gap: 10px;
-    z-index: 4;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    width: calc(100% - 40px);
-    max-width: 820px;
-}
-
-.filter-pill {
-    flex: 1;
-    background: #121212;
-    border: 1px solid #1f1a10;
-    border-radius: 8px;
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
-}
-
-.filter-pill:hover {
-    background: #1a1a1a;
-    border-color: #e5c158;
-}
-
-.filter-icon-box {
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.filter-icon-box svg {
-    width: 16px;
-    height: 16px;
-    fill: #e5c158;
-}
-
-.filter-label-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.filter-label {
-    font-size: 11.5px;
-    font-weight: 600;
-    color: #ffffff;
-}
-
-.filter-sub {
-    font-size: 9.5px;
-    color: #737373;
-    margin-top: 1px;
-}
-
-/* Mensaje de bienvenida central superior */
-.welcome-billboard {
-    position: absolute;
-    top: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    z-index: 3;
-    width: 90%;
-    pointer-events: none;
-}
-
-.welcome-billboard h2 {
-    font-family: 'Cinzel', serif;
-    color: #ffffff;
-    font-size: 18px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-}
-
-.welcome-billboard p {
-    font-size: 11px;
-    color: #cccccc;
-    margin-top: 4px;
-    letter-spacing: 0.5px;
-}
-
-/* ================================================== */
-/* PANEL LATERAL DERECHO: LISTADO DE COMERCIOS        */
-/* ================================================== */
-.aside-showcase-list {
-    grid-area: aside-right;
-    background: #070707;
-    border-left: 1px solid #1a140a;
-    display: flex;
-    flex-direction: column;
-    z-index: 5;
-    overflow: hidden;
-}
-
-.showcase-header {
-    padding: 20px 16px 14px 16px;
-}
-
-.showcase-header h2 {
-    font-family: 'Cinzel', serif;
-    color: #e5c158;
-    font-size: 15px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-}
-
-.showcase-stats {
-    font-size: 11px;
-    color: #8c8c8c;
-    margin-top: 2px;
-}
-
-/* Contenedor de selección de ordenamiento */
-.sort-box {
-    padding: 0 16px 12px 16px;
-    border-bottom: 1px solid #141414;
-}
-
-.sort-select {
-    width: 100%;
-    background: #121212;
-    border: 1px solid #262626;
-    border-radius: 6px;
-    padding: 8px 12px;
-    color: #d9d9d9;
-    font-size: 11.5px;
-    outline: none;
-}
-
-/* Listado con scroll dedicado */
-.shops-scroll-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 12px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Tarjeta de comercio individual */
-.shop-card {
-    background: #121212;
-    border: 1px solid #1a1a1a;
-    border-radius: 8px;
-    overflow: hidden;
-    display: flex;
-    cursor: pointer;
-    transition: border-color 0.2s;
-}
-
-.shop-card:hover {
-    border-color: #40351d;
-}
-
-.shop-thumb-wrapper {
-    width: 85px;
-    position: relative;
-    flex-shrink: 0;
-}
-
-.shop-thumb {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.badge-logo-indicator {
-    position: absolute;
-    bottom: 6px;
-    right: 6px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #d63031;
-    color: #fff;
-    font-size: 10px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.shop-details {
-    flex: 1;
-    padding: 10px 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.shop-title {
-    font-size: 12.5px;
-    font-weight: 600;
-    color: #ffffff;
-}
-
-.shop-segment {
-    font-size: 10.5px;
-    color: #8c8c8c;
-    margin-top: 1px;
-}
-
-.shop-rating-row {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 6px;
-}
-
-.star-icon {
-    width: 11px;
-    height: 11px;
-    fill: #e5c158;
-}
-
-.rating-value {
-    font-size: 11px;
-    font-weight: 600;
-    color: #e5c158;
-}
-
-.rating-count {
-    font-size: 10.5px;
-    color: #595959;
-}
-
-.status-indicator {
-    margin-left: auto;
-    font-size: 10.5px;
-    font-weight: 500;
-    color: #2ed573;
-}
-
-/* Botón inferior de ver todos los negocios */
-.action-footer-box {
-    padding: 14px 16px;
-    border-top: 1px solid #141414;
-}
-
-.btn-view-all-shops {
-    width: 100%;
-    background: linear-gradient(to right, #9e7f33, #bd983c);
-    border: none;
-    border-radius: 20px;
-    padding: 11px;
-    color: #000000;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    text-align: center;
-    transition: opacity 0.2s;
-}
-
-.btn-view-all-shops:hover {
-    opacity: 0.95;
-}
-
-/* ================================================== */
-/* ADAPTABILIDAD INTEGRAL PARA DISPOSITIVOS MÓVILES    */
-/* ================================================== */
-@media(max-width: 1024px) {
-    .dashboard-container {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto 100vw auto;
-        grid-template-areas: 
-            "header"
-            "aside-left"
-            "main"
-            "aside-right";
-        height: auto;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja - Centro Comercial Digital</title>
     
-    .main-boulevard {
-        height: 100vw;
-    }
+    <!-- Tipografías Premium de Alta Definición -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    .bottom-filter-bar {
-        position: static;
-        transform: none;
-        margin: 15px auto;
-        width: calc(100% - 32px);
-        flex-wrap: wrap;
-    }
-    
-    .filter-pill {
-        flex: calc(50% - 10px);
-    }
-}
+    <style>
+        /* ================================================== */
+        /* VARIABLES DE DISEÑO PREMIUM                        */
+        /* ================================================== */
+        :root {
+            --bg-main: #000000;
+            --bg-panels: #070707;
+            --bg-cards: #121212;
+            --gold: #e5c158;
+            --gold-dim: #a68b44;
+            --border-color: #1a140a;
+            --text-main: #ffffff;
+            --text-muted: #8c8c8c;
+            --text-dark: #595959;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+        }
 
-@media(max-width: 600px) {
-    .header-top {
-        flex-direction: column;
-        padding: 15px;
-        gap: 12px;
-        height: auto;
-    }
-    .search-wrapper {
-        width: 100%;
-        margin: 0;
-    }
-    .filter-pill {
-        flex: 100%;
-    }
-}
+        /* ================================================== */
+        /* RESETEO GLOBAL                                     */
+        /* ================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: #262626 transparent;
+        }
 
-/* ================================================== */
-/* PIE DE PÁGINA                                      */
-/* ================================================== */
-.pie-pagina {
-    width: 100%;
-    height: 24px;
-    background-color: #000000;
-    color: #595959;
-    font-size: 11px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border-top: 1px solid #141414;
-    z-index: 10;
-    font-family: Arial, sans-serif;
-}
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--bg-main);
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-</style>
+        /* ================================================== */
+        /* CONTENEDOR PRINCIPAL (GRID DINÁMICO)               */
+        /* ================================================== */
+        .dashboard-container {
+            flex: 1;
+            display: grid;
+            grid-template-rows: 65px 1fr;
+            grid-template-columns: 260px 1fr 320px;
+            grid-template-areas: 
+                "header header header"
+                "aside-left main aside-right";
+            height: calc(100vh - 25px);
+        }
 
+        /* ================================================== */
+        /* BARRA SUPERIOR (HEADER)                            */
+        /* ================================================== */
+        .header-top {
+            grid-area: header;
+            background: var(--bg-panels);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 100;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-icon-svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--gold);
+        }
+
+        .brand-text h1 {
+            font-family: var(--font-serif);
+            color: var(--gold);
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+
+        .brand-text p {
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .search-wrapper {
+            flex: 1;
+            max-width: 480px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--bg-cards);
+            border: 1px solid #231d12;
+            border-radius: 20px;
+            padding: 8px 40px 8px 16px;
+            color: var(--text-main);
+            font-size: 12px;
+            outline: none;
+            font-family: var(--font-sans);
+        }
+
+        .search-input:focus {
+            border-color: var(--gold);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            fill: var(--text-muted);
+        }
+
+        .user-tools {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .location-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #d9d9d9;
+            cursor: pointer;
+        }
+
+        .location-indicator svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold);
+        }
+
+        .tool-icon {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .tool-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: #d9d9d9;
+        }
+
+        .badge-count {
+            position: absolute;
+            top: -4px;
+            right: -5px;
+            background: #d63031;
+            color: #fff;
+            font-size: 8px;
+            font-weight: 700;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            border: 1px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .profile-avatar svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold);
+        }
+
+        /* ================================================== */
+        /* MENÚ LATERAL IZQUIERDO: CATEGORÍAS                 */
+        /* ================================================== */
+        .aside-categories {
+            grid-area: aside-left;
+            background: var(--bg-panels);
+            border-right: 1px solid var(--border-color);
+            padding: 16px 10px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            padding-left: 6px;
+            font-weight: 600;
+        }
+
+        .categories-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            list-style: none;
+        }
+
+        .category-item button {
+            width: 100%;
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 8px 10px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .category-item button .icon-container {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            background: #141414;
+        }
+
+        .category-item button svg {
+            width: 13px;
+            height: 13px;
+            fill: var(--text-muted);
+        }
+
+        .category-text-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category-name {
+            color: #d9d9d9;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .category-count {
+            color: var(--text-dark);
+            font-size: 9px;
+        }
+
+        /* Estado Activo Uniforme */
+        .category-item.active button {
+            background: linear-gradient(135deg, #1c160c 0%, #0d0a05 100%);
+            border-color: #544422;
+        }
+
+        .category-item.active button .icon-container {
+            background: var(--gold);
+        }
+
+        .category-item.active button svg {
+            fill: #000000;
+        }
+
+        .category-item.active .category-name {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* ================================================== */
+        /* CENTRAL: VISTA DEL PASILLO (BOULEVARD)             */
+        /* ================================================== */
+        .main-boulevard {
+            grid-area: main;
+            position: relative;
+            overflow: hidden;
+            background: #050505;
+        }
+
+        .boulevard-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .boulevard-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 60%, rgba(0,0,0,0.7) 100%);
+            pointer-events: none;
+        }
+
+        .welcome-billboard {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 90%;
+            pointer-events: none;
+        }
+
+        .welcome-billboard h2 {
+            font-family: var(--font-serif);
+            color: var(--text-main);
+            font-size: 18px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .welcome-billboard p {
+            font-size: 10px;
+            color: #cccccc;
+            margin-top: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        /* FILTROS METRICOS INFERIORES ACCESIBLES */
+        .bottom-filter-bar {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(7, 7, 7, 0.9);
+            border: 1px solid #231d12;
+            border-radius: 10px;
+            padding: 6px;
+            display: flex;
+            gap: 6px;
+            width: calc(100% - 30px);
+            max-width: 760px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .filter-pill {
+            flex: 1;
+            background: var(--bg-cards);
+            border: 1px solid #1a160f;
+            border-radius: 6px;
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .filter-icon-box svg {
+            width: 13px;
+            height: 13px;
+            fill: var(--gold);
+            display: block;
+        }
+
+        .filter-label-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-label {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .filter-sub {
+            font-size: 8.5px;
+            color: var(--text-dark);
+        }
+
+        /* ================================================== */
+        /* PANEL LATERAL DERECHO: LISTADO DE COMERCIOS        */
+        /* ================================================== */
+        .aside-showcase-list {
+            grid-area: aside-right;
+            background: var(--bg-panels);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .showcase-header {
+            padding: 16px 14px 10px 14px;
+        }
+
+        .showcase-header h2 {
+            font-family: var(--font-serif);
+            color: var(--gold);
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .showcase-stats {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .sort-box {
+            padding: 0 14px 10px 14px;
+            border-bottom: 1px solid #141414;
+        }
+
+        .sort-select {
+            width: 100%;
+            background: var(--bg-cards);
+            border: 1px solid #262626;
+            border-radius: 5px;
+            padding: 6px 10px;
+            color: #d9d9d9;
+            font-size: 11px;
+            outline: none;
+        }
+
+        .shops-scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* TARJETAS DE COMERCIO REFORMADAS (MINI MUESTRAS) */
+        .shop-card {
+            background: var(--bg-cards);
+            border: 1px solid #1a1a1a;
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            cursor: pointer;
+            height: 64px;
+        }
+
+        .shop-thumb-wrapper {
+            width: 64px;
+            height: 64px;
+            flex-shrink: 0;
+            background: #202020;
+        }
+
+        .shop-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .shop-details {
+            flex: 1;
+            padding: 6px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .shop-title {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .shop-segment {
+            font-size: 9.5px;
+            color: var(--text-muted);
+        }
+
+        .shop-rating-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 3px;
+        }
+
+        .star-icon {
+            width: 10px;
+            height: 10px;
+            fill: var(--gold);
+        }
+
+        .rating-value {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .rating-count {
+            font-size: 9.5px;
+            color: var(--text-dark);
+        }
+
+        .status-indicator {
+            margin-left: auto;
+            font-size: 9.5px;
+            font-weight: 500;
+            color: #2ed573;
+        }
+
+        /* BOTÓN DE ACCIÓN ACCENTUADO EN ORO */
+        .action-footer-box {
+            padding: 10px 14px;
+            border-top: 1px solid #141414;
+        }
+
+        .btn-view-all-shops {
+            width: 100%;
+            background: var(--gold);
+            border: none;
+            border-radius: 6px;
+            padding: 8px;
+            color: #000000;
+            font-family: var(--font-sans);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* ================================================== */
+        /* PIE DE PÁGINA (FOOTER)                             */
+        /* ================================================== */
+        .pie-pagina {
+            width: 100%;
+            height: 25px;
+            background-color: #000000;
+            color: var(--text-dark);
+            font-size: 9px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-top: 1px solid #141414;
+            z-index: 100;
+        }
+
+        /* ================================================== */
+        /* RESPONSIVIDAD INTEGRAL: MÓVILES Y TABLETS          */
+        /* ================================================== */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto auto;
+                grid-template-areas: 
+                    "header"
+                    "aside-left"
+                    "main"
+                    "aside-right";
+                height: auto;
+            }
+
+            /* Transformación del menú de categorías a barra horizontal fluida */
+            .aside-categories {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 10px;
+            }
+
+            .section-title {
+                display: none; /* Simplifica espacio */
+            }
+
+            .categories-list {
+                flex-direction: row;
+                overflow-x: auto;
+                white-space: nowrap;
+                gap: 8px;
+                padding-bottom: 4px;
+            }
+
+            .category-item button {
+                width: auto;
+                padding: 6px 12px;
+            }
+
+            /* Dimensionamiento controlado del pasillo central */
+            .main-boulevard {
+                height: 60vh;
+                min-height: 320px;
+            }
+
+            .bottom-filter-bar {
+                position: static;
+                transform: none;
+                margin: 12px auto;
+                width: calc(100% - 20px);
+                flex-wrap: wrap;
+                background: var(--bg-panels);
+            }
+
+            .filter-pill {
+                flex: calc(50% - 4px);
+                min-width: 130px;
+            }
+
+            /* Panel de tiendas adaptado al flujo vertical inferior */
+            .aside-showcase-list {
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+                height: auto;
+            }
+
+            .shops-scroll-area {
+                max-height: 400px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header-top {
+                flex-direction: column;
+                height: auto;
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .search-wrapper {
+                width: 100%;
+                margin: 0;
+                order: 3;
+            }
+
+            .user-tools {
+                width: 100%;
+                justify-content: space-between;
+                order: 2;
+            }
+
+            .filter-pill {
+                flex: 100%;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="dashboard-container">
 
-    <!-- BARRA SUPERIOR: IDENTIDAD Y HERRAMIENTAS -->
+    <!-- BARRA SUPERIOR CONSTANTE -->
     <header class="header-top">
         <div class="brand-box">
             <svg class="brand-icon-svg" viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H7c0 2.76 2.24 5 5 5s5-2.24 5-5h-2c0 1.66-1.34 3-3 3z"/></svg>
             <div class="brand-text">
-                <h1>Loja</h1>
+                <h1>LOJA</h1>
                 <p>Centro Comercial Digital</p>
             </div>
         </div>
@@ -746,15 +707,13 @@ html, body {
         </div>
     </header>
 
-    <!-- MENÚ LATERAL IZQUIERDO: CATEGORÍAS -->
+    <!-- SECCIÓN DE CATEGORÍAS -->
     <aside class="aside-categories">
         <h2 class="section-title">Categorías</h2>
         <ul class="categories-list">
             <li class="category-item active">
                 <button>
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm7-3h-1v5h1V6zm0-4h-3v11h3V2zm2 19H14v-2h6v2z"/></svg>
-                    </div>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm7-3h-1v5h1V6zm0-4h-3v11h3V2zm2 19H14v-2h6v2z"/></svg></div>
                     <div class="category-text-info">
                         <span class="category-name">Comida y Bebida</span>
                         <span class="category-count">128 negocios</span>
@@ -763,9 +722,7 @@ html, body {
             </li>
             <li class="category-item">
                 <button>
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H5v-4h4V5h4v4h4v4z"/></svg>
-                    </div>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H5v-4h4V5h4v4h4v4z"/></svg></div>
                     <div class="category-text-info">
                         <span class="category-name">Salud y Farmacias</span>
                         <span class="category-count">96 negocios</span>
@@ -774,9 +731,7 @@ html, body {
             </li>
             <li class="category-item">
                 <button>
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2v1h2c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h2V4c0-1.1.9-2 2-2zm4 7H8v10h8V9zm-4 2c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z"/></svg>
-                    </div>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2v1h2c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h2V4c0-1.1.9-2 2-2zm4 7H8v10h8V9zm-4 2c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z"/></svg></div>
                     <div class="category-text-info">
                         <span class="category-name">Moda y Accesorios</span>
                         <span class="category-count">112 negocios</span>
@@ -785,9 +740,7 @@ html, body {
             </li>
             <li class="category-item">
                 <button>
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                    </div>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
                     <div class="category-text-info">
                         <span class="category-name">Hogar y Decoración</span>
                         <span class="category-count">84 negocios</span>
@@ -796,134 +749,63 @@ html, body {
             </li>
             <li class="category-item">
                 <button>
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24"><path d="M22 18V3H2v15H0v2h24v-2h-2zm-8 0h-4v-1h4v1zm6-3H4V5h16v10z"/></svg>
-                    </div>
+                    <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M22 18V3H2v15H0v2h24v-2h-2zm-8 0h-4v-1h4v1zm6-3H4V5h16v10z"/></svg></div>
                     <div class="category-text-info">
                         <span class="category-name">Tecnología</span>
                         <span class="category-count">78 negocios</span>
                     </div>
                 </button>
             </li>
-            <li class="category-item">
-                <button>
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24"><path d="M6 2v6h12V2H6zm11 4H7V4h10v2zm1 5c0-1.66-1.34-3-3-3H9c-1.66 0-3 1.34-3 3v8h12v-8zm-2 6H8v-6h8v6z"/></svg>
-                    </div>
-                    <div class="category-text-info">
-                        <span class="category-name">Belleza y Cuidado Personal</span>
-                        <span class="category-count">92 negocios</span>
-                    </div>
-                </button>
-            </li>
-            <li class="category-item">
-                <button>
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
-                    </div>
-                    <div class="category-text-info">
-                        <span class="category-name">Deportes y Fitness</span>
-                        <span class="category-count">54 negocios</span>
-                    </div>
-                </button>
-            </li>
-            <li class="category-item">
-                <button>
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                    </div>
-                    <div class="category-text-info">
-                        <span class="category-name">Servicios Profesionales</span>
-                        <span class="category-count">121 negocios</span>
-                    </div>
-                </button>
-            </li>
-            <li class="category-item">
-                <button>
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5.18 11.5L12 15.22l6.82-3.72L12 7.78 5.18 11.5zM12 19.5l-6-3.27v2.36l6 3.27 6-3.27v-2.36l-6 3.27z"/></svg>
-                    </div>
-                    <div class="category-text-info">
-                        <span class="category-name">Educación</span>
-                        <span class="category-count">67 negocios</span>
-                    </div>
-                </button>
-            </li>
         </ul>
-        <button class="btn-all-categories">Ver todas las categorías</button>
     </aside>
 
-    <!-- CUADRO CENTRAL: PASILLO COMERCIAL INTERACTIVO -->
+    <!-- CUADRO CENTRAL: PASILLO FOTOGRÁFICO -->
     <main class="main-boulevard">
-        <img src="imagenes/Boulevard.png" alt="Boulevard" class="boulevard-img">
+        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80" alt="Pasillo Comercial" class="boulevard-img">
         <div class="boulevard-overlay"></div>
 
-        <!-- Cartelera Informativa Superior -->
         <div class="welcome-billboard">
-            <h2>Bienvenido</h2>
+            <h2>BIENVENIDO</h2>
             <p>a tu centro comercial digital</p>
-            <p style="font-size: 9px; color: #8c8c8c; margin-top: 2px;">Encuentra todo lo que necesitas de manera fácil y rápida.</p>
         </div>
 
-        <!-- Capas interactivas calibradas sobre la imagen -->
-        <div class="interactive-showcase showcase-comida" title="Comida y Bebida"></div>
-        <div class="interactive-showcase showcase-salud" title="Salud y Farmacia"></div>
-        <div class="interactive-showcase showcase-moda" title="Moda y Accesorios"></div>
-
-        <!-- MÓDULO INFERIOR DE FILTROS METRICOS -->
+        <!-- FILTROS CRUCIALES INFERIORES -->
         <div class="bottom-filter-bar">
             <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
-                </div>
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
                 <div class="filter-label-group">
                     <span class="filter-label">Abiertos ahora</span>
                     <span class="filter-sub">156 negocios</span>
                 </div>
             </div>
             <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                </div>
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
                 <div class="filter-label-group">
                     <span class="filter-label">Cerca de mí</span>
                     <span class="filter-sub">124 negocios</span>
                 </div>
             </div>
             <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/></svg>
-                </div>
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/></svg></div>
                 <div class="filter-label-group">
                     <span class="filter-label">Con delivery</span>
                     <span class="filter-sub">98 negocios</span>
                 </div>
             </div>
             <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
-                </div>
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg></div>
                 <div class="filter-label-group">
                     <span class="filter-label">Promociones</span>
                     <span class="filter-sub">73 negocios</span>
                 </div>
             </div>
-            <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                </div>
-                <div class="filter-label-group">
-                    <span class="filter-label">Mejor valorados</span>
-                    <span class="filter-sub">91 negocios</span>
-                </div>
-            </div>
         </div>
     </main>
 
-    <!-- PANEL LATERAL DERECHO: LISTADO FILTRADO -->
+    <!-- PANEL LATERAL DERECHO: LISTADO COMPACTO -->
     <aside class="aside-showcase-list">
         <div class="showcase-header">
-            <h2>Comida y Bebida</h2>
+            <h2>COMIDA Y BEBIDA</h2>
             <div class="showcase-stats">128 negocios encontrados</div>
         </div>
 
@@ -931,93 +813,55 @@ html, body {
             <select class="sort-select">
                 <option>Ordenar por: Destacados</option>
                 <option>Calificación</option>
-                <option>Distancia</option>
             </select>
         </div>
 
-        <!-- Contenedor dinámico de locales comerciales -->
         <div class="shops-scroll-area">
-            
+            <!-- Tarjeta 1 -->
             <div class="shop-card">
                 <div class="shop-thumb-wrapper">
-                    <img src="imagenes/locales/estacion.png" alt="La Estación Café" class="shop-thumb">
+                    <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=100&q=80" alt="La Estación Café" class="shop-thumb">
                 </div>
                 <div class="shop-details">
                     <div class="shop-title">La Estación Café</div>
                     <div class="shop-segment">Cafetería</div>
                     <div class="shop-rating-row">
                         <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <span class="rating-value">4.8</span>
-                        <span class="rating-count">(124)</span>
+                        <span class="rating-value">4.8</span> <span class="rating-count">(124)</span>
                         <span class="status-indicator">Abierto</span>
                     </div>
                 </div>
             </div>
-
+            <!-- Tarjeta 2 -->
             <div class="shop-card">
                 <div class="shop-thumb-wrapper">
-                    <img src="imagenes/locales/sabor.png" alt="Sabor Lojano" class="shop-thumb">
+                    <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=100&q=80" alt="Sabor Lojano" class="shop-thumb">
                 </div>
                 <div class="shop-details">
                     <div class="shop-title">Sabor Lojano</div>
                     <div class="shop-segment">Restaurante</div>
                     <div class="shop-rating-row">
                         <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <span class="rating-value">4.6</span>
-                        <span class="rating-count">(98)</span>
+                        <span class="rating-value">4.6</span> <span class="rating-count">(98)</span>
                         <span class="status-indicator">Abierto</span>
                     </div>
                 </div>
             </div>
-
+            <!-- Tarjeta 3 -->
             <div class="shop-card">
                 <div class="shop-thumb-wrapper">
-                    <img src="imagenes/locales/vito.png" alt="Pizzería Don Vito" class="shop-thumb">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=100&q=80" alt="Pizzería Don Vito" class="shop-thumb">
                 </div>
                 <div class="shop-details">
                     <div class="shop-title">Pizzería Don Vito</div>
                     <div class="shop-segment">Pizzería</div>
                     <div class="shop-rating-row">
                         <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <span class="rating-value">4.5</span>
-                        <span class="rating-count">(87)</span>
+                        <span class="rating-value">4.5</span> <span class="rating-count">(87)</span>
                         <span class="status-indicator">Abierto</span>
                     </div>
                 </div>
             </div>
-
-            <div class="shop-card">
-                <div class="shop-thumb-wrapper">
-                    <img src="imagenes/locales/parque.png" alt="Café del Parque" class="shop-thumb">
-                </div>
-                <div class="shop-details">
-                    <div class="shop-title">Café del Parque</div>
-                    <div class="shop-segment">Cafetería</div>
-                    <div class="shop-rating-row">
-                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <span class="rating-value">4.7</span>
-                        <span class="rating-count">(76)</span>
-                        <span class="status-indicator">Abierto</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="shop-card">
-                <div class="shop-thumb-wrapper">
-                    <img src="imagenes/locales/burger.png" alt="Burger House" class="shop-thumb">
-                </div>
-                <div class="shop-details">
-                    <div class="shop-title">Burger House</div>
-                    <div class="shop-segment">Hamburguesas</div>
-                    <div class="shop-rating-row">
-                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <span class="rating-value">4.4</span>
-                        <span class="rating-count">(65)</span>
-                        <span class="status-indicator">Abierto</span>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
         <div class="action-footer-box">
@@ -1027,7 +871,6 @@ html, body {
 
 </div>
 
-<!-- Pie de página unificado -->
 <footer class="pie-pagina">
     <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
 </footer>
