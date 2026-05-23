@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gastronomía - Urbanex Loja</title>
 
-    <!-- Tipografías Premium -->
+    <!-- Tipografías Premium desde Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         /* ================================================== */
-        /* VARIABLES DE DISEÑO PREMIUM (BASADAS EN INDEX.HTML)*/
+        /* VARIABLES DE DISEÑO PREMIUM (SISTEMA URBANEX)      */
         /* ================================================== */
         :root {
             --bg-main: #020202;
@@ -36,18 +36,16 @@
             flex-direction: column;
         }
 
-        /* ================================================== */
-        /* ESTRUCTURA DEL DASHBOARD (REPLICADA)              */
-        /* ================================================== */
-        .dashboard-container {
+        /* Contenedor Grid Principal */
+        .page-wrapper {
             display: grid;
-            grid-template-rows: 60px 1fr;
+            grid-template-rows: 60px 1fr 24px;
             grid-template-columns: 240px 1fr;
             min-height: 100vh;
         }
 
-        /* Header (Como en index.html) */
-        .header-top {
+        /* HEADER INTEGRADO */
+        .header-main {
             grid-column: 1 / span 2;
             background: var(--bg-panels-glass);
             backdrop-filter: var(--blur-effect);
@@ -58,70 +56,56 @@
             z-index: 10;
         }
 
-        .brand-box { text-decoration: none; cursor: pointer; }
-        .logo-img { height: 40px; width: auto; }
+        /* RUTA CORREGIDA: Se usa /imagenes/ para apuntar siempre a la raíz */
+        .logo-branding { height: 40px; }
 
-        /* Menú Lateral (Como en index.html) */
-        .aside-categories {
+        /* SIDEBAR DE CATEGORÍAS */
+        .sidebar {
             background: var(--bg-panels-glass);
             backdrop-filter: var(--blur-effect);
             border-right: 1px solid var(--border-color);
-            padding: 20px 12px;
+            padding: 20px;
         }
 
-        /* Contenido Central */
-        .main-content {
+        /* ÁREA CENTRAL DE CONTENIDO */
+        .content-area {
             padding: 40px;
-            background: radial-gradient(circle at top right, rgba(229, 193, 88, 0.05), transparent 60%);
+            overflow-y: auto;
         }
 
-        /* Banner de Categoría */
-        .category-hero {
+        .category-hero-container {
             width: 100%;
             height: 300px;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--gold);
             margin-bottom: 40px;
-            position: relative;
+            border-radius: 12px;
+            border: 1px solid var(--gold);
+            overflow: hidden;
+            display: block;
         }
 
-        .category-hero img {
+        /* RUTA CORREGIDA: Se asegura carga absoluta desde la raíz */
+        .category-hero-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        /* Grid de Locales */
-        .shops-grid {
+        .grid-restaurantes {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
         }
 
-        .shop-card {
+        .card-local {
             background: var(--bg-cards-glass);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 20px;
-            transition: var(--transition-smooth);
         }
 
-        .shop-card:hover {
-            border-color: var(--gold);
-            background: rgba(229, 193, 88, 0.05);
-        }
-
-        .shop-card h3 {
-            font-family: 'Cinzel', serif;
-            color: var(--gold);
-            margin-bottom: 10px;
-        }
-
-        /* Footer (Replicado de index.html) */
-        .pie-pagina {
+        /* FOOTER */
+        .footer-main {
             grid-column: 1 / span 2;
-            height: 24px;
             background-color: #000;
             color: #8c8c8c;
             font-size: 11px;
@@ -130,52 +114,37 @@
             align-items: center;
             border-top: 1px solid #1a1a1a;
         }
-
-        /* Responsividad Móvil */
-        @media (max-width: 768px) {
-            .dashboard-container { grid-template-columns: 1fr; }
-            .aside-categories { display: none; }
-            .main-content { padding: 20px; }
-        }
     </style>
 </head>
 <body>
 
-<div class="dashboard-container">
-    <header class="header-top">
-        <a href="index.html" class="brand-box">
-            <img src="imagenes/logo.png" alt="Urbanex" class="logo-img">
+<div class="page-wrapper">
+    <header class="header-main">
+        <a href="/index.html">
+            <img src="/imagenes/logo.png" alt="Logo Urbanex" class="logo-branding">
         </a>
     </header>
 
-    <aside class="aside-categories">
-        <!-- Reutilización del estilo de navegación lateral de index.html -->
-        <h2 style="font-size: 10px; color: var(--gold); margin-bottom: 20px; text-transform: uppercase;">Categorías</h2>
-        <div style="color: #fff; font-size: 14px;">← Volver al Bulevar</div>
+    <aside class="sidebar">
+        <h2 style="color: var(--gold); font-size: 10px; text-transform: uppercase; margin-bottom: 20px;">Menú</h2>
     </aside>
 
-    <main class="main-content">
-        <div class="category-hero">
-            <img src="imagenes/Gastronomía.png" alt="Gastronomía">
+    <main class="content-area">
+        <!-- Banner de Gastronomía con ruta absoluta -->
+        <div class="category-hero-container">
+            <img src="/imagenes/Gastronomía.png" alt="Categoría Gastronomía">
         </div>
 
-        <div class="shops-grid">
-            <!-- Bloque repetible para cada local -->
-            <div class="shop-card">
-                <h3>Nombre del Restaurante</h3>
-                <p style="font-size: 12px; margin-bottom: 5px;">Especialidad: Comida Típica Lojana</p>
-                <p style="font-size: 12px; color: var(--text-dark);">Sector: Centro</p>
-            </div>
-            <div class="shop-card">
-                <h3>Otro Local de Comida</h3>
-                <p style="font-size: 12px; margin-bottom: 5px;">Especialidad: Fast Food</p>
-                <p style="font-size: 12px; color: var(--text-dark);">Sector: Norte</p>
+        <div class="grid-restaurantes">
+            <div class="card-local">
+                <h3 style="font-family: 'Cinzel', serif; color: var(--gold);">Nombre del Restaurante</h3>
+                <p style="font-size: 12px; margin-top: 10px;">Especialidad: Comida Típica Lojana</p>
             </div>
         </div>
     </main>
 
-    <footer class="pie-pagina">
-        <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
+    <footer class="footer-main">
+        &copy; 2026 Urbanex. Todos los derechos reservados.
     </footer>
 </div>
 
