@@ -280,13 +280,13 @@
             width: min(1040px, calc(100% - 28px));
             margin: 0 auto 24px;
             display: grid;
-            grid-template-columns: 1fr 260px;
+            grid-template-columns: 1fr;
             gap: 12px;
         }
 
         .business-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 8px;
         }
 
@@ -421,56 +421,7 @@
         .action-btn:hover {
             transform: translateY(-1px);
         }
-
-        .side-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .panel-card {
-            background: var(--bg-panel);
-            border: 1px solid var(--gold-border);
-            border-radius: 12px;
-            padding: 13px;
-            backdrop-filter: var(--blur);
-            -webkit-backdrop-filter: var(--blur);
-        }
-
-        .panel-card h2 {
-            font-family: var(--font-serif);
-            color: var(--gold);
-            font-size: 12.5px;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        .panel-card p,
-        .panel-card li {
-            color: var(--text-muted);
-            font-size: 9.5px;
-            line-height: 1.45;
-        }
-
-        .panel-card ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 9px;
-        }
-
-        .panel-card li::before {
-            content: "•";
-            color: var(--gold);
-            margin-right: 8px;
-        }
-
-        .featured-box {
-            background: linear-gradient(135deg, rgba(229,193,88,0.18), rgba(255,255,255,0.04));
-        }
-
-        .empty-state {
+.empty-state {
             display: none;
             grid-column: 1 / -1;
             border: 1px dashed rgba(229,193,88,0.34);
@@ -633,7 +584,7 @@
             }
 
             .business-grid {
-                grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             }
 
             .control-panel {
@@ -751,35 +702,6 @@
                 </div>
             </div>
         </section>
-
-        <aside class="side-panel">
-            <div class="panel-card featured-box">
-                <h2>Conteo automático</h2>
-                <p>
-                    Empresas activas en esta categoría:
-                    <strong id="electroCounter" style="color: var(--gold);">0</strong>.
-                    El número cambia automáticamente cuando se agregan o eliminan empresas en este archivo.
-                </p>
-            </div>
-
-            <div class="panel-card">
-                <h2>Idea visual</h2>
-                <p>
-                    La categoría se presenta como un showroom digital: imagen amplia, tarjetas elegantes,
-                    filtros simples y énfasis en garantía, instalación y atención local.
-                </p>
-            </div>
-
-            <div class="panel-card">
-                <h2>Servicios clave</h2>
-                <ul>
-                    <li>Venta de refrigeradoras, cocinas, lavadoras y secadoras.</li>
-                    <li>Instalación técnica con garantía.</li>
-                    <li>Diagnóstico, mantenimiento y repuestos.</li>
-                    <li>Atención para hogares, oficinas y locales comerciales.</li>
-                </ul>
-            </div>
-        </aside>
     </main>
 
     <footer class="footer">
@@ -903,8 +825,8 @@
     }
 
     function updateCounters(total) {
-        electroCounter.textContent = total;
-        heroCounter.textContent = total;
+        if (electroCounter) electroCounter.textContent = total;
+        if (heroCounter) heroCounter.textContent = total;
     }
 
     function renderBusinesses() {
