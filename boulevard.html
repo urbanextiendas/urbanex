@@ -1746,14 +1746,10 @@
 
     async function runSearch(navigateFirstResult) {
         const query = searchInput.value.trim();
+        hidePanel();
 
         if (query.length < MIN_QUERY_LENGTH) {
-            showPanel('<div class="search-results-status">Ingrese al menos ' + MIN_QUERY_LENGTH + ' caracteres para buscar.</div>');
             return;
-        }
-
-        if (!indexLoaded) {
-            showPanel('<div class="search-results-status">Cargando índice de búsqueda...</div>');
         }
 
         try {
@@ -1765,22 +1761,18 @@
                 return;
             }
 
-            renderResults(query, activeResults);
+            hidePanel();
         } catch (error) {
-            showPanel('<div class="search-results-status">No se pudo cargar la búsqueda del repositorio.</div>');
+            hidePanel();
         }
     }
 
     const debouncedSearch = debounce(function () {
-        runSearch(false);
+        hidePanel();
     }, 220);
 
     searchInput.addEventListener("input", function () {
-        if (!searchInput.value.trim()) {
-            hidePanel();
-            return;
-        }
-        debouncedSearch();
+        hidePanel();
     });
 
     searchInput.addEventListener("keydown", function (event) {
