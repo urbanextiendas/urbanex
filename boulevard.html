@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urbanex - Comercio</title>
-    <link rel="icon" type="image/png" href="/imagenes/log.png">
+    <title>Urbanex - Comercios</title>
     
     <!-- Tipografías Premium de Alta Definición -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -369,9 +368,7 @@
             border-radius: 12px;
             display: flex;
             align-items: center;
-            justify-content: flex-start;
             gap: 12px;
-            text-align: left;
             transition: var(--transition-smooth);
         }
 
@@ -414,28 +411,24 @@
         .category-text-info {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            flex: 1;
             min-width: 0;
+            flex: 1;
+            align-items: flex-start;
             text-align: left;
         }
 
         .category-name {
-            width: 100%;
             color: #ffffff;
             font-size: 11.5px;
             font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            text-align: left;
         }
 
         .category-count {
-            width: 100%;
             color: var(--text-dark);
             font-size: 9px;
-            text-align: left;
         }
 
         .category-item.active button {
@@ -467,10 +460,10 @@
         }
 
         .category-item button {
-            justify-content: flex-start;
             gap: 14px;
             padding: 10px;
             border-radius: 12px;
+            justify-content: flex-start;
             text-align: left;
         }
 
@@ -648,17 +641,6 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-        }
-
-        .empty-business-state {
-            border: 1px dashed rgba(229, 193, 88, 0.25);
-            border-radius: 8px;
-            padding: 16px 12px;
-            color: var(--text-muted);
-            font-size: 11px;
-            line-height: 1.5;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.22);
         }
 
         .shop-card {
@@ -1016,7 +998,7 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Gastronomía</span>
-                        <span class="category-count" data-business-count="gastronomia">0 negocios</span>
+                        <span class="category-count">128 locales</span>
                     </div>
                 </button>
             </li>
@@ -1030,7 +1012,7 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Salud y Bienestar</span>
-                        <span class="category-count" data-business-count="salud">0 negocios</span>
+                        <span class="category-count">96 locales</span>
                     </div>
                 </button>
             </li>
@@ -1044,7 +1026,7 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Movilidad</span>
-                        <span class="category-count" data-business-count="movilidad">0 negocios</span>
+                        <span class="category-count">34 zonas</span>
                     </div>
                 </button>
             </li>
@@ -1058,7 +1040,7 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Hogar y Tecnología</span>
-                        <span class="category-count" data-business-count="hogar">0 negocios</span>
+                        <span class="category-count">55 locales</span>
                     </div>
                 </button>
             </li>
@@ -1072,7 +1054,7 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Turismo y Hospedaje</span>
-                        <span class="category-count" data-business-count="turismo">0 negocios</span>
+                        <span class="category-count">42 locales</span>
                     </div>
                 </button>
             </li>
@@ -1086,7 +1068,7 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Finanzas</span>
-                        <span class="category-count" data-business-count="finanzas">0 negocios</span>
+                        <span class="category-count">45 puntos</span>
                     </div>
                 </button>
             </li>
@@ -1100,7 +1082,7 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Comercio y Educación</span>
-                        <span class="category-count" data-business-count="comercio">0 negocios</span>
+                        <span class="category-count">80 locales</span>
                     </div>
                 </button>
             </li>
@@ -1124,7 +1106,7 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Abiertos Ahora</span>
-                    <span class="filter-sub" data-aggregate-count="open">0 negocios</span>
+                    <span class="filter-sub">184 locales</span>
                 </div>
             </div>
 
@@ -1136,7 +1118,7 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Cerca de mí</span>
-                    <span class="filter-sub" data-aggregate-count="near">0 negocios</span>
+                    <span class="filter-sub">92 locales</span>
                 </div>
             </div>
 
@@ -1148,7 +1130,7 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">A Domicilio</span>
-                    <span class="filter-sub" data-aggregate-count="delivery">0 negocios</span>
+                    <span class="filter-sub">115 locales</span>
                 </div>
             </div>
 
@@ -1160,7 +1142,7 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Ofertas</span>
-                    <span class="filter-sub" data-aggregate-count="offers">0 promos</span>
+                    <span class="filter-sub">42 promos</span>
                 </div>
             </div>
         </div>
@@ -1169,7 +1151,7 @@
     <aside class="aside-showcase-list">
         <div class="showcase-header">
             <h2>DESTACADOS</h2>
-            <div class="showcase-stats" data-business-summary>0 negocios registrados</div>
+            <div class="showcase-stats">Recomendados del mes</div>
         </div>
 
         <div class="sort-box">
@@ -1180,7 +1162,41 @@
         </div>
 
         <div class="shops-scroll-area">
-            <div class="empty-business-state">Aún no hay negocios registrados. Cuando se ingresen en el sistema, aparecerán aquí automáticamente.</div>
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=120&q=80" alt="La Terraza Gourmet" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">La Terraza Gourmet</div>
+                    <div class="shop-segment">Alta Cocina</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.9</span>
+                        <span class="rating-count">(312)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=120&q=80" alt="Café Central Loja" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">Café Central Loja</div>
+                    <div class="shop-segment">Café de Especialidad</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.8</span>
+                        <span class="rating-count">(245)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="action-footer-box">
@@ -1194,245 +1210,6 @@
     <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
 </footer>
 
-
-<script>
-(function () {
-    const CATEGORY_CONFIG = {
-        gastronomia: ["gastronomia", "gastronomía", "restaurante", "comida", "cafe", "café", "cafeteria", "cafetería", "bar"],
-        salud: ["salud", "bienestar", "clinica", "clínica", "farmacia", "medicina", "consultorio"],
-        movilidad: ["movilidad", "transporte", "taxi", "auto", "carro", "moto", "vehiculo", "vehículo"],
-        hogar: ["hogar", "tecnologia", "tecnología", "ferreteria", "ferretería", "muebles", "electrodomesticos", "electrodomésticos"],
-        turismo: ["turismo", "hospedaje", "hotel", "hostal", "alojamiento", "viajes"],
-        finanzas: ["finanzas", "banco", "cooperativa", "credito", "crédito", "seguros"],
-        comercio: ["comercio", "educacion", "educación", "tienda", "local", "academia", "instituto", "papeleria", "papelería"]
-    };
-
-    const STORAGE_KEYS = [
-        "urbanexBusinesses",
-        "urbanexNegocios",
-        "negocios",
-        "businesses"
-    ];
-
-    const DEFAULT_IMAGE = "imagenes/logo.png";
-
-    function normalizeText(value) {
-        return String(value || "")
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/[^a-z0-9\s_-]/g, " ")
-            .replace(/\s+/g, " ")
-            .trim();
-    }
-
-    function escapeHtml(value) {
-        return String(value || "")
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
-    function getField(item, fields) {
-        for (const field of fields) {
-            if (item && item[field] !== undefined && item[field] !== null && item[field] !== "") {
-                return item[field];
-            }
-        }
-        return "";
-    }
-
-    function readBusinesses() {
-        if (Array.isArray(window.URBANEX_BUSINESSES)) {
-            return window.URBANEX_BUSINESSES;
-        }
-
-        for (const key of STORAGE_KEYS) {
-            try {
-                const value = localStorage.getItem(key);
-                if (!value) continue;
-
-                const parsed = JSON.parse(value);
-                if (Array.isArray(parsed)) return parsed;
-                if (parsed && Array.isArray(parsed.data)) return parsed.data;
-                if (parsed && Array.isArray(parsed.negocios)) return parsed.negocios;
-                if (parsed && Array.isArray(parsed.businesses)) return parsed.businesses;
-            } catch (error) {
-                continue;
-            }
-        }
-
-        return [];
-    }
-
-    function isActiveBusiness(business) {
-        const inactiveValue = normalizeText(getField(business, ["inactivo", "inactive", "eliminado", "deleted"]));
-        const statusValue = normalizeText(getField(business, ["estadoRegistro", "registrationStatus", "estadoSistema", "systemStatus"]));
-
-        if (business.activo === false || business.active === false) return false;
-        if (business.inactivo === true || business.inactive === true) return false;
-        if (business.eliminado === true || business.deleted === true) return false;
-        if (inactiveValue === "true" || inactiveValue === "si" || inactiveValue === "sí") return false;
-        if (["inactivo", "eliminado", "rechazado"].includes(statusValue)) return false;
-
-        return true;
-    }
-
-    function getCategoryKey(business) {
-        const rawValue = getField(business, [
-            "categoria",
-            "category",
-            "rubro",
-            "tipo",
-            "segmento",
-            "sector",
-            "categoriaPrincipal"
-        ]);
-
-        const normalizedValue = normalizeText(rawValue);
-
-        if (!normalizedValue) return "";
-
-        for (const [key, aliases] of Object.entries(CATEGORY_CONFIG)) {
-            if (aliases.some(function (alias) {
-                return normalizedValue.includes(normalizeText(alias));
-            })) {
-                return key;
-            }
-        }
-
-        return "";
-    }
-
-    function isBusinessOpen(business) {
-        const value = getField(business, ["abierto", "isOpen", "open", "estaAbierto", "estado"]);
-        if (typeof value === "boolean") return value;
-
-        const normalized = normalizeText(value);
-        return normalized === "abierto" || normalized === "open" || normalized === "true";
-    }
-
-    function isBusinessNear(business) {
-        const value = getField(business, ["cerca", "near", "nearMe", "cercaDeMi"]);
-        if (typeof value === "boolean") return value;
-
-        const normalized = normalizeText(value);
-        return normalized === "true" || normalized === "si" || normalized === "sí";
-    }
-
-    function hasDelivery(business) {
-        const value = getField(business, ["domicilio", "delivery", "aDomicilio", "servicioDomicilio"]);
-        if (typeof value === "boolean") return value;
-
-        const normalized = normalizeText(value);
-        return normalized === "true" || normalized === "si" || normalized === "sí";
-    }
-
-    function hasOffer(business) {
-        const value = getField(business, ["oferta", "ofertas", "promo", "promocion", "promoción", "promociones"]);
-        if (Array.isArray(value)) return value.length > 0;
-        if (typeof value === "boolean") return value;
-
-        const normalized = normalizeText(value);
-        return normalized === "true" || normalized === "si" || normalized === "sí" || normalized.length > 0;
-    }
-
-    function formatBusinessCount(count) {
-        return count + " " + (count === 1 ? "negocio" : "negocios");
-    }
-
-    function updateText(selector, value) {
-        const element = document.querySelector(selector);
-        if (element) element.textContent = value;
-    }
-
-    function renderFeaturedBusinesses(businesses) {
-        const container = document.querySelector(".shops-scroll-area");
-        if (!container) return;
-
-        if (!businesses.length) {
-            container.innerHTML = '<div class="empty-business-state">Aún no hay negocios registrados. Cuando se ingresen en el sistema, aparecerán aquí automáticamente.</div>';
-            return;
-        }
-
-        const featuredBusinesses = businesses
-            .slice()
-            .sort(function (a, b) {
-                const ratingA = Number(getField(a, ["calificacion", "rating", "puntaje"])) || 0;
-                const ratingB = Number(getField(b, ["calificacion", "rating", "puntaje"])) || 0;
-                return ratingB - ratingA;
-            })
-            .slice(0, 8);
-
-        container.innerHTML = featuredBusinesses.map(function (business) {
-            const title = getField(business, ["nombre", "name", "titulo", "title"]) || "Negocio sin nombre";
-            const segment = getField(business, ["segmento", "categoria", "category", "rubro"]) || "Negocio local";
-            const image = getField(business, ["imagen", "image", "foto", "photo", "logo"]) || DEFAULT_IMAGE;
-            const rating = Number(getField(business, ["calificacion", "rating", "puntaje"])) || 0;
-            const reviews = Number(getField(business, ["resenas", "reviews", "opiniones"])) || 0;
-            const status = isBusinessOpen(business) ? "Abierto" : "Registrado";
-
-            return '<div class="shop-card">' +
-                '<div class="shop-thumb-wrapper">' +
-                    '<img src="' + escapeHtml(image) + '" alt="' + escapeHtml(title) + '" class="shop-thumb">' +
-                '</div>' +
-                '<div class="shop-details">' +
-                    '<div class="shop-title">' + escapeHtml(title) + '</div>' +
-                    '<div class="shop-segment">' + escapeHtml(segment) + '</div>' +
-                    '<div class="shop-rating-row">' +
-                        '<svg class="star-icon" viewBox="0 0 24 24">' +
-                            '<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>' +
-                        '</svg>' +
-                        '<span class="rating-value">' + rating.toFixed(1) + '</span>' +
-                        '<span class="rating-count">(' + reviews + ')</span>' +
-                        '<span class="status-indicator">' + escapeHtml(status) + '</span>' +
-                    '</div>' +
-                '</div>' +
-            '</div>';
-        }).join("");
-    }
-
-    function updateBusinessCounters() {
-        const businesses = readBusinesses().filter(isActiveBusiness);
-        const categoryTotals = {
-            gastronomia: 0,
-            salud: 0,
-            movilidad: 0,
-            hogar: 0,
-            turismo: 0,
-            finanzas: 0,
-            comercio: 0
-        };
-
-        businesses.forEach(function (business) {
-            const categoryKey = getCategoryKey(business);
-            if (categoryKey && categoryTotals[categoryKey] !== undefined) {
-                categoryTotals[categoryKey] += 1;
-            }
-        });
-
-        Object.keys(categoryTotals).forEach(function (key) {
-            updateText('[data-business-count="' + key + '"]', formatBusinessCount(categoryTotals[key]));
-        });
-
-        updateText('[data-aggregate-count="open"]', formatBusinessCount(businesses.filter(isBusinessOpen).length));
-        updateText('[data-aggregate-count="near"]', formatBusinessCount(businesses.filter(isBusinessNear).length));
-        updateText('[data-aggregate-count="delivery"]', formatBusinessCount(businesses.filter(hasDelivery).length));
-        updateText('[data-aggregate-count="offers"]', businesses.filter(hasOffer).length + " promos");
-        updateText("[data-business-summary]", formatBusinessCount(businesses.length) + " registrados");
-
-        renderFeaturedBusinesses(businesses);
-    }
-
-    window.URBANEX_UPDATE_BUSINESS_COUNTERS = updateBusinessCounters;
-
-    document.addEventListener("DOMContentLoaded", updateBusinessCounters);
-    window.addEventListener("storage", updateBusinessCounters);
-    window.addEventListener("urbanex:businesses-updated", updateBusinessCounters);
-})();
-</script>
 
 <script>
 (function () {
