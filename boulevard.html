@@ -75,6 +75,21 @@
             overflow: visible;
         }
 
+        .dashboard-container::before {
+            content: "";
+            position: absolute;
+            top: 60px;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-image: url("imagenes/Boulevard.png");
+            background-size: cover;
+            background-position: center bottom;
+            background-repeat: no-repeat;
+            z-index: 0;
+            pointer-events: none;
+        }
+
         .global-background-underlay {
             position: absolute;
             inset: 0;
