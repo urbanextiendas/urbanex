@@ -998,6 +998,138 @@
             }
         }
 
+    
+        /* Tarjetas con logo empresarial y descripción comercial */
+        .empresa-electrodomesticos {
+            min-height: 124px;
+            border-radius: 13px;
+            background: linear-gradient(145deg, rgba(18,18,18,0.86), rgba(8,8,8,0.78));
+        }
+
+        .business-cover {
+            display: none;
+        }
+
+        .business-logo-zone {
+            display: grid;
+            grid-template-columns: 44px minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 9px 6px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            background:
+                radial-gradient(circle at 14% 10%, rgba(229,193,88,0.16), transparent 32%),
+                rgba(0,0,0,0.18);
+        }
+
+        .business-logo-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(229,193,88,0.28);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .business-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 5px;
+            display: block;
+        }
+
+        .business-logo-fallback {
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            background: linear-gradient(135deg, rgba(229,193,88,0.14), rgba(255,255,255,0.04));
+        }
+
+        .business-summary {
+            min-width: 0;
+        }
+
+        .business-summary .business-status {
+            position: static;
+            display: inline-flex;
+            width: fit-content;
+            margin-bottom: 3px;
+            padding: 2px 6px;
+            font-size: 6.8px;
+            line-height: 1;
+        }
+
+        .business-title {
+            font-size: 11.5px;
+            line-height: 1.15;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .business-category {
+            font-size: 8.2px;
+            margin-bottom: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .business-rating {
+            align-self: start;
+            font-size: 9px;
+            padding-top: 2px;
+        }
+
+        .business-body {
+            padding: 8px 9px 9px;
+        }
+
+        .business-sale {
+            color: #ffffff;
+            font-size: 9px;
+            font-weight: 700;
+            line-height: 1.32;
+            margin-bottom: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .business-description {
+            color: var(--text-muted);
+            font-size: 8.6px;
+            line-height: 1.35;
+            min-height: 23px;
+            margin-bottom: 7px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .business-actions {
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+        }
+
+        .action-btn {
+            padding: 5px 7px;
+            font-size: 8.5px;
+        }
+
     </style>
 </head>
 
@@ -1144,9 +1276,11 @@
             nombre: "ElectroHogar Loja",
             segmento: "Venta · Instalación",
             tipo: "venta instalacion linea-blanca",
-            descripcion: "Electrodomésticos de línea blanca, asesoría de compra e instalación para hogares.",
+            descripcion: "Venta de refrigeradoras, lavadoras, cocinas, secadoras y electrodomésticos de línea blanca.",
+            venta: "Refrigeradoras · Lavadoras · Cocinas · Secadoras",
             rating: 4.8,
             estado: "Abierto",
+            logo: "../../imagenes/empresas/electrohogar-loja.png",
             imagen: "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=900&q=80",
             tags: ["Refrigeradoras", "Lavadoras", "Garantía"]
         },
@@ -1154,9 +1288,11 @@
             nombre: "Casa Frío",
             segmento: "Refrigeración · Soporte",
             tipo: "reparacion instalacion linea-blanca",
-            descripcion: "Especialistas en refrigeradoras, congeladores, vitrinas y mantenimiento preventivo.",
+            descripcion: "Servicio técnico, mantenimiento e instalación de equipos de refrigeración doméstica y comercial.",
+            venta: "Refrigeradoras · Congeladores · Vitrinas · Mantenimiento",
             rating: 4.7,
             estado: "Abierto",
+            logo: "../../imagenes/empresas/casa-frio.png",
             imagen: "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?auto=format&fit=crop&w=900&q=80",
             tags: ["Refrigeración", "Mantenimiento", "Técnicos"]
         },
@@ -1164,9 +1300,11 @@
             nombre: "TecnoCocina",
             segmento: "Cocinas · Hornos",
             tipo: "venta instalacion",
-            descripcion: "Venta e instalación de cocinas, campanas extractoras, hornos y equipos empotrables.",
+            descripcion: "Venta e instalación de cocinas, hornos, campanas extractoras y equipos empotrables.",
+            venta: "Cocinas · Hornos · Campanas · Empotrables",
             rating: 4.6,
             estado: "Abierto",
+            logo: "../../imagenes/empresas/tecnococina.png",
             imagen: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=900&q=80",
             tags: ["Cocinas", "Hornos", "Campanas"]
         },
@@ -1174,9 +1312,11 @@
             nombre: "Lavatec Express",
             segmento: "Lavadoras · Secadoras",
             tipo: "reparacion instalacion linea-blanca",
-            descripcion: "Reparación, instalación y revisión técnica de lavadoras y secadoras domésticas.",
+            descripcion: "Reparación, instalación, diagnóstico y venta de repuestos para lavadoras y secadoras.",
+            venta: "Lavadoras · Secadoras · Repuestos · Diagnóstico",
             rating: 4.5,
             estado: "Disponible",
+            logo: "../../imagenes/empresas/lavatec-express.png",
             imagen: "https://images.unsplash.com/photo-1626806819282-2c1dc01a5e0c?auto=format&fit=crop&w=900&q=80",
             tags: ["Lavadoras", "Secadoras", "Repuestos"]
         },
@@ -1184,9 +1324,11 @@
             nombre: "Mega Electro",
             segmento: "Electrodomésticos · Hogar",
             tipo: "venta linea-blanca",
-            descripcion: "Catálogo completo de electrodomésticos para cocina, limpieza, climatización y hogar.",
+            descripcion: "Venta de electrodomésticos para cocina, limpieza, climatización, audio y tecnología del hogar.",
+            venta: "Cocina · Limpieza · Climatización · Audio",
             rating: 4.4,
             estado: "Abierto",
+            logo: "../../imagenes/empresas/mega-electro.png",
             imagen: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=900&q=80",
             tags: ["Catálogo", "Crédito", "Entrega"]
         },
@@ -1194,9 +1336,11 @@
             nombre: "InstalaPro Hogar",
             segmento: "Instalación · Garantía",
             tipo: "instalacion reparacion",
-            descripcion: "Instalación técnica de equipos nuevos, revisión de conexiones y soporte postventa.",
+            descripcion: "Instalación profesional de electrodomésticos, revisión de conexiones y soporte postventa.",
+            venta: "Instalación · Conexiones · Soporte · Garantía",
             rating: 4.3,
             estado: "Disponible",
+            logo: "../../imagenes/empresas/instalapro-hogar.png",
             imagen: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=80",
             tags: ["Instalación", "Soporte", "Garantía"]
         }
@@ -1650,6 +1794,15 @@
         }
     }
 
+    function getBusinessInitials(name) {
+        return String(name || "")
+            .split(" ")
+            .filter(Boolean)
+            .slice(0, 2)
+            .map(function (word) { return word.charAt(0).toUpperCase(); })
+            .join("");
+    }
+
     function createBusinessCard(empresa) {
         const article = document.createElement("article");
         article.className = "empresa-electrodomesticos";
@@ -1658,19 +1811,26 @@
         article.dataset.rating = empresa.rating;
         article.dataset.estado = empresa.estado;
 
+        const initials = getBusinessInitials(empresa.nombre);
+
         article.innerHTML = `
-            <div class="business-cover" style="background-image: url('${empresa.imagen}')">
-                <div class="business-status">${empresa.estado}</div>
-            </div>
-            <div class="business-body">
-                <div class="business-head">
-                    <div>
-                        <h2 class="business-title">${empresa.nombre}</h2>
-                        <div class="business-category">${empresa.segmento}</div>
-                    </div>
-                    <div class="business-rating">★ ${empresa.rating}</div>
+            <div class="business-logo-zone">
+                <div class="business-logo-box">
+                    <img src="${empresa.logo}" alt="Logo ${empresa.nombre}" class="business-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <span class="business-logo-fallback">${initials}</span>
                 </div>
 
+                <div class="business-summary">
+                    <div class="business-status">${empresa.estado}</div>
+                    <h2 class="business-title">${empresa.nombre}</h2>
+                    <div class="business-category">${empresa.segmento}</div>
+                </div>
+
+                <div class="business-rating">★ ${empresa.rating}</div>
+            </div>
+
+            <div class="business-body">
+                <p class="business-sale">${empresa.venta || empresa.descripcion}</p>
                 <p class="business-description">${empresa.descripcion}</p>
 
                 <div class="business-actions">
