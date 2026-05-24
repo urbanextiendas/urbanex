@@ -844,8 +844,8 @@
 
         <ul class="categories-list">
 
-            <li class="category-item">
-                <button onclick="window.location.href='../categorias/hogar/electrodomesticos.html'">
+            <li class="category-item active">
+                <button type="button" onclick="window.location.href='categorias/hogar/electrodomesticos.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
@@ -881,7 +881,7 @@
                 </script>
             </li>
             
-            <li class="category-item active">
+            <li class="category-item">
                 <button>
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
@@ -1111,6 +1111,76 @@
 <footer class="pie-pagina">
     <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
 </footer>
+
+
+<script>
+(function () {
+    const countElement = document.getElementById("electrodomesticosCount");
+    if (!countElement) return;
+
+    const electrodomesticosPath = "categorias/hogar/electrodomesticos.html";
+
+    function formatCount(total) {
+        countElement.textContent = total + (total === 1 ? " local" : " locales");
+    }
+
+    function countEmpresasFromScript(htmlText) {
+        const arrayStart = htmlText.indexOf("const empresasElectrodomesticos");
+        if (arrayStart === -1) return null;
+
+        const bracketStart = htmlText.indexOf("[", arrayStart);
+        if (bracketStart === -1) return null;
+
+        let depth = 0;
+        let arrayEnd = -1;
+
+        for (let i = bracketStart; i < htmlText.length; i++) {
+            const char = htmlText[i];
+
+            if (char === "[") depth++;
+            if (char === "]") depth--;
+
+            if (depth === 0) {
+                arrayEnd = i;
+                break;
+            }
+        }
+
+        if (arrayEnd === -1) return null;
+
+        const arrayContent = htmlText.slice(bracketStart, arrayEnd + 1);
+        const matches = arrayContent.match(/\bnombre\s*:/g);
+
+        return matches ? matches.length : 0;
+    }
+
+    function countEmpresasFromMarkup(htmlText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+        return doc.querySelectorAll(".empresa-electrodomesticos").length;
+    }
+
+    async function updateElectrodomesticosCount() {
+        formatCount(0);
+
+        try {
+            const response = await fetch(electrodomesticosPath, { cache: "no-store" });
+            if (!response.ok) return;
+
+            const htmlText = await response.text();
+            const scriptCount = countEmpresasFromScript(htmlText);
+            const markupCount = countEmpresasFromMarkup(htmlText);
+            const total = scriptCount !== null ? scriptCount : markupCount;
+
+            formatCount(total || 0);
+        } catch (error) {
+            formatCount(0);
+        }
+    }
+
+    updateElectrodomesticosCount();
+})();
+</script>
 
 <script>
 (function () {
