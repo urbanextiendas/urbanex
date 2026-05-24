@@ -211,7 +211,8 @@
             backdrop-filter: var(--blur-effect);
             -webkit-backdrop-filter: var(--blur-effect);
             box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65);
-            overflow: hidden;
+            overflow-y: auto;
+            max-height: min(420px, calc(100vh - 90px));
             display: none;
             z-index: 80;
         }
@@ -1212,11 +1213,19 @@
         repo: "",
         branch: "main",
         siteBasePath: "",
-        maxResults: 8,
+        maxResults: 6,
         maxFileSize: 250000,
-        includeExtensions: [".html", ".htm", ".json", ".txt", ".md", ".js", ".css", ".csv"],
+        includeExtensions: [".html", ".htm", ".json", ".txt", ".md", ".csv"],
         skipFolders: [".git/", "node_modules/", "vendor/", "dist/", "build/"]
     };
+
+    const MIN_QUERY_LENGTH = 3;
+    const GENERIC_TITLES = [
+        "urbanex",
+        "loja - centro comercial digital",
+        "loja centro comercial digital",
+        "centro comercial digital"
+    ];
 
     const searchInput = document.getElementById("siteSearch");
     const searchButton = document.getElementById("searchButton");
@@ -1227,28 +1236,37 @@
     let indexLoading = null;
     let activeResults = [];
 
-    function cleanSearchText(value) {
-        let text = String(value || "");
+    function escapeHtml(value) {
+        return String(value || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
 
-        if (/<[a-z][\s\S]*>/i.test(text)) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(text, "text/html");
-            doc.querySelectorAll("script, style, noscript, svg, template, link, meta").forEach(function (node) {
-                node.remove();
-            });
-            text = (doc.body ? doc.body.textContent : doc.documentElement.textContent) || text;
-        }
-
+    function decodeEntities(text) {
         const decoder = document.createElement("textarea");
-        decoder.innerHTML = text;
-        text = decoder.value;
+        decoder.innerHTML = String(text || "");
+        return decoder.value;
+    }
 
-        return text
+    function removeBoilerplate(text) {
+        return String(text || "")
+            .replace(/Negocios confiables/gi, " ")
+            .replace(/Comunidad local/gi, " ")
+            .replace(/Registre su negocio/gi, " ")
+            .replace(/©\s*2026\s*Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
+            .replace(/Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
+            .replace(/Todos los derechos reservados\.?/gi, " ")
+            .replace(/¿Qué producto o servicio busca\?/gi, " ");
+    }
+
+    function cleanSearchText(value) {
+        return removeBoilerplate(decodeEntities(value))
             .replace(/<[^>]*>/g, " ")
-            .replace(/\{[\s\S]*?\}/g, " ")
-            .replace(/\[[\s\S]*?\]/g, " ")
-            .replace(/\b(class|href|onclick|src|alt|style|id)=['"][^'"]*['"]/gi, " ")
-            .replace(/window\.location\.href\s*=\s*['"][^'"]+['"]/gi, " ")
+            .replace(/\b(class|href|onclick|src|alt|style|id)=['\"][^'\"]*['\"]/gi, " ")
+            .replace(/window\.location\.href\s*=\s*['\"][^'\"]+['\"]/gi, " ")
             .replace(/\s+/g, " ")
             .trim();
     }
@@ -1258,17 +1276,14 @@
             .toLowerCase()
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9ñáéíóúü\s./_-]/gi, " ")
             .replace(/\s+/g, " ")
             .trim();
     }
 
-    function escapeHtml(value) {
-        return String(value || "")
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+    function isGenericTitle(title) {
+        const normalizedTitle = normalizeText(title);
+        return !normalizedTitle || GENERIC_TITLES.includes(normalizedTitle);
     }
 
     function debounce(callback, delay) {
@@ -1348,38 +1363,106 @@
     function titleFromPath(path) {
         const fileName = path.split("/").pop() || path;
         const withoutExtension = fileName.replace(/\.[^/.]+$/, "");
+
+        if (/^index$/i.test(withoutExtension)) return "Inicio";
+
         return withoutExtension
             .replace(/[-_]+/g, " ")
             .replace(/\b\w/g, function (letter) { return letter.toUpperCase(); });
     }
 
-    function extractDocument(path, url, rawText) {
-        let title = titleFromPath(path);
-        let content = rawText || "";
-        const extension = getExtension(path);
+    function collectTextFromJson(value, output) {
+        if (value === null || value === undefined) return;
 
-        if (extension === ".html" || extension === ".htm" || /<[a-z][\s\S]*>/i.test(content)) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(rawText, "text/html");
-            const foundTitle = doc.querySelector("title")?.textContent || doc.querySelector("h1, h2")?.textContent;
-            if (foundTitle) title = cleanSearchText(foundTitle);
-            doc.querySelectorAll("script, style, noscript, svg, template, link, meta").forEach(function (node) {
-                node.remove();
-            });
-            content = doc.body ? doc.body.textContent : rawText;
+        if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+            output.push(String(value));
+            return;
         }
 
+        if (Array.isArray(value)) {
+            value.forEach(function (item) { collectTextFromJson(item, output); });
+            return;
+        }
+
+        if (typeof value === "object") {
+            Object.keys(value).forEach(function (key) {
+                output.push(key);
+                collectTextFromJson(value[key], output);
+            });
+        }
+    }
+
+    function textFromStructuredFile(rawText, extension) {
+        if (extension === ".json") {
+            try {
+                const output = [];
+                collectTextFromJson(JSON.parse(rawText), output);
+                return output.join(" ");
+            } catch (error) {
+                return rawText;
+            }
+        }
+
+        return rawText;
+    }
+
+    function getTextContent(element) {
+        return cleanSearchText(element ? element.textContent : "");
+    }
+
+    function extractHtmlDocument(path, url, rawText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(rawText, "text/html");
+
+        doc.querySelectorAll("script, style, noscript, svg, template, link, meta, header, footer, .header-top, .pie-pagina, .search-wrapper, .user-tools, .brand-box, .location-indicator, .tool-icon, .profile-avatar").forEach(function (node) {
+            node.remove();
+        });
+
+        const titleCandidates = Array.from(doc.querySelectorAll(".page-title, .category-title, .categoria-title, main h1, main h2, article h1, article h2, h1, h2, title"))
+            .map(getTextContent)
+            .filter(function (title) {
+                const normalized = normalizeText(title);
+                return normalized && !isGenericTitle(title) && !["bienvenido", "categorias", "destacados"].includes(normalized);
+            });
+
+        let title = titleCandidates[0] || titleFromPath(path);
+        if (isGenericTitle(title)) title = titleFromPath(path);
+
+        const priorityParts = Array.from(doc.querySelectorAll("main, article, section, .category-item, .shop-card, .card, .business-card, .local-card, .restaurant-card, .service-card"))
+            .map(getTextContent)
+            .filter(Boolean);
+
+        let content = priorityParts.length ? priorityParts.join(". ") : getTextContent(doc.body || doc.documentElement);
         content = cleanSearchText(content);
 
+        return makeDocument(path, url, title, content);
+    }
+
+    function makeDocument(path, url, title, content) {
+        const cleanTitle = cleanSearchText(title) || titleFromPath(path);
+        const cleanContent = cleanSearchText(content || path);
+
         return {
-            title: cleanSearchText(title),
+            title: cleanTitle,
             path: path,
             url: url,
-            content: content,
-            normalizedTitle: normalizeText(title),
+            content: cleanContent,
+            normalizedTitle: normalizeText(cleanTitle),
             normalizedPath: normalizeText(path),
-            normalizedContent: normalizeText(content)
+            normalizedContent: normalizeText(cleanContent)
         };
+    }
+
+    function extractDocument(path, url, rawText) {
+        const extension = getExtension(path);
+
+        if (extension === ".html" || extension === ".htm" || /<[a-z][\s\S]*>/i.test(rawText || "")) {
+            return extractHtmlDocument(path, url, rawText || "");
+        }
+
+        const title = titleFromPath(path);
+        const content = textFromStructuredFile(rawText || path, extension);
+        return makeDocument(path, url, title, content);
     }
 
     async function fetchJson(url) {
@@ -1431,7 +1514,7 @@
             .filter(function (item) { return !isTextFile(item.path); })
             .map(function (item) {
                 const url = pageUrlFromRepoPath(item.path, Object.assign({}, config, { branch: activeBranch }));
-                return extractDocument(item.path, url, item.path);
+                return makeDocument(item.path, url, titleFromPath(item.path), item.path);
             });
 
         const loadedDocuments = [];
@@ -1526,12 +1609,22 @@
                 documents = await buildLocalSiteIndex();
             }
 
-            searchDocuments = documents;
+            searchDocuments = documents.filter(function (documentItem) {
+                return documentItem.normalizedTitle || documentItem.normalizedPath || documentItem.normalizedContent;
+            });
+
             indexLoaded = true;
             return searchDocuments;
         })();
 
         return indexLoading;
+    }
+
+    function getSearchTerms(query) {
+        return normalizeText(query)
+            .split(" ")
+            .map(function (term) { return term.trim(); })
+            .filter(function (term) { return term.length >= MIN_QUERY_LENGTH; });
     }
 
     function scoreDocument(documentItem, terms, fullQuery) {
@@ -1540,33 +1633,50 @@
         const path = documentItem.normalizedPath;
         const content = documentItem.normalizedContent;
 
-        if (title.includes(fullQuery)) score += 80;
-        if (path.includes(fullQuery)) score += 55;
-        if (content.includes(fullQuery)) score += 25;
+        if (fullQuery.length >= MIN_QUERY_LENGTH) {
+            if (title.includes(fullQuery)) score += 100;
+            if (path.includes(fullQuery)) score += 70;
+            if (content.includes(fullQuery)) score += 45;
+        }
 
         terms.forEach(function (term) {
-            if (title.includes(term)) score += 30;
-            if (path.includes(term)) score += 18;
-            if (content.includes(term)) score += 8;
+            if (title.includes(term)) score += 40;
+            if (path.includes(term)) score += 25;
+            if (content.includes(term)) score += 12;
         });
 
         return score;
     }
 
-    function makeSnippet(content, query) {
+    function buildSnippet(content, query) {
         const cleanContent = cleanSearchText(content);
+        const fullQuery = normalizeText(query);
+        const terms = getSearchTerms(query);
         const normalizedContent = normalizeText(cleanContent);
-        const normalizedQuery = normalizeText(query);
-        const index = normalizedContent.indexOf(normalizedQuery);
-        const start = index > 70 ? index - 70 : 0;
-        const end = index >= 0 ? index + normalizedQuery.length + 90 : 180;
+        const searchTokens = fullQuery.length >= MIN_QUERY_LENGTH ? [fullQuery].concat(terms) : terms;
+
+        let bestIndex = -1;
+        for (const token of searchTokens) {
+            bestIndex = normalizedContent.indexOf(token);
+            if (bestIndex >= 0) break;
+        }
+
+        if (bestIndex < 0) {
+            return cleanContent ? cleanContent.slice(0, 170) : "Coincidencia encontrada en esta página.";
+        }
+
+        const start = Math.max(0, bestIndex - 70);
+        const end = Math.min(cleanContent.length, bestIndex + 120);
         const snippet = cleanContent.slice(start, end).trim();
+
         return (start > 0 ? "..." : "") + snippet + (end < cleanContent.length ? "..." : "");
     }
 
     function searchDocumentsByQuery(query) {
         const fullQuery = normalizeText(query);
-        const terms = fullQuery.split(" ").filter(Boolean);
+        const terms = getSearchTerms(query);
+
+        if (!terms.length && fullQuery.length < MIN_QUERY_LENGTH) return [];
 
         return searchDocuments
             .map(function (documentItem) {
@@ -1591,7 +1701,7 @@
             return '<a class="search-result-item" href="' + escapeHtml(result.url) + '">' +
                 '<div class="search-result-title">' + escapeHtml(result.title) + '</div>' +
                 '<div class="search-result-path">' + escapeHtml(result.path) + '</div>' +
-                '<div class="search-result-snippet">' + escapeHtml(makeSnippet(result.content, query)) + '</div>' +
+                '<div class="search-result-snippet">' + escapeHtml(buildSnippet(result.content, query)) + '</div>' +
             '</a>';
         }).join("");
 
@@ -1601,8 +1711,8 @@
     async function runSearch(navigateFirstResult) {
         const query = searchInput.value.trim();
 
-        if (query.length < 2) {
-            showPanel('<div class="search-results-status">Ingrese al menos 2 caracteres para buscar.</div>');
+        if (query.length < MIN_QUERY_LENGTH) {
+            showPanel('<div class="search-results-status">Ingrese al menos ' + MIN_QUERY_LENGTH + ' caracteres para buscar.</div>');
             return;
         }
 
@@ -1651,14 +1761,17 @@
     searchButton.addEventListener("click", function () {
         runSearch(true);
     });
+
     document.addEventListener("click", function (event) {
         if (!event.target.closest(".search-wrapper")) {
             hidePanel();
         }
     });
+
     loadSearchIndex().catch(function () {});
 })();
 </script>
+
 
 </body>
 </html>
