@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urbanex - Cerca de mí</title>
+    <link rel="icon" type="image/png" href="imagenes/log.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #020202;
+            --bg-card: rgba(18, 18, 18, 0.76);
+            --gold: #e5c158;
+            --border-color: rgba(229, 193, 88, 0.22);
+            --text-main: #ffffff;
+            --text-muted: #d7d7d7;
+            --text-soft: #9c9c9c;
+            --success: #2ed573;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --transition: all 0.25s ease;
+            --blur: blur(18px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                linear-gradient(135deg, rgba(0,0,0,0.92), rgba(0,0,0,0.62)),
+                url("imagenes/Boulevard.png") center bottom / cover fixed no-repeat;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .header-top {
+            height: 60px;
+            background: rgba(6, 6, 6, 0.45);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .brand-box img {
+            height: 60px;
+            width: auto;
+            display: block;
+        }
+
+        .back-link {
+            border: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.42);
+            color: #ffffff;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 11px;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            border-color: var(--gold);
+            background: rgba(229, 193, 88, 0.10);
+        }
+
+        .page-wrap {
+            width: min(1180px, calc(100% - 28px));
+            margin: 22px auto 36px;
+        }
+
+        .hero {
+            border: 1px solid var(--border-color);
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at 16% 0%, rgba(229, 193, 88, 0.18), transparent 28%),
+                rgba(6, 6, 6, 0.68);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            padding: 26px 28px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 18px;
+            align-items: center;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.42);
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(24px, 4vw, 42px);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 12px;
+            line-height: 1.6;
+            max-width: 760px;
+        }
+
+        .total-card {
+            min-width: 132px;
+            border: 1px solid rgba(229,193,88,0.32);
+            background: rgba(0,0,0,0.44);
+            border-radius: 18px;
+            padding: 14px 16px;
+            text-align: center;
+        }
+
+        .total-card strong {
+            display: block;
+            color: var(--gold);
+            font-family: var(--font-serif);
+            font-size: 30px;
+            line-height: 1;
+        }
+
+        .total-card span {
+            color: var(--text-soft);
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .toolbar {
+            margin: 14px 0;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+        }
+
+        .search-input,
+        .category-select {
+            height: 36px;
+            background: rgba(0,0,0,0.56);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 999px;
+            color: #ffffff;
+            font-family: var(--font-sans);
+            font-size: 11px;
+            outline: none;
+        }
+
+        .search-input {
+            padding: 0 15px;
+        }
+
+        .category-select {
+            padding: 0 12px;
+            min-width: 210px;
+            cursor: pointer;
+        }
+
+        .category-section {
+            margin-top: 14px;
+            border: 1px solid rgba(229,193,88,0.16);
+            border-radius: 18px;
+            background: rgba(5,5,5,0.52);
+            overflow: hidden;
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+        }
+
+        .category-header {
+            padding: 12px 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .category-header h2 {
+            color: var(--gold);
+            font-family: var(--font-serif);
+            font-size: 13px;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .category-header span {
+            color: #000000;
+            background: var(--gold);
+            border-radius: 999px;
+            padding: 4px 9px;
+            font-size: 9px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .business-grid {
+            padding: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 10px;
+        }
+
+        .business-card {
+            border: 1px solid rgba(255,255,255,0.09);
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 10px;
+            min-height: 112px;
+            transition: var(--transition);
+        }
+
+        .business-card:hover {
+            border-color: rgba(229,193,88,0.50);
+            background: rgba(229,193,88,0.08);
+            transform: translateY(-2px);
+        }
+
+        .business-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .business-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .business-status {
+            color: var(--success);
+            border: 1px solid rgba(46,213,115,0.34);
+            background: rgba(46,213,115,0.10);
+            border-radius: 999px;
+            padding: 3px 7px;
+            font-size: 7.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .business-segment {
+            color: var(--gold);
+            font-size: 9px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .business-description {
+            color: var(--text-muted);
+            font-size: 9px;
+            line-height: 1.45;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .business-footer {
+            margin-top: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .rating {
+            color: var(--gold);
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .profile-link {
+            border: 1px solid rgba(229,193,88,0.28);
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 8px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .empty-state {
+            margin-top: 14px;
+            border: 1px dashed rgba(229,193,88,0.34);
+            border-radius: 18px;
+            padding: 24px;
+            text-align: center;
+            background: rgba(0,0,0,0.44);
+            color: var(--text-muted);
+            font-size: 12px;
+            display: none;
+        }
+
+        .loading-state {
+            margin-top: 14px;
+            color: var(--text-muted);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .footer {
+            height: 26px;
+            background: #000000;
+            color: #8c8c8c;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        @media (max-width: 720px) {
+            .header-top {
+                height: auto;
+                padding: 12px;
+                gap: 10px;
+                flex-direction: column;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+
+            .total-card {
+                width: 100%;
+            }
+
+            .toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .category-select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header-top">
+    <a href="boulevard.html" class="brand-box" title="Volver al Boulevard">
+        <img src="imagenes/logo.png" alt="Logo Urbanex">
+    </a>
+
+    <a class="back-link" href="boulevard.html">Volver al Boulevard</a>
+</header>
+
+<main class="page-wrap">
+    <section class="hero">
+        <div>
+            <div class="eyebrow">Filtro global</div>
+            <h1>Cerca de mí</h1>
+            <p>Locales cercanos o marcados por zona, distancia o ubicación dentro de las categorías activas de Urbanex.</p>
+        </div>
+
+        <div class="total-card">
+            <strong id="totalResults">0</strong>
+            <span>Locales cercanos</span>
+        </div>
+    </section>
+
+    <section class="toolbar">
+        <input type="search" id="globalSearch" class="search-input" placeholder="Buscar resultado..." autocomplete="off">
+
+        <select id="categoryFilter" class="category-select">
+            <option value="todas">Todas las categorías</option>
+        </select>
+    </section>
+
+    <div id="loadingState" class="loading-state">Cargando resultados...</div>
+    <div id="resultsContainer"></div>
+    <div id="emptyState" class="empty-state">No hay locales cercanos registrados todavía.</div>
+</main>
+
+<footer class="footer">
+    <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+(function () {
+    const FILTER_TYPE = "cerca";
+
+    const CATEGORY_SOURCES = [
+        {
+            nombre: "Hogar y Tecnología",
+            archivo: "categorias/hogar.html",
+            hijos: [
+                "categorias/hogar/electrodomesticos.html"
+            ]
+        },
+        {
+            nombre: "Gastronomía",
+            archivo: "categorias/gastronomia.html",
+            hijos: []
+        },
+        {
+            nombre: "Salud y Bienestar",
+            archivo: "categorias/salud.html",
+            hijos: []
+        },
+        {
+            nombre: "Movilidad",
+            archivo: "categorias/movilidad.html",
+            hijos: []
+        },
+        {
+            nombre: "Turismo y Hospedaje",
+            archivo: "categorias/turismo.html",
+            hijos: []
+        },
+        {
+            nombre: "Finanzas",
+            archivo: "categorias/finanzas.html",
+            hijos: []
+        },
+        {
+            nombre: "Comercio y Educación",
+            archivo: "categorias/comercio.html",
+            hijos: []
+        }
+    ];
+
+    const resultsContainer = document.getElementById("resultsContainer");
+    const emptyState = document.getElementById("emptyState");
+    const loadingState = document.getElementById("loadingState");
+    const totalResults = document.getElementById("totalResults");
+    const searchInput = document.getElementById("globalSearch");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    const cache = new Map();
+    let allResults = [];
+
+    function escapeHtml(value) {
+        return String(value || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function normalizeText(value) {
+        return String(value || "")
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function escapeRegExp(value) {
+        return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function resolveProjectUrl(src, baseUrl) {
+        if (/^https?:\/\//i.test(src)) return src;
+
+        if (/^(categorias|imagenes)\//i.test(src)) {
+            return new URL(src, window.location.href).href;
+        }
+
+        return new URL(src, baseUrl || window.location.href).href;
+    }
+
+    async function fetchHtml(src, baseUrl) {
+        const normalizedUrl = resolveProjectUrl(src, baseUrl);
+
+        if (cache.has(normalizedUrl)) {
+            return cache.get(normalizedUrl);
+        }
+
+        const requestUrl = new URL(normalizedUrl);
+        requestUrl.searchParams.set("_consulta", Date.now().toString());
+
+        const response = await fetch(requestUrl.href, { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo cargar " + normalizedUrl);
+
+        const htmlText = await response.text();
+        cache.set(normalizedUrl, htmlText);
+        return htmlText;
+    }
+
+    function getBalancedText(sourceText, startIndex, openChar, closeChar) {
+        const firstOpen = sourceText.indexOf(openChar, startIndex);
+        if (firstOpen === -1) return "";
+
+        let depth = 0;
+        let quote = "";
+        let escaped = false;
+
+        for (let i = firstOpen; i < sourceText.length; i++) {
+            const char = sourceText[i];
+
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+
+            if (char === "\\") {
+                escaped = true;
+                continue;
+            }
+
+            if (quote) {
+                if (char === quote) quote = "";
+                continue;
+            }
+
+            if (char === "'" || char === '"' || char === "`") {
+                quote = char;
+                continue;
+            }
+
+            if (char === openChar) depth++;
+            if (char === closeChar) depth--;
+
+            if (depth === 0) {
+                return sourceText.slice(firstOpen, i + 1);
+            }
+        }
+
+        return "";
+    }
+
+    function getArrayText(sourceText, arrayStartIndex) {
+        return getBalancedText(sourceText, arrayStartIndex, "[", "]");
+    }
+
+    function getObjectBlocks(arrayText) {
+        const blocks = [];
+        let index = 0;
+
+        while (index < arrayText.length) {
+            const objectStart = arrayText.indexOf("{", index);
+            if (objectStart === -1) break;
+
+            const objectText = getBalancedText(arrayText, objectStart, "{", "}");
+            if (!objectText) break;
+
+            blocks.push(objectText);
+            index = objectStart + objectText.length;
+        }
+
+        return blocks;
+    }
+
+    function readStringProperty(block, propertyNames) {
+        for (const propertyName of propertyNames) {
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*([\"'`])([\\s\\S]*?)\\1", "i");
+            const match = pattern.exec(block);
+            if (match) return match[2];
+        }
+
+        return "";
+    }
+
+    function readNumberProperty(block, propertyNames) {
+        for (const propertyName of propertyNames) {
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*([0-9]+(?:\\.[0-9]+)?)", "i");
+            const match = pattern.exec(block);
+            if (match) return match[1];
+        }
+
+        return "";
+    }
+
+    function readBooleanProperty(block, propertyNames) {
+        for (const propertyName of propertyNames) {
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*(true|false)", "i");
+            const match = pattern.exec(block);
+            if (match) return match[1].toLowerCase() === "true";
+        }
+
+        return null;
+    }
+
+    function hasNonEmptyArrayProperty(block, propertyNames) {
+        for (const propertyName of propertyNames) {
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*\\[", "i");
+            const match = pattern.exec(block);
+            if (!match) continue;
+
+            const arrayText = getArrayText(block, match.index);
+            if (!arrayText) continue;
+
+            if (arrayText.slice(1, -1).trim().length > 0) return true;
+        }
+
+        return false;
+    }
+
+    function hasProperty(block, propertyNames) {
+        return propertyNames.some(function (propertyName) {
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:", "i");
+            return pattern.test(block);
+        });
+    }
+
+    function matchesFilter(block, text) {
+        const normalized = normalizeText(text + " " + block);
+
+        if (FILTER_TYPE === "cerca") {
+            return readBooleanProperty(block, ["cerca", "cercano", "cercaDeMi", "nearby"]) === true ||
+                   hasProperty(block, ["distancia", "distance", "lat", "lng", "latitude", "longitude", "zona"]) ||
+                   /\b(cerca|cercano|cerca de mi|zona)\b/.test(normalized);
+        }
+
+        if (FILTER_TYPE === "domicilio") {
+            return readBooleanProperty(block, ["domicilio", "delivery", "aDomicilio", "envio", "envios"]) === true ||
+                   /\b(domicilio|delivery|envio|envios|entrega)\b/.test(normalized);
+        }
+
+        if (FILTER_TYPE === "ofertas") {
+            return readBooleanProperty(block, ["oferta", "promo", "promocion", "tieneOferta"]) === true ||
+                   hasNonEmptyArrayProperty(block, ["ofertas", "promos", "promociones", "descuentos"]) ||
+                   /\b(oferta|ofertas|promo|promocion|promociones|descuento|descuentos)\b/.test(normalized);
+        }
+
+        return false;
+    }
+
+    function blockToBusiness(block, categoryName, sourceUrl) {
+        const nombre = readStringProperty(block, ["nombre", "name", "titulo", "title"]) || "Local sin nombre";
+        const segmento = readStringProperty(block, ["segmento", "categoria", "category", "tipo"]) || categoryName;
+        const descripcion = readStringProperty(block, ["descripcion", "description", "detalle", "venta"]) || "Sin descripción registrada.";
+        const rating = readNumberProperty(block, ["rating", "calificacion", "valoracion"]);
+        const perfil = readStringProperty(block, ["url", "href", "perfil", "link"]) || sourceUrl;
+
+        if (!matchesFilter(block, [nombre, segmento, descripcion].join(" "))) {
+            return null;
+        }
+
+        return {
+            nombre: nombre,
+            categoria: categoryName,
+            segmento: segmento,
+            descripcion: descripcion,
+            rating: rating,
+            perfil: perfil,
+            searchable: normalizeText([nombre, categoryName, segmento, descripcion].join(" "))
+        };
+    }
+
+    function extractBusinessesFromArrays(htmlText, categoryName, sourceUrl) {
+        const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
+        let match;
+        const businesses = [];
+
+        while ((match = arrayPattern.exec(htmlText)) !== null) {
+            const arrayText = getArrayText(htmlText, match.index);
+            if (!arrayText) continue;
+
+            getObjectBlocks(arrayText).forEach(function (block) {
+                const business = blockToBusiness(block, categoryName, sourceUrl);
+                if (business) businesses.push(business);
+            });
+        }
+
+        return businesses;
+    }
+
+    function extractBusinessesFromMarkup(htmlText, categoryName, sourceUrl) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+
+        const selectors = [
+            ".empresa-electrodomesticos",
+            ".empresa-card",
+            ".business-card",
+            ".local-card",
+            ".restaurant-card",
+            ".service-card",
+            "[data-business]",
+            "[data-empresa]"
+        ].join(",");
+
+        return Array.from(doc.querySelectorAll(selectors))
+            .map(function (element) {
+                const text = element.textContent || "";
+                if (!matchesFilter("", text)) return null;
+
+                const nameElement = element.querySelector(".business-title, .shop-title, h2, h3, [data-name]");
+                const segmentElement = element.querySelector(".business-category, .shop-segment, .segmento, [data-segment]");
+                const descriptionElement = element.querySelector(".business-description, .descripcion, p");
+
+                return {
+                    nombre: nameElement ? nameElement.textContent.trim() : "Local sin nombre",
+                    categoria: categoryName,
+                    segmento: segmentElement ? segmentElement.textContent.trim() : categoryName,
+                    descripcion: descriptionElement ? descriptionElement.textContent.trim() : "Sin descripción registrada.",
+                    rating: "",
+                    perfil: sourceUrl,
+                    searchable: normalizeText(text + " " + categoryName)
+                };
+            })
+            .filter(Boolean);
+    }
+
+    function getSubcategorySources(htmlText, sourceUrl) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+
+        return Array.from(doc.querySelectorAll("[data-count-src]"))
+            .map(function (element) {
+                return element.getAttribute("data-count-src");
+            })
+            .filter(Boolean)
+            .map(function (src) {
+                return resolveProjectUrl(src, sourceUrl);
+            });
+    }
+
+    async function loadBusinessesFromSource(source, categoryName, depth) {
+        const sourceUrl = resolveProjectUrl(source, window.location.href);
+        const htmlText = await fetchHtml(sourceUrl, window.location.href);
+
+        if (depth > 0) {
+            const subSources = getSubcategorySources(htmlText, sourceUrl);
+            if (subSources.length) {
+                const childResults = await Promise.all(
+                    subSources.map(function (childSource) {
+                        return loadBusinessesFromSource(childSource, categoryName, depth - 1).catch(function () {
+                            return [];
+                        });
+                    })
+                );
+
+                return childResults.flat();
+            }
+        }
+
+        const fromArrays = extractBusinessesFromArrays(htmlText, categoryName, sourceUrl);
+        if (fromArrays.length) return fromArrays;
+
+        return extractBusinessesFromMarkup(htmlText, categoryName, sourceUrl);
+    }
+
+    async function loadAllResults() {
+        const results = await Promise.all(
+            CATEGORY_SOURCES.map(async function (category) {
+                const sources = category.hijos && category.hijos.length ? category.hijos : [category.archivo];
+
+                const categoryResults = await Promise.all(
+                    sources.map(function (source) {
+                        return loadBusinessesFromSource(source, category.nombre, 2).catch(function () {
+                            return [];
+                        });
+                    })
+                );
+
+                return categoryResults.flat();
+            })
+        );
+
+        return results.flat();
+    }
+
+    function populateCategoryFilter(businesses) {
+        const categories = Array.from(new Set(businesses.map(function (business) {
+            return business.categoria;
+        }))).sort();
+
+        categoryFilter.innerHTML = '<option value="todas">Todas las categorías</option>' +
+            categories.map(function (category) {
+                return '<option value="' + escapeHtml(category) + '">' + escapeHtml(category) + '</option>';
+            }).join("");
+    }
+
+    function renderResults() {
+        const query = normalizeText(searchInput.value);
+        const selectedCategory = categoryFilter.value;
+
+        const filtered = allResults.filter(function (business) {
+            const matchesSearch = !query || business.searchable.includes(query);
+            const matchesCategory = selectedCategory === "todas" || business.categoria === selectedCategory;
+
+            return matchesSearch && matchesCategory;
+        });
+
+        totalResults.textContent = filtered.length;
+        emptyState.style.display = filtered.length ? "none" : "block";
+
+        const grouped = filtered.reduce(function (accumulator, business) {
+            if (!accumulator[business.categoria]) accumulator[business.categoria] = [];
+            accumulator[business.categoria].push(business);
+            return accumulator;
+        }, {});
+
+        resultsContainer.innerHTML = Object.keys(grouped).map(function (categoryName) {
+            const items = grouped[categoryName].map(function (business) {
+                return `
+                    <article class="business-card">
+                        <div class="business-top">
+                            <h3 class="business-title">${escapeHtml(business.nombre)}</h3>
+                            <span class="business-status">Activo</span>
+                        </div>
+                        <div class="business-segment">${escapeHtml(business.segmento)}</div>
+                        <p class="business-description">${escapeHtml(business.descripcion)}</p>
+                        <div class="business-footer">
+                            <span class="rating">${business.rating ? "★ " + escapeHtml(business.rating) : ""}</span>
+                            <a class="profile-link" href="${escapeHtml(business.perfil)}">Ver perfil</a>
+                        </div>
+                    </article>
+                `;
+            }).join("");
+
+            return `
+                <section class="category-section">
+                    <div class="category-header">
+                        <h2>${escapeHtml(categoryName)}</h2>
+                        <span>${grouped[categoryName].length} resultados</span>
+                    </div>
+                    <div class="business-grid">
+                        ${items}
+                    </div>
+                </section>
+            `;
+        }).join("");
+    }
+
+    async function init() {
+        try {
+            allResults = await loadAllResults();
+            populateCategoryFilter(allResults);
+            loadingState.style.display = "none";
+            renderResults();
+        } catch (error) {
+            loadingState.style.display = "none";
+            emptyState.style.display = "block";
+        }
+    }
+
+    searchInput.addEventListener("input", renderResults);
+    categoryFilter.addEventListener("change", renderResults);
+
+    init();
+})();
+</script>
+
+</body>
+</html>
