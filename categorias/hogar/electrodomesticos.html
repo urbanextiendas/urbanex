@@ -905,6 +905,99 @@
             }
         }
 
+    
+        /* Barra de filtros refinada */
+        .segment-filter-panel {
+            width: min(1040px, calc(100% - 28px));
+            margin: -2px auto 14px;
+            padding: 8px 10px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: end;
+            gap: 12px;
+            background: linear-gradient(135deg, rgba(8,8,8,0.78), rgba(12,12,12,0.58));
+            border: 1px solid rgba(229, 193, 88, 0.18);
+            border-radius: 14px;
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.28);
+        }
+
+        .segment-filter-title {
+            display: none !important;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(180px, 230px));
+            gap: 8px;
+            justify-content: start;
+        }
+
+        .filter-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .filter-field span {
+            color: var(--gold);
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1.1px;
+            text-transform: uppercase;
+            padding-left: 3px;
+        }
+
+        .filter-select {
+            height: 30px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.58);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 9px;
+            padding: 0 9px;
+            color: #ffffff;
+            font-family: var(--font-sans);
+            font-size: 9.5px;
+            outline: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-select:hover,
+        .filter-select:focus {
+            border-color: rgba(229, 193, 88, 0.58);
+            background: rgba(229, 193, 88, 0.08);
+        }
+
+        .companies-badge {
+            align-self: center;
+            white-space: nowrap;
+            color: #ffffff;
+            font-size: 9px;
+            font-weight: 700;
+            background: rgba(229, 193, 88, 0.12);
+            border: 1px solid rgba(229, 193, 88, 0.34);
+            border-radius: 999px;
+            padding: 5px 9px;
+        }
+
+        @media (max-width: 720px) {
+            .segment-filter-panel {
+                grid-template-columns: 1fr;
+                align-items: stretch;
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .companies-badge {
+                justify-self: start;
+            }
+        }
+
     </style>
 </head>
 
@@ -978,27 +1071,30 @@
         </div>
     </section>
 
-    <section class="segment-filter-panel" aria-label="Segmentadores de electrodomésticos">
-        <div class="segment-filter-title">
-            <span>Segmentadores</span>
-            <strong id="visibleCompaniesCounter">0 empresas</strong>
-        </div>
-
+    <section class="segment-filter-panel" aria-label="Filtros de electrodomésticos">
         <div class="filter-row">
-            <select id="segmentFilter" class="filter-select">
-                <option value="todos">Todos los segmentos</option>
-                <option value="venta">Venta</option>
-                <option value="instalacion">Instalación</option>
-                <option value="reparacion">Reparación</option>
-                <option value="linea-blanca">Línea blanca</option>
-            </select>
+            <label class="filter-field">
+                <span>Categoría</span>
+                <select id="segmentFilter" class="filter-select">
+                    <option value="todos">Todos los segmentos</option>
+                    <option value="venta">Venta</option>
+                    <option value="instalacion">Instalación</option>
+                    <option value="reparacion">Reparación</option>
+                    <option value="linea-blanca">Línea blanca</option>
+                </select>
+            </label>
 
-            <select id="sortFilter" class="filter-select">
-                <option value="rating">Mayor calificación</option>
-                <option value="nombre">Nombre A-Z</option>
-                <option value="disponibilidad">Disponibilidad</option>
-            </select>
+            <label class="filter-field">
+                <span>Orden</span>
+                <select id="sortFilter" class="filter-select">
+                    <option value="rating">Mayor calificación</option>
+                    <option value="nombre">Nombre A-Z</option>
+                    <option value="disponibilidad">Disponibilidad</option>
+                </select>
+            </label>
         </div>
+
+        <strong id="visibleCompaniesCounter" class="companies-badge">0 empresas</strong>
     </section>
 
     <main class="directory-layout">
