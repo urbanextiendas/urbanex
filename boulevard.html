@@ -992,7 +992,7 @@
                 <button type="button"
                         data-count-src="categorias/hogar.html"
                         data-count-array="empresasHogar"
-                        data-count-children="../categorias/hogar/electrodomesticos.html|categorias/hogar/muebles-decoracion.html|categorias/hogar/computadoras-celulares.html|categorias/hogar/reparacion-tecnica.html|categorias/hogar/ferreterias.html|categorias/hogar/internet-seguridad.html"
+                        data-count-children="categorias/hogar/electrodomesticos.html"
                         data-count-target="countHogar"
                         data-count-singular="local"
                         data-count-plural="locales"
@@ -1148,7 +1148,7 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Abiertos Ahora</span>
-                    <span class="filter-sub">184 locales</span>
+                    <span class="filter-sub" id="metricOpenNow">0 locales</span>
                 </div>
             </div>
 
@@ -1160,7 +1160,7 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Cerca de mí</span>
-                    <span class="filter-sub">92 locales</span>
+                    <span class="filter-sub" id="metricNearby">0 locales</span>
                 </div>
             </div>
 
@@ -1172,7 +1172,7 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">A Domicilio</span>
-                    <span class="filter-sub">115 locales</span>
+                    <span class="filter-sub" id="metricDelivery">0 locales</span>
                 </div>
             </div>
 
@@ -1184,7 +1184,7 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Ofertas</span>
-                    <span class="filter-sub">42 promos</span>
+                    <span class="filter-sub" id="metricOffers">0 promos</span>
                 </div>
             </div>
         </div>
@@ -1255,10 +1255,16 @@
 
 
 
+
 <script>
 (function () {
     const categoryButtons = Array.from(document.querySelectorAll("[data-count-src][data-count-target]"));
     if (!categoryButtons.length) return;
+
+    const metricOpenNow = document.getElementById("metricOpenNow");
+    const metricNearby = document.getElementById("metricNearby");
+    const metricDelivery = document.getElementById("metricDelivery");
+    const metricOffers = document.getElementById("metricOffers");
 
     const countableSelectors = [
         ".empresa-electrodomesticos",
@@ -1274,6 +1280,7 @@
     const cache = new Map();
 
     function formatCount(target, total, singular, plural) {
+        if (!target) return;
         target.textContent = total + " " + (total === 1 ? singular : plural);
     }
 
@@ -1314,15 +1321,15 @@
         return htmlText;
     }
 
-    function getBalancedArrayText(sourceText, arrayStartIndex) {
-        const bracketStart = sourceText.indexOf("[", arrayStartIndex);
-        if (bracketStart === -1) return "";
+    function getBalancedText(sourceText, startIndex, openChar, closeChar) {
+        const firstOpen = sourceText.indexOf(openChar, startIndex);
+        if (firstOpen === -1) return "";
 
         let depth = 0;
         let quote = "";
         let escaped = false;
 
-        for (let i = bracketStart; i < sourceText.length; i++) {
+        for (let i = firstOpen; i < sourceText.length; i++) {
             const char = sourceText[i];
 
             if (escaped) {
@@ -1345,29 +1352,120 @@
                 continue;
             }
 
-            if (char === "[") depth++;
-            if (char === "]") depth--;
+            if (char === openChar) depth++;
+            if (char === closeChar) depth--;
 
             if (depth === 0) {
-                return sourceText.slice(bracketStart, i + 1);
+                return sourceText.slice(firstOpen, i + 1);
             }
         }
 
         return "";
     }
 
-    function countObjectsInArray(arrayText) {
-        const nombreMatches = arrayText.match(/\bnombre\s*:/g);
-        if (nombreMatches) return nombreMatches.length;
-
-        const titleMatches = arrayText.match(/\b(title|titulo|name)\s*:/gi);
-        if (titleMatches) return titleMatches.length;
-
-        const objectMatches = arrayText.match(/\{[\s\S]*?\}/g);
-        return objectMatches ? objectMatches.length : 0;
+    function getArrayText(sourceText, arrayStartIndex) {
+        return getBalancedText(sourceText, arrayStartIndex, "[", "]");
     }
 
-    function countFromSpecificArray(htmlText, arrayName) {
+    function getObjectBlocks(arrayText) {
+        const blocks = [];
+        let index = 0;
+
+        while (index < arrayText.length) {
+            const objectStart = arrayText.indexOf("{", index);
+            if (objectStart === -1) break;
+
+            const objectText = getBalancedText(arrayText, objectStart, "{", "}");
+            if (!objectText) break;
+
+            blocks.push(objectText);
+            index = objectStart + objectText.length;
+        }
+
+        return blocks;
+    }
+
+    function readStringProperty(block, propertyNames) {
+        for (const propertyName of propertyNames) {
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*([\"'`])([\\s\\S]*?)\\1", "i");
+            const match = pattern.exec(block);
+            if (match) return match[2];
+        }
+
+        return "";
+    }
+
+    function readBooleanProperty(block, propertyNames) {
+        for (const propertyName of propertyNames) {
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*(true|false)", "i");
+            const match = pattern.exec(block);
+            if (match) return match[1].toLowerCase() === "true";
+        }
+
+        return null;
+    }
+
+    function hasNonEmptyArrayProperty(block, propertyNames) {
+        for (const propertyName of propertyNames) {
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*\\[", "i");
+            const match = pattern.exec(block);
+            if (!match) continue;
+
+            const arrayText = getArrayText(block, match.index);
+            if (!arrayText) continue;
+
+            const innerText = arrayText.slice(1, -1).trim();
+            if (innerText.length > 0) return true;
+        }
+
+        return false;
+    }
+
+    function hasProperty(block, propertyNames) {
+        return propertyNames.some(function (propertyName) {
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:", "i");
+            return pattern.test(block);
+        });
+    }
+
+    function normalizeText(value) {
+        return String(value || "")
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function objectBlockToBusiness(block) {
+        const searchableText = normalizeText(block);
+
+        const estado = readStringProperty(block, ["estado", "status", "disponibilidad", "horario"]);
+        const descripcion = readStringProperty(block, ["descripcion", "description", "detalle", "venta", "segmento", "categoria"]);
+        const tags = readStringProperty(block, ["tags", "servicios"]);
+
+        const openedBoolean = readBooleanProperty(block, ["abierto", "open", "isOpen", "estaAbierto"]);
+        const nearbyBoolean = readBooleanProperty(block, ["cerca", "cercano", "cercaDeMi", "nearby"]);
+        const deliveryBoolean = readBooleanProperty(block, ["domicilio", "delivery", "aDomicilio", "envio", "envios"]);
+        const offerBoolean = readBooleanProperty(block, ["oferta", "ofertasActivas", "promo", "promocion", "tieneOferta"]);
+
+        const openByText = /\babierto\b/.test(normalizeText(estado));
+        const deliveryByText = /(domicilio|delivery|envio|entrega)/.test(searchableText);
+        const nearbyByData = hasProperty(block, ["distancia", "distance", "lat", "lng", "latitude", "longitude", "zona"]);
+        const offerByData = offerBoolean === true || hasNonEmptyArrayProperty(block, ["ofertas", "promos", "promociones", "descuentos"]);
+        const offerByText = /(oferta|promo|promocion|descuento)/.test(searchableText);
+
+        return {
+            raw: block,
+            estado: estado,
+            descripcion: descripcion,
+            tags: tags,
+            abierto: openedBoolean === true || openByText,
+            cercano: nearbyBoolean === true || nearbyByData,
+            domicilio: deliveryBoolean === true || deliveryByText,
+            oferta: offerByData || offerByText
+        };
+    }
+
+    function extractBusinessesFromArray(htmlText, arrayName) {
         if (!arrayName) return null;
 
         const pattern = new RegExp("(?:const|let|var)\\s+" + escapeRegExp(arrayName) + "\\s*=\\s*\\[");
@@ -1375,33 +1473,44 @@
 
         if (!match) return null;
 
-        const arrayText = getBalancedArrayText(htmlText, match.index);
+        const arrayText = getArrayText(htmlText, match.index);
         if (!arrayText) return null;
 
-        return countObjectsInArray(arrayText);
+        return getObjectBlocks(arrayText).map(objectBlockToBusiness);
     }
 
-    function countFromAnyBusinessArray(htmlText) {
+    function extractBusinessesFromAnyArray(htmlText) {
         const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
         let match;
-        let total = 0;
-        let found = false;
+        const businesses = [];
 
         while ((match = arrayPattern.exec(htmlText)) !== null) {
-            const arrayText = getBalancedArrayText(htmlText, match.index);
+            const arrayText = getArrayText(htmlText, match.index);
             if (!arrayText) continue;
 
-            total += countObjectsInArray(arrayText);
-            found = true;
+            getObjectBlocks(arrayText).forEach(function (block) {
+                businesses.push(objectBlockToBusiness(block));
+            });
         }
 
-        return found ? total : null;
+        return businesses;
     }
 
-    function countFromRenderedMarkup(htmlText) {
+    function extractBusinessesFromMarkup(htmlText) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, "text/html");
-        return doc.querySelectorAll(countableSelectors).length;
+
+        return Array.from(doc.querySelectorAll(countableSelectors)).map(function (element) {
+            const text = normalizeText(element.textContent || "");
+
+            return {
+                raw: text,
+                abierto: /\babierto\b/.test(text),
+                cercano: /(cerca|distancia|zona)/.test(text),
+                domicilio: /(domicilio|delivery|envio|entrega)/.test(text),
+                oferta: /(oferta|promo|promocion|descuento)/.test(text)
+            };
+        });
     }
 
     function getSubcategorySources(htmlText, pageUrl) {
@@ -1418,32 +1527,30 @@
             });
     }
 
-    async function countDirectPage(src, arrayName, baseUrl) {
+    async function loadDirectBusinesses(src, arrayName, baseUrl) {
         const pageUrl = resolveProjectUrl(src, baseUrl);
         const htmlText = await fetchHtml(pageUrl, baseUrl);
 
-        const specificArrayCount = countFromSpecificArray(htmlText, arrayName);
-        if (specificArrayCount !== null) return specificArrayCount;
+        const specificBusinesses = extractBusinessesFromArray(htmlText, arrayName);
+        if (specificBusinesses && specificBusinesses.length) return specificBusinesses;
 
-        const genericArrayCount = countFromAnyBusinessArray(htmlText);
-        if (genericArrayCount !== null) return genericArrayCount;
+        const genericBusinesses = extractBusinessesFromAnyArray(htmlText);
+        if (genericBusinesses.length) return genericBusinesses;
 
-        return countFromRenderedMarkup(htmlText);
+        return extractBusinessesFromMarkup(htmlText);
     }
 
-    async function countPage(src, arrayName, depth, explicitChildren) {
+    async function loadBusinessesFromPage(src, arrayName, depth, explicitChildren) {
         if (explicitChildren && explicitChildren.length) {
-            const childCounts = await Promise.all(
+            const childrenBusinesses = await Promise.all(
                 explicitChildren.map(function (childSrc) {
-                    return countPage(childSrc, "", depth - 1, []).catch(function () {
-                        return 0;
+                    return loadBusinessesFromPage(childSrc, "", depth - 1, []).catch(function () {
+                        return [];
                     });
                 })
             );
 
-            return childCounts.reduce(function (sum, value) {
-                return sum + value;
-            }, 0);
+            return childrenBusinesses.flat();
         }
 
         const pageUrl = resolveProjectUrl(src, window.location.href);
@@ -1456,47 +1563,76 @@
                 });
 
             if (subcategorySources.length) {
-                const childCounts = await Promise.all(
+                const childrenBusinesses = await Promise.all(
                     subcategorySources.map(function (childSrc) {
-                        return countPage(childSrc, "", depth - 1, []).catch(function () {
-                            return 0;
+                        return loadBusinessesFromPage(childSrc, "", depth - 1, []).catch(function () {
+                            return [];
                         });
                     })
                 );
 
-                return childCounts.reduce(function (sum, value) {
-                    return sum + value;
-                }, 0);
+                return childrenBusinesses.flat();
             }
         }
 
-        return countDirectPage(pageUrl, arrayName, window.location.href);
+        return loadDirectBusinesses(pageUrl, arrayName, window.location.href);
+    }
+
+    function getExplicitChildren(button) {
+        return (button.dataset.countChildren || "")
+            .split("|")
+            .map(function (item) { return item.trim(); })
+            .filter(Boolean);
     }
 
     async function updateCategoryCount(button) {
         const target = document.getElementById(button.dataset.countTarget);
-        if (!target) return;
+        if (!target) return [];
 
-        const src = button.dataset.countSrc;
-        const arrayName = button.dataset.countArray || "";
         const singular = button.dataset.countSingular || "local";
         const plural = button.dataset.countPlural || "locales";
-        const explicitChildren = (button.dataset.countChildren || "")
-            .split("|")
-            .map(function (item) { return item.trim(); })
-            .filter(Boolean);
 
         formatCount(target, 0, singular, plural);
 
         try {
-            const total = await countPage(src, arrayName, 3, explicitChildren);
-            formatCount(target, total || 0, singular, plural);
+            const businesses = await loadBusinessesFromPage(
+                button.dataset.countSrc,
+                button.dataset.countArray || "",
+                3,
+                getExplicitChildren(button)
+            );
+
+            formatCount(target, businesses.length || 0, singular, plural);
+            return businesses;
         } catch (error) {
             formatCount(target, 0, singular, plural);
+            return [];
         }
     }
 
-    categoryButtons.forEach(updateCategoryCount);
+    function updateGlobalMetrics(allBusinesses) {
+        const openNow = allBusinesses.filter(function (business) { return business.abierto; }).length;
+        const nearby = allBusinesses.filter(function (business) { return business.cercano; }).length;
+        const delivery = allBusinesses.filter(function (business) { return business.domicilio; }).length;
+        const offers = allBusinesses.filter(function (business) { return business.oferta; }).length;
+
+        formatCount(metricOpenNow, openNow, "local", "locales");
+        formatCount(metricNearby, nearby, "local", "locales");
+        formatCount(metricDelivery, delivery, "local", "locales");
+        formatCount(metricOffers, offers, "promo", "promos");
+    }
+
+    async function updateAllCounts() {
+        const categoryBusinesses = await Promise.all(
+            categoryButtons.map(function (button) {
+                return updateCategoryCount(button);
+            })
+        );
+
+        updateGlobalMetrics(categoryBusinesses.flat());
+    }
+
+    updateAllCounts();
 })();
 </script>
 
