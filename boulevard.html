@@ -1691,21 +1691,57 @@
             .map(function (result) { return result.item; });
     }
 
+    function getResultTypeLabel(path) {
+        const cleanPath = String(path || "").toLowerCase();
+
+        if (cleanPath.includes("categorias/") || cleanPath.includes("categoria")) return "Categoría";
+        if (cleanPath.includes("gastronomia") || cleanPath.includes("restaurante") || cleanPath.includes("cafe")) return "Gastronomía";
+        if (cleanPath.includes("salud")) return "Salud y bienestar";
+        if (cleanPath.includes("movilidad")) return "Movilidad";
+        if (cleanPath.includes("hogar")) return "Hogar y tecnología";
+        if (cleanPath.includes("turismo")) return "Turismo";
+        if (cleanPath.includes("finanza")) return "Finanzas";
+        if (cleanPath.includes("comercio")) return "Comercio";
+        if (cleanPath.includes("index")) return "Página principal";
+
+        return "Resultado";
+    }
+
+    function compactSnippet(snippet, title) {
+        const cleanTitle = normalizeText(title);
+        let output = cleanSearchText(snippet)
+            .replace(/\s*[|•]\s*/g, " · ")
+            .replace(/\.{2,}/g, "...")
+            .replace(/\s+/g, " ")
+            .trim();
+
+        if (cleanTitle && normalizeText(output).startsWith(cleanTitle)) {
+            output = output.slice(String(title || "").length).replace(/^\s*[-–—:·|]+\s*/, "").trim();
+        }
+
+        return output || "Coincidencia encontrada en esta sección.";
+    }
+
     function renderResults(query, results) {
         if (!results.length) {
-            showPanel('<div class="search-results-status">No se encontraron resultados para "' + escapeHtml(query) + '".</div>');
+            showPanel('<div class="search-results-status">Sin resultados para "' + escapeHtml(query) + '".</div>');
             return;
         }
 
+        const statusText = results.length === 1 ? "1 resultado encontrado" : results.length + " resultados encontrados";
+
         const items = results.map(function (result) {
+            const label = getResultTypeLabel(result.path);
+            const snippet = compactSnippet(buildSnippet(result.content, query), result.title);
+
             return '<a class="search-result-item" href="' + escapeHtml(result.url) + '">' +
                 '<div class="search-result-title">' + escapeHtml(result.title) + '</div>' +
-                '<div class="search-result-path">' + escapeHtml(result.path) + '</div>' +
-                '<div class="search-result-snippet">' + escapeHtml(buildSnippet(result.content, query)) + '</div>' +
+                '<div class="search-result-meta"><span class="search-result-badge">' + escapeHtml(label) + '</span></div>' +
+                '<div class="search-result-snippet">' + escapeHtml(snippet) + '</div>' +
             '</a>';
         }).join("");
 
-        showPanel('<div class="search-results-status">Resultados encontrados: ' + results.length + '</div>' + items);
+        showPanel('<div class="search-results-status">' + statusText + '</div>' + items);
     }
 
     async function runSearch(navigateFirstResult) {
