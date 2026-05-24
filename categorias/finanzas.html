@@ -347,9 +347,9 @@
             inset: 0;
             background: linear-gradient(
                 to bottom,
-                rgba(0,0,0,0.18) 0%,
-                rgba(0,0,0,0.05) 45%,
-                rgba(0,0,0,0.32) 100%
+                rgba(0,0,0,0.16) 0%,
+                rgba(0,0,0,0.03) 45%,
+                rgba(0,0,0,0.18) 100%
             );
             pointer-events: none;
             z-index: 1;
@@ -357,7 +357,7 @@
 
         .welcome-billboard {
             position: absolute;
-            top: 35px;
+            top: 42px;
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
@@ -382,70 +382,6 @@
             margin-top: 6px;
             letter-spacing: 2px;
             text-shadow: 0 2px 8px rgba(0,0,0,0.95);
-        }
-
-        .bottom-filter-bar {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(10, 10, 10, 0.72);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 6px;
-            display: flex;
-            gap: 6px;
-            width: calc(100% - 30px);
-            max-width: 760px;
-            backdrop-filter: var(--blur-effect);
-            -webkit-backdrop-filter: var(--blur-effect);
-            z-index: 2;
-        }
-
-        .filter-pill {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.42);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            padding: 8px 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            min-width: 0;
-        }
-
-        .filter-pill:hover {
-            border-color: var(--gold);
-            background: rgba(229, 193, 88, 0.08);
-        }
-
-        .filter-icon-box svg {
-            width: 14px;
-            height: 14px;
-            fill: var(--gold);
-            display: block;
-        }
-
-        .filter-label-group {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-
-        .filter-label {
-            font-size: 10.5px;
-            font-weight: 700;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .filter-sub {
-            font-size: 8.5px;
-            color: var(--text-dark);
         }
 
         .aside-showcase-list {
@@ -689,33 +625,6 @@
                 background-position: center bottom;
             }
 
-            .bottom-filter-bar {
-                position: absolute;
-                bottom: 12px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: calc(100% - 24px);
-                display: flex;
-                flex-direction: row;
-                overflow-x: auto;
-                gap: 8px;
-                background: rgba(10, 10, 10, 0.72);
-                padding: 5px;
-                border-radius: 30px;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .bottom-filter-bar::-webkit-scrollbar {
-                display: none;
-            }
-
-            .filter-pill {
-                flex: 0 0 auto;
-                padding: 6px 14px;
-                border-radius: 20px;
-                background: rgba(0, 0, 0, 0.50);
-            }
-
             .aside-showcase-list {
                 border-left: none;
                 border-top: 1px solid var(--border-color);
@@ -787,14 +696,6 @@
                 font-size: 9px;
                 letter-spacing: 1.4px;
             }
-
-            .filter-label {
-                font-size: 10px;
-            }
-
-            .filter-sub {
-                font-size: 8px;
-            }
         }
     </style>
 </head>
@@ -845,8 +746,15 @@
         <h2 class="section-title">Categorías</h2>
 
         <ul class="categories-list">
+
             <li class="category-item active">
-                <button>
+                <button type="button"
+                        data-count-src="finanzas/bancos.html"
+                        data-count-array="empresasBancos"
+                        data-count-target="countBancos"
+                        data-count-singular="punto"
+                        data-count-plural="puntos"
+                        onclick="window.location.href='finanzas/bancos.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1H6.8c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
@@ -854,13 +762,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Bancos</span>
-                        <span class="category-count">12 puntos</span>
+                        <span class="category-count" id="countBancos">0 puntos</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="finanzas/cooperativas.html"
+                        data-count-array="empresasCooperativas"
+                        data-count-target="countCooperativas"
+                        data-count-singular="oficina"
+                        data-count-plural="oficinas"
+                        onclick="window.location.href='finanzas/cooperativas.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.18L19 6.3V11c0 4.52-2.98 8.69-7 9.93C7.98 19.69 5 15.52 5 11V6.3l7-3.12z"/>
@@ -868,13 +782,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Cooperativas</span>
-                        <span class="category-count">18 oficinas</span>
+                        <span class="category-count" id="countCooperativas">0 oficinas</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="finanzas/seguros.html"
+                        data-count-array="empresasSeguros"
+                        data-count-target="countSeguros"
+                        data-count-singular="agencia"
+                        data-count-plural="agencias"
+                        onclick="window.location.href='finanzas/seguros.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 14H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V7h10v2z"/>
@@ -882,13 +802,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Seguros</span>
-                        <span class="category-count">9 agencias</span>
+                        <span class="category-count" id="countSeguros">0 agencias</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="finanzas/cajeros-automaticos.html"
+                        data-count-array="empresasCajerosAutomaticos"
+                        data-count-target="countCajerosAutomaticos"
+                        data-count-singular="punto"
+                        data-count-plural="puntos"
+                        onclick="window.location.href='finanzas/cajeros-automaticos.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-9-1c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13-6v11c0 1.1-.9 2-2 2H6v-2h15V7h2z"/>
@@ -896,13 +822,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Cajeros Automáticos</span>
-                        <span class="category-count">24 puntos</span>
+                        <span class="category-count" id="countCajerosAutomaticos">0 puntos</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="finanzas/pagos-y-servicios.html"
+                        data-count-array="empresasPagosServicios"
+                        data-count-target="countPagosServicios"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='finanzas/pagos-y-servicios.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M3 6h18v12H3V6zm2 2v8h14V8H5zm2 2h6v2H7v-2zm0 3h4v1H7v-1zm10-3h1v4h-1v-4z"/>
@@ -910,13 +842,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Pagos y Servicios</span>
-                        <span class="category-count">16 locales</span>
+                        <span class="category-count" id="countPagosServicios">0 locales</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="finanzas/creditos-y-asesoria.html"
+                        data-count-array="empresasCreditosAsesoria"
+                        data-count-target="countCreditosAsesoria"
+                        data-count-singular="oficina"
+                        data-count-plural="oficinas"
+                        onclick="window.location.href='finanzas/creditos-y-asesoria.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
@@ -924,7 +862,7 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Créditos y Asesoría</span>
-                        <span class="category-count">11 oficinas</span>
+                        <span class="category-count" id="countCreditosAsesoria">0 oficinas</span>
                     </div>
                 </button>
             </li>
@@ -937,56 +875,6 @@
         <div class="welcome-billboard">
             <h2>FINANZAS</h2>
             <p>BANCOS, COOPERATIVAS Y SERVICIOS FINANCIEROS DE LOJA EN UN SOLO LUGAR</p>
-        </div>
-
-        <div class="bottom-filter-bar">
-            <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
-                    </svg>
-                </div>
-                <div class="filter-label-group">
-                    <span class="filter-label">Abiertos Ahora</span>
-                    <span class="filter-sub">21 puntos</span>
-                </div>
-            </div>
-
-            <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-                    </svg>
-                </div>
-                <div class="filter-label-group">
-                    <span class="filter-label">Cerca de mí</span>
-                    <span class="filter-sub">19 opciones</span>
-                </div>
-            </div>
-
-            <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 14H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-                    </svg>
-                </div>
-                <div class="filter-label-group">
-                    <span class="filter-label">Trámites</span>
-                    <span class="filter-sub">28 servicios</span>
-                </div>
-            </div>
-
-            <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-                    </svg>
-                </div>
-                <div class="filter-label-group">
-                    <span class="filter-label">Atención Segura</span>
-                    <span class="filter-sub">45 puntos</span>
-                </div>
-            </div>
         </div>
     </main>
 
@@ -1080,7 +968,7 @@
         </div>
 
         <div class="action-footer-box">
-            <button class="btn-view-all-shops">Explorar Directorio Financiero</button>
+            <button class="btn-view-all-shops">Ver entidades y servicios financieros</button>
         </div>
     </aside>
 
@@ -1089,6 +977,164 @@
 <footer class="pie-pagina">
     <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
 </footer>
+
+
+<script>
+(function () {
+    const categoryButtons = Array.from(document.querySelectorAll("[data-count-src][data-count-target]"));
+    if (!categoryButtons.length) return;
+
+    const countableSelectors = [
+        ".empresa-electrodomesticos",
+        ".empresa-card",
+        ".business-card",
+        ".local-card",
+        ".restaurant-card",
+        ".service-card",
+        "[data-business]",
+        "[data-empresa]"
+    ].join(",");
+
+    function formatCount(target, total, singular, plural) {
+        target.textContent = total + " " + (total === 1 ? singular : plural);
+    }
+
+    function escapeRegExp(value) {
+        return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function getBalancedArrayText(sourceText, arrayStartIndex) {
+        const bracketStart = sourceText.indexOf("[", arrayStartIndex);
+        if (bracketStart === -1) return "";
+
+        let depth = 0;
+        let quote = "";
+        let escaped = false;
+
+        for (let i = bracketStart; i < sourceText.length; i++) {
+            const char = sourceText[i];
+
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+
+            if (char === "\\") {
+                escaped = true;
+                continue;
+            }
+
+            if (quote) {
+                if (char === quote) quote = "";
+                continue;
+            }
+
+            if (char === "'" || char === '"' || char === "`") {
+                quote = char;
+                continue;
+            }
+
+            if (char === "[") depth++;
+            if (char === "]") depth--;
+
+            if (depth === 0) {
+                return sourceText.slice(bracketStart, i + 1);
+            }
+        }
+
+        return "";
+    }
+
+    function countObjectsInArray(arrayText) {
+        const nombreMatches = arrayText.match(/\bnombre\s*:/g);
+        if (nombreMatches) return nombreMatches.length;
+
+        const titleMatches = arrayText.match(/\b(title|titulo|name)\s*:/gi);
+        if (titleMatches) return titleMatches.length;
+
+        const objectMatches = arrayText.match(/\{[\s\S]*?\}/g);
+        return objectMatches ? objectMatches.length : 0;
+    }
+
+    function countFromSpecificArray(htmlText, arrayName) {
+        if (!arrayName) return null;
+
+        const arrayPattern = new RegExp("(?:const|let|var)\\s+" + escapeRegExp(arrayName) + "\\s*=\\s*\\[");
+        const match = arrayPattern.exec(htmlText);
+
+        if (!match) return null;
+
+        const arrayText = getBalancedArrayText(htmlText, match.index);
+        if (!arrayText) return null;
+
+        return countObjectsInArray(arrayText);
+    }
+
+    function countFromAnyBusinessArray(htmlText) {
+        const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
+        let match;
+        let bestCount = null;
+
+        while ((match = arrayPattern.exec(htmlText)) !== null) {
+            const arrayText = getBalancedArrayText(htmlText, match.index);
+            if (!arrayText) continue;
+
+            const count = countObjectsInArray(arrayText);
+            if (bestCount === null || count > bestCount) bestCount = count;
+        }
+
+        return bestCount;
+    }
+
+    function countFromRenderedMarkup(htmlText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+        return doc.querySelectorAll(countableSelectors).length;
+    }
+
+    function countCategoryItems(htmlText, arrayName) {
+        const specificArrayCount = countFromSpecificArray(htmlText, arrayName);
+        if (specificArrayCount !== null) return specificArrayCount;
+
+        const genericArrayCount = countFromAnyBusinessArray(htmlText);
+        if (genericArrayCount !== null) return genericArrayCount;
+
+        return countFromRenderedMarkup(htmlText);
+    }
+
+    async function updateCategoryCount(button) {
+        const src = button.dataset.countSrc;
+        const arrayName = button.dataset.countArray;
+        const target = document.getElementById(button.dataset.countTarget);
+        const singular = button.dataset.countSingular || "local";
+        const plural = button.dataset.countPlural || "locales";
+
+        if (!src || !target) return;
+
+        formatCount(target, 0, singular, plural);
+
+        try {
+            const url = new URL(src, window.location.href);
+            url.searchParams.set("_conteo", Date.now().toString());
+
+            const response = await fetch(url.href, { cache: "no-store" });
+            if (!response.ok) {
+                formatCount(target, 0, singular, plural);
+                return;
+            }
+
+            const htmlText = await response.text();
+            const total = countCategoryItems(htmlText, arrayName);
+
+            formatCount(target, total || 0, singular, plural);
+        } catch (error) {
+            formatCount(target, 0, singular, plural);
+        }
+    }
+
+    categoryButtons.forEach(updateCategoryCount);
+})();
+</script>
 
 <script>
 (function () {
