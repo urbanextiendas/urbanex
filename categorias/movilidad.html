@@ -347,9 +347,9 @@
             inset: 0;
             background: linear-gradient(
                 to bottom,
-                rgba(0,0,0,0.18) 0%,
-                rgba(0,0,0,0.05) 45%,
-                rgba(0,0,0,0.32) 100%
+                rgba(0,0,0,0.16) 0%,
+                rgba(0,0,0,0.03) 45%,
+                rgba(0,0,0,0.18) 100%
             );
             pointer-events: none;
             z-index: 1;
@@ -357,7 +357,7 @@
 
         .welcome-billboard {
             position: absolute;
-            top: 35px;
+            top: 42px;
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
@@ -382,70 +382,6 @@
             margin-top: 6px;
             letter-spacing: 2px;
             text-shadow: 0 2px 8px rgba(0,0,0,0.95);
-        }
-
-        .bottom-filter-bar {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(10, 10, 10, 0.72);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 6px;
-            display: flex;
-            gap: 6px;
-            width: calc(100% - 30px);
-            max-width: 760px;
-            backdrop-filter: var(--blur-effect);
-            -webkit-backdrop-filter: var(--blur-effect);
-            z-index: 2;
-        }
-
-        .filter-pill {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.42);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            padding: 8px 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            min-width: 0;
-        }
-
-        .filter-pill:hover {
-            border-color: var(--gold);
-            background: rgba(229, 193, 88, 0.08);
-        }
-
-        .filter-icon-box svg {
-            width: 14px;
-            height: 14px;
-            fill: var(--gold);
-            display: block;
-        }
-
-        .filter-label-group {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-
-        .filter-label {
-            font-size: 10.5px;
-            font-weight: 700;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .filter-sub {
-            font-size: 8.5px;
-            color: var(--text-dark);
         }
 
         .aside-showcase-list {
@@ -689,33 +625,6 @@
                 background-position: center bottom;
             }
 
-            .bottom-filter-bar {
-                position: absolute;
-                bottom: 12px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: calc(100% - 24px);
-                display: flex;
-                flex-direction: row;
-                overflow-x: auto;
-                gap: 8px;
-                background: rgba(10, 10, 10, 0.72);
-                padding: 5px;
-                border-radius: 30px;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .bottom-filter-bar::-webkit-scrollbar {
-                display: none;
-            }
-
-            .filter-pill {
-                flex: 0 0 auto;
-                padding: 6px 14px;
-                border-radius: 20px;
-                background: rgba(0, 0, 0, 0.50);
-            }
-
             .aside-showcase-list {
                 border-left: none;
                 border-top: 1px solid var(--border-color);
@@ -787,14 +696,6 @@
                 font-size: 9px;
                 letter-spacing: 1.4px;
             }
-
-            .filter-label {
-                font-size: 10px;
-            }
-
-            .filter-sub {
-                font-size: 8px;
-            }
         }
     </style>
 </head>
@@ -845,8 +746,15 @@
         <h2 class="section-title">Categorías</h2>
 
         <ul class="categories-list">
+
             <li class="category-item active">
-                <button>
+                <button type="button"
+                        data-count-src="movilidad/taxis.html"
+                        data-count-array="empresasTaxis"
+                        data-count-target="countTaxis"
+                        data-count-singular="unidad"
+                        data-count-plural="unidades"
+                        onclick="window.location.href='movilidad/taxis.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16C5.67 16 5 15.33 5 14.5S5.67 13 6.5 13 8 13.67 8 14.5 7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
@@ -854,13 +762,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Taxis</span>
-                        <span class="category-count">42 unidades</span>
+                        <span class="category-count" id="countTaxis">0 unidades</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="movilidad/buses-urbanos.html"
+                        data-count-array="empresasBusesUrbanos"
+                        data-count-target="countBusesUrbanos"
+                        data-count-singular="ruta"
+                        data-count-plural="rutas"
+                        onclick="window.location.href='movilidad/buses-urbanos.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14 9 14.67 9 15.5 8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM6 10V6h12v4H6z"/>
@@ -868,13 +782,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Buses Urbanos</span>
-                        <span class="category-count">18 rutas</span>
+                        <span class="category-count" id="countBusesUrbanos">0 rutas</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="movilidad/transporte-ejecutivo.html"
+                        data-count-array="empresasTransporteEjecutivo"
+                        data-count-target="countTransporteEjecutivo"
+                        data-count-singular="servicio"
+                        data-count-plural="servicios"
+                        onclick="window.location.href='movilidad/transporte-ejecutivo.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/>
@@ -882,13 +802,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Transporte Ejecutivo</span>
-                        <span class="category-count">16 servicios</span>
+                        <span class="category-count" id="countTransporteEjecutivo">0 servicios</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="movilidad/parqueaderos.html"
+                        data-count-array="empresasParqueaderos"
+                        data-count-target="countParqueaderos"
+                        data-count-singular="zona"
+                        data-count-plural="zonas"
+                        onclick="window.location.href='movilidad/parqueaderos.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M13 3H6c-1.1 0-2 .9-2 2v16h2v-7h7c2.76 0 5-2.24 5-5V8c0-2.76-2.24-5-5-5zm3 6c0 1.65-1.35 3-3 3H6V5h7c1.65 0 3 1.35 3 3v1z"/>
@@ -896,13 +822,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Parqueaderos</span>
-                        <span class="category-count">29 zonas</span>
+                        <span class="category-count" id="countParqueaderos">0 zonas</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="movilidad/talleres.html"
+                        data-count-array="empresasTalleres"
+                        data-count-target="countTalleres"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='movilidad/talleres.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3l4.3 4.3-3 3-4.4-4.2C.4 7.2.9 10.2 2.9 12.2c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.5z"/>
@@ -910,13 +842,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Talleres</span>
-                        <span class="category-count">24 locales</span>
+                        <span class="category-count" id="countTalleres">0 locales</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="movilidad/gasolineras.html"
+                        data-count-array="empresasGasolineras"
+                        data-count-target="countGasolineras"
+                        data-count-singular="punto"
+                        data-count-plural="puntos"
+                        onclick="window.location.href='movilidad/gasolineras.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M19.77 7.23l.01-.01-3.72-3.72L15 4.56l2.11 2.11c-.94.36-1.61 1.26-1.61 2.33 0 1.38 1.12 2.5 2.5 2.5.36 0 .69-.08 1-.21V18c0 .55-.45 1-1 1s-1-.45-1-1v-4.5c0-1.38-1.12-2.5-2.5-2.5H13V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v16h10v-8.5h1.5c.55 0 1 .45 1 1V18c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V9c0-.69-.28-1.32-.73-1.77zM11 10H5V5h6v5z"/>
@@ -924,7 +862,7 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Gasolineras</span>
-                        <span class="category-count">12 puntos</span>
+                        <span class="category-count" id="countGasolineras">0 puntos</span>
                     </div>
                 </button>
             </li>
@@ -937,56 +875,6 @@
         <div class="welcome-billboard">
             <h2>MOVILIDAD</h2>
             <p>TRANSPORTE, RUTAS Y SERVICIOS DE MOVILIDAD DE LOJA EN UN SOLO LUGAR</p>
-        </div>
-
-        <div class="bottom-filter-bar">
-            <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
-                    </svg>
-                </div>
-                <div class="filter-label-group">
-                    <span class="filter-label">Disponibles Ahora</span>
-                    <span class="filter-sub">58 servicios</span>
-                </div>
-            </div>
-
-            <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-                    </svg>
-                </div>
-                <div class="filter-label-group">
-                    <span class="filter-label">Cerca de mí</span>
-                    <span class="filter-sub">31 opciones</span>
-                </div>
-            </div>
-
-            <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10z"/>
-                    </svg>
-                </div>
-                <div class="filter-label-group">
-                    <span class="filter-label">Rutas Activas</span>
-                    <span class="filter-sub">18 rutas</span>
-                </div>
-            </div>
-
-            <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-                    </svg>
-                </div>
-                <div class="filter-label-group">
-                    <span class="filter-label">Reservas</span>
-                    <span class="filter-sub">22 disponibles</span>
-                </div>
-            </div>
         </div>
     </main>
 
@@ -1080,7 +968,7 @@
         </div>
 
         <div class="action-footer-box">
-            <button class="btn-view-all-shops">Explorar Directorio de Movilidad</button>
+            <button class="btn-view-all-shops">Ver servicios de Movilidad</button>
         </div>
     </aside>
 
@@ -1089,6 +977,164 @@
 <footer class="pie-pagina">
     <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
 </footer>
+
+
+<script>
+(function () {
+    const categoryButtons = Array.from(document.querySelectorAll("[data-count-src][data-count-target]"));
+    if (!categoryButtons.length) return;
+
+    const countableSelectors = [
+        ".empresa-electrodomesticos",
+        ".empresa-card",
+        ".business-card",
+        ".local-card",
+        ".restaurant-card",
+        ".service-card",
+        "[data-business]",
+        "[data-empresa]"
+    ].join(",");
+
+    function formatCount(target, total, singular, plural) {
+        target.textContent = total + " " + (total === 1 ? singular : plural);
+    }
+
+    function escapeRegExp(value) {
+        return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function getBalancedArrayText(sourceText, arrayStartIndex) {
+        const bracketStart = sourceText.indexOf("[", arrayStartIndex);
+        if (bracketStart === -1) return "";
+
+        let depth = 0;
+        let quote = "";
+        let escaped = false;
+
+        for (let i = bracketStart; i < sourceText.length; i++) {
+            const char = sourceText[i];
+
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+
+            if (char === "\\") {
+                escaped = true;
+                continue;
+            }
+
+            if (quote) {
+                if (char === quote) quote = "";
+                continue;
+            }
+
+            if (char === "'" || char === '"' || char === "`") {
+                quote = char;
+                continue;
+            }
+
+            if (char === "[") depth++;
+            if (char === "]") depth--;
+
+            if (depth === 0) {
+                return sourceText.slice(bracketStart, i + 1);
+            }
+        }
+
+        return "";
+    }
+
+    function countObjectsInArray(arrayText) {
+        const nombreMatches = arrayText.match(/\bnombre\s*:/g);
+        if (nombreMatches) return nombreMatches.length;
+
+        const titleMatches = arrayText.match(/\b(title|titulo|name)\s*:/gi);
+        if (titleMatches) return titleMatches.length;
+
+        const objectMatches = arrayText.match(/\{[\s\S]*?\}/g);
+        return objectMatches ? objectMatches.length : 0;
+    }
+
+    function countFromSpecificArray(htmlText, arrayName) {
+        if (!arrayName) return null;
+
+        const arrayPattern = new RegExp("(?:const|let|var)\\s+" + escapeRegExp(arrayName) + "\\s*=\\s*\\[");
+        const match = arrayPattern.exec(htmlText);
+
+        if (!match) return null;
+
+        const arrayText = getBalancedArrayText(htmlText, match.index);
+        if (!arrayText) return null;
+
+        return countObjectsInArray(arrayText);
+    }
+
+    function countFromAnyBusinessArray(htmlText) {
+        const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
+        let match;
+        let bestCount = null;
+
+        while ((match = arrayPattern.exec(htmlText)) !== null) {
+            const arrayText = getBalancedArrayText(htmlText, match.index);
+            if (!arrayText) continue;
+
+            const count = countObjectsInArray(arrayText);
+            if (bestCount === null || count > bestCount) bestCount = count;
+        }
+
+        return bestCount;
+    }
+
+    function countFromRenderedMarkup(htmlText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+        return doc.querySelectorAll(countableSelectors).length;
+    }
+
+    function countCategoryItems(htmlText, arrayName) {
+        const specificArrayCount = countFromSpecificArray(htmlText, arrayName);
+        if (specificArrayCount !== null) return specificArrayCount;
+
+        const genericArrayCount = countFromAnyBusinessArray(htmlText);
+        if (genericArrayCount !== null) return genericArrayCount;
+
+        return countFromRenderedMarkup(htmlText);
+    }
+
+    async function updateCategoryCount(button) {
+        const src = button.dataset.countSrc;
+        const arrayName = button.dataset.countArray;
+        const target = document.getElementById(button.dataset.countTarget);
+        const singular = button.dataset.countSingular || "local";
+        const plural = button.dataset.countPlural || "locales";
+
+        if (!src || !target) return;
+
+        formatCount(target, 0, singular, plural);
+
+        try {
+            const url = new URL(src, window.location.href);
+            url.searchParams.set("_conteo", Date.now().toString());
+
+            const response = await fetch(url.href, { cache: "no-store" });
+            if (!response.ok) {
+                formatCount(target, 0, singular, plural);
+                return;
+            }
+
+            const htmlText = await response.text();
+            const total = countCategoryItems(htmlText, arrayName);
+
+            formatCount(target, total || 0, singular, plural);
+        } catch (error) {
+            formatCount(target, 0, singular, plural);
+        }
+    }
+
+    categoryButtons.forEach(updateCategoryCount);
+})();
+</script>
 
 <script>
 (function () {
