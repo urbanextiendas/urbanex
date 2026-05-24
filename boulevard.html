@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loja - Centro Comercial Digital</title>
+    <title>Urbanex - Comercio</title>
     
     <!-- Tipografías Premium de Alta Definición -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -368,7 +368,9 @@
             border-radius: 12px;
             display: flex;
             align-items: center;
+            justify-content: flex-start;
             gap: 12px;
+            text-align: left;
             transition: var(--transition-smooth);
         }
 
@@ -411,21 +413,28 @@
         .category-text-info {
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
+            flex: 1;
             min-width: 0;
+            text-align: left;
         }
 
         .category-name {
+            width: 100%;
             color: #ffffff;
             font-size: 11.5px;
             font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            text-align: left;
         }
 
         .category-count {
+            width: 100%;
             color: var(--text-dark);
             font-size: 9px;
+            text-align: left;
         }
 
         .category-item.active button {
@@ -457,9 +466,11 @@
         }
 
         .category-item button {
+            justify-content: flex-start;
             gap: 14px;
             padding: 10px;
             border-radius: 12px;
+            text-align: left;
         }
 
         .main-boulevard {
