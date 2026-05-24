@@ -987,10 +987,15 @@
 
     <aside class="aside-categories">
         <h2 class="section-title">Categorías</h2>
-
            <ul class="categories-list">
             <li class="category-item">
-                <button onclick="window.location.href='categorias/hogar.html'">
+                <button type="button"
+                        data-count-src="categorias/hogar.html"
+                        data-count-array="empresasHogar"
+                        data-count-target="countHogar"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='categorias/hogar.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M4 10h3v7H4zm6.5 0h3v7h-3zM2 22h19v-3H2zm15-12h3v7h-3zM11.5 2L2 7v2h19V7z"/>
@@ -998,13 +1003,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Hogar y Tecnología</span>
-                        <span class="category-count">55 locales</span>
+                        <span class="category-count" id="countHogar">0 locales</span>
                     </div>
                 </button>
-            </li>   
-       
+            </li>
+
             <li class="category-item">
-                <button onclick="window.location.href='categorias/gastronomia.html'">
+                <button type="button"
+                        data-count-src="categorias/gastronomia.html"
+                        data-count-array="empresasGastronomia"
+                        data-count-target="countGastronomia"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='categorias/gastronomia.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm7-3h-1v5h1V6zm0-4h-3v11h3V2zm2 19H14v-2h6v2z"/>
@@ -1012,13 +1023,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Gastronomía</span>
-                        <span class="category-count">128 locales</span>
+                        <span class="category-count" id="countGastronomia">0 locales</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button onclick="window.location.href='categorias/salud.html'">
+                <button type="button"
+                        data-count-src="categorias/salud.html"
+                        data-count-array="empresasSalud"
+                        data-count-target="countSalud"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='categorias/salud.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H5v-4h4V5h4v4h4v4z"/>
@@ -1026,13 +1043,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Salud y Bienestar</span>
-                        <span class="category-count">96 locales</span>
+                        <span class="category-count" id="countSalud">0 locales</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button onclick="window.location.href='categorias/movilidad.html'">
+                <button type="button"
+                        data-count-src="categorias/movilidad.html"
+                        data-count-array="empresasMovilidad"
+                        data-count-target="countMovilidad"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='categorias/movilidad.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M22.46 6c-.77-2.3-2.89-4-5.46-4H7c-2.57 0-4.69 1.7-5.46 4L.55 9H23.5l-1.04-3zM2 11v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-9H2zm7 8H5v-4h4v4zm10 0h-4v-4h4v4z"/>
@@ -1040,13 +1063,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Movilidad</span>
-                        <span class="category-count">34 zonas</span>
+                        <span class="category-count" id="countMovilidad">0 locales</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button onclick="window.location.href='categorias/turismo.html'">
+                <button type="button"
+                        data-count-src="categorias/turismo.html"
+                        data-count-array="empresasTurismo"
+                        data-count-target="countTurismo"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='categorias/turismo.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
@@ -1054,13 +1083,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Turismo y Hospedaje</span>
-                        <span class="category-count">42 locales</span>
+                        <span class="category-count" id="countTurismo">0 locales</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button onclick="window.location.href='categorias/finanzas.html'">
+                <button type="button"
+                        data-count-src="categorias/finanzas.html"
+                        data-count-array="empresasFinanzas"
+                        data-count-target="countFinanzas"
+                        data-count-singular="punto"
+                        data-count-plural="puntos"
+                        onclick="window.location.href='categorias/finanzas.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1H6.8c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
@@ -1068,13 +1103,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Finanzas</span>
-                        <span class="category-count">45 puntos</span>
+                        <span class="category-count" id="countFinanzas">0 puntos</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button onclick="window.location.href='categorias/comercio.html'">
+                <button type="button"
+                        data-count-src="categorias/comercio.html"
+                        data-count-array="empresasComercio"
+                        data-count-target="countComercio"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='categorias/comercio.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/>
@@ -1082,7 +1123,7 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Comercio y Educación</span>
-                        <span class="category-count">80 locales</span>
+                        <span class="category-count" id="countComercio">0 locales</span>
                     </div>
                 </button>
             </li>
@@ -1210,6 +1251,211 @@
     <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
 </footer>
 
+
+
+<script>
+(function () {
+    const categoryButtons = Array.from(document.querySelectorAll("[data-count-src][data-count-target]"));
+    if (!categoryButtons.length) return;
+
+    const countableSelectors = [
+        ".empresa-electrodomesticos",
+        ".empresa-card",
+        ".business-card",
+        ".shop-card",
+        ".local-card",
+        ".restaurant-card",
+        ".service-card",
+        "[data-business]",
+        "[data-empresa]"
+    ].join(",");
+
+    const cache = new Map();
+
+    function formatCount(target, total, singular, plural) {
+        target.textContent = total + " " + (total === 1 ? singular : plural);
+    }
+
+    function escapeRegExp(value) {
+        return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function getBalancedArrayText(sourceText, arrayStartIndex) {
+        const bracketStart = sourceText.indexOf("[", arrayStartIndex);
+        if (bracketStart === -1) return "";
+
+        let depth = 0;
+        let quote = "";
+        let escaped = false;
+
+        for (let i = bracketStart; i < sourceText.length; i++) {
+            const char = sourceText[i];
+
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+
+            if (char === "\\") {
+                escaped = true;
+                continue;
+            }
+
+            if (quote) {
+                if (char === quote) quote = "";
+                continue;
+            }
+
+            if (char === "'" || char === '"' || char === "`") {
+                quote = char;
+                continue;
+            }
+
+            if (char === "[") depth++;
+            if (char === "]") depth--;
+
+            if (depth === 0) {
+                return sourceText.slice(bracketStart, i + 1);
+            }
+        }
+
+        return "";
+    }
+
+    function countObjectsInArray(arrayText) {
+        const nombreMatches = arrayText.match(/\bnombre\s*:/g);
+        if (nombreMatches) return nombreMatches.length;
+
+        const titleMatches = arrayText.match(/\b(title|titulo|name)\s*:/gi);
+        if (titleMatches) return titleMatches.length;
+
+        const objectMatches = arrayText.match(/\{[\s\S]*?\}/g);
+        return objectMatches ? objectMatches.length : 0;
+    }
+
+    function countFromSpecificArray(htmlText, arrayName) {
+        if (!arrayName) return null;
+
+        const pattern = new RegExp("(?:const|let|var)\\s+" + escapeRegExp(arrayName) + "\\s*=\\s*\\[");
+        const match = pattern.exec(htmlText);
+
+        if (!match) return null;
+
+        const arrayText = getBalancedArrayText(htmlText, match.index);
+        if (!arrayText) return null;
+
+        return countObjectsInArray(arrayText);
+    }
+
+    function countFromAnyBusinessArray(htmlText) {
+        const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
+        let match;
+        let total = 0;
+        let found = false;
+
+        while ((match = arrayPattern.exec(htmlText)) !== null) {
+            const arrayText = getBalancedArrayText(htmlText, match.index);
+            if (!arrayText) continue;
+
+            total += countObjectsInArray(arrayText);
+            found = true;
+        }
+
+        return found ? total : null;
+    }
+
+    function countFromRenderedMarkup(htmlText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+        return doc.querySelectorAll(countableSelectors).length;
+    }
+
+    function getSubcategorySources(htmlText, baseUrl) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+
+        return Array.from(doc.querySelectorAll("[data-count-src]"))
+            .map(function (element) {
+                return element.getAttribute("data-count-src");
+            })
+            .filter(Boolean)
+            .map(function (src) {
+                return new URL(src, baseUrl).href;
+            });
+    }
+
+    async function fetchHtml(url) {
+        const normalizedUrl = new URL(url, window.location.href).href;
+
+        if (cache.has(normalizedUrl)) {
+            return cache.get(normalizedUrl);
+        }
+
+        const requestUrl = new URL(normalizedUrl);
+        requestUrl.searchParams.set("_conteo", Date.now().toString());
+
+        const response = await fetch(requestUrl.href, { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo cargar " + normalizedUrl);
+
+        const htmlText = await response.text();
+        cache.set(normalizedUrl, htmlText);
+
+        return htmlText;
+    }
+
+    async function countPage(src, arrayName, depth) {
+        const pageUrl = new URL(src, window.location.href).href;
+        const htmlText = await fetchHtml(pageUrl);
+
+        const specificArrayCount = countFromSpecificArray(htmlText, arrayName);
+        if (specificArrayCount !== null) return specificArrayCount;
+
+        const genericArrayCount = countFromAnyBusinessArray(htmlText);
+        if (genericArrayCount !== null && genericArrayCount > 0) return genericArrayCount;
+
+        const markupCount = countFromRenderedMarkup(htmlText);
+        if (markupCount > 0) return markupCount;
+
+        if (depth <= 0) return 0;
+
+        const subcategorySources = getSubcategorySources(htmlText, pageUrl);
+        if (!subcategorySources.length) return 0;
+
+        const childCounts = await Promise.all(
+            subcategorySources.map(function (childSrc) {
+                return countPage(childSrc, "", depth - 1).catch(function () {
+                    return 0;
+                });
+            })
+        );
+
+        return childCounts.reduce(function (sum, value) {
+            return sum + value;
+        }, 0);
+    }
+
+    async function updateCategoryCount(button) {
+        const target = document.getElementById(button.dataset.countTarget);
+        if (!target) return;
+
+        const src = button.dataset.countSrc;
+        const arrayName = button.dataset.countArray || "";
+        const singular = button.dataset.countSingular || "local";
+        const plural = button.dataset.countPlural || "locales";
+
+        formatCount(target, 0, singular, plural);
+
+        try {
+            const total = await countPage(src, arrayName, 2);
+            formatCount(target, total || 0, singular, plural);
+        } catch (error) {
+            formatCount(target, 0, singular, plural);
+        }
+    }
+
+    categoryButtons.forEach(updateCategoryCount);
+})();
+</script>
 
 <script>
 (function () {
