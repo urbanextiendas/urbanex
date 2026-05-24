@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Urbanex - Electrodomésticos</title>
-    <link rel="icon" type="image/png" href="../../../imagenes/log.png">
+    <link rel="icon" type="image/png" href="../../imagenes/log.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,7 +39,7 @@
             min-height: 100vh;
             background:
                 linear-gradient(135deg, rgba(0,0,0,0.88), rgba(0,0,0,0.62)),
-                url("../../../imagenes/Hogar.png") center bottom / cover fixed no-repeat;
+                url("../../imagenes/Hogar.png") center bottom / cover fixed no-repeat;
             color: var(--text-main);
             font-family: var(--font-sans);
             overflow-x: hidden;
@@ -470,6 +470,7 @@
             border-color: rgba(229,193,88,0.34);
             background: rgba(0,0,0,0.62);
             padding-left: 14px;
+            padding-right: 42px;
         }
 
         .filter-row {
@@ -573,6 +574,39 @@
             font-size: 6.8px;
         }
 
+
+        .repo-search-button {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 26px;
+            height: 26px;
+            border: 1px solid rgba(229,193,88,0.36);
+            border-radius: 8px;
+            background: rgba(229,193,88,0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .repo-search-button:hover {
+            background: var(--gold);
+        }
+
+        .repo-search-button svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold);
+            transition: var(--transition);
+        }
+
+        .repo-search-button:hover svg {
+            fill: #000000;
+        }
+
         @media (max-width: 980px) {
             .hero-section,
             .directory-layout {
@@ -622,6 +656,255 @@
                 grid-template-columns: 1fr;
             }
         }
+    
+        /* Encabezado igual al documento base */
+        .header-top {
+            height: 60px;
+            background: rgba(6, 6, 6, 0.45);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border-bottom: 1px solid var(--gold-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+        }
+
+        .brand-box img {
+            height: 60px;
+            width: auto;
+            display: block;
+        }
+
+        .search-wrapper {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.42);
+            border: 1px solid var(--gold);
+            border-radius: 20px;
+            padding: 8px 40px 8px 16px;
+            color: var(--text-main);
+            font-size: 12px;
+            outline: none;
+            font-family: var(--font-sans);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .search-input:focus {
+            border-color: var(--gold);
+            background: rgba(0, 0, 0, 0.58);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            fill: var(--text-soft);
+            cursor: pointer;
+        }
+
+        .user-tools {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .location-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .location-indicator svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold);
+        }
+
+        .tool-icon {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .tool-icon:nth-child(2) {
+            margin-right: 14px;
+        }
+
+        .tool-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+            transition: var(--transition);
+        }
+
+        .tool-icon:hover svg {
+            fill: var(--gold);
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .profile-avatar svg {
+            width: 13px;
+            height: 13px;
+            fill: var(--gold);
+        }
+
+        /* Segmentadores compactos y mejor ubicados */
+        .segment-filter-panel {
+            width: min(1040px, calc(100% - 28px));
+            margin: -2px auto 14px;
+            padding: 8px;
+            display: grid;
+            grid-template-columns: auto minmax(360px, 1fr);
+            align-items: center;
+            gap: 12px;
+            background: rgba(5, 5, 5, 0.68);
+            border: 1px solid rgba(229, 193, 88, 0.22);
+            border-radius: 16px;
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            box-shadow: 0 14px 34px rgba(0,0,0,0.30);
+        }
+
+        .segment-filter-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            padding-left: 4px;
+        }
+
+        .segment-filter-title span {
+            color: var(--gold);
+            font-family: var(--font-serif);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .segment-filter-title strong {
+            color: #ffffff;
+            font-size: 9.5px;
+            font-weight: 600;
+            background: rgba(229, 193, 88, 0.10);
+            border: 1px solid rgba(229, 193, 88, 0.22);
+            border-radius: 999px;
+            padding: 4px 8px;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: minmax(170px, 1fr) minmax(170px, 1fr);
+            gap: 8px;
+        }
+
+        .filter-select {
+            height: 32px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.52);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 10px;
+            padding: 0 10px;
+            color: #ffffff;
+            font-family: var(--font-sans);
+            font-size: 10px;
+            outline: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-select:hover,
+        .filter-select:focus {
+            border-color: rgba(229, 193, 88, 0.55);
+            background: rgba(229, 193, 88, 0.08);
+        }
+
+        .control-panel,
+        .search-bar-box,
+        .repo-search-button {
+            display: none;
+        }
+
+        @media (max-width: 820px) {
+            .segment-filter-panel {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .segment-filter-title {
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header-top {
+                flex-direction: column;
+                height: auto;
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .search-wrapper {
+                width: 100%;
+                margin: 0;
+                order: 3;
+            }
+
+            .user-tools {
+                width: 100%;
+                justify-content: flex-end;
+                gap: 10px !important;
+                order: 2;
+            }
+
+            .icon-corazon {
+                margin-right: 0 !important;
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
     </style>
 </head>
 
@@ -629,13 +912,36 @@
 <div class="page-shell">
 
     <header class="header-top">
-        <a href="../../../boulevard.html" class="brand-box" title="Volver al inicio">
-            <img src="../../../imagenes/logo.png" alt="Logo Urbanex">
+        <a href="../../boulevard.html" class="brand-box" title="Volver al Inicio">
+            <img src="../../imagenes/logo.png" alt="Logo Urbanex">
         </a>
 
-        <div class="header-actions">
-            <a class="back-link" href="../../hogar.html">Volver a Hogar</a>
-            <a class="register-link" href="#">Registrar Empresa</a>
+        <div class="search-wrapper">
+            <input type="search" id="siteSearch" class="search-input" placeholder="¿Qué producto o servicio busca?" autocomplete="off">
+            <svg class="search-icon" id="searchButton" viewBox="0 0 24 24" role="button" aria-label="Buscar" tabindex="0">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+        </div>
+
+        <div class="user-tools">
+            <div class="location-indicator">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <span>Loja, Ecuador</span>
+            </div>
+
+            <div class="tool-icon icon-corazon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+
+            <div class="profile-avatar">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>
         </div>
     </header>
 
@@ -672,9 +978,10 @@
         </div>
     </section>
 
-    <section class="control-panel" aria-label="Controles del directorio">
-        <div class="search-bar-box">
-            <input type="search" id="businessSearch" class="search-box" placeholder="Buscar empresa, producto o servicio..." autocomplete="off">
+    <section class="segment-filter-panel" aria-label="Segmentadores de electrodomésticos">
+        <div class="segment-filter-title">
+            <span>Segmentadores</span>
+            <strong id="visibleCompaniesCounter">0 empresas</strong>
         </div>
 
         <div class="filter-row">
@@ -712,6 +1019,30 @@
 
 <script>
 (function () {
+    const REPO_CONFIG = {
+        owner: "",
+        repo: "",
+        branch: "main",
+        siteBasePath: "",
+        maxResults: 8,
+        maxFiles: 600,
+        maxFileSize: 250000,
+        textExtensions: [".html", ".htm", ".json", ".txt", ".md", ".csv", ".js", ".css", ".xml"],
+        skipFolders: [".git/", "node_modules/", "vendor/", "dist/", "build/"]
+    };
+
+    const MIN_QUERY_LENGTH = 3;
+    const GENERIC_TITLES = [
+        "urbanex",
+        "loja - centro comercial digital",
+        "loja centro comercial digital",
+        "loja - gastronomica",
+        "loja gastronomica",
+        "loja - hogar y tecnologia",
+        "loja hogar y tecnologia",
+        "centro comercial digital"
+    ];
+
     const empresasElectrodomesticos = [
         {
             nombre: "ElectroHogar Loja",
@@ -777,18 +1108,382 @@
 
     const businessGrid = document.getElementById("businessGrid");
     const emptyState = document.getElementById("emptyState");
-    const searchInput = document.getElementById("businessSearch");
+    const searchInput = document.getElementById("siteSearch");
+    const searchButton = document.getElementById("searchButton");
     const segmentFilter = document.getElementById("segmentFilter");
     const sortFilter = document.getElementById("sortFilter");
     const electroCounter = document.getElementById("electroCounter");
     const heroCounter = document.getElementById("heroCounter");
+    const visibleCompaniesCounter = document.getElementById("visibleCompaniesCounter");
+
+    if (!businessGrid || !searchInput) return;
+
+    let searchDocuments = [];
+    let indexLoaded = false;
+    let indexLoading = null;
+
+    function decodeEntities(text) {
+        const decoder = document.createElement("textarea");
+        decoder.innerHTML = String(text || "");
+        return decoder.value;
+    }
+
+    function removeBoilerplate(text) {
+        return String(text || "")
+            .replace(/Negocios confiables/gi, " ")
+            .replace(/Comunidad local/gi, " ")
+            .replace(/Registre su negocio/gi, " ")
+            .replace(/©\s*2026\s*Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
+            .replace(/Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
+            .replace(/Todos los derechos reservados\.?/gi, " ")
+            .replace(/¿Qué producto o servicio busca\?/gi, " ")
+            .replace(/¿Qué restaurante, cafetería o plato busca\?/gi, " ")
+            .replace(/¿Qué producto, servicio o equipo busca\?/gi, " ")
+            .replace(/Buscar en todo Urbanex/gi, " ");
+    }
+
+    function cleanSearchText(value) {
+        return removeBoilerplate(decodeEntities(value))
+            .replace(/<[^>]*>/g, " ")
+            .replace(/\b(class|href|onclick|src|alt|style|id)=['\"][^'\"]*['\"]/gi, " ")
+            .replace(/window\.location\.href\s*=\s*['\"][^'\"]+['\"]/gi, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
 
     function normalizeText(value) {
-        return String(value || "")
+        return cleanSearchText(value)
             .toLowerCase()
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9ñáéíóúü\s./_-]/gi, " ")
+            .replace(/\s+/g, " ")
             .trim();
+    }
+
+    function isGenericTitle(title) {
+        const normalizedTitle = normalizeText(title);
+        return !normalizedTitle || GENERIC_TITLES.includes(normalizedTitle);
+    }
+
+    function getExtension(path) {
+        const cleanPath = String(path || "").split("?")[0].split("#")[0];
+        const dotIndex = cleanPath.lastIndexOf(".");
+        return dotIndex >= 0 ? cleanPath.slice(dotIndex).toLowerCase() : "";
+    }
+
+    function isTextFile(path) {
+        return REPO_CONFIG.textExtensions.includes(getExtension(path));
+    }
+
+    function shouldSkipPath(path) {
+        return REPO_CONFIG.skipFolders.some(function (folder) {
+            return path.includes(folder);
+        });
+    }
+
+    function getInferredGithubPagesConfig() {
+        const host = window.location.hostname;
+        if (!host.endsWith(".github.io")) return null;
+
+        const owner = host.replace(".github.io", "");
+        const parts = window.location.pathname.split("/").filter(Boolean);
+        const repo = parts[0] || owner + ".github.io";
+        const siteBasePath = repo === owner + ".github.io" ? "" : "/" + repo;
+
+        return {
+            owner: owner,
+            repo: repo,
+            branch: REPO_CONFIG.branch,
+            siteBasePath: siteBasePath
+        };
+    }
+
+    function getActiveRepoConfig() {
+        const inferred = getInferredGithubPagesConfig() || {};
+        return {
+            owner: REPO_CONFIG.owner || inferred.owner || "",
+            repo: REPO_CONFIG.repo || inferred.repo || "",
+            branch: REPO_CONFIG.branch || inferred.branch || "main",
+            siteBasePath: REPO_CONFIG.siteBasePath || inferred.siteBasePath || ""
+        };
+    }
+
+    function pageUrlFromRepoPath(path, config) {
+        const cleanBase = (config.siteBasePath || "").replace(/\/$/, "");
+        const cleanPath = String(path || "").replace(/^\/+/, "");
+
+        if (window.location.protocol === "file:") {
+            return cleanPath;
+        }
+
+        return window.location.origin + cleanBase + "/" + cleanPath;
+    }
+
+    function titleFromPath(path) {
+        const fileName = String(path || "").split("/").pop() || path;
+        const withoutExtension = fileName.replace(/\.[^/.]+$/, "");
+
+        if (/^index$/i.test(withoutExtension)) return "Inicio";
+
+        return withoutExtension
+            .replace(/[-_]+/g, " ")
+            .replace(/\b\w/g, function (letter) { return letter.toUpperCase(); });
+    }
+
+    function collectTextFromJson(value, output) {
+        if (value === null || value === undefined) return;
+
+        if (["string", "number", "boolean"].includes(typeof value)) {
+            output.push(String(value));
+            return;
+        }
+
+        if (Array.isArray(value)) {
+            value.forEach(function (item) { collectTextFromJson(item, output); });
+            return;
+        }
+
+        if (typeof value === "object") {
+            Object.keys(value).forEach(function (key) {
+                output.push(key);
+                collectTextFromJson(value[key], output);
+            });
+        }
+    }
+
+    function textFromStructuredFile(rawText, extension) {
+        if (extension === ".json") {
+            try {
+                const output = [];
+                collectTextFromJson(JSON.parse(rawText), output);
+                return output.join(" ");
+            } catch (error) {
+                return rawText;
+            }
+        }
+
+        return rawText;
+    }
+
+    function getTextContent(element) {
+        return cleanSearchText(element ? element.textContent : "");
+    }
+
+    function makeDocument(path, url, title, content) {
+        const cleanTitle = cleanSearchText(title) || titleFromPath(path);
+        const cleanContent = cleanSearchText(content || path);
+
+        return {
+            title: cleanTitle,
+            path: path,
+            url: url,
+            content: cleanContent,
+            normalizedTitle: normalizeText(cleanTitle),
+            normalizedPath: normalizeText(path),
+            normalizedContent: normalizeText(cleanContent)
+        };
+    }
+
+    function extractHtmlDocument(path, url, rawText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(rawText || "", "text/html");
+
+        doc.querySelectorAll("script, style, noscript, svg, template, link, meta, header, footer, .header-top, .pie-pagina, .footer, .search-wrapper, .search-bar-box, .user-tools, .brand-box, .location-indicator, .tool-icon, .profile-avatar").forEach(function (node) {
+            node.remove();
+        });
+
+        const titleCandidates = Array.from(doc.querySelectorAll(".page-title, .category-title, .categoria-title, main h1, main h2, article h1, article h2, h1, h2, title"))
+            .map(getTextContent)
+            .filter(function (title) {
+                const normalized = normalizeText(title);
+                return normalized && !isGenericTitle(title) && !["bienvenido", "categorias", "destacados", "sabores destacados", "hogar destacado"].includes(normalized);
+            });
+
+        let title = titleCandidates[0] || titleFromPath(path);
+        if (isGenericTitle(title)) title = titleFromPath(path);
+
+        const priorityParts = Array.from(doc.querySelectorAll("main, article, section, .category-item, .shop-card, .card, .business-card, .local-card, .restaurant-card, .service-card, .empresa-electrodomesticos"))
+            .map(getTextContent)
+            .filter(Boolean);
+
+        const content = priorityParts.length ? priorityParts.join(". ") : getTextContent(doc.body || doc.documentElement);
+
+        return makeDocument(path, url, title, content);
+    }
+
+    function extractDocument(path, url, rawText) {
+        const extension = getExtension(path);
+
+        if (extension === ".html" || extension === ".htm" || /<[a-z][\s\S]*>/i.test(rawText || "")) {
+            return extractHtmlDocument(path, url, rawText || "");
+        }
+
+        return makeDocument(path, url, titleFromPath(path), textFromStructuredFile(rawText || path, extension));
+    }
+
+    async function fetchJson(url) {
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo cargar: " + url);
+        return response.json();
+    }
+
+    async function fetchText(url) {
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo cargar: " + url);
+        return response.text();
+    }
+
+    async function buildGithubRepositoryIndex() {
+        const config = getActiveRepoConfig();
+        if (!config.owner || !config.repo) throw new Error("Repositorio no configurado");
+
+        const branches = Array.from(new Set([config.branch, "main", "master"].filter(Boolean)));
+        let treeData = null;
+        let activeBranch = config.branch;
+
+        for (const branch of branches) {
+            try {
+                treeData = await fetchJson("https://api.github.com/repos/" + encodeURIComponent(config.owner) + "/" + encodeURIComponent(config.repo) + "/git/trees/" + encodeURIComponent(branch) + "?recursive=1");
+                activeBranch = branch;
+                break;
+            } catch (error) {
+                treeData = null;
+            }
+        }
+
+        if (!treeData || !Array.isArray(treeData.tree)) throw new Error("No se pudo leer el repositorio");
+
+        const allFiles = treeData.tree
+            .filter(function (item) {
+                return item.type === "blob" && item.path && !shouldSkipPath(item.path);
+            })
+            .slice(0, REPO_CONFIG.maxFiles);
+
+        const textFiles = allFiles.filter(function (item) {
+            return isTextFile(item.path) && (!item.size || item.size <= REPO_CONFIG.maxFileSize);
+        });
+
+        const loadedDocuments = [];
+        const pathOnlyFiles = allFiles.map(function (item) {
+            return makeDocument(
+                item.path,
+                pageUrlFromRepoPath(item.path, Object.assign({}, config, { branch: activeBranch })),
+                titleFromPath(item.path),
+                item.path
+            );
+        });
+
+        const rawBase = "https://raw.githubusercontent.com/" + encodeURIComponent(config.owner) + "/" + encodeURIComponent(config.repo) + "/" + encodeURIComponent(activeBranch) + "/";
+
+        for (let index = 0; index < textFiles.length; index += 8) {
+            const batch = textFiles.slice(index, index + 8);
+            const results = await Promise.allSettled(batch.map(async function (item) {
+                const rawText = await fetchText(rawBase + item.path);
+                return extractDocument(item.path, pageUrlFromRepoPath(item.path, Object.assign({}, config, { branch: activeBranch })), rawText);
+            }));
+
+            results.forEach(function (result) {
+                if (result.status === "fulfilled") loadedDocuments.push(result.value);
+            });
+        }
+
+        return loadedDocuments.concat(pathOnlyFiles);
+    }
+
+    async function loadSearchIndex() {
+        if (indexLoaded) return searchDocuments;
+        if (indexLoading) return indexLoading;
+
+        indexLoading = (async function () {
+            const documents = await buildGithubRepositoryIndex();
+
+            searchDocuments = documents.filter(function (documentItem) {
+                return documentItem.normalizedTitle || documentItem.normalizedPath || documentItem.normalizedContent;
+            });
+
+            indexLoaded = true;
+            return searchDocuments;
+        })();
+
+        return indexLoading;
+    }
+
+    function getSearchTerms(query) {
+        return normalizeText(query)
+            .split(" ")
+            .map(function (term) { return term.trim(); })
+            .filter(function (term) { return term.length >= MIN_QUERY_LENGTH; });
+    }
+
+    function scoreDocument(documentItem, terms, fullQuery) {
+        let score = 0;
+        const title = documentItem.normalizedTitle;
+        const path = documentItem.normalizedPath;
+        const content = documentItem.normalizedContent;
+
+        if (fullQuery.length >= MIN_QUERY_LENGTH) {
+            if (title.includes(fullQuery)) score += 100;
+            if (path.includes(fullQuery)) score += 80;
+            if (content.includes(fullQuery)) score += 45;
+        }
+
+        terms.forEach(function (term) {
+            if (title.includes(term)) score += 40;
+            if (path.includes(term)) score += 28;
+            if (content.includes(term)) score += 12;
+        });
+
+        return score;
+    }
+
+    function searchDocumentsByQuery(query) {
+        const fullQuery = normalizeText(query);
+        const terms = getSearchTerms(query);
+
+        if (!terms.length && fullQuery.length < MIN_QUERY_LENGTH) return [];
+
+        return searchDocuments
+            .map(function (documentItem) {
+                return {
+                    item: documentItem,
+                    score: scoreDocument(documentItem, terms, fullQuery)
+                };
+            })
+            .filter(function (result) { return result.score > 0; })
+            .sort(function (a, b) { return b.score - a.score; })
+            .slice(0, REPO_CONFIG.maxResults)
+            .map(function (result) { return result.item; });
+    }
+
+    async function runRepositorySearch() {
+        const query = searchInput.value.trim();
+        if (query.length < MIN_QUERY_LENGTH) return;
+
+        const originalPlaceholder = searchInput.placeholder;
+        searchInput.placeholder = "Buscando en el repositorio...";
+
+        try {
+            await loadSearchIndex();
+            const results = searchDocumentsByQuery(query);
+
+            if (results.length) {
+                window.location.href = results[0].url;
+                return;
+            }
+
+            searchInput.value = "";
+            searchInput.placeholder = "Sin resultados en el repositorio";
+            setTimeout(function () {
+                searchInput.placeholder = originalPlaceholder;
+            }, 1600);
+        } catch (error) {
+            searchInput.value = "";
+            searchInput.placeholder = "Configure owner y repo en REPO_CONFIG";
+            setTimeout(function () {
+                searchInput.placeholder = originalPlaceholder;
+            }, 2200);
+        }
     }
 
     function createBusinessCard(empresa) {
@@ -830,22 +1525,11 @@
     }
 
     function renderBusinesses() {
-        const query = normalizeText(searchInput.value);
-        const segment = segmentFilter.value;
-        const sort = sortFilter.value;
+        const segment = segmentFilter ? segmentFilter.value : "todos";
+        const sort = sortFilter ? sortFilter.value : "rating";
 
         let filtered = empresasElectrodomesticos.filter(function (empresa) {
-            const searchableText = normalizeText([
-                empresa.nombre,
-                empresa.segmento,
-                empresa.descripcion,
-                empresa.tags.join(" ")
-            ].join(" "));
-
-            const matchesSearch = !query || searchableText.includes(query);
-            const matchesSegment = segment === "todos" || empresa.tipo.includes(segment);
-
-            return matchesSearch && matchesSegment;
+            return segment === "todos" || empresa.tipo.includes(segment);
         });
 
         if (sort === "rating") {
@@ -868,16 +1552,42 @@
             businessGrid.appendChild(createBusinessCard(empresa));
         });
 
-        emptyState.style.display = filtered.length ? "none" : "block";
+        if (emptyState) emptyState.style.display = filtered.length ? "none" : "block";
+        if (visibleCompaniesCounter) {
+            visibleCompaniesCounter.textContent = filtered.length + (filtered.length === 1 ? " empresa" : " empresas");
+        }
         updateCounters(empresasElectrodomesticos.length);
     }
 
-    searchInput.addEventListener("input", renderBusinesses);
-    segmentFilter.addEventListener("change", renderBusinesses);
-    sortFilter.addEventListener("change", renderBusinesses);
+    searchInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            runRepositorySearch();
+        }
+    });
+
+    if (searchButton) {
+        searchButton.addEventListener("click", runRepositorySearch);
+
+        searchButton.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                runRepositorySearch();
+            }
+        });
+    }
+
+    if (segmentFilter) {
+        segmentFilter.addEventListener("change", renderBusinesses);
+    }
+
+    if (sortFilter) {
+        sortFilter.addEventListener("change", renderBusinesses);
+    }
 
     updateCounters(0);
     renderBusinesses();
+    loadSearchIndex().catch(function () {});
 })();
 </script>
 
