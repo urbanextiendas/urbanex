@@ -10,7 +10,7 @@
 <style>
 
 /* ================================================== */
-/* RESETEO GLOBAL (HABILITA EL GESTO DE REFRESCAR)   */
+/* RESETEO GLOBAL                                     */
 /* ================================================== */
 *{
     margin:0;
@@ -28,47 +28,38 @@ html, body {
 }
 
 /* ================================================== */
-/* PORTADA (AJUSTE EXACTO PARA CUALQUIER PANTALLA)    */
+/* PORTADA CON IMAGEN NÍTIDA                          */
 /* ================================================== */
 .portada{
     width: 100%;
     height: calc(100vh - 24px);
-    height: calc(100svh - 24px); 
+    height: calc(100svh - 24px);
     position: relative;
     overflow: hidden;
     background-color: #000;
+    background-image: url("imagenes/Portada.png");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 
-/* Control adaptativo de la imagen */
-.portada-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: fill; 
-    display: block;
-}
-
-/* CAPA OSCURA REFINADA PARA MEJORAR CONTRASTE DE TEXTOS */
+/* CAPA OSCURA SUAVE PARA NO APAGAR LA IMAGEN */
 .portada::before{
     content:"";
     position:absolute;
     inset:0;
     background: linear-gradient(
         to bottom,
-        rgba(0,0,0,.30),
-        rgba(0,0,0,.50)
+        rgba(0,0,0,.18),
+        rgba(0,0,0,.34)
     );
     z-index: 1;
     pointer-events: none;
 }
 
 /* ================================================== */
-/* CAPAS DE TEXTO PROFESIONAL Y LEGIBLE (ESCRITORIO)  */
+/* CAPAS DE TEXTO                                     */
 /* ================================================== */
-
-/* Encabezado Superior (Arco de la puerta) */
 .header-branding {
     position: absolute;
     top: 0.5%;
@@ -79,6 +70,12 @@ html, body {
     max-width: 400px;
     z-index: 3;
     pointer-events: none;
+}
+
+.header-branding img {
+    width: 40%;
+    max-width: 400px;
+    height: auto;
 }
 
 .header-branding h1 {
@@ -100,7 +97,7 @@ html, body {
     text-shadow: 0 2px 4px rgba(0,0,0,0.95);
 }
 
-/* Eslogan Lateral Izquierdo (Sobre pilar izquierdo) */
+/* Eslogan Lateral Izquierdo */
 .slogan-lateral {
     position: absolute;
     top: 40%;
@@ -128,7 +125,7 @@ html, body {
     margin: 5px 0;
 }
 
-/* Características / Beneficios (Sobre pilar derecho) */
+/* Características / Beneficios */
 .caracteristicas-lista {
     position: absolute;
     top: 35%;
@@ -145,7 +142,7 @@ html, body {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.48);
     padding: 10px 14px;
     border-radius: 6px;
     backdrop-filter: blur(5px);
@@ -170,7 +167,7 @@ html, body {
     text-shadow: 0 1px 3px rgba(0,0,0,0.9);
 }
 
-/* Botón de Registro Superior Derecho */
+/* Botón de Registro */
 .registro-contenedor {
     position: absolute;
     top: 4%;
@@ -198,7 +195,7 @@ html, body {
     text-transform: uppercase;
     letter-spacing: 1px;
     border-radius: 4px;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.66);
     transition: all 0.3s ease;
 }
 
@@ -217,7 +214,7 @@ html, body {
     left: 38%;
     width: 24%;
     height: 58%;
-    z-index: 10; 
+    z-index: 10;
     display:block;
     cursor:pointer;
     background-color: rgba(255, 255, 255, 0);
@@ -244,16 +241,22 @@ html, body {
 }
 
 /* ================================================== */
-/* OPTIMIZACIÓN EXCLUSIVA PARA DISPOSITIVOS MÓVILES    */
+/* OPTIMIZACIÓN PARA CELULAR                          */
 /* ================================================== */
 @media(max-width:768px){
-    /* Se cambia a 'cover' para que la imagen abarque perfectamente la pantalla vertical */
-    .portada-img {
-        object-fit: cover;
-        object-position: center center;
+    .portada {
+        background-size: cover;
+        background-position: center center;
     }
 
-    /* Redefinición del arco de entrada en el móvil */
+    .portada::before {
+        background: linear-gradient(
+            to bottom,
+            rgba(0,0,0,.12),
+            rgba(0,0,0,.26)
+        );
+    }
+
     .puerta-link{
         top: 22%;
         left: 22%;
@@ -262,14 +265,19 @@ html, body {
     }
     
     .puerta-link::after {
-        opacity: 1; /* Siempre visible en móvil ya que no existe el hover */
+        opacity: 1;
         font-size: 12px;
         bottom: 4%;
     }
 
-    /* Título principal adaptado al arco superior móvil */
     .header-branding {
         top: 2%;
+    }
+
+    .header-branding img {
+        width: 42%;
+        max-width: 220px;
+        height: auto;
     }
 
     .header-branding h1 {
@@ -282,7 +290,6 @@ html, body {
         letter-spacing: 1px;
     }
 
-    /* UBICACIÓN CLAVE: El eslogan se coloca en la franja superior de la puerta */
     .slogan-lateral {
         top: 22%;
         left: 5%;
@@ -301,7 +308,6 @@ html, body {
         margin: 0 5px;
     }
 
-    /* UBICACIÓN CLAVE: Los beneficios se alinean horizontalmente abajo de la puerta */
     .caracteristicas-lista {
         top: auto;
         bottom: 14%;
@@ -317,13 +323,12 @@ html, body {
         padding: 5px 8px;
         border-left: none;
         border-bottom: 2px solid #e5c158;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(0, 0, 0, 0.62);
     }
 
     .item-caracteristica svg {
         width: 13px;
         height: 13px;
-        gap: 6px;
     }
 
     .item-caracteristica span {
@@ -331,7 +336,6 @@ html, body {
         letter-spacing: 0.5px;
     }
 
-    /* UBICACIÓN CLAVE: Registro de negocio toma la base oscura inferior */
     .registro-contenedor {
         top: auto;
         bottom: 3%;
@@ -354,11 +358,12 @@ html, body {
     }
 }
 
-/* Ajuste fino para pantallas extremadamente pequeñas */
+/* Ajuste fino para pantallas pequeñas */
 @media(max-width:380px){
     .caracteristicas-lista {
         bottom: 16%;
     }
+
     .item-caracteristica span {
         font-size: 8px;
     }
@@ -388,12 +393,10 @@ html, body {
 
 <body>
 
-<section class="portada">
-    <img src="imagenes/Portada.png" alt="Portada" class="portada-img">
+<section class="portada" aria-label="Portada Urbanex">
 
-    <!-- Reemplazo del bloque de texto por la imagen solicitada -->
     <div class="header-branding">
-        <img src="imagenes/logo.png" alt="Urbanex" style="width: 40%; max-width: 400px; height: auto;">
+        <img src="imagenes/logo.png" alt="Urbanex">
     </div>
     
     <div class="slogan-lateral">
@@ -402,19 +405,30 @@ html, body {
 
     <div class="caracteristicas-lista">
         <div class="item-caracteristica">
-            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
             <span>Cerca de usted</span>
         </div>
+
         <div class="item-caracteristica">
-            <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+            <svg viewBox="0 0 24 24">
+                <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
+            </svg>
             <span>Las mejores ofertas</span>
         </div>
+
         <div class="item-caracteristica">
-            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            <svg viewBox="0 0 24 24">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+            </svg>
             <span>Negocios confiables</span>
         </div>
+
         <div class="item-caracteristica">
-            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+            <svg viewBox="0 0 24 24">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
             <span>Comunidad local</span>
         </div>
     </div>
@@ -424,6 +438,7 @@ html, body {
     </div>
 
     <a href="boulevard.html" class="puerta-link"></a>
+
 </section>
 
 <footer class="pie-pagina">
