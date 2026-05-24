@@ -992,6 +992,7 @@
                 <button type="button"
                         data-count-src="categorias/hogar.html"
                         data-count-array="empresasHogar"
+                        data-count-children="categorias/hogar/electrodomesticos.html|categorias/hogar/muebles-decoracion.html|categorias/hogar/computadoras-celulares.html|categorias/hogar/reparacion-tecnica.html|categorias/hogar/ferreterias.html|categorias/hogar/internet-seguridad.html"
                         data-count-target="countHogar"
                         data-count-singular="local"
                         data-count-plural="locales"
@@ -1253,6 +1254,7 @@
 
 
 
+
 <script>
 (function () {
     const categoryButtons = Array.from(document.querySelectorAll("[data-count-src][data-count-target]"));
@@ -1262,7 +1264,6 @@
         ".empresa-electrodomesticos",
         ".empresa-card",
         ".business-card",
-        ".shop-card",
         ".local-card",
         ".restaurant-card",
         ".service-card",
@@ -1278,6 +1279,39 @@
 
     function escapeRegExp(value) {
         return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function resolveProjectUrl(src, baseUrl) {
+        if (!src) return "";
+
+        if (/^https?:\/\//i.test(src)) {
+            return src;
+        }
+
+        if (/^(categorias|imagenes)\//i.test(src)) {
+            return new URL(src, window.location.href).href;
+        }
+
+        return new URL(src, baseUrl || window.location.href).href;
+    }
+
+    async function fetchHtml(src, baseUrl) {
+        const normalizedUrl = resolveProjectUrl(src, baseUrl);
+
+        if (cache.has(normalizedUrl)) {
+            return cache.get(normalizedUrl);
+        }
+
+        const requestUrl = new URL(normalizedUrl);
+        requestUrl.searchParams.set("_conteo", Date.now().toString());
+
+        const response = await fetch(requestUrl.href, { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo cargar " + normalizedUrl);
+
+        const htmlText = await response.text();
+        cache.set(normalizedUrl, htmlText);
+
+        return htmlText;
     }
 
     function getBalancedArrayText(sourceText, arrayStartIndex) {
@@ -1370,7 +1404,7 @@
         return doc.querySelectorAll(countableSelectors).length;
     }
 
-    function getSubcategorySources(htmlText, baseUrl) {
+    function getSubcategorySources(htmlText, pageUrl) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, "text/html");
 
@@ -1380,58 +1414,63 @@
             })
             .filter(Boolean)
             .map(function (src) {
-                return new URL(src, baseUrl).href;
+                return resolveProjectUrl(src, pageUrl);
             });
     }
 
-    async function fetchHtml(url) {
-        const normalizedUrl = new URL(url, window.location.href).href;
-
-        if (cache.has(normalizedUrl)) {
-            return cache.get(normalizedUrl);
-        }
-
-        const requestUrl = new URL(normalizedUrl);
-        requestUrl.searchParams.set("_conteo", Date.now().toString());
-
-        const response = await fetch(requestUrl.href, { cache: "no-store" });
-        if (!response.ok) throw new Error("No se pudo cargar " + normalizedUrl);
-
-        const htmlText = await response.text();
-        cache.set(normalizedUrl, htmlText);
-
-        return htmlText;
-    }
-
-    async function countPage(src, arrayName, depth) {
-        const pageUrl = new URL(src, window.location.href).href;
-        const htmlText = await fetchHtml(pageUrl);
+    async function countDirectPage(src, arrayName, baseUrl) {
+        const pageUrl = resolveProjectUrl(src, baseUrl);
+        const htmlText = await fetchHtml(pageUrl, baseUrl);
 
         const specificArrayCount = countFromSpecificArray(htmlText, arrayName);
         if (specificArrayCount !== null) return specificArrayCount;
 
         const genericArrayCount = countFromAnyBusinessArray(htmlText);
-        if (genericArrayCount !== null && genericArrayCount > 0) return genericArrayCount;
+        if (genericArrayCount !== null) return genericArrayCount;
 
-        const markupCount = countFromRenderedMarkup(htmlText);
-        if (markupCount > 0) return markupCount;
+        return countFromRenderedMarkup(htmlText);
+    }
 
-        if (depth <= 0) return 0;
+    async function countPage(src, arrayName, depth, explicitChildren) {
+        if (explicitChildren && explicitChildren.length) {
+            const childCounts = await Promise.all(
+                explicitChildren.map(function (childSrc) {
+                    return countPage(childSrc, "", depth - 1, []).catch(function () {
+                        return 0;
+                    });
+                })
+            );
 
-        const subcategorySources = getSubcategorySources(htmlText, pageUrl);
-        if (!subcategorySources.length) return 0;
+            return childCounts.reduce(function (sum, value) {
+                return sum + value;
+            }, 0);
+        }
 
-        const childCounts = await Promise.all(
-            subcategorySources.map(function (childSrc) {
-                return countPage(childSrc, "", depth - 1).catch(function () {
-                    return 0;
+        const pageUrl = resolveProjectUrl(src, window.location.href);
+        const htmlText = await fetchHtml(pageUrl, window.location.href);
+
+        if (depth > 0) {
+            const subcategorySources = getSubcategorySources(htmlText, pageUrl)
+                .filter(function (childSrc) {
+                    return childSrc !== pageUrl;
                 });
-            })
-        );
 
-        return childCounts.reduce(function (sum, value) {
-            return sum + value;
-        }, 0);
+            if (subcategorySources.length) {
+                const childCounts = await Promise.all(
+                    subcategorySources.map(function (childSrc) {
+                        return countPage(childSrc, "", depth - 1, []).catch(function () {
+                            return 0;
+                        });
+                    })
+                );
+
+                return childCounts.reduce(function (sum, value) {
+                    return sum + value;
+                }, 0);
+            }
+        }
+
+        return countDirectPage(pageUrl, arrayName, window.location.href);
     }
 
     async function updateCategoryCount(button) {
@@ -1442,11 +1481,15 @@
         const arrayName = button.dataset.countArray || "";
         const singular = button.dataset.countSingular || "local";
         const plural = button.dataset.countPlural || "locales";
+        const explicitChildren = (button.dataset.countChildren || "")
+            .split("|")
+            .map(function (item) { return item.trim(); })
+            .filter(Boolean);
 
         formatCount(target, 0, singular, plural);
 
         try {
-            const total = await countPage(src, arrayName, 2);
+            const total = await countPage(src, arrayName, 3, explicitChildren);
             formatCount(target, total || 0, singular, plural);
         } catch (error) {
             formatCount(target, 0, singular, plural);
