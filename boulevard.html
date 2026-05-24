@@ -11,9 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        /* ================================================== */
-        /* VARIABLES DE DISEÑO PREMIUM (CON ENFOQUE TRASLÚCIDO)*/
-        /* ================================================== */
         :root {
             --bg-main: #020202;
             --bg-panels-glass: rgba(6, 6, 6, 0.65);
@@ -30,45 +27,41 @@
             --blur-effect: blur(20px);
         }
 
-        /* ================================================== */
-        /* RESETEO GLOBAL                                     */
-        /* ================================================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Control de barras de desplazamiento imperceptibles pero funcionales */
         ::-webkit-scrollbar {
             width: 4px;
             height: 4px;
         }
+
         ::-webkit-scrollbar-track {
             background: transparent;
         }
+
         ::-webkit-scrollbar-thumb {
             background: rgba(229, 193, 88, 0.2);
             border-radius: 10px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: var(--gold);
         }
 
         body {
             width: 100%;
-            min-height: 100vh; /* Permite que la página tenga altura mínima */
+            min-height: 100vh;
             background-color: var(--bg-main);
             font-family: var(--font-sans);
             color: var(--text-main);
-            overflow-y: auto; /* IMPORTANTE: Esto permite el scroll y el refresco */
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
         }
 
-        /* ================================================== */
-        /* CONTENEDOR PRINCIPAL INTERCONECTADO                */
-        /* ================================================== */
         .dashboard-container {
             flex: 1;
             display: grid;
@@ -77,13 +70,11 @@
             grid-template-areas: 
                 "header header header"
                 "aside-left main aside-right";
-            height: auto; /* Cambiado de calc(100vh - 24px) a auto */
+            height: auto;
             position: relative;
-            overflow: visible; /* Cambiado de hidden a visible */
-            /*overflow: hidden;*/
+            overflow: visible;
         }
 
-        /* CAPA DE FONDO GLOBAL PARA EL EFECTO TRASLÚCIDO COMPLETO */
         .global-background-underlay {
             position: absolute;
             inset: 0;
@@ -98,9 +89,6 @@
             object-position: center;
         }
 
-        /* ================================================== */
-        /* BARRA SUPERIOR (HEADER TRASLÚCIDO)                 */
-        /* ================================================== */
         .header-top {
             grid-area: header;
             background: var(--bg-panels-glass);
@@ -114,7 +102,6 @@
             z-index: 10;
         }
 
-        /* Enlace de retorno al inicio con diseño profesional */
         .brand-box {
             display: flex;
             align-items: center;
@@ -179,7 +166,7 @@
             outline: none;
             font-family: var(--font-sans);
             transition: var(--transition-smooth);
-            text-align: center; /* Esto centrará el texto dentro del input */
+            text-align: center;
         }
 
         .search-input:focus {
@@ -225,9 +212,9 @@
             display: flex;
             align-items: center;
         }
-        /* Agrega esta regla específica a tu CSS */
+
         .tool-icon:nth-child(2) {
-            margin-right: 14px; /* Ajusta este valor para darle la separación exacta que buscas */
+            margin-right: 14px;
         }
         
         .tool-icon svg {
@@ -259,9 +246,6 @@
             fill: var(--gold);
         }
 
-        /* ================================================== */
-        /* MENÚ LATERAL IZQUIERDO TRASLÚCIDO                  */
-        /* ================================================== */
         .aside-categories {
             grid-area: aside-left;
             background: var(--bg-panels-glass);
@@ -292,17 +276,17 @@
             list-style: none;
         }
 
-.category-item button {
-    width: 100%;
-    background: rgba(10, 10, 10, 0.6); /* Fondo oscuro similar a la referencia */
-    border: 1px solid rgba(229, 193, 88, 0.2); /* Borde dorado tenue */
-    padding: 10px 14px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    transition: var(--transition-smooth);
-}
+        .category-item button {
+            width: 100%;
+            background: rgba(10, 10, 10, 0.6);
+            border: 1px solid rgba(229, 193, 88, 0.2);
+            padding: 10px 14px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition-smooth);
+        }
 
         .category-item button:hover:not(.active) {
             background: rgba(255, 255, 255, 0.05);
@@ -315,28 +299,24 @@
             align-items: center;
             justify-content: center;
             border-radius: 12px;
-            /* Fondo semi-transparente con ligero brillo */
             background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Mejora el efecto al pasar el mouse */
         .category-item button:hover .icon-container {
             transform: scale(1.1);
             border-color: var(--gold);
             background: rgba(229, 193, 88, 0.1);
         }
         
-        /* Icono activo más brillante y definido */
         .category-item.active button .icon-container {
             background: var(--gold);
             border: none;
             box-shadow: 0 0 15px rgba(229, 193, 88, 0.4);
         }
 
-        /* Asegura que el SVG siempre esté limpio y bien posicionado */
         .category-item button svg {
             width: 18px;
             height: 18px;
@@ -364,20 +344,19 @@
             font-size: 9px;
         }
 
-.category-item.active button {
-    border: 1px solid var(--gold);
-    background: rgba(229, 193, 88, 0.05);
-}
+        .category-item.active button {
+            border: 1px solid var(--gold);
+            background: rgba(229, 193, 88, 0.05);
+        }
 
-  /* Contenedor del icono (limpio, sin degradados forzados) */
-.icon-container {
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent; /* Fondo transparente para integrar el icono */
-}      
+        .icon-container {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+        }      
 
         .category-item.active button .icon-container {
             background: var(--gold);
@@ -393,21 +372,20 @@
             font-weight: 600;
         }
 
-        /* Ajuste del botón para que se sienta más "Clickable" */
         .category-item button {
-            gap: 14px; /* Mayor separación entre icono y texto */
+            gap: 14px;
             padding: 10px;
             border-radius: 12px;
         }
 
-        /* ================================================== */
-        /* CENTRAL: VISTA DEL BULEVAR                         */
-        /* ================================================== */
         .main-boulevard {
             grid-area: main;
             position: relative;
             overflow: hidden;
-            background: transparent;
+            background-image: url("imagenes/Boulevard.png");
+            background-size: cover;
+            background-position: center bottom;
+            background-repeat: no-repeat;
             z-index: 2;
         }
 
@@ -418,7 +396,6 @@
             pointer-events: none;
         }
 
-        
         .welcome-billboard {
             position: absolute;
             top: 35px;
@@ -447,17 +424,15 @@
             text-shadow: 0 2px 6px rgba(0,0,0,0.9);
         }
 
-        /* MAPEO DE ZONAS INTERACTIVAS */
-        
         .interactive-showcase:hover {
             background: rgba(229, 193, 88, 0.02);
             box-shadow: inset 0 0 15px rgba(229, 193, 88, 0.15);
         }
+
         .showcase-comida { top: 15%; left: 3%; width: 14%; height: 40%; }
         .showcase-salud { top: 25%; left: 22%; width: 8%; height: 30%; }
         .showcase-moda { top: 18%; right: 14%; width: 12%; height: 40%; }
 
-        /* FILTROS TRASLÚCIDOS INFERIORES */
         .bottom-filter-bar {
             position: absolute;
             bottom: 20px;
@@ -522,9 +497,6 @@
             color: var(--text-dark);
         }
 
-        /* ================================================== */
-        /* PANEL LATERAL DERECHO TRASLÚCIDO                   */
-        /* ================================================== */
         .aside-showcase-list {
             grid-area: aside-right;
             background: var(--bg-panels-glass);
@@ -689,9 +661,6 @@
             background: #f1cd6b;
         }
 
-        /* ================================================== */
-        /* PIE DE PÁGINA (FOOTER REPLICADO DE INDEX)          */
-        /* ================================================== */
         .pie-pagina {
             width: 100%;
             height: 24px;
@@ -707,30 +676,27 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        /* AJUSTE ESPECÍFICO PARA TABLETS (768px - 1023px) */
         @media (min-width: 768px) and (max-width: 1024px) {
             .dashboard-container {
-                grid-template-columns: 200px 1fr 240px; /* Reducimos anchos de paneles laterales */
+                grid-template-columns: 200px 1fr 240px;
             }
         
             .brand-text h1 {
-                font-size: 14px; /* Reducimos ligeramente el logo para que no choque */
+                font-size: 14px;
             }
         
             .user-tools {
-                gap: 12px; /* Reducimos el espacio entre iconos para que quepan */
+                gap: 12px;
             }
         
             .search-wrapper {
-                max-width: 250px; /* Acortamos el buscador para dejar aire */
+                max-width: 250px;
             }
         }
         
-        /* ================================================== */
-        /* RESPONSIVIDAD REFINADA (EVITA MANCHAS EN LA IMAGEN)*/
-        /* ================================================== */
         @media (max-width: 1024px) {
             body { overflow-y: auto; height: auto; }
+
             .dashboard-container {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto auto 1fr auto;
@@ -757,18 +723,20 @@
                 padding-bottom: 4px;
             }
 
-            .category-item button { width: auto; white-space: nowrap; padding: 6px 12px; }
+            .category-item button {
+                width: auto;
+                white-space: nowrap;
+                padding: 6px 12px;
+            }
             
-            .main-boulevard {
-                min-height: 360px;
-                height: 48vh;
+            .main-boulevard { 
+                min-height: 380px; 
+                height: 45vh;
+                background-size: cover;
+                background-position: center bottom;
+                background-repeat: no-repeat;
             }
 
-    .main-boulevard .global-background-underlay img {
-        object-position: 50% 82%;
-    }
-
-            /* PERMANECE FLOTANTE PERO RE-DISEÑADO ULTRA-COMPACTO */
             .bottom-filter-bar {
                 position: absolute;
                 bottom: 12px;
@@ -796,205 +764,241 @@
                 background: rgba(0, 0, 0, 0.5);
             }
 
-            .aside-showcase-list { border-left: none; border-top: 1px solid var(--border-color); }
-            .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+            .aside-showcase-list {
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+            }
+
+            .shops-scroll-area {
+                max-height: none;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 10px;
+            }
         }
 
-      @media (max-width: 640px) {
-    .header-top {
-        flex-direction: column;
-        height: auto;
-        padding: 12px;
-        gap: 10px;
-    }
+        @media (max-width: 640px) {
+            .header-top {
+                flex-direction: column;
+                height: auto;
+                padding: 12px;
+                gap: 10px;
+            }
 
-    .search-wrapper {
-        width: 100%;
-        margin: 0;
-        order: 3;
-    }
+            .search-wrapper {
+                width: 100%;
+                margin: 0;
+                order: 3;
+            }
 
-    .user-tools {
-        width: 100%;
-        justify-content: flex-end;
-        gap: 10px !important;
-        order: 2;
-    }
+            .user-tools {
+                width: 100%;
+                justify-content: flex-end;
+                gap: 10px !important;
+                order: 2;
+            }
 
-    .icon-corazon {
-        margin-right: 0 !important;
-    }
+            .icon-corazon {
+                margin-right: 0 !important;
+            }
 
-.main-boulevard {
-    min-height: 460px;
-    height: 62vh;
-}
+            .main-boulevard {
+                min-height: 360px;
+                height: 48vh;
+                background-size: cover;
+                background-position: center bottom;
+                background-repeat: no-repeat;
+            }
 
-    .global-background-underlay img {
-        object-fit: cover;
-        object-position: center bottom;
-    }
+            .boulevard-overlay {
+                background: linear-gradient(
+                    to bottom,
+                    rgba(0,0,0,0.12) 0%,
+                    transparent 45%,
+                    rgba(0,0,0,0.22) 100%
+                );
+            }
 
-              .boulevard-overlay {
-        background: linear-gradient(
-            to bottom,
-            rgba(0,0,0,0.12) 0%,
-            transparent 45%,
-            rgba(0,0,0,0.22) 100%
-        );
-    }
-          
-    .welcome-billboard {
-        top: 26px;
-    }
+            .welcome-billboard {
+                top: 26px;
+            }
 
-    .welcome-billboard h2 {
-        font-size: 18px;
-        letter-spacing: 4px;
-    }
+            .welcome-billboard h2 {
+                font-size: 18px;
+                letter-spacing: 4px;
+            }
 
-    .welcome-billboard p {
-        font-size: 9px;
-        letter-spacing: 1.4px;
-    }
+            .welcome-billboard p {
+                font-size: 9px;
+                letter-spacing: 1.4px;
+            }
 
-    .bottom-filter-bar {
-        bottom: 12px;
-        width: calc(100% - 24px);
-        overflow-x: auto;
-        border-radius: 30px;
-    }
+            .bottom-filter-bar {
+                bottom: 12px;
+                width: calc(100% - 24px);
+                overflow-x: auto;
+                border-radius: 30px;
+            }
 
-    .filter-pill {
-        flex: 0 0 auto;
-        padding: 6px 14px;
-        border-radius: 20px;
-    }
+            .filter-pill {
+                flex: 0 0 auto;
+                padding: 6px 14px;
+                border-radius: 20px;
+            }
 
-    .filter-label {
-        font-size: 10px;
-    }
+            .filter-label {
+                font-size: 10px;
+            }
 
-    .filter-sub {
-        font-size: 8px;
-    }
-}
+            .filter-sub {
+                font-size: 8px;
+            }
+        }
     </style>
 </head>
+
 <body>
 
 <div class="dashboard-container">
     
-    <!-- IMAGEN CENTRAL CON EXTENSIÓN BAJO PANELES TRASLÚCIDOS -->
-    <div class="global-background-underlay">
-        <img src="imagenes/Boulevard.png" alt="Bulevar Comercial de Loja">
-    </div>
-
-    <!-- BARRA SUPERIOR TRASLÚCIDA -->
     <header class="header-top">
-        <!-- Reemplazo del texto por la imagen -->
         <a href="index.html" class="brand-box" title="Volver al Inicio">
             <img src="imagenes/logo.png" alt="Logo Urbanex" style="height: 60px; width: auto; display: block;">
         </a>
 
         <div class="search-wrapper">
             <input type="text" class="search-input" placeholder="¿Qué producto o servicio busca?">
-            <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <svg class="search-icon" viewBox="0 0 24 24">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
         </div>
 
         <div class="user-tools">
             <div class="location-indicator">
-                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
                 <span>Loja, Ecuador</span>
             </div>
-            <!-- Busca esto en tu header -->
+
             <div class="tool-icon icon-corazon">
-                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
             </div>
+
             <div class="profile-avatar">
-                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
             </div>
         </div>
     </header>
 
-    <!-- MENÚ LATERAL IZQUIERDO TRASLÚCIDO -->
     <aside class="aside-categories">
         <h2 class="section-title">Categorías</h2>
+
         <ul class="categories-list">
-    <!-- 1. Gastronomía -->
-    <li class="category-item">
-        <button onclick="window.location.href='categorias/gastronomia.html'">
-            <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm7-3h-1v5h1V6zm0-4h-3v11h3V2zm2 19H14v-2h6v2z"/></svg></div>
-            <div class="category-text-info">
-                <span class="category-name">Gastronomía</span>
-                <span class="category-count">128 locales</span>
-            </div>
-        </button>
-    </li>
-    <!-- 2. Salud y Bienestar -->
-    <li class="category-item">
-        <button onclick="window.location.href='salud.html'">
-            <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H5v-4h4V5h4v4h4v4z"/></svg></div>
-            <div class="category-text-info">
-                <span class="category-name">Salud y Bienestar</span>
-                <span class="category-count">96 locales</span>
-            </div>
-        </button>
-    </li>
-    <!-- 3. Movilidad y Automotriz -->
-    <li class="category-item">
-        <button onclick="window.location.href='movilidad.html'">
-            <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M22.46 6c-.77-2.3-2.89-4-5.46-4H7c-2.57 0-4.69 1.7-5.46 4L.55 9H23.5l-1.04-3zM2 11v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-9H2zm7 8H5v-4h4v4zm10 0h-4v-4h4v4z"/></svg></div>
-            <div class="category-text-info">
-                <span class="category-name">Movilidad</span>
-                <span class="category-count">34 zonas</span>
-            </div>
-        </button>
-    </li>
-    <!-- 4. Hogar y Tecnología -->
-    <li class="category-item">
-        <button onclick="window.location.href='hogar.html'">
-            <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M4 10h3v7H4zm6.5 0h3v7h-3zM2 22h19v-3H2zm15-12h3v7h-3zM11.5 2L2 7v2h19V7z"/></svg></div>
-            <div class="category-text-info">
-                <span class="category-name">Hogar y Tecnología</span>
-                <span class="category-count">55 locales</span>
-            </div>
-        </button>
-    </li>
-    <!-- 5. Turismo y Hospedaje -->
-    <li class="category-item">
-        <button onclick="window.location.href='turismo.html'">
-            <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg></div>
-            <div class="category-text-info">
-                <span class="category-name">Turismo y Hospedaje</span>
-                <span class="category-count">42 locales</span>
-            </div>
-        </button>
-    </li>
-    <!-- 6. Servicios Financieros -->
-    <li class="category-item">
-        <button onclick="window.location.href='finanzas.html'">
-            <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1H6.8c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
-            <div class="category-text-info">
-                <span class="category-name">Finanzas</span>
-                <span class="category-count">45 puntos</span>
-            </div>
-        </button>
-    </li>
-    <!-- 7. Comercio y Educación -->
-    <li class="category-item">
-        <button onclick="window.location.href='comercio.html'">
-            <div class="icon-container"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg></div>
-            <div class="category-text-info">
-                <span class="category-name">Comercio y Educación</span>
-                <span class="category-count">80 locales</span>
-            </div>
-        </button>
-    </li>
-</ul>
+            <li class="category-item">
+                <button onclick="window.location.href='categorias/gastronomia.html'">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm7-3h-1v5h1V6zm0-4h-3v11h3V2zm2 19H14v-2h6v2z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Gastronomía</span>
+                        <span class="category-count">128 locales</span>
+                    </div>
+                </button>
+            </li>
+
+            <li class="category-item">
+                <button onclick="window.location.href='salud.html'">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H5v-4h4V5h4v4h4v4z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Salud y Bienestar</span>
+                        <span class="category-count">96 locales</span>
+                    </div>
+                </button>
+            </li>
+
+            <li class="category-item">
+                <button onclick="window.location.href='movilidad.html'">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22.46 6c-.77-2.3-2.89-4-5.46-4H7c-2.57 0-4.69 1.7-5.46 4L.55 9H23.5l-1.04-3zM2 11v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-9H2zm7 8H5v-4h4v4zm10 0h-4v-4h4v4z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Movilidad</span>
+                        <span class="category-count">34 zonas</span>
+                    </div>
+                </button>
+            </li>
+
+            <li class="category-item">
+                <button onclick="window.location.href='hogar.html'">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4 10h3v7H4zm6.5 0h3v7h-3zM2 22h19v-3H2zm15-12h3v7h-3zM11.5 2L2 7v2h19V7z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Hogar y Tecnología</span>
+                        <span class="category-count">55 locales</span>
+                    </div>
+                </button>
+            </li>
+
+            <li class="category-item">
+                <button onclick="window.location.href='turismo.html'">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Turismo y Hospedaje</span>
+                        <span class="category-count">42 locales</span>
+                    </div>
+                </button>
+            </li>
+
+            <li class="category-item">
+                <button onclick="window.location.href='finanzas.html'">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1H6.8c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Finanzas</span>
+                        <span class="category-count">45 puntos</span>
+                    </div>
+                </button>
+            </li>
+
+            <li class="category-item">
+                <button onclick="window.location.href='comercio.html'">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Comercio y Educación</span>
+                        <span class="category-count">80 locales</span>
+                    </div>
+                </button>
+            </li>
+        </ul>
     </aside>
 
-    <!-- ÁREA CENTRAL INTERACTIVA -->
     <main class="main-boulevard">
         <div class="boulevard-overlay"></div>
 
@@ -1005,28 +1009,47 @@
 
         <div class="bottom-filter-bar">
             <div class="filter-pill">
-                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+                <div class="filter-icon-box">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
+                    </svg>
+                </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Abiertos Ahora</span>
                     <span class="filter-sub">184 locales</span>
                 </div>
             </div>
+
             <div class="filter-pill">
-                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+                <div class="filter-icon-box">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Cerca de mí</span>
                     <span class="filter-sub">92 locales</span>
                 </div>
             </div>
+
             <div class="filter-pill">
-                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/></svg></div>
+                <div class="filter-icon-box">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/>
+                    </svg>
+                </div>
                 <div class="filter-label-group">
                     <span class="filter-label">A Domicilio</span>
                     <span class="filter-sub">115 locales</span>
                 </div>
             </div>
+
             <div class="filter-pill">
-                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg></div>
+                <div class="filter-icon-box">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
+                    </svg>
+                </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Ofertas</span>
                     <span class="filter-sub">42 promos</span>
@@ -1035,7 +1058,6 @@
         </div>
     </main>
 
-    <!-- PANEL LATERAL DERECHO TRASLÚCIDO -->
     <aside class="aside-showcase-list">
         <div class="showcase-header">
             <h2>DESTACADOS</h2>
@@ -1058,12 +1080,16 @@
                     <div class="shop-title">La Terraza Gourmet</div>
                     <div class="shop-segment">Alta Cocina</div>
                     <div class="shop-rating-row">
-                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <span class="rating-value">4.9</span> <span class="rating-count">(312)</span>
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.9</span>
+                        <span class="rating-count">(312)</span>
                         <span class="status-indicator">Abierto</span>
                     </div>
                 </div>
             </div>
+
             <div class="shop-card">
                 <div class="shop-thumb-wrapper">
                     <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=120&q=80" alt="Café Central Loja" class="shop-thumb">
@@ -1072,8 +1098,11 @@
                     <div class="shop-title">Café Central Loja</div>
                     <div class="shop-segment">Café de Especialidad</div>
                     <div class="shop-rating-row">
-                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <span class="rating-value">4.8</span> <span class="rating-count">(245)</span>
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.8</span>
+                        <span class="rating-count">(245)</span>
                         <span class="status-indicator">Abierto</span>
                     </div>
                 </div>
@@ -1087,7 +1116,6 @@
 
 </div>
 
-<!-- PIE DE PÁGINA REPLICADO EXACTAMENTE DESDE INDEX -->
 <footer class="pie-pagina">
     <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
 </footer>
