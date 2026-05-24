@@ -1227,8 +1227,34 @@
     let indexLoading = null;
     let activeResults = [];
 
+    function cleanSearchText(value) {
+        let text = String(value || "");
+
+        if (/<[a-z][\s\S]*>/i.test(text)) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(text, "text/html");
+            doc.querySelectorAll("script, style, noscript, svg, template, link, meta").forEach(function (node) {
+                node.remove();
+            });
+            text = (doc.body ? doc.body.textContent : doc.documentElement.textContent) || text;
+        }
+
+        const decoder = document.createElement("textarea");
+        decoder.innerHTML = text;
+        text = decoder.value;
+
+        return text
+            .replace(/<[^>]*>/g, " ")
+            .replace(/\{[\s\S]*?\}/g, " ")
+            .replace(/\[[\s\S]*?\]/g, " ")
+            .replace(/\b(class|href|onclick|src|alt|style|id)=['"][^'"]*['"]/gi, " ")
+            .replace(/window\.location\.href\s*=\s*['"][^'"]+['"]/gi, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
     function normalizeText(value) {
-        return String(value || "")
+        return cleanSearchText(value)
             .toLowerCase()
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
@@ -1332,19 +1358,21 @@
         let content = rawText || "";
         const extension = getExtension(path);
 
-        if (extension === ".html" || extension === ".htm") {
+        if (extension === ".html" || extension === ".htm" || /<[a-z][\s\S]*>/i.test(content)) {
             const parser = new DOMParser();
             const doc = parser.parseFromString(rawText, "text/html");
             const foundTitle = doc.querySelector("title")?.textContent || doc.querySelector("h1, h2")?.textContent;
-            if (foundTitle) title = foundTitle.trim();
-            doc.querySelectorAll("script, style, noscript, svg").forEach(function (node) {
+            if (foundTitle) title = cleanSearchText(foundTitle);
+            doc.querySelectorAll("script, style, noscript, svg, template, link, meta").forEach(function (node) {
                 node.remove();
             });
-            content = doc.body ? doc.body.innerText : rawText;
+            content = doc.body ? doc.body.textContent : rawText;
         }
 
+        content = cleanSearchText(content);
+
         return {
-            title: title,
+            title: cleanSearchText(title),
             path: path,
             url: url,
             content: content,
@@ -1526,13 +1554,13 @@
     }
 
     function makeSnippet(content, query) {
-        const cleanContent = String(content || "").replace(/\s+/g, " ").trim();
+        const cleanContent = cleanSearchText(content);
         const normalizedContent = normalizeText(cleanContent);
         const normalizedQuery = normalizeText(query);
         const index = normalizedContent.indexOf(normalizedQuery);
         const start = index > 70 ? index - 70 : 0;
-        const end = index >= 0 ? index + normalizedQuery.length + 90 : 160;
-        const snippet = cleanContent.slice(start, end);
+        const end = index >= 0 ? index + normalizedQuery.length + 90 : 180;
+        const snippet = cleanContent.slice(start, end).trim();
         return (start > 0 ? "..." : "") + snippet + (end < cleanContent.length ? "..." : "");
     }
 
@@ -1623,13 +1651,11 @@
     searchButton.addEventListener("click", function () {
         runSearch(true);
     });
-
     document.addEventListener("click", function (event) {
         if (!event.target.closest(".search-wrapper")) {
             hidePanel();
         }
     });
-
     loadSearchIndex().catch(function () {});
 })();
 </script>
