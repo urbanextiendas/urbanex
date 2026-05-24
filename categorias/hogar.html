@@ -845,7 +845,7 @@
         <ul class="categories-list">
 
             <li class="category-item">
-                <button>
+                <button onclick="window.location.href='categorias/hogar/electrodomesticos.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
@@ -853,9 +853,32 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Electrodomésticos</span>
-                        <span class="category-count">14 locales</span>
+                        <span class="category-count" id="electrodomesticosCount">0 locales</span>
                     </div>
                 </button>
+
+                <script>
+                    (function () {
+                        const targetFile = "categorias/hogar/electrodomesticos.html";
+                        const counter = document.getElementById("electrodomesticosCount");
+                        if (!counter) return;
+
+                        fetch(targetFile, { cache: "no-store" })
+                            .then(function (response) {
+                                if (!response.ok) throw new Error("No se pudo cargar electrodomesticos.html");
+                                return response.text();
+                            })
+                            .then(function (html) {
+                                const doc = new DOMParser().parseFromString(html, "text/html");
+                                const companies = doc.querySelectorAll(".empresa-card, .business-card, .local-card, .shop-card, .company-card, .store-card, .directory-card, [data-empresa], [data-business], [data-company]");
+                                const total = companies.length;
+                                counter.textContent = total + (total === 1 ? " local" : " locales");
+                            })
+                            .catch(function () {
+                                counter.textContent = "0 locales";
+                            });
+                    })();
+                </script>
             </li>
             
             <li class="category-item active">
