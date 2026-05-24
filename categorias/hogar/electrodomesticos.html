@@ -1130,6 +1130,93 @@
             font-size: 8.5px;
         }
 
+    
+        /* Filtros compactos tipo toolbar */
+        .segment-filter-panel {
+            width: min(1040px, calc(100% - 28px));
+            margin: -6px auto 10px;
+            padding: 5px 6px;
+            min-height: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.38);
+            border: 1px solid rgba(229, 193, 88, 0.14);
+            border-radius: 999px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.22);
+        }
+
+        .segment-filter-title,
+        .filter-field,
+        .filter-field span {
+            display: none !important;
+        }
+
+        .filter-row {
+            display: contents;
+        }
+
+        .filter-select {
+            width: auto;
+            min-width: 132px;
+            max-width: 170px;
+            height: 26px;
+            background: rgba(8, 8, 8, 0.82);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 999px;
+            padding: 0 24px 0 11px;
+            color: #ffffff;
+            font-family: var(--font-sans);
+            font-size: 9px;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-select:hover,
+        .filter-select:focus {
+            border-color: rgba(229, 193, 88, 0.55);
+            background: rgba(229, 193, 88, 0.10);
+        }
+
+        .companies-badge {
+            height: 26px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            color: #000000;
+            font-size: 8.8px;
+            font-weight: 800;
+            background: var(--gold);
+            border: 1px solid var(--gold);
+            border-radius: 999px;
+            padding: 0 10px;
+            box-shadow: 0 0 16px rgba(229,193,88,0.16);
+        }
+
+        @media (max-width: 720px) {
+            .segment-filter-panel {
+                justify-content: flex-start;
+                overflow-x: auto;
+                border-radius: 14px;
+                padding: 6px;
+            }
+
+            .filter-select {
+                flex: 0 0 auto;
+                min-width: 128px;
+            }
+
+            .companies-badge {
+                flex: 0 0 auto;
+            }
+        }
+
     </style>
 </head>
 
@@ -1204,29 +1291,21 @@
     </section>
 
     <section class="segment-filter-panel" aria-label="Filtros de electrodomésticos">
-        <div class="filter-row">
-            <label class="filter-field">
-                <span>Categoría</span>
-                <select id="segmentFilter" class="filter-select">
-                    <option value="todos">Todos los segmentos</option>
-                    <option value="venta">Venta</option>
-                    <option value="instalacion">Instalación</option>
-                    <option value="reparacion">Reparación</option>
-                    <option value="linea-blanca">Línea blanca</option>
-                </select>
-            </label>
+        <select id="segmentFilter" class="filter-select">
+            <option value="todos">Todos</option>
+            <option value="venta">Venta</option>
+            <option value="instalacion">Instalación</option>
+            <option value="reparacion">Reparación</option>
+            <option value="linea-blanca">Línea blanca</option>
+        </select>
 
-            <label class="filter-field">
-                <span>Orden</span>
-                <select id="sortFilter" class="filter-select">
-                    <option value="rating">Mayor calificación</option>
-                    <option value="nombre">Nombre A-Z</option>
-                    <option value="disponibilidad">Disponibilidad</option>
-                </select>
-            </label>
-        </div>
+        <select id="sortFilter" class="filter-select">
+            <option value="rating">Mejor calificación</option>
+            <option value="nombre">Nombre A-Z</option>
+            <option value="disponibilidad">Disponibilidad</option>
+        </select>
 
-        <strong id="visibleCompaniesCounter" class="companies-badge">0 empresas</strong>
+        <span id="visibleCompaniesCounter" class="companies-badge">0 empresas</span>
     </section>
 
     <main class="directory-layout">
