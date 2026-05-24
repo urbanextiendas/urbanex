@@ -799,28 +799,76 @@
             .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
         }
 
-        @media (max-width: 640px) {
-            .header-top { flex-direction: column; height: auto; padding: 12px; gap: 10px; }
-            .search-wrapper { width: 100%; margin: 0; order: 3; }
-        /* Alineación a la derecha y elementos compactos */
-            .user-tools { 
-                width: 100%;             /* Asegura que el contenedor ocupe el ancho para alinear */
-                justify-content: flex-end; /* Alinea todo el grupo a la derecha */
-                gap: 10px !important;      /* Espacio reducido y uniforme */
-                order: 2; 
-            }
-            
-            /* Asegura que el corazón no tenga márgenes que lo separen */
-            .icon-corazon {
-                margin-right: 0 !important;
-            }             
-            .main-boulevard { min-height: 280px; height: 40vh; }
-            .welcome-billboard { top: 25px; }
-            .welcome-billboard h2 { font-size: 18px; letter-spacing: 4px; }
-            
-            .filter-label { font-size: 10px; }
-            .filter-sub { font-size: 8px; }
-        }
+      @media (max-width: 640px) {
+    .header-top {
+        flex-direction: column;
+        height: auto;
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .search-wrapper {
+        width: 100%;
+        margin: 0;
+        order: 3;
+    }
+
+    .user-tools {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 10px !important;
+        order: 2;
+    }
+
+    .icon-corazon {
+        margin-right: 0 !important;
+    }
+
+    .main-boulevard {
+        min-height: 470px;
+        height: 62vh;
+    }
+
+    .global-background-underlay img {
+        object-fit: cover;
+        object-position: center bottom;
+    }
+
+    .welcome-billboard {
+        top: 26px;
+    }
+
+    .welcome-billboard h2 {
+        font-size: 18px;
+        letter-spacing: 4px;
+    }
+
+    .welcome-billboard p {
+        font-size: 9px;
+        letter-spacing: 1.4px;
+    }
+
+    .bottom-filter-bar {
+        bottom: 12px;
+        width: calc(100% - 24px);
+        overflow-x: auto;
+        border-radius: 30px;
+    }
+
+    .filter-pill {
+        flex: 0 0 auto;
+        padding: 6px 14px;
+        border-radius: 20px;
+    }
+
+    .filter-label {
+        font-size: 10px;
+    }
+
+    .filter-sub {
+        font-size: 8px;
+    }
+}
     </style>
 </head>
 <body>
