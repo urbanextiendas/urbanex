@@ -172,8 +172,8 @@
 
         .search-input {
             width: 100%;
-            background: rgba(0, 0, 0, 0.42);
-            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 8px 40px 8px 16px;
             color: var(--text-main);
@@ -186,7 +186,7 @@
 
         .search-input:focus {
             border-color: var(--gold);
-            background: rgba(0, 0, 0, 0.58);
+            background: rgba(0, 0, 0, 0.6);
         }
 
         .search-icon {
@@ -197,6 +197,75 @@
             width: 14px;
             height: 14px;
             fill: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .search-results-panel {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: rgba(6, 6, 6, 0.92);
+            border: 1px solid rgba(229, 193, 88, 0.28);
+            border-radius: 12px;
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65);
+            overflow-y: auto;
+            max-height: min(420px, calc(100vh - 90px));
+            display: none;
+            z-index: 80;
+        }
+
+        .search-results-panel.active {
+            display: block;
+        }
+
+        .search-results-status {
+            padding: 10px 14px;
+            font-size: 11px;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .search-result-item {
+            display: block;
+            padding: 10px 14px;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition-smooth);
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-item:hover,
+        .search-result-item:focus {
+            background: rgba(229, 193, 88, 0.08);
+            outline: none;
+        }
+
+        .search-result-title {
+            font-size: 12px;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .search-result-path {
+            font-size: 9px;
+            color: var(--gold);
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .search-result-snippet {
+            font-size: 10px;
+            line-height: 1.4;
+            color: var(--text-dark);
         }
 
         .user-tools {
@@ -882,10 +951,11 @@
         </a>
 
         <div class="search-wrapper">
-            <input type="text" class="search-input" placeholder="¿Qué producto o servicio busca?">
-            <svg class="search-icon" viewBox="0 0 24 24">
+            <input type="search" id="siteSearch" class="search-input" placeholder="¿Qué producto o servicio busca?" autocomplete="off">
+            <svg class="search-icon" id="searchButton" viewBox="0 0 24 24" role="button" aria-label="Buscar">
                 <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
             </svg>
+            <div class="search-results-panel" id="searchResults" aria-live="polite"></div>
         </div>
 
         <div class="user-tools">
@@ -1134,6 +1204,573 @@
 <footer class="pie-pagina">
     <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
 </footer>
+
+
+<script>
+(function () {
+    const REPO_CONFIG = {
+        owner: "",
+        repo: "",
+        branch: "main",
+        siteBasePath: "",
+        maxResults: 6,
+        maxFileSize: 250000,
+        includeExtensions: [".html", ".htm", ".json", ".txt", ".md", ".csv"],
+        skipFolders: [".git/", "node_modules/", "vendor/", "dist/", "build/"]
+    };
+
+    const MIN_QUERY_LENGTH = 3;
+    const GENERIC_TITLES = [
+        "urbanex",
+        "loja - centro comercial digital",
+        "loja centro comercial digital",
+        "centro comercial digital"
+    ];
+
+    const searchInput = document.getElementById("siteSearch");
+    const searchButton = document.getElementById("searchButton");
+    const resultsPanel = document.getElementById("searchResults");
+
+    let searchDocuments = [];
+    let indexLoaded = false;
+    let indexLoading = null;
+    let activeResults = [];
+
+    function escapeHtml(value) {
+        return String(value || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function decodeEntities(text) {
+        const decoder = document.createElement("textarea");
+        decoder.innerHTML = String(text || "");
+        return decoder.value;
+    }
+
+    function removeBoilerplate(text) {
+        return String(text || "")
+            .replace(/Negocios confiables/gi, " ")
+            .replace(/Comunidad local/gi, " ")
+            .replace(/Registre su negocio/gi, " ")
+            .replace(/©\s*2026\s*Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
+            .replace(/Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
+            .replace(/Todos los derechos reservados\.?/gi, " ")
+            .replace(/¿Qué producto o servicio busca\?/gi, " ");
+    }
+
+    function cleanSearchText(value) {
+        return removeBoilerplate(decodeEntities(value))
+            .replace(/<[^>]*>/g, " ")
+            .replace(/\b(class|href|onclick|src|alt|style|id)=['\"][^'\"]*['\"]/gi, " ")
+            .replace(/window\.location\.href\s*=\s*['\"][^'\"]+['\"]/gi, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    function normalizeText(value) {
+        return cleanSearchText(value)
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9ñáéíóúü\s./_-]/gi, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    function isGenericTitle(title) {
+        const normalizedTitle = normalizeText(title);
+        return !normalizedTitle || GENERIC_TITLES.includes(normalizedTitle);
+    }
+
+    function debounce(callback, delay) {
+        let timer;
+        return function (...args) {
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                callback.apply(null, args);
+            }, delay);
+        };
+    }
+
+    function showPanel(content) {
+        resultsPanel.innerHTML = content;
+        resultsPanel.classList.add("active");
+    }
+
+    function hidePanel() {
+        resultsPanel.classList.remove("active");
+    }
+
+    function getExtension(path) {
+        const cleanPath = path.split("?")[0].split("#")[0];
+        const dotIndex = cleanPath.lastIndexOf(".");
+        return dotIndex >= 0 ? cleanPath.slice(dotIndex).toLowerCase() : "";
+    }
+
+    function isTextFile(path) {
+        return REPO_CONFIG.includeExtensions.includes(getExtension(path));
+    }
+
+    function shouldSkipPath(path) {
+        return REPO_CONFIG.skipFolders.some(function (folder) {
+            return path.includes(folder);
+        });
+    }
+
+    function getInferredGithubPagesConfig() {
+        const host = window.location.hostname;
+        if (!host.endsWith(".github.io")) return null;
+
+        const owner = host.replace(".github.io", "");
+        const parts = window.location.pathname.split("/").filter(Boolean);
+        const repo = parts[0] || owner + ".github.io";
+        const siteBasePath = repo === owner + ".github.io" ? "" : "/" + repo;
+
+        return {
+            owner: owner,
+            repo: repo,
+            branch: REPO_CONFIG.branch,
+            siteBasePath: siteBasePath
+        };
+    }
+
+    function getActiveRepoConfig() {
+        const inferred = getInferredGithubPagesConfig() || {};
+        return {
+            owner: REPO_CONFIG.owner || inferred.owner || "",
+            repo: REPO_CONFIG.repo || inferred.repo || "",
+            branch: REPO_CONFIG.branch || inferred.branch || "main",
+            siteBasePath: REPO_CONFIG.siteBasePath || inferred.siteBasePath || ""
+        };
+    }
+
+    function pageUrlFromRepoPath(path, config) {
+        const cleanBase = (config.siteBasePath || "").replace(/\/$/, "");
+        const cleanPath = path.replace(/^\//, "");
+        const host = window.location.hostname;
+
+        if (host.endsWith(".github.io") || cleanBase) {
+            return cleanBase + "/" + cleanPath;
+        }
+
+        return cleanPath;
+    }
+
+    function titleFromPath(path) {
+        const fileName = path.split("/").pop() || path;
+        const withoutExtension = fileName.replace(/\.[^/.]+$/, "");
+
+        if (/^index$/i.test(withoutExtension)) return "Inicio";
+
+        return withoutExtension
+            .replace(/[-_]+/g, " ")
+            .replace(/\b\w/g, function (letter) { return letter.toUpperCase(); });
+    }
+
+    function collectTextFromJson(value, output) {
+        if (value === null || value === undefined) return;
+
+        if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+            output.push(String(value));
+            return;
+        }
+
+        if (Array.isArray(value)) {
+            value.forEach(function (item) { collectTextFromJson(item, output); });
+            return;
+        }
+
+        if (typeof value === "object") {
+            Object.keys(value).forEach(function (key) {
+                output.push(key);
+                collectTextFromJson(value[key], output);
+            });
+        }
+    }
+
+    function textFromStructuredFile(rawText, extension) {
+        if (extension === ".json") {
+            try {
+                const output = [];
+                collectTextFromJson(JSON.parse(rawText), output);
+                return output.join(" ");
+            } catch (error) {
+                return rawText;
+            }
+        }
+
+        return rawText;
+    }
+
+    function getTextContent(element) {
+        return cleanSearchText(element ? element.textContent : "");
+    }
+
+    function extractHtmlDocument(path, url, rawText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(rawText, "text/html");
+
+        doc.querySelectorAll("script, style, noscript, svg, template, link, meta, header, footer, .header-top, .pie-pagina, .search-wrapper, .user-tools, .brand-box, .location-indicator, .tool-icon, .profile-avatar").forEach(function (node) {
+            node.remove();
+        });
+
+        const titleCandidates = Array.from(doc.querySelectorAll(".page-title, .category-title, .categoria-title, main h1, main h2, article h1, article h2, h1, h2, title"))
+            .map(getTextContent)
+            .filter(function (title) {
+                const normalized = normalizeText(title);
+                return normalized && !isGenericTitle(title) && !["bienvenido", "categorias", "destacados"].includes(normalized);
+            });
+
+        let title = titleCandidates[0] || titleFromPath(path);
+        if (isGenericTitle(title)) title = titleFromPath(path);
+
+        const priorityParts = Array.from(doc.querySelectorAll("main, article, section, .category-item, .shop-card, .card, .business-card, .local-card, .restaurant-card, .service-card"))
+            .map(getTextContent)
+            .filter(Boolean);
+
+        let content = priorityParts.length ? priorityParts.join(". ") : getTextContent(doc.body || doc.documentElement);
+        content = cleanSearchText(content);
+
+        return makeDocument(path, url, title, content);
+    }
+
+    function makeDocument(path, url, title, content) {
+        const cleanTitle = cleanSearchText(title) || titleFromPath(path);
+        const cleanContent = cleanSearchText(content || path);
+
+        return {
+            title: cleanTitle,
+            path: path,
+            url: url,
+            content: cleanContent,
+            normalizedTitle: normalizeText(cleanTitle),
+            normalizedPath: normalizeText(path),
+            normalizedContent: normalizeText(cleanContent)
+        };
+    }
+
+    function extractDocument(path, url, rawText) {
+        const extension = getExtension(path);
+
+        if (extension === ".html" || extension === ".htm" || /<[a-z][\s\S]*>/i.test(rawText || "")) {
+            return extractHtmlDocument(path, url, rawText || "");
+        }
+
+        const title = titleFromPath(path);
+        const content = textFromStructuredFile(rawText || path, extension);
+        return makeDocument(path, url, title, content);
+    }
+
+    async function fetchJson(url) {
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo cargar: " + url);
+        return response.json();
+    }
+
+    async function fetchText(url) {
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo cargar: " + url);
+        return response.text();
+    }
+
+    async function buildGithubRepositoryIndex() {
+        const config = getActiveRepoConfig();
+        if (!config.owner || !config.repo) {
+            throw new Error("Repositorio no configurado");
+        }
+
+        const branches = Array.from(new Set([config.branch, "main", "master"].filter(Boolean)));
+        let treeData = null;
+        let activeBranch = config.branch;
+
+        for (const branch of branches) {
+            try {
+                treeData = await fetchJson("https://api.github.com/repos/" + encodeURIComponent(config.owner) + "/" + encodeURIComponent(config.repo) + "/git/trees/" + encodeURIComponent(branch) + "?recursive=1");
+                activeBranch = branch;
+                break;
+            } catch (error) {
+                treeData = null;
+            }
+        }
+
+        if (!treeData || !Array.isArray(treeData.tree)) {
+            throw new Error("No se pudo leer el árbol del repositorio");
+        }
+
+        const rawBase = "https://raw.githubusercontent.com/" + config.owner + "/" + config.repo + "/" + activeBranch + "/";
+        const blobs = treeData.tree.filter(function (item) {
+            return item.type === "blob" && !shouldSkipPath(item.path);
+        });
+
+        const textFiles = blobs.filter(function (item) {
+            return isTextFile(item.path) && (!item.size || item.size <= REPO_CONFIG.maxFileSize);
+        });
+
+        const pathOnlyFiles = blobs
+            .filter(function (item) { return !isTextFile(item.path); })
+            .map(function (item) {
+                const url = pageUrlFromRepoPath(item.path, Object.assign({}, config, { branch: activeBranch }));
+                return makeDocument(item.path, url, titleFromPath(item.path), item.path);
+            });
+
+        const loadedDocuments = [];
+        const batchSize = 8;
+
+        for (let index = 0; index < textFiles.length; index += batchSize) {
+            const batch = textFiles.slice(index, index + batchSize);
+            const results = await Promise.allSettled(batch.map(async function (item) {
+                const rawUrl = rawBase + item.path;
+                const publicUrl = pageUrlFromRepoPath(item.path, Object.assign({}, config, { branch: activeBranch }));
+                const rawText = await fetchText(rawUrl);
+                return extractDocument(item.path, publicUrl, rawText);
+            }));
+
+            results.forEach(function (result) {
+                if (result.status === "fulfilled") {
+                    loadedDocuments.push(result.value);
+                }
+            });
+        }
+
+        return loadedDocuments.concat(pathOnlyFiles);
+    }
+
+    function sameOriginHtmlUrl(url) {
+        try {
+            const parsed = new URL(url, window.location.href);
+            if (parsed.origin !== window.location.origin) return null;
+            if (["mailto:", "tel:", "javascript:"].includes(parsed.protocol)) return null;
+            const extension = getExtension(parsed.pathname);
+            if (extension && extension !== ".html" && extension !== ".htm") return null;
+            parsed.hash = "";
+            return parsed.href;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function collectPageLinks(doc, baseUrl) {
+        return Array.from(doc.querySelectorAll("a[href], button[onclick]"))
+            .map(function (element) {
+                const href = element.getAttribute("href");
+                if (href) return sameOriginHtmlUrl(new URL(href, baseUrl).href);
+
+                const onclick = element.getAttribute("onclick") || "";
+                const match = onclick.match(/window\.location\.href\s*=\s*['\"]([^'\"]+)['\"]/);
+                if (match) return sameOriginHtmlUrl(new URL(match[1], baseUrl).href);
+
+                return null;
+            })
+            .filter(Boolean);
+    }
+
+    async function buildLocalSiteIndex() {
+        const visited = new Set();
+        const queue = [window.location.href].concat(collectPageLinks(document, window.location.href));
+        const documents = [];
+
+        while (queue.length && visited.size < 80) {
+            const url = queue.shift();
+            if (!url || visited.has(url)) continue;
+            visited.add(url);
+
+            try {
+                const html = url === window.location.href ? document.documentElement.outerHTML : await fetchText(url);
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, "text/html");
+                const path = new URL(url).pathname.replace(/^\//, "") || "index.html";
+                documents.push(extractDocument(path, url, html));
+
+                collectPageLinks(doc, url).forEach(function (nextUrl) {
+                    if (!visited.has(nextUrl)) queue.push(nextUrl);
+                });
+            } catch (error) {
+                continue;
+            }
+        }
+
+        return documents;
+    }
+
+    async function loadSearchIndex() {
+        if (indexLoaded) return searchDocuments;
+        if (indexLoading) return indexLoading;
+
+        indexLoading = (async function () {
+            let documents = [];
+
+            try {
+                documents = await buildGithubRepositoryIndex();
+            } catch (githubError) {
+                documents = await buildLocalSiteIndex();
+            }
+
+            searchDocuments = documents.filter(function (documentItem) {
+                return documentItem.normalizedTitle || documentItem.normalizedPath || documentItem.normalizedContent;
+            });
+
+            indexLoaded = true;
+            return searchDocuments;
+        })();
+
+        return indexLoading;
+    }
+
+    function getSearchTerms(query) {
+        return normalizeText(query)
+            .split(" ")
+            .map(function (term) { return term.trim(); })
+            .filter(function (term) { return term.length >= MIN_QUERY_LENGTH; });
+    }
+
+    function scoreDocument(documentItem, terms, fullQuery) {
+        let score = 0;
+        const title = documentItem.normalizedTitle;
+        const path = documentItem.normalizedPath;
+        const content = documentItem.normalizedContent;
+
+        if (fullQuery.length >= MIN_QUERY_LENGTH) {
+            if (title.includes(fullQuery)) score += 100;
+            if (path.includes(fullQuery)) score += 70;
+            if (content.includes(fullQuery)) score += 45;
+        }
+
+        terms.forEach(function (term) {
+            if (title.includes(term)) score += 40;
+            if (path.includes(term)) score += 25;
+            if (content.includes(term)) score += 12;
+        });
+
+        return score;
+    }
+
+    function buildSnippet(content, query) {
+        const cleanContent = cleanSearchText(content);
+        const fullQuery = normalizeText(query);
+        const terms = getSearchTerms(query);
+        const normalizedContent = normalizeText(cleanContent);
+        const searchTokens = fullQuery.length >= MIN_QUERY_LENGTH ? [fullQuery].concat(terms) : terms;
+
+        let bestIndex = -1;
+        for (const token of searchTokens) {
+            bestIndex = normalizedContent.indexOf(token);
+            if (bestIndex >= 0) break;
+        }
+
+        if (bestIndex < 0) {
+            return cleanContent ? cleanContent.slice(0, 170) : "Coincidencia encontrada en esta página.";
+        }
+
+        const start = Math.max(0, bestIndex - 70);
+        const end = Math.min(cleanContent.length, bestIndex + 120);
+        const snippet = cleanContent.slice(start, end).trim();
+
+        return (start > 0 ? "..." : "") + snippet + (end < cleanContent.length ? "..." : "");
+    }
+
+    function searchDocumentsByQuery(query) {
+        const fullQuery = normalizeText(query);
+        const terms = getSearchTerms(query);
+
+        if (!terms.length && fullQuery.length < MIN_QUERY_LENGTH) return [];
+
+        return searchDocuments
+            .map(function (documentItem) {
+                return {
+                    item: documentItem,
+                    score: scoreDocument(documentItem, terms, fullQuery)
+                };
+            })
+            .filter(function (result) { return result.score > 0; })
+            .sort(function (a, b) { return b.score - a.score; })
+            .slice(0, REPO_CONFIG.maxResults)
+            .map(function (result) { return result.item; });
+    }
+
+    function renderResults(query, results) {
+        if (!results.length) {
+            showPanel('<div class="search-results-status">No se encontraron resultados para "' + escapeHtml(query) + '".</div>');
+            return;
+        }
+
+        const items = results.map(function (result) {
+            return '<a class="search-result-item" href="' + escapeHtml(result.url) + '">' +
+                '<div class="search-result-title">' + escapeHtml(result.title) + '</div>' +
+                '<div class="search-result-path">' + escapeHtml(result.path) + '</div>' +
+                '<div class="search-result-snippet">' + escapeHtml(buildSnippet(result.content, query)) + '</div>' +
+            '</a>';
+        }).join("");
+
+        showPanel('<div class="search-results-status">Resultados encontrados: ' + results.length + '</div>' + items);
+    }
+
+    async function runSearch(navigateFirstResult) {
+        const query = searchInput.value.trim();
+
+        if (query.length < MIN_QUERY_LENGTH) {
+            showPanel('<div class="search-results-status">Ingrese al menos ' + MIN_QUERY_LENGTH + ' caracteres para buscar.</div>');
+            return;
+        }
+
+        if (!indexLoaded) {
+            showPanel('<div class="search-results-status">Cargando índice de búsqueda...</div>');
+        }
+
+        try {
+            await loadSearchIndex();
+            activeResults = searchDocumentsByQuery(query);
+
+            if (navigateFirstResult && activeResults.length) {
+                window.location.href = activeResults[0].url;
+                return;
+            }
+
+            renderResults(query, activeResults);
+        } catch (error) {
+            showPanel('<div class="search-results-status">No se pudo cargar la búsqueda del repositorio.</div>');
+        }
+    }
+
+    const debouncedSearch = debounce(function () {
+        runSearch(false);
+    }, 220);
+
+    searchInput.addEventListener("input", function () {
+        if (!searchInput.value.trim()) {
+            hidePanel();
+            return;
+        }
+        debouncedSearch();
+    });
+
+    searchInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            runSearch(true);
+        }
+
+        if (event.key === "Escape") {
+            hidePanel();
+        }
+    });
+
+    searchButton.addEventListener("click", function () {
+        runSearch(true);
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!event.target.closest(".search-wrapper")) {
+            hidePanel();
+        }
+    });
+
+    loadSearchIndex().catch(function () {});
+})();
+</script>
 
 
 </body>
