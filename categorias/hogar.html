@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urbanex - Hogar y Tecnología</title>
+    <link rel="icon" type="image/png" href="../imagenes/log.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #020202;
+            --bg-panels-glass: rgba(6, 6, 6, 0.45);
+            --bg-cards-glass: rgba(20, 20, 20, 0.58);
+            --gold: #e5c158;
+            --gold-dim: #a68b44;
+            --border-color: rgba(229, 193, 88, 0.22);
+            --text-main: #ffffff;
+            --text-muted: #e0e0e0;
+            --text-dark: #aaaaaa;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --blur-effect: blur(18px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(229, 193, 88, 0.2);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
+        }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--bg-main);
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-container {
+            flex: 1;
+            display: grid;
+            grid-template-rows: 60px 1fr;
+            grid-template-columns: 240px 1fr 290px;
+            grid-template-areas:
+                "header header header"
+                "aside-left main aside-right";
+            min-height: calc(100vh - 24px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .global-background-underlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .global-background-underlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center bottom;
+        }
+
+        .header-top {
+            grid-area: header;
+            background: rgba(6, 6, 6, 0.45);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            user-select: none;
+        }
+
+        .brand-box img {
+            height: 60px;
+            width: auto;
+            display: block;
+        }
+
+        .search-wrapper {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.42);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 20px;
+            padding: 8px 40px 8px 16px;
+            color: var(--text-main);
+            font-size: 12px;
+            outline: none;
+            font-family: var(--font-sans);
+            transition: var(--transition-smooth);
+            text-align: center;
+        }
+
+        .search-input:focus {
+            border-color: var(--gold);
+            background: rgba(0, 0, 0, 0.58);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            fill: var(--text-dark);
+        }
+
+        .user-tools {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .location-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .location-indicator svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold);
+        }
+
+        .tool-icon {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .tool-icon:nth-child(2) {
+            margin-right: 14px;
+        }
+
+        .tool-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+            transition: var(--transition-smooth);
+        }
+
+        .tool-icon:hover svg {
+            fill: var(--gold);
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .profile-avatar svg {
+            width: 13px;
+            height: 13px;
+            fill: var(--gold);
+        }
+
+        .aside-categories {
+            grid-area: aside-left;
+            background: var(--bg-panels-glass);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-right: 1px solid var(--border-color);
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 5;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-bottom: 14px;
+            padding-left: 6px;
+            font-weight: 700;
+        }
+
+        .categories-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            list-style: none;
+        }
+
+        .category-item button {
+            width: 100%;
+            background: rgba(10, 10, 10, 0.54);
+            border: 1px solid rgba(229, 193, 88, 0.28);
+            padding: 10px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 14px;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .category-item button:hover {
+            background: rgba(229, 193, 88, 0.08);
+        }
+
+        .category-item.active button {
+            border: 1px solid var(--gold);
+            background: rgba(229, 193, 88, 0.10);
+        }
+
+        .icon-container {
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: var(--transition-smooth);
+        }
+
+        .category-item.active .icon-container {
+            background: var(--gold);
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(229, 193, 88, 0.4);
+        }
+
+        .category-item button svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--gold);
+        }
+
+        .category-item.active button svg {
+            fill: #000000;
+        }
+
+        .category-text-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-width: 0;
+            text-align: left;
+        }
+
+        .category-name {
+            color: #ffffff;
+            font-size: 11.5px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
+        }
+
+        .category-item.active .category-name {
+            color: var(--gold);
+        }
+
+        .category-count {
+            color: var(--text-dark);
+            font-size: 9px;
+            text-align: left;
+        }
+
+        .main-boulevard {
+            grid-area: main;
+            position: relative;
+            overflow: hidden;
+            background-image: url("../imagenes/Hogar y Tecnología.png");
+            background-size: cover;
+            background-position: center bottom;
+            background-repeat: no-repeat;
+            z-index: 2;
+        }
+
+        .boulevard-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0.18) 0%,
+                rgba(0,0,0,0.05) 45%,
+                rgba(0,0,0,0.32) 100%
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .welcome-billboard {
+            position: absolute;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 90%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .welcome-billboard h2 {
+            font-family: var(--font-serif);
+            color: var(--text-main);
+            font-size: 24px;
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.95);
+        }
+
+        .welcome-billboard p {
+            font-size: 10px;
+            color: var(--gold);
+            font-weight: 700;
+            margin-top: 6px;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.95);
+        }
+
+        .bottom-filter-bar {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 10, 10, 0.72);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 6px;
+            display: flex;
+            gap: 6px;
+            width: calc(100% - 30px);
+            max-width: 760px;
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            z-index: 2;
+        }
+
+        .filter-pill {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.42);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            min-width: 0;
+        }
+
+        .filter-pill:hover {
+            border-color: var(--gold);
+            background: rgba(229, 193, 88, 0.08);
+        }
+
+        .filter-icon-box svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold);
+            display: block;
+        }
+
+        .filter-label-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .filter-label {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .filter-sub {
+            font-size: 8.5px;
+            color: var(--text-dark);
+        }
+
+        .aside-showcase-list {
+            grid-area: aside-right;
+            background: var(--bg-panels-glass);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .showcase-header {
+            padding: 20px 14px 8px 14px;
+        }
+
+        .showcase-header h2 {
+            font-family: var(--font-serif);
+            color: var(--gold);
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .showcase-stats {
+            font-size: 10px;
+            color: #ffffff;
+            margin-top: 1px;
+        }
+
+        .sort-box {
+            padding: 0 14px 10px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sort-select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.42);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 6px;
+            padding: 6px 10px;
+            color: #ffffff;
+            font-size: 11px;
+            outline: none;
+            cursor: pointer;
+            font-family: var(--font-sans);
+        }
+
+        .shops-scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .shop-card {
+            background: var(--bg-cards-glass);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            cursor: pointer;
+            height: 64px;
+            transition: var(--transition-smooth);
+        }
+
+        .shop-card:hover {
+            border-color: rgba(229, 193, 88, 0.45);
+            background: rgba(229, 193, 88, 0.10);
+            transform: translateX(2px);
+        }
+
+        .shop-thumb-wrapper {
+            width: 64px;
+            height: 64px;
+            flex-shrink: 0;
+        }
+
+        .shop-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .shop-details {
+            flex: 1;
+            padding: 6px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .shop-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .shop-segment {
+            font-size: 9.5px;
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        .shop-rating-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 2px;
+        }
+
+        .star-icon {
+            width: 10px;
+            height: 10px;
+            fill: var(--gold);
+        }
+
+        .rating-value {
+            font-size: 10px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .rating-count {
+            font-size: 9.5px;
+            color: var(--text-dark);
+        }
+
+        .status-indicator {
+            margin-left: auto;
+            font-size: 9.5px;
+            font-weight: 700;
+            color: #2ed573;
+        }
+
+        .action-footer-box {
+            padding: 10px 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-view-all-shops {
+            width: 100%;
+            background: var(--gold);
+            border: none;
+            border-radius: 6px;
+            padding: 8px;
+            color: #000000;
+            font-family: var(--font-sans);
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-view-all-shops:hover {
+            background: #f1cd6b;
+        }
+
+        .pie-pagina {
+            width: 100%;
+            height: 24px;
+            background-color: #000000;
+            color: #8c8c8c;
+            font-size: 11px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+            z-index: 5;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 200px 1fr 240px;
+            }
+
+            .user-tools {
+                gap: 12px;
+            }
+
+            .search-wrapper {
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                overflow-y: auto;
+                height: auto;
+            }
+
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto 1fr auto;
+                grid-template-areas:
+                    "header"
+                    "aside-left"
+                    "main"
+                    "aside-right";
+                min-height: auto;
+                overflow: visible;
+            }
+
+            .aside-categories {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 12px;
+            }
+
+            .section-title {
+                display: none;
+            }
+
+            .categories-list {
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 8px;
+                padding-bottom: 4px;
+            }
+
+            .category-item button {
+                width: auto;
+                white-space: nowrap;
+                padding: 8px 12px;
+            }
+
+            .main-boulevard {
+                min-height: 380px;
+                height: 45vh;
+                background-position: center bottom;
+            }
+
+            .bottom-filter-bar {
+                position: absolute;
+                bottom: 12px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: calc(100% - 24px);
+                display: flex;
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 8px;
+                background: rgba(10, 10, 10, 0.72);
+                padding: 5px;
+                border-radius: 30px;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .bottom-filter-bar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .filter-pill {
+                flex: 0 0 auto;
+                padding: 6px 14px;
+                border-radius: 20px;
+                background: rgba(0, 0, 0, 0.50);
+            }
+
+            .aside-showcase-list {
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+            }
+
+            .shops-scroll-area {
+                max-height: none;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header-top {
+                flex-direction: column;
+                height: auto;
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .search-wrapper {
+                width: 100%;
+                margin: 0;
+                order: 3;
+            }
+
+            .user-tools {
+                width: 100%;
+                justify-content: flex-end;
+                gap: 10px !important;
+                order: 2;
+            }
+
+            .icon-corazon {
+                margin-right: 0 !important;
+            }
+
+            .main-boulevard {
+                min-height: 360px;
+                height: 48vh;
+                background-size: cover;
+                background-position: center bottom;
+            }
+
+            .global-background-underlay img {
+                object-position: center bottom;
+            }
+
+            .boulevard-overlay {
+                background: linear-gradient(
+                    to bottom,
+                    rgba(0,0,0,0.10) 0%,
+                    transparent 45%,
+                    rgba(0,0,0,0.20) 100%
+                );
+            }
+
+            .welcome-billboard {
+                top: 26px;
+            }
+
+            .welcome-billboard h2 {
+                font-size: 18px;
+                letter-spacing: 4px;
+            }
+
+            .welcome-billboard p {
+                font-size: 9px;
+                letter-spacing: 1.4px;
+            }
+
+            .filter-label {
+                font-size: 10px;
+            }
+
+            .filter-sub {
+                font-size: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <div class="global-background-underlay">
+        <img src="../imagenes/Hogar y Tecnología.png" alt="Hogar y Tecnología de Loja">
+    </div>
+
+    <header class="header-top">
+        <a href="../boulevard.html" class="brand-box" title="Volver al Inicio">
+            <img src="../imagenes/logo.png" alt="Logo Urbanex">
+        </a>
+
+        <div class="search-wrapper">
+            <input type="search" id="siteSearch" class="search-input" placeholder="¿Qué producto, servicio o equipo busca?" autocomplete="off">
+            <svg class="search-icon" id="searchButton" viewBox="0 0 24 24" role="button" aria-label="Buscar" tabindex="0">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+        </div>
+
+        <div class="user-tools">
+            <div class="location-indicator">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <span>Loja, Ecuador</span>
+            </div>
+
+            <div class="tool-icon icon-corazon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+
+            <div class="profile-avatar">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <aside class="aside-categories">
+        <h2 class="section-title">Categorías</h2>
+
+        <ul class="categories-list">
+            <li class="category-item active">
+                <button>
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Muebles y Decoración</span>
+                        <span class="category-count">18 locales</span>
+                    </div>
+                </button>
+            </li>
+
+            <li class="category-item">
+                <button>
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Electrodomésticos</span>
+                        <span class="category-count">14 locales</span>
+                    </div>
+                </button>
+            </li>
+
+            <li class="category-item">
+                <button>
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 18c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2H1v2h22v-2h-3zM4 4h16v12H4V4z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Computadoras y Celulares</span>
+                        <span class="category-count">21 locales</span>
+                    </div>
+                </button>
+            </li>
+
+            <li class="category-item">
+                <button>
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3l4.1 4.1-3 3-4.2-4C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Reparación Técnica</span>
+                        <span class="category-count">16 servicios</span>
+                    </div>
+                </button>
+            </li>
+
+            <li class="category-item">
+                <button>
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22 19v3H2v-3h20zM19 3c-1.1 0-2 .9-2 2v3H7V5c0-1.1-.9-2-2-2S3 3.9 3 5v10h18V5c0-1.1-.9-2-2-2z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Ferreterías</span>
+                        <span class="category-count">22 locales</span>
+                    </div>
+                </button>
+            </li>
+
+            <li class="category-item">
+                <button>
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 12c-2.33 0-4.31-1.46-5.11-3.5 1.28-.82 3.02-1.3 5.11-1.3s3.83.48 5.11 1.3C16.31 17.54 14.33 19 12 19z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Internet y Seguridad</span>
+                        <span class="category-count">12 servicios</span>
+                    </div>
+                </button>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="main-boulevard">
+        <div class="boulevard-overlay"></div>
+
+        <div class="welcome-billboard">
+            <h2>HOGAR Y TECNOLOGÍA</h2>
+            <p>PRODUCTOS, SERVICIOS Y SOLUCIONES PARA EL HOGAR EN LOJA</p>
+        </div>
+
+        <div class="bottom-filter-bar">
+            <div class="filter-pill">
+                <div class="filter-icon-box">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
+                    </svg>
+                </div>
+                <div class="filter-label-group">
+                    <span class="filter-label">Abiertos Ahora</span>
+                    <span class="filter-sub">39 locales</span>
+                </div>
+            </div>
+
+            <div class="filter-pill">
+                <div class="filter-icon-box">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                    </svg>
+                </div>
+                <div class="filter-label-group">
+                    <span class="filter-label">Cerca de mí</span>
+                    <span class="filter-sub">27 opciones</span>
+                </div>
+            </div>
+
+            <div class="filter-pill">
+                <div class="filter-icon-box">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/>
+                    </svg>
+                </div>
+                <div class="filter-label-group">
+                    <span class="filter-label">Instalación</span>
+                    <span class="filter-sub">24 servicios</span>
+                </div>
+            </div>
+
+            <div class="filter-pill">
+                <div class="filter-icon-box">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                </div>
+                <div class="filter-label-group">
+                    <span class="filter-label">Soporte Técnico</span>
+                    <span class="filter-sub">19 disponibles</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <aside class="aside-showcase-list">
+        <div class="showcase-header">
+            <h2>HOGAR DESTACADO</h2>
+            <div class="showcase-stats">Recomendados para casa y tecnología</div>
+        </div>
+
+        <div class="sort-box">
+            <select class="sort-select">
+                <option>Ordenar por: Mayor Calificación</option>
+                <option>Cercanía</option>
+                <option>Precio promedio</option>
+                <option>Mayor disponibilidad</option>
+            </select>
+        </div>
+
+        <div class="shops-scroll-area">
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=120&q=80" alt="Casa Nova" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">Casa Nova</div>
+                    <div class="shop-segment">Muebles · Decoración</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.9</span>
+                        <span class="rating-count">(284)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=120&q=80" alt="Tecno Loja" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">Tecno Loja</div>
+                    <div class="shop-segment">Computadoras · Accesorios</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.8</span>
+                        <span class="rating-count">(231)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=120&q=80" alt="ElectroHogar Loja" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">ElectroHogar Loja</div>
+                    <div class="shop-segment">Electrodomésticos · Instalación</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.7</span>
+                        <span class="rating-count">(176)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=120&q=80" alt="FixSmart" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">FixSmart</div>
+                    <div class="shop-segment">Reparación · Soporte técnico</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.7</span>
+                        <span class="rating-count">(152)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-footer-box">
+            <button class="btn-view-all-shops">Explorar Directorio de Hogar y Tecnología</button>
+        </div>
+    </aside>
+
+</div>
+
+<footer class="pie-pagina">
+    <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+(function () {
+    const REPO_CONFIG = {
+        owner: "",
+        repo: "",
+        branch: "main",
+        siteBasePath: "",
+        maxResults: 6,
+        maxFileSize: 250000,
+        includeExtensions: [".html", ".htm", ".json", ".txt", ".md", ".csv"],
+        skipFolders: [".git/", "node_modules/", "vendor/", "dist/", "build/"]
+    };
+
+    const MIN_QUERY_LENGTH = 3;
+    const GENERIC_TITLES = [
+        "urbanex",
+        "loja - centro comercial digital",
+        "loja centro comercial digital",
+        "loja - gastronomica",
+        "loja gastronomica",
+        "loja - hogar y tecnologia",
+        "loja hogar y tecnologia",
+        "centro comercial digital"
+    ];
+
+    const searchInput = document.getElementById("siteSearch");
+    const searchButton = document.getElementById("searchButton");
+
+    if (!searchInput || !searchButton) return;
+
+    let searchDocuments = [];
+    let indexLoaded = false;
+    let indexLoading = null;
+
+    function decodeEntities(text) {
+        const decoder = document.createElement("textarea");
+        decoder.innerHTML = String(text || "");
+        return decoder.value;
+    }
+
+    function removeBoilerplate(text) {
+        return String(text || "")
+            .replace(/Negocios confiables/gi, " ")
+            .replace(/Comunidad local/gi, " ")
+            .replace(/Registre su negocio/gi, " ")
+            .replace(/©\s*2026\s*Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
+            .replace(/Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
+            .replace(/Todos los derechos reservados\.?/gi, " ")
+            .replace(/¿Qué producto o servicio busca\?/gi, " ")
+            .replace(/¿Qué restaurante, cafetería o plato busca\?/gi, " ")
+            .replace(/¿Qué producto, servicio o equipo busca\?/gi, " ");
+    }
+
+    function cleanSearchText(value) {
+        return removeBoilerplate(decodeEntities(value))
+            .replace(/<[^>]*>/g, " ")
+            .replace(/\b(class|href|onclick|src|alt|style|id)=['\"][^'\"]*['\"]/gi, " ")
+            .replace(/window\.location\.href\s*=\s*['\"][^'\"]+['\"]/gi, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    function normalizeText(value) {
+        return cleanSearchText(value)
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9ñáéíóúü\s./_-]/gi, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    function isGenericTitle(title) {
+        const normalizedTitle = normalizeText(title);
+        return !normalizedTitle || GENERIC_TITLES.includes(normalizedTitle);
+    }
+
+    function getExtension(path) {
+        const cleanPath = String(path || "").split("?")[0].split("#")[0];
+        const dotIndex = cleanPath.lastIndexOf(".");
+        return dotIndex >= 0 ? cleanPath.slice(dotIndex).toLowerCase() : "";
+    }
+
+    function isTextFile(path) {
+        return REPO_CONFIG.includeExtensions.includes(getExtension(path));
+    }
+
+    function shouldSkipPath(path) {
+        return REPO_CONFIG.skipFolders.some(function (folder) {
+            return path.includes(folder);
+        });
+    }
+
+    function getInferredGithubPagesConfig() {
+        const host = window.location.hostname;
+        if (!host.endsWith(".github.io")) return null;
+
+        const owner = host.replace(".github.io", "");
+        const parts = window.location.pathname.split("/").filter(Boolean);
+        const repo = parts[0] || owner + ".github.io";
+        const siteBasePath = repo === owner + ".github.io" ? "" : "/" + repo;
+
+        return {
+            owner: owner,
+            repo: repo,
+            branch: REPO_CONFIG.branch,
+            siteBasePath: siteBasePath
+        };
+    }
+
+    function getActiveRepoConfig() {
+        const inferred = getInferredGithubPagesConfig() || {};
+        return {
+            owner: REPO_CONFIG.owner || inferred.owner || "",
+            repo: REPO_CONFIG.repo || inferred.repo || "",
+            branch: REPO_CONFIG.branch || inferred.branch || "main",
+            siteBasePath: REPO_CONFIG.siteBasePath || inferred.siteBasePath || ""
+        };
+    }
+
+    function pageUrlFromRepoPath(path, config) {
+        const cleanBase = (config.siteBasePath || "").replace(/\/$/, "");
+        const cleanPath = String(path || "").replace(/^\/+/, "");
+
+        if (window.location.protocol === "file:") {
+            return cleanPath;
+        }
+
+        return window.location.origin + cleanBase + "/" + cleanPath;
+    }
+
+    function titleFromPath(path) {
+        const fileName = String(path || "").split("/").pop() || path;
+        const withoutExtension = fileName.replace(/\.[^/.]+$/, "");
+
+        if (/^index$/i.test(withoutExtension)) return "Inicio";
+
+        return withoutExtension
+            .replace(/[-_]+/g, " ")
+            .replace(/\b\w/g, function (letter) { return letter.toUpperCase(); });
+    }
+
+    function collectTextFromJson(value, output) {
+        if (value === null || value === undefined) return;
+
+        if (["string", "number", "boolean"].includes(typeof value)) {
+            output.push(String(value));
+            return;
+        }
+
+        if (Array.isArray(value)) {
+            value.forEach(function (item) { collectTextFromJson(item, output); });
+            return;
+        }
+
+        if (typeof value === "object") {
+            Object.keys(value).forEach(function (key) {
+                output.push(key);
+                collectTextFromJson(value[key], output);
+            });
+        }
+    }
+
+    function textFromStructuredFile(rawText, extension) {
+        if (extension === ".json") {
+            try {
+                const output = [];
+                collectTextFromJson(JSON.parse(rawText), output);
+                return output.join(" ");
+            } catch (error) {
+                return rawText;
+            }
+        }
+
+        return rawText;
+    }
+
+    function getTextContent(element) {
+        return cleanSearchText(element ? element.textContent : "");
+    }
+
+    function makeDocument(path, url, title, content) {
+        const cleanTitle = cleanSearchText(title) || titleFromPath(path);
+        const cleanContent = cleanSearchText(content || path);
+
+        return {
+            title: cleanTitle,
+            path: path,
+            url: url,
+            content: cleanContent,
+            normalizedTitle: normalizeText(cleanTitle),
+            normalizedPath: normalizeText(path),
+            normalizedContent: normalizeText(cleanContent)
+        };
+    }
+
+    function extractHtmlDocument(path, url, rawText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(rawText || "", "text/html");
+
+        doc.querySelectorAll("script, style, noscript, svg, template, link, meta, header, footer, .header-top, .pie-pagina, .search-wrapper, .user-tools, .brand-box, .location-indicator, .tool-icon, .profile-avatar").forEach(function (node) {
+            node.remove();
+        });
+
+        const titleCandidates = Array.from(doc.querySelectorAll(".page-title, .category-title, .categoria-title, main h1, main h2, article h1, article h2, h1, h2, title"))
+            .map(getTextContent)
+            .filter(function (title) {
+                const normalized = normalizeText(title);
+                return normalized && !isGenericTitle(title) && !["bienvenido", "categorias", "destacados", "sabores destacados", "hogar destacado"].includes(normalized);
+            });
+
+        let title = titleCandidates[0] || titleFromPath(path);
+        if (isGenericTitle(title)) title = titleFromPath(path);
+
+        const priorityParts = Array.from(doc.querySelectorAll("main, article, section, .category-item, .shop-card, .card, .business-card, .local-card, .restaurant-card, .service-card"))
+            .map(getTextContent)
+            .filter(Boolean);
+
+        const content = priorityParts.length ? priorityParts.join(". ") : getTextContent(doc.body || doc.documentElement);
+
+        return makeDocument(path, url, title, content);
+    }
+
+    function extractDocument(path, url, rawText) {
+        const extension = getExtension(path);
+
+        if (extension === ".html" || extension === ".htm" || /<[a-z][\s\S]*>/i.test(rawText || "")) {
+            return extractHtmlDocument(path, url, rawText || "");
+        }
+
+        return makeDocument(path, url, titleFromPath(path), textFromStructuredFile(rawText || path, extension));
+    }
+
+    async function fetchJson(url) {
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo cargar: " + url);
+        return response.json();
+    }
+
+    async function fetchText(url) {
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo cargar: " + url);
+        return response.text();
+    }
+
+    async function buildGithubRepositoryIndex() {
+        const config = getActiveRepoConfig();
+        if (!config.owner || !config.repo) throw new Error("Repositorio no configurado");
+
+        const branches = Array.from(new Set([config.branch, "main", "master"].filter(Boolean)));
+        let treeData = null;
+        let activeBranch = config.branch;
+
+        for (const branch of branches) {
+            try {
+                treeData = await fetchJson("https://api.github.com/repos/" + encodeURIComponent(config.owner) + "/" + encodeURIComponent(config.repo) + "/git/trees/" + encodeURIComponent(branch) + "?recursive=1");
+                activeBranch = branch;
+                break;
+            } catch (error) {
+                treeData = null;
+            }
+        }
+
+        if (!treeData || !Array.isArray(treeData.tree)) throw new Error("No se pudo leer el repositorio");
+
+        const files = treeData.tree
+            .filter(function (item) {
+                return item.type === "blob" &&
+                    item.path &&
+                    !shouldSkipPath(item.path) &&
+                    isTextFile(item.path) &&
+                    (!item.size || item.size <= REPO_CONFIG.maxFileSize);
+            })
+            .slice(0, 250);
+
+        const loadedDocuments = [];
+        const pathOnlyFiles = files.map(function (item) {
+            return makeDocument(
+                item.path,
+                pageUrlFromRepoPath(item.path, Object.assign({}, config, { branch: activeBranch })),
+                titleFromPath(item.path),
+                item.path
+            );
+        });
+
+        const rawBase = "https://raw.githubusercontent.com/" + encodeURIComponent(config.owner) + "/" + encodeURIComponent(config.repo) + "/" + encodeURIComponent(activeBranch) + "/";
+
+        for (let index = 0; index < files.length; index += 8) {
+            const batch = files.slice(index, index + 8);
+            const results = await Promise.allSettled(batch.map(async function (item) {
+                const rawText = await fetchText(rawBase + item.path);
+                return extractDocument(item.path, pageUrlFromRepoPath(item.path, Object.assign({}, config, { branch: activeBranch })), rawText);
+            }));
+
+            results.forEach(function (result) {
+                if (result.status === "fulfilled") loadedDocuments.push(result.value);
+            });
+        }
+
+        return loadedDocuments.concat(pathOnlyFiles);
+    }
+
+    function sameOriginHtmlUrl(url) {
+        try {
+            const parsed = new URL(url, window.location.href);
+            if (parsed.origin !== window.location.origin) return null;
+            if (["mailto:", "tel:", "javascript:"].includes(parsed.protocol)) return null;
+            const extension = getExtension(parsed.pathname);
+            if (extension && extension !== ".html" && extension !== ".htm") return null;
+            parsed.hash = "";
+            return parsed.href;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function collectPageLinks(doc, baseUrl) {
+        return Array.from(doc.querySelectorAll("a[href], button[onclick]"))
+            .map(function (element) {
+                const href = element.getAttribute("href");
+                if (href) return sameOriginHtmlUrl(new URL(href, baseUrl).href);
+
+                const onclick = element.getAttribute("onclick") || "";
+                const match = onclick.match(/window\.location\.href\s*=\s*['\"]([^'\"]+)['\"]/);
+                if (match) return sameOriginHtmlUrl(new URL(match[1], baseUrl).href);
+
+                return null;
+            })
+            .filter(Boolean);
+    }
+
+    async function buildLocalSiteIndex() {
+        const visited = new Set();
+        const queue = [window.location.href].concat(collectPageLinks(document, window.location.href));
+        const documents = [];
+
+        while (queue.length && visited.size < 80) {
+            const url = queue.shift();
+            if (!url || visited.has(url)) continue;
+            visited.add(url);
+
+            try {
+                const html = url === window.location.href ? document.documentElement.outerHTML : await fetchText(url);
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, "text/html");
+                const path = new URL(url).pathname.replace(/^\//, "") || "index.html";
+                documents.push(extractDocument(path, url, html));
+
+                collectPageLinks(doc, url).forEach(function (nextUrl) {
+                    if (!visited.has(nextUrl)) queue.push(nextUrl);
+                });
+            } catch (error) {
+                continue;
+            }
+        }
+
+        return documents;
+    }
+
+    async function loadSearchIndex() {
+        if (indexLoaded) return searchDocuments;
+        if (indexLoading) return indexLoading;
+
+        indexLoading = (async function () {
+            let documents = [];
+
+            try {
+                documents = await buildGithubRepositoryIndex();
+            } catch (githubError) {
+                documents = await buildLocalSiteIndex();
+            }
+
+            searchDocuments = documents.filter(function (documentItem) {
+                return documentItem.normalizedTitle || documentItem.normalizedPath || documentItem.normalizedContent;
+            });
+
+            indexLoaded = true;
+            return searchDocuments;
+        })();
+
+        return indexLoading;
+    }
+
+    function getSearchTerms(query) {
+        return normalizeText(query)
+            .split(" ")
+            .map(function (term) { return term.trim(); })
+            .filter(function (term) { return term.length >= MIN_QUERY_LENGTH; });
+    }
+
+    function scoreDocument(documentItem, terms, fullQuery) {
+        let score = 0;
+        const title = documentItem.normalizedTitle;
+        const path = documentItem.normalizedPath;
+        const content = documentItem.normalizedContent;
+
+        if (fullQuery.length >= MIN_QUERY_LENGTH) {
+            if (title.includes(fullQuery)) score += 100;
+            if (path.includes(fullQuery)) score += 70;
+            if (content.includes(fullQuery)) score += 45;
+        }
+
+        terms.forEach(function (term) {
+            if (title.includes(term)) score += 40;
+            if (path.includes(term)) score += 25;
+            if (content.includes(term)) score += 12;
+        });
+
+        return score;
+    }
+
+    function searchDocumentsByQuery(query) {
+        const fullQuery = normalizeText(query);
+        const terms = getSearchTerms(query);
+
+        if (!terms.length && fullQuery.length < MIN_QUERY_LENGTH) return [];
+
+        return searchDocuments
+            .map(function (documentItem) {
+                return {
+                    item: documentItem,
+                    score: scoreDocument(documentItem, terms, fullQuery)
+                };
+            })
+            .filter(function (result) { return result.score > 0; })
+            .sort(function (a, b) { return b.score - a.score; })
+            .slice(0, REPO_CONFIG.maxResults)
+            .map(function (result) { return result.item; });
+    }
+
+    async function runSearch() {
+        const query = searchInput.value.trim();
+        if (query.length < MIN_QUERY_LENGTH) return;
+
+        try {
+            await loadSearchIndex();
+            const results = searchDocumentsByQuery(query);
+
+            if (results.length) {
+                window.location.href = results[0].url;
+            }
+        } catch (error) {
+            return;
+        }
+    }
+
+    searchInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            runSearch();
+        }
+    });
+
+    searchButton.addEventListener("click", runSearch);
+
+    searchButton.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            runSearch();
+        }
+    });
+
+    loadSearchIndex().catch(function () {});
+})();
+</script>
+
+
+</body>
+</html>
