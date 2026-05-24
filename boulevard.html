@@ -369,6 +369,8 @@
             border-radius: 12px;
             display: flex;
             align-items: center;
+            justify-content: flex-start;
+            text-align: left;
             gap: 12px;
             transition: var(--transition-smooth);
         }
@@ -412,6 +414,8 @@
         .category-text-info {
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
             min-width: 0;
         }
 
@@ -1298,8 +1302,8 @@
     }
 
     function showPanel(content) {
-        resultsPanel.innerHTML = content;
-        resultsPanel.classList.add("active");
+        resultsPanel.innerHTML = "";
+        resultsPanel.classList.remove("active");
     }
 
     function hidePanel() {
