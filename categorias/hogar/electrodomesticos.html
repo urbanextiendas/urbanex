@@ -1,1 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urbanex - Electrodomésticos</title>
+    <link rel="icon" type="image/png" href="../../../imagenes/log.png">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #020202;
+            --bg-panel: rgba(8, 8, 8, 0.76);
+            --bg-card: rgba(18, 18, 18, 0.72);
+            --gold: #e5c158;
+            --gold-soft: rgba(229, 193, 88, 0.16);
+            --gold-border: rgba(229, 193, 88, 0.28);
+            --text-main: #ffffff;
+            --text-muted: #d5d5d5;
+            --text-soft: #9a9a9a;
+            --success: #2ed573;
+            --danger: #ff7675;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --transition: all 0.25s ease;
+            --blur: blur(18px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                linear-gradient(135deg, rgba(0,0,0,0.88), rgba(0,0,0,0.62)),
+                url("../../../imagenes/Hogar.png") center bottom / cover fixed no-repeat;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .page-shell {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-top {
+            height: 64px;
+            background: rgba(6, 6, 6, 0.62);
+            border-bottom: 1px solid var(--gold-border);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-box img {
+            height: 58px;
+            width: auto;
+            display: block;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-link,
+        .register-link {
+            border: 1px solid var(--gold-border);
+            background: rgba(0,0,0,0.38);
+            color: #ffffff;
+            border-radius: 999px;
+            padding: 9px 14px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            transition: var(--transition);
+        }
+
+        .register-link {
+            background: var(--gold);
+            color: #000000;
+            border-color: var(--gold);
+        }
+
+        .back-link:hover,
+        .register-link:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.34);
+        }
+
+        .hero-section {
+            width: min(1180px, calc(100% - 32px));
+            margin: 28px auto 18px;
+            min-height: 280px;
+            border: 1px solid var(--gold-border);
+            border-radius: 26px;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(229,193,88,0.20), transparent 32%),
+                linear-gradient(135deg, rgba(8,8,8,0.86), rgba(12,12,12,0.56));
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            position: relative;
+            box-shadow: 0 28px 70px rgba(0,0,0,0.46);
+        }
+
+        .hero-content {
+            padding: 42px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2.2px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 28px;
+            height: 1px;
+            background: var(--gold);
+            display: block;
+        }
+
+        .hero-content h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(30px, 5vw, 56px);
+            line-height: 1;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .hero-content p {
+            max-width: 620px;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.75;
+        }
+
+        .hero-metrics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .metric-card {
+            min-width: 150px;
+            background: rgba(0,0,0,0.36);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 18px;
+            padding: 14px;
+        }
+
+        .metric-card strong {
+            display: block;
+            color: var(--gold);
+            font-size: 22px;
+            font-family: var(--font-serif);
+        }
+
+        .metric-card span {
+            color: var(--text-soft);
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-visual {
+            position: relative;
+            min-height: 280px;
+            background:
+                linear-gradient(90deg, rgba(0,0,0,0.04), rgba(0,0,0,0.42)),
+                url("https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=900&q=85") center / cover no-repeat;
+        }
+
+        .hero-visual::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.64), transparent 52%);
+        }
+
+        .floating-badge {
+            position: absolute;
+            right: 24px;
+            bottom: 24px;
+            z-index: 2;
+            background: rgba(0,0,0,0.72);
+            border: 1px solid var(--gold-border);
+            border-radius: 18px;
+            padding: 14px 16px;
+            backdrop-filter: var(--blur);
+        }
+
+        .floating-badge strong {
+            display: block;
+            color: #ffffff;
+            font-size: 13px;
+        }
+
+        .floating-badge span {
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-panel {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto 18px;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 10px;
+        }
+
+        .search-box,
+        .filter-select {
+            height: 44px;
+            background: rgba(7,7,7,0.72);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
+            color: #ffffff;
+            outline: none;
+            font-family: var(--font-sans);
+            font-size: 12px;
+            backdrop-filter: var(--blur);
+        }
+
+        .search-box {
+            padding: 0 16px;
+        }
+
+        .filter-select {
+            min-width: 190px;
+            padding: 0 12px;
+            cursor: pointer;
+        }
+
+        .directory-layout {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto 32px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 18px;
+        }
+
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .empresa-electrodomesticos {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 20px;
+            overflow: hidden;
+            min-height: 210px;
+            transition: var(--transition);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            box-shadow: 0 16px 38px rgba(0,0,0,0.28);
+        }
+
+        .empresa-electrodomesticos:hover {
+            transform: translateY(-3px);
+            border-color: rgba(229,193,88,0.54);
+            box-shadow: 0 24px 58px rgba(0,0,0,0.38);
+        }
+
+        .business-cover {
+            height: 92px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .business-cover::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.78), rgba(0,0,0,0.08));
+        }
+
+        .business-status {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 2;
+            border-radius: 999px;
+            padding: 5px 10px;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            background: rgba(46,213,115,0.14);
+            color: var(--success);
+            border: 1px solid rgba(46,213,115,0.42);
+        }
+
+        .business-body {
+            padding: 16px;
+        }
+
+        .business-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .business-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .business-rating {
+            flex: 0 0 auto;
+            color: var(--gold);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .business-category {
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .business-description {
+            color: var(--text-muted);
+            font-size: 12px;
+            line-height: 1.55;
+            margin-bottom: 14px;
+        }
+
+        .business-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-bottom: 14px;
+        }
+
+        .tag {
+            color: #ffffff;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 999px;
+            padding: 5px 8px;
+            font-size: 9.5px;
+            font-weight: 600;
+        }
+
+        .business-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .action-btn {
+            border-radius: 10px;
+            border: 1px solid var(--gold-border);
+            background: rgba(0,0,0,0.34);
+            color: #ffffff;
+            padding: 8px 10px;
+            font-size: 10.5px;
+            font-weight: 700;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .action-btn.primary {
+            background: var(--gold);
+            color: #000000;
+            border-color: var(--gold);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .panel-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--gold-border);
+            border-radius: 20px;
+            padding: 18px;
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+        }
+
+        .panel-card h2 {
+            font-family: var(--font-serif);
+            color: var(--gold);
+            font-size: 15px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .panel-card p,
+        .panel-card li {
+            color: var(--text-muted);
+            font-size: 12px;
+            line-height: 1.65;
+        }
+
+        .panel-card ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .panel-card li::before {
+            content: "•";
+            color: var(--gold);
+            margin-right: 8px;
+        }
+
+        .featured-box {
+            background: linear-gradient(135deg, rgba(229,193,88,0.18), rgba(255,255,255,0.04));
+        }
+
+        .empty-state {
+            display: none;
+            grid-column: 1 / -1;
+            border: 1px dashed rgba(229,193,88,0.34);
+            border-radius: 18px;
+            padding: 24px;
+            text-align: center;
+            color: var(--text-muted);
+            background: rgba(0,0,0,0.34);
+        }
+
+        .footer {
+            margin-top: auto;
+            height: 28px;
+            background: #000000;
+            color: #8c8c8c;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+        }
+
+        @media (max-width: 980px) {
+            .hero-section,
+            .directory-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-visual {
+                min-height: 230px;
+            }
+
+            .business-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .control-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-select {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .header-top {
+                height: auto;
+                padding: 12px;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .hero-content {
+                padding: 28px 22px;
+            }
+
+            .business-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="page-shell">
+
+    <header class="header-top">
+        <a href="../../../boulevard.html" class="brand-box" title="Volver al inicio">
+            <img src="../../../imagenes/logo.png" alt="Logo Urbanex">
+        </a>
+
+        <div class="header-actions">
+            <a class="back-link" href="../../hogar.html">Volver a Hogar</a>
+            <a class="register-link" href="#">Registrar Empresa</a>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="eyebrow">Categoría Hogar</div>
+            <h1>Electrodomésticos</h1>
+            <p>
+                Directorio premium para tiendas, distribuidores, servicios de instalación y soporte especializado
+                en electrodomésticos para hogares y negocios de Loja.
+            </p>
+
+            <div class="hero-metrics">
+                <div class="metric-card">
+                    <strong id="heroCounter">0</strong>
+                    <span>Empresas registradas</span>
+                </div>
+                <div class="metric-card">
+                    <strong>24/7</strong>
+                    <span>Consulta digital</span>
+                </div>
+                <div class="metric-card">
+                    <strong>Loja</strong>
+                    <span>Cobertura local</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="floating-badge">
+                <strong>Selección verificada</strong>
+                <span>Compra · Instalación · Garantía</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="control-panel" aria-label="Controles del directorio">
+        <input type="search" id="businessSearch" class="search-box" placeholder="Buscar empresa, producto o servicio..." autocomplete="off">
+
+        <select id="segmentFilter" class="filter-select">
+            <option value="todos">Todos los segmentos</option>
+            <option value="venta">Venta</option>
+            <option value="instalacion">Instalación</option>
+            <option value="reparacion">Reparación</option>
+            <option value="linea-blanca">Línea blanca</option>
+        </select>
+
+        <select id="sortFilter" class="filter-select">
+            <option value="rating">Mayor calificación</option>
+            <option value="nombre">Nombre A-Z</option>
+            <option value="disponibilidad">Disponibilidad</option>
+        </select>
+    </section>
+
+    <main class="directory-layout">
+        <section>
+            <div class="business-grid" id="businessGrid">
+                <div class="empty-state" id="emptyState">
+                    No se encontraron empresas con esos criterios.
+                </div>
+            </div>
+        </section>
+
+        <aside class="side-panel">
+            <div class="panel-card featured-box">
+                <h2>Conteo automático</h2>
+                <p>
+                    Empresas activas en esta categoría:
+                    <strong id="electroCounter" style="color: var(--gold);">0</strong>.
+                    El número cambia automáticamente cuando se agregan o eliminan empresas en este archivo.
+                </p>
+            </div>
+
+            <div class="panel-card">
+                <h2>Idea visual</h2>
+                <p>
+                    La categoría se presenta como un showroom digital: imagen amplia, tarjetas elegantes,
+                    filtros simples y énfasis en garantía, instalación y atención local.
+                </p>
+            </div>
+
+            <div class="panel-card">
+                <h2>Servicios clave</h2>
+                <ul>
+                    <li>Venta de refrigeradoras, cocinas, lavadoras y secadoras.</li>
+                    <li>Instalación técnica con garantía.</li>
+                    <li>Diagnóstico, mantenimiento y repuestos.</li>
+                    <li>Atención para hogares, oficinas y locales comerciales.</li>
+                </ul>
+            </div>
+        </aside>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
+    </footer>
+
+</div>
+
+<script>
+(function () {
+    const empresasElectrodomesticos = [
+        {
+            nombre: "ElectroHogar Loja",
+            segmento: "Venta · Instalación",
+            tipo: "venta instalacion linea-blanca",
+            descripcion: "Electrodomésticos de línea blanca, asesoría de compra e instalación para hogares.",
+            rating: 4.8,
+            estado: "Abierto",
+            imagen: "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=900&q=80",
+            tags: ["Refrigeradoras", "Lavadoras", "Garantía"]
+        },
+        {
+            nombre: "Casa Frío",
+            segmento: "Refrigeración · Soporte",
+            tipo: "reparacion instalacion linea-blanca",
+            descripcion: "Especialistas en refrigeradoras, congeladores, vitrinas y mantenimiento preventivo.",
+            rating: 4.7,
+            estado: "Abierto",
+            imagen: "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?auto=format&fit=crop&w=900&q=80",
+            tags: ["Refrigeración", "Mantenimiento", "Técnicos"]
+        },
+        {
+            nombre: "TecnoCocina",
+            segmento: "Cocinas · Hornos",
+            tipo: "venta instalacion",
+            descripcion: "Venta e instalación de cocinas, campanas extractoras, hornos y equipos empotrables.",
+            rating: 4.6,
+            estado: "Abierto",
+            imagen: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=900&q=80",
+            tags: ["Cocinas", "Hornos", "Campanas"]
+        },
+        {
+            nombre: "Lavatec Express",
+            segmento: "Lavadoras · Secadoras",
+            tipo: "reparacion instalacion linea-blanca",
+            descripcion: "Reparación, instalación y revisión técnica de lavadoras y secadoras domésticas.",
+            rating: 4.5,
+            estado: "Disponible",
+            imagen: "https://images.unsplash.com/photo-1626806819282-2c1dc01a5e0c?auto=format&fit=crop&w=900&q=80",
+            tags: ["Lavadoras", "Secadoras", "Repuestos"]
+        },
+        {
+            nombre: "Mega Electro",
+            segmento: "Electrodomésticos · Hogar",
+            tipo: "venta linea-blanca",
+            descripcion: "Catálogo completo de electrodomésticos para cocina, limpieza, climatización y hogar.",
+            rating: 4.4,
+            estado: "Abierto",
+            imagen: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=900&q=80",
+            tags: ["Catálogo", "Crédito", "Entrega"]
+        },
+        {
+            nombre: "InstalaPro Hogar",
+            segmento: "Instalación · Garantía",
+            tipo: "instalacion reparacion",
+            descripcion: "Instalación técnica de equipos nuevos, revisión de conexiones y soporte postventa.",
+            rating: 4.3,
+            estado: "Disponible",
+            imagen: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=80",
+            tags: ["Instalación", "Soporte", "Garantía"]
+        }
+    ];
+
+    const businessGrid = document.getElementById("businessGrid");
+    const emptyState = document.getElementById("emptyState");
+    const searchInput = document.getElementById("businessSearch");
+    const segmentFilter = document.getElementById("segmentFilter");
+    const sortFilter = document.getElementById("sortFilter");
+    const electroCounter = document.getElementById("electroCounter");
+    const heroCounter = document.getElementById("heroCounter");
+
+    function normalizeText(value) {
+        return String(value || "")
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .trim();
+    }
+
+    function createBusinessCard(empresa) {
+        const article = document.createElement("article");
+        article.className = "empresa-electrodomesticos";
+        article.dataset.tipo = empresa.tipo;
+        article.dataset.nombre = empresa.nombre;
+        article.dataset.rating = empresa.rating;
+        article.dataset.estado = empresa.estado;
+
+        article.innerHTML = `
+            <div class="business-cover" style="background-image: url('${empresa.imagen}')">
+                <div class="business-status">${empresa.estado}</div>
+            </div>
+            <div class="business-body">
+                <div class="business-head">
+                    <div>
+                        <h2 class="business-title">${empresa.nombre}</h2>
+                        <div class="business-category">${empresa.segmento}</div>
+                    </div>
+                    <div class="business-rating">★ ${empresa.rating}</div>
+                </div>
+
+                <p class="business-description">${empresa.descripcion}</p>
+
+                <div class="business-meta">
+                    ${empresa.tags.map(function (tag) {
+                        return `<span class="tag">${tag}</span>`;
+                    }).join("")}
+                </div>
+
+                <div class="business-actions">
+                    <a class="action-btn primary" href="#">Ver perfil</a>
+                    <a class="action-btn" href="#">Contactar</a>
+                </div>
+            </div>
+        `;
+
+        return article;
+    }
+
+    function updateCounters(total) {
+        electroCounter.textContent = total;
+        heroCounter.textContent = total;
+    }
+
+    function renderBusinesses() {
+        const query = normalizeText(searchInput.value);
+        const segment = segmentFilter.value;
+        const sort = sortFilter.value;
+
+        let filtered = empresasElectrodomesticos.filter(function (empresa) {
+            const searchableText = normalizeText([
+                empresa.nombre,
+                empresa.segmento,
+                empresa.descripcion,
+                empresa.tags.join(" ")
+            ].join(" "));
+
+            const matchesSearch = !query || searchableText.includes(query);
+            const matchesSegment = segment === "todos" || empresa.tipo.includes(segment);
+
+            return matchesSearch && matchesSegment;
+        });
+
+        if (sort === "rating") {
+            filtered.sort(function (a, b) { return b.rating - a.rating; });
+        }
+
+        if (sort === "nombre") {
+            filtered.sort(function (a, b) { return a.nombre.localeCompare(b.nombre); });
+        }
+
+        if (sort === "disponibilidad") {
+            filtered.sort(function (a, b) { return a.estado.localeCompare(b.estado); });
+        }
+
+        businessGrid.querySelectorAll(".empresa-electrodomesticos").forEach(function (card) {
+            card.remove();
+        });
+
+        filtered.forEach(function (empresa) {
+            businessGrid.appendChild(createBusinessCard(empresa));
+        });
+
+        emptyState.style.display = filtered.length ? "none" : "block";
+        updateCounters(empresasElectrodomesticos.length);
+    }
+
+    searchInput.addEventListener("input", renderBusinesses);
+    segmentFilter.addEventListener("change", renderBusinesses);
+    sortFilter.addEventListener("change", renderBusinesses);
+
+    updateCounters(0);
+    renderBusinesses();
+})();
+</script>
+
+</body>
+</html>
