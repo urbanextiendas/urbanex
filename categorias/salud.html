@@ -256,9 +256,11 @@
             border-radius: 12px;
             display: flex;
             align-items: center;
+            justify-content: flex-start;
             gap: 14px;
             transition: var(--transition-smooth);
             cursor: pointer;
+            text-align: left;
         }
 
         .category-item button:hover {
@@ -302,7 +304,10 @@
         .category-text-info {
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
+            flex: 1;
             min-width: 0;
+            text-align: left;
         }
 
         .category-name {
@@ -312,6 +317,9 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: block;
+            width: 100%;
+            text-align: left;
         }
 
         .category-item.active .category-name {
@@ -321,25 +329,20 @@
         .category-count {
             color: var(--text-dark);
             font-size: 9px;
+            display: block;
+            width: 100%;
+            text-align: left;
         }
 
         .main-boulevard {
             grid-area: main;
             position: relative;
             overflow: hidden;
-            background-image: url("../imagenes/Salud.png");
+            background-image: url("../imagenes/Salud y Bienestar.png");
             background-size: cover;
             background-position: center bottom;
             background-repeat: no-repeat;
             z-index: 2;
-        }
-
-        @media (min-width: 1025px) {
-            .main-boulevard {
-                background-size: 85% auto;
-                background-position: center bottom;
-                background-repeat: no-repeat;
-            }
         }
 
         .boulevard-overlay {
@@ -803,6 +806,10 @@
 
 <div class="dashboard-container">
 
+    <div class="global-background-underlay">
+        <img src="../imagenes/Salud y Bienestar.png" alt="Salud y Bienestar de Loja">
+    </div>
+
     <header class="header-top">
         <a href="../boulevard.html" class="brand-box" title="Volver al Inicio">
             <img src="../imagenes/logo.png" alt="Logo Urbanex">
@@ -845,25 +852,11 @@
                 <button>
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
-                            <path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H5v-4h4V5h4v4h4v4z"/>
+                            <path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/>
                         </svg>
                     </div>
                     <div class="category-text-info">
-                        <span class="category-name">Clínicas y Consultorios</span>
-                        <span class="category-count">36 centros</span>
-                    </div>
-                </button>
-            </li>
-
-            <li class="category-item">
-                <button>
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4C8.9 2 8 2.9 8 4v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4zm5 10h-2v2h-2v-2H9v-2h2v-2h2v2h2v2z"/>
-                        </svg>
-                    </div>
-                    <div class="category-text-info">
-                        <span class="category-name">Farmacias</span>
+                        <span class="category-name">Consultorios Médicos</span>
                         <span class="category-count">28 locales</span>
                     </div>
                 </button>
@@ -873,12 +866,26 @@
                 <button>
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
-                            <path d="M12 2C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V22h8v-7.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm0 2c2.76 0 5 2.24 5 5 0 1.75-.91 3.29-2.28 4.18L14 13.65V20h-4v-6.35l-.72-.47C7.91 12.29 7 10.75 7 9c0-2.76 2.24-5 5-5z"/>
+                            <path d="M21 9h-6V3H9v6H3v6h6v6h6v-6h6V9z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Farmacias</span>
+                        <span class="category-count">34 locales</span>
+                    </div>
+                </button>
+            </li>
+
+            <li class="category-item">
+                <button>
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C8.69 2 6 4.69 6 8c0 2.28 1.28 4.27 3.16 5.28L8 22l4-2 4 2-1.16-8.72C16.72 12.27 18 10.28 18 8c0-3.31-2.69-6-6-6zm0 9c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
                         </svg>
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Odontología</span>
-                        <span class="category-count">22 centros</span>
+                        <span class="category-count">22 locales</span>
                     </div>
                 </button>
             </li>
@@ -887,12 +894,12 @@
                 <button>
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
-                            <path d="M9 2v6.17L3.59 18.5C2.9 19.82 3.86 21.4 5.35 21.4h13.3c1.49 0 2.45-1.58 1.76-2.9L15 8.17V2H9zm2 2h2v4.66l5.63 10.74H5.37L11 8.66V4z"/>
+                            <path d="M9 2v6.59L4.41 13.17C3.9 13.68 3.9 14.5 4.41 15.01L8.99 19.59c.51.51 1.33.51 1.84 0L15.41 15H22v-2h-7.41L10 17.59 6.41 14 11 9.41V2H9zm4 0v7h2V2h-2z"/>
                         </svg>
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Laboratorios Clínicos</span>
-                        <span class="category-count">18 centros</span>
+                        <span class="category-count">16 locales</span>
                     </div>
                 </button>
             </li>
@@ -901,12 +908,12 @@
                 <button>
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
-                            <path d="M20.57 14.86l1.77-1.77-1.41-1.41-1.77 1.77-8.49-8.49 1.77-1.77-1.41-1.41-1.77 1.77-1.42-1.42-2.83 2.83 1.42 1.42-5.66 5.66-1.42-1.42-2.83 2.83 1.42 1.42-1.77 1.77 1.41 1.41 1.77-1.77 8.49 8.49-1.77 1.77 1.41 1.41 1.77-1.77 1.42 1.42 2.83-2.83-1.42-1.42 5.66-5.66 1.42 1.42 2.83-2.83-1.43-1.43z"/>
+                            <path d="M20.57 14.86l1.77-1.77-1.41-1.41-1.77 1.77-2.12-2.12 1.77-1.77-1.41-1.41-1.77 1.77-2.12-2.12 1.77-1.77-1.41-1.41-1.77 1.77-1.41-1.41L7.76 7.05 6.34 5.64 4.93 7.05l1.41 1.41-1.77 1.77 1.41 1.41 1.77-1.77 2.12 2.12-1.77 1.77 1.41 1.41 1.77-1.77 2.12 2.12-1.77 1.77 1.41 1.41 1.77-1.77 1.41 1.41 1.41-1.41-1.41-1.41 1.77-1.77 2.12 2.12z"/>
                         </svg>
                     </div>
                     <div class="category-text-info">
-                        <span class="category-name">Fitness y Gimnasios</span>
-                        <span class="category-count">31 espacios</span>
+                        <span class="category-name">Gimnasios</span>
+                        <span class="category-count">18 locales</span>
                     </div>
                 </button>
             </li>
@@ -915,12 +922,12 @@
                 <button>
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
-                            <path d="M12 2C8.69 2 6 4.69 6 8c0 1.77.77 3.36 2 4.46V22h8v-9.54c1.23-1.1 2-2.69 2-4.46 0-3.31-2.69-6-6-6zm0 2c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z"/>
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V22h8v-7.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm0 10.5c-1.93 0-3.5-1.57-3.5-3.5S10.07 5.5 12 5.5 15.5 7.07 15.5 9 13.93 12.5 12 12.5z"/>
                         </svg>
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Spa y Estética</span>
-                        <span class="category-count">26 centros</span>
+                        <span class="category-count">15 locales</span>
                     </div>
                 </button>
             </li>
@@ -932,7 +939,7 @@
 
         <div class="welcome-billboard">
             <h2>SALUD Y BIENESTAR</h2>
-            <p>CLÍNICAS, FARMACIAS, FITNESS Y CUIDADO PERSONAL EN UN SOLO LUGAR</p>
+            <p>CLÍNICAS, FARMACIAS Y BIENESTAR DE LOJA EN UN SOLO LUGAR</p>
         </div>
 
         <div class="bottom-filter-bar">
@@ -944,7 +951,7 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Abiertos Ahora</span>
-                    <span class="filter-sub">52 centros</span>
+                    <span class="filter-sub">46 locales</span>
                 </div>
             </div>
 
@@ -956,19 +963,7 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Cerca de mí</span>
-                    <span class="filter-sub">34 opciones</span>
-                </div>
-            </div>
-
-            <div class="filter-pill">
-                <div class="filter-icon-box">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/>
-                    </svg>
-                </div>
-                <div class="filter-label-group">
-                    <span class="filter-label">Atención a Domicilio</span>
-                    <span class="filter-sub">19 servicios</span>
+                    <span class="filter-sub">31 opciones</span>
                 </div>
             </div>
 
@@ -980,7 +975,19 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Citas Disponibles</span>
-                    <span class="filter-sub">27 turnos</span>
+                    <span class="filter-sub">19 servicios</span>
+                </div>
+            </div>
+
+            <div class="filter-pill">
+                <div class="filter-icon-box">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </div>
+                <div class="filter-label-group">
+                    <span class="filter-label">Emergencias</span>
+                    <span class="filter-sub">12 puntos</span>
                 </div>
             </div>
         </div>
@@ -988,27 +995,27 @@
 
     <aside class="aside-showcase-list">
         <div class="showcase-header">
-            <h2>BIENESTAR DESTACADO</h2>
-            <div class="showcase-stats">Recomendados de salud y bienestar</div>
+            <h2>SERVICIOS DESTACADOS</h2>
+            <div class="showcase-stats">Recomendados de salud y bienestar del mes</div>
         </div>
 
         <div class="sort-box">
             <select class="sort-select">
                 <option>Ordenar por: Mayor Calificación</option>
                 <option>Cercanía</option>
+                <option>Disponibilidad</option>
                 <option>Especialidad</option>
-                <option>Disponibilidad de citas</option>
             </select>
         </div>
 
         <div class="shops-scroll-area">
             <div class="shop-card">
                 <div class="shop-thumb-wrapper">
-                    <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=120&q=80" alt="Clínica Vida Loja" class="shop-thumb">
+                    <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=120&q=80" alt="Clínica San José" class="shop-thumb">
                 </div>
                 <div class="shop-details">
-                    <div class="shop-title">Clínica Vida Loja</div>
-                    <div class="shop-segment">Medicina general · Atención integral</div>
+                    <div class="shop-title">Clínica San José</div>
+                    <div class="shop-segment">Clínica · Atención médica</div>
                     <div class="shop-rating-row">
                         <svg class="star-icon" viewBox="0 0 24 24">
                             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
@@ -1022,17 +1029,17 @@
 
             <div class="shop-card">
                 <div class="shop-thumb-wrapper">
-                    <img src="https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=120&q=80" alt="Farmacia Central Salud" class="shop-thumb">
+                    <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=120&q=80" alt="Farmacia Central Loja" class="shop-thumb">
                 </div>
                 <div class="shop-details">
-                    <div class="shop-title">Farmacia Central Salud</div>
-                    <div class="shop-segment">Farmacia · Medicamentos y cuidado</div>
+                    <div class="shop-title">Farmacia Central Loja</div>
+                    <div class="shop-segment">Farmacia · Medicamentos</div>
                     <div class="shop-rating-row">
                         <svg class="star-icon" viewBox="0 0 24 24">
                             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                         </svg>
                         <span class="rating-value">4.8</span>
-                        <span class="rating-count">(214)</span>
+                        <span class="rating-count">(241)</span>
                         <span class="status-indicator">Abierto</span>
                     </div>
                 </div>
@@ -1040,11 +1047,11 @@
 
             <div class="shop-card">
                 <div class="shop-thumb-wrapper">
-                    <img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&w=120&q=80" alt="Sonrisa Dental" class="shop-thumb">
+                    <img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&w=120&q=80" alt="OdontoVida Loja" class="shop-thumb">
                 </div>
                 <div class="shop-details">
-                    <div class="shop-title">Sonrisa Dental</div>
-                    <div class="shop-segment">Odontología · Estética dental</div>
+                    <div class="shop-title">OdontoVida Loja</div>
+                    <div class="shop-segment">Odontología · Salud oral</div>
                     <div class="shop-rating-row">
                         <svg class="star-icon" viewBox="0 0 24 24">
                             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
@@ -1058,11 +1065,11 @@
 
             <div class="shop-card">
                 <div class="shop-thumb-wrapper">
-                    <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=120&q=80" alt="Zen Spa Wellness" class="shop-thumb">
+                    <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=120&q=80" alt="Laboratorio Integral Salud" class="shop-thumb">
                 </div>
                 <div class="shop-details">
-                    <div class="shop-title">Zen Spa Wellness</div>
-                    <div class="shop-segment">Spa · Masajes y relajación</div>
+                    <div class="shop-title">Laboratorio Integral Salud</div>
+                    <div class="shop-segment">Laboratorio · Análisis clínicos</div>
                     <div class="shop-rating-row">
                         <svg class="star-icon" viewBox="0 0 24 24">
                             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
@@ -1076,7 +1083,7 @@
         </div>
 
         <div class="action-footer-box">
-            <button class="btn-view-all-shops">Explorar Directorio de Salud</button>
+            <button class="btn-view-all-shops">Explorar Directorio de Salud y Bienestar</button>
         </div>
     </aside>
 
@@ -1104,7 +1111,7 @@
         "urbanex",
         "loja - centro comercial digital",
         "loja centro comercial digital",
-        "loja - gastronomica",
+        "loja - salud y bienestar",
         "loja salud y bienestar",
         "centro comercial digital"
     ];
