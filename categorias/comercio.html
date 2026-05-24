@@ -749,8 +749,15 @@
         <h2 class="section-title">Categorías</h2>
 
         <ul class="categories-list">
+
             <li class="category-item active">
-                <button>
+                <button type="button"
+                        data-count-src="comercio/tiendas-y-retail.html"
+                        data-count-array="empresasTiendasRetail"
+                        data-count-target="countTiendasRetail"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='comercio/tiendas-y-retail.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.16 14.26c-.75 0-1.41-.41-1.75-1.03L2 4H0V2h3.31l.94 2H20c.75 0 1.39.41 1.73 1.03.35.64.36 1.4.03 2.05l-2.83 5.2A2.99 2.99 0 0 1 16.29 14H7.42l-.9 1.63c-.18.33.06.74.44.74H20v2H6.96c-1.52 0-2.48-1.63-1.75-2.96l1.06-1.92-.11-.23z"/>
@@ -758,13 +765,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Tiendas y Retail</span>
-                        <span class="category-count">28 locales</span>
+                        <span class="category-count" id="countTiendasRetail">0 locales</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="comercio/librerias-y-papelerias.html"
+                        data-count-array="empresasLibreriasPapelerias"
+                        data-count-target="countLibreriasPapelerias"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='comercio/librerias-y-papelerias.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M21 4H7c-1.1 0-2 .9-2 2v14c0 .55.45 1 1 1h15V4zM7 6h12v11H7V6zm-3 1H3v15c0 1.1.9 2 2 2h14v-1H5c-.55 0-1-.45-1-1V7z"/>
@@ -772,13 +785,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Librerías y Papelerías</span>
-                        <span class="category-count">12 locales</span>
+                        <span class="category-count" id="countLibreriasPapelerias">0 locales</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="comercio/centros-educativos.html"
+                        data-count-array="empresasCentrosEducativos"
+                        data-count-target="countCentrosEducativos"
+                        data-count-singular="institución"
+                        data-count-plural="instituciones"
+                        onclick="window.location.href='comercio/centros-educativos.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 13.5L5 12.68v3.82c0 1.66 3.13 3 7 3s7-1.34 7-3v-3.82l-7 3.82z"/>
@@ -786,13 +805,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Centros Educativos</span>
-                        <span class="category-count">16 instituciones</span>
+                        <span class="category-count" id="countCentrosEducativos">0 instituciones</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="comercio/academias-y-cursos.html"
+                        data-count-array="empresasAcademiasCursos"
+                        data-count-target="countAcademiasCursos"
+                        data-count-singular="opción"
+                        data-count-plural="opciones"
+                        onclick="window.location.href='comercio/academias-y-cursos.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M3 4v16h18V4H3zm16 14H5V6h14v12zM7 8h10v2H7V8zm0 3h10v2H7v-2zm0 3h6v2H7v-2z"/>
@@ -800,13 +825,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Academias y Cursos</span>
-                        <span class="category-count">14 opciones</span>
+                        <span class="category-count" id="countAcademiasCursos">0 opciones</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="comercio/servicios-profesionales.html"
+                        data-count-array="empresasServiciosProfesionales"
+                        data-count-target="countServiciosProfesionales"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='comercio/servicios-profesionales.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>
@@ -814,13 +845,19 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Servicios Profesionales</span>
-                        <span class="category-count">10 locales</span>
+                        <span class="category-count" id="countServiciosProfesionales">0 locales</span>
                     </div>
                 </button>
             </li>
 
             <li class="category-item">
-                <button>
+                <button type="button"
+                        data-count-src="comercio/tecnologia-educativa.html"
+                        data-count-array="empresasTecnologiaEducativa"
+                        data-count-target="countTecnologiaEducativa"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='comercio/tecnologia-educativa.html'">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24">
                             <path d="M20 18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 5h16v11H4V5z"/>
@@ -828,7 +865,7 @@
                     </div>
                     <div class="category-text-info">
                         <span class="category-name">Tecnología Educativa</span>
-                        <span class="category-count">8 locales</span>
+                        <span class="category-count" id="countTecnologiaEducativa">0 locales</span>
                     </div>
                 </button>
             </li>
@@ -943,6 +980,164 @@
 <footer class="pie-pagina">
     <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
 </footer>
+
+
+<script>
+(function () {
+    const categoryButtons = Array.from(document.querySelectorAll("[data-count-src][data-count-target]"));
+    if (!categoryButtons.length) return;
+
+    const countableSelectors = [
+        ".empresa-electrodomesticos",
+        ".empresa-card",
+        ".business-card",
+        ".local-card",
+        ".restaurant-card",
+        ".service-card",
+        "[data-business]",
+        "[data-empresa]"
+    ].join(",");
+
+    function formatCount(target, total, singular, plural) {
+        target.textContent = total + " " + (total === 1 ? singular : plural);
+    }
+
+    function escapeRegExp(value) {
+        return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function getBalancedArrayText(sourceText, arrayStartIndex) {
+        const bracketStart = sourceText.indexOf("[", arrayStartIndex);
+        if (bracketStart === -1) return "";
+
+        let depth = 0;
+        let quote = "";
+        let escaped = false;
+
+        for (let i = bracketStart; i < sourceText.length; i++) {
+            const char = sourceText[i];
+
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+
+            if (char === "\\") {
+                escaped = true;
+                continue;
+            }
+
+            if (quote) {
+                if (char === quote) quote = "";
+                continue;
+            }
+
+            if (char === "'" || char === '"' || char === "`") {
+                quote = char;
+                continue;
+            }
+
+            if (char === "[") depth++;
+            if (char === "]") depth--;
+
+            if (depth === 0) {
+                return sourceText.slice(bracketStart, i + 1);
+            }
+        }
+
+        return "";
+    }
+
+    function countObjectsInArray(arrayText) {
+        const nombreMatches = arrayText.match(/\bnombre\s*:/g);
+        if (nombreMatches) return nombreMatches.length;
+
+        const titleMatches = arrayText.match(/\b(title|titulo|name)\s*:/gi);
+        if (titleMatches) return titleMatches.length;
+
+        const objectMatches = arrayText.match(/\{[\s\S]*?\}/g);
+        return objectMatches ? objectMatches.length : 0;
+    }
+
+    function countFromSpecificArray(htmlText, arrayName) {
+        if (!arrayName) return null;
+
+        const arrayPattern = new RegExp("(?:const|let|var)\\s+" + escapeRegExp(arrayName) + "\\s*=\\s*\\[");
+        const match = arrayPattern.exec(htmlText);
+
+        if (!match) return null;
+
+        const arrayText = getBalancedArrayText(htmlText, match.index);
+        if (!arrayText) return null;
+
+        return countObjectsInArray(arrayText);
+    }
+
+    function countFromAnyBusinessArray(htmlText) {
+        const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
+        let match;
+        let bestCount = null;
+
+        while ((match = arrayPattern.exec(htmlText)) !== null) {
+            const arrayText = getBalancedArrayText(htmlText, match.index);
+            if (!arrayText) continue;
+
+            const count = countObjectsInArray(arrayText);
+            if (bestCount === null || count > bestCount) bestCount = count;
+        }
+
+        return bestCount;
+    }
+
+    function countFromRenderedMarkup(htmlText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+        return doc.querySelectorAll(countableSelectors).length;
+    }
+
+    function countCategoryItems(htmlText, arrayName) {
+        const specificArrayCount = countFromSpecificArray(htmlText, arrayName);
+        if (specificArrayCount !== null) return specificArrayCount;
+
+        const genericArrayCount = countFromAnyBusinessArray(htmlText);
+        if (genericArrayCount !== null) return genericArrayCount;
+
+        return countFromRenderedMarkup(htmlText);
+    }
+
+    async function updateCategoryCount(button) {
+        const src = button.dataset.countSrc;
+        const arrayName = button.dataset.countArray;
+        const target = document.getElementById(button.dataset.countTarget);
+        const singular = button.dataset.countSingular || "local";
+        const plural = button.dataset.countPlural || "locales";
+
+        if (!src || !target) return;
+
+        formatCount(target, 0, singular, plural);
+
+        try {
+            const url = new URL(src, window.location.href);
+            url.searchParams.set("_conteo", Date.now().toString());
+
+            const response = await fetch(url.href, { cache: "no-store" });
+            if (!response.ok) {
+                formatCount(target, 0, singular, plural);
+                return;
+            }
+
+            const htmlText = await response.text();
+            const total = countCategoryItems(htmlText, arrayName);
+
+            formatCount(target, total || 0, singular, plural);
+        } catch (error) {
+            formatCount(target, 0, singular, plural);
+        }
+    }
+
+    categoryButtons.forEach(updateCategoryCount);
+})();
+</script>
 
 <script>
 (function () {
