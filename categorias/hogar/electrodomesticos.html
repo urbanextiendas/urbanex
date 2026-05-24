@@ -1212,7 +1212,7 @@
     const heroCounter = document.getElementById("heroCounter");
     const visibleCompaniesCounter = document.getElementById("visibleCompaniesCounter");
 
-    if (!businessGrid || !searchInput) return;
+    if (!businessGrid || !searchInput || !searchButton) return;
 
     let searchDocuments = [];
     let indexLoaded = false;
@@ -1280,6 +1280,7 @@
 
     function getInferredGithubPagesConfig() {
         const host = window.location.hostname;
+
         if (!host.endsWith(".github.io")) return null;
 
         const owner = host.replace(".github.io", "");
@@ -1297,6 +1298,7 @@
 
     function getActiveRepoConfig() {
         const inferred = getInferredGithubPagesConfig() || {};
+
         return {
             owner: REPO_CONFIG.owner || inferred.owner || "",
             repo: REPO_CONFIG.repo || inferred.repo || "",
@@ -1487,12 +1489,78 @@
         return loadedDocuments.concat(pathOnlyFiles);
     }
 
+    function sameOriginHtmlUrl(url) {
+        try {
+            const parsed = new URL(url, window.location.href);
+            if (parsed.origin !== window.location.origin) return null;
+            if (["mailto:", "tel:", "javascript:"].includes(parsed.protocol)) return null;
+
+            const extension = getExtension(parsed.pathname);
+            if (extension && extension !== ".html" && extension !== ".htm") return null;
+
+            parsed.hash = "";
+            return parsed.href;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function collectPageLinks(doc, baseUrl) {
+        return Array.from(doc.querySelectorAll("a[href], button[onclick]"))
+            .map(function (element) {
+                const href = element.getAttribute("href");
+                if (href) return sameOriginHtmlUrl(new URL(href, baseUrl).href);
+
+                const onclick = element.getAttribute("onclick") || "";
+                const match = onclick.match(/window\.location\.href\s*=\s*['\"]([^'\"]+)['\"]/);
+                if (match) return sameOriginHtmlUrl(new URL(match[1], baseUrl).href);
+
+                return null;
+            })
+            .filter(Boolean);
+    }
+
+    async function buildLocalSiteIndex() {
+        const visited = new Set();
+        const queue = [window.location.href].concat(collectPageLinks(document, window.location.href));
+        const documents = [];
+
+        while (queue.length && visited.size < 100) {
+            const url = queue.shift();
+            if (!url || visited.has(url)) continue;
+            visited.add(url);
+
+            try {
+                const html = url === window.location.href ? document.documentElement.outerHTML : await fetchText(url);
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, "text/html");
+                const path = new URL(url).pathname.replace(/^\//, "") || "index.html";
+
+                documents.push(extractDocument(path, url, html));
+
+                collectPageLinks(doc, url).forEach(function (nextUrl) {
+                    if (!visited.has(nextUrl)) queue.push(nextUrl);
+                });
+            } catch (error) {
+                continue;
+            }
+        }
+
+        return documents;
+    }
+
     async function loadSearchIndex() {
         if (indexLoaded) return searchDocuments;
         if (indexLoading) return indexLoading;
 
         indexLoading = (async function () {
-            const documents = await buildGithubRepositoryIndex();
+            let documents = [];
+
+            try {
+                documents = await buildGithubRepositoryIndex();
+            } catch (githubError) {
+                documents = await buildLocalSiteIndex();
+            }
 
             searchDocuments = documents.filter(function (documentItem) {
                 return documentItem.normalizedTitle || documentItem.normalizedPath || documentItem.normalizedContent;
@@ -1557,7 +1625,7 @@
         if (query.length < MIN_QUERY_LENGTH) return;
 
         const originalPlaceholder = searchInput.placeholder;
-        searchInput.placeholder = "Buscando en el repositorio...";
+        searchInput.placeholder = "Buscando...";
 
         try {
             await loadSearchIndex();
@@ -1569,16 +1637,16 @@
             }
 
             searchInput.value = "";
-            searchInput.placeholder = "Sin resultados en el repositorio";
+            searchInput.placeholder = "Sin resultados";
             setTimeout(function () {
                 searchInput.placeholder = originalPlaceholder;
             }, 1600);
         } catch (error) {
             searchInput.value = "";
-            searchInput.placeholder = "Configure owner y repo en REPO_CONFIG";
+            searchInput.placeholder = "No se pudo cargar la búsqueda";
             setTimeout(function () {
                 searchInput.placeholder = originalPlaceholder;
-            }, 2200);
+            }, 1800);
         }
     }
 
@@ -1649,9 +1717,11 @@
         });
 
         if (emptyState) emptyState.style.display = filtered.length ? "none" : "block";
+
         if (visibleCompaniesCounter) {
             visibleCompaniesCounter.textContent = filtered.length + (filtered.length === 1 ? " empresa" : " empresas");
         }
+
         updateCounters(empresasElectrodomesticos.length);
     }
 
@@ -1662,16 +1732,14 @@
         }
     });
 
-    if (searchButton) {
-        searchButton.addEventListener("click", runRepositorySearch);
+    searchButton.addEventListener("click", runRepositorySearch);
 
-        searchButton.addEventListener("keydown", function (event) {
-            if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                runRepositorySearch();
-            }
-        });
-    }
+    searchButton.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            runRepositorySearch();
+        }
+    });
 
     if (segmentFilter) {
         segmentFilter.addEventListener("change", renderBusinesses);
