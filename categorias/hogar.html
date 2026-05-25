@@ -892,8 +892,76 @@
         </div>
 
         <div class="shops-scroll-area">
-            <div style="padding: 14px; color: #e0e0e0; font-size: 11px;">
-                Cargando información de electrodomésticos...
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=120&q=80" alt="Casa Nova" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">Casa Nova</div>
+                    <div class="shop-segment">Muebles · Decoración</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.9</span>
+                        <span class="rating-count">(284)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=120&q=80" alt="Tecno Loja" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">Tecno Loja</div>
+                    <div class="shop-segment">Computadoras · Accesorios</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.8</span>
+                        <span class="rating-count">(231)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=120&q=80" alt="ElectroHogar Loja" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">ElectroHogar Loja</div>
+                    <div class="shop-segment">Electrodomésticos · Instalación</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.7</span>
+                        <span class="rating-count">(176)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=120&q=80" alt="FixSmart" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">FixSmart</div>
+                    <div class="shop-segment">Reparación · Soporte técnico</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.7</span>
+                        <span class="rating-count">(152)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -915,10 +983,6 @@
     const categoryButtons = Array.from(document.querySelectorAll("[data-count-src][data-count-target]"));
     if (!categoryButtons.length) return;
 
-    const showcaseArea = document.querySelector(".shops-scroll-area");
-    const showcaseStats = document.querySelector(".showcase-stats");
-    const viewAllButton = document.querySelector(".btn-view-all-shops");
-
     const countableSelectors = [
         ".empresa-electrodomesticos",
         ".empresa-card",
@@ -930,116 +994,20 @@
         "[data-empresa]"
     ].join(",");
 
-    const loadedCategoryCache = new Map();
-
-    function escapeHtml(value) {
-        return String(value ?? "")
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
-    function normalizeText(value) {
-        return String(value || "")
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/[^a-z0-9ñáéíóúü\s./_-]/gi, " ")
-            .replace(/\s+/g, " ")
-            .trim();
-    }
-
     function formatCount(target, total, singular, plural) {
         target.textContent = total + " " + (total === 1 ? singular : plural);
     }
 
-    function getDirectoryBaseUrl() {
-        const base = new URL(window.location.href);
-        if (!base.pathname.endsWith("/")) {
-            base.pathname = base.pathname + "/";
-        }
-        return base.href;
-    }
+    function getBalancedArrayText(sourceText, arrayStartIndex) {
+        const bracketStart = sourceText.indexOf("[", arrayStartIndex);
+        if (bracketStart === -1) return "";
 
-    function addCandidate(candidates, value, base) {
-        try {
-            const url = new URL(value, base || window.location.href);
-            url.hash = "";
-            const clean = url.href;
-            if (!candidates.includes(clean)) candidates.push(clean);
-        } catch (error) {
-            return;
-        }
-    }
-
-    function getCandidateUrls(src) {
-        const candidates = [];
-        const directoryBase = getDirectoryBaseUrl();
-
-        addCandidate(candidates, src, window.location.href);
-        addCandidate(candidates, src, directoryBase);
-
-        if (/^hogar\//i.test(src)) {
-            const withoutHogar = src.replace(/^hogar\//i, "");
-            addCandidate(candidates, withoutHogar, directoryBase);
-            addCandidate(candidates, withoutHogar, window.location.href);
-        }
-
-        if (!src.includes("/")) {
-            addCandidate(candidates, "hogar/" + src, window.location.href);
-            addCandidate(candidates, "hogar/" + src, directoryBase);
-        }
-
-        if (/\.html$/i.test(src)) {
-            const withoutHtml = src.replace(/\.html$/i, "");
-            addCandidate(candidates, withoutHtml, window.location.href);
-            addCandidate(candidates, withoutHtml, directoryBase);
-
-            if (/^hogar\//i.test(withoutHtml)) {
-                addCandidate(candidates, withoutHtml.replace(/^hogar\//i, ""), directoryBase);
-            }
-        }
-
-        return candidates;
-    }
-
-    async function fetchTextFromCandidates(candidates) {
-        let lastError = null;
-
-        for (const href of candidates) {
-            try {
-                const url = new URL(href);
-                url.searchParams.set("_urbanex_datos", Date.now().toString());
-
-                const response = await fetch(url.href, { cache: "no-store" });
-                if (!response.ok) {
-                    lastError = new Error("No se pudo cargar: " + href);
-                    continue;
-                }
-
-                return {
-                    text: await response.text(),
-                    url: response.url || href
-                };
-            } catch (error) {
-                lastError = error;
-            }
-        }
-
-        throw lastError || new Error("No se pudo cargar la información.");
-    }
-
-    function getBalancedStructure(source, startIndex) {
-        const opener = source[startIndex];
-        const closer = opener === "{" ? "}" : "]";
         let depth = 0;
         let quote = "";
         let escaped = false;
 
-        for (let index = startIndex; index < source.length; index++) {
-            const char = source[index];
+        for (let i = bracketStart; i < sourceText.length; i++) {
+            const char = sourceText[i];
 
             if (escaped) {
                 escaped = false;
@@ -1056,264 +1024,20 @@
                 continue;
             }
 
-            if (char === "\"" || char === "'" || char === "`") {
+            if (char === "'" || char === '"' || char === "`") {
                 quote = char;
                 continue;
             }
 
-            if (char === opener) depth++;
-            if (char === closer) depth--;
+            if (char === "[") depth++;
+            if (char === "]") depth--;
 
             if (depth === 0) {
-                return source.slice(startIndex, index + 1);
+                return sourceText.slice(bracketStart, i + 1);
             }
         }
 
         return "";
-    }
-
-    function extractAssignedData(source, names) {
-        for (const name of names) {
-            const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-            const pattern = new RegExp("(?:const|let|var)\\s+" + escapedName + "\\s*=|window\\." + escapedName + "\\s*=", "m");
-            const match = source.match(pattern);
-
-            if (!match) continue;
-
-            const structureStart = source.indexOf("{", match.index);
-            const arrayStart = source.indexOf("[", match.index);
-            const candidates = [structureStart, arrayStart].filter(function (index) { return index >= 0; });
-            const startIndex = Math.min.apply(null, candidates);
-
-            if (!Number.isFinite(startIndex)) continue;
-
-            const raw = getBalancedStructure(source, startIndex);
-            if (!raw) continue;
-
-            try {
-                return (new Function("return (" + raw + ");"))();
-            } catch (error) {
-                continue;
-            }
-        }
-
-        return null;
-    }
-
-    function getScriptText(htmlText) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlText || "", "text/html");
-
-        return Array.from(doc.querySelectorAll("script"))
-            .map(function (script) { return script.textContent || ""; })
-            .join("\n");
-    }
-
-    function resolveUrl(value, baseUrl) {
-        const raw = String(value || "").trim();
-        if (!raw) return "";
-
-        if (/^(mailto|tel|javascript|data):/i.test(raw)) return "";
-
-        try {
-            return new URL(raw, baseUrl || window.location.href).href;
-        } catch (error) {
-            return raw;
-        }
-    }
-
-    function getBusinessInitials(name) {
-        return String(name || "")
-            .split(" ")
-            .filter(Boolean)
-            .slice(0, 2)
-            .map(function (word) { return word.charAt(0).toUpperCase(); })
-            .join("");
-    }
-
-    function timeToMinutes(value) {
-        const parts = String(value || "00:00").split(":");
-        const hours = Number(parts[0] || 0);
-        const minutes = Number(parts[1] || 0);
-        return (hours * 60) + minutes;
-    }
-
-    function getNowInTimeZone(timeZone) {
-        const formatter = new Intl.DateTimeFormat("en-US", {
-            timeZone: timeZone || "America/Guayaquil",
-            weekday: "long",
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false
-        });
-
-        const parts = formatter.formatToParts(new Date());
-        const weekday = String(parts.find(function (part) { return part.type === "weekday"; })?.value || "").toLowerCase();
-        const hour = Number(parts.find(function (part) { return part.type === "hour"; })?.value || 0);
-        const minute = Number(parts.find(function (part) { return part.type === "minute"; })?.value || 0);
-
-        const dayMap = {
-            sunday: "domingo",
-            monday: "lunes",
-            tuesday: "martes",
-            wednesday: "miercoles",
-            thursday: "jueves",
-            friday: "viernes",
-            saturday: "sabado"
-        };
-
-        return {
-            dia: dayMap[weekday] || "lunes",
-            minutos: (hour * 60) + minute
-        };
-    }
-
-    function getBusinessStatusInfo(empresa) {
-        if (!empresa.horario) {
-            const manual = String(empresa.estado || empresa.estadoManual || "Disponible").trim();
-            const normalized = normalizeText(manual);
-
-            if (normalized.includes("cerrado")) return { label: "Cerrado", className: "closed" };
-            if (normalized.includes("abierto")) return { label: "Abierto", className: "open" };
-
-            return { label: manual || "Disponible", className: "available" };
-        }
-
-        const now = getNowInTimeZone(empresa.zonaHoraria || "America/Guayaquil");
-        const todaySchedule = empresa.horario[now.dia] || [];
-
-        for (const range of todaySchedule) {
-            const open = timeToMinutes(range.abre);
-            const close = timeToMinutes(range.cierra);
-
-            if (now.minutos >= open && now.minutos < close) {
-                return { label: "Abierto", className: "open" };
-            }
-
-            if (now.minutos < open && (open - now.minutos) <= 60) {
-                return { label: "Abre pronto", className: "soon" };
-            }
-        }
-
-        return { label: "Cerrado", className: "closed" };
-    }
-
-    function parseEmpresaDataFromHtml(htmlText, sourceUrl) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlText || "", "text/html");
-
-        const jsonData = doc.querySelector(
-            "#urbanex-empresa-data, #urbanex-empresas-data, #empresa-data, script[type='application/json'][data-urbanex='empresa']"
-        );
-
-        if (jsonData && jsonData.textContent.trim()) {
-            try {
-                const parsed = JSON.parse(jsonData.textContent);
-                return Array.isArray(parsed) ? parsed : [parsed];
-            } catch (error) {
-                return [];
-            }
-        }
-
-        const scriptText = getScriptText(htmlText);
-        const assignedData = extractAssignedData(scriptText, [
-            "EMPRESAS_ELECTRODOMESTICOS",
-            "EMPRESAS",
-            "URBANEX_EMPRESAS",
-            "EMPRESA",
-            "URBANEX_EMPRESA"
-        ]);
-
-        if (assignedData) {
-            return Array.isArray(assignedData) ? assignedData : [assignedData];
-        }
-
-        const title = (doc.querySelector("h1")?.textContent || doc.title || "").trim();
-        const description = (doc.querySelector(".company-description, .business-description, meta[name='description']")?.textContent || "").trim();
-        const logo = doc.querySelector("img[id='companyLogo'], .logo-box img, .business-logo")?.getAttribute("src") || "";
-        const category = (doc.querySelector(".category-pill, .business-category")?.textContent || "Electrodomésticos").trim();
-
-        if (!title && !description && !logo) return [];
-
-        return [{
-            nombre: title,
-            categoria: category,
-            descripcion: description,
-            logo: logo,
-            perfil: sourceUrl
-        }];
-    }
-
-    function normalizeEmpresa(rawEmpresa, sourceUrl) {
-        const empresa = Object.assign({}, rawEmpresa || {});
-        const categoria = empresa.categoria || empresa.segmento || "Electrodomésticos";
-        const perfil = resolveUrl(empresa.perfil || empresa.url || sourceUrl, sourceUrl);
-        const logo = resolveUrl(empresa.logo || empresa.imagenEmpresa || empresa.logoUrl || empresa.imagen || empresa.portada || "", sourceUrl);
-
-        return {
-            nombre: empresa.nombre || empresa.name || "Empresa",
-            categoria: categoria,
-            segmento: categoria,
-            descripcion: empresa.descripcion || empresa.description || "",
-            rating: Number(empresa.rating || empresa.calificacion || empresa.estrellas || 0),
-            logo: logo,
-            perfil: perfil,
-            horario: empresa.horario || null,
-            zonaHoraria: empresa.zonaHoraria || "America/Guayaquil",
-            estado: empresa.estado || empresa.estadoManual || "Disponible"
-        };
-    }
-
-    async function loadEmpresasFromCategory(button) {
-        const src = button.dataset.countSrc;
-        if (!src) return { empresas: [], htmlText: "", categoryUrl: "" };
-
-        const cacheKey = src;
-        if (loadedCategoryCache.has(cacheKey)) return loadedCategoryCache.get(cacheKey);
-
-        const loading = (async function () {
-            const categoryResponse = await fetchTextFromCandidates(getCandidateUrls(src));
-            const categoryHtml = categoryResponse.text;
-            const categoryUrl = categoryResponse.url;
-
-            const scriptText = getScriptText(categoryHtml);
-            const dataSources = extractAssignedData(scriptText, ["EMPRESAS_DATA_SOURCES", "URBANEX_DATA_SOURCES"]);
-            let empresas = [];
-
-            if (Array.isArray(dataSources) && dataSources.length) {
-                const loadedProfiles = await Promise.allSettled(dataSources.map(async function (sourcePath) {
-                    const sourceUrl = resolveUrl(sourcePath, categoryUrl);
-                    const profileResponse = await fetchTextFromCandidates([sourceUrl]);
-                    const rawEmpresas = parseEmpresaDataFromHtml(profileResponse.text, profileResponse.url);
-
-                    return rawEmpresas.map(function (empresa) {
-                        return normalizeEmpresa(empresa, profileResponse.url);
-                    });
-                }));
-
-                loadedProfiles.forEach(function (result) {
-                    if (result.status === "fulfilled") {
-                        empresas = empresas.concat(result.value);
-                    }
-                });
-            }
-
-            if (!empresas.length) {
-                const rawEmpresas = parseEmpresaDataFromHtml(categoryHtml, categoryUrl);
-                empresas = rawEmpresas.map(function (empresa) {
-                    return normalizeEmpresa(empresa, categoryUrl);
-                });
-            }
-
-            return {
-                empresas: empresas,
-                htmlText: categoryHtml,
-                categoryUrl: categoryUrl
-            };
-        })();
-
-        loadedCategoryCache.set(cacheKey, loading);
-        return loading;
     }
 
     function countObjectsInArray(arrayText) {
@@ -1327,24 +1051,31 @@
     function countFromSpecificArray(htmlText, arrayName) {
         if (!arrayName) return null;
 
-        const escapedArrayName = arrayName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        const pattern = new RegExp("(?:const|let|var)\\s+" + escapedArrayName + "\\s*=\\s*\\[");
-        const match = pattern.exec(htmlText);
+        const arrayPattern = new RegExp("(?:const|let|var)\\s+" + arrayName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\s*=\\s*\\[");
+        const match = arrayPattern.exec(htmlText);
 
         if (!match) return null;
 
-        const bracketStart = htmlText.indexOf("[", match.index);
-        const arrayText = getBalancedStructure(htmlText, bracketStart);
+        const arrayText = getBalancedArrayText(htmlText, match.index);
         if (!arrayText) return null;
 
         return countObjectsInArray(arrayText);
     }
 
-    function countFromDataSources(htmlText) {
-        const scriptText = getScriptText(htmlText);
-        const dataSources = extractAssignedData(scriptText, ["EMPRESAS_DATA_SOURCES", "URBANEX_DATA_SOURCES"]);
+    function countFromAnyBusinessArray(htmlText) {
+        const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
+        let match;
+        let bestCount = null;
 
-        return Array.isArray(dataSources) ? dataSources.length : null;
+        while ((match = arrayPattern.exec(htmlText)) !== null) {
+            const arrayText = getBalancedArrayText(htmlText, match.index);
+            if (!arrayText) continue;
+
+            const count = countObjectsInArray(arrayText);
+            if (bestCount === null || count > bestCount) bestCount = count;
+        }
+
+        return bestCount;
     }
 
     function countFromRenderedMarkup(htmlText) {
@@ -1354,110 +1085,42 @@
     }
 
     function countCategoryItems(htmlText, arrayName) {
-        const sourceCount = countFromDataSources(htmlText);
-        if (sourceCount !== null) return sourceCount;
-
         const specificArrayCount = countFromSpecificArray(htmlText, arrayName);
         if (specificArrayCount !== null) return specificArrayCount;
+
+        const genericArrayCount = countFromAnyBusinessArray(htmlText);
+        if (genericArrayCount !== null) return genericArrayCount;
 
         return countFromRenderedMarkup(htmlText);
     }
 
-    function renderShowcase(empresas, sourceButton) {
-        if (!showcaseArea) return;
-
-        const total = empresas.length;
-        const categoryName = sourceButton?.querySelector(".category-name")?.textContent?.trim() || "Electrodomésticos";
-
-        if (showcaseStats) {
-            showcaseStats.textContent = total + " " + (total === 1 ? "local registrado" : "locales registrados");
-        }
-
-        if (viewAllButton && sourceButton?.getAttribute("onclick")) {
-            viewAllButton.setAttribute("onclick", sourceButton.getAttribute("onclick"));
-        }
-
-        if (!total) {
-            showcaseArea.innerHTML = `
-                <div style="padding: 14px; color: #e0e0e0; font-size: 11px;">
-                    No se pudo cargar información de empresas.
-                </div>
-            `;
-            return;
-        }
-
-        showcaseArea.innerHTML = empresas.slice(0, 8).map(function (empresa) {
-            const status = getBusinessStatusInfo(empresa);
-            const ratingText = empresa.rating > 0 ? empresa.rating.toFixed(1) : "Nuevo";
-            const logoContent = empresa.logo
-                ? `<img src="${escapeHtml(empresa.logo)}" alt="${escapeHtml(empresa.nombre)}" class="shop-thumb" onerror="this.style.display='none'; this.parentElement.querySelector('.shop-thumb-fallback').style.display='flex';">`
-                : "";
-
-            return `
-                <div class="shop-card" role="button" tabindex="0" data-perfil="${escapeHtml(empresa.perfil)}">
-                    <div class="shop-thumb-wrapper">
-                        ${logoContent}
-                        <div class="shop-thumb-fallback" style="${empresa.logo ? "display:none;" : "display:flex;"} width:100%; height:100%; align-items:center; justify-content:center; background:rgba(229,193,88,0.12); color:#e5c158; font-size:12px; font-weight:800;">
-                            ${escapeHtml(getBusinessInitials(empresa.nombre) || "UX")}
-                        </div>
-                    </div>
-                    <div class="shop-details">
-                        <div class="shop-title">${escapeHtml(empresa.nombre)}</div>
-                        <div class="shop-segment">${escapeHtml(empresa.segmento || categoryName)}</div>
-                        <div class="shop-rating-row">
-                            <svg class="star-icon" viewBox="0 0 24 24">
-                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                            </svg>
-                            <span class="rating-value">${escapeHtml(ratingText)}</span>
-                            <span class="rating-count">${empresa.rating > 0 ? "(Urbanex)" : ""}</span>
-                            <span class="status-indicator">${escapeHtml(status.label)}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }).join("");
-
-        showcaseArea.querySelectorAll(".shop-card[data-perfil]").forEach(function (card) {
-            card.addEventListener("click", function () {
-                const perfil = card.dataset.perfil;
-                if (perfil) window.location.href = perfil;
-            });
-
-            card.addEventListener("keydown", function (event) {
-                if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    const perfil = card.dataset.perfil;
-                    if (perfil) window.location.href = perfil;
-                }
-            });
-        });
-    }
-
     async function updateCategoryCount(button) {
+        const src = button.dataset.countSrc;
+        const arrayName = button.dataset.countArray;
         const target = document.getElementById(button.dataset.countTarget);
         const singular = button.dataset.countSingular || "local";
         const plural = button.dataset.countPlural || "locales";
 
-        if (!target) return;
+        if (!src || !target) return;
 
         formatCount(target, 0, singular, plural);
 
         try {
-            const categoryData = await loadEmpresasFromCategory(button);
-            const empresas = categoryData.empresas || [];
-            const total = empresas.length || countCategoryItems(categoryData.htmlText || "", button.dataset.countArray) || 0;
+            const url = new URL(src, window.location.href);
+            url.searchParams.set("_conteo", Date.now().toString());
 
-            formatCount(target, total, singular, plural);
-
-            if (button.dataset.countTarget === "countElectrodomesticos") {
-                renderShowcase(empresas, button);
+            const response = await fetch(url.href, { cache: "no-store" });
+            if (!response.ok) {
+                formatCount(target, 0, singular, plural);
+                return;
             }
+
+            const htmlText = await response.text();
+            const total = countCategoryItems(htmlText, arrayName);
+
+            formatCount(target, total || 0, singular, plural);
         } catch (error) {
             formatCount(target, 0, singular, plural);
-
-            if (button.dataset.countTarget === "countElectrodomesticos") {
-                renderShowcase([], button);
-            }
         }
     }
 
