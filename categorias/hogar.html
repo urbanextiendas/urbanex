@@ -695,6 +695,98 @@
                 letter-spacing: 1.4px;
             }
         }
+
+        /* Destacados manuales de Hogar */
+        .manual-shop-card {
+            min-height: 76px;
+            height: auto;
+            padding: 7px;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .manual-shop-card .shop-thumb-wrapper {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(229,193,88,0.22);
+            overflow: hidden;
+        }
+
+        .manual-shop-card .shop-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 5px;
+            background: rgba(0,0,0,0.20);
+        }
+
+        .manual-shop-card .shop-details {
+            min-width: 0;
+            padding: 0;
+            gap: 2px;
+        }
+
+        .manual-shop-card .shop-title {
+            font-size: 12px;
+            line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .manual-shop-card .shop-segment {
+            font-size: 9px;
+            line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .manual-shop-description {
+            color: var(--text-muted);
+            font-size: 8.4px;
+            line-height: 1.25;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .manual-shop-card:hover .manual-shop-description {
+            -webkit-line-clamp: 3;
+        }
+
+        .manual-status {
+            margin-left: auto;
+            font-size: 8.8px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .manual-status.estado-abierto {
+            color: #2ed573;
+        }
+
+        .manual-status.estado-cerrado {
+            color: #ff7675;
+        }
+
+        .manual-status.estado-disponible {
+            color: var(--gold);
+        }
+
+        .manual-empty-state {
+            border: 1px dashed rgba(229,193,88,0.34);
+            border-radius: 10px;
+            padding: 14px;
+            color: var(--text-muted);
+            font-size: 10px;
+            text-align: center;
+            background: rgba(0,0,0,0.28);
+        }
+
     </style>
 </head>
 
@@ -879,91 +971,19 @@
     <aside class="aside-showcase-list">
         <div class="showcase-header">
             <h2>HOGAR DESTACADO</h2>
-            <div class="showcase-stats">Recomendados para casa y tecnología</div>
+            <div class="showcase-stats" id="manualShowcaseStats">0 empresas cargadas manualmente</div>
         </div>
 
         <div class="sort-box">
-            <select class="sort-select">
-                <option>Ordenar por: Mayor Calificación</option>
-                <option>Cercanía</option>
-                <option>Precio promedio</option>
-                <option>Mayor disponibilidad</option>
+            <select class="sort-select" id="manualHogarSort" aria-label="Ordenar destacados de hogar">
+                <option value="orden">Ordenar por: Orden manual</option>
+                <option value="calificacion">Mayor calificación</option>
+                <option value="nombre">Nombre A-Z</option>
+                <option value="estado">Disponibilidad</option>
             </select>
         </div>
 
-        <div class="shops-scroll-area">
-            <div class="shop-card">
-                <div class="shop-thumb-wrapper">
-                    <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=120&q=80" alt="Casa Nova" class="shop-thumb">
-                </div>
-                <div class="shop-details">
-                    <div class="shop-title">Casa Nova</div>
-                    <div class="shop-segment">Muebles · Decoración</div>
-                    <div class="shop-rating-row">
-                        <svg class="star-icon" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                        </svg>
-                        <span class="rating-value">4.9</span>
-                        <span class="rating-count">(284)</span>
-                        <span class="status-indicator">Abierto</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="shop-card">
-                <div class="shop-thumb-wrapper">
-                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=120&q=80" alt="Tecno Loja" class="shop-thumb">
-                </div>
-                <div class="shop-details">
-                    <div class="shop-title">Tecno Loja</div>
-                    <div class="shop-segment">Computadoras · Accesorios</div>
-                    <div class="shop-rating-row">
-                        <svg class="star-icon" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                        </svg>
-                        <span class="rating-value">4.8</span>
-                        <span class="rating-count">(231)</span>
-                        <span class="status-indicator">Abierto</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="shop-card">
-                <div class="shop-thumb-wrapper">
-                    <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=120&q=80" alt="ElectroHogar Loja" class="shop-thumb">
-                </div>
-                <div class="shop-details">
-                    <div class="shop-title">ElectroHogar Loja</div>
-                    <div class="shop-segment">Electrodomésticos · Instalación</div>
-                    <div class="shop-rating-row">
-                        <svg class="star-icon" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                        </svg>
-                        <span class="rating-value">4.7</span>
-                        <span class="rating-count">(176)</span>
-                        <span class="status-indicator">Abierto</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="shop-card">
-                <div class="shop-thumb-wrapper">
-                    <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=120&q=80" alt="FixSmart" class="shop-thumb">
-                </div>
-                <div class="shop-details">
-                    <div class="shop-title">FixSmart</div>
-                    <div class="shop-segment">Reparación · Soporte técnico</div>
-                    <div class="shop-rating-row">
-                        <svg class="star-icon" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                        </svg>
-                        <span class="rating-value">4.7</span>
-                        <span class="rating-count">(152)</span>
-                        <span class="status-indicator">Abierto</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="shops-scroll-area" id="manualHogarDestacados" aria-label="Empresas destacadas de hogar"></div>
 
         <div class="action-footer-box">
             <button class="btn-view-all-shops" type="button" onclick="window.location.href='hogar/electrodomesticos.html'">Ver empresas de Hogar y Tecnología</button>
@@ -980,12 +1000,176 @@
 
 <script>
 (function () {
+    /* ==========================================================
+       HOGAR DESTACADO - CARGA MANUAL
+
+       MODIFIQUE SOLO ESTE ARREGLO PARA MOSTRAR EMPRESAS DESTACADAS
+       EN EL PANEL DERECHO DE hogar.html.
+
+       Campos:
+       - nombre: nombre de la empresa.
+       - segmento: categoría o tipo visible.
+       - descripcion: texto corto. No escriba demasiado.
+       - imagen: ruta del logo o imagen.
+       - url: página a la que abrirá la tarjeta.
+       - calificacion: número. Use 0 si no desea mostrar calificación.
+       - resenas: número de reseñas. Use 0 si no aplica.
+       - estado: "Abierto", "Cerrado" o "Disponible".
+       - orden: número para ordenar manualmente. 1 aparece primero.
+       ========================================================== */
+
+    const DESTACADOS_HOGAR = [
+        {
+            nombre: "Electromas",
+            segmento: "Electrodomésticos",
+            descripcion: "Venta de refrigeradoras, lavadoras, cocinas, secadoras y línea blanca para hogares y negocios de Loja.",
+            imagen: "../imagenes/empresas/electromas.png",
+            url: "hogar/electrodomesticos.html",
+            calificacion: 0,
+            resenas: 0,
+            estado: "Cerrado",
+            orden: 1
+        }
+
+        /*
+        Ejemplo para agregar otra empresa manualmente:
+
+        ,
+        {
+            nombre: "Nombre de la empresa",
+            segmento: "Muebles · Decoración",
+            descripcion: "Descripción breve de la empresa destacada.",
+            imagen: "../imagenes/empresas/nombre-empresa.png",
+            url: "hogar/muebles-decoracion.html",
+            calificacion: 4.8,
+            resenas: 120,
+            estado: "Abierto",
+            orden: 2
+        }
+        */
+    ];
+
+    const list = document.getElementById("manualHogarDestacados");
+    const stats = document.getElementById("manualShowcaseStats");
+    const sortSelect = document.getElementById("manualHogarSort");
+
+    if (!list || !stats || !sortSelect) return;
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function normalizeText(value) {
+        return String(value || "")
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .trim();
+    }
+
+    function getStatusClass(estado) {
+        const normalized = normalizeText(estado);
+
+        if (normalized.includes("abierto")) return "estado-abierto";
+        if (normalized.includes("cerrado")) return "estado-cerrado";
+
+        return "estado-disponible";
+    }
+
+    function getSortedItems() {
+        const mode = sortSelect.value;
+        const items = DESTACADOS_HOGAR.slice();
+
+        if (mode === "calificacion") {
+            return items.sort(function (a, b) {
+                return Number(b.calificacion || 0) - Number(a.calificacion || 0);
+            });
+        }
+
+        if (mode === "nombre") {
+            return items.sort(function (a, b) {
+                return String(a.nombre || "").localeCompare(String(b.nombre || ""), "es");
+            });
+        }
+
+        if (mode === "estado") {
+            const order = { abierto: 1, disponible: 2, cerrado: 3 };
+
+            return items.sort(function (a, b) {
+                const aKey = normalizeText(a.estado);
+                const bKey = normalizeText(b.estado);
+                const aOrder = aKey.includes("abierto") ? order.abierto : aKey.includes("cerrado") ? order.cerrado : order.disponible;
+                const bOrder = bKey.includes("abierto") ? order.abierto : bKey.includes("cerrado") ? order.cerrado : order.disponible;
+
+                return aOrder - bOrder;
+            });
+        }
+
+        return items.sort(function (a, b) {
+            return Number(a.orden || 999) - Number(b.orden || 999);
+        });
+    }
+
+    function renderManualDestacados() {
+        const items = getSortedItems();
+
+        stats.textContent = items.length + " " + (items.length === 1 ? "empresa destacada" : "empresas destacadas");
+
+        if (!items.length) {
+            list.innerHTML = '<div class="manual-empty-state">No hay empresas destacadas cargadas manualmente.</div>';
+            return;
+        }
+
+        list.innerHTML = items.map(function (item) {
+            const ratingBlock = Number(item.calificacion || 0) > 0
+                ? `
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">${escapeHtml(Number(item.calificacion).toFixed(1))}</span>
+                        <span class="rating-count">${Number(item.resenas || 0) > 0 ? "(" + escapeHtml(item.resenas) + ")" : ""}</span>
+                        <span class="manual-status ${getStatusClass(item.estado)}">${escapeHtml(item.estado || "Disponible")}</span>
+                    </div>
+                `
+                : `
+                    <div class="shop-rating-row">
+                        <span class="rating-count">Referencia manual</span>
+                        <span class="manual-status ${getStatusClass(item.estado)}">${escapeHtml(item.estado || "Disponible")}</span>
+                    </div>
+                `;
+
+            return `
+                <article class="shop-card manual-shop-card" onclick="window.location.href='${escapeHtml(item.url || "#")}'">
+                    <div class="shop-thumb-wrapper">
+                        <img src="${escapeHtml(item.imagen || "")}" alt="${escapeHtml(item.nombre || "Empresa")}" class="shop-thumb" onerror="this.style.display='none';">
+                    </div>
+                    <div class="shop-details">
+                        <div class="shop-title">${escapeHtml(item.nombre || "Empresa")}</div>
+                        <div class="shop-segment">${escapeHtml(item.segmento || "Hogar")}</div>
+                        <p class="manual-shop-description">${escapeHtml(item.descripcion || "")}</p>
+                        ${ratingBlock}
+                    </div>
+                </article>
+            `;
+        }).join("");
+    }
+
+    sortSelect.addEventListener("change", renderManualDestacados);
+    renderManualDestacados();
+})();
+</script>
+
+
+<script>
+(function () {
     const categoryButtons = Array.from(document.querySelectorAll("[data-count-src][data-count-target]"));
     if (!categoryButtons.length) return;
-
-    const featuredList = document.querySelector(".shops-scroll-area");
-    const showcaseStats = document.querySelector(".showcase-stats");
-    const categoryCompanyCache = new Map();
 
     const countableSelectors = [
         ".empresa-electrodomesticos",
@@ -998,84 +1182,19 @@
         "[data-empresa]"
     ].join(",");
 
-    const DATA_SOURCE_VARIABLES = [
-        "EMPRESAS_DATA_SOURCES",
-        "EMPRESA_DATA_SOURCES",
-        "URBANEX_EMPRESAS_DATA_SOURCES",
-        "URBANEX_DATA_SOURCES"
-    ];
-
-    const EMPRESA_VARIABLES = [
-        "EMPRESAS_ELECTRODOMESTICOS",
-        "EMPRESAS",
-        "URBANEX_EMPRESAS",
-        "EMPRESA",
-        "URBANEX_EMPRESA"
-    ];
-
     function formatCount(target, total, singular, plural) {
         target.textContent = total + " " + (total === 1 ? singular : plural);
     }
 
-    function escapeHtml(value) {
-        return String(value || "")
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
+    function getBalancedArrayText(sourceText, arrayStartIndex) {
+        const bracketStart = sourceText.indexOf("[", arrayStartIndex);
+        if (bracketStart === -1) return "";
 
-    function resolveUrl(path, baseUrl) {
-        if (!path) return "";
-        try {
-            return new URL(String(path), baseUrl || window.location.href).href;
-        } catch (error) {
-            return String(path);
-        }
-    }
-
-    function titleFromPath(path) {
-        const cleanPath = String(path || "").split("?")[0].split("#")[0];
-        const fileName = cleanPath.split("/").pop() || cleanPath;
-        const withoutExtension = fileName.replace(/\.[^/.]+$/, "");
-
-        return withoutExtension
-            .replace(/[-_]+/g, " ")
-            .replace(/\b\w/g, function (letter) { return letter.toUpperCase(); });
-    }
-
-    function decodeEntities(text) {
-        const decoder = document.createElement("textarea");
-        decoder.innerHTML = String(text || "");
-        return decoder.value;
-    }
-
-    function cleanText(value) {
-        return decodeEntities(value)
-            .replace(/<[^>]*>/g, " ")
-            .replace(/\s+/g, " ")
-            .trim();
-    }
-
-    function normalizeText(value) {
-        return cleanText(value)
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/[^a-z0-9ñáéíóúü\s./_-]/gi, " ")
-            .replace(/\s+/g, " ")
-            .trim();
-    }
-
-    function getBalancedStructure(sourceText, startIndex) {
-        const opener = sourceText[startIndex];
-        const closer = opener === "[" ? "]" : "}";
         let depth = 0;
         let quote = "";
         let escaped = false;
 
-        for (let i = startIndex; i < sourceText.length; i++) {
+        for (let i = bracketStart; i < sourceText.length; i++) {
             const char = sourceText[i];
 
             if (escaped) {
@@ -1098,237 +1217,20 @@
                 continue;
             }
 
-            if (char === opener) depth++;
-            if (char === closer) depth--;
+            if (char === "[") depth++;
+            if (char === "]") depth--;
 
-            if (depth === 0) return sourceText.slice(startIndex, i + 1);
+            if (depth === 0) {
+                return sourceText.slice(bracketStart, i + 1);
+            }
         }
 
         return "";
     }
 
-    function extractAssignedData(sourceText, variableNames) {
-        for (const name of variableNames) {
-            const safeName = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-            const pattern = new RegExp("(?:const|let|var)\\s+" + safeName + "\\s*=\\s*", "m");
-            const match = pattern.exec(sourceText);
-
-            if (!match) continue;
-
-            const objectStart = sourceText.indexOf("{", match.index);
-            const arrayStart = sourceText.indexOf("[", match.index);
-            const candidates = [objectStart, arrayStart].filter(function (index) { return index >= 0; });
-            const startIndex = Math.min.apply(null, candidates);
-
-            if (!Number.isFinite(startIndex)) continue;
-
-            const rawStructure = getBalancedStructure(sourceText, startIndex);
-            if (!rawStructure) continue;
-
-            try {
-                return (new Function("return (" + rawStructure + ");"))();
-            } catch (error) {
-                continue;
-            }
-        }
-
-        return null;
-    }
-
-    function getScriptText(doc) {
-        return Array.from(doc.querySelectorAll("script"))
-            .map(function (script) { return script.textContent || ""; })
-            .join("\n");
-    }
-
-    function parseJsonEmpresaBlocks(doc) {
-        const jsonBlocks = Array.from(doc.querySelectorAll(
-            "#urbanex-empresa-data, #urbanex-empresas-data, #empresa-data, script[type='application/json'][data-urbanex='empresa']"
-        ));
-
-        const output = [];
-
-        jsonBlocks.forEach(function (block) {
-            const content = block.textContent.trim();
-            if (!content) return;
-
-            try {
-                const parsed = JSON.parse(content);
-                if (Array.isArray(parsed)) {
-                    parsed.forEach(function (item) { output.push(item); });
-                } else {
-                    output.push(parsed);
-                }
-            } catch (error) {
-                return;
-            }
-        });
-
-        return output;
-    }
-
-    function parseCompaniesFromHtml(htmlText, sourceUrl, allowFallback) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlText || "", "text/html");
-
-        const jsonCompanies = parseJsonEmpresaBlocks(doc);
-        if (jsonCompanies.length) return jsonCompanies;
-
-        const scriptText = getScriptText(doc);
-        const assignedData = extractAssignedData(scriptText, EMPRESA_VARIABLES);
-
-        if (assignedData) {
-            return Array.isArray(assignedData) ? assignedData : [assignedData];
-        }
-
-        if (!allowFallback) return [];
-
-        const title = cleanText((doc.querySelector("h1") && doc.querySelector("h1").textContent) || doc.title || titleFromPath(sourceUrl));
-        const descriptionElement = doc.querySelector(".company-description, .business-description");
-        const descriptionMeta = doc.querySelector("meta[name='description']");
-        const logoElement = doc.querySelector("img[id='companyLogo'], .logo-box img, .business-logo");
-        const categoryElement = doc.querySelector(".category-pill, .business-category");
-
-        return [{
-            nombre: title,
-            categoria: cleanText(categoryElement ? categoryElement.textContent : "Electrodomésticos"),
-            descripcion: cleanText(descriptionElement ? descriptionElement.textContent : (descriptionMeta ? descriptionMeta.getAttribute("content") : "")),
-            logo: logoElement ? logoElement.getAttribute("src") : "",
-            perfil: sourceUrl
-        }];
-    }
-
-    function getCompanyDataSourcesFromCategory(htmlText, categoryUrl) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlText || "", "text/html");
-        const scriptText = getScriptText(doc);
-        const assignedSources = extractAssignedData(scriptText, DATA_SOURCE_VARIABLES);
-
-        if (!assignedSources) return [];
-
-        const sourceList = Array.isArray(assignedSources) ? assignedSources : [assignedSources];
-        return sourceList
-            .filter(Boolean)
-            .map(function (sourcePath) {
-                return resolveUrl(sourcePath, categoryUrl);
-            });
-    }
-
-    function getProductSummary(empresa) {
-        const products = Array.isArray(empresa.productos) ? empresa.productos : [];
-        const productNames = products
-            .map(function (product) { return product && product.nombre; })
-            .filter(Boolean)
-            .slice(0, 4);
-
-        if (productNames.length) return productNames.join(" · ");
-        return empresa.venta || empresa.descripcion || empresa.segmento || empresa.categoria || "";
-    }
-
-    function getPrimaryImage(empresa, sourceUrl) {
-        if (empresa.logo || empresa.imagenEmpresa || empresa.logoUrl) {
-            return resolveUrl(empresa.logo || empresa.imagenEmpresa || empresa.logoUrl, sourceUrl);
-        }
-
-        if (empresa.imagen || empresa.portada || empresa.cover) {
-            return resolveUrl(empresa.imagen || empresa.portada || empresa.cover, sourceUrl);
-        }
-
-        if (Array.isArray(empresa.productos)) {
-            const productWithImage = empresa.productos.find(function (product) {
-                return product && product.imagen;
-            });
-
-            if (productWithImage) return resolveUrl(productWithImage.imagen, sourceUrl);
-        }
-
-        return "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=120&q=80";
-    }
-
-    function normalizeEmpresa(rawEmpresa, sourceUrl, categorySrc, index) {
-        const empresa = Object.assign({}, rawEmpresa || {});
-        const tags = empresa.tags || empresa.etiquetas || [];
-        const segmento = empresa.segmento || empresa.categoria || "Electrodomésticos";
-        const tipoBase = empresa.tipo || segmento || (Array.isArray(tags) ? tags.join(" ") : "");
-        const profileSource = empresa.perfil || empresa.url || sourceUrl || categorySrc;
-
-        return {
-            nombre: empresa.nombre || empresa.name || titleFromPath(sourceUrl),
-            segmento: segmento,
-            tipo: normalizeText(tipoBase || "electrodomesticos venta"),
-            descripcion: empresa.descripcion || empresa.description || "",
-            venta: empresa.venta || getProductSummary(empresa),
-            rating: Number(empresa.rating || empresa.calificacion || empresa.estrellas || 0),
-            estado: empresa.estado || "Disponible",
-            logo: getPrimaryImage(empresa, sourceUrl),
-            celular: empresa.celular || empresa.telefono || empresa.whatsapp || "",
-            correo: empresa.correo || empresa.email || "",
-            horario: empresa.horario || null,
-            zonaHoraria: empresa.zonaHoraria || "America/Guayaquil",
-            perfil: resolveUrl(profileSource, sourceUrl || window.location.href),
-            categoriaOrigen: categorySrc,
-            orden: index
-        };
-    }
-
-    async function fetchText(url) {
-        const requestUrl = new URL(url, window.location.href);
-        requestUrl.searchParams.set("_urbanex", Date.now().toString());
-
-        const response = await fetch(requestUrl.href, { cache: "no-store" });
-        if (!response.ok) throw new Error("No se pudo cargar " + url);
-        return response.text();
-    }
-
-    async function loadCompaniesFromCategory(categorySrc, arrayName) {
-        const categoryUrl = resolveUrl(categorySrc, window.location.href);
-        const cacheKey = categoryUrl + "::" + (arrayName || "");
-
-        if (categoryCompanyCache.has(cacheKey)) return categoryCompanyCache.get(cacheKey);
-
-        const promise = (async function () {
-            const categoryHtml = await fetchText(categoryUrl);
-            const dataSources = getCompanyDataSourcesFromCategory(categoryHtml, categoryUrl);
-            const companies = [];
-
-            if (dataSources.length) {
-                for (const sourceUrl of dataSources) {
-                    try {
-                        const sourceHtml = await fetchText(sourceUrl);
-                        const parsedCompanies = parseCompaniesFromHtml(sourceHtml, sourceUrl, true);
-
-                        parsedCompanies.forEach(function (company, index) {
-                            companies.push(normalizeEmpresa(company, sourceUrl, categorySrc, index));
-                        });
-                    } catch (error) {
-                        continue;
-                    }
-                }
-
-                return companies.filter(function (company) { return company.nombre; });
-            }
-
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(categoryHtml || "", "text/html");
-            const scriptText = getScriptText(doc);
-            const directVariables = arrayName ? [arrayName].concat(EMPRESA_VARIABLES) : EMPRESA_VARIABLES;
-            const directData = extractAssignedData(scriptText, directVariables);
-            const directCompanies = directData ? (Array.isArray(directData) ? directData : [directData]) : parseCompaniesFromHtml(categoryHtml, categoryUrl, false);
-
-            directCompanies.forEach(function (company, index) {
-                companies.push(normalizeEmpresa(company, categoryUrl, categorySrc, index));
-            });
-
-            return companies.filter(function (company) { return company.nombre; });
-        })();
-
-        categoryCompanyCache.set(cacheKey, promise);
-        return promise;
-    }
-
     function countObjectsInArray(arrayText) {
-        const nameMatches = arrayText.match(/\bnombre\s*:/g);
-        if (nameMatches) return nameMatches.length;
+        const matches = arrayText.match(/\bnombre\s*:/g);
+        if (matches) return matches.length;
 
         const objectMatches = arrayText.match(/\{[\s\S]*?\}/g);
         return objectMatches ? objectMatches.length : 0;
@@ -1337,23 +1239,47 @@
     function countFromSpecificArray(htmlText, arrayName) {
         if (!arrayName) return null;
 
-        const safeName = arrayName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        const arrayPattern = new RegExp("(?:const|let|var)\\s+" + safeName + "\\s*=\\s*\\[");
+        const arrayPattern = new RegExp("(?:const|let|var)\\s+" + arrayName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\s*=\\s*\\[");
         const match = arrayPattern.exec(htmlText);
 
         if (!match) return null;
 
-        const bracketStart = htmlText.indexOf("[", match.index);
-        const arrayText = getBalancedStructure(htmlText, bracketStart);
+        const arrayText = getBalancedArrayText(htmlText, match.index);
         if (!arrayText) return null;
 
         return countObjectsInArray(arrayText);
+    }
+
+    function countFromAnyBusinessArray(htmlText) {
+        const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
+        let match;
+        let bestCount = null;
+
+        while ((match = arrayPattern.exec(htmlText)) !== null) {
+            const arrayText = getBalancedArrayText(htmlText, match.index);
+            if (!arrayText) continue;
+
+            const count = countObjectsInArray(arrayText);
+            if (bestCount === null || count > bestCount) bestCount = count;
+        }
+
+        return bestCount;
     }
 
     function countFromRenderedMarkup(htmlText) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, "text/html");
         return doc.querySelectorAll(countableSelectors).length;
+    }
+
+    function countCategoryItems(htmlText, arrayName) {
+        const specificArrayCount = countFromSpecificArray(htmlText, arrayName);
+        if (specificArrayCount !== null) return specificArrayCount;
+
+        const genericArrayCount = countFromAnyBusinessArray(htmlText);
+        if (genericArrayCount !== null) return genericArrayCount;
+
+        return countFromRenderedMarkup(htmlText);
     }
 
     async function updateCategoryCount(button) {
@@ -1368,17 +1294,17 @@
         formatCount(target, 0, singular, plural);
 
         try {
-            const companies = await loadCompaniesFromCategory(src, arrayName);
-            if (companies.length) {
-                formatCount(target, companies.length, singular, plural);
+            const url = new URL(src, window.location.href);
+            url.searchParams.set("_conteo", Date.now().toString());
+
+            const response = await fetch(url.href, { cache: "no-store" });
+            if (!response.ok) {
+                formatCount(target, 0, singular, plural);
                 return;
             }
 
-            const categoryUrl = resolveUrl(src, window.location.href);
-            const htmlText = await fetchText(categoryUrl);
-            const arrayCount = countFromSpecificArray(htmlText, arrayName);
-            const renderedCount = countFromRenderedMarkup(htmlText);
-            const total = arrayCount !== null ? arrayCount : renderedCount;
+            const htmlText = await response.text();
+            const total = countCategoryItems(htmlText, arrayName);
 
             formatCount(target, total || 0, singular, plural);
         } catch (error) {
@@ -1386,146 +1312,9 @@
         }
     }
 
-    function getNowInTimeZone(timeZone) {
-        try {
-            const parts = new Intl.DateTimeFormat("en-US", {
-                timeZone: timeZone || "America/Guayaquil",
-                weekday: "long",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false
-            }).formatToParts(new Date());
-
-            const weekdayEnglish = parts.find(function (part) { return part.type === "weekday"; }).value.toLowerCase();
-            const hour = parts.find(function (part) { return part.type === "hour"; }).value.padStart(2, "0");
-            const minute = parts.find(function (part) { return part.type === "minute"; }).value.padStart(2, "0");
-
-            const dayMap = {
-                sunday: "domingo",
-                monday: "lunes",
-                tuesday: "martes",
-                wednesday: "miercoles",
-                thursday: "jueves",
-                friday: "viernes",
-                saturday: "sabado"
-            };
-
-            return {
-                dia: dayMap[weekdayEnglish],
-                minutos: Number(hour) * 60 + Number(minute)
-            };
-        } catch (error) {
-            const now = new Date();
-            const dayMap = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-            return {
-                dia: dayMap[now.getDay()],
-                minutos: now.getHours() * 60 + now.getMinutes()
-            };
-        }
-    }
-
-    function timeToMinutes(time) {
-        const parts = String(time || "00:00").split(":").map(Number);
-        return (parts[0] || 0) * 60 + (parts[1] || 0);
-    }
-
-    function getBusinessStatus(empresa) {
-        if (!empresa.horario) {
-            return empresa.estado || "Disponible";
-        }
-
-        const now = getNowInTimeZone(empresa.zonaHoraria);
-        const todaySchedule = empresa.horario[now.dia] || [];
-
-        for (const range of todaySchedule) {
-            const open = timeToMinutes(range.abre);
-            const close = timeToMinutes(range.cierra);
-
-            if (now.minutos >= open && now.minutos < close) return "Abierto";
-            if (now.minutos < open && open - now.minutos <= 60) return "Abre pronto";
-        }
-
-        return "Cerrado";
-    }
-
-    function createFeaturedCard(empresa) {
-        const status = getBusinessStatus(empresa);
-        const rating = empresa.rating ? empresa.rating.toFixed(1) : "0.0";
-
-        return `
-            <div class="shop-card" data-perfil="${escapeHtml(empresa.perfil)}">
-                <div class="shop-thumb-wrapper">
-                    <img src="${escapeHtml(empresa.logo)}" alt="${escapeHtml(empresa.nombre)}" class="shop-thumb">
-                </div>
-                <div class="shop-details">
-                    <div class="shop-title">${escapeHtml(empresa.nombre)}</div>
-                    <div class="shop-segment">${escapeHtml(empresa.segmento)}</div>
-                    <div class="shop-rating-row">
-                        <svg class="star-icon" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                        </svg>
-                        <span class="rating-value">${escapeHtml(rating)}</span>
-                        <span class="rating-count">${escapeHtml(empresa.venta || "")}</span>
-                        <span class="status-indicator">${escapeHtml(status)}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    async function renderFeaturedCompanies() {
-        if (!featuredList) return;
-
-        const allCompanies = [];
-
-        for (const button of categoryButtons) {
-            try {
-                const companies = await loadCompaniesFromCategory(button.dataset.countSrc, button.dataset.countArray);
-                companies.forEach(function (company) { allCompanies.push(company); });
-            } catch (error) {
-                continue;
-            }
-        }
-
-        const uniqueCompanies = [];
-        const usedKeys = new Set();
-
-        allCompanies.forEach(function (company) {
-            const key = normalizeText(company.nombre + " " + company.perfil);
-            if (usedKeys.has(key)) return;
-            usedKeys.add(key);
-            uniqueCompanies.push(company);
-        });
-
-        uniqueCompanies.sort(function (a, b) {
-            return (b.rating || 0) - (a.rating || 0);
-        });
-
-        if (!uniqueCompanies.length) {
-            featuredList.innerHTML = "<div class='shop-card'><div class='shop-details'><div class='shop-title'>Sin empresas cargadas</div><div class='shop-segment'>Revise las rutas de las páginas de empresa.</div></div></div>";
-            if (showcaseStats) showcaseStats.textContent = "0 empresas cargadas";
-            return;
-        }
-
-        featuredList.innerHTML = uniqueCompanies.slice(0, 6).map(createFeaturedCard).join("");
-        if (showcaseStats) {
-            showcaseStats.textContent = uniqueCompanies.length + " " + (uniqueCompanies.length === 1 ? "empresa cargada" : "empresas cargadas");
-        }
-
-        featuredList.querySelectorAll(".shop-card[data-perfil]").forEach(function (card) {
-            card.addEventListener("click", function () {
-                const perfil = card.getAttribute("data-perfil");
-                if (perfil) window.location.href = perfil;
-            });
-        });
-    }
-
     categoryButtons.forEach(updateCategoryCount);
-    renderFeaturedCompanies();
-    setInterval(renderFeaturedCompanies, 60000);
 })();
 </script>
-
 
 <script>
 (function () {
