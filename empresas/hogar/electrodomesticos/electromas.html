@@ -945,13 +945,13 @@ const EMPRESA = {
     entregaDomicilio: true,
 
     horario: {
+        domingo: [],
         lunes: [{ abre: "08:30", cierra: "18:00" }],
         martes: [{ abre: "08:30", cierra: "18:00" }],
         miercoles: [{ abre: "08:30", cierra: "18:00" }],
         jueves: [{ abre: "08:30", cierra: "18:00" }],
         viernes: [{ abre: "08:30", cierra: "18:00" }],
-        sabado: [{ abre: "08:30", cierra: "14:00" }],
-        domingo: []
+        sabado: [{ abre: "08:30", cierra: "14:00" }]
     },
 
     productos: [
@@ -998,13 +998,13 @@ const EMPRESA = {
 const DIAS = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
 
 const DIAS_LABEL = {
+    domingo: "Domingo",
     lunes: "Lunes",
     martes: "Martes",
     miercoles: "Miércoles",
     jueves: "Jueves",
     viernes: "Viernes",
-    sabado: "Sábado",
-    domingo: "Domingo"
+    sabado: "Sábado"
 };
 
 function escapeHtml(value) {
