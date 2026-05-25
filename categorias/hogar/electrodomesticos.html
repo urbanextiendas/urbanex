@@ -1113,26 +1113,14 @@
             padding: 8px 9px 9px;
         }
 
-        .business-sale {
-            color: #ffffff;
-            font-size: 9px;
-            font-weight: 700;
-            line-height: 1.32;
-            margin-bottom: 4px;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
         .business-description {
             color: var(--text-muted);
-            font-size: 8.6px;
+            font-size: 8.7px;
             line-height: 1.35;
-            min-height: 23px;
-            margin-bottom: 7px;
+            min-height: 36px;
+            margin-bottom: 8px;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -1282,18 +1270,6 @@
             padding: 9px 10px 10px;
         }
 
-        .business-sale {
-            color: #ffffff;
-            font-size: 9.2px;
-            font-weight: 800;
-            line-height: 1.28;
-            margin-bottom: 4px;
-            display: block;
-            white-space: normal;
-            overflow: visible;
-            text-overflow: initial;
-        }
-
         .business-description {
             color: var(--text-muted);
             font-size: 8.7px;
@@ -1325,24 +1301,16 @@
 
         .empresa-electrodomesticos:hover,
         .empresa-electrodomesticos:focus-within {
-            width: 238px;
-            min-height: 188px;
+            width: 258px;
+            min-height: 194px;
             z-index: 30;
             border-color: rgba(229, 193, 88, 0.62);
             box-shadow: 0 24px 58px rgba(0,0,0,0.48);
         }
 
-        .empresa-electrodomesticos:hover .business-sale,
-        .empresa-electrodomesticos:focus-within .business-sale {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
         .empresa-electrodomesticos:hover .business-description,
         .empresa-electrodomesticos:focus-within .business-description {
-            -webkit-line-clamp: 5;
+            -webkit-line-clamp: 6;
             min-height: auto;
             margin-bottom: 9px;
         }
@@ -1358,6 +1326,45 @@
                 width: 100%;
                 min-height: 188px;
             }
+        }
+
+
+        /* Filtros por encima de las tarjetas y opciones legibles */
+        .segment-filter-panel {
+            position: relative;
+            z-index: 300;
+            overflow: visible;
+        }
+
+        .filter-select {
+            position: relative;
+            z-index: 301;
+        }
+
+        .directory-layout,
+        .business-grid {
+            position: relative;
+            z-index: 1;
+        }
+
+        .empresa-electrodomesticos {
+            position: relative;
+            z-index: 1;
+        }
+
+        .empresa-electrodomesticos:hover,
+        .empresa-electrodomesticos:focus-within {
+            z-index: 40;
+        }
+
+        .filter-select option {
+            background: #080808;
+            color: #ffffff;
+        }
+
+        .filter-select option:checked {
+            background: #e5c158;
+            color: #000000;
         }
 
     </style>
@@ -2205,23 +2212,6 @@
         }];
     }
 
-    function getCompanyReference(empresa, segmento) {
-        const explicitReference = empresa.resumenDirectorio || empresa.referenciaDirectorio || empresa.referencia;
-        if (explicitReference) return explicitReference;
-
-        return "Tienda y soporte especializado";
-    }
-
-    function getDirectoryDescription(empresa) {
-        const explicitDescription = empresa.descripcionDirectorio || empresa.descripcionCorta || empresa.resumenCorto;
-        if (explicitDescription) return explicitDescription;
-
-        const companyDescription = empresa.descripcion || empresa.description;
-        if (companyDescription) return companyDescription;
-
-        return "Electrodomésticos para hogares y negocios en Loja.";
-    }
-
     function normalizeEmpresa(rawEmpresa, sourcePath, index) {
         const empresa = Object.assign({}, rawEmpresa || {});
         const tags = empresa.tags || empresa.etiquetas || [];
@@ -2234,8 +2224,6 @@
             segmento: segmento,
             tipo: normalizeText(tipoBase || "electrodomesticos venta").replace(/\s+/g, " "),
             descripcion: empresa.descripcion || empresa.description || "",
-            referencia: getCompanyReference(empresa, segmento),
-            descripcionDirectorio: getDirectoryDescription(empresa),
             rating: Number(empresa.rating || empresa.calificacion || empresa.estrellas || 0),
             estado: empresa.estado || "Disponible",
             estadoManual: empresa.estado || "Disponible",
@@ -2309,8 +2297,7 @@
             </div>
 
             <div class="business-body">
-                <p class="business-sale">${escapeHtml(empresa.referencia)}</p>
-                <p class="business-description">${escapeHtml(empresa.descripcionDirectorio)}</p>
+                <p class="business-description">${escapeHtml(empresa.descripcion)}</p>
 
                 <div class="business-actions">
                     <a class="action-btn primary" href="${escapeHtml(safeUrl(empresa.perfil))}">Ver perfil</a>
