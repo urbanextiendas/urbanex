@@ -1325,8 +1325,8 @@
 
         .empresa-electrodomesticos:hover,
         .empresa-electrodomesticos:focus-within {
-            width: 230px;
-            min-height: 178px;
+            width: 238px;
+            min-height: 188px;
             z-index: 30;
             border-color: rgba(229, 193, 88, 0.62);
             box-shadow: 0 24px 58px rgba(0,0,0,0.48);
@@ -1342,7 +1342,7 @@
 
         .empresa-electrodomesticos:hover .business-description,
         .empresa-electrodomesticos:focus-within .business-description {
-            -webkit-line-clamp: 4;
+            -webkit-line-clamp: 5;
             min-height: auto;
             margin-bottom: 9px;
         }
@@ -1356,7 +1356,7 @@
             .empresa-electrodomesticos:hover,
             .empresa-electrodomesticos:focus-within {
                 width: 100%;
-                min-height: 178px;
+                min-height: 188px;
             }
         }
 
@@ -2215,6 +2215,9 @@
     function getDirectoryDescription(empresa) {
         const explicitDescription = empresa.descripcionDirectorio || empresa.descripcionCorta || empresa.resumenCorto;
         if (explicitDescription) return explicitDescription;
+
+        const companyDescription = empresa.descripcion || empresa.description;
+        if (companyDescription) return companyDescription;
 
         return "Electrodomésticos para hogares y negocios en Loja.";
     }
