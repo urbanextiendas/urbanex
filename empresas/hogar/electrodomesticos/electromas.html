@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de empresa | Urbanex</title>
+    <link rel="icon" type="image/png" href="../../imagenes/log.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #020202;
+            --bg-card: rgba(12, 12, 12, 0.82);
+            --bg-soft: rgba(255,255,255,0.055);
+            --gold: #e5c158;
+            --gold-border: rgba(229, 193, 88, 0.30);
+            --text-main: #ffffff;
+            --text-muted: #d5d5d5;
+            --text-soft: #9a9a9a;
+            --success: #2ed573;
+            --danger: #ff7675;
+            --warning: #ffa502;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --transition: all 0.25s ease;
+            --blur: blur(18px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                linear-gradient(135deg, rgba(0,0,0,0.90), rgba(0,0,0,0.68)),
+                url("../../imagenes/Hogar.png") center bottom / cover fixed no-repeat;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .page-shell {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-top {
+            min-height: 60px;
+            background: rgba(6, 6, 6, 0.55);
+            border-bottom: 1px solid var(--gold-border);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 0 16px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .brand-box img {
+            height: 54px;
+            width: auto;
+            display: block;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .top-link {
+            border: 1px solid var(--gold-border);
+            background: rgba(0,0,0,0.36);
+            color: #ffffff;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 10px;
+            font-weight: 800;
+            transition: var(--transition);
+        }
+
+        .top-link:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .profile-wrap {
+            width: min(1080px, calc(100% - 28px));
+            margin: 20px auto 26px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 12px;
+        }
+
+        .company-hero {
+            border: 1px solid var(--gold-border);
+            border-radius: 18px;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(10,10,10,0.92), rgba(14,14,14,0.72));
+            box-shadow: 0 28px 70px rgba(0,0,0,0.46);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+        }
+
+        .cover-zone {
+            min-height: 210px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .cover-zone::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.94), rgba(0,0,0,0.24));
+        }
+
+        .company-main-info {
+            position: relative;
+            z-index: 2;
+            min-height: 210px;
+            padding: 22px;
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+        }
+
+        .logo-box {
+            width: 92px;
+            height: 92px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--gold-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 8px;
+        }
+
+        .company-title-zone {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .status-line {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 999px;
+            padding: 5px 9px;
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(0,0,0,0.46);
+        }
+
+        .status-pill.open {
+            color: var(--success);
+            border-color: rgba(46,213,115,0.40);
+            background: rgba(46,213,115,0.10);
+        }
+
+        .status-pill.closed {
+            color: var(--danger);
+            border-color: rgba(255,118,117,0.38);
+            background: rgba(255,118,117,0.10);
+        }
+
+        .status-pill.soon {
+            color: var(--warning);
+            border-color: rgba(255,165,2,0.42);
+            background: rgba(255,165,2,0.10);
+        }
+
+        .category-pill {
+            color: #000000;
+            background: var(--gold);
+            border-radius: 999px;
+            padding: 5px 9px;
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(25px, 4vw, 46px);
+            line-height: 0.98;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .company-description {
+            max-width: 680px;
+            color: var(--text-muted);
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .btn {
+            border: 1px solid var(--gold-border);
+            border-radius: 999px;
+            padding: 9px 13px;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn.primary {
+            background: var(--gold);
+            color: #000000;
+            border-color: var(--gold);
+        }
+
+        .btn.secondary {
+            background: rgba(0,0,0,0.38);
+            color: #ffffff;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            gap: 12px;
+        }
+
+        .panel {
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 16px;
+            background: var(--bg-card);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            box-shadow: 0 18px 42px rgba(0,0,0,0.28);
+            overflow: hidden;
+        }
+
+        .panel-head {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .panel-head h2 {
+            color: var(--gold);
+            font-family: var(--font-serif);
+            font-size: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .product-grid {
+            padding: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 10px;
+        }
+
+        .product-card {
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 14px;
+            background: rgba(0,0,0,0.34);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+        }
+
+        .product-image {
+            height: 126px;
+            background: rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-body {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .product-body h3 {
+            font-size: 12px;
+            line-height: 1.25;
+        }
+
+        .product-description {
+            color: var(--text-muted);
+            font-size: 9.5px;
+            line-height: 1.45;
+            flex: 1;
+        }
+
+        .product-price {
+            color: var(--gold);
+            font-size: 15px;
+            font-weight: 900;
+        }
+
+        .product-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .tag {
+            color: #ffffff;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 999px;
+            padding: 3px 6px;
+            font-size: 7.8px;
+            font-weight: 700;
+        }
+
+        .side-content {
+            display: grid;
+            gap: 12px;
+            align-content: start;
+        }
+
+        .info-list {
+            padding: 14px 16px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .info-item {
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            padding-bottom: 9px;
+        }
+
+        .info-item:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .info-label {
+            display: block;
+            color: var(--gold);
+            font-size: 8px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .info-value {
+            color: #ffffff;
+            font-size: 11px;
+            line-height: 1.45;
+        }
+
+        .schedule-list {
+            padding: 12px 16px 16px;
+            display: grid;
+            gap: 7px;
+        }
+
+        .schedule-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding-bottom: 7px;
+        }
+
+        .schedule-row.today {
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        .schedule-row span:last-child {
+            text-align: right;
+        }
+
+        .footer {
+            margin-top: auto;
+            height: 24px;
+            background: #000000;
+            color: #8c8c8c;
+            border-top: 1px solid #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 11px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .footer a {
+            color: #8c8c8c;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: var(--gold);
+        }
+
+        @media (max-width: 880px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .company-main-info {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .header-top {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .top-actions {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .profile-wrap {
+                width: min(100% - 18px, 1080px);
+                margin-top: 12px;
+            }
+
+            .cover-zone,
+            .company-main-info {
+                min-height: 245px;
+            }
+
+            .logo-box {
+                width: 76px;
+                height: 76px;
+                border-radius: 17px;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="page-shell">
+    <header class="header-top">
+        <a href="../hogar.html" class="brand-box" title="Volver a Urbanex">
+            <img src="../../imagenes/logo.png" alt="Urbanex">
+        </a>
+
+        <div class="top-actions">
+            <a href="../hogar.html" class="top-link">Volver</a>
+            <a href="../../registro.html" class="top-link">Registre su negocio</a>
+        </div>
+    </header>
+
+    <main class="profile-wrap">
+        <section class="company-hero">
+            <div class="cover-zone" id="companyCover">
+                <div class="company-main-info">
+                    <div class="logo-box">
+                        <img id="companyLogo" src="" alt="Logo de la empresa">
+                    </div>
+
+                    <div class="company-title-zone">
+                        <div class="status-line">
+                            <span class="status-pill" id="businessStatus">Calculando...</span>
+                            <span class="category-pill" id="companyCategory">Categoría</span>
+                        </div>
+
+                        <h1 id="companyName">Nombre de la empresa</h1>
+                        <p class="company-description" id="companyDescription">Descripción de la empresa.</p>
+
+                        <div class="hero-buttons">
+                            <a class="btn primary" id="whatsappGeneral" target="_blank" rel="noopener noreferrer">Contactar por WhatsApp</a>
+                            <a class="btn secondary" id="callButton">Llamar</a>
+                            <a class="btn secondary" id="emailButton">Correo</a>
+                            <a class="btn secondary" id="mapButton" target="_blank" rel="noopener noreferrer">Ubicación</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <section class="panel">
+                <div class="panel-head">
+                    <h2>Productos destacados</h2>
+                </div>
+                <div class="product-grid" id="productGrid"></div>
+            </section>
+
+            <aside class="side-content">
+                <section class="panel">
+                    <div class="panel-head">
+                        <h2>Contacto</h2>
+                    </div>
+                    <div class="info-list">
+                        <div class="info-item">
+                            <span class="info-label">Celular</span>
+                            <span class="info-value" id="infoPhone"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Correo</span>
+                            <span class="info-value" id="infoEmail"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Dirección</span>
+                            <span class="info-value" id="infoAddress"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-head">
+                        <h2>Horario</h2>
+                    </div>
+                    <div class="schedule-list" id="scheduleList"></div>
+                </section>
+            </aside>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Urbanex. Desarrollado por <a href="https://www.neodat.net" target="_blank" rel="noopener noreferrer">Neodat Consultores</a>.</p>
+    </footer>
+</div>
+
+<script>
+/* ==========================================================
+   LA EMPRESA SOLO DEBE EDITAR ESTE BLOQUE DE INFORMACIÓN
+   ========================================================== */
+const EMPRESA = {
+    nombre: "ElectroHogar Loja",
+    categoria: "Electrodomésticos",
+    descripcion: "Venta de refrigeradoras, lavadoras, cocinas, secadoras y electrodomésticos de línea blanca para hogares y negocios de Loja.",
+    logo: "../../imagenes/empresas/electrohogar-loja.png",
+    portada: "../../imagenes/empresas/electrohogar-portada.jpg",
+    celular: "+593987654321",
+    correo: "ventas@electrohogarloja.com",
+    direccion: "Av. Universitaria y 10 de Agosto, Loja, Ecuador",
+    mapa: "https://www.google.com/maps/search/?api=1&query=Av.+Universitaria+y+10+de+Agosto+Loja+Ecuador",
+    moneda: "$",
+    zonaHoraria: "America/Guayaquil",
+
+    horario: {
+        lunes: [{ abre: "09:00", cierra: "18:00" }],
+        martes: [{ abre: "09:00", cierra: "18:00" }],
+        miercoles: [{ abre: "09:00", cierra: "18:00" }],
+        jueves: [{ abre: "09:00", cierra: "18:00" }],
+        viernes: [{ abre: "09:00", cierra: "18:00" }],
+        sabado: [{ abre: "09:00", cierra: "14:00" }],
+        domingo: []
+    },
+
+    productos: [
+        {
+            nombre: "Refrigeradora No Frost 300L",
+            precio: 499,
+            descripcion: "Refrigeradora de bajo consumo, sistema No Frost y garantía de fábrica.",
+            imagen: "../../imagenes/productos/refrigeradora-300l.jpg",
+            etiquetas: ["Garantía", "Entrega", "Instalación"]
+        },
+        {
+            nombre: "Lavadora automática 18kg",
+            precio: 389,
+            descripcion: "Lavadora automática para uso familiar, múltiples ciclos de lavado y soporte técnico local.",
+            imagen: "../../imagenes/productos/lavadora-18kg.jpg",
+            etiquetas: ["Línea blanca", "Crédito", "Soporte"]
+        },
+        {
+            nombre: "Cocina a gas 4 quemadores",
+            precio: 249,
+            descripcion: "Cocina a gas con horno, encendido eléctrico y opción de instalación a domicilio.",
+            imagen: "../../imagenes/productos/cocina-4-quemadores.jpg",
+            etiquetas: ["Instalación", "Hogar", "Oferta"]
+        }
+    ]
+};
+
+/* ==========================================================
+   NO EDITAR DESDE AQUÍ, SALVO CAMBIOS DE FUNCIONAMIENTO
+   ========================================================== */
+const DIAS = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+const DIAS_LABEL = {
+    lunes: "Lunes",
+    martes: "Martes",
+    miercoles: "Miércoles",
+    jueves: "Jueves",
+    viernes: "Viernes",
+    sabado: "Sábado",
+    domingo: "Domingo"
+};
+
+function getNowInTimeZone(timeZone) {
+    const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone,
+        weekday: "long",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+    }).formatToParts(new Date());
+
+    const weekdayEnglish = parts.find(part => part.type === "weekday").value.toLowerCase();
+    const hour = parts.find(part => part.type === "hour").value.padStart(2, "0");
+    const minute = parts.find(part => part.type === "minute").value.padStart(2, "0");
+
+    const dayMap = {
+        sunday: "domingo",
+        monday: "lunes",
+        tuesday: "martes",
+        wednesday: "miercoles",
+        thursday: "jueves",
+        friday: "viernes",
+        saturday: "sabado"
+    };
+
+    return {
+        dia: dayMap[weekdayEnglish],
+        minutos: Number(hour) * 60 + Number(minute)
+    };
+}
+
+function timeToMinutes(time) {
+    const [hours, minutes] = String(time).split(":").map(Number);
+    return hours * 60 + minutes;
+}
+
+function getBusinessStatus() {
+    const now = getNowInTimeZone(EMPRESA.zonaHoraria || "America/Guayaquil");
+    const todaySchedule = EMPRESA.horario[now.dia] || [];
+
+    for (const range of todaySchedule) {
+        const open = timeToMinutes(range.abre);
+        const close = timeToMinutes(range.cierra);
+
+        if (now.minutos >= open && now.minutos < close) {
+            return {
+                state: "open",
+                label: "Abierto",
+                detail: "Cierra a las " + range.cierra
+            };
+        }
+
+        if (now.minutos < open && open - now.minutos <= 60) {
+            return {
+                state: "soon",
+                label: "Abre pronto",
+                detail: "Abre a las " + range.abre
+            };
+        }
+    }
+
+    return {
+        state: "closed",
+        label: "Cerrado",
+        detail: getNextOpenText(now.dia)
+    };
+}
+
+function getNextOpenText(currentDay) {
+    const currentIndex = DIAS.indexOf(currentDay);
+
+    for (let offset = 1; offset <= 7; offset++) {
+        const nextDay = DIAS[(currentIndex + offset) % 7];
+        const ranges = EMPRESA.horario[nextDay] || [];
+
+        if (ranges.length) {
+            return "Abre " + DIAS_LABEL[nextDay].toLowerCase() + " a las " + ranges[0].abre;
+        }
+    }
+
+    return "Sin horario disponible";
+}
+
+function normalizePhone(phone) {
+    return String(phone || "").replace(/[^0-9]/g, "");
+}
+
+function makeWhatsappLink(productName) {
+    const phone = normalizePhone(EMPRESA.celular);
+    const message = productName
+        ? "Hola, estoy interesado en comprar: " + productName + ". Lo vi en Urbanex."
+        : "Hola, quisiera información sobre " + EMPRESA.nombre + ". Lo vi en Urbanex.";
+
+    return "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+}
+
+function formatPrice(price) {
+    if (price === null || price === undefined || price === "") return "Consultar precio";
+    return EMPRESA.moneda + Number(price).toLocaleString("es-EC", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function renderCompany() {
+    document.title = EMPRESA.nombre + " | Urbanex";
+
+    document.getElementById("companyCover").style.backgroundImage = "url('" + EMPRESA.portada + "')";
+    document.getElementById("companyLogo").src = EMPRESA.logo;
+    document.getElementById("companyLogo").alt = "Logo " + EMPRESA.nombre;
+    document.getElementById("companyCategory").textContent = EMPRESA.categoria;
+    document.getElementById("companyName").textContent = EMPRESA.nombre;
+    document.getElementById("companyDescription").textContent = EMPRESA.descripcion;
+
+    document.getElementById("infoPhone").textContent = EMPRESA.celular;
+    document.getElementById("infoEmail").textContent = EMPRESA.correo;
+    document.getElementById("infoAddress").textContent = EMPRESA.direccion;
+
+    document.getElementById("whatsappGeneral").href = makeWhatsappLink();
+    document.getElementById("callButton").href = "tel:" + EMPRESA.celular;
+    document.getElementById("emailButton").href = "mailto:" + EMPRESA.correo;
+    document.getElementById("mapButton").href = EMPRESA.mapa;
+
+    renderStatus();
+    renderSchedule();
+    renderProducts();
+}
+
+function renderStatus() {
+    const status = getBusinessStatus();
+    const statusElement = document.getElementById("businessStatus");
+
+    statusElement.className = "status-pill " + status.state;
+    statusElement.textContent = status.label + " · " + status.detail;
+}
+
+function renderSchedule() {
+    const now = getNowInTimeZone(EMPRESA.zonaHoraria || "America/Guayaquil");
+    const scheduleList = document.getElementById("scheduleList");
+
+    scheduleList.innerHTML = Object.keys(DIAS_LABEL).map(day => {
+        const ranges = EMPRESA.horario[day] || [];
+        const label = ranges.length
+            ? ranges.map(range => range.abre + " - " + range.cierra).join(" / ")
+            : "Cerrado";
+
+        return `
+            <div class="schedule-row ${day === now.dia ? "today" : ""}">
+                <span>${DIAS_LABEL[day]}</span>
+                <span>${label}</span>
+            </div>
+        `;
+    }).join("");
+}
+
+function renderProducts() {
+    const productGrid = document.getElementById("productGrid");
+
+    productGrid.innerHTML = EMPRESA.productos.map(product => `
+        <article class="product-card">
+            <div class="product-image">
+                <img src="${product.imagen}" alt="${product.nombre}">
+            </div>
+            <div class="product-body">
+                <h3>${product.nombre}</h3>
+                <p class="product-description">${product.descripcion}</p>
+                <div class="product-price">${formatPrice(product.precio)}</div>
+                <div class="product-tags">
+                    ${(product.etiquetas || []).map(tag => `<span class="tag">${tag}</span>`).join("")}
+                </div>
+                <a class="btn primary" href="${makeWhatsappLink(product.nombre)}" target="_blank" rel="noopener noreferrer">Comprar / consultar</a>
+            </div>
+        </article>
+    `).join("");
+}
+
+renderCompany();
+setInterval(renderStatus, 60000);
+</script>
+</body>
+</html>
