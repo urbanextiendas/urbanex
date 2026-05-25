@@ -432,22 +432,16 @@
             background: rgba(0,0,0,0.34);
         }
 
-        /* ================================================== */
-        /* PIE DE PÁGINA                                      */
-        /* ================================================== */
-        .pie-pagina {
-            width: 100%;
+        .footer {
+            margin-top: auto;
             height: 24px;
-            background-color: #000000;
+            background: #000000;
             color: #8c8c8c;
-            font-size: 11px;
+            border-top: 1px solid rgba(255,255,255,0.08);
             display: flex;
-            justify-content: center;
             align-items: center;
-            text-align: center;
-            border-top: 1px solid #1a1a1a;
-            z-index: 5;
-            font-family: Arial, Helvetica, sans-serif;
+            justify-content: center;
+            font-size: 10px;
         }
 
 
@@ -1223,6 +1217,32 @@
             }
         }
 
+
+        /* Estados automáticos de las empresas */
+        .business-status.status-open {
+            background: rgba(46,213,115,0.14);
+            color: var(--success);
+            border-color: rgba(46,213,115,0.42);
+        }
+
+        .business-status.status-closed {
+            background: rgba(255,118,117,0.13);
+            color: var(--danger);
+            border-color: rgba(255,118,117,0.38);
+        }
+
+        .business-status.status-soon {
+            background: rgba(255,165,2,0.13);
+            color: #ffa502;
+            border-color: rgba(255,165,2,0.42);
+        }
+
+        .business-status.status-available {
+            background: rgba(229,193,88,0.14);
+            color: var(--gold);
+            border-color: rgba(229,193,88,0.36);
+        }
+
     </style>
 </head>
 
@@ -1322,8 +1342,8 @@
         </section>
     </main>
 
-    <footer class="pie-pagina">
-        <p>&copy; 2026 Urbanex. Desarrollado por Neodat Consultores.</p>
+    <footer class="footer">
+        <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
     </footer>
 
 </div>
@@ -1354,80 +1374,11 @@
         "centro comercial digital"
     ];
 
-    const empresasElectrodomesticos = [
-        {
-            nombre: "ElectroHogar Loja",
-            segmento: "Venta · Instalación",
-            tipo: "venta instalacion linea-blanca",
-            descripcion: "Venta de refrigeradoras, lavadoras, cocinas, secadoras y electrodomésticos de línea blanca.",
-            venta: "Refrigeradoras · Lavadoras · Cocinas · Secadoras",
-            rating: 4.8,
-            estado: "Abierto",
-            logo: "../../imagenes/empresas/electrohogar-loja.png",
-            imagen: "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=900&q=80",
-            tags: ["Refrigeradoras", "Lavadoras", "Garantía"]
-        },
-        {
-            nombre: "Casa Frío",
-            segmento: "Refrigeración · Soporte",
-            tipo: "reparacion instalacion linea-blanca",
-            descripcion: "Servicio técnico, mantenimiento e instalación de equipos de refrigeración doméstica y comercial.",
-            venta: "Refrigeradoras · Congeladores · Vitrinas · Mantenimiento",
-            rating: 4.7,
-            estado: "Abierto",
-            logo: "../../imagenes/empresas/casa-frio.png",
-            imagen: "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?auto=format&fit=crop&w=900&q=80",
-            tags: ["Refrigeración", "Mantenimiento", "Técnicos"]
-        },
-        {
-            nombre: "TecnoCocina",
-            segmento: "Cocinas · Hornos",
-            tipo: "venta instalacion",
-            descripcion: "Venta e instalación de cocinas, hornos, campanas extractoras y equipos empotrables.",
-            venta: "Cocinas · Hornos · Campanas · Empotrables",
-            rating: 4.6,
-            estado: "Abierto",
-            logo: "../../imagenes/empresas/tecnococina.png",
-            imagen: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=900&q=80",
-            tags: ["Cocinas", "Hornos", "Campanas"]
-        },
-        {
-            nombre: "Lavatec Express",
-            segmento: "Lavadoras · Secadoras",
-            tipo: "reparacion instalacion linea-blanca",
-            descripcion: "Reparación, instalación, diagnóstico y venta de repuestos para lavadoras y secadoras.",
-            venta: "Lavadoras · Secadoras · Repuestos · Diagnóstico",
-            rating: 4.5,
-            estado: "Disponible",
-            logo: "../../imagenes/empresas/lavatec-express.png",
-            imagen: "https://images.unsplash.com/photo-1626806819282-2c1dc01a5e0c?auto=format&fit=crop&w=900&q=80",
-            tags: ["Lavadoras", "Secadoras", "Repuestos"]
-        },
-        {
-            nombre: "Mega Electro",
-            segmento: "Electrodomésticos · Hogar",
-            tipo: "venta linea-blanca",
-            descripcion: "Venta de electrodomésticos para cocina, limpieza, climatización, audio y tecnología del hogar.",
-            venta: "Cocina · Limpieza · Climatización · Audio",
-            rating: 4.4,
-            estado: "Abierto",
-            logo: "../../imagenes/empresas/mega-electro.png",
-            imagen: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=900&q=80",
-            tags: ["Catálogo", "Crédito", "Entrega"]
-        },
-        {
-            nombre: "InstalaPro Hogar",
-            segmento: "Instalación · Garantía",
-            tipo: "instalacion reparacion",
-            descripcion: "Instalación profesional de electrodomésticos, revisión de conexiones y soporte postventa.",
-            venta: "Instalación · Conexiones · Soporte · Garantía",
-            rating: 4.3,
-            estado: "Disponible",
-            logo: "../../imagenes/empresas/instalapro-hogar.png",
-            imagen: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=80",
-            tags: ["Instalación", "Soporte", "Garantía"]
-        }
+    const EMPRESAS_DATA_SOURCES = [
+        "../../empresas/hogar/electrodomesticos/electromas.html"
     ];
+
+    let empresasElectrodomesticos = [];
 
     const businessGrid = document.getElementById("businessGrid");
     const emptyState = document.getElementById("emptyState");
@@ -1886,39 +1837,357 @@
             .join("");
     }
 
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function safeUrl(value) {
+        const url = String(value || "").trim();
+        if (!url) return "#";
+        if (/^(javascript|data):/i.test(url)) return "#";
+        return url;
+    }
+
+    function normalizePhone(value) {
+        return String(value || "").replace(/[^0-9]/g, "");
+    }
+
+    function makeWhatsappLink(empresa) {
+        const phone = normalizePhone(empresa.whatsapp || empresa.celular || empresa.telefono);
+        if (!phone) return "#";
+
+        const message = "Hola, quisiera información de " + empresa.nombre + ". Lo vi en Urbanex.";
+        return "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+    }
+
+    const BUSINESS_DAYS = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+
+    function timeToMinutes(value) {
+        const parts = String(value || "00:00").split(":");
+        const hours = Number(parts[0] || 0);
+        const minutes = Number(parts[1] || 0);
+        return (hours * 60) + minutes;
+    }
+
+    function getNowInTimeZone(timeZone) {
+        const formatter = new Intl.DateTimeFormat("en-US", {
+            timeZone: timeZone || "America/Guayaquil",
+            weekday: "long",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false
+        });
+
+        const parts = formatter.formatToParts(new Date());
+        const weekday = String(parts.find(function (part) { return part.type === "weekday"; })?.value || "").toLowerCase();
+        const hour = Number(parts.find(function (part) { return part.type === "hour"; })?.value || 0);
+        const minute = Number(parts.find(function (part) { return part.type === "minute"; })?.value || 0);
+
+        const dayMap = {
+            sunday: "domingo",
+            monday: "lunes",
+            tuesday: "martes",
+            wednesday: "miercoles",
+            thursday: "jueves",
+            friday: "viernes",
+            saturday: "sabado"
+        };
+
+        return {
+            dia: dayMap[weekday] || "lunes",
+            minutos: (hour * 60) + minute
+        };
+    }
+
+    function getNextOpeningText(empresa, currentDay) {
+        const schedule = empresa.horario || {};
+        const currentIndex = BUSINESS_DAYS.indexOf(currentDay);
+
+        for (let offset = 1; offset <= 7; offset++) {
+            const nextDay = BUSINESS_DAYS[(currentIndex + offset) % 7];
+            const ranges = schedule[nextDay] || [];
+
+            if (ranges.length) {
+                return "Abre " + nextDay + " " + ranges[0].abre;
+            }
+        }
+
+        return "Horario no disponible";
+    }
+
+    function getBusinessStatusInfo(empresa) {
+        if (!empresa.horario) {
+            const manual = String(empresa.estado || empresa.estadoManual || "Disponible").trim();
+            const normalized = normalizeText(manual);
+
+            if (normalized.includes("cerrado")) {
+                return { state: "closed", className: "status-closed", label: "Cerrado" };
+            }
+
+            if (normalized.includes("abierto")) {
+                return { state: "open", className: "status-open", label: "Abierto" };
+            }
+
+            return { state: "available", className: "status-available", label: manual || "Disponible" };
+        }
+
+        const now = getNowInTimeZone(empresa.zonaHoraria || "America/Guayaquil");
+        const todaySchedule = empresa.horario[now.dia] || [];
+
+        for (const range of todaySchedule) {
+            const open = timeToMinutes(range.abre);
+            const close = timeToMinutes(range.cierra);
+
+            if (now.minutos >= open && now.minutos < close) {
+                return {
+                    state: "open",
+                    className: "status-open",
+                    label: "Abierto"
+                };
+            }
+
+            if (now.minutos < open && (open - now.minutos) <= 60) {
+                return {
+                    state: "soon",
+                    className: "status-soon",
+                    label: "Abre pronto"
+                };
+            }
+        }
+
+        return {
+            state: "closed",
+            className: "status-closed",
+            label: "Cerrado"
+        };
+    }
+
+    function extractBalancedStructure(source, startIndex) {
+        const opener = source[startIndex];
+        const closer = opener === "{" ? "}" : "]";
+        let depth = 0;
+        let quote = null;
+        let escaped = false;
+
+        for (let index = startIndex; index < source.length; index++) {
+            const char = source[index];
+
+            if (quote) {
+                if (escaped) {
+                    escaped = false;
+                    continue;
+                }
+
+                if (char === "\\") {
+                    escaped = true;
+                    continue;
+                }
+
+                if (char === quote) {
+                    quote = null;
+                }
+
+                continue;
+            }
+
+            if (char === "\"" || char === "'" || char === "`") {
+                quote = char;
+                continue;
+            }
+
+            if (char === opener) depth++;
+            if (char === closer) depth--;
+
+            if (depth === 0) {
+                return source.slice(startIndex, index + 1);
+            }
+        }
+
+        return "";
+    }
+
+    function extractAssignedData(source, names) {
+        for (const name of names) {
+            const pattern = new RegExp("(?:const|let|var)\\s+" + name + "\\s*=|window\\." + name + "\\s*=", "m");
+            const match = source.match(pattern);
+
+            if (!match) continue;
+
+            const structureStart = source.indexOf("{", match.index);
+            const arrayStart = source.indexOf("[", match.index);
+            const candidates = [structureStart, arrayStart].filter(function (index) { return index >= 0; });
+            const startIndex = Math.min.apply(null, candidates);
+
+            if (!Number.isFinite(startIndex)) continue;
+
+            const raw = extractBalancedStructure(source, startIndex);
+            if (!raw) continue;
+
+            try {
+                return (new Function("return (" + raw + ");"))();
+            } catch (error) {
+                console.warn("No se pudo interpretar la información de " + name, error);
+            }
+        }
+
+        return null;
+    }
+
+    function parseEmpresaDataFromHtml(htmlText, sourcePath) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+
+        const jsonData = doc.querySelector(
+            "#urbanex-empresa-data, #urbanex-empresas-data, #empresa-data, script[type='application/json'][data-urbanex='empresa']"
+        );
+
+        if (jsonData && jsonData.textContent.trim()) {
+            try {
+                const parsed = JSON.parse(jsonData.textContent);
+                return Array.isArray(parsed) ? parsed : [parsed];
+            } catch (error) {
+                console.warn("El bloque JSON de " + sourcePath + " no es válido.", error);
+            }
+        }
+
+        const scriptText = Array.from(doc.querySelectorAll("script"))
+            .map(function (script) { return script.textContent || ""; })
+            .join("\n");
+
+        const assignedData = extractAssignedData(scriptText, [
+            "EMPRESAS_ELECTRODOMESTICOS",
+            "EMPRESAS",
+            "URBANEX_EMPRESAS",
+            "EMPRESA",
+            "URBANEX_EMPRESA"
+        ]);
+
+        if (assignedData) {
+            return Array.isArray(assignedData) ? assignedData : [assignedData];
+        }
+
+        const title = cleanSearchText(doc.querySelector("h1")?.textContent || doc.title || titleFromPath(sourcePath));
+        const description = cleanSearchText(doc.querySelector(".company-description, .business-description, meta[name='description']")?.textContent || "");
+        const logo = doc.querySelector("img[id='companyLogo'], .logo-box img, .business-logo")?.getAttribute("src") || "";
+        const category = cleanSearchText(doc.querySelector(".category-pill, .business-category")?.textContent || "Electrodomésticos");
+
+        return [{
+            nombre: title,
+            categoria: category,
+            descripcion: description,
+            logo: logo,
+            perfil: sourcePath
+        }];
+    }
+
+    function getProductSummary(empresa) {
+        const products = Array.isArray(empresa.productos) ? empresa.productos : [];
+        const names = products
+            .map(function (product) { return product.nombre; })
+            .filter(Boolean)
+            .slice(0, 4);
+
+        if (names.length) return names.join(" · ");
+        return empresa.venta || empresa.descripcion || empresa.segmento || "";
+    }
+
+    function normalizeEmpresa(rawEmpresa, sourcePath, index) {
+        const empresa = Object.assign({}, rawEmpresa || {});
+        const tags = empresa.tags || empresa.etiquetas || [];
+        const segmento = empresa.segmento || empresa.categoria || "Electrodomésticos";
+        const tipoBase = empresa.tipo || segmento || tags.join(" ");
+        const perfil = empresa.perfil || empresa.url || sourcePath;
+
+        return {
+            nombre: empresa.nombre || empresa.name || titleFromPath(sourcePath),
+            segmento: segmento,
+            tipo: normalizeText(tipoBase || "electrodomesticos venta").replace(/\s+/g, " "),
+            descripcion: empresa.descripcion || empresa.description || "",
+            venta: empresa.venta || getProductSummary(empresa),
+            rating: Number(empresa.rating || empresa.calificacion || empresa.estrellas || 0),
+            estado: empresa.estado || "Disponible",
+            estadoManual: empresa.estado || "Disponible",
+            logo: empresa.logo || empresa.imagenEmpresa || empresa.logoUrl || "",
+            imagen: empresa.imagen || empresa.portada || empresa.cover || "",
+            tags: Array.isArray(tags) ? tags : [],
+            celular: empresa.celular || empresa.telefono || empresa.whatsapp || "",
+            telefono: empresa.telefono || empresa.celular || empresa.whatsapp || "",
+            whatsapp: empresa.whatsapp || empresa.celular || empresa.telefono || "",
+            correo: empresa.correo || empresa.email || "",
+            horario: empresa.horario || null,
+            zonaHoraria: empresa.zonaHoraria || "America/Guayaquil",
+            perfil: perfil,
+            orden: index
+        };
+    }
+
+    async function loadEmpresasElectrodomesticos() {
+        const loadedCompanies = [];
+
+        for (const sourcePath of EMPRESAS_DATA_SOURCES) {
+            try {
+                const response = await fetch(sourcePath, { cache: "no-store" });
+                if (!response.ok) throw new Error("No se pudo cargar " + sourcePath);
+
+                const htmlText = await response.text();
+                const parsedCompanies = parseEmpresaDataFromHtml(htmlText, sourcePath);
+
+                parsedCompanies.forEach(function (empresa, index) {
+                    loadedCompanies.push(normalizeEmpresa(empresa, sourcePath, index));
+                });
+            } catch (error) {
+                console.warn(error);
+            }
+        }
+
+        empresasElectrodomesticos = loadedCompanies.filter(function (empresa) {
+            return empresa.nombre;
+        });
+
+        return empresasElectrodomesticos;
+    }
+
     function createBusinessCard(empresa) {
         const article = document.createElement("article");
+        const statusInfo = getBusinessStatusInfo(empresa);
+        const initials = getBusinessInitials(empresa.nombre);
+        const logoFallbackDisplay = empresa.logo ? "" : " style=\"display:flex;\"";
+        const ratingText = empresa.rating > 0 ? "★ " + empresa.rating.toFixed(1) : "★";
+
         article.className = "empresa-electrodomesticos";
         article.dataset.tipo = empresa.tipo;
         article.dataset.nombre = empresa.nombre;
         article.dataset.rating = empresa.rating;
-        article.dataset.estado = empresa.estado;
-
-        const initials = getBusinessInitials(empresa.nombre);
+        article.dataset.estado = statusInfo.state;
 
         article.innerHTML = `
             <div class="business-logo-zone">
                 <div class="business-logo-box">
-                    <img src="${empresa.logo}" alt="Logo ${empresa.nombre}" class="business-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <span class="business-logo-fallback">${initials}</span>
+                    ${empresa.logo ? `<img src="${escapeHtml(empresa.logo)}" alt="Logo ${escapeHtml(empresa.nombre)}" class="business-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` : ""}
+                    <span class="business-logo-fallback"${logoFallbackDisplay}>${escapeHtml(initials)}</span>
                 </div>
 
                 <div class="business-summary">
-                    <div class="business-status">${empresa.estado}</div>
-                    <h2 class="business-title">${empresa.nombre}</h2>
-                    <div class="business-category">${empresa.segmento}</div>
+                    <div class="business-status ${statusInfo.className}">${escapeHtml(statusInfo.label)}</div>
+                    <h2 class="business-title">${escapeHtml(empresa.nombre)}</h2>
+                    <div class="business-category">${escapeHtml(empresa.segmento)}</div>
                 </div>
 
-                <div class="business-rating">★ ${empresa.rating}</div>
+                <div class="business-rating">${escapeHtml(ratingText)}</div>
             </div>
 
             <div class="business-body">
-                <p class="business-sale">${empresa.venta || empresa.descripcion}</p>
-                <p class="business-description">${empresa.descripcion}</p>
+                <p class="business-sale">${escapeHtml(empresa.venta || empresa.descripcion)}</p>
+                <p class="business-description">${escapeHtml(empresa.descripcion)}</p>
 
                 <div class="business-actions">
-                    <a class="action-btn primary" href="#">Ver perfil</a>
-                    <a class="action-btn" href="#">Contactar</a>
+                    <a class="action-btn primary" href="${escapeHtml(safeUrl(empresa.perfil))}">Ver perfil</a>
+                    <a class="action-btn" href="${escapeHtml(safeUrl(makeWhatsappLink(empresa)))}" target="_blank" rel="noopener noreferrer">Contactar</a>
                 </div>
             </div>
         `;
@@ -1948,7 +2217,18 @@
         }
 
         if (sort === "disponibilidad") {
-            filtered.sort(function (a, b) { return a.estado.localeCompare(b.estado); });
+            const statusOrder = {
+                open: 0,
+                soon: 1,
+                available: 2,
+                closed: 3
+            };
+
+            filtered.sort(function (a, b) {
+                const statusA = getBusinessStatusInfo(a).state;
+                const statusB = getBusinessStatusInfo(b).state;
+                return (statusOrder[statusA] ?? 9) - (statusOrder[statusB] ?? 9);
+            });
         }
 
         businessGrid.querySelectorAll(".empresa-electrodomesticos").forEach(function (card) {
@@ -1959,7 +2239,12 @@
             businessGrid.appendChild(createBusinessCard(empresa));
         });
 
-        if (emptyState) emptyState.style.display = filtered.length ? "none" : "block";
+        if (emptyState) {
+            emptyState.textContent = empresasElectrodomesticos.length
+                ? "No se encontraron empresas con esos criterios."
+                : "No se pudo cargar información de empresas.";
+            emptyState.style.display = filtered.length ? "none" : "block";
+        }
 
         if (visibleCompaniesCounter) {
             visibleCompaniesCounter.textContent = filtered.length + (filtered.length === 1 ? " empresa" : " empresas");
@@ -1993,7 +2278,21 @@
     }
 
     updateCounters(0);
-    renderBusinesses();
+
+    if (emptyState) {
+        emptyState.textContent = "Cargando empresas...";
+        emptyState.style.display = "block";
+    }
+
+    loadEmpresasElectrodomesticos()
+        .then(renderBusinesses)
+        .catch(function () {
+            empresasElectrodomesticos = [];
+            renderBusinesses();
+        });
+
+    setInterval(renderBusinesses, 60000);
+
     loadSearchIndex().catch(function () {});
 })();
 </script>
