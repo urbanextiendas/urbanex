@@ -1332,6 +1332,35 @@
         }
 
 
+    
+        /* Corrección de capas: el desplegable debe quedar sobre las tarjetas */
+        .segment-filter-panel {
+            position: relative;
+            z-index: 120;
+            overflow: visible;
+        }
+
+        .custom-filter-select {
+            position: relative;
+            z-index: 130;
+        }
+
+        .custom-filter-select.open {
+            z-index: 250;
+        }
+
+        .custom-filter-menu {
+            z-index: 300;
+        }
+
+        .directory-layout,
+        .business-grid,
+        .empresa-electrodomesticos {
+            position: relative;
+            z-index: 1;
+        }
+
+
     </style>
 </head>
 
