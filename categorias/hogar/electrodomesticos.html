@@ -1357,13 +1357,95 @@
             z-index: 40;
         }
 
-        .filter-select option {
-            background: #080808;
-            color: #ffffff;
+
+
+
+        /* Dropdown personalizado: evita el menú nativo que se veía blanco/amarillo */
+        .native-filter-hidden {
+            display: none !important;
         }
 
-        .filter-select option:checked {
-            background: #e5c158;
+        .custom-filter {
+            position: relative;
+            z-index: 302;
+        }
+
+        .custom-filter-button {
+            min-width: 132px;
+            max-width: 170px;
+            height: 26px;
+            background: rgba(8, 8, 8, 0.82);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 999px;
+            padding: 0 24px 0 11px;
+            color: #ffffff;
+            font-family: var(--font-sans);
+            font-size: 9px;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            text-align: left;
+        }
+
+        .custom-filter-button::after {
+            content: "";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            width: 0;
+            height: 0;
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+            border-top: 4px solid var(--gold);
+            transform: translateY(-50%);
+        }
+
+        .custom-filter-button:hover,
+        .custom-filter-button:focus {
+            border-color: rgba(229, 193, 88, 0.55);
+            background: rgba(229, 193, 88, 0.10);
+        }
+
+        .custom-filter-menu {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            min-width: 132px;
+            width: max-content;
+            max-width: 190px;
+            padding: 4px;
+            background: rgba(8, 8, 8, 0.96);
+            border: 1px solid rgba(229, 193, 88, 0.38);
+            border-radius: 10px;
+            box-shadow: 0 16px 36px rgba(0,0,0,0.52);
+            display: none;
+            z-index: 500;
+        }
+
+        .custom-filter.is-open .custom-filter-menu {
+            display: grid;
+            gap: 2px;
+        }
+
+        .custom-filter-option {
+            width: 100%;
+            border: 0;
+            border-radius: 7px;
+            background: transparent;
+            color: #ffffff;
+            padding: 6px 9px;
+            font-family: var(--font-sans);
+            font-size: 8.8px;
+            font-weight: 700;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .custom-filter-option:hover,
+        .custom-filter-option.is-selected {
+            background: var(--gold);
             color: #000000;
         }
 
@@ -1441,7 +1523,27 @@
     </section>
 
     <section class="segment-filter-panel" aria-label="Filtros de electrodomésticos">
-        <select id="segmentFilter" class="filter-select">
+        <div class="custom-filter" data-select-target="segmentFilter">
+            <button class="custom-filter-button" type="button" aria-expanded="false">Todos</button>
+            <div class="custom-filter-menu">
+                <button class="custom-filter-option is-selected" type="button" data-value="todos">Todos</button>
+                <button class="custom-filter-option" type="button" data-value="venta">Venta</button>
+                <button class="custom-filter-option" type="button" data-value="instalacion">Instalación</button>
+                <button class="custom-filter-option" type="button" data-value="reparacion">Reparación</button>
+                <button class="custom-filter-option" type="button" data-value="linea-blanca">Línea blanca</button>
+            </div>
+        </div>
+
+        <div class="custom-filter" data-select-target="sortFilter">
+            <button class="custom-filter-button" type="button" aria-expanded="false">Mejor calificación</button>
+            <div class="custom-filter-menu">
+                <button class="custom-filter-option is-selected" type="button" data-value="rating">Mejor calificación</button>
+                <button class="custom-filter-option" type="button" data-value="nombre">Nombre A-Z</button>
+                <button class="custom-filter-option" type="button" data-value="disponibilidad">Disponibilidad</button>
+            </div>
+        </div>
+
+        <select id="segmentFilter" class="filter-select native-filter-hidden" aria-hidden="true" tabindex="-1">
             <option value="todos">Todos</option>
             <option value="venta">Venta</option>
             <option value="instalacion">Instalación</option>
@@ -1449,7 +1551,7 @@
             <option value="linea-blanca">Línea blanca</option>
         </select>
 
-        <select id="sortFilter" class="filter-select">
+        <select id="sortFilter" class="filter-select native-filter-hidden" aria-hidden="true" tabindex="-1">
             <option value="rating">Mejor calificación</option>
             <option value="nombre">Nombre A-Z</option>
             <option value="disponibilidad">Disponibilidad</option>
@@ -2390,6 +2492,71 @@
     if (sortFilter) {
         sortFilter.addEventListener("change", renderBusinesses);
     }
+
+
+    function setupCustomFilters() {
+        document.querySelectorAll(".custom-filter").forEach(function (filter) {
+            const selectId = filter.dataset.selectTarget;
+            const select = document.getElementById(selectId);
+            const button = filter.querySelector(".custom-filter-button");
+            const options = Array.from(filter.querySelectorAll(".custom-filter-option"));
+
+            if (!select || !button || !options.length) return;
+
+            function closeFilter() {
+                filter.classList.remove("is-open");
+                button.setAttribute("aria-expanded", "false");
+            }
+
+            function openFilter() {
+                document.querySelectorAll(".custom-filter.is-open").forEach(function (openItem) {
+                    if (openItem !== filter) {
+                        openItem.classList.remove("is-open");
+                        const openButton = openItem.querySelector(".custom-filter-button");
+                        if (openButton) openButton.setAttribute("aria-expanded", "false");
+                    }
+                });
+
+                filter.classList.add("is-open");
+                button.setAttribute("aria-expanded", "true");
+            }
+
+            button.addEventListener("click", function () {
+                if (filter.classList.contains("is-open")) {
+                    closeFilter();
+                } else {
+                    openFilter();
+                }
+            });
+
+            options.forEach(function (option) {
+                option.addEventListener("click", function () {
+                    select.value = option.dataset.value || "";
+                    button.textContent = option.textContent;
+
+                    options.forEach(function (item) {
+                        item.classList.remove("is-selected");
+                    });
+
+                    option.classList.add("is-selected");
+                    closeFilter();
+                    select.dispatchEvent(new Event("change", { bubbles: true }));
+                });
+            });
+        });
+
+        document.addEventListener("click", function (event) {
+            if (event.target.closest(".custom-filter")) return;
+
+            document.querySelectorAll(".custom-filter.is-open").forEach(function (filter) {
+                filter.classList.remove("is-open");
+                const button = filter.querySelector(".custom-filter-button");
+                if (button) button.setAttribute("aria-expanded", "false");
+            });
+        });
+    }
+
+    setupCustomFilters();
 
     updateCounters(0);
 
