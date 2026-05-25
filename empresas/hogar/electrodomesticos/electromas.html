@@ -1115,6 +1115,29 @@
             border-color: rgba(255,255,255,0.08);
         }
 
+
+        /* Corrección: precio alineado y oferta solo como distintivo superior */
+        .product-body {
+            flex: 1 1 auto;
+        }
+
+        .product-description {
+            flex: 0 0 auto;
+        }
+
+        .product-price-row {
+            margin-top: auto;
+            padding-top: 8px;
+        }
+
+        .product-tags {
+            display: none !important;
+        }
+
+        .product-card .btn.primary {
+            margin-top: 8px;
+        }
+
     </style>
 </head>
 
@@ -1284,13 +1307,13 @@ const EMPRESA = {
     busquedaGithub: "Electromas electrodomésticos Loja venta línea blanca entrega a domicilio a domicilio delivery ofertas promociones promo instalación garantía",
 
     horario: {
+        domingo: [],
         lunes: [{ abre: "08:30", cierra: "18:00" }],
         martes: [{ abre: "08:30", cierra: "18:00" }],
         miercoles: [{ abre: "08:30", cierra: "18:00" }],
         jueves: [{ abre: "08:30", cierra: "18:00" }],
         viernes: [{ abre: "08:30", cierra: "18:00" }],
-        sabado: [{ abre: "08:30", cierra: "14:00" }],
-        domingo: []
+        sabado: [{ abre: "08:30", cierra: "14:00" }]
     },
 
     productos: [
@@ -1513,8 +1536,6 @@ function renderProducts() {
 
     productGrid.innerHTML = EMPRESA.productos.map(product => {
         const isOffer = product.oferta === true;
-        const tags = isOffer ? ["Oferta"] : [];
-
         return `
             <article class="product-card" data-producto="${product.nombre}" data-oferta="${isOffer ? "true" : "false"}">
                 <div class="product-media" aria-label="${product.nombre}">
@@ -1539,11 +1560,6 @@ function renderProducts() {
                         <span class="product-price-label">Precio</span>
                         <div class="product-price">${formatPrice(product.precio)}</div>
                     </div>
-
-                    ${tags.length ? `
-                    <div class="product-tags">
-                        ${tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
-                    </div>` : ""}
 
                     <a class="btn primary" href="${makeWhatsappLink(product.nombre)}" target="_blank" rel="noopener noreferrer">Comprar / consultar</a>
                 </div>
