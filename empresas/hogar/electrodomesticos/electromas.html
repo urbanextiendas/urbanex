@@ -3,30 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electromas | Urbanex</title>
-
-    <link rel="icon" type="image/png" href="/imagenes/log.png">
+    <title>Urbanex - Hogar y Tecnología</title>
+    <link rel="icon" type="image/png" href="../imagenes/log.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --bg-main: #020202;
-            --bg-card: rgba(12, 12, 12, 0.58);
+            --bg-panels-glass: rgba(6, 6, 6, 0.45);
+            --bg-cards-glass: rgba(20, 20, 20, 0.58);
             --gold: #e5c158;
-            --gold-border: rgba(229, 193, 88, 0.30);
+            --gold-dim: #a68b44;
+            --border-color: rgba(229, 193, 88, 0.22);
             --text-main: #ffffff;
-            --text-muted: #d5d5d5;
-            --text-soft: #9a9a9a;
-            --success: #2ed573;
-            --danger: #ff7675;
-            --warning: #ffa502;
+            --text-muted: #e0e0e0;
+            --text-dark: #aaaaaa;
             --font-serif: 'Cinzel', serif;
             --font-sans: 'Montserrat', sans-serif;
-            --transition: all 0.25s ease;
-            --blur: blur(10px);
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --blur-effect: blur(18px);
         }
 
         * {
@@ -35,59 +33,83 @@
             box-sizing: border-box;
         }
 
-        html,
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(229, 193, 88, 0.2);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
+        }
+
         body {
             width: 100%;
-            min-height: 100%;
-            background: #000000;
-        }
-
-        body {
             min-height: 100vh;
-            padding-top: 60px;
-            padding-bottom: 24px;
-            background:
-                linear-gradient(135deg, rgba(0,0,0,0.72), rgba(0,0,0,0.48)),
-                url("/imagenes/Hogar.png") center bottom / cover fixed no-repeat;
-            color: var(--text-main);
+            background-color: var(--bg-main);
             font-family: var(--font-sans);
-            overflow-x: hidden;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        .page-shell {
-            min-height: calc(100vh - 84px);
+            color: var(--text-main);
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
         }
 
-        .header-top {
-            height: 60px;
+        .dashboard-container {
+            flex: 1;
+            display: grid;
+            grid-template-rows: 60px 1fr;
+            grid-template-columns: 240px 1fr 290px;
+            grid-template-areas:
+                "header header header"
+                "aside-left main aside-right";
+            min-height: calc(100vh - 24px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .global-background-underlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .global-background-underlay img {
             width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center bottom;
+        }
+
+        .header-top {
+            grid-area: header;
             background: rgba(6, 6, 6, 0.45);
-            border-bottom: 1px solid var(--gold-border);
-            backdrop-filter: var(--blur);
-            -webkit-backdrop-filter: var(--blur);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
+            position: relative;
+            z-index: 10;
         }
 
         .brand-box {
             display: flex;
             align-items: center;
             gap: 12px;
+            text-decoration: none;
             cursor: pointer;
-            transition: var(--transition);
+            transition: var(--transition-smooth);
             user-select: none;
         }
 
@@ -95,6 +117,42 @@
             height: 60px;
             width: auto;
             display: block;
+        }
+
+        .search-wrapper {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.42);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 20px;
+            padding: 8px 40px 8px 16px;
+            color: var(--text-main);
+            font-size: 12px;
+            outline: none;
+            font-family: var(--font-sans);
+            transition: var(--transition-smooth);
+            text-align: center;
+        }
+
+        .search-input:focus {
+            border-color: var(--gold);
+            background: rgba(0, 0, 0, 0.58);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            fill: var(--text-dark);
         }
 
         .user-tools {
@@ -134,7 +192,7 @@
             width: 18px;
             height: 18px;
             fill: #ffffff;
-            transition: var(--transition);
+            transition: var(--transition-smooth);
         }
 
         .tool-icon:hover svg {
@@ -159,1186 +217,1419 @@
             fill: var(--gold);
         }
 
-        .profile-wrap {
-            width: min(1080px, calc(100% - 28px));
-            margin: 20px auto 26px;
-            display: grid;
-            grid-template-columns: minmax(0, 1fr);
-            gap: 12px;
-        }
-
-        .company-hero {
-            border: 1px solid var(--gold-border);
-            border-radius: 16px;
-            overflow: hidden;
-            background: rgba(8, 8, 8, 0.48);
-            box-shadow: 0 22px 58px rgba(0,0,0,0.34);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .cover-zone {
-            min-height: 158px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .cover-zone::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at 16% 22%, rgba(229,193,88,0.10), transparent 36%),
-                linear-gradient(to right, rgba(0,0,0,0.58), rgba(0,0,0,0.28));
-        }
-
-        .company-main-info {
-            position: relative;
-            z-index: 2;
-            min-height: 158px;
-            padding: 18px 20px;
-            display: grid;
-            grid-template-columns: 82px minmax(0, 1fr);
-            align-items: center;
-            gap: 16px;
-        }
-
-        .logo-box {
-            width: 82px;
-            height: 82px;
-            border-radius: 18px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid var(--gold-border);
+        .aside-categories {
+            grid-area: aside-left;
+            background: var(--bg-panels-glass);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-right: 1px solid var(--border-color);
+            padding: 20px 12px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            flex-shrink: 0;
+            flex-direction: column;
+            position: relative;
+            z-index: 5;
+            overflow-y: auto;
         }
 
-        .logo-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            padding: 0;
-            display: block;
-        }
-
-        .logo-fallback {
-            display: none;
-            color: #ffffff;
-            font-size: 13px;
-            font-weight: 800;
-            text-align: center;
-            line-height: 1.18;
-            padding: 10px;
-        }
-
-        .company-title-zone {
-            min-width: 0;
-        }
-
-        .status-line {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-
-        .status-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            border-radius: 999px;
-            padding: 5px 9px;
-            font-size: 8.5px;
-            font-weight: 900;
-            letter-spacing: 0.7px;
+        .section-title {
+            font-size: 10px;
             text-transform: uppercase;
-            border: 1px solid rgba(255,255,255,0.14);
-            background: rgba(0,0,0,0.46);
-        }
-
-        .status-pill.open {
-            color: var(--success);
-            border-color: rgba(46,213,115,0.40);
-            background: rgba(46,213,115,0.10);
-        }
-
-        .status-pill.closed {
-            color: var(--danger);
-            border-color: rgba(255,118,117,0.38);
-            background: rgba(255,118,117,0.10);
-        }
-
-        .status-pill.soon {
-            color: var(--warning);
-            border-color: rgba(255,165,2,0.42);
-            background: rgba(255,165,2,0.10);
-        }
-
-        .category-pill,
-        .delivery-pill {
-            color: #000000;
-            background: var(--gold);
-            border-radius: 999px;
-            padding: 5px 9px;
-            font-size: 8.5px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.7px;
-        }
-
-        .delivery-pill {
-            color: var(--gold);
-            background: rgba(229,193,88,0.10);
-            border: 1px solid rgba(229,193,88,0.38);
-        }
-
-        h1 {
-            font-family: var(--font-serif);
-            font-size: clamp(24px, 3.2vw, 36px);
-            line-height: 0.98;
             letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
+            color: var(--gold);
+            margin-bottom: 14px;
+            padding-left: 6px;
+            font-weight: 700;
         }
 
-        .company-description {
-            max-width: 760px;
-            color: var(--text-muted);
-            font-size: 11px;
-            line-height: 1.5;
-        }
-
-        .hero-buttons {
+        .categories-list {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 13px;
-        }
-
-        .btn {
-            border: 1px solid var(--gold-border);
-            border-radius: 999px;
-            padding: 9px 13px;
-            font-size: 9.5px;
-            font-weight: 900;
-            letter-spacing: 0.3px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
             gap: 6px;
-            text-align: center;
+            list-style: none;
         }
 
-        .btn.primary {
-            background: var(--gold);
-            color: #000000;
-            border-color: var(--gold);
-        }
-
-        .btn.secondary {
-            background: rgba(0,0,0,0.38);
-            color: #ffffff;
-        }
-
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.28);
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) 320px;
-            gap: 12px;
-        }
-
-        .panel {
-            border: 1px solid rgba(255,255,255,0.14);
-            border-radius: 16px;
-            background: rgba(12, 12, 12, 0.58);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 18px 42px rgba(0,0,0,0.22);
-            overflow: hidden;
-        }
-
-        .panel-head {
-            padding: 14px 16px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .panel-head h2 {
-            color: var(--gold);
-            font-family: var(--font-serif);
-            font-size: 15px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .product-grid {
-            padding: 12px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
-            gap: 12px;
-        }
-
-        .product-card {
-            min-height: 100%;
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 14px;
-            background:
-                radial-gradient(circle at 20% 0%, rgba(229,193,88,0.10), transparent 34%),
-                rgba(0,0,0,0.28);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: var(--transition);
-        }
-
-        .product-card:hover {
-            border-color: rgba(229,193,88,0.48);
-            transform: translateY(-2px);
-            box-shadow: 0 18px 36px rgba(0,0,0,0.34);
-        }
-
-        .product-media {
-            padding: 10px 10px 0;
-        }
-
-        .product-main-image {
-            position: relative;
-            height: 128px;
-            border: 1px solid rgba(255,255,255,0.10);
-            border-radius: 12px;
-            background:
-                radial-gradient(circle at 50% 24%, rgba(229,193,88,0.20), transparent 34%),
-                linear-gradient(145deg, rgba(255,255,255,0.10), rgba(0,0,0,0.22));
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .product-main-image img {
+        .category-item button {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+            background: rgba(10, 10, 10, 0.54);
+            border: 1px solid rgba(229, 193, 88, 0.28);
+            padding: 10px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 14px;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            text-align: left;
         }
 
-        .product-main-image.image-empty img {
-            display: none;
+        .category-item button:hover {
+            background: rgba(229, 193, 88, 0.08);
         }
 
-        .product-placeholder {
-            display: none;
-            flex-direction: column;
+        .category-item.active button {
+            border: 1px solid var(--gold);
+            background: rgba(229, 193, 88, 0.10);
+        }
+
+        .icon-container {
+            width: 26px;
+            height: 26px;
+            display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--gold);
-            text-align: center;
-            gap: 7px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: var(--transition-smooth);
         }
 
-        .product-main-image.image-empty .product-placeholder {
-            display: flex;
+        .category-item.active .icon-container {
+            background: var(--gold);
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(229, 193, 88, 0.4);
         }
 
-        .product-placeholder svg {
-            width: 30px;
-            height: 30px;
+        .category-item button svg {
+            width: 18px;
+            height: 18px;
             fill: var(--gold);
         }
 
-        .product-placeholder span {
-            max-width: 95px;
+        .category-item.active button svg {
+            fill: #000000;
+        }
+
+        .category-text-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-width: 0;
+            text-align: left;
+        }
+
+        .category-name {
             color: #ffffff;
-            font-size: 8px;
-            font-weight: 900;
+            font-size: 11.5px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
+        }
+
+        .category-item.active .category-name {
+            color: var(--gold);
+        }
+
+        .category-count {
+            color: var(--text-dark);
+            font-size: 9px;
+            text-align: left;
+        }
+
+        .main-boulevard {
+            grid-area: main;
+            position: relative;
+            overflow: hidden;
+            background-image: url("../imagenes/Hogar.png");
+            background-size: cover;
+            background-position: center bottom;
+            background-repeat: no-repeat;
+            z-index: 2;
+        }
+
+        .boulevard-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,0.16) 0%,
+                rgba(0,0,0,0.03) 45%,
+                rgba(0,0,0,0.18) 100%
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .welcome-billboard {
+            position: absolute;
+            top: 42px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 90%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .welcome-billboard h2 {
+            font-family: var(--font-serif);
+            color: var(--text-main);
+            font-size: 24px;
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.95);
+        }
+
+        .welcome-billboard p {
+            font-size: 10px;
+            color: var(--gold);
+            font-weight: 700;
+            margin-top: 6px;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.95);
+        }
+
+        .aside-showcase-list {
+            grid-area: aside-right;
+            background: var(--bg-panels-glass);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .showcase-header {
+            padding: 20px 14px 8px 14px;
+        }
+
+        .showcase-header h2 {
+            font-family: var(--font-serif);
+            color: var(--gold);
+            font-size: 13px;
             letter-spacing: 1px;
             text-transform: uppercase;
-            line-height: 1.25;
         }
 
-        .offer-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            z-index: 2;
-            border: 1px solid rgba(229,193,88,0.52);
-            border-radius: 999px;
-            color: var(--gold);
-            background: rgba(0,0,0,0.76);
-            padding: 4px 8px;
-            font-size: 6.8px;
-            font-weight: 900;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
+        .showcase-stats {
+            font-size: 10px;
+            color: #ffffff;
+            margin-top: 1px;
         }
 
-        .product-thumbs {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin-top: 7px;
+        .sort-box {
+            padding: 0 14px 10px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .product-thumb {
-            height: 38px;
-            border: 1px solid rgba(255,255,255,0.10);
-            border-radius: 9px;
-            background: rgba(255,255,255,0.04);
-            overflow: hidden;
-            cursor: pointer;
-            transition: var(--transition);
-            padding: 0;
-        }
-
-        .product-thumb img {
+        .sort-select {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+            background: rgba(0, 0, 0, 0.42);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 6px;
+            padding: 6px 10px;
+            color: #ffffff;
+            font-size: 11px;
+            outline: none;
+            cursor: pointer;
+            font-family: var(--font-sans);
         }
 
-        .product-thumb.is-active,
-        .product-thumb:hover {
-            border-color: rgba(229,193,88,0.64);
-            box-shadow: 0 0 0 1px rgba(229,193,88,0.18);
-        }
-
-        .product-body {
-            padding: 10px;
+        .shops-scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 14px;
             display: flex;
             flex-direction: column;
             gap: 8px;
-            flex: 1;
         }
 
-        .product-body h3 {
-            font-size: 11.5px;
-            line-height: 1.25;
-            color: #ffffff;
-        }
-
-        .product-description {
-            color: var(--text-muted);
-            font-size: 9.2px;
-            line-height: 1.45;
-            min-height: 39px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
+        .shop-card {
+            background: var(--bg-cards-glass);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
             overflow: hidden;
-        }
-
-        .product-bottom {
-            margin-top: auto;
-            display: grid;
-            gap: 8px;
-        }
-
-        .price-block {
             display: flex;
-            align-items: end;
-            justify-content: space-between;
-            gap: 10px;
-            padding-top: 4px;
+            cursor: pointer;
+            height: 64px;
+            transition: var(--transition-smooth);
         }
 
-        .price-label {
-            color: var(--text-soft);
-            font-size: 7px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1.1px;
+        .shop-card:hover {
+            border-color: rgba(229, 193, 88, 0.45);
+            background: rgba(229, 193, 88, 0.10);
+            transform: translateX(2px);
         }
 
-        .product-price {
-            color: var(--gold);
-            font-size: 16px;
-            line-height: 1;
-            font-weight: 900;
+        .shop-thumb-wrapper {
+            width: 64px;
+            height: 64px;
+            flex-shrink: 0;
+        }
+
+        .shop-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .shop-details {
+            flex: 1;
+            padding: 6px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .shop-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffffff;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .product-card .btn {
-            width: 100%;
-            min-height: 34px;
-            padding: 8px 10px;
-            font-size: 8.8px;
-        }
-
-        .side-content {
-            display: grid;
-            gap: 12px;
-            align-content: start;
-        }
-
-        .info-list {
-            padding: 14px 16px;
-            display: grid;
-            gap: 10px;
-        }
-
-        .info-item {
-            border-bottom: 1px solid rgba(255,255,255,0.07);
-            padding-bottom: 9px;
-        }
-
-        .info-item:last-child {
-            border-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .info-label {
-            display: block;
+        .shop-segment {
+            font-size: 9.5px;
             color: var(--gold);
-            font-size: 8px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 3px;
+            font-weight: 500;
         }
 
-        .info-value {
-            color: #ffffff;
-            font-size: 11px;
-            line-height: 1.45;
-            word-break: break-word;
-        }
-
-        a.info-value:hover {
-            color: var(--gold);
-        }
-
-        .schedule-list {
-            padding: 12px 16px 16px;
-            display: grid;
-            gap: 7px;
-        }
-
-        .schedule-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            color: var(--text-muted);
-            font-size: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding-bottom: 7px;
-        }
-
-        .schedule-row.today {
-            color: #ffffff;
-            font-weight: 800;
-        }
-
-        .schedule-row span:last-child {
-            text-align: right;
-        }
-
-        .service-list {
-            padding: 14px 16px;
-            display: grid;
-            gap: 8px;
-        }
-
-        .service-item {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            color: var(--text-muted);
-            font-size: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding-bottom: 8px;
-        }
-
-        .service-item:last-child {
-            border-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .service-item strong {
-            color: #ffffff;
-            font-size: 10px;
-        }
-
-        .service-item span {
-            color: var(--gold);
-            font-weight: 800;
-            text-align: right;
-        }
-
-        .footer {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 24px;
-            background: #000000;
-            color: #8c8c8c;
-            border-top: 1px solid #1a1a1a;
+        .shop-rating-row {
             display: flex;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-size: 11px;
-            font-family: Arial, Helvetica, sans-serif;
-            z-index: 1000;
+            gap: 4px;
+            margin-top: 2px;
         }
 
-        .footer a {
+        .star-icon {
+            width: 10px;
+            height: 10px;
+            fill: var(--gold);
+        }
+
+        .rating-value {
+            font-size: 10px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .rating-count {
+            font-size: 9.5px;
+            color: var(--text-dark);
+        }
+
+        .status-indicator {
+            margin-left: auto;
+            font-size: 9.5px;
+            font-weight: 700;
+            color: #2ed573;
+        }
+
+        .action-footer-box {
+            padding: 10px 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-view-all-shops {
+            width: 100%;
+            background: var(--gold);
+            border: none;
+            border-radius: 6px;
+            padding: 8px;
+            color: #000000;
+            font-family: var(--font-sans);
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-view-all-shops:hover {
+            background: #f1cd6b;
+        }
+
+        .pie-pagina {
+            width: 100%;
+            height: 24px;
+            background-color: #000000;
             color: #8c8c8c;
-            text-decoration: none;
+            font-size: 11px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+            z-index: 5;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
-        .footer a:hover {
-            color: var(--gold);
-        }
-
-        .index-data {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        @media (max-width: 880px) {
-            .content-grid {
-                grid-template-columns: 1fr;
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 200px 1fr 240px;
             }
 
-            .company-main-info {
-                grid-template-columns: 1fr;
-                align-items: start;
+            .user-tools {
+                gap: 12px;
             }
 
-            .logo-box {
-                width: 76px;
-                height: 76px;
+            .search-wrapper {
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                overflow-y: auto;
+                height: auto;
+            }
+
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto 1fr auto;
+                grid-template-areas:
+                    "header"
+                    "aside-left"
+                    "main"
+                    "aside-right";
+                min-height: auto;
+                overflow: visible;
+            }
+
+            .aside-categories {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 12px;
+            }
+
+            .section-title {
+                display: none;
+            }
+
+            .categories-list {
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 8px;
+                padding-bottom: 4px;
+            }
+
+            .category-item button {
+                width: auto;
+                white-space: nowrap;
+                padding: 8px 12px;
+            }
+
+            .main-boulevard {
+                min-height: 380px;
+                height: 45vh;
+                background-position: center bottom;
+            }
+
+            .aside-showcase-list {
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+            }
+
+            .shops-scroll-area {
+                max-height: none;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 10px;
             }
         }
 
         @media (max-width: 640px) {
-            body {
-                padding-top: 68px;
-            }
-
             .header-top {
-                height: 68px;
-                padding: 0 12px;
-            }
-
-            .brand-box img {
-                height: 54px;
-            }
-
-            .user-tools {
+                flex-direction: column;
+                height: auto;
+                padding: 12px;
                 gap: 10px;
             }
 
-            .location-indicator span {
-                display: none;
+            .search-wrapper {
+                width: 100%;
+                margin: 0;
+                order: 3;
             }
 
-            .tool-icon:nth-child(2) {
-                margin-right: 0;
+            .user-tools {
+                width: 100%;
+                justify-content: flex-end;
+                gap: 10px !important;
+                order: 2;
             }
 
-            .profile-wrap {
-                width: min(100% - 18px, 1080px);
-                margin-top: 12px;
+            .icon-corazon {
+                margin-right: 0 !important;
             }
 
-            .cover-zone,
-            .company-main-info {
-                min-height: auto;
+            .main-boulevard {
+                min-height: 360px;
+                height: 48vh;
+                background-size: cover;
+                background-position: center bottom;
             }
 
-            .company-main-info {
-                padding: 16px;
+            .global-background-underlay img {
+                object-position: center bottom;
             }
 
-            .hero-buttons {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
+            .boulevard-overlay {
+                background: linear-gradient(
+                    to bottom,
+                    rgba(0,0,0,0.10) 0%,
+                    transparent 45%,
+                    rgba(0,0,0,0.20) 100%
+                );
             }
 
-            .product-grid {
-                grid-template-columns: 1fr;
+            .welcome-billboard {
+                top: 26px;
+            }
+
+            .welcome-billboard h2 {
+                font-size: 18px;
+                letter-spacing: 4px;
+            }
+
+            .welcome-billboard p {
+                font-size: 9px;
+                letter-spacing: 1.4px;
             }
         }
     </style>
 </head>
 
 <body>
-<div class="page-shell">
+
+<div class="dashboard-container">
+
+    <div class="global-background-underlay">
+        <img src="../imagenes/Hogar.png" alt="Hogar y Tecnología de Loja">
+    </div>
 
     <header class="header-top">
-        <a href="/categorias/hogar/electrodomesticos.html" class="brand-box" title="Volver a Urbanex">
-            <img src="/imagenes/logo.png" alt="Urbanex">
+        <a href="../boulevard.html" class="brand-box" title="Volver al Inicio">
+            <img src="../imagenes/logo.png" alt="Logo Urbanex">
         </a>
+
+        <div class="search-wrapper">
+            <input type="search" id="siteSearch" class="search-input" placeholder="¿Qué producto, servicio o equipo busca?" autocomplete="off">
+            <svg class="search-icon" id="searchButton" viewBox="0 0 24 24" role="button" aria-label="Buscar" tabindex="0">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+        </div>
 
         <div class="user-tools">
             <div class="location-indicator">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                 </svg>
                 <span>Loja, Ecuador</span>
             </div>
 
-            <div class="tool-icon icon-corazon" title="Favoritos">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
+            <div class="tool-icon icon-corazon">
+                <svg viewBox="0 0 24 24">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                 </svg>
             </div>
 
-            <div class="profile-avatar" title="Perfil">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
+            <div class="profile-avatar">
+                <svg viewBox="0 0 24 24">
                     <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                 </svg>
             </div>
         </div>
     </header>
 
-    <main
-        class="profile-wrap"
-        id="empresaProfile"
-        data-empresa=""
-        data-categoria=""
-        data-tipo=""
-        data-entrega-domicilio=""
-        data-credito-directo=""
-        data-tiene-ofertas=""
-        data-web=""
-    >
-        <section class="company-hero">
-            <div class="cover-zone" id="companyCover">
-                <div class="company-main-info">
-                    <div class="logo-box">
-                        <img id="companyLogo" src="" alt="Logo de la empresa" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='block';">
-                        <span class="logo-fallback" id="logoFallback">Logo<br>Empresa</span>
+    <aside class="aside-categories">
+        <h2 class="section-title">Categorías</h2>
+
+        <ul class="categories-list">
+
+            <li class="category-item active">
+                <button type="button"
+                        data-count-src="hogar/electrodomesticos.html"
+                        data-count-array="empresasElectrodomesticos"
+                        data-count-target="countElectrodomesticos"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='hogar/electrodomesticos.html'">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
+                        </svg>
                     </div>
-
-                    <div class="company-title-zone">
-                        <div class="status-line">
-                            <span class="status-pill" id="businessStatus">Calculando...</span>
-                            <span class="category-pill" id="companyCategory">Categoría</span>
-                            <span class="delivery-pill" id="deliveryStatus">Entrega a domicilio</span>
-                            <span class="delivery-pill" id="creditStatus">Crédito directo</span>
-                        </div>
-
-                        <h1 id="companyName">Nombre de la empresa</h1>
-                        <p class="company-description" id="companyDescription">Descripción de la empresa.</p>
-
-                        <div class="hero-buttons">
-                            <a class="btn primary" id="whatsappGeneral" target="_blank" rel="noopener noreferrer">Contactar por WhatsApp</a>
-                            <a class="btn secondary" id="callButton">Llamar</a>
-                            <a class="btn secondary" id="emailButton">Correo</a>
-                            <a class="btn secondary" id="mapButton" target="_blank" rel="noopener noreferrer">Ubicación</a>
-                            <a class="btn secondary" id="webButton" target="_blank" rel="noopener noreferrer">Sitio web</a>
-                        </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Electrodomésticos</span>
+                        <span class="category-count" id="countElectrodomesticos">0 locales</span>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="content-grid">
-            <section class="panel">
-                <div class="panel-head">
-                    <h2>Productos destacados</h2>
-                </div>
-                <div class="product-grid" id="productGrid"></div>
-            </section>
-
-            <aside class="side-content">
-                <section class="panel">
-                    <div class="panel-head">
-                        <h2>Contacto</h2>
+                </button>
+            </li>
+            
+            <li class="category-item">
+                <button type="button"
+                        data-count-src="hogar/muebles-decoracion.html"
+                        data-count-array="empresasMueblesDecoracion"
+                        data-count-target="countMueblesDecoracion"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='hogar/muebles-decoracion.html'">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                        </svg>
                     </div>
-                    <div class="info-list">
-                        <div class="info-item">
-                            <span class="info-label">Celular</span>
-                            <span class="info-value" id="infoPhone"></span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Correo</span>
-                            <span class="info-value" id="infoEmail"></span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Sitio web</span>
-                            <a class="info-value" id="infoWeb" target="_blank" rel="noopener noreferrer"></a>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Dirección</span>
-                            <span class="info-value" id="infoAddress"></span>
-                        </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Muebles y Decoración</span>
+                        <span class="category-count" id="countMueblesDecoracion">0 locales</span>
                     </div>
-                </section>
+                </button>
+            </li>
+            
+            <li class="category-item">
+                <button type="button"
+                        data-count-src="hogar/computadoras-celulares.html"
+                        data-count-array="empresasComputadorasCelulares"
+                        data-count-target="countComputadorasCelulares"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='hogar/computadoras-celulares.html'">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 18c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2H1v2h22v-2h-3zM4 4h16v12H4V4z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Computadoras y Celulares</span>
+                        <span class="category-count" id="countComputadorasCelulares">0 locales</span>
+                    </div>
+                </button>
+            </li>
+            
+            <li class="category-item">
+                <button type="button"
+                        data-count-src="hogar/reparacion-tecnica.html"
+                        data-count-array="empresasReparacionTecnica"
+                        data-count-target="countReparacionTecnica"
+                        data-count-singular="servicio"
+                        data-count-plural="servicios"
+                        onclick="window.location.href='hogar/reparacion-tecnica.html'">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3l4.1 4.1-3 3-4.2-4C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Reparación Técnica</span>
+                        <span class="category-count" id="countReparacionTecnica">0 servicios</span>
+                    </div>
+                </button>
+            </li>
+            
+            <li class="category-item">
+                <button type="button"
+                        data-count-src="hogar/ferreterias.html"
+                        data-count-array="empresasFerreterias"
+                        data-count-target="countFerreterias"
+                        data-count-singular="local"
+                        data-count-plural="locales"
+                        onclick="window.location.href='hogar/ferreterias.html'">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22 19v3H2v-3h20zM19 3c-1.1 0-2 .9-2 2v3H7V5c0-1.1-.9-2-2-2S3 3.9 3 5v10h18V5c0-1.1-.9-2-2-2z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Ferreterías</span>
+                        <span class="category-count" id="countFerreterias">0 locales</span>
+                    </div>
+                </button>
+            </li>
+            
+            <li class="category-item">
+                <button type="button"
+                        data-count-src="hogar/internet-seguridad.html"
+                        data-count-array="empresasInternetSeguridad"
+                        data-count-target="countInternetSeguridad"
+                        data-count-singular="servicio"
+                        data-count-plural="servicios"
+                        onclick="window.location.href='hogar/internet-seguridad.html'">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 12c-2.33 0-4.31-1.46-5.11-3.5 1.28-.82 3.02-1.3 5.11-1.3s3.83.48 5.11 1.3C16.31 17.54 14.33 19 12 19z"/>
+                        </svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Internet y Seguridad</span>
+                        <span class="category-count" id="countInternetSeguridad">0 servicios</span>
+                    </div>
+                </button>
+            </li>
+        </ul>
+    </aside>
 
-                <section class="panel">
-                    <div class="panel-head">
-                        <h2>Servicios</h2>
-                    </div>
-                    <div class="service-list">
-                        <div class="service-item">
-                            <strong>Entrega a domicilio</strong>
-                            <span id="deliveryText">Disponible</span>
-                        </div>
-                        <div class="service-item">
-                            <strong>Ofertas activas</strong>
-                            <span id="offersText">Disponible</span>
-                        </div>
-                        <div class="service-item">
-                            <strong>Crédito directo</strong>
-                            <span id="creditText">Disponible</span>
-                        </div>
-                    </div>
-                </section>
+    <main class="main-boulevard">
+        <div class="boulevard-overlay"></div>
 
-                <section class="panel">
-                    <div class="panel-head">
-                        <h2>Horario</h2>
-                    </div>
-                    <div class="schedule-list" id="scheduleList"></div>
-                </section>
-            </aside>
-        </section>
-
-        <section class="index-data" aria-hidden="true" id="indexData"></section>
+        <div class="welcome-billboard">
+            <h2>HOGAR Y TECNOLOGÍA</h2>
+            <p>PRODUCTOS, SERVICIOS Y SOLUCIONES PARA EL HOGAR EN LOJA</p>
+        </div>
     </main>
 
-    <footer class="footer">
-        <p>&copy; 2026 Urbanex. Desarrollado por <a href="https://www.neodat.net" target="_blank" rel="noopener noreferrer">Neodat Consultores</a>.</p>
-    </footer>
+    <aside class="aside-showcase-list">
+        <div class="showcase-header">
+            <h2>HOGAR DESTACADO</h2>
+            <div class="showcase-stats">Recomendados para casa y tecnología</div>
+        </div>
+
+        <div class="sort-box">
+            <select class="sort-select">
+                <option>Ordenar por: Mayor Calificación</option>
+                <option>Cercanía</option>
+                <option>Precio promedio</option>
+                <option>Mayor disponibilidad</option>
+            </select>
+        </div>
+
+        <div class="shops-scroll-area">
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=120&q=80" alt="Casa Nova" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">Casa Nova</div>
+                    <div class="shop-segment">Muebles · Decoración</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.9</span>
+                        <span class="rating-count">(284)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=120&q=80" alt="Tecno Loja" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">Tecno Loja</div>
+                    <div class="shop-segment">Computadoras · Accesorios</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.8</span>
+                        <span class="rating-count">(231)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=120&q=80" alt="ElectroHogar Loja" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">ElectroHogar Loja</div>
+                    <div class="shop-segment">Electrodomésticos · Instalación</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.7</span>
+                        <span class="rating-count">(176)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-card">
+                <div class="shop-thumb-wrapper">
+                    <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=120&q=80" alt="FixSmart" class="shop-thumb">
+                </div>
+                <div class="shop-details">
+                    <div class="shop-title">FixSmart</div>
+                    <div class="shop-segment">Reparación · Soporte técnico</div>
+                    <div class="shop-rating-row">
+                        <svg class="star-icon" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                        <span class="rating-value">4.7</span>
+                        <span class="rating-count">(152)</span>
+                        <span class="status-indicator">Abierto</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-footer-box">
+            <button class="btn-view-all-shops" type="button" onclick="window.location.href='hogar/electrodomesticos.html'">Ver empresas de Hogar y Tecnología</button>
+        </div>
+    </aside>
+
 </div>
 
+<footer class="pie-pagina">
+    <p>&copy; 2026 Urbanex. Desarrollado por Neodat Consultores.</p>
+</footer>
+
+
+
 <script>
-/* ==========================================================
-   SOLO EDITAR ESTE BLOQUE PARA CADA NUEVA EMPRESA
-   ========================================================== */
+(function () {
+    const categoryButtons = Array.from(document.querySelectorAll("[data-count-src][data-count-target]"));
+    if (!categoryButtons.length) return;
 
-const EMPRESA = {
-    nombre: "Electromas",
-    categoria: "Electrodomésticos",
-    tipo: "venta linea-blanca linea blanca electrodomesticos",
-    descripcion: "Venta de refrigeradoras, lavadoras, cocinas, secadoras y electrodomésticos de línea blanca para hogares y negocios de la provincia de Loja y Zamora.",
+    const countableSelectors = [
+        ".empresa-electrodomesticos",
+        ".empresa-card",
+        ".business-card",
+        ".local-card",
+        ".restaurant-card",
+        ".service-card",
+        "[data-business]",
+        "[data-empresa]"
+    ].join(",");
 
-    logo: "/logosempresas/electromas1.jpg",
-    portada: "/logosempresas/electromas2.png",
+    function formatCount(target, total, singular, plural) {
+        target.textContent = total + " " + (total === 1 ? singular : plural);
+    }
 
-    celular: "+593959782300",
-    correo: "electromascreditosas@gmail.com",
-    web: "https://electromas.pages.dev",
-    direccion: "Calle Imbabura entre Sucre y 18 de Noviembre, Loja, Ecuador",
-    mapa: "https://www.google.com/maps/search/?api=1&query=Calle+Imbabura+entre+Sucre+y+18+de+Noviembre,+Loja,+Ecuador",
-    moneda: "$",
-    zonaHoraria: "America/Guayaquil",
+    function getBalancedStructure(sourceText, startIndex, opener, closer) {
+        const structureStart = sourceText.indexOf(opener, startIndex);
+        if (structureStart === -1) return "";
 
-    entregaDomicilio: true,
-    creditoDirecto: true,
+        let depth = 0;
+        let quote = "";
+        let escaped = false;
 
-    horario: {
-        domingo: [],
-        lunes: [{ abre: "08:30", cierra: "18:00" }],
-        martes: [{ abre: "08:30", cierra: "18:00" }],
-        miercoles: [{ abre: "08:30", cierra: "18:00" }],
-        jueves: [{ abre: "08:30", cierra: "18:00" }],
-        viernes: [{ abre: "08:30", cierra: "18:00" }],
-        sabado: [{ abre: "08:30", cierra: "14:00" }]
-    },
+        for (let i = structureStart; i < sourceText.length; i++) {
+            const char = sourceText[i];
 
-    productos: [
-        {
-            nombre: "Refrigeradora No Frost 300L",
-            precio: 499,
-            descripcion: "Refrigeradora de bajo consumo, sistema No Frost y garantía de fábrica.",
-            oferta: false,
-            imagenes: [
-                "/imagenes/productos/refrigeradora-300l.jpg",
-                "/imagenes/productos/refrigeradora-300l-2.jpg",
-                "/imagenes/productos/refrigeradora-300l-3.jpg"
-            ]
-        },
-        {
-            nombre: "Lavadora automática 18kg",
-            precio: 389,
-            descripcion: "Lavadora automática para uso familiar, múltiples ciclos de lavado y soporte técnico local.",
-            oferta: false,
-            imagenes: [
-                "/imagenes/productos/lavadora-18kg.jpg",
-                "/imagenes/productos/lavadora-18kg-2.jpg",
-                "/imagenes/productos/lavadora-18kg-3.jpg"
-            ]
-        },
-        {
-            nombre: "Cocina a gas 4 quemadores",
-            precio: 249,
-            descripcion: "Cocina a gas con horno, encendido eléctrico y soporte local.",
-            oferta: true,
-            imagenes: [
-                "/imagenes/productos/cocina-4-quemadores.jpg",
-                "/imagenes/productos/cocina-4-quemadores-2.jpg",
-                "/imagenes/productos/cocina-4-quemadores-3.jpg"
-            ]
-        }
-    ]
-};
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
 
-/* ==========================================================
-   NO EDITAR DESDE AQUÍ, SALVO CAMBIOS DE FUNCIONAMIENTO
-   ========================================================== */
+            if (char === "\\") {
+                escaped = true;
+                continue;
+            }
 
-const DIAS = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+            if (quote) {
+                if (char === quote) quote = "";
+                continue;
+            }
 
-const DIAS_LABEL = {
-    domingo: "Domingo",
-    lunes: "Lunes",
-    martes: "Martes",
-    miercoles: "Miércoles",
-    jueves: "Jueves",
-    viernes: "Viernes",
-    sabado: "Sábado"
-};
+            if (char === "'" || char === '"' || char === "`") {
+                quote = char;
+                continue;
+            }
 
-function escapeHtml(value) {
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
+            if (char === opener) depth++;
+            if (char === closer) depth--;
 
-function getNowInTimeZone(timeZone) {
-    const parts = new Intl.DateTimeFormat("en-US", {
-        timeZone,
-        weekday: "long",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false
-    }).formatToParts(new Date());
-
-    const weekdayEnglish = parts.find(part => part.type === "weekday").value.toLowerCase();
-    const hour = parts.find(part => part.type === "hour").value.padStart(2, "0");
-    const minute = parts.find(part => part.type === "minute").value.padStart(2, "0");
-
-    const dayMap = {
-        sunday: "domingo",
-        monday: "lunes",
-        tuesday: "martes",
-        wednesday: "miercoles",
-        thursday: "jueves",
-        friday: "viernes",
-        saturday: "sabado"
-    };
-
-    return {
-        dia: dayMap[weekdayEnglish],
-        minutos: Number(hour) * 60 + Number(minute)
-    };
-}
-
-function timeToMinutes(time) {
-    const [hours, minutes] = String(time).split(":").map(Number);
-    return hours * 60 + minutes;
-}
-
-function getBusinessStatus() {
-    const now = getNowInTimeZone(EMPRESA.zonaHoraria || "America/Guayaquil");
-    const todaySchedule = EMPRESA.horario[now.dia] || [];
-
-    for (const range of todaySchedule) {
-        const open = timeToMinutes(range.abre);
-        const close = timeToMinutes(range.cierra);
-
-        if (now.minutos >= open && now.minutos < close) {
-            return {
-                state: "open",
-                label: "Abierto",
-                detail: "Cierra a las " + range.cierra
-            };
+            if (depth === 0) {
+                return sourceText.slice(structureStart, i + 1);
+            }
         }
 
-        if (now.minutos < open) {
-            const minutesUntilOpen = open - now.minutos;
+        return "";
+    }
 
-            return {
-                state: minutesUntilOpen <= 60 ? "soon" : "closed",
-                label: minutesUntilOpen <= 60 ? "Abre pronto" : "Cerrado",
-                detail: "Abre hoy a las " + range.abre
-            };
+    function escapeRegExp(value) {
+        return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function getAssignedArrayText(htmlText, arrayName) {
+        if (!arrayName) return "";
+
+        const pattern = new RegExp("(?:const|let|var)\\s+" + escapeRegExp(arrayName) + "\\s*=\\s*\\[", "m");
+        const match = pattern.exec(htmlText);
+
+        if (!match) return "";
+
+        return getBalancedStructure(htmlText, match.index, "[", "]");
+    }
+
+    function countBusinessObjectsInArray(arrayText) {
+        if (!arrayText) return 0;
+
+        const namedItems = arrayText.match(/\bnombre\s*:/g);
+        if (namedItems) return namedItems.length;
+
+        const objectItems = arrayText.match(/\{[\s\S]*?\}/g);
+        return objectItems ? objectItems.length : 0;
+    }
+
+    function countStringItemsInArray(arrayText) {
+        if (!arrayText) return 0;
+
+        const stringItems = arrayText.match(/(["'`])(?:\\.|(?!\1)[\s\S])*\1/g);
+        return stringItems ? stringItems.length : 0;
+    }
+
+    function countFromSpecificArray(htmlText, arrayName) {
+        const arrayText = getAssignedArrayText(htmlText, arrayName);
+        return countBusinessObjectsInArray(arrayText);
+    }
+
+    function countFromDataSources(htmlText) {
+        const sourceArrayNames = [
+            "EMPRESAS_DATA_SOURCES",
+            "EMPRESA_DATA_SOURCES",
+            "DATA_SOURCES",
+            "FUENTES_EMPRESAS",
+            "BUSINESS_DATA_SOURCES"
+        ];
+
+        for (const arrayName of sourceArrayNames) {
+            const arrayText = getAssignedArrayText(htmlText, arrayName);
+            const total = countStringItemsInArray(arrayText);
+
+            if (total > 0) return total;
+        }
+
+        return 0;
+    }
+
+    function countFromAnyBusinessArray(htmlText) {
+        const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
+        let match;
+        let bestCount = 0;
+
+        while ((match = arrayPattern.exec(htmlText)) !== null) {
+            const arrayText = getBalancedStructure(htmlText, match.index, "[", "]");
+            const count = countBusinessObjectsInArray(arrayText);
+
+            if (count > bestCount) bestCount = count;
+        }
+
+        return bestCount;
+    }
+
+    function countFromRenderedMarkup(htmlText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+        return doc.querySelectorAll(countableSelectors).length;
+    }
+
+    function countCategoryItems(htmlText, arrayName) {
+        const specificArrayCount = countFromSpecificArray(htmlText, arrayName);
+        if (specificArrayCount > 0) return specificArrayCount;
+
+        const dataSourcesCount = countFromDataSources(htmlText);
+        if (dataSourcesCount > 0) return dataSourcesCount;
+
+        const genericArrayCount = countFromAnyBusinessArray(htmlText);
+        if (genericArrayCount > 0) return genericArrayCount;
+
+        return countFromRenderedMarkup(htmlText);
+    }
+
+    async function updateCategoryCount(button) {
+        const src = button.dataset.countSrc;
+        const arrayName = button.dataset.countArray;
+        const target = document.getElementById(button.dataset.countTarget);
+        const singular = button.dataset.countSingular || "local";
+        const plural = button.dataset.countPlural || "locales";
+
+        if (!src || !target) return;
+
+        formatCount(target, 0, singular, plural);
+
+        try {
+            const url = new URL(src, window.location.href);
+            url.searchParams.set("_conteo", Date.now().toString());
+
+            const response = await fetch(url.href, { cache: "no-store" });
+            if (!response.ok) {
+                formatCount(target, 0, singular, plural);
+                return;
+            }
+
+            const htmlText = await response.text();
+            const total = countCategoryItems(htmlText, arrayName);
+
+            formatCount(target, total || 0, singular, plural);
+        } catch (error) {
+            formatCount(target, 0, singular, plural);
         }
     }
 
-    return {
-        state: "closed",
-        label: "Cerrado",
-        detail: getNextOpenText(now.dia)
-    };
-}
-
-function getNextOpenText(currentDay) {
-    const currentIndex = DIAS.indexOf(currentDay);
-
-    for (let offset = 1; offset <= 7; offset++) {
-        const nextDay = DIAS[(currentIndex + offset) % 7];
-        const ranges = EMPRESA.horario[nextDay] || [];
-
-        if (ranges.length) {
-            return "Abre " + DIAS_LABEL[nextDay].toLowerCase() + " a las " + ranges[0].abre;
-        }
-    }
-
-    return "Sin horario disponible";
-}
-
-function normalizePhone(phone) {
-    return String(phone || "").replace(/[^0-9]/g, "");
-}
-
-function makeWhatsappLink(productName) {
-    const phone = normalizePhone(EMPRESA.celular);
-    const message = productName
-        ? "Hola, estoy interesado en comprar: " + productName + ". Lo vi en Urbanex."
-        : "Hola, quisiera información sobre " + EMPRESA.nombre + ". Lo vi en Urbanex.";
-
-    return "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
-}
-
-function formatPrice(price) {
-    if (price === null || price === undefined || price === "") return "Consultar precio";
-
-    return EMPRESA.moneda + Number(price).toLocaleString("es-EC", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
-}
-
-function getSafeImages(product) {
-    const images = Array.isArray(product.imagenes) ? product.imagenes : [];
-
-    return images
-        .map(image => String(image || "").trim())
-        .filter(Boolean)
-        .slice(0, 3);
-}
-
-function getDisplayWeb(url) {
-    return String(url || "")
-        .replace(/^https?:\/\//i, "")
-        .replace(/\/$/g, "");
-}
-
-function renderCompany() {
-    const hasOffers = EMPRESA.productos.some(product => product.oferta === true);
-
-    document.title = EMPRESA.nombre + " | Urbanex";
-
-    document.getElementById("companyCover").style.backgroundImage = "url('" + EMPRESA.portada + "')";
-    document.getElementById("companyLogo").src = EMPRESA.logo;
-    document.getElementById("companyLogo").alt = "Logo " + EMPRESA.nombre;
-    document.getElementById("logoFallback").innerHTML = "Logo<br>" + escapeHtml(EMPRESA.nombre);
-
-    document.getElementById("companyCategory").textContent = EMPRESA.categoria;
-    document.getElementById("companyName").textContent = EMPRESA.nombre;
-    document.getElementById("companyDescription").textContent = EMPRESA.descripcion;
-
-    document.getElementById("infoPhone").textContent = EMPRESA.celular;
-    document.getElementById("infoEmail").textContent = EMPRESA.correo;
-
-    document.getElementById("infoWeb").textContent = EMPRESA.web ? getDisplayWeb(EMPRESA.web) : "No disponible";
-    document.getElementById("infoWeb").href = EMPRESA.web || "#";
-
-    document.getElementById("infoAddress").textContent = EMPRESA.direccion;
-
-    document.getElementById("whatsappGeneral").href = makeWhatsappLink();
-    document.getElementById("callButton").href = "tel:" + EMPRESA.celular;
-    document.getElementById("emailButton").href = "mailto:" + EMPRESA.correo;
-    document.getElementById("mapButton").href = EMPRESA.mapa;
-    document.getElementById("webButton").href = EMPRESA.web || "#";
-
-    document.getElementById("webButton").style.display = EMPRESA.web ? "inline-flex" : "none";
-    document.getElementById("deliveryStatus").style.display = EMPRESA.entregaDomicilio ? "inline-flex" : "none";
-    document.getElementById("creditStatus").style.display = EMPRESA.creditoDirecto ? "inline-flex" : "none";
-    document.getElementById("deliveryText").textContent = EMPRESA.entregaDomicilio ? "Disponible" : "No disponible";
-    document.getElementById("creditText").textContent = EMPRESA.creditoDirecto ? "Disponible" : "No disponible";
-    document.getElementById("offersText").textContent = hasOffers ? "Disponible" : "Sin ofertas";
-
-    const profile = document.getElementById("empresaProfile");
-    profile.dataset.empresa = EMPRESA.nombre || "";
-    profile.dataset.categoria = EMPRESA.categoria || "";
-    profile.dataset.tipo = EMPRESA.tipo || "";
-    profile.dataset.entregaDomicilio = EMPRESA.entregaDomicilio ? "true" : "false";
-    profile.dataset.creditoDirecto = EMPRESA.creditoDirecto ? "true" : "false";
-    profile.dataset.tieneOfertas = hasOffers ? "true" : "false";
-    profile.dataset.web = EMPRESA.web || "";
-
-    renderIndexData(hasOffers);
-    renderStatus();
-    renderSchedule();
-    renderProducts();
-}
-
-function renderIndexData(hasOffers) {
-    const indexData = document.getElementById("indexData");
-
-    indexData.textContent = `
-        ${EMPRESA.nombre}.
-        ${EMPRESA.categoria}.
-        ${EMPRESA.tipo}.
-        ${EMPRESA.descripcion}.
-        ${EMPRESA.entregaDomicilio ? "Empresa con entrega a domicilio. Servicio a domicilio disponible. Delivery disponible." : ""}
-        ${EMPRESA.creditoDirecto ? "Empresa con crédito directo. Financiamiento directo disponible." : ""}
-        ${hasOffers ? "Productos con ofertas activas. Promociones disponibles." : ""}
-        ${EMPRESA.web ? "Sitio web oficial: " + EMPRESA.web + "." : ""}
-        ${EMPRESA.direccion}.
-    `;
-}
-
-function renderStatus() {
-    const status = getBusinessStatus();
-    const statusElement = document.getElementById("businessStatus");
-
-    statusElement.className = "status-pill " + status.state;
-    statusElement.textContent = status.label + " · " + status.detail;
-}
-
-function renderSchedule() {
-    const now = getNowInTimeZone(EMPRESA.zonaHoraria || "America/Guayaquil");
-    const scheduleList = document.getElementById("scheduleList");
-
-    scheduleList.innerHTML = Object.keys(DIAS_LABEL).map(day => {
-        const ranges = EMPRESA.horario[day] || [];
-        const label = ranges.length
-            ? ranges.map(range => range.abre + " - " + range.cierra).join(" / ")
-            : "Cerrado";
-
-        return `
-            <div class="schedule-row ${day === now.dia ? "today" : ""}">
-                <span>${DIAS_LABEL[day]}</span>
-                <span>${label}</span>
-            </div>
-        `;
-    }).join("");
-}
-
-function renderProducts() {
-    const productGrid = document.getElementById("productGrid");
-
-    productGrid.innerHTML = EMPRESA.productos.map((product, index) => {
-        const images = getSafeImages(product);
-        const mainImage = images[0] || "";
-        const imageClass = mainImage ? "" : " image-empty";
-        const offerBadge = product.oferta ? `<span class="offer-badge">Oferta</span>` : "";
-
-        const thumbs = images.map((image, thumbIndex) => `
-            <button
-                class="product-thumb ${thumbIndex === 0 ? "is-active" : ""}"
-                type="button"
-                data-product-index="${index}"
-                data-image="${escapeHtml(image)}"
-                aria-label="Ver imagen ${thumbIndex + 1} de ${escapeHtml(product.nombre)}"
-            >
-                <img src="${escapeHtml(image)}" alt="${escapeHtml(product.nombre)} imagen ${thumbIndex + 1}">
-            </button>
-        `).join("");
-
-        return `
-            <article
-                class="product-card"
-                data-empresa="${escapeHtml(EMPRESA.nombre)}"
-                data-producto="${escapeHtml(product.nombre)}"
-                data-precio="${escapeHtml(product.precio)}"
-                data-oferta="${product.oferta ? "true" : "false"}"
-                data-entrega-domicilio="${EMPRESA.entregaDomicilio ? "true" : "false"}"
-                data-credito-directo="${EMPRESA.creditoDirecto ? "true" : "false"}"
-                data-web="${escapeHtml(EMPRESA.web)}"
-            >
-                <div class="product-media">
-                    <div class="product-main-image${imageClass}" id="productImageBox-${index}">
-                        ${offerBadge}
-                        <img
-                            id="productMainImage-${index}"
-                            src="${escapeHtml(mainImage)}"
-                            alt="${escapeHtml(product.nombre)}"
-                            onerror="this.style.display='none'; this.parentElement.classList.add('image-empty');"
-                        >
-                        <div class="product-placeholder">
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zM10 4h4v2h-4V4zm10 15H4V8h16v11z"/>
-                            </svg>
-                            <span>Producto destacado</span>
-                        </div>
-                    </div>
-
-                    <div class="product-thumbs">
-                        ${thumbs}
-                    </div>
-                </div>
-
-                <div class="product-body">
-                    <h3>${escapeHtml(product.nombre)}</h3>
-                    <p class="product-description">${escapeHtml(product.descripcion)}</p>
-
-                    <div class="product-bottom">
-                        <div class="price-block">
-                            <span class="price-label">Precio</span>
-                            <strong class="product-price">${formatPrice(product.precio)}</strong>
-                        </div>
-
-                        <a class="btn primary" href="${makeWhatsappLink(product.nombre)}" target="_blank" rel="noopener noreferrer">
-                            Comprar / consultar
-                        </a>
-                    </div>
-                </div>
-            </article>
-        `;
-    }).join("");
-
-    bindProductGallery();
-}
-
-function bindProductGallery() {
-    document.querySelectorAll(".product-thumb").forEach(button => {
-        button.addEventListener("click", () => {
-            const productIndex = button.dataset.productIndex;
-            const image = button.dataset.image;
-            const mainImage = document.getElementById("productMainImage-" + productIndex);
-            const imageBox = document.getElementById("productImageBox-" + productIndex);
-
-            if (!mainImage || !imageBox || !image) return;
-
-            mainImage.style.display = "block";
-            mainImage.src = image;
-            imageBox.classList.remove("image-empty");
-
-            document
-                .querySelectorAll('.product-thumb[data-product-index="' + productIndex + '"]')
-                .forEach(thumb => thumb.classList.remove("is-active"));
-
-            button.classList.add("is-active");
-        });
-    });
-}
-
-renderCompany();
-setInterval(renderStatus, 60000);
+    categoryButtons.forEach(updateCategoryCount);
+})();
 </script>
+
+<script>
+(function () {
+    const REPO_CONFIG = {
+        owner: "",
+        repo: "",
+        branch: "main",
+        siteBasePath: "",
+        maxResults: 6,
+        maxFileSize: 250000,
+        includeExtensions: [".html", ".htm", ".json", ".txt", ".md", ".csv"],
+        skipFolders: [".git/", "node_modules/", "vendor/", "dist/", "build/"]
+    };
+
+    const MIN_QUERY_LENGTH = 3;
+    const GENERIC_TITLES = [
+        "urbanex",
+        "loja - centro comercial digital",
+        "loja centro comercial digital",
+        "loja - gastronomica",
+        "loja gastronomica",
+        "loja - hogar y tecnologia",
+        "loja hogar y tecnologia",
+        "centro comercial digital"
+    ];
+
+    const searchInput = document.getElementById("siteSearch");
+    const searchButton = document.getElementById("searchButton");
+
+    if (!searchInput || !searchButton) return;
+
+    let searchDocuments = [];
+    let indexLoaded = false;
+    let indexLoading = null;
+
+    function decodeEntities(text) {
+        const decoder = document.createElement("textarea");
+        decoder.innerHTML = String(text || "");
+        return decoder.value;
+    }
+
+    function removeBoilerplate(text) {
+        return String(text || "")
+            .replace(/Negocios confiables/gi, " ")
+            .replace(/Comunidad local/gi, " ")
+            .replace(/Registre su negocio/gi, " ")
+            .replace(/©\s*2026\s*Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
+            .replace(/Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
+            .replace(/Todos los derechos reservados\.?/gi, " ")
+            .replace(/¿Qué producto o servicio busca\?/gi, " ")
+            .replace(/¿Qué restaurante, cafetería o plato busca\?/gi, " ")
+            .replace(/¿Qué producto, servicio o equipo busca\?/gi, " ");
+    }
+
+    function cleanSearchText(value) {
+        return removeBoilerplate(decodeEntities(value))
+            .replace(/<[^>]*>/g, " ")
+            .replace(/\b(class|href|onclick|src|alt|style|id)=['\"][^'\"]*['\"]/gi, " ")
+            .replace(/window\.location\.href\s*=\s*['\"][^'\"]+['\"]/gi, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    function normalizeText(value) {
+        return cleanSearchText(value)
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9ñáéíóúü\s./_-]/gi, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    function isGenericTitle(title) {
+        const normalizedTitle = normalizeText(title);
+        return !normalizedTitle || GENERIC_TITLES.includes(normalizedTitle);
+    }
+
+    function getExtension(path) {
+        const cleanPath = String(path || "").split("?")[0].split("#")[0];
+        const dotIndex = cleanPath.lastIndexOf(".");
+        return dotIndex >= 0 ? cleanPath.slice(dotIndex).toLowerCase() : "";
+    }
+
+    function isTextFile(path) {
+        return REPO_CONFIG.includeExtensions.includes(getExtension(path));
+    }
+
+    function shouldSkipPath(path) {
+        return REPO_CONFIG.skipFolders.some(function (folder) {
+            return path.includes(folder);
+        });
+    }
+
+    function getInferredGithubPagesConfig() {
+        const host = window.location.hostname;
+        if (!host.endsWith(".github.io")) return null;
+
+        const owner = host.replace(".github.io", "");
+        const parts = window.location.pathname.split("/").filter(Boolean);
+        const repo = parts[0] || owner + ".github.io";
+        const siteBasePath = repo === owner + ".github.io" ? "" : "/" + repo;
+
+        return {
+            owner: owner,
+            repo: repo,
+            branch: REPO_CONFIG.branch,
+            siteBasePath: siteBasePath
+        };
+    }
+
+    function getActiveRepoConfig() {
+        const inferred = getInferredGithubPagesConfig() || {};
+        return {
+            owner: REPO_CONFIG.owner || inferred.owner || "",
+            repo: REPO_CONFIG.repo || inferred.repo || "",
+            branch: REPO_CONFIG.branch || inferred.branch || "main",
+            siteBasePath: REPO_CONFIG.siteBasePath || inferred.siteBasePath || ""
+        };
+    }
+
+    function pageUrlFromRepoPath(path, config) {
+        const cleanBase = (config.siteBasePath || "").replace(/\/$/, "");
+        const cleanPath = String(path || "").replace(/^\/+/, "");
+
+        if (window.location.protocol === "file:") {
+            return cleanPath;
+        }
+
+        return window.location.origin + cleanBase + "/" + cleanPath;
+    }
+
+    function titleFromPath(path) {
+        const fileName = String(path || "").split("/").pop() || path;
+        const withoutExtension = fileName.replace(/\.[^/.]+$/, "");
+
+        if (/^index$/i.test(withoutExtension)) return "Inicio";
+
+        return withoutExtension
+            .replace(/[-_]+/g, " ")
+            .replace(/\b\w/g, function (letter) { return letter.toUpperCase(); });
+    }
+
+    function collectTextFromJson(value, output) {
+        if (value === null || value === undefined) return;
+
+        if (["string", "number", "boolean"].includes(typeof value)) {
+            output.push(String(value));
+            return;
+        }
+
+        if (Array.isArray(value)) {
+            value.forEach(function (item) { collectTextFromJson(item, output); });
+            return;
+        }
+
+        if (typeof value === "object") {
+            Object.keys(value).forEach(function (key) {
+                output.push(key);
+                collectTextFromJson(value[key], output);
+            });
+        }
+    }
+
+    function textFromStructuredFile(rawText, extension) {
+        if (extension === ".json") {
+            try {
+                const output = [];
+                collectTextFromJson(JSON.parse(rawText), output);
+                return output.join(" ");
+            } catch (error) {
+                return rawText;
+            }
+        }
+
+        return rawText;
+    }
+
+    function getTextContent(element) {
+        return cleanSearchText(element ? element.textContent : "");
+    }
+
+    function makeDocument(path, url, title, content) {
+        const cleanTitle = cleanSearchText(title) || titleFromPath(path);
+        const cleanContent = cleanSearchText(content || path);
+
+        return {
+            title: cleanTitle,
+            path: path,
+            url: url,
+            content: cleanContent,
+            normalizedTitle: normalizeText(cleanTitle),
+            normalizedPath: normalizeText(path),
+            normalizedContent: normalizeText(cleanContent)
+        };
+    }
+
+    function extractHtmlDocument(path, url, rawText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(rawText || "", "text/html");
+
+        doc.querySelectorAll("script, style, noscript, svg, template, link, meta, header, footer, .header-top, .pie-pagina, .search-wrapper, .user-tools, .brand-box, .location-indicator, .tool-icon, .profile-avatar").forEach(function (node) {
+            node.remove();
+        });
+
+        const titleCandidates = Array.from(doc.querySelectorAll(".page-title, .category-title, .categoria-title, main h1, main h2, article h1, article h2, h1, h2, title"))
+            .map(getTextContent)
+            .filter(function (title) {
+                const normalized = normalizeText(title);
+                return normalized && !isGenericTitle(title) && !["bienvenido", "categorias", "destacados", "sabores destacados", "hogar destacado"].includes(normalized);
+            });
+
+        let title = titleCandidates[0] || titleFromPath(path);
+        if (isGenericTitle(title)) title = titleFromPath(path);
+
+        const priorityParts = Array.from(doc.querySelectorAll("main, article, section, .category-item, .shop-card, .card, .business-card, .local-card, .restaurant-card, .service-card"))
+            .map(getTextContent)
+            .filter(Boolean);
+
+        const content = priorityParts.length ? priorityParts.join(". ") : getTextContent(doc.body || doc.documentElement);
+
+        return makeDocument(path, url, title, content);
+    }
+
+    function extractDocument(path, url, rawText) {
+        const extension = getExtension(path);
+
+        if (extension === ".html" || extension === ".htm" || /<[a-z][\s\S]*>/i.test(rawText || "")) {
+            return extractHtmlDocument(path, url, rawText || "");
+        }
+
+        return makeDocument(path, url, titleFromPath(path), textFromStructuredFile(rawText || path, extension));
+    }
+
+    async function fetchJson(url) {
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo cargar: " + url);
+        return response.json();
+    }
+
+    async function fetchText(url) {
+        const response = await fetch(url, { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo cargar: " + url);
+        return response.text();
+    }
+
+    async function buildGithubRepositoryIndex() {
+        const config = getActiveRepoConfig();
+        if (!config.owner || !config.repo) throw new Error("Repositorio no configurado");
+
+        const branches = Array.from(new Set([config.branch, "main", "master"].filter(Boolean)));
+        let treeData = null;
+        let activeBranch = config.branch;
+
+        for (const branch of branches) {
+            try {
+                treeData = await fetchJson("https://api.github.com/repos/" + encodeURIComponent(config.owner) + "/" + encodeURIComponent(config.repo) + "/git/trees/" + encodeURIComponent(branch) + "?recursive=1");
+                activeBranch = branch;
+                break;
+            } catch (error) {
+                treeData = null;
+            }
+        }
+
+        if (!treeData || !Array.isArray(treeData.tree)) throw new Error("No se pudo leer el repositorio");
+
+        const files = treeData.tree
+            .filter(function (item) {
+                return item.type === "blob" &&
+                    item.path &&
+                    !shouldSkipPath(item.path) &&
+                    isTextFile(item.path) &&
+                    (!item.size || item.size <= REPO_CONFIG.maxFileSize);
+            })
+            .slice(0, 250);
+
+        const loadedDocuments = [];
+        const pathOnlyFiles = files.map(function (item) {
+            return makeDocument(
+                item.path,
+                pageUrlFromRepoPath(item.path, Object.assign({}, config, { branch: activeBranch })),
+                titleFromPath(item.path),
+                item.path
+            );
+        });
+
+        const rawBase = "https://raw.githubusercontent.com/" + encodeURIComponent(config.owner) + "/" + encodeURIComponent(config.repo) + "/" + encodeURIComponent(activeBranch) + "/";
+
+        for (let index = 0; index < files.length; index += 8) {
+            const batch = files.slice(index, index + 8);
+            const results = await Promise.allSettled(batch.map(async function (item) {
+                const rawText = await fetchText(rawBase + item.path);
+                return extractDocument(item.path, pageUrlFromRepoPath(item.path, Object.assign({}, config, { branch: activeBranch })), rawText);
+            }));
+
+            results.forEach(function (result) {
+                if (result.status === "fulfilled") loadedDocuments.push(result.value);
+            });
+        }
+
+        return loadedDocuments.concat(pathOnlyFiles);
+    }
+
+    function sameOriginHtmlUrl(url) {
+        try {
+            const parsed = new URL(url, window.location.href);
+            if (parsed.origin !== window.location.origin) return null;
+            if (["mailto:", "tel:", "javascript:"].includes(parsed.protocol)) return null;
+            const extension = getExtension(parsed.pathname);
+            if (extension && extension !== ".html" && extension !== ".htm") return null;
+            parsed.hash = "";
+            return parsed.href;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function collectPageLinks(doc, baseUrl) {
+        return Array.from(doc.querySelectorAll("a[href], button[onclick]"))
+            .map(function (element) {
+                const href = element.getAttribute("href");
+                if (href) return sameOriginHtmlUrl(new URL(href, baseUrl).href);
+
+                const onclick = element.getAttribute("onclick") || "";
+                const match = onclick.match(/window\.location\.href\s*=\s*['\"]([^'\"]+)['\"]/);
+                if (match) return sameOriginHtmlUrl(new URL(match[1], baseUrl).href);
+
+                return null;
+            })
+            .filter(Boolean);
+    }
+
+    async function buildLocalSiteIndex() {
+        const visited = new Set();
+        const queue = [window.location.href].concat(collectPageLinks(document, window.location.href));
+        const documents = [];
+
+        while (queue.length && visited.size < 80) {
+            const url = queue.shift();
+            if (!url || visited.has(url)) continue;
+            visited.add(url);
+
+            try {
+                const html = url === window.location.href ? document.documentElement.outerHTML : await fetchText(url);
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, "text/html");
+                const path = new URL(url).pathname.replace(/^\//, "") || "index.html";
+                documents.push(extractDocument(path, url, html));
+
+                collectPageLinks(doc, url).forEach(function (nextUrl) {
+                    if (!visited.has(nextUrl)) queue.push(nextUrl);
+                });
+            } catch (error) {
+                continue;
+            }
+        }
+
+        return documents;
+    }
+
+    async function loadSearchIndex() {
+        if (indexLoaded) return searchDocuments;
+        if (indexLoading) return indexLoading;
+
+        indexLoading = (async function () {
+            let documents = [];
+
+            try {
+                documents = await buildGithubRepositoryIndex();
+            } catch (githubError) {
+                documents = await buildLocalSiteIndex();
+            }
+
+            searchDocuments = documents.filter(function (documentItem) {
+                return documentItem.normalizedTitle || documentItem.normalizedPath || documentItem.normalizedContent;
+            });
+
+            indexLoaded = true;
+            return searchDocuments;
+        })();
+
+        return indexLoading;
+    }
+
+    function getSearchTerms(query) {
+        return normalizeText(query)
+            .split(" ")
+            .map(function (term) { return term.trim(); })
+            .filter(function (term) { return term.length >= MIN_QUERY_LENGTH; });
+    }
+
+    function scoreDocument(documentItem, terms, fullQuery) {
+        let score = 0;
+        const title = documentItem.normalizedTitle;
+        const path = documentItem.normalizedPath;
+        const content = documentItem.normalizedContent;
+
+        if (fullQuery.length >= MIN_QUERY_LENGTH) {
+            if (title.includes(fullQuery)) score += 100;
+            if (path.includes(fullQuery)) score += 70;
+            if (content.includes(fullQuery)) score += 45;
+        }
+
+        terms.forEach(function (term) {
+            if (title.includes(term)) score += 40;
+            if (path.includes(term)) score += 25;
+            if (content.includes(term)) score += 12;
+        });
+
+        return score;
+    }
+
+    function searchDocumentsByQuery(query) {
+        const fullQuery = normalizeText(query);
+        const terms = getSearchTerms(query);
+
+        if (!terms.length && fullQuery.length < MIN_QUERY_LENGTH) return [];
+
+        return searchDocuments
+            .map(function (documentItem) {
+                return {
+                    item: documentItem,
+                    score: scoreDocument(documentItem, terms, fullQuery)
+                };
+            })
+            .filter(function (result) { return result.score > 0; })
+            .sort(function (a, b) { return b.score - a.score; })
+            .slice(0, REPO_CONFIG.maxResults)
+            .map(function (result) { return result.item; });
+    }
+
+    async function runSearch() {
+        const query = searchInput.value.trim();
+        if (query.length < MIN_QUERY_LENGTH) return;
+
+        try {
+            await loadSearchIndex();
+            const results = searchDocumentsByQuery(query);
+
+            if (results.length) {
+                window.location.href = results[0].url;
+            }
+        } catch (error) {
+            return;
+        }
+    }
+
+    searchInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            runSearch();
+        }
+    });
+
+    searchButton.addEventListener("click", runSearch);
+
+    searchButton.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            runSearch();
+        }
+    });
+
+    loadSearchIndex().catch(function () {});
+})();
+</script>
+
+
 </body>
 </html>
