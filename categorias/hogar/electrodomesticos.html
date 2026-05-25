@@ -1260,6 +1260,106 @@
             border-color: rgba(229,193,88,0.36);
         }
 
+
+
+        /* Tarjeta de directorio: referencia legible, no productos */
+        .business-grid {
+            grid-template-columns: repeat(auto-fill, minmax(210px, 210px));
+            gap: 10px;
+            align-items: start;
+        }
+
+        .empresa-electrodomesticos {
+            width: 210px;
+            min-height: 146px;
+        }
+
+        .business-logo-zone {
+            grid-template-columns: 44px minmax(0, 1fr) 14px;
+        }
+
+        .business-body {
+            padding: 9px 10px 10px;
+        }
+
+        .business-sale {
+            color: #ffffff;
+            font-size: 9.2px;
+            font-weight: 800;
+            line-height: 1.28;
+            margin-bottom: 4px;
+            display: block;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: initial;
+        }
+
+        .business-description {
+            color: var(--text-muted);
+            font-size: 8.7px;
+            line-height: 1.35;
+            min-height: 24px;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        @media (max-width: 720px) {
+            .business-grid {
+                grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            }
+
+            .empresa-electrodomesticos {
+                width: 100%;
+            }
+        }
+
+
+        /* Expansión suave de tarjeta para lectura al pasar el cursor */
+        .empresa-electrodomesticos {
+            position: relative;
+            transform-origin: top left;
+        }
+
+        .empresa-electrodomesticos:hover,
+        .empresa-electrodomesticos:focus-within {
+            width: 230px;
+            min-height: 178px;
+            z-index: 30;
+            border-color: rgba(229, 193, 88, 0.62);
+            box-shadow: 0 24px 58px rgba(0,0,0,0.48);
+        }
+
+        .empresa-electrodomesticos:hover .business-sale,
+        .empresa-electrodomesticos:focus-within .business-sale {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .empresa-electrodomesticos:hover .business-description,
+        .empresa-electrodomesticos:focus-within .business-description {
+            -webkit-line-clamp: 4;
+            min-height: auto;
+            margin-bottom: 9px;
+        }
+
+        .empresa-electrodomesticos:hover .business-actions,
+        .empresa-electrodomesticos:focus-within .business-actions {
+            margin-top: 2px;
+        }
+
+        @media (max-width: 720px) {
+            .empresa-electrodomesticos:hover,
+            .empresa-electrodomesticos:focus-within {
+                width: 100%;
+                min-height: 178px;
+            }
+        }
+
     </style>
 </head>
 
@@ -2106,11 +2206,17 @@
     }
 
     function getCompanyReference(empresa, segmento) {
-        const explicitReference = empresa.referencia || empresa.resumen || empresa.venta;
+        const explicitReference = empresa.resumenDirectorio || empresa.referenciaDirectorio || empresa.referencia;
         if (explicitReference) return explicitReference;
 
-        const city = empresa.ciudad || empresa.ubicacion || "Loja";
-        return "Empresa de " + (segmento || "electrodomésticos") + " en " + city;
+        return "Tienda y soporte especializado";
+    }
+
+    function getDirectoryDescription(empresa) {
+        const explicitDescription = empresa.descripcionDirectorio || empresa.descripcionCorta || empresa.resumenCorto;
+        if (explicitDescription) return explicitDescription;
+
+        return "Electrodomésticos para hogares y negocios en Loja.";
     }
 
     function normalizeEmpresa(rawEmpresa, sourcePath, index) {
@@ -2126,6 +2232,7 @@
             tipo: normalizeText(tipoBase || "electrodomesticos venta").replace(/\s+/g, " "),
             descripcion: empresa.descripcion || empresa.description || "",
             referencia: getCompanyReference(empresa, segmento),
+            descripcionDirectorio: getDirectoryDescription(empresa),
             rating: Number(empresa.rating || empresa.calificacion || empresa.estrellas || 0),
             estado: empresa.estado || "Disponible",
             estadoManual: empresa.estado || "Disponible",
@@ -2200,7 +2307,7 @@
 
             <div class="business-body">
                 <p class="business-sale">${escapeHtml(empresa.referencia)}</p>
-                <p class="business-description">${escapeHtml(empresa.descripcion)}</p>
+                <p class="business-description">${escapeHtml(empresa.descripcionDirectorio)}</p>
 
                 <div class="business-actions">
                     <a class="action-btn primary" href="${escapeHtml(safeUrl(empresa.perfil))}">Ver perfil</a>
