@@ -432,16 +432,22 @@
             background: rgba(0,0,0,0.34);
         }
 
-        .footer {
-            margin-top: auto;
+        /* ================================================== */
+        /* PIE DE PÁGINA                                      */
+        /* ================================================== */
+        .pie-pagina {
+            width: 100%;
             height: 24px;
-            background: #000000;
+            background-color: #000000;
             color: #8c8c8c;
-            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 11px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 10px;
+            align-items: center;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+            z-index: 5;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
 
@@ -1217,150 +1223,6 @@
             }
         }
 
-    
-        /* Select personalizado para evitar el desplegable blanco nativo */
-        .native-filter-select {
-            display: none !important;
-        }
-
-        .custom-filter-select {
-            position: relative;
-            width: auto;
-            min-width: 132px;
-            max-width: 175px;
-        }
-
-        .custom-filter-button {
-            width: 100%;
-            height: 28px;
-            background: rgba(8, 8, 8, 0.88);
-            border: 1px solid rgba(229,193,88,0.34);
-            border-radius: 999px;
-            color: #ffffff;
-            font-family: var(--font-sans);
-            font-size: 9px;
-            font-weight: 700;
-            padding: 0 9px 0 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
-        }
-
-        .custom-filter-button:hover,
-        .custom-filter-select.open .custom-filter-button {
-            border-color: var(--gold);
-            background: rgba(229,193,88,0.10);
-        }
-
-        .custom-filter-button span {
-            display: block;
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .custom-filter-button svg {
-            width: 14px;
-            height: 14px;
-            fill: var(--gold);
-            flex: 0 0 auto;
-            transition: var(--transition);
-        }
-
-        .custom-filter-select.open .custom-filter-button svg {
-            transform: rotate(180deg);
-        }
-
-        .custom-filter-menu {
-            position: absolute;
-            top: calc(100% + 6px);
-            left: 0;
-            z-index: 80;
-            width: 100%;
-            min-width: 158px;
-            padding: 5px;
-            background: rgba(6, 6, 6, 0.96);
-            border: 1px solid rgba(229,193,88,0.36);
-            border-radius: 12px;
-            box-shadow: 0 18px 38px rgba(0,0,0,0.55);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-4px);
-            transition: var(--transition);
-        }
-
-        .custom-filter-select.open .custom-filter-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .custom-filter-menu button {
-            width: 100%;
-            height: 26px;
-            border: none;
-            border-radius: 8px;
-            background: transparent;
-            color: #d7d7d7;
-            font-family: var(--font-sans);
-            font-size: 9px;
-            font-weight: 700;
-            text-align: left;
-            padding: 0 9px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .custom-filter-menu button:hover,
-        .custom-filter-menu button.active {
-            background: rgba(229,193,88,0.16);
-            color: var(--gold);
-        }
-
-        @media (max-width: 720px) {
-            .custom-filter-select {
-                flex: 0 0 auto;
-                min-width: 138px;
-            }
-        }
-
-
-    
-        /* Corrección de capas: el desplegable debe quedar sobre las tarjetas */
-        .segment-filter-panel {
-            position: relative;
-            z-index: 120;
-            overflow: visible;
-        }
-
-        .custom-filter-select {
-            position: relative;
-            z-index: 130;
-        }
-
-        .custom-filter-select.open {
-            z-index: 250;
-        }
-
-        .custom-filter-menu {
-            z-index: 300;
-        }
-
-        .directory-layout,
-        .business-grid,
-        .empresa-electrodomesticos {
-            position: relative;
-            z-index: 1;
-        }
-
-
     </style>
 </head>
 
@@ -1435,7 +1297,7 @@
     </section>
 
     <section class="segment-filter-panel" aria-label="Filtros de electrodomésticos">
-        <select id="segmentFilter" class="filter-select native-filter-select" aria-hidden="true" tabindex="-1">
+        <select id="segmentFilter" class="filter-select">
             <option value="todos">Todos</option>
             <option value="venta">Venta</option>
             <option value="instalacion">Instalación</option>
@@ -1443,43 +1305,11 @@
             <option value="linea-blanca">Línea blanca</option>
         </select>
 
-        <select id="sortFilter" class="filter-select native-filter-select" aria-hidden="true" tabindex="-1">
+        <select id="sortFilter" class="filter-select">
             <option value="rating">Mejor calificación</option>
             <option value="nombre">Nombre A-Z</option>
             <option value="disponibilidad">Disponibilidad</option>
         </select>
-
-        <div class="custom-filter-select" data-select-id="segmentFilter">
-            <button type="button" class="custom-filter-button">
-                <span>Todos</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M7 10l5 5 5-5z"/>
-                </svg>
-            </button>
-
-            <div class="custom-filter-menu">
-                <button type="button" data-value="todos" class="active">Todos</button>
-                <button type="button" data-value="venta">Venta</button>
-                <button type="button" data-value="instalacion">Instalación</button>
-                <button type="button" data-value="reparacion">Reparación</button>
-                <button type="button" data-value="linea-blanca">Línea blanca</button>
-            </div>
-        </div>
-
-        <div class="custom-filter-select" data-select-id="sortFilter">
-            <button type="button" class="custom-filter-button">
-                <span>Mejor calificación</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M7 10l5 5 5-5z"/>
-                </svg>
-            </button>
-
-            <div class="custom-filter-menu">
-                <button type="button" data-value="rating" class="active">Mejor calificación</button>
-                <button type="button" data-value="nombre">Nombre A-Z</button>
-                <button type="button" data-value="disponibilidad">Disponibilidad</button>
-            </div>
-        </div>
     </section>
 
     <main class="directory-layout">
@@ -1492,7 +1322,7 @@
         </section>
     </main>
 
-    <footer class="footer">
+    <footer class="pie-pagina">
         <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
     </footer>
 
@@ -2101,65 +1931,6 @@
         if (heroCounter) heroCounter.textContent = total;
     }
 
-
-    function initCustomFilterSelects() {
-        const customSelects = Array.from(document.querySelectorAll(".custom-filter-select"));
-
-        function closeAll(except) {
-            customSelects.forEach(function (customSelect) {
-                if (customSelect !== except) {
-                    customSelect.classList.remove("open");
-                }
-            });
-        }
-
-        customSelects.forEach(function (customSelect) {
-            const selectId = customSelect.dataset.selectId;
-            const nativeSelect = document.getElementById(selectId);
-            const trigger = customSelect.querySelector(".custom-filter-button");
-            const triggerText = trigger ? trigger.querySelector("span") : null;
-            const optionButtons = Array.from(customSelect.querySelectorAll(".custom-filter-menu button"));
-
-            if (!nativeSelect || !trigger || !triggerText) return;
-
-            trigger.addEventListener("click", function () {
-                const isOpen = customSelect.classList.contains("open");
-                closeAll(customSelect);
-                customSelect.classList.toggle("open", !isOpen);
-            });
-
-            optionButtons.forEach(function (optionButton) {
-                optionButton.addEventListener("click", function () {
-                    const value = optionButton.dataset.value;
-                    const label = optionButton.textContent.trim();
-
-                    nativeSelect.value = value;
-                    triggerText.textContent = label;
-
-                    optionButtons.forEach(function (button) {
-                        button.classList.toggle("active", button === optionButton);
-                    });
-
-                    customSelect.classList.remove("open");
-                    nativeSelect.dispatchEvent(new Event("change", { bubbles: true }));
-                });
-            });
-        });
-
-        document.addEventListener("click", function (event) {
-            if (!event.target.closest(".custom-filter-select")) {
-                closeAll(null);
-            }
-        });
-
-        document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape") {
-                closeAll(null);
-            }
-        });
-    }
-
-
     function renderBusinesses() {
         const segment = segmentFilter ? segmentFilter.value : "todos";
         const sort = sortFilter ? sortFilter.value : "rating";
@@ -2221,7 +1992,6 @@
         sortFilter.addEventListener("change", renderBusinesses);
     }
 
-    initCustomFilterSelects();
     updateCounters(0);
     renderBusinesses();
     loadSearchIndex().catch(function () {});
