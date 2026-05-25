@@ -821,6 +821,219 @@
             border: 0;
         }
 
+
+
+        /* Tarjetas de productos refinadas */
+        .product-grid {
+            padding: 14px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .product-card {
+            position: relative;
+            min-height: 315px;
+            border-radius: 16px;
+            border: 1px solid rgba(229,193,88,0.18);
+            background:
+                radial-gradient(circle at 18% 0%, rgba(229,193,88,0.13), transparent 28%),
+                linear-gradient(180deg, rgba(24,24,24,0.92), rgba(7,7,7,0.92));
+            box-shadow: 0 16px 34px rgba(0,0,0,0.30);
+            overflow: hidden;
+            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(229,193,88,0.45);
+            box-shadow: 0 22px 46px rgba(0,0,0,0.40);
+        }
+
+        .product-card::after {
+            content: "";
+            position: absolute;
+            left: 12px;
+            right: 12px;
+            top: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(229,193,88,0.62), transparent);
+        }
+
+        .product-media {
+            position: relative;
+            height: 118px;
+            margin: 10px 10px 0;
+            border-radius: 13px;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 28% 18%, rgba(229,193,88,0.20), transparent 32%),
+                linear-gradient(145deg, rgba(255,255,255,0.08), rgba(0,0,0,0.30));
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .product-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            opacity: 0.92;
+        }
+
+        .product-media.image-missing img {
+            display: none;
+        }
+
+        .product-placeholder {
+            position: absolute;
+            inset: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            color: rgba(255,255,255,0.82);
+        }
+
+        .product-media.image-missing .product-placeholder {
+            display: flex;
+        }
+
+        .product-placeholder svg {
+            width: 38px;
+            height: 38px;
+            fill: none;
+            stroke: var(--gold);
+            stroke-width: 1.7;
+            opacity: 0.95;
+        }
+
+        .product-placeholder span {
+            max-width: 120px;
+            color: rgba(255,255,255,0.76);
+            font-size: 8.6px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            line-height: 1.25;
+        }
+
+        .product-ribbon {
+            position: absolute;
+            top: 9px;
+            right: 9px;
+            z-index: 2;
+            border-radius: 999px;
+            padding: 4px 8px;
+            background: rgba(0,0,0,0.66);
+            color: var(--gold);
+            border: 1px solid rgba(229,193,88,0.34);
+            font-size: 7.4px;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .product-body {
+            min-height: 185px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .product-body h3 {
+            color: #ffffff;
+            font-size: 12.2px;
+            font-weight: 900;
+            line-height: 1.22;
+            min-height: 30px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-description {
+            color: rgba(255,255,255,0.70);
+            font-size: 9.2px;
+            line-height: 1.45;
+            min-height: 28px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 1px;
+        }
+
+        .product-price-label {
+            color: var(--text-soft);
+            font-size: 7.6px;
+            font-weight: 800;
+            letter-spacing: 0.9px;
+            text-transform: uppercase;
+        }
+
+        .product-price {
+            color: var(--gold);
+            font-size: 17px;
+            line-height: 1;
+            font-weight: 900;
+        }
+
+        .product-tags {
+            min-height: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 5px;
+        }
+
+        .tag {
+            border-color: rgba(229,193,88,0.18);
+            background: rgba(255,255,255,0.075);
+            color: rgba(255,255,255,0.90);
+            padding: 4px 7px;
+            font-size: 7.3px;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .product-card .btn.primary {
+            width: 100%;
+            height: 32px;
+            margin-top: auto;
+            border-radius: 10px;
+            font-size: 8.8px;
+            box-shadow: 0 10px 20px rgba(229,193,88,0.14);
+        }
+
+        @media (max-width: 980px) {
+            .product-grid {
+                grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            }
+        }
+
+        @media (max-width: 620px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .product-card {
+                min-height: auto;
+            }
+        }
+
         .footer {
             position: fixed;
             left: 0;
@@ -891,6 +1104,15 @@
             .btn {
                 flex: 1 1 auto;
             }
+        }
+
+
+        .product-tags:empty {
+            display: none;
+        }
+
+        .product-card[data-oferta="false"] .product-media {
+            border-color: rgba(255,255,255,0.08);
         }
 
     </style>
@@ -1013,11 +1235,11 @@
     </footer>
 </div>
 
-<section class="urbanex-search-metadata" aria-label="Datos de búsqueda Urbanex">
+<section class="urbanex-search-metadata" aria-label="Datos de búsqueda Urbanex" data-empresa="Electromas" data-entrega-domicilio="true" data-cobertura-domicilio="Loja urbana">
     <h2>Electromas - datos para buscador Urbanex</h2>
     <p>Electromas Loja electrodomésticos línea blanca refrigeradoras lavadoras cocinas secadoras instalación garantía crédito soporte técnico local.</p>
-    <p>Entrega a domicilio disponible. A domicilio en Loja. Delivery de electrodomésticos. Servicio con entrega local.</p>
-    <p>Ofertas activas. Promociones activas. Promo en productos seleccionados. Oferta en cocina a gas 4 quemadores.</p>
+    <p>Empresa con entrega a domicilio disponible. A domicilio en Loja. Delivery de electrodomésticos. Servicio con entrega local.</p>
+    <p data-tipo="oferta" data-producto="Cocina a gas 4 quemadores" data-oferta="true">Oferta activa en producto: Cocina a gas 4 quemadores. Promoción disponible para lectura de ofertas.html.</p>
     <p>Categorías localizables: venta, instalación, reparación, línea blanca, entrega a domicilio, a domicilio, delivery, ofertas, promociones.</p>
 </section>
 
@@ -1077,28 +1299,25 @@ const EMPRESA = {
             precio: 499,
             descripcion: "Refrigeradora de bajo consumo, sistema No Frost y garantía de fábrica.",
             imagen: "../../../imagenes/productos/refrigeradora-300l.jpg",
-            entregaDomicilio: true,
             oferta: false,
-            etiquetas: ["Garantía", "Entrega", "A domicilio", "Instalación"]
+            etiquetas: []
         },
         {
             nombre: "Lavadora automática 18kg",
             precio: 389,
             descripcion: "Lavadora automática para uso familiar, múltiples ciclos de lavado y soporte técnico local.",
             imagen: "../../../imagenes/productos/lavadora-18kg.jpg",
-            entregaDomicilio: true,
             oferta: false,
-            etiquetas: ["Línea blanca", "Crédito", "Soporte", "A domicilio"]
+            etiquetas: []
         },
         {
             nombre: "Cocina a gas 4 quemadores",
             precio: 249,
-            descripcion: "Cocina a gas con horno, encendido eléctrico y opción de instalación a domicilio.",
+            descripcion: "Cocina a gas con horno, encendido eléctrico y soporte local.",
             imagen: "../../../imagenes/productos/cocina-4-quemadores.jpg",
-            entregaDomicilio: true,
             oferta: true,
             promocion: "Oferta activa",
-            etiquetas: ["Instalación", "Hogar", "Oferta", "A domicilio"]
+            etiquetas: ["Oferta"]
         }
     ]
 };
@@ -1292,28 +1511,46 @@ function renderSchedule() {
 function renderProducts() {
     const productGrid = document.getElementById("productGrid");
 
-    productGrid.innerHTML = EMPRESA.productos.map(product => `
-        <article class="product-card">
-            <div class="product-image" data-fallback="${product.nombre}">
-                <img src="${product.imagen}" alt="${product.nombre}" onerror="this.parentElement.classList.add('image-missing'); this.remove();">
-            </div>
-            <div class="product-body">
-                <h3>${product.nombre}</h3>
-                <p class="product-description">${product.descripcion}</p>
-                <div class="product-price">${formatPrice(product.precio)}</div>
-                <div class="product-tags">
-                    ${[
-                        ...(product.etiquetas || []),
-                        ...(product.entregaDomicilio ? ["A domicilio"] : []),
-                        ...(product.oferta ? ["Oferta"] : [])
-                    ].filter((tag, index, list) => list.indexOf(tag) === index).map(tag => `<span class="tag">${tag}</span>`).join("")}
-                </div>
-                <a class="btn primary" href="${makeWhatsappLink(product.nombre)}" target="_blank" rel="noopener noreferrer">Comprar / consultar</a>
-            </div>
-        </article>
-    `).join("");
-}
+    productGrid.innerHTML = EMPRESA.productos.map(product => {
+        const isOffer = product.oferta === true;
+        const tags = isOffer ? ["Oferta"] : [];
 
+        return `
+            <article class="product-card" data-producto="${product.nombre}" data-oferta="${isOffer ? "true" : "false"}">
+                <div class="product-media" aria-label="${product.nombre}">
+                    ${isOffer ? `<span class="product-ribbon">Oferta</span>` : ""}
+                    <img src="${product.imagen}" alt="${product.nombre}" onerror="this.parentElement.classList.add('image-missing'); this.remove();">
+                    <div class="product-placeholder" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4 7.5h16v10.8a1.7 1.7 0 0 1-1.7 1.7H5.7A1.7 1.7 0 0 1 4 18.3V7.5Z"/>
+                            <path d="M8 7.5V5.8A1.8 1.8 0 0 1 9.8 4h4.4A1.8 1.8 0 0 1 16 5.8v1.7"/>
+                            <path d="M8 12h8"/>
+                            <path d="M8 15h5"/>
+                        </svg>
+                        <span>Producto destacado</span>
+                    </div>
+                </div>
+
+                <div class="product-body">
+                    <h3>${product.nombre}</h3>
+                    <p class="product-description">${product.descripcion}</p>
+
+                    <div class="product-price-row">
+                        <span class="product-price-label">Precio</span>
+                        <div class="product-price">${formatPrice(product.precio)}</div>
+                    </div>
+
+                    ${tags.length ? `
+                    <div class="product-tags">
+                        ${tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+                    </div>` : ""}
+
+                    <a class="btn primary" href="${makeWhatsappLink(product.nombre)}" target="_blank" rel="noopener noreferrer">Comprar / consultar</a>
+                </div>
+            </article>
+        `;
+    }).join("");
+}
 renderCompany();
 setInterval(renderStatus, 60000);
 </script>
