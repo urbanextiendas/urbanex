@@ -819,19 +819,19 @@
     <main
         class="profile-wrap"
         id="empresaProfile"
-        data-empresa="Electromas"
-        data-categoria="Electrodomésticos"
-        data-tipo="venta linea-blanca linea blanca electrodomesticos"
-        data-entrega-domicilio="true"
-        data-tiene-ofertas="true"
-        data-web="https://electromas.pages.dev"
+        data-empresa=""
+        data-categoria=""
+        data-tipo=""
+        data-entrega-domicilio=""
+        data-tiene-ofertas=""
+        data-web=""
     >
         <section class="company-hero">
             <div class="cover-zone" id="companyCover">
                 <div class="company-main-info">
                     <div class="logo-box">
                         <img id="companyLogo" src="" alt="Logo de la empresa" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='block';">
-                        <span class="logo-fallback" id="logoFallback">Logo<br>Electromas</span>
+                        <span class="logo-fallback" id="logoFallback">Logo<br>Empresa</span>
                     </div>
 
                     <div class="company-title-zone">
@@ -914,21 +914,7 @@
             </aside>
         </section>
 
-        <section class="index-data" aria-hidden="true">
-            Electromas electrodomésticos Loja Ecuador.
-            Venta de electrodomésticos.
-            Línea blanca en Loja.
-            Empresa de venta de refrigeradoras, lavadoras, cocinas y secadoras.
-            Empresa con entrega a domicilio.
-            Servicio a domicilio disponible.
-            Delivery disponible.
-            Productos con ofertas activas.
-            Promociones en electrodomésticos.
-            Ofertas en línea blanca.
-            Sitio web oficial Electromas.
-            Dirección web Electromas: https://electromas.pages.dev.
-            Web Electromas: electromas.pages.dev.
-        </section>
+        <section class="index-data" aria-hidden="true" id="indexData"></section>
     </main>
 
     <footer class="footer">
@@ -938,8 +924,9 @@
 
 <script>
 /* ==========================================================
-   LA EMPRESA SOLO DEBE EDITAR ESTE BLOQUE DE INFORMACIÓN
+   SOLO EDITAR ESTE BLOQUE PARA CADA NUEVA EMPRESA
    ========================================================== */
+
 const EMPRESA = {
     nombre: "Electromas",
     categoria: "Electrodomésticos",
@@ -958,13 +945,13 @@ const EMPRESA = {
     entregaDomicilio: true,
 
     horario: {
-        domingo: [],
         lunes: [{ abre: "08:30", cierra: "18:00" }],
         martes: [{ abre: "08:30", cierra: "18:00" }],
         miercoles: [{ abre: "08:30", cierra: "18:00" }],
         jueves: [{ abre: "08:30", cierra: "18:00" }],
         viernes: [{ abre: "08:30", cierra: "18:00" }],
-        sabado: [{ abre: "08:30", cierra: "14:00" }]
+        sabado: [{ abre: "08:30", cierra: "14:00" }],
+        domingo: []
     },
 
     productos: [
@@ -1007,16 +994,17 @@ const EMPRESA = {
 /* ==========================================================
    NO EDITAR DESDE AQUÍ, SALVO CAMBIOS DE FUNCIONAMIENTO
    ========================================================== */
+
 const DIAS = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
 
 const DIAS_LABEL = {
-    domingo: "Domingo",
     lunes: "Lunes",
     martes: "Martes",
     miercoles: "Miércoles",
     jueves: "Jueves",
     viernes: "Viernes",
-    sabado: "Sábado"
+    sabado: "Sábado",
+    domingo: "Domingo"
 };
 
 function escapeHtml(value) {
@@ -1078,11 +1066,13 @@ function getBusinessStatus() {
             };
         }
 
-        if (now.minutos < open && open - now.minutos <= 60) {
+        if (now.minutos < open) {
+            const minutesUntilOpen = open - now.minutos;
+
             return {
-                state: "soon",
-                label: "Abre pronto",
-                detail: "Abre a las " + range.abre
+                state: minutesUntilOpen <= 60 ? "soon" : "closed",
+                label: minutesUntilOpen <= 60 ? "Abre pronto" : "Cerrado",
+                detail: "Abre hoy a las " + range.abre
             };
         }
     }
@@ -1154,6 +1144,8 @@ function renderCompany() {
     document.getElementById("companyCover").style.backgroundImage = "url('" + EMPRESA.portada + "')";
     document.getElementById("companyLogo").src = EMPRESA.logo;
     document.getElementById("companyLogo").alt = "Logo " + EMPRESA.nombre;
+    document.getElementById("logoFallback").innerHTML = "Logo<br>" + escapeHtml(EMPRESA.nombre);
+
     document.getElementById("companyCategory").textContent = EMPRESA.categoria;
     document.getElementById("companyName").textContent = EMPRESA.nombre;
     document.getElementById("companyDescription").textContent = EMPRESA.descripcion;
@@ -1161,8 +1153,8 @@ function renderCompany() {
     document.getElementById("infoPhone").textContent = EMPRESA.celular;
     document.getElementById("infoEmail").textContent = EMPRESA.correo;
 
-    document.getElementById("infoWeb").textContent = getDisplayWeb(EMPRESA.web);
-    document.getElementById("infoWeb").href = EMPRESA.web;
+    document.getElementById("infoWeb").textContent = EMPRESA.web ? getDisplayWeb(EMPRESA.web) : "No disponible";
+    document.getElementById("infoWeb").href = EMPRESA.web || "#";
 
     document.getElementById("infoAddress").textContent = EMPRESA.direccion;
 
@@ -1170,21 +1162,40 @@ function renderCompany() {
     document.getElementById("callButton").href = "tel:" + EMPRESA.celular;
     document.getElementById("emailButton").href = "mailto:" + EMPRESA.correo;
     document.getElementById("mapButton").href = EMPRESA.mapa;
-    document.getElementById("webButton").href = EMPRESA.web;
+    document.getElementById("webButton").href = EMPRESA.web || "#";
 
+    document.getElementById("webButton").style.display = EMPRESA.web ? "inline-flex" : "none";
     document.getElementById("deliveryStatus").style.display = EMPRESA.entregaDomicilio ? "inline-flex" : "none";
     document.getElementById("deliveryText").textContent = EMPRESA.entregaDomicilio ? "Disponible" : "No disponible";
     document.getElementById("offersText").textContent = hasOffers ? "Disponible" : "Sin ofertas";
 
     const profile = document.getElementById("empresaProfile");
+    profile.dataset.empresa = EMPRESA.nombre || "";
+    profile.dataset.categoria = EMPRESA.categoria || "";
     profile.dataset.tipo = EMPRESA.tipo || "";
     profile.dataset.entregaDomicilio = EMPRESA.entregaDomicilio ? "true" : "false";
     profile.dataset.tieneOfertas = hasOffers ? "true" : "false";
     profile.dataset.web = EMPRESA.web || "";
 
+    renderIndexData(hasOffers);
     renderStatus();
     renderSchedule();
     renderProducts();
+}
+
+function renderIndexData(hasOffers) {
+    const indexData = document.getElementById("indexData");
+
+    indexData.textContent = `
+        ${EMPRESA.nombre}.
+        ${EMPRESA.categoria}.
+        ${EMPRESA.tipo}.
+        ${EMPRESA.descripcion}.
+        ${EMPRESA.entregaDomicilio ? "Empresa con entrega a domicilio. Servicio a domicilio disponible. Delivery disponible." : ""}
+        ${hasOffers ? "Productos con ofertas activas. Promociones disponibles." : ""}
+        ${EMPRESA.web ? "Sitio web oficial: " + EMPRESA.web + "." : ""}
+        ${EMPRESA.direccion}.
+    `;
 }
 
 function renderStatus() {
