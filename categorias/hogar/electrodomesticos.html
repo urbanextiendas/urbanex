@@ -1055,8 +1055,8 @@
         .business-logo {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            padding: 5px;
+            object-fit: cover;
+            padding: 0;
             display: block;
         }
 
@@ -1329,130 +1329,16 @@
         }
 
 
-        /* Filtros premium: reemplazan el desplegable nativo para evitar estilos blancos del navegador */
+        /* Filtros por encima de las tarjetas y opciones legibles */
         .segment-filter-panel {
             position: relative;
-            z-index: 500;
+            z-index: 300;
             overflow: visible;
-            padding: 5px 7px;
-            gap: 7px;
         }
 
-        .native-filter-hidden {
-            position: absolute !important;
-            width: 1px !important;
-            height: 1px !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
-
-        .custom-filter {
+        .filter-select {
             position: relative;
-            z-index: 510;
-            min-width: 132px;
-        }
-
-        .custom-filter-wide {
-            min-width: 154px;
-        }
-
-        .custom-filter-button {
-            width: 100%;
-            height: 28px;
-            border: 1px solid rgba(229, 193, 88, 0.28);
-            border-radius: 999px;
-            background:
-                linear-gradient(135deg, rgba(18,18,18,0.92), rgba(4,4,4,0.86));
-            color: #ffffff;
-            padding: 0 8px 0 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            font-family: var(--font-sans);
-            font-size: 9px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025);
-        }
-
-        .custom-filter-button svg {
-            width: 14px;
-            height: 14px;
-            fill: var(--gold);
-            flex: 0 0 auto;
-            transition: transform 0.22s ease;
-        }
-
-        .custom-filter.is-open .custom-filter-button,
-        .custom-filter-button:hover,
-        .custom-filter-button:focus-visible {
-            border-color: rgba(229,193,88,0.68);
-            background:
-                linear-gradient(135deg, rgba(229,193,88,0.16), rgba(5,5,5,0.88));
-            outline: none;
-        }
-
-        .custom-filter.is-open .custom-filter-button svg {
-            transform: rotate(180deg);
-        }
-
-        .custom-filter-menu {
-            position: absolute;
-            top: calc(100% + 7px);
-            left: 0;
-            min-width: 100%;
-            padding: 6px;
-            border: 1px solid rgba(229,193,88,0.35);
-            border-radius: 13px;
-            background:
-                linear-gradient(145deg, rgba(9,9,9,0.98), rgba(18,18,18,0.94));
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            box-shadow: 0 18px 42px rgba(0,0,0,0.58), 0 0 0 1px rgba(255,255,255,0.04) inset;
-            display: grid;
-            gap: 3px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-4px) scale(0.98);
-            transform-origin: top left;
-            transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
-        }
-
-        .custom-filter.is-open .custom-filter-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-        }
-
-        .custom-filter-option {
-            min-height: 27px;
-            border: 0;
-            border-radius: 9px;
-            background: transparent;
-            color: #ffffff;
-            padding: 0 10px;
-            text-align: left;
-            font-family: var(--font-sans);
-            font-size: 9px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            white-space: nowrap;
-        }
-
-        .custom-filter-option:hover,
-        .custom-filter-option:focus-visible {
-            background: rgba(229,193,88,0.12);
-            color: var(--gold);
-            outline: none;
-        }
-
-        .custom-filter-option.is-selected {
-            background: var(--gold);
-            color: #000000;
-            font-weight: 900;
+            z-index: 301;
         }
 
         .directory-layout,
@@ -1471,12 +1357,14 @@
             z-index: 40;
         }
 
-        @media (max-width: 720px) {
-            .custom-filter,
-            .custom-filter-wide {
-                flex: 0 0 auto;
-                min-width: 142px;
-            }
+        .filter-select option {
+            background: #080808;
+            color: #ffffff;
+        }
+
+        .filter-select option:checked {
+            background: #e5c158;
+            color: #000000;
         }
 
     </style>
@@ -1553,7 +1441,7 @@
     </section>
 
     <section class="segment-filter-panel" aria-label="Filtros de electrodomésticos">
-        <select id="segmentFilter" class="filter-select native-filter-hidden" aria-hidden="true" tabindex="-1">
+        <select id="segmentFilter" class="filter-select">
             <option value="todos">Todos</option>
             <option value="venta">Venta</option>
             <option value="instalacion">Instalación</option>
@@ -1561,41 +1449,11 @@
             <option value="linea-blanca">Línea blanca</option>
         </select>
 
-        <div class="custom-filter" data-filter-target="segmentFilter">
-            <button class="custom-filter-button" type="button" aria-haspopup="listbox" aria-expanded="false">
-                <span>Todos</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M7 10l5 5 5-5z"/>
-                </svg>
-            </button>
-            <div class="custom-filter-menu" role="listbox">
-                <button class="custom-filter-option is-selected" type="button" data-value="todos" role="option" aria-selected="true">Todos</button>
-                <button class="custom-filter-option" type="button" data-value="venta" role="option" aria-selected="false">Venta</button>
-                <button class="custom-filter-option" type="button" data-value="instalacion" role="option" aria-selected="false">Instalación</button>
-                <button class="custom-filter-option" type="button" data-value="reparacion" role="option" aria-selected="false">Reparación</button>
-                <button class="custom-filter-option" type="button" data-value="linea-blanca" role="option" aria-selected="false">Línea blanca</button>
-            </div>
-        </div>
-
-        <select id="sortFilter" class="filter-select native-filter-hidden" aria-hidden="true" tabindex="-1">
+        <select id="sortFilter" class="filter-select">
             <option value="rating">Mejor calificación</option>
             <option value="nombre">Nombre A-Z</option>
             <option value="disponibilidad">Disponibilidad</option>
         </select>
-
-        <div class="custom-filter custom-filter-wide" data-filter-target="sortFilter">
-            <button class="custom-filter-button" type="button" aria-haspopup="listbox" aria-expanded="false">
-                <span>Mejor calificación</span>
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M7 10l5 5 5-5z"/>
-                </svg>
-            </button>
-            <div class="custom-filter-menu" role="listbox">
-                <button class="custom-filter-option is-selected" type="button" data-value="rating" role="option" aria-selected="true">Mejor calificación</button>
-                <button class="custom-filter-option" type="button" data-value="nombre" role="option" aria-selected="false">Nombre A-Z</button>
-                <button class="custom-filter-option" type="button" data-value="disponibilidad" role="option" aria-selected="false">Disponibilidad</button>
-            </div>
-        </div>
     </section>
 
     <main class="directory-layout">
@@ -2532,71 +2390,6 @@
     if (sortFilter) {
         sortFilter.addEventListener("change", renderBusinesses);
     }
-
-    function closeCustomFilters(exceptWrapper) {
-        document.querySelectorAll(".custom-filter.is-open").forEach(function (wrapper) {
-            if (wrapper === exceptWrapper) return;
-            wrapper.classList.remove("is-open");
-            const button = wrapper.querySelector(".custom-filter-button");
-            if (button) button.setAttribute("aria-expanded", "false");
-        });
-    }
-
-    function syncCustomFilter(wrapper, select) {
-        const selectedOption = select.options[select.selectedIndex];
-        const label = selectedOption ? selectedOption.textContent : "";
-        const buttonLabel = wrapper.querySelector(".custom-filter-button span");
-
-        if (buttonLabel) buttonLabel.textContent = label;
-
-        wrapper.querySelectorAll(".custom-filter-option").forEach(function (optionButton) {
-            const isSelected = optionButton.dataset.value === select.value;
-            optionButton.classList.toggle("is-selected", isSelected);
-            optionButton.setAttribute("aria-selected", isSelected ? "true" : "false");
-        });
-    }
-
-    function initCustomFilters() {
-        document.querySelectorAll(".custom-filter").forEach(function (wrapper) {
-            const select = document.getElementById(wrapper.dataset.filterTarget);
-            const trigger = wrapper.querySelector(".custom-filter-button");
-
-            if (!select || !trigger) return;
-
-            syncCustomFilter(wrapper, select);
-
-            trigger.addEventListener("click", function (event) {
-                event.stopPropagation();
-                const isOpen = wrapper.classList.contains("is-open");
-                closeCustomFilters(wrapper);
-                wrapper.classList.toggle("is-open", !isOpen);
-                trigger.setAttribute("aria-expanded", !isOpen ? "true" : "false");
-            });
-
-            wrapper.querySelectorAll(".custom-filter-option").forEach(function (optionButton) {
-                optionButton.addEventListener("click", function () {
-                    select.value = optionButton.dataset.value;
-                    select.dispatchEvent(new Event("change", { bubbles: true }));
-                    syncCustomFilter(wrapper, select);
-                    closeCustomFilters();
-                });
-            });
-
-            select.addEventListener("change", function () {
-                syncCustomFilter(wrapper, select);
-            });
-        });
-
-        document.addEventListener("click", function () {
-            closeCustomFilters();
-        });
-
-        document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape") closeCustomFilters();
-        });
-    }
-
-    initCustomFilters();
 
     updateCounters(0);
 
