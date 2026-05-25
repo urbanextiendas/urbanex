@@ -823,6 +823,7 @@
         data-categoria=""
         data-tipo=""
         data-entrega-domicilio=""
+        data-credito-directo=""
         data-tiene-ofertas=""
         data-web=""
     >
@@ -839,6 +840,7 @@
                             <span class="status-pill" id="businessStatus">Calculando...</span>
                             <span class="category-pill" id="companyCategory">Categoría</span>
                             <span class="delivery-pill" id="deliveryStatus">Entrega a domicilio</span>
+                            <span class="delivery-pill" id="creditStatus">Crédito directo</span>
                         </div>
 
                         <h1 id="companyName">Nombre de la empresa</h1>
@@ -902,6 +904,10 @@
                             <strong>Ofertas activas</strong>
                             <span id="offersText">Disponible</span>
                         </div>
+                        <div class="service-item">
+                            <strong>Crédito directo</strong>
+                            <span id="creditText">Disponible</span>
+                        </div>
                     </div>
                 </section>
 
@@ -945,6 +951,7 @@ const EMPRESA = {
     zonaHoraria: "America/Guayaquil",
 
     entregaDomicilio: true,
+    creditoDirecto: true,
 
     horario: {
         domingo: [],
@@ -1168,7 +1175,9 @@ function renderCompany() {
 
     document.getElementById("webButton").style.display = EMPRESA.web ? "inline-flex" : "none";
     document.getElementById("deliveryStatus").style.display = EMPRESA.entregaDomicilio ? "inline-flex" : "none";
+    document.getElementById("creditStatus").style.display = EMPRESA.creditoDirecto ? "inline-flex" : "none";
     document.getElementById("deliveryText").textContent = EMPRESA.entregaDomicilio ? "Disponible" : "No disponible";
+    document.getElementById("creditText").textContent = EMPRESA.creditoDirecto ? "Disponible" : "No disponible";
     document.getElementById("offersText").textContent = hasOffers ? "Disponible" : "Sin ofertas";
 
     const profile = document.getElementById("empresaProfile");
@@ -1176,6 +1185,7 @@ function renderCompany() {
     profile.dataset.categoria = EMPRESA.categoria || "";
     profile.dataset.tipo = EMPRESA.tipo || "";
     profile.dataset.entregaDomicilio = EMPRESA.entregaDomicilio ? "true" : "false";
+    profile.dataset.creditoDirecto = EMPRESA.creditoDirecto ? "true" : "false";
     profile.dataset.tieneOfertas = hasOffers ? "true" : "false";
     profile.dataset.web = EMPRESA.web || "";
 
@@ -1194,6 +1204,7 @@ function renderIndexData(hasOffers) {
         ${EMPRESA.tipo}.
         ${EMPRESA.descripcion}.
         ${EMPRESA.entregaDomicilio ? "Empresa con entrega a domicilio. Servicio a domicilio disponible. Delivery disponible." : ""}
+        ${EMPRESA.creditoDirecto ? "Empresa con crédito directo. Financiamiento directo disponible." : ""}
         ${hasOffers ? "Productos con ofertas activas. Promociones disponibles." : ""}
         ${EMPRESA.web ? "Sitio web oficial: " + EMPRESA.web + "." : ""}
         ${EMPRESA.direccion}.
@@ -1256,6 +1267,7 @@ function renderProducts() {
                 data-precio="${escapeHtml(product.precio)}"
                 data-oferta="${product.oferta ? "true" : "false"}"
                 data-entrega-domicilio="${EMPRESA.entregaDomicilio ? "true" : "false"}"
+                data-credito-directo="${EMPRESA.creditoDirecto ? "true" : "false"}"
                 data-web="${escapeHtml(EMPRESA.web)}"
             >
                 <div class="product-media">
