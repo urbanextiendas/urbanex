@@ -998,15 +998,15 @@
         target.textContent = total + " " + (total === 1 ? singular : plural);
     }
 
-    function getBalancedArrayText(sourceText, arrayStartIndex) {
-        const bracketStart = sourceText.indexOf("[", arrayStartIndex);
-        if (bracketStart === -1) return "";
+    function getBalancedStructure(sourceText, startIndex, opener, closer) {
+        const structureStart = sourceText.indexOf(opener, startIndex);
+        if (structureStart === -1) return "";
 
         let depth = 0;
         let quote = "";
         let escaped = false;
 
-        for (let i = bracketStart; i < sourceText.length; i++) {
+        for (let i = structureStart; i < sourceText.length; i++) {
             const char = sourceText[i];
 
             if (escaped) {
@@ -1029,50 +1029,83 @@
                 continue;
             }
 
-            if (char === "[") depth++;
-            if (char === "]") depth--;
+            if (char === opener) depth++;
+            if (char === closer) depth--;
 
             if (depth === 0) {
-                return sourceText.slice(bracketStart, i + 1);
+                return sourceText.slice(structureStart, i + 1);
             }
         }
 
         return "";
     }
 
-    function countObjectsInArray(arrayText) {
-        const matches = arrayText.match(/\bnombre\s*:/g);
-        if (matches) return matches.length;
+    function escapeRegExp(value) {
+        return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
 
-        const objectMatches = arrayText.match(/\{[\s\S]*?\}/g);
-        return objectMatches ? objectMatches.length : 0;
+    function getAssignedArrayText(htmlText, arrayName) {
+        if (!arrayName) return "";
+
+        const pattern = new RegExp("(?:const|let|var)\\s+" + escapeRegExp(arrayName) + "\\s*=\\s*\\[", "m");
+        const match = pattern.exec(htmlText);
+
+        if (!match) return "";
+
+        return getBalancedStructure(htmlText, match.index, "[", "]");
+    }
+
+    function countBusinessObjectsInArray(arrayText) {
+        if (!arrayText) return 0;
+
+        const namedItems = arrayText.match(/\bnombre\s*:/g);
+        if (namedItems) return namedItems.length;
+
+        const objectItems = arrayText.match(/\{[\s\S]*?\}/g);
+        return objectItems ? objectItems.length : 0;
+    }
+
+    function countStringItemsInArray(arrayText) {
+        if (!arrayText) return 0;
+
+        const stringItems = arrayText.match(/(["'`])(?:\\.|(?!\1)[\s\S])*\1/g);
+        return stringItems ? stringItems.length : 0;
     }
 
     function countFromSpecificArray(htmlText, arrayName) {
-        if (!arrayName) return null;
+        const arrayText = getAssignedArrayText(htmlText, arrayName);
+        return countBusinessObjectsInArray(arrayText);
+    }
 
-        const arrayPattern = new RegExp("(?:const|let|var)\\s+" + arrayName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\s*=\\s*\\[");
-        const match = arrayPattern.exec(htmlText);
+    function countFromDataSources(htmlText) {
+        const sourceArrayNames = [
+            "EMPRESAS_DATA_SOURCES",
+            "EMPRESA_DATA_SOURCES",
+            "DATA_SOURCES",
+            "FUENTES_EMPRESAS",
+            "BUSINESS_DATA_SOURCES"
+        ];
 
-        if (!match) return null;
+        for (const arrayName of sourceArrayNames) {
+            const arrayText = getAssignedArrayText(htmlText, arrayName);
+            const total = countStringItemsInArray(arrayText);
 
-        const arrayText = getBalancedArrayText(htmlText, match.index);
-        if (!arrayText) return null;
+            if (total > 0) return total;
+        }
 
-        return countObjectsInArray(arrayText);
+        return 0;
     }
 
     function countFromAnyBusinessArray(htmlText) {
         const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
         let match;
-        let bestCount = null;
+        let bestCount = 0;
 
         while ((match = arrayPattern.exec(htmlText)) !== null) {
-            const arrayText = getBalancedArrayText(htmlText, match.index);
-            if (!arrayText) continue;
+            const arrayText = getBalancedStructure(htmlText, match.index, "[", "]");
+            const count = countBusinessObjectsInArray(arrayText);
 
-            const count = countObjectsInArray(arrayText);
-            if (bestCount === null || count > bestCount) bestCount = count;
+            if (count > bestCount) bestCount = count;
         }
 
         return bestCount;
@@ -1086,10 +1119,13 @@
 
     function countCategoryItems(htmlText, arrayName) {
         const specificArrayCount = countFromSpecificArray(htmlText, arrayName);
-        if (specificArrayCount !== null) return specificArrayCount;
+        if (specificArrayCount > 0) return specificArrayCount;
+
+        const dataSourcesCount = countFromDataSources(htmlText);
+        if (dataSourcesCount > 0) return dataSourcesCount;
 
         const genericArrayCount = countFromAnyBusinessArray(htmlText);
-        if (genericArrayCount !== null) return genericArrayCount;
+        if (genericArrayCount > 0) return genericArrayCount;
 
         return countFromRenderedMarkup(htmlText);
     }
