@@ -432,16 +432,19 @@
             background: rgba(0,0,0,0.34);
         }
 
-        .footer {
-            margin-top: auto;
+        .pie-pagina {
+            width: 100%;
             height: 24px;
-            background: #000000;
+            background-color: #000000;
             color: #8c8c8c;
-            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 11px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 10px;
+            align-items: center;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+            z-index: 5;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
 
@@ -1342,8 +1345,8 @@
         </section>
     </main>
 
-    <footer class="footer">
-        <p>&copy; 2026 Urbanex. Todos los derechos reservados.</p>
+    <footer class="pie-pagina">
+        <p>&copy; 2026 Urbanex. Desarrollado por Neodat Consultores.</p>
     </footer>
 
 </div>
@@ -1407,6 +1410,9 @@
             .replace(/Negocios confiables/gi, " ")
             .replace(/Comunidad local/gi, " ")
             .replace(/Registre su negocio/gi, " ")
+            .replace(/©\s*2026\s*Urbanex\.\s*Desarrollado por Neodat Consultores\.?/gi, " ")
+            .replace(/Urbanex\.\s*Desarrollado por Neodat Consultores\.?/gi, " ")
+            .replace(/Desarrollado por Neodat Consultores\.?/gi, " ")
             .replace(/©\s*2026\s*Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
             .replace(/Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
             .replace(/Todos los derechos reservados\.?/gi, " ")
