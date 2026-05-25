@@ -12,13 +12,15 @@
     <style>
         :root {
             --bg-main: #020202;
-            --bg-card: rgba(12, 12, 12, 0.82);
+            --bg-card: rgba(8, 8, 8, 0.86);
+            --bg-card-soft: rgba(18, 18, 18, 0.78);
             --bg-soft: rgba(255,255,255,0.055);
-            --gold: #e5c158;
-            --gold-border: rgba(229, 193, 88, 0.30);
+            --gold: #f0c84b;
+            --gold-soft: rgba(240, 200, 75, 0.12);
+            --gold-border: rgba(240, 200, 75, 0.28);
             --text-main: #ffffff;
-            --text-muted: #d5d5d5;
-            --text-soft: #9a9a9a;
+            --text-muted: #d8d8d8;
+            --text-soft: #a7a7a7;
             --success: #2ed573;
             --danger: #ff7675;
             --warning: #ffa502;
@@ -37,7 +39,8 @@
         body {
             min-height: 100vh;
             background:
-                linear-gradient(135deg, rgba(0,0,0,0.90), rgba(0,0,0,0.68)),
+                radial-gradient(circle at 20% 0%, rgba(240, 200, 75, 0.14), transparent 32%),
+                linear-gradient(135deg, rgba(0,0,0,0.92), rgba(0,0,0,0.74)),
                 url("../../../imagenes/Hogar.png") center bottom / cover fixed no-repeat;
             color: var(--text-main);
             font-family: var(--font-sans);
@@ -57,7 +60,7 @@
 
         .header-top {
             min-height: 60px;
-            background: rgba(6, 6, 6, 0.55);
+            background: rgba(6, 6, 6, 0.72);
             border-bottom: 1px solid var(--gold-border);
             backdrop-filter: var(--blur);
             -webkit-backdrop-filter: var(--blur);
@@ -88,7 +91,7 @@
             background: rgba(0,0,0,0.36);
             color: #ffffff;
             border-radius: 999px;
-            padding: 8px 12px;
+            padding: 8px 13px;
             font-size: 10px;
             font-weight: 800;
             transition: var(--transition);
@@ -97,11 +100,12 @@
         .top-link:hover {
             border-color: var(--gold);
             color: var(--gold);
+            background: rgba(240, 200, 75, 0.08);
         }
 
         .profile-wrap {
             width: min(1080px, calc(100% - 28px));
-            margin: 20px auto 26px;
+            margin: 18px auto 24px;
             display: grid;
             grid-template-columns: minmax(0, 1fr);
             gap: 12px;
@@ -111,14 +115,14 @@
             border: 1px solid var(--gold-border);
             border-radius: 18px;
             overflow: hidden;
-            background: linear-gradient(135deg, rgba(10,10,10,0.92), rgba(14,14,14,0.72));
-            box-shadow: 0 28px 70px rgba(0,0,0,0.46);
+            background: linear-gradient(135deg, rgba(8,8,8,0.96), rgba(16,16,16,0.84));
+            box-shadow: 0 24px 64px rgba(0,0,0,0.48);
             backdrop-filter: var(--blur);
             -webkit-backdrop-filter: var(--blur);
         }
 
         .cover-zone {
-            min-height: 210px;
+            min-height: 190px;
             background-size: cover;
             background-position: center;
             position: relative;
@@ -128,30 +132,33 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.94), rgba(0,0,0,0.24));
+            background:
+                linear-gradient(90deg, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.86) 42%, rgba(0,0,0,0.50) 100%),
+                linear-gradient(to top, rgba(0,0,0,0.90), rgba(0,0,0,0.24));
         }
 
         .company-main-info {
             position: relative;
             z-index: 2;
-            min-height: 210px;
-            padding: 22px;
+            min-height: 190px;
+            padding: 22px 28px;
             display: flex;
             align-items: flex-end;
             gap: 16px;
         }
 
         .logo-box {
-            width: 92px;
-            height: 92px;
-            border-radius: 20px;
-            background: rgba(255,255,255,0.08);
+            width: 78px;
+            height: 78px;
+            border-radius: 18px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.10), rgba(255,255,255,0.035));
             border: 1px solid var(--gold-border);
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             flex-shrink: 0;
+            box-shadow: inset 0 0 24px rgba(255,255,255,0.035);
         }
 
         .logo-box img {
@@ -179,10 +186,10 @@
             align-items: center;
             gap: 6px;
             border-radius: 999px;
-            padding: 5px 9px;
-            font-size: 9px;
+            padding: 5px 11px;
+            font-size: 8px;
             font-weight: 900;
-            letter-spacing: 0.7px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
             border: 1px solid rgba(255,255,255,0.14);
             background: rgba(0,0,0,0.46);
@@ -208,26 +215,28 @@
 
         .category-pill {
             color: #000000;
-            background: var(--gold);
+            background: linear-gradient(135deg, #f7d96c, var(--gold));
             border-radius: 999px;
-            padding: 5px 9px;
-            font-size: 9px;
+            padding: 5px 11px;
+            font-size: 8px;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 0.7px;
+            letter-spacing: 0.8px;
+            box-shadow: 0 8px 24px rgba(240, 200, 75, 0.16);
         }
 
         h1 {
             font-family: var(--font-serif);
-            font-size: clamp(25px, 4vw, 46px);
-            line-height: 0.98;
-            letter-spacing: 2px;
+            font-size: clamp(26px, 3.2vw, 38px);
+            line-height: 1.02;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             margin-bottom: 8px;
+            text-shadow: 0 14px 28px rgba(0,0,0,0.46);
         }
 
         .company-description {
-            max-width: 680px;
+            max-width: 740px;
             color: var(--text-muted);
             font-size: 12px;
             line-height: 1.55;
@@ -243,32 +252,34 @@
         .btn {
             border: 1px solid var(--gold-border);
             border-radius: 999px;
-            padding: 9px 13px;
+            padding: 9px 14px;
             font-size: 10px;
             font-weight: 900;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.2px;
             cursor: pointer;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
+            min-height: 34px;
         }
 
         .btn.primary {
-            background: var(--gold);
+            background: linear-gradient(135deg, #f7d96c, var(--gold));
             color: #000000;
             border-color: var(--gold);
+            box-shadow: 0 12px 24px rgba(240, 200, 75, 0.16);
         }
 
         .btn.secondary {
-            background: rgba(0,0,0,0.38);
+            background: rgba(0,0,0,0.36);
             color: #ffffff;
         }
 
         .btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+            box-shadow: 0 14px 28px rgba(0,0,0,0.32);
         }
 
         .content-grid {
@@ -280,51 +291,63 @@
         .panel {
             border: 1px solid rgba(255,255,255,0.10);
             border-radius: 16px;
-            background: var(--bg-card);
+            background:
+                linear-gradient(145deg, rgba(255,255,255,0.035), transparent 38%),
+                var(--bg-card);
             backdrop-filter: var(--blur);
             -webkit-backdrop-filter: var(--blur);
-            box-shadow: 0 18px 42px rgba(0,0,0,0.28);
+            box-shadow: 0 18px 46px rgba(0,0,0,0.34);
             overflow: hidden;
         }
 
         .panel-head {
-            padding: 14px 16px;
+            padding: 15px 16px;
             border-bottom: 1px solid rgba(255,255,255,0.08);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 10px;
+            background: rgba(255,255,255,0.018);
         }
 
         .panel-head h2 {
             color: var(--gold);
             font-family: var(--font-serif);
             font-size: 15px;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
         }
 
         .product-grid {
-            padding: 12px;
+            padding: 14px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 12px;
         }
 
         .product-card {
             border: 1px solid rgba(255,255,255,0.10);
-            border-radius: 14px;
-            background: rgba(0,0,0,0.34);
+            border-radius: 15px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(0,0,0,0.42));
             overflow: hidden;
             display: flex;
             flex-direction: column;
             min-height: 100%;
+            transition: var(--transition);
+        }
+
+        .product-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--gold-border);
+            box-shadow: 0 18px 38px rgba(0,0,0,0.36);
         }
 
         .product-image {
-            height: 126px;
-            background: rgba(255,255,255,0.05);
+            height: 136px;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
             overflow: hidden;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
 
         .product-image img {
@@ -332,32 +355,40 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.035);
         }
 
         .product-body {
-            padding: 10px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 7px;
             flex: 1;
         }
 
         .product-body h3 {
-            font-size: 12px;
-            line-height: 1.25;
+            font-size: 12.5px;
+            line-height: 1.3;
+            font-weight: 800;
+            color: #ffffff;
         }
 
         .product-description {
             color: var(--text-muted);
             font-size: 9.5px;
-            line-height: 1.45;
+            line-height: 1.5;
             flex: 1;
         }
 
         .product-price {
             color: var(--gold);
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 900;
+            letter-spacing: 0.2px;
         }
 
         .product-tags {
@@ -371,9 +402,10 @@
             background: rgba(255,255,255,0.07);
             border: 1px solid rgba(255,255,255,0.10);
             border-radius: 999px;
-            padding: 3px 6px;
-            font-size: 7.8px;
-            font-weight: 700;
+            padding: 4px 7px;
+            font-size: 7.5px;
+            font-weight: 800;
+            letter-spacing: 0.2px;
         }
 
         .side-content {
@@ -390,7 +422,7 @@
 
         .info-item {
             border-bottom: 1px solid rgba(255,255,255,0.07);
-            padding-bottom: 9px;
+            padding-bottom: 10px;
         }
 
         .info-item:last-child {
@@ -401,17 +433,18 @@
         .info-label {
             display: block;
             color: var(--gold);
-            font-size: 8px;
+            font-size: 7.5px;
             font-weight: 900;
             letter-spacing: 1px;
             text-transform: uppercase;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
 
         .info-value {
             color: #ffffff;
-            font-size: 11px;
-            line-height: 1.45;
+            font-size: 10.5px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
         }
 
         .schedule-list {
@@ -492,13 +525,22 @@
 
             .cover-zone,
             .company-main-info {
-                min-height: 245px;
+                min-height: 230px;
+            }
+
+            .company-main-info {
+                padding: 18px;
             }
 
             .logo-box {
-                width: 76px;
-                height: 76px;
-                border-radius: 17px;
+                width: 72px;
+                height: 72px;
+                border-radius: 16px;
+            }
+
+            h1 {
+                font-size: 28px;
+                letter-spacing: 1px;
             }
 
             .product-grid {
