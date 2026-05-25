@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Electromas | Urbanex</title>
+    <meta name="description" content="Electromas en Loja: venta de electrodomésticos de línea blanca, entrega a domicilio, instalación, garantía y ofertas activas.">
+    <meta name="keywords" content="Electromas, electrodomésticos Loja, línea blanca, entrega a domicilio, a domicilio, delivery, ofertas, promociones, refrigeradoras, lavadoras, cocinas, instalación, garantía">
     <link rel="icon" type="image/png" href="../../../imagenes/log.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -506,19 +508,317 @@
             }
         }
 
-        /* Encabezado y pie fijos */
+        /* Encabezado Urbanex sin buscador, fijo y consistente con electrodomesticos.html */
         body {
             padding-top: 60px;
             padding-bottom: 24px;
         }
 
         .header-top {
+            height: 60px;
+            min-height: 60px;
+            background: rgba(6, 6, 6, 0.45);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border-bottom: 1px solid var(--gold-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 0 20px;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             width: 100%;
             z-index: 1000;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+        }
+
+        .brand-box img {
+            height: 60px;
+            width: auto;
+            display: block;
+        }
+
+        .top-actions,
+        .top-link {
+            display: none !important;
+        }
+
+        .user-tools {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 24px;
+        }
+
+        .location-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .location-indicator svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold);
+        }
+
+        .tool-icon {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .tool-icon:nth-child(2) {
+            margin-right: 14px;
+        }
+
+        .tool-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+            transition: var(--transition);
+        }
+
+        .tool-icon:hover svg {
+            fill: var(--gold);
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .profile-avatar svg {
+            width: 13px;
+            height: 13px;
+            fill: var(--gold);
+        }
+
+        /* Página empresarial más compacta y estandarizada */
+        .profile-wrap {
+            width: min(1080px, calc(100% - 44px));
+            margin: 16px auto 42px;
+            gap: 14px;
+        }
+
+        .company-hero {
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(8,8,8,0.94), rgba(14,14,14,0.78));
+            box-shadow: 0 20px 52px rgba(0,0,0,0.42);
+        }
+
+        .cover-zone,
+        .company-main-info {
+            min-height: 154px;
+        }
+
+        .cover-zone::after {
+            background:
+                linear-gradient(90deg, rgba(0,0,0,0.96), rgba(0,0,0,0.72) 52%, rgba(0,0,0,0.58)),
+                linear-gradient(to top, rgba(0,0,0,0.86), rgba(0,0,0,0.16));
+        }
+
+        .company-main-info {
+            align-items: center;
+            padding: 18px 22px;
+            gap: 16px;
+        }
+
+        .logo-box {
+            width: 74px;
+            height: 74px;
+            border-radius: 17px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(0,0,0,0.28));
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+        }
+
+        .logo-box img {
+            padding: 7px;
+        }
+
+        .status-line {
+            gap: 7px;
+            margin-bottom: 7px;
+        }
+
+        .status-pill,
+        .category-pill {
+            padding: 4px 9px;
+            font-size: 8px;
+            letter-spacing: 0.8px;
+        }
+
+        h1 {
+            font-size: clamp(23px, 3vw, 34px);
+            line-height: 1;
+            letter-spacing: 1.4px;
+            margin-bottom: 7px;
+        }
+
+        .company-description {
+            max-width: 760px;
+            font-size: 11px;
+            line-height: 1.45;
+        }
+
+        .hero-buttons {
+            gap: 7px;
+            margin-top: 12px;
+        }
+
+        .btn {
+            min-height: 30px;
+            padding: 7px 12px;
+            font-size: 9.2px;
+        }
+
+        .content-grid {
+            grid-template-columns: minmax(0, 1fr) 320px;
+            gap: 14px;
+            align-items: start;
+        }
+
+        .panel {
+            border-radius: 15px;
+            background: linear-gradient(145deg, rgba(14,14,14,0.86), rgba(6,6,6,0.78));
+            box-shadow: 0 16px 38px rgba(0,0,0,0.30);
+        }
+
+        .panel-head {
+            padding: 13px 16px;
+        }
+
+        .panel-head h2 {
+            font-size: 14px;
+            letter-spacing: 0.8px;
+        }
+
+        .product-grid {
+            padding: 12px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .product-card {
+            border-radius: 13px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(0,0,0,0.34));
+        }
+
+        .product-image {
+            height: 104px;
+            position: relative;
+            background:
+                radial-gradient(circle at 20% 15%, rgba(229,193,88,0.18), transparent 34%),
+                linear-gradient(145deg, rgba(255,255,255,0.07), rgba(0,0,0,0.22));
+        }
+
+        .product-image.image-missing::after {
+            content: attr(data-fallback);
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            color: rgba(255,255,255,0.74);
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1.25;
+            text-align: center;
+        }
+
+        .product-body {
+            padding: 11px 12px 12px;
+            gap: 7px;
+        }
+
+        .product-body h3 {
+            font-size: 11.4px;
+            line-height: 1.25;
+        }
+
+        .product-description {
+            font-size: 9.2px;
+            line-height: 1.42;
+        }
+
+        .product-price {
+            font-size: 14px;
+        }
+
+        .info-list {
+            padding: 13px 16px;
+        }
+
+        .schedule-list {
+            padding: 12px 16px 15px;
+        }
+
+        .service-flags {
+            padding: 13px 16px 15px;
+            display: grid;
+            gap: 9px;
+        }
+
+        .service-flag {
+            border: 1px solid rgba(229,193,88,0.20);
+            border-radius: 12px;
+            background: rgba(229,193,88,0.07);
+            padding: 10px 11px;
+        }
+
+        .service-flag strong {
+            display: block;
+            color: var(--gold);
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .service-flag span {
+            display: block;
+            color: var(--text-muted);
+            font-size: 10px;
+            line-height: 1.4;
+        }
+
+        .urbanex-search-metadata {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
         .footer {
@@ -530,9 +830,66 @@
             z-index: 1000;
         }
 
+        @media (max-width: 980px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            }
+        }
+
         @media (max-width: 620px) {
-            body {
-                padding-top: 116px;
+            .header-top {
+                height: 60px;
+                min-height: 60px;
+                flex-direction: row;
+                padding: 0 12px;
+            }
+
+            .brand-box img {
+                height: 54px;
+            }
+
+            .user-tools {
+                gap: 11px;
+            }
+
+            .location-indicator span {
+                display: none;
+            }
+
+            .tool-icon:nth-child(2) {
+                margin-right: 0;
+            }
+
+            .profile-wrap {
+                width: min(100% - 18px, 1080px);
+                margin-top: 12px;
+            }
+
+            .company-main-info {
+                align-items: flex-start;
+                flex-direction: column;
+                min-height: 210px;
+            }
+
+            .cover-zone {
+                min-height: 210px;
+            }
+
+            .logo-box {
+                width: 68px;
+                height: 68px;
+            }
+
+            .hero-buttons {
+                width: 100%;
+            }
+
+            .btn {
+                flex: 1 1 auto;
             }
         }
 
@@ -546,9 +903,25 @@
             <img src="../../../imagenes/logo.png" alt="Urbanex">
         </a>
 
-        <div class="top-actions">
-            <a href="../../../categorias/hogar/electrodomesticos.html" class="top-link">Volver</a>
-            <a href="../../registro.html" class="top-link">Registre su negocio</a>
+        <div class="user-tools">
+            <div class="location-indicator">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <span>Loja, Ecuador</span>
+            </div>
+
+            <div class="tool-icon icon-corazon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+
+            <div class="profile-avatar">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>
         </div>
     </header>
 
@@ -611,6 +984,22 @@
 
                 <section class="panel">
                     <div class="panel-head">
+                        <h2>Servicios</h2>
+                    </div>
+                    <div class="service-flags">
+                        <div class="service-flag">
+                            <strong>A domicilio</strong>
+                            <span id="deliveryFlag">Entrega a domicilio disponible en Loja.</span>
+                        </div>
+                        <div class="service-flag">
+                            <strong>Ofertas</strong>
+                            <span id="offersFlag">Promociones activas en productos seleccionados.</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-head">
                         <h2>Horario</h2>
                     </div>
                     <div class="schedule-list" id="scheduleList"></div>
@@ -624,6 +1013,14 @@
     </footer>
 </div>
 
+<section class="urbanex-search-metadata" aria-label="Datos de búsqueda Urbanex">
+    <h2>Electromas - datos para buscador Urbanex</h2>
+    <p>Electromas Loja electrodomésticos línea blanca refrigeradoras lavadoras cocinas secadoras instalación garantía crédito soporte técnico local.</p>
+    <p>Entrega a domicilio disponible. A domicilio en Loja. Delivery de electrodomésticos. Servicio con entrega local.</p>
+    <p>Ofertas activas. Promociones activas. Promo en productos seleccionados. Oferta en cocina a gas 4 quemadores.</p>
+    <p>Categorías localizables: venta, instalación, reparación, línea blanca, entrega a domicilio, a domicilio, delivery, ofertas, promociones.</p>
+</section>
+
 <script>
 /* ==========================================================
    LA EMPRESA SOLO DEBE EDITAR ESTE BLOQUE DE INFORMACIÓN
@@ -633,21 +1030,44 @@ const EMPRESA = {
     categoria: "Electrodomésticos",
     descripcion: "Venta de refrigeradoras, lavadoras, cocinas, secadoras y electrodomésticos de línea blanca para hogares y negocios de Loja.",
     logo: "../../../imagenes/empresas/electromas.png",
-    portada: "../../imagenes/empresas/electromas.jpg",
+    portada: "../../../imagenes/empresas/electromas.jpg",
     celular: "+593959782300",
     correo: "electromascreditosas@gmail.com",
     direccion: "Imbabura entre Sucre y 18 de Noviembre, Loja, Ecuador",
     mapa: "https://www.google.com/maps/search/?api=1&query=Av.+Imbabura+entre+Sucre+y+18+de+Noviembre+Loja+Ecuador",
     moneda: "$",
     zonaHoraria: "America/Guayaquil",
+    entregaDomicilio: true,
+    coberturaDomicilio: "Loja urbana",
+    ofertasActivas: true,
+    promociones: [
+        {
+            nombre: "Oferta en cocina a gas 4 quemadores",
+            detalle: "Promoción activa en producto seleccionado.",
+            codigo: "OFERTA-ELECTROMAS-COCINA"
+        }
+    ],
+    tags: [
+        "Venta",
+        "Electrodomésticos",
+        "Línea blanca",
+        "Instalación",
+        "Entrega a domicilio",
+        "A domicilio",
+        "Delivery",
+        "Ofertas",
+        "Promociones"
+    ],
+    tipo: "venta instalacion linea-blanca entrega domicilio a-domicilio delivery oferta ofertas promocion promociones",
+    busquedaGithub: "Electromas electrodomésticos Loja venta línea blanca entrega a domicilio a domicilio delivery ofertas promociones promo instalación garantía",
 
     horario: {
-        lunes: [{ abre: "09:00", cierra: "18:00" }],
-        martes: [{ abre: "09:00", cierra: "18:00" }],
-        miercoles: [{ abre: "09:00", cierra: "18:00" }],
-        jueves: [{ abre: "09:00", cierra: "18:00" }],
-        viernes: [{ abre: "09:00", cierra: "18:00" }],
-        sabado: [{ abre: "09:00", cierra: "14:00" }],
+        lunes: [{ abre: "08:30", cierra: "18:00" }],
+        martes: [{ abre: "08:30", cierra: "18:00" }],
+        miercoles: [{ abre: "08:30", cierra: "18:00" }],
+        jueves: [{ abre: "08:30", cierra: "18:00" }],
+        viernes: [{ abre: "08:30", cierra: "18:00" }],
+        sabado: [{ abre: "08:30", cierra: "14:00" }],
         domingo: []
     },
 
@@ -656,22 +1076,29 @@ const EMPRESA = {
             nombre: "Refrigeradora No Frost 300L",
             precio: 499,
             descripcion: "Refrigeradora de bajo consumo, sistema No Frost y garantía de fábrica.",
-            imagen: "../../imagenes/productos/refrigeradora-300l.jpg",
-            etiquetas: ["Garantía", "Entrega", "Instalación"]
+            imagen: "../../../imagenes/productos/refrigeradora-300l.jpg",
+            entregaDomicilio: true,
+            oferta: false,
+            etiquetas: ["Garantía", "Entrega", "A domicilio", "Instalación"]
         },
         {
             nombre: "Lavadora automática 18kg",
             precio: 389,
             descripcion: "Lavadora automática para uso familiar, múltiples ciclos de lavado y soporte técnico local.",
-            imagen: "../../imagenes/productos/lavadora-18kg.jpg",
-            etiquetas: ["Línea blanca", "Crédito", "Soporte"]
+            imagen: "../../../imagenes/productos/lavadora-18kg.jpg",
+            entregaDomicilio: true,
+            oferta: false,
+            etiquetas: ["Línea blanca", "Crédito", "Soporte", "A domicilio"]
         },
         {
             nombre: "Cocina a gas 4 quemadores",
             precio: 249,
             descripcion: "Cocina a gas con horno, encendido eléctrico y opción de instalación a domicilio.",
-            imagen: "../../imagenes/productos/cocina-4-quemadores.jpg",
-            etiquetas: ["Instalación", "Hogar", "Oferta"]
+            imagen: "../../../imagenes/productos/cocina-4-quemadores.jpg",
+            entregaDomicilio: true,
+            oferta: true,
+            promocion: "Oferta activa",
+            etiquetas: ["Instalación", "Hogar", "Oferta", "A domicilio"]
         }
     ]
 };
@@ -811,9 +1238,28 @@ function renderCompany() {
     document.getElementById("emailButton").href = "mailto:" + EMPRESA.correo;
     document.getElementById("mapButton").href = EMPRESA.mapa;
 
+    renderServiceFlags();
     renderStatus();
     renderSchedule();
     renderProducts();
+}
+
+function renderServiceFlags() {
+    const deliveryFlag = document.getElementById("deliveryFlag");
+    const offersFlag = document.getElementById("offersFlag");
+
+    if (deliveryFlag) {
+        deliveryFlag.textContent = EMPRESA.entregaDomicilio
+            ? "Entrega a domicilio disponible en " + (EMPRESA.coberturaDomicilio || "Loja") + "."
+            : "Entrega a domicilio no disponible.";
+    }
+
+    if (offersFlag) {
+        const totalPromos = Array.isArray(EMPRESA.promociones) ? EMPRESA.promociones.length : 0;
+        offersFlag.textContent = EMPRESA.ofertasActivas && totalPromos
+            ? totalPromos + (totalPromos === 1 ? " promoción activa." : " promociones activas.")
+            : "Sin promociones activas.";
+    }
 }
 
 function renderStatus() {
@@ -848,15 +1294,19 @@ function renderProducts() {
 
     productGrid.innerHTML = EMPRESA.productos.map(product => `
         <article class="product-card">
-            <div class="product-image">
-                <img src="${product.imagen}" alt="${product.nombre}">
+            <div class="product-image" data-fallback="${product.nombre}">
+                <img src="${product.imagen}" alt="${product.nombre}" onerror="this.parentElement.classList.add('image-missing'); this.remove();">
             </div>
             <div class="product-body">
                 <h3>${product.nombre}</h3>
                 <p class="product-description">${product.descripcion}</p>
                 <div class="product-price">${formatPrice(product.precio)}</div>
                 <div class="product-tags">
-                    ${(product.etiquetas || []).map(tag => `<span class="tag">${tag}</span>`).join("")}
+                    ${[
+                        ...(product.etiquetas || []),
+                        ...(product.entregaDomicilio ? ["A domicilio"] : []),
+                        ...(product.oferta ? ["Oferta"] : [])
+                    ].filter((tag, index, list) => list.indexOf(tag) === index).map(tag => `<span class="tag">${tag}</span>`).join("")}
                 </div>
                 <a class="btn primary" href="${makeWhatsappLink(product.nombre)}" target="_blank" rel="noopener noreferrer">Comprar / consultar</a>
             </div>
