@@ -12,11 +12,10 @@
     <style>
         :root {
             --bg-main: #020202;
-            --bg-card: rgba(8, 8, 8, 0.84);
+            --bg-card: rgba(12, 12, 12, 0.82);
             --bg-soft: rgba(255,255,255,0.055);
             --gold: #e5c158;
-            --gold-soft: rgba(229, 193, 88, 0.14);
-            --gold-border: rgba(229, 193, 88, 0.28);
+            --gold-border: rgba(229, 193, 88, 0.30);
             --text-main: #ffffff;
             --text-muted: #d5d5d5;
             --text-soft: #9a9a9a;
@@ -38,7 +37,7 @@
         body {
             min-height: 100vh;
             background:
-                linear-gradient(135deg, rgba(0,0,0,0.88), rgba(0,0,0,0.64)),
+                linear-gradient(135deg, rgba(0,0,0,0.90), rgba(0,0,0,0.68)),
                 url("../../../imagenes/Hogar.png") center bottom / cover fixed no-repeat;
             color: var(--text-main);
             font-family: var(--font-sans);
@@ -56,102 +55,53 @@
             flex-direction: column;
         }
 
-        /* Encabezado estilo electrodomesticos.html, sin buscador */
         .header-top {
-            height: 60px;
-            background: rgba(6, 6, 6, 0.45);
+            min-height: 60px;
+            background: rgba(6, 6, 6, 0.55);
+            border-bottom: 1px solid var(--gold-border);
             backdrop-filter: var(--blur);
             -webkit-backdrop-filter: var(--blur);
-            border-bottom: 1px solid var(--gold-border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
-            position: relative;
+            gap: 14px;
+            padding: 0 16px;
+            position: sticky;
+            top: 0;
             z-index: 20;
         }
 
-        .brand-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: var(--transition);
-            user-select: none;
-        }
-
         .brand-box img {
-            height: 60px;
+            height: 54px;
             width: auto;
             display: block;
         }
 
-        .user-tools {
+        .top-actions {
             display: flex;
             align-items: center;
-            gap: 24px;
+            gap: 8px;
         }
 
-        .location-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
+        .top-link {
+            border: 1px solid var(--gold-border);
+            background: rgba(0,0,0,0.36);
             color: #ffffff;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .location-indicator svg {
-            width: 14px;
-            height: 14px;
-            fill: var(--gold);
-        }
-
-        .tool-icon {
-            position: relative;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-
-        .tool-icon:nth-child(2) {
-            margin-right: 14px;
-        }
-
-        .tool-icon svg {
-            width: 18px;
-            height: 18px;
-            fill: #ffffff;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 10px;
+            font-weight: 800;
             transition: var(--transition);
         }
 
-        .tool-icon:hover svg {
-            fill: var(--gold);
-        }
-
-        .profile-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .profile-avatar svg {
-            width: 13px;
-            height: 13px;
-            fill: var(--gold);
+        .top-link:hover {
+            border-color: var(--gold);
+            color: var(--gold);
         }
 
         .profile-wrap {
             width: min(1080px, calc(100% - 28px));
-            margin: 18px auto 26px;
+            margin: 20px auto 26px;
             display: grid;
             grid-template-columns: minmax(0, 1fr);
             gap: 12px;
@@ -159,16 +109,16 @@
 
         .company-hero {
             border: 1px solid var(--gold-border);
-            border-radius: 16px;
+            border-radius: 18px;
             overflow: hidden;
-            background: linear-gradient(135deg, rgba(8,8,8,0.94), rgba(14,14,14,0.74));
-            box-shadow: 0 26px 68px rgba(0,0,0,0.44);
+            background: linear-gradient(135deg, rgba(10,10,10,0.92), rgba(14,14,14,0.72));
+            box-shadow: 0 28px 70px rgba(0,0,0,0.46);
             backdrop-filter: var(--blur);
             -webkit-backdrop-filter: var(--blur);
         }
 
         .cover-zone {
-            min-height: 190px;
+            min-height: 210px;
             background-size: cover;
             background-position: center;
             position: relative;
@@ -178,33 +128,30 @@
             content: "";
             position: absolute;
             inset: 0;
-            background:
-                linear-gradient(90deg, rgba(0,0,0,0.94), rgba(0,0,0,0.74), rgba(0,0,0,0.42)),
-                linear-gradient(to top, rgba(0,0,0,0.92), rgba(0,0,0,0.18));
+            background: linear-gradient(to top, rgba(0,0,0,0.94), rgba(0,0,0,0.24));
         }
 
         .company-main-info {
             position: relative;
             z-index: 2;
-            min-height: 190px;
-            padding: 22px 28px;
+            min-height: 210px;
+            padding: 22px;
             display: flex;
             align-items: flex-end;
             gap: 16px;
         }
 
         .logo-box {
-            width: 80px;
-            height: 80px;
-            border-radius: 18px;
-            background: rgba(255,255,255,0.07);
+            width: 92px;
+            height: 92px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.08);
             border: 1px solid var(--gold-border);
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             flex-shrink: 0;
-            box-shadow: inset 0 0 22px rgba(255,255,255,0.035);
         }
 
         .logo-box img {
@@ -232,8 +179,8 @@
             align-items: center;
             gap: 6px;
             border-radius: 999px;
-            padding: 5px 10px;
-            font-size: 8px;
+            padding: 5px 9px;
+            font-size: 9px;
             font-weight: 900;
             letter-spacing: 0.7px;
             text-transform: uppercase;
@@ -263,8 +210,8 @@
             color: #000000;
             background: var(--gold);
             border-radius: 999px;
-            padding: 5px 10px;
-            font-size: 8px;
+            padding: 5px 9px;
+            font-size: 9px;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0.7px;
@@ -272,17 +219,17 @@
 
         h1 {
             font-family: var(--font-serif);
-            font-size: clamp(26px, 3.1vw, 38px);
-            line-height: 1.02;
-            letter-spacing: 1.8px;
+            font-size: clamp(25px, 4vw, 46px);
+            line-height: 0.98;
+            letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 8px;
         }
 
         .company-description {
-            max-width: 720px;
+            max-width: 680px;
             color: var(--text-muted);
-            font-size: 11.5px;
+            font-size: 12px;
             line-height: 1.55;
         }
 
@@ -296,17 +243,16 @@
         .btn {
             border: 1px solid var(--gold-border);
             border-radius: 999px;
-            padding: 8px 13px;
-            font-size: 9.5px;
+            padding: 9px 13px;
+            font-size: 10px;
             font-weight: 900;
-            letter-spacing: 0.2px;
+            letter-spacing: 0.4px;
             cursor: pointer;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
-            min-height: 32px;
         }
 
         .btn.primary {
@@ -322,7 +268,7 @@
 
         .btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.30);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.28);
         }
 
         .content-grid {
@@ -334,17 +280,15 @@
         .panel {
             border: 1px solid rgba(255,255,255,0.10);
             border-radius: 16px;
-            background:
-                linear-gradient(145deg, rgba(255,255,255,0.035), transparent 38%),
-                var(--bg-card);
+            background: var(--bg-card);
             backdrop-filter: var(--blur);
             -webkit-backdrop-filter: var(--blur);
-            box-shadow: 0 18px 42px rgba(0,0,0,0.30);
+            box-shadow: 0 18px 42px rgba(0,0,0,0.28);
             overflow: hidden;
         }
 
         .panel-head {
-            padding: 15px 16px;
+            padding: 14px 16px;
             border-bottom: 1px solid rgba(255,255,255,0.08);
             display: flex;
             align-items: center;
@@ -356,39 +300,31 @@
             color: var(--gold);
             font-family: var(--font-serif);
             font-size: 15px;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
         .product-grid {
-            padding: 14px;
+            padding: 12px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 10px;
         }
 
         .product-card {
             border: 1px solid rgba(255,255,255,0.10);
             border-radius: 14px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.38));
+            background: rgba(0,0,0,0.34);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             min-height: 100%;
-            transition: var(--transition);
-        }
-
-        .product-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(229,193,88,0.46);
-            box-shadow: 0 18px 38px rgba(0,0,0,0.34);
         }
 
         .product-image {
-            height: 132px;
+            height: 126px;
             background: rgba(255,255,255,0.05);
             overflow: hidden;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
 
         .product-image img {
@@ -396,30 +332,24 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: var(--transition);
-        }
-
-        .product-card:hover .product-image img {
-            transform: scale(1.035);
         }
 
         .product-body {
-            padding: 12px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
-            gap: 7px;
+            gap: 6px;
             flex: 1;
         }
 
         .product-body h3 {
             font-size: 12px;
-            line-height: 1.3;
-            font-weight: 800;
+            line-height: 1.25;
         }
 
         .product-description {
             color: var(--text-muted);
-            font-size: 9.4px;
+            font-size: 9.5px;
             line-height: 1.45;
             flex: 1;
         }
@@ -442,7 +372,7 @@
             border: 1px solid rgba(255,255,255,0.10);
             border-radius: 999px;
             padding: 3px 6px;
-            font-size: 7.6px;
+            font-size: 7.8px;
             font-weight: 700;
         }
 
@@ -471,7 +401,7 @@
         .info-label {
             display: block;
             color: var(--gold);
-            font-size: 7.5px;
+            font-size: 8px;
             font-weight: 900;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -480,9 +410,8 @@
 
         .info-value {
             color: #ffffff;
-            font-size: 10.5px;
+            font-size: 11px;
             line-height: 1.45;
-            overflow-wrap: anywhere;
         }
 
         .schedule-list {
@@ -544,22 +473,16 @@
             }
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 620px) {
             .header-top {
                 flex-direction: column;
-                height: auto;
-                padding: 12px;
-                gap: 10px;
+                padding: 10px;
             }
 
-            .user-tools {
+            .top-actions {
                 width: 100%;
-                justify-content: flex-end;
-                gap: 10px;
-            }
-
-            .icon-corazon {
-                margin-right: 0;
+                justify-content: center;
+                flex-wrap: wrap;
             }
 
             .profile-wrap {
@@ -569,28 +492,50 @@
 
             .cover-zone,
             .company-main-info {
-                min-height: 230px;
-            }
-
-            .company-main-info {
-                padding: 18px;
+                min-height: 245px;
             }
 
             .logo-box {
-                width: 72px;
-                height: 72px;
-                border-radius: 16px;
-            }
-
-            h1 {
-                font-size: 28px;
-                letter-spacing: 1px;
+                width: 76px;
+                height: 76px;
+                border-radius: 17px;
             }
 
             .product-grid {
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Encabezado y pie fijos */
+        body {
+            padding-top: 60px;
+            padding-bottom: 24px;
+        }
+
+        .header-top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            margin-top: 0;
+            z-index: 1000;
+        }
+
+        @media (max-width: 620px) {
+            body {
+                padding-top: 116px;
+            }
+        }
+
     </style>
 </head>
 
@@ -598,28 +543,12 @@
 <div class="page-shell">
     <header class="header-top">
         <a href="../../../categorias/hogar/electrodomesticos.html" class="brand-box" title="Volver a Urbanex">
-            <img src="../../../imagenes/logo.png" alt="Logo Urbanex">
+            <img src="../../../imagenes/logo.png" alt="Urbanex">
         </a>
 
-        <div class="user-tools">
-            <div class="location-indicator">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                </svg>
-                <span>Loja, Ecuador</span>
-            </div>
-
-            <div class="tool-icon icon-corazon">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-            </div>
-
-            <div class="profile-avatar">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                </svg>
-            </div>
+        <div class="top-actions">
+            <a href="../../../categorias/hogar/electrodomesticos.html" class="top-link">Volver</a>
+            <a href="../../registro.html" class="top-link">Registre su negocio</a>
         </div>
     </header>
 
