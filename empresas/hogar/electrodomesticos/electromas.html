@@ -15,7 +15,6 @@
         :root {
             --bg-main: #020202;
             --bg-card: rgba(12, 12, 12, 0.86);
-            --bg-soft: rgba(255,255,255,0.055);
             --gold: #e5c158;
             --gold-border: rgba(229, 193, 88, 0.30);
             --text-main: #ffffff;
@@ -87,7 +86,6 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            text-decoration: none;
             cursor: pointer;
             transition: var(--transition);
             user-select: none;
@@ -823,6 +821,7 @@
         id="empresaProfile"
         data-empresa="Electromas"
         data-categoria="Electrodomésticos"
+        data-tipo="venta linea-blanca linea blanca electrodomesticos"
         data-entrega-domicilio="true"
         data-tiene-ofertas="true"
         data-web="https://electromas.pages.dev"
@@ -917,6 +916,9 @@
 
         <section class="index-data" aria-hidden="true">
             Electromas electrodomésticos Loja Ecuador.
+            Venta de electrodomésticos.
+            Línea blanca en Loja.
+            Empresa de venta de refrigeradoras, lavadoras, cocinas y secadoras.
             Empresa con entrega a domicilio.
             Servicio a domicilio disponible.
             Delivery disponible.
@@ -941,27 +943,28 @@
 const EMPRESA = {
     nombre: "Electromas",
     categoria: "Electrodomésticos",
+    tipo: "venta linea-blanca linea blanca electrodomesticos",
     descripcion: "Venta de refrigeradoras, lavadoras, cocinas, secadoras y electrodomésticos de línea blanca para hogares y negocios de Loja.",
     logo: "../../../imagenes/empresas/electromas.png",
     portada: "../../../imagenes/empresas/electromas.jpg",
     celular: "+593959782300",
     correo: "electromascreditosas@gmail.com",
     web: "https://electromas.pages.dev",
-    direccion: "Imbabura entre Sucre y 18 de Noviembre, Loja, Ecuador",
-    mapa: "https://www.google.com/maps/search/?api=1&query=Calle+Imbabura+entre+Sucre+y+18+de+Noviembre+Loja+Ecuador",
+    direccion: "Calle Imbabura entre Sucre y 18 de Noviembre, Loja, Ecuador",
+    mapa: "https://www.google.com/maps/search/?api=1&query=Calle+Imbabura+entre+Sucre+y+18+de+Noviembre,+Loja,+Ecuador",
     moneda: "$",
     zonaHoraria: "America/Guayaquil",
 
     entregaDomicilio: true,
 
     horario: {
-        domingo: [],
         lunes: [{ abre: "08:30", cierra: "18:00" }],
         martes: [{ abre: "08:30", cierra: "18:00" }],
         miercoles: [{ abre: "08:30", cierra: "18:00" }],
         jueves: [{ abre: "08:30", cierra: "18:00" }],
         viernes: [{ abre: "08:30", cierra: "18:00" }],
-        sabado: [{ abre: "08:30", cierra: "14:00" }]
+        sabado: [{ abre: "08:30", cierra: "14:00" }],
+        domingo: []
     },
 
     productos: [
@@ -1007,13 +1010,13 @@ const EMPRESA = {
 const DIAS = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
 
 const DIAS_LABEL = {
-    domingo: "Domingo",
     lunes: "Lunes",
     martes: "Martes",
     miercoles: "Miércoles",
     jueves: "Jueves",
     viernes: "Viernes",
-    sabado: "Sábado"
+    sabado: "Sábado",
+    domingo: "Domingo"
 };
 
 function escapeHtml(value) {
@@ -1174,6 +1177,7 @@ function renderCompany() {
     document.getElementById("offersText").textContent = hasOffers ? "Disponible" : "Sin ofertas";
 
     const profile = document.getElementById("empresaProfile");
+    profile.dataset.tipo = EMPRESA.tipo || "";
     profile.dataset.entregaDomicilio = EMPRESA.entregaDomicilio ? "true" : "false";
     profile.dataset.tieneOfertas = hasOffers ? "true" : "false";
     profile.dataset.web = EMPRESA.web || "";
