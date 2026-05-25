@@ -685,9 +685,8 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            position: relative;
+            z-index: 20;
         }
 
         .brand-box {
@@ -2106,15 +2105,12 @@
         }];
     }
 
-    function getProductSummary(empresa) {
-        const products = Array.isArray(empresa.productos) ? empresa.productos : [];
-        const names = products
-            .map(function (product) { return product.nombre; })
-            .filter(Boolean)
-            .slice(0, 4);
+    function getCompanyReference(empresa, segmento) {
+        const explicitReference = empresa.referencia || empresa.resumen || empresa.venta;
+        if (explicitReference) return explicitReference;
 
-        if (names.length) return names.join(" · ");
-        return empresa.venta || empresa.descripcion || empresa.segmento || "";
+        const city = empresa.ciudad || empresa.ubicacion || "Loja";
+        return "Empresa de " + (segmento || "electrodomésticos") + " en " + city;
     }
 
     function normalizeEmpresa(rawEmpresa, sourcePath, index) {
@@ -2129,7 +2125,7 @@
             segmento: segmento,
             tipo: normalizeText(tipoBase || "electrodomesticos venta").replace(/\s+/g, " "),
             descripcion: empresa.descripcion || empresa.description || "",
-            venta: empresa.venta || getProductSummary(empresa),
+            referencia: getCompanyReference(empresa, segmento),
             rating: Number(empresa.rating || empresa.calificacion || empresa.estrellas || 0),
             estado: empresa.estado || "Disponible",
             estadoManual: empresa.estado || "Disponible",
@@ -2203,7 +2199,7 @@
             </div>
 
             <div class="business-body">
-                <p class="business-sale">${escapeHtml(empresa.venta || empresa.descripcion)}</p>
+                <p class="business-sale">${escapeHtml(empresa.referencia)}</p>
                 <p class="business-description">${escapeHtml(empresa.descripcion)}</p>
 
                 <div class="business-actions">
