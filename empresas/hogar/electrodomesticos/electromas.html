@@ -66,7 +66,6 @@
             flex-direction: column;
         }
 
-        /* Encabezado estilo electrodomesticos.html sin buscador */
         .header-top {
             height: 60px;
             width: 100%;
@@ -618,6 +617,11 @@
             color: #ffffff;
             font-size: 11px;
             line-height: 1.45;
+            word-break: break-word;
+        }
+
+        a.info-value:hover {
+            color: var(--gold);
         }
 
         .schedule-list {
@@ -821,6 +825,7 @@
         data-categoria="Electrodomésticos"
         data-entrega-domicilio="true"
         data-tiene-ofertas="true"
+        data-web="https://electromas.pages.dev"
     >
         <section class="company-hero">
             <div class="cover-zone" id="companyCover">
@@ -845,6 +850,7 @@
                             <a class="btn secondary" id="callButton">Llamar</a>
                             <a class="btn secondary" id="emailButton">Correo</a>
                             <a class="btn secondary" id="mapButton" target="_blank" rel="noopener noreferrer">Ubicación</a>
+                            <a class="btn secondary" id="webButton" target="_blank" rel="noopener noreferrer">Sitio web</a>
                         </div>
                     </div>
                 </div>
@@ -872,6 +878,10 @@
                         <div class="info-item">
                             <span class="info-label">Correo</span>
                             <span class="info-value" id="infoEmail"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Sitio web</span>
+                            <a class="info-value" id="infoWeb" target="_blank" rel="noopener noreferrer"></a>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Dirección</span>
@@ -913,6 +923,9 @@
             Productos con ofertas activas.
             Promociones en electrodomésticos.
             Ofertas en línea blanca.
+            Sitio web oficial Electromas.
+            Dirección web Electromas: https://electromas.pages.dev.
+            Web Electromas: electromas.pages.dev.
         </section>
     </main>
 
@@ -933,6 +946,7 @@ const EMPRESA = {
     portada: "../../../imagenes/empresas/electromas.jpg",
     celular: "+593959782300",
     correo: "electromascreditosas@gmail.com",
+    web: "https://electromas.pages.dev",
     direccion: "Imbabura entre Sucre y 18 de Noviembre, Loja, Ecuador",
     mapa: "https://www.google.com/maps/search/?api=1&query=Av.+Imbabura+entre+Sucre+y+18+de+Noviembre+Loja+Ecuador",
     moneda: "$",
@@ -1123,6 +1137,12 @@ function getSafeImages(product) {
         .slice(0, 3);
 }
 
+function getDisplayWeb(url) {
+    return String(url || "")
+        .replace(/^https?:\/\//i, "")
+        .replace(/\/$/g, "");
+}
+
 function renderCompany() {
     const hasOffers = EMPRESA.productos.some(product => product.oferta === true);
 
@@ -1137,12 +1157,17 @@ function renderCompany() {
 
     document.getElementById("infoPhone").textContent = EMPRESA.celular;
     document.getElementById("infoEmail").textContent = EMPRESA.correo;
+
+    document.getElementById("infoWeb").textContent = getDisplayWeb(EMPRESA.web);
+    document.getElementById("infoWeb").href = EMPRESA.web;
+
     document.getElementById("infoAddress").textContent = EMPRESA.direccion;
 
     document.getElementById("whatsappGeneral").href = makeWhatsappLink();
     document.getElementById("callButton").href = "tel:" + EMPRESA.celular;
     document.getElementById("emailButton").href = "mailto:" + EMPRESA.correo;
     document.getElementById("mapButton").href = EMPRESA.mapa;
+    document.getElementById("webButton").href = EMPRESA.web;
 
     document.getElementById("deliveryStatus").style.display = EMPRESA.entregaDomicilio ? "inline-flex" : "none";
     document.getElementById("deliveryText").textContent = EMPRESA.entregaDomicilio ? "Disponible" : "No disponible";
@@ -1151,6 +1176,7 @@ function renderCompany() {
     const profile = document.getElementById("empresaProfile");
     profile.dataset.entregaDomicilio = EMPRESA.entregaDomicilio ? "true" : "false";
     profile.dataset.tieneOfertas = hasOffers ? "true" : "false";
+    profile.dataset.web = EMPRESA.web || "";
 
     renderStatus();
     renderSchedule();
@@ -1213,6 +1239,7 @@ function renderProducts() {
                 data-precio="${escapeHtml(product.precio)}"
                 data-oferta="${product.oferta ? "true" : "false"}"
                 data-entrega-domicilio="${EMPRESA.entregaDomicilio ? "true" : "false"}"
+                data-web="${escapeHtml(EMPRESA.web)}"
             >
                 <div class="product-media">
                     <div class="product-main-image${imageClass}" id="productImageBox-${index}">
