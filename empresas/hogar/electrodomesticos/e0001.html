@@ -386,19 +386,20 @@
         }
 
         .product-grid {
-            padding: 12px;
+            padding: 16px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
         }
 
         .product-card {
             min-height: 100%;
             border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 14px;
+            border-radius: 18px;
             background:
-                radial-gradient(circle at 20% 0%, rgba(229,193,88,0.10), transparent 34%),
-                rgba(0,0,0,0.28);
+                radial-gradient(circle at 18% 0%, rgba(229,193,88,0.12), transparent 34%),
+                linear-gradient(180deg, rgba(255,255,255,0.055), rgba(0,0,0,0.24)),
+                rgba(10,10,10,0.72);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -406,27 +407,37 @@
         }
 
         .product-card:hover {
-            border-color: rgba(229,193,88,0.48);
-            transform: translateY(-2px);
-            box-shadow: 0 18px 36px rgba(0,0,0,0.34);
+            border-color: rgba(229,193,88,0.46);
+            transform: translateY(-3px);
+            box-shadow: 0 22px 44px rgba(0,0,0,0.42);
         }
 
         .product-media {
-            padding: 10px 10px 0;
+            padding: 0;
         }
 
         .product-main-image {
             position: relative;
-            height: 128px;
-            border: 1px solid rgba(255,255,255,0.10);
-            border-radius: 12px;
+            height: 176px;
+            border: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+            border-radius: 18px 18px 0 0;
             background:
-                radial-gradient(circle at 50% 24%, rgba(229,193,88,0.20), transparent 34%),
-                linear-gradient(145deg, rgba(255,255,255,0.10), rgba(0,0,0,0.22));
+                radial-gradient(circle at 50% 24%, rgba(229,193,88,0.18), transparent 34%),
+                linear-gradient(145deg, rgba(255,255,255,0.10), rgba(0,0,0,0.28));
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .product-main-image::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.10), transparent 38%, rgba(0,0,0,0.42));
+            pointer-events: none;
+            z-index: 1;
         }
 
         .product-main-image img {
@@ -435,6 +446,12 @@
             object-fit: cover;
             display: block;
             cursor: zoom-in;
+            transition: transform 0.35s ease, filter 0.35s ease;
+        }
+
+        .product-card:hover .product-main-image img {
+            transform: scale(1.035);
+            filter: saturate(1.04) contrast(1.03);
         }
 
         .product-main-image.image-empty img {
@@ -449,10 +466,18 @@
             color: var(--gold);
             text-align: center;
             gap: 7px;
+            z-index: 2;
         }
 
         .product-main-image.image-empty .product-placeholder {
             display: flex;
+        }
+
+        .product-main-image.image-empty .product-image-nav,
+        .product-main-image.image-empty .product-image-count,
+        .product-main-image.image-empty .product-zoom-hint,
+        .product-main-image.image-empty .product-thumbs {
+            display: none;
         }
 
         .product-placeholder svg {
@@ -473,49 +498,132 @@
 
         .offer-badge {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            z-index: 2;
-            border: 1px solid rgba(229,193,88,0.52);
+            top: 10px;
+            right: 10px;
+            z-index: 4;
+            border: 1px solid rgba(229,193,88,0.58);
             border-radius: 999px;
-            color: var(--gold);
-            background: rgba(0,0,0,0.76);
-            padding: 4px 8px;
-            font-size: 6.8px;
+            color: #000000;
+            background: rgba(229,193,88,0.92);
+            padding: 5px 9px;
+            font-size: 6.9px;
             font-weight: 900;
             letter-spacing: 0.8px;
             text-transform: uppercase;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.24);
+        }
+
+        .product-image-count {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 4;
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 999px;
+            color: #ffffff;
+            background: rgba(0,0,0,0.60);
+            padding: 5px 8px;
+            font-size: 7px;
+            font-weight: 900;
+            letter-spacing: 0.7px;
+        }
+
+        .product-image-nav {
+            position: absolute;
+            top: 50%;
+            z-index: 4;
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(255,255,255,0.22);
+            border-radius: 50%;
+            background: rgba(0,0,0,0.58);
+            color: #ffffff;
+            font-size: 22px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(-50%);
+            transition: var(--transition);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .product-image-nav.prev {
+            left: 10px;
+        }
+
+        .product-image-nav.next {
+            right: 10px;
+        }
+
+        .product-card:hover .product-image-nav,
+        .product-main-image:focus-within .product-image-nav {
+            opacity: 1;
+        }
+
+        .product-image-nav:hover {
+            color: #000000;
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .product-zoom-hint {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            z-index: 4;
+            border: 1px solid rgba(229,193,88,0.46);
+            border-radius: 999px;
+            background: rgba(0,0,0,0.64);
+            color: var(--gold);
+            padding: 6px 9px;
+            font-size: 7px;
+            font-weight: 900;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            cursor: zoom-in;
+            transition: var(--transition);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .product-zoom-hint:hover {
+            background: var(--gold);
+            color: #000000;
+            border-color: var(--gold);
         }
 
         .product-thumbs {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            position: absolute;
+            left: 50%;
+            bottom: 14px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 6px;
-            margin-top: 7px;
+            transform: translateX(-50%);
         }
 
         .product-thumb {
-            height: 38px;
-            border: 1px solid rgba(255,255,255,0.10);
-            border-radius: 9px;
-            background: rgba(255,255,255,0.04);
-            overflow: hidden;
+            width: 7px;
+            height: 7px;
+            border: 0;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.58);
             cursor: pointer;
             transition: var(--transition);
             padding: 0;
         }
 
-        .product-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
         .product-thumb.is-active,
         .product-thumb:hover {
-            border-color: rgba(229,193,88,0.64);
-            box-shadow: 0 0 0 1px rgba(229,193,88,0.18);
+            width: 21px;
+            background: var(--gold);
+            box-shadow: 0 0 0 3px rgba(229,193,88,0.18);
         }
 
         .product-body {
@@ -1548,19 +1656,28 @@ function renderProducts() {
         const mainImage = images[0] || "";
         const imageClass = mainImage ? "" : " image-empty";
         const offerBadge = product.oferta ? `<span class="offer-badge">Oferta</span>` : "";
+        const hasGallery = images.length > 1;
 
-        const thumbs = images.map((image, thumbIndex) => `
+        const dots = hasGallery ? images.map((image, thumbIndex) => `
             <button
                 class="product-thumb ${thumbIndex === 0 ? "is-active" : ""}"
                 type="button"
                 data-product-index="${index}"
                 data-image-index="${thumbIndex}"
-                data-image="${escapeHtml(image)}"
                 aria-label="Ver imagen ${thumbIndex + 1} de ${escapeHtml(product.nombre)}"
-            >
-                <img src="${escapeHtml(image)}" alt="${escapeHtml(product.nombre)} imagen ${thumbIndex + 1}">
-            </button>
-        `).join("");
+            ></button>
+        `).join("") : "";
+
+        const galleryControls = hasGallery ? `
+            <button class="product-image-nav prev" type="button" data-product-index="${index}" data-direction="-1" aria-label="Imagen anterior">‹</button>
+            <button class="product-image-nav next" type="button" data-product-index="${index}" data-direction="1" aria-label="Imagen siguiente">›</button>
+            <span class="product-image-count" id="productImageCounter-${index}">1 / ${images.length}</span>
+            <div class="product-thumbs">${dots}</div>
+        ` : "";
+
+        const zoomButton = mainImage ? `
+            <button class="product-zoom-hint" type="button" data-product-index="${index}" aria-label="Ampliar imagen de ${escapeHtml(product.nombre)}">Ver foto</button>
+        ` : "";
 
         return `
             <article
@@ -1584,16 +1701,14 @@ function renderProducts() {
                             alt="${escapeHtml(product.nombre)}"
                             onerror="this.style.display='none'; this.parentElement.classList.add('image-empty');"
                         >
+                        ${galleryControls}
+                        ${zoomButton}
                         <div class="product-placeholder">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zM10 4h4v2h-4V4zm10 15H4V8h16v11z"/>
                             </svg>
                             <span>Producto destacado</span>
                         </div>
-                    </div>
-
-                    <div class="product-thumbs">
-                        ${thumbs}
                     </div>
                 </div>
 
@@ -1619,43 +1734,80 @@ function renderProducts() {
     bindProductGallery();
 }
 
+function setProductImage(productIndex, imageIndex) {
+    const product = EMPRESA.productos[Number(productIndex)] || {};
+    const images = getSafeImages(product);
+    const mainImage = document.getElementById("productMainImage-" + productIndex);
+    const imageBox = document.getElementById("productImageBox-" + productIndex);
+    const counter = document.getElementById("productImageCounter-" + productIndex);
+
+    if (!mainImage || !imageBox || !images.length) return;
+
+    const normalizedIndex = (Number(imageIndex) + images.length) % images.length;
+
+    mainImage.style.display = "block";
+    mainImage.src = images[normalizedIndex];
+    mainImage.dataset.imageIndex = String(normalizedIndex);
+    imageBox.classList.remove("image-empty");
+
+    if (counter) {
+        counter.textContent = (normalizedIndex + 1) + " / " + images.length;
+    }
+
+    document
+        .querySelectorAll('.product-thumb[data-product-index="' + productIndex + '"]')
+        .forEach(thumb => thumb.classList.remove("is-active"));
+
+    const activeDot = document.querySelector('.product-thumb[data-product-index="' + productIndex + '"][data-image-index="' + normalizedIndex + '"]');
+    if (activeDot) activeDot.classList.add("is-active");
+}
+
+function openProductImageViewer(productIndex) {
+    const mainImage = document.getElementById("productMainImage-" + productIndex);
+    const imageBox = document.getElementById("productImageBox-" + productIndex);
+
+    if (!mainImage || !mainImage.src || !imageBox || imageBox.classList.contains("image-empty")) return;
+
+    const product = EMPRESA.productos[Number(productIndex)] || {};
+    const images = getSafeImages(product);
+    const imageIndex = Number(mainImage.dataset.imageIndex || 0);
+
+    if (!images.length) return;
+
+    openImageViewer(images, imageIndex, product.nombre || mainImage.alt || "Imagen del producto");
+}
+
 function bindProductGallery() {
     document.querySelectorAll(".product-thumb").forEach(button => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", event => {
+            event.stopPropagation();
+            setProductImage(button.dataset.productIndex, Number(button.dataset.imageIndex || 0));
+        });
+    });
+
+    document.querySelectorAll(".product-image-nav").forEach(button => {
+        button.addEventListener("click", event => {
+            event.stopPropagation();
+
             const productIndex = button.dataset.productIndex;
-            const imageIndex = Number(button.dataset.imageIndex || 0);
-            const image = button.dataset.image;
+            const direction = Number(button.dataset.direction || 1);
             const mainImage = document.getElementById("productMainImage-" + productIndex);
-            const imageBox = document.getElementById("productImageBox-" + productIndex);
+            const currentIndex = Number(mainImage?.dataset.imageIndex || 0);
 
-            if (!mainImage || !imageBox || !image) return;
+            setProductImage(productIndex, currentIndex + direction);
+        });
+    });
 
-            mainImage.style.display = "block";
-            mainImage.src = image;
-            mainImage.dataset.imageIndex = String(imageIndex);
-            imageBox.classList.remove("image-empty");
-
-            document
-                .querySelectorAll('.product-thumb[data-product-index="' + productIndex + '"]')
-                .forEach(thumb => thumb.classList.remove("is-active"));
-
-            button.classList.add("is-active");
+    document.querySelectorAll(".product-zoom-hint").forEach(button => {
+        button.addEventListener("click", event => {
+            event.stopPropagation();
+            openProductImageViewer(button.dataset.productIndex);
         });
     });
 
     document.querySelectorAll(".product-main-image img").forEach(image => {
         image.addEventListener("click", () => {
-            const imageBox = image.closest(".product-main-image");
-            if (!image.src || !imageBox || imageBox.classList.contains("image-empty")) return;
-
-            const productIndex = Number(image.dataset.productIndex || 0);
-            const imageIndex = Number(image.dataset.imageIndex || 0);
-            const product = EMPRESA.productos[productIndex] || {};
-            const images = getSafeImages(product);
-
-            if (!images.length) return;
-
-            openImageViewer(images, imageIndex, product.nombre || image.alt || "Imagen del producto");
+            openProductImageViewer(image.dataset.productIndex);
         });
     });
 }
