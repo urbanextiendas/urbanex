@@ -1045,7 +1045,7 @@
 <div class="page-shell">
 
     <header class="header-top">
-        <a href="/" class="brand-box" title="Volver a Urbanex">
+        <a href="/" class="brand-box" title="Volver a la página anterior" onclick="volverPaginaAnterior(event)">
             <img src="/imagenes/logo.png" alt="Urbanex">
         </a>
 
@@ -1401,6 +1401,17 @@ const DIAS_LABEL = {
     viernes: "Viernes",
     sabado: "Sábado"
 };
+
+function volverPaginaAnterior(event) {
+    event.preventDefault();
+
+    if (window.history.length > 1) {
+        window.history.back();
+        return;
+    }
+
+    window.location.href = "/";
+}
 
 function escapeHtml(value) {
     return String(value ?? "")
