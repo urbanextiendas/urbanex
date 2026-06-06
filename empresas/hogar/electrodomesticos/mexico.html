@@ -769,6 +769,48 @@
             letter-spacing: 0.4px;
         }
 
+
+
+        .image-viewer-nav {
+            position: absolute;
+            top: 50%;
+            z-index: 2;
+            width: 44px;
+            height: 44px;
+            transform: translateY(-50%);
+            border: 1px solid rgba(229,193,88,0.52);
+            border-radius: 50%;
+            background: rgba(0,0,0,0.72);
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .image-viewer-nav:hover {
+            background: var(--gold);
+            color: #000000;
+            border-color: var(--gold);
+        }
+
+        .image-viewer-nav:disabled {
+            opacity: 0.28;
+            cursor: not-allowed;
+            background: rgba(0,0,0,0.45);
+            color: #ffffff;
+            border-color: rgba(255,255,255,0.18);
+        }
+
+        .image-viewer-nav.prev {
+            left: 14px;
+        }
+
+        .image-viewer-nav.next {
+            right: 14px;
+        }
+
         .image-viewer-caption {
             position: absolute;
             left: 14px;
@@ -1034,6 +1076,9 @@
             <div class="image-viewer-stage" id="imageViewerStage">
                 <img id="imageViewerImg" src="" alt="">
             </div>
+
+            <button type="button" class="image-viewer-nav prev" id="imageViewerPrev" aria-label="Imagen anterior">‹</button>
+            <button type="button" class="image-viewer-nav next" id="imageViewerNext" aria-label="Imagen siguiente">›</button>
 
             <div class="image-viewer-tools">
                 <button type="button" id="zoomOutButton" aria-label="Alejar imagen">−</button>
@@ -1509,6 +1554,7 @@ function renderProducts() {
                 class="product-thumb ${thumbIndex === 0 ? "is-active" : ""}"
                 type="button"
                 data-product-index="${index}"
+                data-image-index="${thumbIndex}"
                 data-image="${escapeHtml(image)}"
                 aria-label="Ver imagen ${thumbIndex + 1} de ${escapeHtml(product.nombre)}"
             >
@@ -1532,6 +1578,8 @@ function renderProducts() {
                         ${offerBadge}
                         <img
                             id="productMainImage-${index}"
+                            data-product-index="${index}"
+                            data-image-index="0"
                             src="${escapeHtml(mainImage)}"
                             alt="${escapeHtml(product.nombre)}"
                             onerror="this.style.display='none'; this.parentElement.classList.add('image-empty');"
@@ -1575,6 +1623,7 @@ function bindProductGallery() {
     document.querySelectorAll(".product-thumb").forEach(button => {
         button.addEventListener("click", () => {
             const productIndex = button.dataset.productIndex;
+            const imageIndex = Number(button.dataset.imageIndex || 0);
             const image = button.dataset.image;
             const mainImage = document.getElementById("productMainImage-" + productIndex);
             const imageBox = document.getElementById("productImageBox-" + productIndex);
@@ -1583,6 +1632,7 @@ function bindProductGallery() {
 
             mainImage.style.display = "block";
             mainImage.src = image;
+            mainImage.dataset.imageIndex = String(imageIndex);
             imageBox.classList.remove("image-empty");
 
             document
@@ -1595,9 +1645,17 @@ function bindProductGallery() {
 
     document.querySelectorAll(".product-main-image img").forEach(image => {
         image.addEventListener("click", () => {
-            if (!image.src || image.closest(".product-main-image").classList.contains("image-empty")) return;
+            const imageBox = image.closest(".product-main-image");
+            if (!image.src || !imageBox || imageBox.classList.contains("image-empty")) return;
 
-            openImageViewer(image.src, image.alt || "Imagen del producto");
+            const productIndex = Number(image.dataset.productIndex || 0);
+            const imageIndex = Number(image.dataset.imageIndex || 0);
+            const product = EMPRESA.productos[productIndex] || {};
+            const images = getSafeImages(product);
+
+            if (!images.length) return;
+
+            openImageViewer(images, imageIndex, product.nombre || image.alt || "Imagen del producto");
         });
     });
 }
@@ -1610,6 +1668,9 @@ let viewerStartX = 0;
 let viewerStartY = 0;
 let viewerBaseX = 0;
 let viewerBaseY = 0;
+let viewerGalleryImages = [];
+let viewerCurrentIndex = 0;
+let viewerCurrentTitle = "Imagen del producto";
 
 function applyViewerTransform() {
     const viewerImage = document.getElementById("imageViewerImg");
@@ -1639,21 +1700,58 @@ function setViewerZoom(nextScale) {
     applyViewerTransform();
 }
 
-function openImageViewer(src, alt) {
-    const viewer = document.getElementById("imageViewer");
+function updateViewerNavButtons() {
+    const prevButton = document.getElementById("imageViewerPrev");
+    const nextButton = document.getElementById("imageViewerNext");
+
+    if (!prevButton || !nextButton) return;
+
+    const disabled = viewerGalleryImages.length <= 1;
+    prevButton.disabled = disabled;
+    nextButton.disabled = disabled;
+}
+
+function showViewerImage(index) {
     const viewerImage = document.getElementById("imageViewerImg");
     const caption = document.getElementById("imageViewerCaption");
 
-    if (!viewer || !viewerImage || !caption) return;
+    if (!viewerImage || !caption || !viewerGalleryImages.length) return;
 
-    viewerImage.src = src;
-    viewerImage.alt = alt || "Imagen del producto";
-    caption.textContent = alt || "Imagen del producto";
+    viewerCurrentIndex = (index + viewerGalleryImages.length) % viewerGalleryImages.length;
+    viewerImage.src = viewerGalleryImages[viewerCurrentIndex];
+    viewerImage.alt = viewerCurrentTitle;
 
+    const counter = viewerGalleryImages.length > 1
+        ? " · " + (viewerCurrentIndex + 1) + " / " + viewerGalleryImages.length
+        : "";
+
+    caption.textContent = viewerCurrentTitle + counter;
     resetViewerZoom();
+    updateViewerNavButtons();
+}
+
+function changeViewerImage(direction) {
+    if (viewerGalleryImages.length <= 1) return;
+    showViewerImage(viewerCurrentIndex + direction);
+}
+
+function openImageViewer(images, startIndex, title) {
+    const viewer = document.getElementById("imageViewer");
+
+    if (!viewer) return;
+
+    viewerGalleryImages = Array.isArray(images)
+        ? images.map(image => String(image || "").trim()).filter(Boolean)
+        : [String(images || "").trim()].filter(Boolean);
+
+    if (!viewerGalleryImages.length) return;
+
+    viewerCurrentTitle = title || "Imagen del producto";
     viewer.classList.add("is-open");
     viewer.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
+
+    showViewerImage(Number(startIndex || 0));
 }
 
 function closeImageViewer() {
@@ -1665,6 +1763,8 @@ function closeImageViewer() {
     viewer.classList.remove("is-open");
     viewer.setAttribute("aria-hidden", "true");
     viewerImage.src = "";
+    viewerGalleryImages = [];
+    viewerCurrentIndex = 0;
     document.body.style.overflow = "";
 }
 
@@ -1675,13 +1775,17 @@ function bindImageViewer() {
     const zoomInButton = document.getElementById("zoomInButton");
     const zoomOutButton = document.getElementById("zoomOutButton");
     const zoomResetButton = document.getElementById("zoomResetButton");
+    const prevButton = document.getElementById("imageViewerPrev");
+    const nextButton = document.getElementById("imageViewerNext");
 
-    if (!viewer || !stage || !closeButton || !zoomInButton || !zoomOutButton || !zoomResetButton) return;
+    if (!viewer || !stage || !closeButton || !zoomInButton || !zoomOutButton || !zoomResetButton || !prevButton || !nextButton) return;
 
     closeButton.addEventListener("click", closeImageViewer);
     zoomInButton.addEventListener("click", () => setViewerZoom(viewerScale + 0.25));
     zoomOutButton.addEventListener("click", () => setViewerZoom(viewerScale - 0.25));
     zoomResetButton.addEventListener("click", resetViewerZoom);
+    prevButton.addEventListener("click", () => changeViewerImage(-1));
+    nextButton.addEventListener("click", () => changeViewerImage(1));
 
     viewer.addEventListener("click", event => {
         if (event.target === viewer) closeImageViewer();
@@ -1730,6 +1834,8 @@ function bindImageViewer() {
         if (event.key === "+" || event.key === "=") setViewerZoom(viewerScale + 0.25);
         if (event.key === "-") setViewerZoom(viewerScale - 0.25);
         if (event.key === "0") resetViewerZoom();
+        if (event.key === "ArrowLeft") changeViewerImage(-1);
+        if (event.key === "ArrowRight") changeViewerImage(1);
     });
 }
 
