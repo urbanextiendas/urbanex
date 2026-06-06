@@ -434,6 +434,7 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            cursor: zoom-in;
         }
 
         .product-main-image.image-empty img {
@@ -679,6 +680,110 @@
             text-align: right;
         }
 
+
+        .image-viewer-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .image-viewer-overlay.is-open {
+            display: flex;
+        }
+
+        .image-viewer-box {
+            position: relative;
+            width: min(96vw, 1120px);
+            height: min(88vh, 760px);
+            border: 1px solid rgba(229,193,88,0.46);
+            border-radius: 16px;
+            background: rgba(0,0,0,0.72);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.62);
+            overflow: hidden;
+        }
+
+        .image-viewer-stage {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            touch-action: none;
+        }
+
+        .image-viewer-stage.is-dragging {
+            cursor: grabbing;
+        }
+
+        .image-viewer-stage img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            user-select: none;
+            pointer-events: none;
+            transform: translate(0, 0) scale(1);
+            transition: transform 0.12s ease;
+        }
+
+        .image-viewer-tools {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 2;
+            display: flex;
+            gap: 7px;
+            align-items: center;
+        }
+
+        .image-viewer-tools button {
+            min-width: 36px;
+            height: 34px;
+            border: 1px solid rgba(229,193,88,0.46);
+            border-radius: 999px;
+            background: rgba(0,0,0,0.72);
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .image-viewer-tools button:hover {
+            background: var(--gold);
+            color: #000000;
+            border-color: var(--gold);
+        }
+
+        #zoomResetButton {
+            min-width: 56px;
+            font-size: 10px;
+            letter-spacing: 0.4px;
+        }
+
+        .image-viewer-caption {
+            position: absolute;
+            left: 14px;
+            bottom: 14px;
+            max-width: calc(100% - 28px);
+            border-radius: 999px;
+            padding: 8px 12px;
+            background: rgba(0,0,0,0.68);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
         .footer {
             position: fixed;
             left: 0;
@@ -922,6 +1027,24 @@
 
         <section class="index-data" aria-hidden="true" id="indexData"></section>
     </main>
+
+
+    <div class="image-viewer-overlay" id="imageViewer" aria-hidden="true">
+        <div class="image-viewer-box" role="dialog" aria-modal="true" aria-label="Vista ampliada de imagen">
+            <div class="image-viewer-stage" id="imageViewerStage">
+                <img id="imageViewerImg" src="" alt="">
+            </div>
+
+            <div class="image-viewer-tools">
+                <button type="button" id="zoomOutButton" aria-label="Alejar imagen">−</button>
+                <button type="button" id="zoomResetButton" aria-label="Restablecer zoom">100%</button>
+                <button type="button" id="zoomInButton" aria-label="Acercar imagen">+</button>
+                <button type="button" id="imageViewerClose" aria-label="Cerrar imagen ampliada">×</button>
+            </div>
+
+            <div class="image-viewer-caption" id="imageViewerCaption"></div>
+        </div>
+    </div>
 
     <footer class="footer">
         <p>&copy; 2026 Urbanex. Desarrollado por <a href="https://www.neodat.net" target="_blank" rel="noopener noreferrer">Neodat Consultores</a>.</p>
@@ -1392,9 +1515,149 @@ function bindProductGallery() {
             button.classList.add("is-active");
         });
     });
+
+    document.querySelectorAll(".product-main-image img").forEach(image => {
+        image.addEventListener("click", () => {
+            if (!image.src || image.closest(".product-main-image").classList.contains("image-empty")) return;
+
+            openImageViewer(image.src, image.alt || "Imagen del producto");
+        });
+    });
+}
+
+let viewerScale = 1;
+let viewerTranslateX = 0;
+let viewerTranslateY = 0;
+let viewerIsDragging = false;
+let viewerStartX = 0;
+let viewerStartY = 0;
+let viewerBaseX = 0;
+let viewerBaseY = 0;
+
+function applyViewerTransform() {
+    const viewerImage = document.getElementById("imageViewerImg");
+    const zoomResetButton = document.getElementById("zoomResetButton");
+
+    if (!viewerImage || !zoomResetButton) return;
+
+    viewerImage.style.transform = "translate(" + viewerTranslateX + "px, " + viewerTranslateY + "px) scale(" + viewerScale + ")";
+    zoomResetButton.textContent = Math.round(viewerScale * 100) + "%";
+}
+
+function resetViewerZoom() {
+    viewerScale = 1;
+    viewerTranslateX = 0;
+    viewerTranslateY = 0;
+    applyViewerTransform();
+}
+
+function setViewerZoom(nextScale) {
+    viewerScale = Math.min(4, Math.max(1, nextScale));
+
+    if (viewerScale === 1) {
+        viewerTranslateX = 0;
+        viewerTranslateY = 0;
+    }
+
+    applyViewerTransform();
+}
+
+function openImageViewer(src, alt) {
+    const viewer = document.getElementById("imageViewer");
+    const viewerImage = document.getElementById("imageViewerImg");
+    const caption = document.getElementById("imageViewerCaption");
+
+    if (!viewer || !viewerImage || !caption) return;
+
+    viewerImage.src = src;
+    viewerImage.alt = alt || "Imagen del producto";
+    caption.textContent = alt || "Imagen del producto";
+
+    resetViewerZoom();
+    viewer.classList.add("is-open");
+    viewer.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+}
+
+function closeImageViewer() {
+    const viewer = document.getElementById("imageViewer");
+    const viewerImage = document.getElementById("imageViewerImg");
+
+    if (!viewer || !viewerImage) return;
+
+    viewer.classList.remove("is-open");
+    viewer.setAttribute("aria-hidden", "true");
+    viewerImage.src = "";
+    document.body.style.overflow = "";
+}
+
+function bindImageViewer() {
+    const viewer = document.getElementById("imageViewer");
+    const stage = document.getElementById("imageViewerStage");
+    const closeButton = document.getElementById("imageViewerClose");
+    const zoomInButton = document.getElementById("zoomInButton");
+    const zoomOutButton = document.getElementById("zoomOutButton");
+    const zoomResetButton = document.getElementById("zoomResetButton");
+
+    if (!viewer || !stage || !closeButton || !zoomInButton || !zoomOutButton || !zoomResetButton) return;
+
+    closeButton.addEventListener("click", closeImageViewer);
+    zoomInButton.addEventListener("click", () => setViewerZoom(viewerScale + 0.25));
+    zoomOutButton.addEventListener("click", () => setViewerZoom(viewerScale - 0.25));
+    zoomResetButton.addEventListener("click", resetViewerZoom);
+
+    viewer.addEventListener("click", event => {
+        if (event.target === viewer) closeImageViewer();
+    });
+
+    stage.addEventListener("wheel", event => {
+        event.preventDefault();
+        setViewerZoom(viewerScale + (event.deltaY < 0 ? 0.20 : -0.20));
+    }, { passive: false });
+
+    stage.addEventListener("pointerdown", event => {
+        if (viewerScale <= 1) return;
+
+        viewerIsDragging = true;
+        viewerStartX = event.clientX;
+        viewerStartY = event.clientY;
+        viewerBaseX = viewerTranslateX;
+        viewerBaseY = viewerTranslateY;
+        stage.classList.add("is-dragging");
+        stage.setPointerCapture(event.pointerId);
+    });
+
+    stage.addEventListener("pointermove", event => {
+        if (!viewerIsDragging) return;
+
+        viewerTranslateX = viewerBaseX + (event.clientX - viewerStartX);
+        viewerTranslateY = viewerBaseY + (event.clientY - viewerStartY);
+        applyViewerTransform();
+    });
+
+    stage.addEventListener("pointerup", event => {
+        viewerIsDragging = false;
+        stage.classList.remove("is-dragging");
+        stage.releasePointerCapture(event.pointerId);
+    });
+
+    stage.addEventListener("pointercancel", () => {
+        viewerIsDragging = false;
+        stage.classList.remove("is-dragging");
+    });
+
+    window.addEventListener("keydown", event => {
+        if (!viewer.classList.contains("is-open")) return;
+
+        if (event.key === "Escape") closeImageViewer();
+        if (event.key === "+" || event.key === "=") setViewerZoom(viewerScale + 0.25);
+        if (event.key === "-") setViewerZoom(viewerScale - 0.25);
+        if (event.key === "0") resetViewerZoom();
+    });
 }
 
 renderCompany();
+bindImageViewer();
 setInterval(renderStatus, 60000);
 </script>
 </body>
