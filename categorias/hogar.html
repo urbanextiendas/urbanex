@@ -980,181 +980,162 @@
 
 <script>
 (function () {
-    const categoryButtons = Array.from(document.querySelectorAll("[data-count-src][data-count-target]"));
+    const categoryButtons = Array.from(document.querySelectorAll("[data-count-target]"));
     if (!categoryButtons.length) return;
 
-    const countableSelectors = [
-        ".empresa-electrodomesticos",
-        ".empresa-card",
-        ".business-card",
-        ".local-card",
-        ".restaurant-card",
-        ".service-card",
-        "[data-business]",
-        "[data-empresa]"
-    ].join(",");
+    const COUNT_CONFIG = {
+        owner: "",
+        repo: "",
+        branch: "main",
+        siteBasePath: ""
+    };
+
+    let repositoryTreePromise = null;
 
     function formatCount(target, total, singular, plural) {
         target.textContent = total + " " + (total === 1 ? singular : plural);
     }
 
-    function getBalancedStructure(sourceText, startIndex, opener, closer) {
-        const structureStart = sourceText.indexOf(opener, startIndex);
-        if (structureStart === -1) return "";
+    function getInferredGithubPagesConfig() {
+        const host = window.location.hostname;
+        if (!host.endsWith(".github.io")) return null;
 
-        let depth = 0;
-        let quote = "";
-        let escaped = false;
+        const owner = host.replace(".github.io", "");
+        const parts = window.location.pathname.split("/").filter(Boolean);
+        const repo = parts[0] || owner + ".github.io";
+        const siteBasePath = repo === owner + ".github.io" ? "" : "/" + repo;
 
-        for (let i = structureStart; i < sourceText.length; i++) {
-            const char = sourceText[i];
+        return {
+            owner: owner,
+            repo: repo,
+            branch: COUNT_CONFIG.branch,
+            siteBasePath: siteBasePath
+        };
+    }
 
-            if (escaped) {
-                escaped = false;
-                continue;
+    function getActiveRepoConfig() {
+        const inferred = getInferredGithubPagesConfig() || {};
+        return {
+            owner: COUNT_CONFIG.owner || inferred.owner || "",
+            repo: COUNT_CONFIG.repo || inferred.repo || "",
+            branch: COUNT_CONFIG.branch || inferred.branch || "main",
+            siteBasePath: COUNT_CONFIG.siteBasePath || inferred.siteBasePath || ""
+        };
+    }
+
+    async function fetchRepositoryTree() {
+        if (repositoryTreePromise) return repositoryTreePromise;
+
+        repositoryTreePromise = (async function () {
+            const config = getActiveRepoConfig();
+            if (!config.owner || !config.repo) {
+                throw new Error("Repositorio no configurado para conteo general.");
             }
 
-            if (char === "\\") {
-                escaped = true;
-                continue;
+            const branches = Array.from(new Set([config.branch, "main", "master"].filter(Boolean)));
+
+            for (const branch of branches) {
+                try {
+                    const apiUrl = "https://api.github.com/repos/" +
+                        encodeURIComponent(config.owner) + "/" +
+                        encodeURIComponent(config.repo) +
+                        "/git/trees/" + encodeURIComponent(branch) + "?recursive=1";
+
+                    const response = await fetch(apiUrl, { cache: "no-store" });
+                    if (!response.ok) continue;
+
+                    const data = await response.json();
+                    if (data && Array.isArray(data.tree)) {
+                        return {
+                            tree: data.tree,
+                            config: Object.assign({}, config, { branch: branch })
+                        };
+                    }
+                } catch (error) {
+                    continue;
+                }
             }
 
-            if (quote) {
-                if (char === quote) quote = "";
-                continue;
-            }
+            throw new Error("No se pudo leer el árbol del repositorio.");
+        })();
 
-            if (char === "'" || char === '"' || char === "`") {
-                quote = char;
-                continue;
-            }
+        return repositoryTreePromise;
+    }
 
-            if (char === opener) depth++;
-            if (char === closer) depth--;
+    function normalizeRepoPathFromUrl(value, config) {
+        const absoluteUrl = new URL(value, window.location.href);
+        let pathname = decodeURIComponent(absoluteUrl.pathname).replace(/^\/+/, "");
+        const base = String(config.siteBasePath || "").replace(/^\/+/, "").replace(/\/+$/, "");
 
-            if (depth === 0) {
-                return sourceText.slice(structureStart, i + 1);
-            }
+        if (base && pathname === base) {
+            pathname = "";
+        } else if (base && pathname.startsWith(base + "/")) {
+            pathname = pathname.slice(base.length + 1);
         }
 
-        return "";
+        return pathname.replace(/^\/+/, "");
     }
 
-    function escapeRegExp(value) {
-        return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    function getPathFromOnclick(button) {
+        const onclick = button.getAttribute("onclick") || "";
+        const match = onclick.match(/window\.location\.href\s*=\s*['\"]([^'\"]+)['\"]/);
+        return match ? match[1] : "";
     }
 
-    function getAssignedArrayText(htmlText, arrayName) {
-        if (!arrayName) return "";
-
-        const pattern = new RegExp("(?:const|let|var)\\s+" + escapeRegExp(arrayName) + "\\s*=\\s*\\[", "m");
-        const match = pattern.exec(htmlText);
-
-        if (!match) return "";
-
-        return getBalancedStructure(htmlText, match.index, "[", "]");
+    function getCountSource(button) {
+        if (button.dataset.countFolder) return button.dataset.countFolder;
+        if (button.dataset.countSrc) return button.dataset.countSrc;
+        if (button.getAttribute("href")) return button.getAttribute("href");
+        return getPathFromOnclick(button);
     }
 
-    function countBusinessObjectsInArray(arrayText) {
-        if (!arrayText) return 0;
+    function sourceToCompanyFolderPrefix(source, config) {
+        let repoPath = normalizeRepoPathFromUrl(source, config)
+            .split("?")[0]
+            .split("#")[0]
+            .replace(/\\/g, "/")
+            .replace(/^\/+/, "")
+            .replace(/\/+$/, "");
 
-        const namedItems = arrayText.match(/\bnombre\s*:/g);
-        if (namedItems) return namedItems.length;
+        if (!repoPath) return "";
 
-        const objectItems = arrayText.match(/\{[\s\S]*?\}/g);
-        return objectItems ? objectItems.length : 0;
-    }
-
-    function countStringItemsInArray(arrayText) {
-        if (!arrayText) return 0;
-
-        const stringItems = arrayText.match(/(["'`])(?:\\.|(?!\1)[\s\S])*\1/g);
-        return stringItems ? stringItems.length : 0;
-    }
-
-    function countFromSpecificArray(htmlText, arrayName) {
-        const arrayText = getAssignedArrayText(htmlText, arrayName);
-        return countBusinessObjectsInArray(arrayText);
-    }
-
-    function countFromDataSources(htmlText) {
-        const sourceArrayNames = [
-            "EMPRESAS_DATA_SOURCES",
-            "EMPRESA_DATA_SOURCES",
-            "DATA_SOURCES",
-            "FUENTES_EMPRESAS",
-            "BUSINESS_DATA_SOURCES"
-        ];
-
-        for (const arrayName of sourceArrayNames) {
-            const arrayText = getAssignedArrayText(htmlText, arrayName);
-            const total = countStringItemsInArray(arrayText);
-
-            if (total > 0) return total;
+        if (/^empresas\//i.test(repoPath)) {
+            return repoPath.replace(/\/+$/, "") + "/";
         }
 
-        return 0;
+        repoPath = repoPath.replace(/^categorias\//i, "");
+        repoPath = repoPath.replace(/\.html?$/i, "");
+
+        if (!repoPath) return "";
+
+        return "empresas/" + repoPath.replace(/\/+$/, "") + "/";
     }
 
-    function countFromAnyBusinessArray(htmlText) {
-        const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
-        let match;
-        let bestCount = 0;
+    function countHtmlFilesUnderPrefix(tree, folderPrefix) {
+        if (!folderPrefix) return 0;
 
-        while ((match = arrayPattern.exec(htmlText)) !== null) {
-            const arrayText = getBalancedStructure(htmlText, match.index, "[", "]");
-            const count = countBusinessObjectsInArray(arrayText);
-
-            if (count > bestCount) bestCount = count;
-        }
-
-        return bestCount;
-    }
-
-    function countFromRenderedMarkup(htmlText) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlText, "text/html");
-        return doc.querySelectorAll(countableSelectors).length;
-    }
-
-    function countCategoryItems(htmlText, arrayName) {
-        const specificArrayCount = countFromSpecificArray(htmlText, arrayName);
-        if (specificArrayCount > 0) return specificArrayCount;
-
-        const dataSourcesCount = countFromDataSources(htmlText);
-        if (dataSourcesCount > 0) return dataSourcesCount;
-
-        const genericArrayCount = countFromAnyBusinessArray(htmlText);
-        if (genericArrayCount > 0) return genericArrayCount;
-
-        return countFromRenderedMarkup(htmlText);
+        return tree.filter(function (item) {
+            if (!item || item.type !== "blob" || !item.path) return false;
+            const path = String(item.path).replace(/^\/+/, "");
+            return path.startsWith(folderPrefix) && /\.html?$/i.test(path);
+        }).length;
     }
 
     async function updateCategoryCount(button) {
-        const src = button.dataset.countSrc;
-        const arrayName = button.dataset.countArray;
         const target = document.getElementById(button.dataset.countTarget);
         const singular = button.dataset.countSingular || "local";
         const plural = button.dataset.countPlural || "locales";
+        const source = getCountSource(button);
 
-        if (!src || !target) return;
+        if (!target || !source) return;
 
         formatCount(target, 0, singular, plural);
 
         try {
-            const url = new URL(src, window.location.href);
-            url.searchParams.set("_conteo", Date.now().toString());
-
-            const response = await fetch(url.href, { cache: "no-store" });
-            if (!response.ok) {
-                formatCount(target, 0, singular, plural);
-                return;
-            }
-
-            const htmlText = await response.text();
-            const total = countCategoryItems(htmlText, arrayName);
-
-            formatCount(target, total || 0, singular, plural);
+            const repoData = await fetchRepositoryTree();
+            const folderPrefix = sourceToCompanyFolderPrefix(source, repoData.config);
+            const total = countHtmlFilesUnderPrefix(repoData.tree, folderPrefix);
+            formatCount(target, total, singular, plural);
         } catch (error) {
             formatCount(target, 0, singular, plural);
         }
