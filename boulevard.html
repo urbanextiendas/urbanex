@@ -1003,7 +1003,7 @@
                         </svg>
                     </div>
                     <div class="category-text-info">
-                        <span class="category-name">Hogar & Tecnología</span>
+                        <span class="category-name">Hogar y Tecnología</span>
                         <span class="category-count" id="countHogar">0 locales</span>
                     </div>
                 </button>
@@ -1140,7 +1140,7 @@
         </div>
 
         <div class="bottom-filter-bar">
-            <div class="filter-pill" role="button" tabindex="0" onclick="window.location.href='../informativos/abiertos-ahora.html'">
+            <div class="filter-pill" role="button" tabindex="0" onclick="window.location.href='informativos/abiertos-ahora.html'">
                 <div class="filter-icon-box">
                     <svg viewBox="0 0 24 24">
                         <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
@@ -1152,7 +1152,7 @@
                 </div>
             </div>
 
-            <div class="filter-pill" role="button" tabindex="0" onclick="window.location.href='../informativos/cerca-de-mi.html'">
+            <div class="filter-pill" role="button" tabindex="0" onclick="window.location.href='informativos/cerca-de-mi.html'">
                 <div class="filter-icon-box">
                     <svg viewBox="0 0 24 24">
                         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
@@ -1164,7 +1164,7 @@
                 </div>
             </div>
 
-            <div class="filter-pill" role="button" tabindex="0" onclick="window.location.href='../informativos/a-domicilio.html'">
+            <div class="filter-pill" role="button" tabindex="0" onclick="window.location.href='informativos/a-domicilio.html'">
                 <div class="filter-icon-box">
                     <svg viewBox="0 0 24 24">
                         <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/>
@@ -1176,7 +1176,7 @@
                 </div>
             </div>
 
-            <div class="filter-pill" role="button" tabindex="0" onclick="window.location.href='../informativos/ofertas.html'">
+            <div class="filter-pill" role="button" tabindex="0" onclick="window.location.href='informativos/ofertas.html'">
                 <div class="filter-icon-box">
                     <svg viewBox="0 0 24 24">
                         <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
@@ -1266,63 +1266,68 @@
     const metricDelivery = document.getElementById("metricDelivery");
     const metricOffers = document.getElementById("metricOffers");
 
-    const countableSelectors = [
-        ".empresa-electrodomesticos",
-        ".empresa-card",
-        ".business-card",
-        ".local-card",
-        ".restaurant-card",
-        ".service-card",
-        "[data-business]",
-        "[data-empresa]"
-    ].join(",");
+
+    const CATEGORY_SOURCES = [
+        {
+            nombre: "Hogar y Tecnología",
+            archivo: "../categorias/hogar.html",
+            hijos: ["../categorias/hogar/electrodomesticos.html"]
+        },
+        { nombre: "Gastronomía", archivo: "../categorias/gastronomia.html", hijos: [] },
+        { nombre: "Salud y Bienestar", archivo: "../categorias/salud.html", hijos: [] },
+        { nombre: "Movilidad", archivo: "../categorias/movilidad.html", hijos: [] },
+        { nombre: "Turismo y Hospedaje", archivo: "../categorias/turismo.html", hijos: [] },
+        { nombre: "Finanzas", archivo: "../categorias/finanzas.html", hijos: [] },
+        { nombre: "Comercio y Educación", archivo: "../categorias/comercio.html", hijos: [] }
+    ];
 
     const cache = new Map();
 
-    function formatCount(target, total, singular, plural) {
-        if (!target) return;
-        target.textContent = total + " " + (total === 1 ? singular : plural);
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
 
     function escapeRegExp(value) {
         return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     }
 
+    function normalizeText(value) {
+        return String(value ?? "")
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9ñ\s./:_-]/gi, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
     function resolveProjectUrl(src, baseUrl) {
         if (!src) return "";
-
-        if (/^https?:\/\//i.test(src)) {
-            return src;
-        }
-
-        if (/^(categorias|imagenes)\//i.test(src)) {
-            return new URL(src, window.location.href).href;
-        }
-
-        return new URL(src, baseUrl || window.location.href).href;
+        return new URL(String(src), baseUrl || window.location.href).href;
     }
 
     async function fetchHtml(src, baseUrl) {
         const normalizedUrl = resolveProjectUrl(src, baseUrl);
-
-        if (cache.has(normalizedUrl)) {
-            return cache.get(normalizedUrl);
-        }
+        if (cache.has(normalizedUrl)) return cache.get(normalizedUrl);
 
         const requestUrl = new URL(normalizedUrl);
-        requestUrl.searchParams.set("_conteo", Date.now().toString());
+        requestUrl.searchParams.set("_urbanex", Date.now().toString());
 
         const response = await fetch(requestUrl.href, { cache: "no-store" });
         if (!response.ok) throw new Error("No se pudo cargar " + normalizedUrl);
 
         const htmlText = await response.text();
         cache.set(normalizedUrl, htmlText);
-
         return htmlText;
     }
 
     function getBalancedText(sourceText, startIndex, openChar, closeChar) {
-        const firstOpen = sourceText.indexOf(openChar, startIndex);
+        const firstOpen = String(sourceText || "").indexOf(openChar, startIndex);
         if (firstOpen === -1) return "";
 
         let depth = 0;
@@ -1355,162 +1360,323 @@
             if (char === openChar) depth++;
             if (char === closeChar) depth--;
 
-            if (depth === 0) {
-                return sourceText.slice(firstOpen, i + 1);
+            if (depth === 0) return sourceText.slice(firstOpen, i + 1);
+        }
+
+        return "";
+    }
+
+    function extractAssignedData(sourceText, variableNames) {
+        const source = String(sourceText || "");
+
+        for (const name of variableNames) {
+            const patterns = [
+                new RegExp("(?:const|let|var)\\s+" + escapeRegExp(name) + "\\s*=\\s*", "i"),
+                new RegExp("window\\." + escapeRegExp(name) + "\\s*=\\s*", "i"),
+                new RegExp("\\b" + escapeRegExp(name) + "\\s*=\\s*", "i")
+            ];
+
+            for (const pattern of patterns) {
+                const match = pattern.exec(source);
+                if (!match) continue;
+
+                let valueStart = match.index + match[0].length;
+                while (/\s/.test(source[valueStart] || "")) valueStart++;
+
+                const firstChar = source[valueStart];
+                let raw = "";
+
+                if (firstChar === "[") raw = getBalancedText(source, valueStart, "[", "]");
+                else if (firstChar === "{") raw = getBalancedText(source, valueStart, "{", "}");
+                else {
+                    const semicolon = source.indexOf(";", valueStart);
+                    raw = source.slice(valueStart, semicolon === -1 ? source.length : semicolon).trim();
+                }
+
+                if (!raw) continue;
+
+                try {
+                    return (new Function("return (" + raw + ");"))();
+                } catch (error) {
+                    console.warn("No se pudo interpretar " + name, error);
+                }
             }
-        }
-
-        return "";
-    }
-
-    function getArrayText(sourceText, arrayStartIndex) {
-        return getBalancedText(sourceText, arrayStartIndex, "[", "]");
-    }
-
-    function getObjectBlocks(arrayText) {
-        const blocks = [];
-        let index = 0;
-
-        while (index < arrayText.length) {
-            const objectStart = arrayText.indexOf("{", index);
-            if (objectStart === -1) break;
-
-            const objectText = getBalancedText(arrayText, objectStart, "{", "}");
-            if (!objectText) break;
-
-            blocks.push(objectText);
-            index = objectStart + objectText.length;
-        }
-
-        return blocks;
-    }
-
-    function readStringProperty(block, propertyNames) {
-        for (const propertyName of propertyNames) {
-            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*([\"'`])([\\s\\S]*?)\\1", "i");
-            const match = pattern.exec(block);
-            if (match) return match[2];
-        }
-
-        return "";
-    }
-
-    function readBooleanProperty(block, propertyNames) {
-        for (const propertyName of propertyNames) {
-            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*(true|false)", "i");
-            const match = pattern.exec(block);
-            if (match) return match[1].toLowerCase() === "true";
         }
 
         return null;
     }
 
-    function hasNonEmptyArrayProperty(block, propertyNames) {
-        for (const propertyName of propertyNames) {
-            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*\\[", "i");
-            const match = pattern.exec(block);
-            if (!match) continue;
+    function parseJsonData(doc) {
+        const jsonNode = doc.querySelector(
+            "#urbanex-empresa-data, #urbanex-empresas-data, #empresa-data, #businessData, script[type='application/json'][data-urbanex='empresa'], script[type='application/json'][data-urbanex='empresas']"
+        );
 
-            const arrayText = getArrayText(block, match.index);
-            if (!arrayText) continue;
+        if (!jsonNode || !jsonNode.textContent.trim()) return null;
 
-            const innerText = arrayText.slice(1, -1).trim();
-            if (innerText.length > 0) return true;
+        try {
+            const parsed = JSON.parse(jsonNode.textContent.trim());
+            return Array.isArray(parsed) ? parsed : [parsed];
+        } catch (error) {
+            console.warn("El bloque JSON del último eslabón no es válido.", error);
+            return null;
         }
-
-        return false;
     }
 
-    function hasProperty(block, propertyNames) {
-        return propertyNames.some(function (propertyName) {
-            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:", "i");
-            return pattern.test(block);
+    function scriptTextFromDoc(doc) {
+        return Array.from(doc.querySelectorAll("script"))
+            .map(function (script) { return script.textContent || ""; })
+            .join("\n");
+    }
+
+    function cleanPathTitle(path) {
+        const fileName = String(path || "").split("/").pop() || "Negocio";
+        return fileName.replace(/\.html?$/i, "").replace(/[-_]/g, " ").trim() || "Negocio";
+    }
+
+    function getMeta(doc, name) {
+        return doc.querySelector(`meta[name="${name}"]`)?.getAttribute("content")?.trim() || "";
+    }
+
+    function toBoolean(value) {
+        if (typeof value === "boolean") return value;
+        if (typeof value === "number") return value === 1;
+        if (typeof value === "string") {
+            const normalized = normalizeText(value);
+            if (["si", "sí", "true", "1", "activo", "activa", "abierto", "disponible", "publicado", "habilitado"].includes(normalized)) return true;
+            if (["no", "false", "0", "inactivo", "inactiva", "cerrado", "oculto", "pendiente", "suspendido"].includes(normalized)) return false;
+        }
+        return null;
+    }
+
+    function firstDefined(raw, names) {
+        for (const name of names) {
+            if (raw && raw[name] !== undefined && raw[name] !== null && raw[name] !== "") return raw[name];
+        }
+        return "";
+    }
+
+    function booleanFromRaw(raw, names) {
+        for (const name of names) {
+            if (!raw || raw[name] === undefined || raw[name] === null || raw[name] === "") continue;
+            const value = toBoolean(raw[name]);
+            if (value !== null) return value;
+        }
+        return null;
+    }
+
+    function hasNonEmptyArray(raw, names) {
+        return names.some(function (name) {
+            return Array.isArray(raw?.[name]) && raw[name].length > 0;
         });
     }
 
-    function normalizeText(value) {
-        return String(value || "")
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
+    function parseNumber(value) {
+        const number = Number(String(value ?? "").replace(",", ".").replace(/[^\d.-]/g, ""));
+        return Number.isFinite(number) ? number : null;
     }
 
-    function objectBlockToBusiness(block) {
-        const searchableText = normalizeText(block);
+    function dayKeyFromDate(date) {
+        return ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"][date.getDay()];
+    }
 
-        const estado = readStringProperty(block, ["estado", "status", "disponibilidad", "horario"]);
-        const descripcion = readStringProperty(block, ["descripcion", "description", "detalle", "venta", "segmento", "categoria"]);
-        const tags = readStringProperty(block, ["tags", "servicios"]);
+    function minutesFromTime(value) {
+        const match = String(value || "").trim().match(/^(\d{1,2}):(\d{2})$/);
+        if (!match) return null;
+        return Number(match[1]) * 60 + Number(match[2]);
+    }
 
-        const openedBoolean = readBooleanProperty(block, ["abierto", "open", "isOpen", "estaAbierto"]);
-        const nearbyBoolean = readBooleanProperty(block, ["cerca", "cercano", "cercaDeMi", "nearby"]);
-        const deliveryBoolean = readBooleanProperty(block, ["domicilio", "delivery", "aDomicilio", "envio", "envios"]);
-        const offerBoolean = readBooleanProperty(block, ["oferta", "ofertasActivas", "promo", "promocion", "tieneOferta"]);
+    function normalizeScheduleRange(value) {
+        if (Array.isArray(value)) return value.join("-");
+        return String(value || "");
+    }
 
-        const openByText = /\babierto\b/.test(normalizeText(estado));
-        const deliveryByText = /(domicilio|delivery|envio|entrega)/.test(searchableText);
-        const nearbyByData = hasProperty(block, ["distancia", "distance", "lat", "lng", "latitude", "longitude", "zona"]);
-        const offerByData = offerBoolean === true || hasNonEmptyArrayProperty(block, ["ofertas", "promos", "promociones", "descuentos"]);
-        const offerByText = /(oferta|promo|promocion|descuento)/.test(searchableText);
+    function isOpenBySchedule(schedule) {
+        if (!schedule || typeof schedule !== "object") return false;
+
+        const now = new Date();
+        const dayKey = dayKeyFromDate(now);
+        const rawRange = schedule[dayKey] || schedule[dayKey.normalize("NFD").replace(/[\u0300-\u036f]/g, "")];
+        if (!rawRange || normalizeText(rawRange) === "cerrado") return false;
+
+        const ranges = Array.isArray(rawRange) && Array.isArray(rawRange[0]) ? rawRange : [normalizeScheduleRange(rawRange)];
+        const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+        return ranges.some(function (range) {
+            const parts = String(range).split("-");
+            if (parts.length !== 2) return false;
+
+            const openMinutes = minutesFromTime(parts[0]);
+            const closeMinutes = minutesFromTime(parts[1]);
+            if (openMinutes === null || closeMinutes === null) return false;
+
+            if (closeMinutes < openMinutes) {
+                return currentMinutes >= openMinutes || currentMinutes <= closeMinutes;
+            }
+
+            return currentMinutes >= openMinutes && currentMinutes <= closeMinutes;
+        });
+    }
+
+    function isActiveBusiness(raw, estado) {
+        const explicit = booleanFromRaw(raw, ["activo", "active", "publicado", "visible", "habilitado", "registrado"]);
+        if (explicit === false) return false;
+        if (explicit === true) return true;
+
+        const normalizedStatus = normalizeText(estado);
+        if (!normalizedStatus) return true;
+
+        return !/(inactivo|inactiva|oculto|oculta|suspendido|suspendida|pendiente|eliminado|eliminada|borrador|cerrado permanente)/.test(normalizedStatus);
+    }
+
+    function normalizeBusiness(rawBusiness, sourceUrl, fallbackCategory) {
+        const raw = Object.assign({}, rawBusiness || {});
+        const estado = String(firstDefined(raw, ["estado", "status", "disponibilidad", "estadoManual"]) || "Disponible");
+        const nombre = String(firstDefined(raw, ["nombre", "name", "titulo", "title"]) || cleanPathTitle(sourceUrl));
+        const categoria = String(firstDefined(raw, ["categoria", "category", "rubro"]) || fallbackCategory || "Sin categoría");
+        const segmento = String(firstDefined(raw, ["segmento", "tipo", "subcategoria", "category"]) || categoria);
+        const descripcion = String(firstDefined(raw, ["descripcion", "description", "detalle", "resumen"]) || "");
+        const rating = Number(firstDefined(raw, ["rating", "calificacion", "valoracion", "estrellas"]) || 0) || 0;
+        const perfilRaw = String(firstDefined(raw, ["perfil", "url", "href", "link"]) || sourceUrl);
+        const perfil = resolveProjectUrl(perfilRaw, sourceUrl);
+        const latitud = parseNumber(firstDefined(raw, ["latitud", "lat", "latitude"]));
+        const longitud = parseNumber(firstDefined(raw, ["longitud", "lng", "lon", "longitude"]));
+        const direccion = String(firstDefined(raw, ["direccion", "address", "ubicacion", "location"]) || "");
+        const zona = String(firstDefined(raw, ["zona", "sector", "barrio"]) || "");
+        const horario = raw.horario || raw.schedule || null;
+
+        const abiertoExplicit = booleanFromRaw(raw, ["abierto", "open", "isOpen", "estaAbierto"]);
+        const domicilioExplicit = booleanFromRaw(raw, [
+            "domicilio", "delivery", "aDomicilio", "servicioDomicilio", "entregaDomicilio", "tieneDomicilio", "envioDomicilio"
+        ]);
+        const ofertaExplicit = booleanFromRaw(raw, ["oferta", "tieneOferta", "promo", "promocion", "ofertasActivas", "enOferta"]);
+        const cercaExplicit = booleanFromRaw(raw, ["cerca", "cercano", "cercaDeMi", "nearby"]);
+
+        const estadoNormalizado = normalizeText(estado);
+        const activo = isActiveBusiness(raw, estado);
+        const abierto = abiertoExplicit === true || estadoNormalizado.includes("abierto") || isOpenBySchedule(horario);
+        const domicilio = domicilioExplicit === true;
+        const oferta = ofertaExplicit === true || hasNonEmptyArray(raw, ["ofertas", "promos", "promociones", "descuentos"]);
+        const cercano = cercaExplicit === true || (latitud !== null && longitud !== null) || Boolean(direccion || zona || raw.distancia || raw.distance);
 
         return {
-            raw: block,
+            nombre: nombre,
+            categoria: categoria,
+            segmento: segmento,
+            descripcion: descripcion || "Sin descripción registrada.",
+            rating: rating,
             estado: estado,
-            descripcion: descripcion,
-            tags: tags,
-            abierto: openedBoolean === true || openByText,
-            cercano: nearbyBoolean === true || nearbyByData,
-            domicilio: deliveryBoolean === true || deliveryByText,
-            oferta: offerByData || offerByText
+            activo: activo,
+            abierto: abierto,
+            domicilio: domicilio,
+            oferta: oferta,
+            cercano: cercano,
+            perfil: perfil,
+            searchable: normalizeText([nombre, categoria, segmento, descripcion, estado, direccion, zona].join(" ")),
+            sourceUrl: sourceUrl
         };
     }
 
-    function extractBusinessesFromArray(htmlText, arrayName) {
-        if (!arrayName) return null;
+    function fallbackBusinessFromFinalHtml(doc, sourceUrl, fallbackCategory) {
+        const body = doc.body || document.createElement("body");
+        const root = doc.querySelector("[data-business], [data-empresa], article, main") || body;
 
-        const pattern = new RegExp("(?:const|let|var)\\s+" + escapeRegExp(arrayName) + "\\s*=\\s*\\[");
-        const match = pattern.exec(htmlText);
+        const raw = {
+            nombre: getMeta(doc, "urbanex:nombre") || root.querySelector("h1, .business-title, .shop-title, [data-name]")?.textContent?.trim() || doc.title || cleanPathTitle(sourceUrl),
+            categoria: getMeta(doc, "urbanex:categoria") || root.querySelector(".business-category, .category-pill, .categoria, [data-category]")?.textContent?.trim() || fallbackCategory || "Sin categoría",
+            segmento: getMeta(doc, "urbanex:segmento") || root.querySelector(".business-segment, .shop-segment, .segmento, [data-segment]")?.textContent?.trim() || fallbackCategory || "Negocio",
+            descripcion: getMeta(doc, "description") || root.querySelector(".business-description, .company-description, .descripcion, [data-description]")?.textContent?.trim() || "",
+            estado: getMeta(doc, "urbanex:estado") || root.querySelector(".business-status, .estado, [data-status]")?.textContent?.trim() || "Disponible",
+            rating: root.querySelector(".rating, .business-rating, [data-rating]")?.textContent?.replace(/[^\d.]/g, "") || 0,
+            activo: getMeta(doc, "urbanex:activo") || root.getAttribute("data-activo") || root.getAttribute("data-active") || "",
+            abierto: getMeta(doc, "urbanex:abierto") || root.getAttribute("data-abierto") || root.getAttribute("data-open") || "",
+            domicilio: getMeta(doc, "urbanex:domicilio") || root.getAttribute("data-domicilio") || root.getAttribute("data-delivery") || "",
+            oferta: getMeta(doc, "urbanex:oferta") || root.getAttribute("data-oferta") || root.getAttribute("data-promo") || "",
+            cerca: getMeta(doc, "urbanex:cerca") || root.getAttribute("data-cerca") || root.getAttribute("data-nearby") || "",
+            latitud: getMeta(doc, "urbanex:latitud") || root.getAttribute("data-lat") || root.getAttribute("data-latitud") || "",
+            longitud: getMeta(doc, "urbanex:longitud") || root.getAttribute("data-lng") || root.getAttribute("data-longitud") || "",
+            direccion: getMeta(doc, "urbanex:direccion") || root.querySelector(".direccion, .address, [data-address]")?.textContent?.trim() || "",
+            perfil: sourceUrl
+        };
 
-        if (!match) return null;
+        if (doc.querySelector("[data-oferta='true'], [data-promo='true'], .oferta-activa, .promo-activa")) raw.oferta = true;
 
-        const arrayText = getArrayText(htmlText, match.index);
-        if (!arrayText) return null;
-
-        return getObjectBlocks(arrayText).map(objectBlockToBusiness);
+        return [raw];
     }
 
-    function extractBusinessesFromAnyArray(htmlText) {
-        const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
-        let match;
-        const businesses = [];
-
-        while ((match = arrayPattern.exec(htmlText)) !== null) {
-            const arrayText = getArrayText(htmlText, match.index);
-            if (!arrayText) continue;
-
-            getObjectBlocks(arrayText).forEach(function (block) {
-                businesses.push(objectBlockToBusiness(block));
-            });
-        }
-
-        return businesses;
-    }
-
-    function extractBusinessesFromMarkup(htmlText) {
+    function parseBusinessDataFromFinalHtml(htmlText, sourceUrl, fallbackCategory) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, "text/html");
 
-        return Array.from(doc.querySelectorAll(countableSelectors)).map(function (element) {
-            const text = normalizeText(element.textContent || "");
+        const jsonData = parseJsonData(doc);
+        if (jsonData && jsonData.length) {
+            return jsonData.map(function (raw) { return normalizeBusiness(raw, sourceUrl, fallbackCategory); });
+        }
 
-            return {
-                raw: text,
-                abierto: /\babierto\b/.test(text),
-                cercano: /(cerca|distancia|zona)/.test(text),
-                domicilio: /(domicilio|delivery|envio|entrega)/.test(text),
-                oferta: /(oferta|promo|promocion|descuento)/.test(text)
-            };
+        const scriptText = scriptTextFromDoc(doc);
+        const assignedData = extractAssignedData(scriptText, [
+            "URBANEX_EMPRESAS",
+            "EMPRESAS",
+            "EMPRESAS_ELECTRODOMESTICOS",
+            "URBANEX_EMPRESA",
+            "EMPRESA",
+            "BUSINESS_DATA",
+            "BUSINESSES"
+        ]);
+
+        if (assignedData) {
+            const arrayData = Array.isArray(assignedData) ? assignedData : [assignedData];
+            const objectData = arrayData.filter(function (item) { return item && typeof item === "object" && !Array.isArray(item); });
+            if (objectData.length) {
+                return objectData.map(function (raw) { return normalizeBusiness(raw, sourceUrl, fallbackCategory); });
+            }
+        }
+
+        return fallbackBusinessFromFinalHtml(doc, sourceUrl, fallbackCategory)
+            .map(function (raw) { return normalizeBusiness(raw, sourceUrl, fallbackCategory); });
+    }
+
+    function getLastEslabonSources(htmlText, pageUrl) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+        const scriptText = scriptTextFromDoc(doc);
+        const sources = [];
+
+        const assignedSources = extractAssignedData(scriptText, [
+            "EMPRESAS_DATA_SOURCES",
+            "BUSINESS_DATA_SOURCES",
+            "NEGOCIOS_DATA_SOURCES",
+            "URBANEX_DATA_SOURCES",
+            "EMPRESAS_SOURCES",
+            "BUSINESS_SOURCES"
+        ]);
+
+        if (Array.isArray(assignedSources)) {
+            assignedSources.forEach(function (source) {
+                if (typeof source === "string" && /\.html?(?:$|[?#])/i.test(source)) {
+                    sources.push(resolveProjectUrl(source, pageUrl));
+                }
+            });
+        }
+
+        Array.from(doc.querySelectorAll("[data-business-src], [data-empresa-src], [data-final-src], [data-profile-src]")).forEach(function (element) {
+            const source = element.getAttribute("data-business-src") ||
+                element.getAttribute("data-empresa-src") ||
+                element.getAttribute("data-final-src") ||
+                element.getAttribute("data-profile-src");
+
+            if (source && /\.html?(?:$|[?#])/i.test(source)) {
+                sources.push(resolveProjectUrl(source, pageUrl));
+            }
         });
+
+        Array.from(doc.querySelectorAll("a[href]")).forEach(function (anchor) {
+            const href = anchor.getAttribute("href") || "";
+            if (/\.html?(?:$|[?#])/i.test(href) && /(^|\/)empresas\//i.test(href)) {
+                sources.push(resolveProjectUrl(href, pageUrl));
+            }
+        });
+
+        return Array.from(new Set(sources));
     }
 
     function getSubcategorySources(htmlText, pageUrl) {
@@ -1518,64 +1684,58 @@
         const doc = parser.parseFromString(htmlText, "text/html");
 
         return Array.from(doc.querySelectorAll("[data-count-src]"))
-            .map(function (element) {
-                return element.getAttribute("data-count-src");
-            })
+            .map(function (element) { return element.getAttribute("data-count-src"); })
             .filter(Boolean)
-            .map(function (src) {
-                return resolveProjectUrl(src, pageUrl);
-            });
+            .map(function (source) { return resolveProjectUrl(source, pageUrl); });
     }
 
-    async function loadDirectBusinesses(src, arrayName, baseUrl) {
-        const pageUrl = resolveProjectUrl(src, baseUrl);
-        const htmlText = await fetchHtml(pageUrl, baseUrl);
-
-        const specificBusinesses = extractBusinessesFromArray(htmlText, arrayName);
-        if (specificBusinesses && specificBusinesses.length) return specificBusinesses;
-
-        const genericBusinesses = extractBusinessesFromAnyArray(htmlText);
-        if (genericBusinesses.length) return genericBusinesses;
-
-        return extractBusinessesFromMarkup(htmlText);
+    async function loadBusinessesFromFinalSource(sourceUrl, fallbackCategory) {
+        const htmlText = await fetchHtml(sourceUrl, window.location.href);
+        return parseBusinessDataFromFinalHtml(htmlText, sourceUrl, fallbackCategory);
     }
 
-    async function loadBusinessesFromPage(src, arrayName, depth, explicitChildren) {
-        if (explicitChildren && explicitChildren.length) {
-            const childrenBusinesses = await Promise.all(
-                explicitChildren.map(function (childSrc) {
-                    return loadBusinessesFromPage(childSrc, "", depth - 1, []).catch(function () {
-                        return [];
-                    });
-                })
-            );
-
-            return childrenBusinesses.flat();
-        }
-
-        const pageUrl = resolveProjectUrl(src, window.location.href);
+    async function loadBusinessesFromPage(source, fallbackCategory, depth) {
+        const pageUrl = resolveProjectUrl(source, window.location.href);
         const htmlText = await fetchHtml(pageUrl, window.location.href);
 
+        const lastSources = getLastEslabonSources(htmlText, pageUrl);
+        if (lastSources.length) {
+            const finalResults = await Promise.all(lastSources.map(function (lastSource) {
+                return loadBusinessesFromFinalSource(lastSource, fallbackCategory).catch(function () { return []; });
+            }));
+            return finalResults.flat();
+        }
+
         if (depth > 0) {
-            const subcategorySources = getSubcategorySources(htmlText, pageUrl)
-                .filter(function (childSrc) {
-                    return childSrc !== pageUrl;
-                });
+            const childSources = getSubcategorySources(htmlText, pageUrl).filter(function (childSource) {
+                return childSource !== pageUrl;
+            });
 
-            if (subcategorySources.length) {
-                const childrenBusinesses = await Promise.all(
-                    subcategorySources.map(function (childSrc) {
-                        return loadBusinessesFromPage(childSrc, "", depth - 1, []).catch(function () {
-                            return [];
-                        });
-                    })
-                );
-
-                return childrenBusinesses.flat();
+            if (childSources.length) {
+                const childResults = await Promise.all(childSources.map(function (childSource) {
+                    return loadBusinessesFromPage(childSource, fallbackCategory, depth - 1).catch(function () { return []; });
+                }));
+                return childResults.flat();
             }
         }
 
-        return loadDirectBusinesses(pageUrl, arrayName, window.location.href);
+        return parseBusinessDataFromFinalHtml(htmlText, pageUrl, fallbackCategory);
+    }
+
+    function dedupeBusinesses(businesses) {
+        const map = new Map();
+        businesses.forEach(function (business) {
+            if (!business || !business.nombre) return;
+            const key = normalizeText((business.perfil || business.sourceUrl || "") + "|" + business.nombre);
+            if (!map.has(key)) map.set(key, business);
+        });
+        return Array.from(map.values());
+    }
+
+
+    function formatCount(target, total, singular, plural) {
+        if (!target) return;
+        target.textContent = total + " " + (total === 1 ? singular : plural);
     }
 
     function getExplicitChildren(button) {
@@ -1585,36 +1745,50 @@
             .filter(Boolean);
     }
 
+    function getButtonCategoryName(button) {
+        return button.querySelector(".category-name")?.textContent?.trim() || "Sin categoría";
+    }
+
     async function updateCategoryCount(button) {
         const target = document.getElementById(button.dataset.countTarget);
         if (!target) return [];
 
         const singular = button.dataset.countSingular || "local";
         const plural = button.dataset.countPlural || "locales";
+        const categoryName = getButtonCategoryName(button);
+        const explicitChildren = getExplicitChildren(button);
 
         formatCount(target, 0, singular, plural);
 
         try {
-            const businesses = await loadBusinessesFromPage(
-                button.dataset.countSrc,
-                button.dataset.countArray || "",
-                3,
-                getExplicitChildren(button)
-            );
+            let businesses = [];
 
-            formatCount(target, businesses.length || 0, singular, plural);
+            if (explicitChildren.length) {
+                const childResults = await Promise.all(explicitChildren.map(function (childSource) {
+                    return loadBusinessesFromPage(childSource, categoryName, 3).catch(function () { return []; });
+                }));
+                businesses = childResults.flat();
+            } else {
+                businesses = await loadBusinessesFromPage(button.dataset.countSrc, categoryName, 3);
+            }
+
+            businesses = dedupeBusinesses(businesses).filter(function (business) { return business.activo; });
+            formatCount(target, businesses.length, singular, plural);
             return businesses;
         } catch (error) {
+            console.warn(error);
             formatCount(target, 0, singular, plural);
             return [];
         }
     }
 
     function updateGlobalMetrics(allBusinesses) {
-        const openNow = allBusinesses.filter(function (business) { return business.abierto; }).length;
-        const nearby = allBusinesses.filter(function (business) { return business.cercano; }).length;
-        const delivery = allBusinesses.filter(function (business) { return business.domicilio; }).length;
-        const offers = allBusinesses.filter(function (business) { return business.oferta; }).length;
+        const uniqueBusinesses = dedupeBusinesses(allBusinesses).filter(function (business) { return business.activo; });
+
+        const openNow = uniqueBusinesses.filter(function (business) { return business.abierto; }).length;
+        const nearby = uniqueBusinesses.filter(function (business) { return business.cercano; }).length;
+        const delivery = uniqueBusinesses.filter(function (business) { return business.domicilio; }).length;
+        const offers = uniqueBusinesses.filter(function (business) { return business.oferta; }).length;
 
         formatCount(metricOpenNow, openNow, "local", "locales");
         formatCount(metricNearby, nearby, "local", "locales");
@@ -1623,11 +1797,9 @@
     }
 
     async function updateAllCounts() {
-        const categoryBusinesses = await Promise.all(
-            categoryButtons.map(function (button) {
-                return updateCategoryCount(button);
-            })
-        );
+        const categoryBusinesses = await Promise.all(categoryButtons.map(function (button) {
+            return updateCategoryCount(button);
+        }));
 
         updateGlobalMetrics(categoryBusinesses.flat());
     }
