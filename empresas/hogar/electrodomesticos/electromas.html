@@ -1168,6 +1168,59 @@
             flex: 0 0 10px !important;
         }
 
+
+        /* Indicadores discretos y profesionales del carrusel */
+        .product-thumbs {
+            position: absolute;
+            left: 50%;
+            bottom: 11px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transform: translateX(-50%);
+            width: auto;
+            height: auto;
+            padding: 4px 6px;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.28);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+
+        .product-thumb {
+            width: 5px !important;
+            height: 5px !important;
+            min-width: 5px !important;
+            min-height: 5px !important;
+            max-width: 5px !important;
+            max-height: 5px !important;
+            border: 0 !important;
+            border-radius: 50% !important;
+            background: rgba(255,255,255,0.55);
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 0 !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+            flex: 0 0 5px !important;
+        }
+
+        .product-thumb.is-active,
+        .product-thumb:hover {
+            width: 6px !important;
+            height: 6px !important;
+            min-width: 6px !important;
+            min-height: 6px !important;
+            max-width: 6px !important;
+            max-height: 6px !important;
+            border-radius: 50% !important;
+            background: var(--gold);
+            box-shadow: 0 0 0 2px rgba(229,193,88,0.14) !important;
+            flex: 0 0 6px !important;
+        }
+
 </style>
 </head>
 
