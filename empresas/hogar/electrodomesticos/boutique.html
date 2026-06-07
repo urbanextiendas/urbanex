@@ -386,11 +386,11 @@
             text-transform: uppercase;
         }
 
-        .product-grid {
-            padding: 16px;
+                .product-grid {
+            padding: 14px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
         }
 
         .product-card {
@@ -417,15 +417,17 @@
             padding: 0;
         }
 
-        .product-main-image {
+                .product-main-image {
             position: relative;
-            height: 176px;
-            border: 0;
-            border-bottom: 1px solid rgba(255,255,255,0.10);
-            border-radius: 18px 18px 0 0;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            height: auto;
+            max-height: 215px;
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 12px;
             background:
-                radial-gradient(circle at 50% 24%, rgba(229,193,88,0.18), transparent 34%),
-                linear-gradient(145deg, rgba(255,255,255,0.10), rgba(0,0,0,0.28));
+                radial-gradient(circle at 50% 24%, rgba(229,193,88,0.10), transparent 34%),
+                linear-gradient(145deg, rgba(18,18,18,0.96), rgba(0,0,0,0.94));
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -441,17 +443,16 @@
             z-index: 1;
         }
 
-        .product-main-image img {
+                .product-main-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            object-position: center;
             display: block;
-            cursor: zoom-in;
-            transition: transform 0.35s ease, filter 0.35s ease;
+            padding: 7px;
         }
 
         .product-card:hover .product-main-image img {
-            transform: scale(1.035);
             filter: saturate(1.04) contrast(1.03);
         }
 
@@ -609,12 +610,12 @@
             transform: translateX(-50%);
         }
 
-        .product-thumb {
-            width: 7px;
-            height: 7px;
-            border: 0;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.58);
+                .product-thumb {
+            height: 46px;
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 9px;
+            background: rgba(0,0,0,0.62);
+            overflow: hidden;
             cursor: pointer;
             transition: var(--transition);
             padding: 0;
@@ -1074,8 +1075,83 @@
             .product-grid {
                 grid-template-columns: 1fr;
             }
+
+                        .product-main-image {
+                aspect-ratio: 4 / 3;
+                max-height: 205px;
+            }
         }
-    </style>
+    
+        .gallery-dots,
+        .product-dots,
+        .slider-dots,
+        .image-dots {
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            transform: translateX(-50%);
+            z-index: 5;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: auto;
+            height: auto;
+            pointer-events: auto;
+        }
+
+        .gallery-dot,
+        .product-dot,
+        .slider-dot,
+        .image-dot,
+        .gallery-dots button,
+        .product-dots button,
+        .slider-dots button,
+        .image-dots button {
+            width: 7px !important;
+            height: 7px !important;
+            min-width: 7px !important;
+            min-height: 7px !important;
+            max-width: 7px !important;
+            max-height: 7px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: 0 !important;
+            border-radius: 50% !important;
+            background: rgba(255,255,255,0.48);
+            display: inline-block !important;
+            flex: 0 0 7px !important;
+            cursor: pointer;
+            line-height: 1 !important;
+            font-size: 0 !important;
+            overflow: hidden;
+        }
+
+        .gallery-dot.is-active,
+        .product-dot.is-active,
+        .slider-dot.is-active,
+        .image-dot.is-active,
+        .gallery-dots button.is-active,
+        .product-dots button.is-active,
+        .slider-dots button.is-active,
+        .image-dots button.is-active,
+        .gallery-dots button.active,
+        .product-dots button.active,
+        .slider-dots button.active,
+        .image-dots button.active {
+            width: 10px !important;
+            height: 6px !important;
+            min-width: 10px !important;
+            min-height: 6px !important;
+            max-width: 10px !important;
+            max-height: 6px !important;
+            border-radius: 999px !important;
+            background: var(--gold);
+            flex: 0 0 10px !important;
+        }
+
+</style>
 </head>
 
 <body>
