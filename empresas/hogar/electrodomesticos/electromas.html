@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electromas | Urbanex</title>
+    <title>Electromás | Urbanex</title>
 
     <link rel="icon" type="image/png" href="/imagenes/log.png">
 
@@ -48,7 +48,7 @@
             padding-bottom: 24px;
             background:
                 linear-gradient(135deg, rgba(0,0,0,0.72), rgba(0,0,0,0.48)),
-                url("https://casamexicoloja.com/assets/img/banner/2026-03-06/f.png") center center / cover fixed no-repeat;
+                url("https://electromas.pages.dev/principal/general/electro.png") center center / contain fixed no-repeat;
             color: var(--text-main);
             font-family: var(--font-sans);
             overflow-x: hidden;
@@ -217,11 +217,11 @@
             flex-shrink: 0;
         }
 
-                .logo-box img {
+        .logo-box img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: 4px;
+            padding: 6px;
             display: block;
             background: #000000;
         }
@@ -758,6 +758,7 @@
             text-align: right;
         }
 
+
         .schedule-slots {
             display: flex;
             align-items: flex-end;
@@ -774,26 +775,17 @@
             flex-direction: column;
         }
 
-
-        .schedule-slots {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 4px;
-            text-align: right;
-        }
-
         .schedule-slot {
             display: inline-flex;
             align-items: center;
-            justify-content: flex-end;
-            min-width: 92px;
+            justify-content: center;
+            min-width: 96px;
             border: 1px solid rgba(229,193,88,0.22);
             border-radius: 999px;
-            padding: 3px 8px;
+            padding: 4px 9px;
             background: rgba(229,193,88,0.06);
             color: #ffffff;
-            font-size: 9.5px;
+            font-size: 9.3px;
             font-weight: 800;
             line-height: 1.2;
             white-space: nowrap;
@@ -1169,12 +1161,12 @@
         }
 
 
-        /* Indicadores discretos y profesionales del carrusel */
+        /* Indicadores discretos del carrusel */
         .product-thumbs {
             position: absolute;
             left: 50%;
-            bottom: 11px;
-            z-index: 4;
+            bottom: 13px;
+            z-index: 5;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1182,43 +1174,44 @@
             transform: translateX(-50%);
             width: auto;
             height: auto;
-            padding: 4px 6px;
+            padding: 4px 7px;
             border-radius: 999px;
-            background: rgba(0,0,0,0.28);
+            background: rgba(0,0,0,0.30);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
         }
 
         .product-thumb {
-            width: 5px !important;
-            height: 5px !important;
-            min-width: 5px !important;
-            min-height: 5px !important;
-            max-width: 5px !important;
-            max-height: 5px !important;
-            border: 0 !important;
-            border-radius: 50% !important;
-            background: rgba(255,255,255,0.55);
-            cursor: pointer;
-            transition: var(--transition);
-            padding: 0 !important;
-            margin: 0 !important;
-            box-shadow: none !important;
-            flex: 0 0 5px !important;
-        }
-
-        .product-thumb.is-active,
-        .product-thumb:hover {
             width: 6px !important;
             height: 6px !important;
             min-width: 6px !important;
             min-height: 6px !important;
             max-width: 6px !important;
             max-height: 6px !important;
+            border: 0 !important;
             border-radius: 50% !important;
-            background: var(--gold);
-            box-shadow: 0 0 0 2px rgba(229,193,88,0.14) !important;
+            background: rgba(255,255,255,0.60);
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 0 !important;
+            margin: 0 !important;
+            box-shadow: none !important;
             flex: 0 0 6px !important;
+            overflow: hidden;
+        }
+
+        .product-thumb.is-active,
+        .product-thumb:hover {
+            width: 18px !important;
+            height: 6px !important;
+            min-width: 18px !important;
+            min-height: 6px !important;
+            max-width: 18px !important;
+            max-height: 6px !important;
+            border-radius: 999px !important;
+            background: var(--gold);
+            box-shadow: 0 0 0 2px rgba(229,193,88,0.16) !important;
+            flex: 0 0 18px !important;
         }
 
 </style>
@@ -1395,17 +1388,17 @@
 const EMPRESA = {
     nombre: "Electromás",
     categoria: "Electrodomésticos, tecnología y hogar",
-    tipo: "electrodomesticos tecnologia hogar refrigeracion cocina lavado microondas electrodomesticos menores celulares televisores combos ofertas credito directo loja zamora",
+    tipo: "electrodomesticos tecnologia hogar refrigeracion cocina lavado microondas electrodomesticos menores celulares televisores computadoras confort ofertas combos credito directo loja zamora",
     descripcion: "Electrodomésticos, tecnología y hogar con atención directa para Loja y Zamora. Consulte por WhatsApp y reciba precio, crédito, garantía y disponibilidad sin perder tiempo.",
 
     logo: "https://electromas.pages.dev/principal/general/electro.png",
-    portada: "/logosempresas/electromas2.png",
+    portada: "https://electromas.pages.dev/principal/general/electro.png",
 
     celular: "+593988926331",
     correo: "",
     web: "https://electromas.pages.dev",
     direccion: "Imbabura entre Sucre y 18 de Noviembre, Loja",
-    mapa: "https://www.google.com/maps/search/?api=1&query=Imbabura+entre+Sucre+y+18+de+Noviembre,+Loja,+Ecuador",
+    mapa: "https://www.google.com/maps/search/?api=1&query=Electrom%C3%A1s+Imbabura+entre+Sucre+y+18+de+Noviembre,+Loja,+Ecuador",
     moneda: "$",
     zonaHoraria: "America/Guayaquil",
 
@@ -1424,75 +1417,9 @@ const EMPRESA = {
 
     productos: [
         {
-            nombre: "Kombo-cocineta a gas Pompeya 4Q Inox",
-            precio: 82,
-            descripcion: "Producto de la línea Cocinas. Incluye 18 meses de garantía.",
-            oferta: false,
-            imagenes: [
-                "https://electromas.pages.dev/principal/cocina/pompeya.png",
-                "https://electromas.pages.dev/principal/cocina/Bilbao20.png",
-                "https://electromas.pages.dev/principal/cocina/Milan24.png"
-            ]
-        },
-        {
-            nombre: "Indurama Bilbao Spazio Plus 20\"",
-            precio: 221.40,
-            descripcion: "Cocina Indurama de la sección Cocinas. Incluye 1 año de garantía.",
-            oferta: false,
-            imagenes: [
-                "https://electromas.pages.dev/principal/cocina/Bilbao20.png",
-                "https://electromas.pages.dev/principal/cocina/Milan24.png",
-                "https://electromas.pages.dev/principal/cocina/Zafiro30.png"
-            ]
-        },
-        {
-            nombre: "Indurama Milan Zafiro 24\"",
-            precio: 372,
-            descripcion: "Cocina Indurama de la sección Cocinas. Incluye 1 año de garantía.",
-            oferta: false,
-            imagenes: [
-                "https://electromas.pages.dev/principal/cocina/Milan24.png",
-                "https://electromas.pages.dev/principal/cocina/Zafiro30.png",
-                "https://electromas.pages.dev/principal/cocina/Bilbao20.png"
-            ]
-        },
-        {
-            nombre: "Indurama Galicia Zafiro 30\"",
-            precio: 517,
-            descripcion: "Cocina Indurama de la sección Cocinas. Incluye 1 año de garantía.",
-            oferta: false,
-            imagenes: [
-                "https://electromas.pages.dev/principal/cocina/Zafiro30.png",
-                "https://electromas.pages.dev/principal/cocina/Milan24.png",
-                "https://electromas.pages.dev/principal/cocina/Bilbao20.png"
-            ]
-        },
-        {
-            nombre: "Whirlpool 20 litros silver WM1807D",
-            precio: 115,
-            descripcion: "Microondas Whirlpool de 20 litros. Incluye 1 año de garantía.",
-            oferta: false,
-            imagenes: [
-                "https://electromas.pages.dev/principal/microondas/wm1807d.png",
-                "https://electromas.pages.dev/principal/microondas/mwi-20cr.png",
-                "https://electromas.pages.dev/principal/cocina/pompeya.png"
-            ]
-        },
-        {
-            nombre: "Indurama 20 litros croma MWI-20CR",
-            precio: 118,
-            descripcion: "Microondas Indurama de 20 litros. Incluye 1 año de garantía.",
-            oferta: false,
-            imagenes: [
-                "https://electromas.pages.dev/principal/microondas/mwi-20cr.png",
-                "https://electromas.pages.dev/principal/microondas/wm1807d.png",
-                "https://electromas.pages.dev/principal/menores/air.png"
-            ]
-        },
-        {
             nombre: "Minibar Indurama 95 litros RI-120CR",
             precio: 205.20,
-            descripcion: "Producto de refrigeración. Incluye 3 años de garantía en el compresor.",
+            descripcion: "Minibar Indurama de 95 litros. Incluye 3 años de garantía en el compresor.",
             oferta: false,
             imagenes: [
                 "https://electromas.pages.dev/principal/refrigerador/RI-120CR.png",
@@ -1507,8 +1434,8 @@ const EMPRESA = {
             oferta: false,
             imagenes: [
                 "https://electromas.pages.dev/principal/refrigerador/indurama.png",
-                "https://electromas.pages.dev/principal/refrigerador/RI-480CR.jpeg",
-                "https://electromas.pages.dev/principal/refrigerador/RI-120CR.png"
+                "https://electromas.pages.dev/principal/refrigerador/RI-120CR.png",
+                "https://electromas.pages.dev/principal/refrigerador/RI-480CR.jpeg"
             ]
         },
         {
@@ -1523,6 +1450,61 @@ const EMPRESA = {
             ]
         },
         {
+            nombre: "Kombo-cocineta a gas Pompeya 4Q Inox",
+            precio: 82,
+            descripcion: "Cocineta a gas Pompeya de 4 quemadores en acero inoxidable. Incluye 18 meses de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/cocina/pompeya.png",
+                "https://electromas.pages.dev/principal/cocina/Bilbao20.png",
+                "https://electromas.pages.dev/principal/cocina/Milan24.png"
+            ]
+        },
+        {
+            nombre: "Indurama Bilbao Spazio Plus 20\"",
+            precio: 221.40,
+            descripcion: "Cocina Indurama Bilbao Spazio Plus de 20 pulgadas. Incluye 1 año de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/cocina/Bilbao20.png",
+                "https://electromas.pages.dev/principal/cocina/Milan24.png",
+                "https://electromas.pages.dev/principal/cocina/Zafiro30.png"
+            ]
+        },
+        {
+            nombre: "Indurama Milan Zafiro 24\"",
+            precio: 372,
+            descripcion: "Cocina Indurama Milan Zafiro de 24 pulgadas. Incluye 1 año de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/cocina/Milan24.png",
+                "https://electromas.pages.dev/principal/cocina/Zafiro30.png",
+                "https://electromas.pages.dev/principal/cocina/Bilbao20.png"
+            ]
+        },
+        {
+            nombre: "Whirlpool 20 litros silver WM1807D",
+            precio: 115,
+            descripcion: "Microondas Whirlpool de 20 litros en color silver. Incluye 1 año de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/microondas/wm1807d.png",
+                "https://electromas.pages.dev/principal/microondas/mwi-20cr.png",
+                "https://electromas.pages.dev/principal/cocina/pompeya.png"
+            ]
+        },
+        {
+            nombre: "Indurama 20 litros croma MWI-20CR",
+            precio: 118,
+            descripcion: "Microondas Indurama de 20 litros color croma. Incluye 1 año de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/microondas/mwi-20cr.png",
+                "https://electromas.pages.dev/principal/microondas/wm1807d.png",
+                "https://electromas.pages.dev/principal/cocina/Bilbao20.png"
+            ]
+        },
+        {
             nombre: "Lavadora Indurama 19kg",
             precio: 535,
             descripcion: "Lavadora Indurama de 19kg. Incluye 3 años de garantía en motor y panel.",
@@ -1530,101 +1512,13 @@ const EMPRESA = {
             imagenes: [
                 "https://electromas.pages.dev/principal/lavadora/indurama.png",
                 "https://electromas.pages.dev/principal/refrigerador/indurama.png",
-                "https://electromas.pages.dev/principal/menores/air.png"
-            ]
-        },
-        {
-            nombre: "Extractor de jugo Indurama EI-CR",
-            precio: 98.28,
-            descripcion: "Electrodoméstico menor. Incluye 1 año de garantía.",
-            oferta: false,
-            imagenes: [
-                "https://electromas.pages.dev/principal/menores/eicr.png",
-                "https://electromas.pages.dev/principal/menores/air.png",
-                "https://electromas.pages.dev/principal/menores/arrocera.png"
-            ]
-        },
-        {
-            nombre: "Air fryer Indurama 8 litros negra",
-            precio: 161,
-            descripcion: "Freidora de aire Indurama de 8 litros. Incluye 1 año de garantía.",
-            oferta: false,
-            imagenes: [
-                "https://electromas.pages.dev/principal/menores/air.png",
-                "https://electromas.pages.dev/principal/menores/eicr.png",
-                "https://electromas.pages.dev/principal/menores/arrocera.png"
-            ]
-        },
-        {
-            nombre: "Olla arrocera Indurama 1.8 litros croma",
-            precio: 48,
-            descripcion: "Olla arrocera Indurama de 1.8 litros. Incluye 1 año de garantía.",
-            oferta: false,
-            imagenes: [
-                "https://electromas.pages.dev/principal/menores/arrocera.png",
-                "https://electromas.pages.dev/principal/menores/air.png",
-                "https://electromas.pages.dev/principal/menores/eicr.png"
-            ]
-        },
-        {
-            nombre: "Televisor Indurama 32\"",
-            precio: 222,
-            descripcion: "Televisor Indurama de 32 pulgadas. Incluye 2 años de garantía.",
-            oferta: false,
-            imagenes: [
-                "https://electromas.pages.dev/principal/televisor/indurama.png",
-                "https://electromas.pages.dev/principal/televisor/indurama.png",
-                "https://electromas.pages.dev/principal/televisor/indurama.png"
-            ]
-        },
-        {
-            nombre: "Televisor Indurama 43\"",
-            precio: 351,
-            descripcion: "Televisor Indurama de 43 pulgadas. Incluye 2 años de garantía.",
-            oferta: false,
-            imagenes: [
-                "https://electromas.pages.dev/principal/televisor/indurama.png",
-                "https://electromas.pages.dev/principal/televisor/indurama.png",
-                "https://electromas.pages.dev/principal/televisor/indurama.png"
-            ]
-        },
-        {
-            nombre: "Televisor Indurama 58\"",
-            precio: 556,
-            descripcion: "Televisor Indurama de 58 pulgadas. Incluye 2 años de garantía.",
-            oferta: true,
-            imagenes: [
-                "https://electromas.pages.dev/principal/televisor/indurama.png",
-                "https://electromas.pages.dev/principal/televisor/indurama.png",
-                "https://electromas.pages.dev/principal/televisor/indurama.png"
-            ]
-        },
-        {
-            nombre: "Televisor TCL 43\"",
-            precio: 370,
-            descripcion: "Televisor TCL de 43 pulgadas. Incluye 2 años de garantía.",
-            oferta: false,
-            imagenes: [
-                "https://electromas.pages.dev/principal/televisor/indurama.png",
-                "https://electromas.pages.dev/principal/televisor/indurama.png",
-                "https://electromas.pages.dev/principal/televisor/indurama.png"
-            ]
-        },
-        {
-            nombre: "Televisor TCL 55\"",
-            precio: 516,
-            descripcion: "Televisor TCL de 55 pulgadas. Incluye 2 años de garantía.",
-            oferta: false,
-            imagenes: [
-                "https://electromas.pages.dev/principal/televisor/indurama.png",
-                "https://electromas.pages.dev/principal/televisor/indurama.png",
-                "https://electromas.pages.dev/principal/televisor/indurama.png"
+                "https://electromas.pages.dev/principal/refrigerador/RI-480CR.jpeg"
             ]
         },
         {
             nombre: "Infinix Hot 50 pro",
             precio: 240,
-            descripcion: "Smartphone Infinix Hot 50 pro. Incluye 1 año de garantía.",
+            descripcion: "Celular Infinix Hot 50 pro. Incluye 1 año de garantía.",
             oferta: false,
             imagenes: [
                 "https://electromas.pages.dev/principal/celulares/prohot50pro.png",
@@ -1635,7 +1529,7 @@ const EMPRESA = {
         {
             nombre: "Infinix Hot 50 i",
             precio: 150,
-            descripcion: "Smartphone Infinix Hot 50 i. Incluye 1 año de garantía.",
+            descripcion: "Celular Infinix Hot 50 i. Incluye 1 año de garantía.",
             oferta: false,
             imagenes: [
                 "https://electromas.pages.dev/principal/celulares/hot50i.png",
@@ -1644,9 +1538,20 @@ const EMPRESA = {
             ]
         },
         {
+            nombre: "Televisor Indurama 58\" UHD 4K",
+            precio: 556,
+            descripcion: "Smart TV Indurama de 58 pulgadas UHD 4K. Incluye 2 años de garantía.",
+            oferta: true,
+            imagenes: [
+                "https://electromas.pages.dev/principal/televisor/indurama.png",
+                "https://electromas.pages.dev/principal/general/electro.png",
+                "https://electromas.pages.dev/principal/celulares/prohot50pro.png"
+            ]
+        },
+        {
             nombre: "Combo Cocina Premium",
             precio: 1199,
-            descripcion: "Cocina a gas de 5 quemadores Indurama, horno empotrable eléctrico con convección, campana extractora, garantía directa de fábrica e instalación básica incluida.",
+            descripcion: "Combo con cocina a gas de 5 quemadores Indurama, horno empotrable eléctrico con convección, campana extractora, garantía directa de fábrica e instalación básica incluida.",
             oferta: true,
             imagenes: [
                 "https://electromas.pages.dev/principal/general/electro.png",
@@ -1657,23 +1562,23 @@ const EMPRESA = {
         {
             nombre: "Combo Lavado Total",
             precio: 1099,
-            descripcion: "Lavadora automática de gran capacidad, secadora eficiente con sensores de humedad, entrega e instalación a domicilio, envío gratis e incluye kit de instalación.",
+            descripcion: "Combo con lavadora automática de gran capacidad, secadora eficiente con sensores de humedad, entrega e instalación a domicilio, envío gratis e incluye kit de instalación.",
             oferta: true,
             imagenes: [
                 "https://electromas.pages.dev/principal/lavadora/indurama.png",
-                "https://electromas.pages.dev/principal/general/electro.png",
-                "https://electromas.pages.dev/principal/refrigerador/indurama.png"
+                "https://electromas.pages.dev/principal/refrigerador/indurama.png",
+                "https://electromas.pages.dev/principal/general/electro.png"
             ]
         },
         {
             nombre: "Combo Clima Ideal",
             precio: 899,
-            descripcion: "Aire acondicionado split de 12.000 BTU, ventilador silencioso de torre, control remoto, temporizador programable e instalación básica en Loja.",
+            descripcion: "Combo con aire acondicionado split de 12.000 BTU, ventilador silencioso de torre, control remoto, temporizador programable e instalación básica en Loja.",
             oferta: true,
             imagenes: [
                 "https://electromas.pages.dev/principal/general/electro.png",
-                "https://electromas.pages.dev/principal/menores/air.png",
-                "https://electromas.pages.dev/principal/televisor/indurama.png"
+                "https://electromas.pages.dev/principal/televisor/indurama.png",
+                "https://electromas.pages.dev/principal/cocina/Zafiro30.png"
             ]
         }
     ]
@@ -1862,7 +1767,13 @@ function renderCompany() {
     document.getElementById("companyDescription").textContent = EMPRESA.descripcion;
 
     document.getElementById("infoPhone").textContent = EMPRESA.celular;
-    document.getElementById("infoEmail").textContent = EMPRESA.correo || "No disponible";
+
+    const emailValue = String(EMPRESA.correo || "").trim();
+    const emailLink = emailValue
+        ? "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(emailValue)
+        : "#";
+
+    document.getElementById("infoEmail").textContent = emailValue || "No disponible";
 
     document.getElementById("infoWeb").textContent = EMPRESA.web ? getDisplayWeb(EMPRESA.web) : "No disponible";
     document.getElementById("infoWeb").href = EMPRESA.web || "#";
@@ -1871,12 +1782,16 @@ function renderCompany() {
 
     document.getElementById("whatsappGeneral").href = makeWhatsappLink();
     document.getElementById("callButton").href = "tel:" + EMPRESA.celular;
-    document.getElementById("emailButton").href = EMPRESA.correo ? "mailto:" + EMPRESA.correo : "#";
+
+    const emailButton = document.getElementById("emailButton");
+    emailButton.href = emailLink;
+    emailButton.target = emailValue ? "_blank" : "";
+    emailButton.rel = emailValue ? "noopener noreferrer" : "";
+    emailButton.style.display = emailValue ? "inline-flex" : "none";
+
     document.getElementById("mapButton").href = EMPRESA.mapa;
     document.getElementById("webButton").href = EMPRESA.web || "#";
 
-    document.getElementById("emailButton").style.display = EMPRESA.correo ? "inline-flex" : "none";
-    document.getElementById("emailButton").style.display = EMPRESA.correo ? "inline-flex" : "none";
     document.getElementById("webButton").style.display = EMPRESA.web ? "inline-flex" : "none";
     document.getElementById("deliveryStatus").style.display = EMPRESA.entregaDomicilio ? "inline-flex" : "none";
     document.getElementById("creditStatus").style.display = EMPRESA.creditoDirecto ? "inline-flex" : "none";
