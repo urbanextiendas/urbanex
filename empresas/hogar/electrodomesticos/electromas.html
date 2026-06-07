@@ -1246,7 +1246,7 @@
         <section class="content-grid">
             <section class="panel">
                 <div class="panel-head">
-                    <h2>Productos destacados</h2>
+                    <h2>Catálogo destacado</h2>
                 </div>
                 <div class="product-grid" id="productGrid"></div>
             </section>
@@ -1342,21 +1342,21 @@
 const EMPRESA = {
     nombre: "Electromás",
     categoria: "Electrodomésticos, tecnología y hogar",
-    tipo: "electrodomesticos tecnologia hogar refrigeracion cocina lavado climatizacion celulares televisores computadoras confort ofertas combos credito directo loja zamora",
-    descripcion: "Electrodomésticos, tecnología y hogar con atención comercial para Loja y Zamora. Consulte por WhatsApp y reciba precio, crédito, garantía y disponibilidad.",
+    tipo: "electrodomesticos tecnologia hogar refrigeracion cocina lavado microondas electrodomesticos menores celulares televisores combos ofertas credito directo loja zamora",
+    descripcion: "Electrodomésticos, tecnología y hogar con atención directa para Loja y Zamora. Consulte por WhatsApp y reciba precio, crédito, garantía y disponibilidad sin perder tiempo.",
 
-    logo: "/logosempresas/electromas1.jpg",
+    logo: "https://electromas.pages.dev/principal/general/electro.png",
     portada: "/logosempresas/electromas2.png",
 
     celular: "+593988926331",
-    correo: "electromascreditosas@gmail.com",
+    correo: "",
     web: "https://electromas.pages.dev",
-    direccion: "Imbabura entre Sucre y 18 de Noviembre, Loja, Ecuador",
+    direccion: "Imbabura entre Sucre y 18 de Noviembre, Loja",
     mapa: "https://www.google.com/maps/search/?api=1&query=Imbabura+entre+Sucre+y+18+de+Noviembre,+Loja,+Ecuador",
     moneda: "$",
     zonaHoraria: "America/Guayaquil",
 
-    entregaDomicilio: false,
+    entregaDomicilio: true,
     creditoDirecto: true,
 
     horario: {
@@ -1371,91 +1371,256 @@ const EMPRESA = {
 
     productos: [
         {
-            nombre: "Refrigeración",
-            precio: "",
-            descripcion: "Equipos de refrigeración para hogar y negocio. Consulte modelos, garantía, disponibilidad y opciones de crédito.",
+            nombre: "Kombo-cocineta a gas Pompeya 4Q Inox",
+            precio: 82,
+            descripcion: "Producto de la línea Cocinas. Incluye 18 meses de garantía.",
             oferta: false,
             imagenes: [
-                "/imagenes/productos/refrigeradora-300l.jpg",
-                "/imagenes/productos/refrigeradora-300l-2.jpg",
-                "/imagenes/productos/refrigeradora-300l-3.jpg"
+                "https://electromas.pages.dev/principal/cocina/pompeya.png",
+                "https://electromas.pages.dev/principal/cocina/Bilbao20.png",
+                "https://electromas.pages.dev/principal/cocina/Milan24.png"
             ]
         },
         {
-            nombre: "Lavado",
-            precio: "",
-            descripcion: "Lavadoras y soluciones para el cuidado de la ropa, con asesoría comercial para Loja y Zamora.",
+            nombre: "Indurama Bilbao Spazio Plus 20\"",
+            precio: 221.40,
+            descripcion: "Cocina Indurama de la sección Cocinas. Incluye 1 año de garantía.",
             oferta: false,
             imagenes: [
-                "/imagenes/productos/lavadora-18kg.jpg",
-                "/imagenes/productos/lavadora-18kg-2.jpg",
-                "/imagenes/productos/lavadora-18kg-3.jpg"
+                "https://electromas.pages.dev/principal/cocina/Bilbao20.png",
+                "https://electromas.pages.dev/principal/cocina/Milan24.png",
+                "https://electromas.pages.dev/principal/cocina/Zafiro30.png"
             ]
         },
         {
-            nombre: "Cocina",
-            precio: "",
-            descripcion: "Cocinas y equipos complementarios para el hogar, con cotización directa por WhatsApp.",
+            nombre: "Indurama Milan Zafiro 24\"",
+            precio: 372,
+            descripcion: "Cocina Indurama de la sección Cocinas. Incluye 1 año de garantía.",
             oferta: false,
             imagenes: [
-                "/imagenes/productos/cocina-4-quemadores.jpg",
-                "/imagenes/productos/cocina-4-quemadores-2.jpg",
-                "/imagenes/productos/cocina-4-quemadores-3.jpg"
+                "https://electromas.pages.dev/principal/cocina/Milan24.png",
+                "https://electromas.pages.dev/principal/cocina/Zafiro30.png",
+                "https://electromas.pages.dev/principal/cocina/Bilbao20.png"
             ]
         },
         {
-            nombre: "Televisores",
-            precio: "",
-            descripcion: "Televisores y tecnología para entretenimiento en el hogar. Consulte disponibilidad y precios actualizados.",
+            nombre: "Indurama Galicia Zafiro 30\"",
+            precio: 517,
+            descripcion: "Cocina Indurama de la sección Cocinas. Incluye 1 año de garantía.",
             oferta: false,
             imagenes: [
-                "/imagenes/productos/televisor.jpg",
-                "/imagenes/productos/televisor-2.jpg",
-                "/imagenes/productos/televisor-3.jpg"
+                "https://electromas.pages.dev/principal/cocina/Zafiro30.png",
+                "https://electromas.pages.dev/principal/cocina/Milan24.png",
+                "https://electromas.pages.dev/principal/cocina/Bilbao20.png"
             ]
         },
         {
-            nombre: "Celulares",
-            precio: "",
-            descripcion: "Celulares y equipos tecnológicos sujetos a disponibilidad. Solicite cotización directa.",
+            nombre: "Whirlpool 20 litros silver WM1807D",
+            precio: 115,
+            descripcion: "Microondas Whirlpool de 20 litros. Incluye 1 año de garantía.",
             oferta: false,
             imagenes: [
-                "/imagenes/productos/celular.jpg",
-                "/imagenes/productos/celular-2.jpg",
-                "/imagenes/productos/celular-3.jpg"
+                "https://electromas.pages.dev/principal/microondas/wm1807d.png",
+                "https://electromas.pages.dev/principal/microondas/mwi-20cr.png",
+                "https://electromas.pages.dev/principal/cocina/pompeya.png"
             ]
         },
         {
-            nombre: "Computadoras",
-            precio: "",
-            descripcion: "Computadoras y accesorios tecnológicos para estudio, trabajo y hogar.",
+            nombre: "Indurama 20 litros croma MWI-20CR",
+            precio: 118,
+            descripcion: "Microondas Indurama de 20 litros. Incluye 1 año de garantía.",
             oferta: false,
             imagenes: [
-                "/imagenes/productos/computadora.jpg",
-                "/imagenes/productos/computadora-2.jpg",
-                "/imagenes/productos/computadora-3.jpg"
+                "https://electromas.pages.dev/principal/microondas/mwi-20cr.png",
+                "https://electromas.pages.dev/principal/microondas/wm1807d.png",
+                "https://electromas.pages.dev/principal/menores/air.png"
             ]
         },
         {
-            nombre: "Climatización",
-            precio: "",
-            descripcion: "Equipos de climatización y confort para espacios familiares o comerciales.",
+            nombre: "Minibar Indurama 95 litros RI-120CR",
+            precio: 205.20,
+            descripcion: "Producto de refrigeración. Incluye 3 años de garantía en el compresor.",
             oferta: false,
             imagenes: [
-                "/imagenes/productos/climatizacion.jpg",
-                "/imagenes/productos/climatizacion-2.jpg",
-                "/imagenes/productos/climatizacion-3.jpg"
+                "https://electromas.pages.dev/principal/refrigerador/RI-120CR.png",
+                "https://electromas.pages.dev/principal/refrigerador/indurama.png",
+                "https://electromas.pages.dev/principal/refrigerador/RI-480CR.jpeg"
             ]
         },
         {
-            nombre: "Ofertas y combos",
-            precio: "",
-            descripcion: "Consulte promociones, combos y alternativas de compra con asesoría comercial.",
+            nombre: "Refrigerador Indurama 262 litros RI-370SD",
+            precio: 420,
+            descripcion: "Refrigerador Indurama de 262 litros. Incluye 3 años de garantía en el compresor.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/refrigerador/indurama.png",
+                "https://electromas.pages.dev/principal/refrigerador/RI-480CR.jpeg",
+                "https://electromas.pages.dev/principal/refrigerador/RI-120CR.png"
+            ]
+        },
+        {
+            nombre: "Refrigerador Indurama 390 litros RI-480CR",
+            precio: 621,
+            descripcion: "Refrigerador Indurama de 390 litros. Incluye 3 años de garantía en el compresor.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/refrigerador/RI-480CR.jpeg",
+                "https://electromas.pages.dev/principal/refrigerador/indurama.png",
+                "https://electromas.pages.dev/principal/refrigerador/RI-120CR.png"
+            ]
+        },
+        {
+            nombre: "Lavadora Indurama 19kg",
+            precio: 535,
+            descripcion: "Lavadora Indurama de 19kg. Incluye 3 años de garantía en motor y panel.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/lavadora/indurama.png",
+                "https://electromas.pages.dev/principal/refrigerador/indurama.png",
+                "https://electromas.pages.dev/principal/menores/air.png"
+            ]
+        },
+        {
+            nombre: "Extractor de jugo Indurama EI-CR",
+            precio: 98.28,
+            descripcion: "Electrodoméstico menor. Incluye 1 año de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/menores/eicr.png",
+                "https://electromas.pages.dev/principal/menores/air.png",
+                "https://electromas.pages.dev/principal/menores/arrocera.png"
+            ]
+        },
+        {
+            nombre: "Air fryer Indurama 8 litros negra",
+            precio: 161,
+            descripcion: "Freidora de aire Indurama de 8 litros. Incluye 1 año de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/menores/air.png",
+                "https://electromas.pages.dev/principal/menores/eicr.png",
+                "https://electromas.pages.dev/principal/menores/arrocera.png"
+            ]
+        },
+        {
+            nombre: "Olla arrocera Indurama 1.8 litros croma",
+            precio: 48,
+            descripcion: "Olla arrocera Indurama de 1.8 litros. Incluye 1 año de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/menores/arrocera.png",
+                "https://electromas.pages.dev/principal/menores/air.png",
+                "https://electromas.pages.dev/principal/menores/eicr.png"
+            ]
+        },
+        {
+            nombre: "Televisor Indurama 32\"",
+            precio: 222,
+            descripcion: "Televisor Indurama de 32 pulgadas. Incluye 2 años de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/televisor/indurama.png",
+                "https://electromas.pages.dev/principal/televisor/indurama.png",
+                "https://electromas.pages.dev/principal/televisor/indurama.png"
+            ]
+        },
+        {
+            nombre: "Televisor Indurama 43\"",
+            precio: 351,
+            descripcion: "Televisor Indurama de 43 pulgadas. Incluye 2 años de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/televisor/indurama.png",
+                "https://electromas.pages.dev/principal/televisor/indurama.png",
+                "https://electromas.pages.dev/principal/televisor/indurama.png"
+            ]
+        },
+        {
+            nombre: "Televisor Indurama 58\"",
+            precio: 556,
+            descripcion: "Televisor Indurama de 58 pulgadas. Incluye 2 años de garantía.",
             oferta: true,
             imagenes: [
-                "/imagenes/productos/ofertas.jpg",
-                "/imagenes/productos/combos.jpg",
-                "/imagenes/productos/electrodomesticos.jpg"
+                "https://electromas.pages.dev/principal/televisor/indurama.png",
+                "https://electromas.pages.dev/principal/televisor/indurama.png",
+                "https://electromas.pages.dev/principal/televisor/indurama.png"
+            ]
+        },
+        {
+            nombre: "Televisor TCL 43\"",
+            precio: 370,
+            descripcion: "Televisor TCL de 43 pulgadas. Incluye 2 años de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/televisor/indurama.png",
+                "https://electromas.pages.dev/principal/televisor/indurama.png",
+                "https://electromas.pages.dev/principal/televisor/indurama.png"
+            ]
+        },
+        {
+            nombre: "Televisor TCL 55\"",
+            precio: 516,
+            descripcion: "Televisor TCL de 55 pulgadas. Incluye 2 años de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/televisor/indurama.png",
+                "https://electromas.pages.dev/principal/televisor/indurama.png",
+                "https://electromas.pages.dev/principal/televisor/indurama.png"
+            ]
+        },
+        {
+            nombre: "Infinix Hot 50 pro",
+            precio: 240,
+            descripcion: "Smartphone Infinix Hot 50 pro. Incluye 1 año de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/celulares/prohot50pro.png",
+                "https://electromas.pages.dev/principal/celulares/hot50i.png",
+                "https://electromas.pages.dev/principal/televisor/indurama.png"
+            ]
+        },
+        {
+            nombre: "Infinix Hot 50 i",
+            precio: 150,
+            descripcion: "Smartphone Infinix Hot 50 i. Incluye 1 año de garantía.",
+            oferta: false,
+            imagenes: [
+                "https://electromas.pages.dev/principal/celulares/hot50i.png",
+                "https://electromas.pages.dev/principal/celulares/prohot50pro.png",
+                "https://electromas.pages.dev/principal/televisor/indurama.png"
+            ]
+        },
+        {
+            nombre: "Combo Cocina Premium",
+            precio: 1199,
+            descripcion: "Cocina a gas de 5 quemadores Indurama, horno empotrable eléctrico con convección, campana extractora, garantía directa de fábrica e instalación básica incluida.",
+            oferta: true,
+            imagenes: [
+                "https://electromas.pages.dev/principal/general/electro.png",
+                "https://electromas.pages.dev/principal/cocina/Zafiro30.png",
+                "https://electromas.pages.dev/principal/cocina/Bilbao20.png"
+            ]
+        },
+        {
+            nombre: "Combo Lavado Total",
+            precio: 1099,
+            descripcion: "Lavadora automática de gran capacidad, secadora eficiente con sensores de humedad, entrega e instalación a domicilio, envío gratis e incluye kit de instalación.",
+            oferta: true,
+            imagenes: [
+                "https://electromas.pages.dev/principal/lavadora/indurama.png",
+                "https://electromas.pages.dev/principal/general/electro.png",
+                "https://electromas.pages.dev/principal/refrigerador/indurama.png"
+            ]
+        },
+        {
+            nombre: "Combo Clima Ideal",
+            precio: 899,
+            descripcion: "Aire acondicionado split de 12.000 BTU, ventilador silencioso de torre, control remoto, temporizador programable e instalación básica en Loja.",
+            oferta: true,
+            imagenes: [
+                "https://electromas.pages.dev/principal/general/electro.png",
+                "https://electromas.pages.dev/principal/menores/air.png",
+                "https://electromas.pages.dev/principal/televisor/indurama.png"
             ]
         }
     ]
