@@ -11,418 +11,363 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        :root{
-            --bg-main:#020202;
-            --bg-card:rgba(18,18,18,.76);
-            --gold:#e5c158;
-            --border-color:rgba(229,193,88,.22);
-            --text-main:#fff;
-            --text-muted:#d7d7d7;
-            --text-soft:#9c9c9c;
-            --success:#2ed573;
-            --danger:#ff7675;
-            --font-serif:'Cinzel',serif;
-            --font-sans:'Montserrat',sans-serif;
-            --transition:all .25s ease;
-            --blur:blur(18px);
+        :root {
+            --bg-main: #020202;
+            --bg-card: rgba(18, 18, 18, 0.76);
+            --gold: #e5c158;
+            --border-color: rgba(229, 193, 88, 0.22);
+            --text-main: #ffffff;
+            --text-muted: #d7d7d7;
+            --text-soft: #9c9c9c;
+            --success: #2ed573;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --transition: all 0.25s ease;
+            --blur: blur(18px);
         }
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        body{
-            min-height:100vh;
+        body {
+            min-height: 100vh;
             background:
-                linear-gradient(135deg,rgba(0,0,0,.66),rgba(0,0,0,.34)),
-                url("../imagenes/Boulevard.png") center bottom/cover fixed no-repeat;
-            color:var(--text-main);
-            font-family:var(--font-sans);
-            padding-bottom:24px;
+                linear-gradient(135deg, rgba(0,0,0,0.66), rgba(0,0,0,0.34)),
+                url("../imagenes/Boulevard.png") center bottom / cover fixed no-repeat;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            padding-bottom: 24px;
         }
 
-        a{
-            color:inherit;
-            text-decoration:none;
+        a {
+            color: inherit;
+            text-decoration: none;
         }
 
-        .header-top{
-            height:60px;
-            background:rgba(6,6,6,.45);
-            backdrop-filter:var(--blur);
-            -webkit-backdrop-filter:var(--blur);
-            border-bottom:1px solid var(--border-color);
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            padding:0 20px;
-            position:sticky;
-            top:0;
-            z-index:20;
+        .header-top {
+            height: 60px;
+            background: rgba(6, 6, 6, 0.45);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
         }
 
-        .brand-box img{
-            height:60px;
-            width:auto;
-            display:block;
+        .brand-box img {
+            height: 60px;
+            width: auto;
+            display: block;
         }
 
-        .back-link{
-            border:1px solid var(--border-color);
-            background:rgba(0,0,0,.42);
-            color:#fff;
-            border-radius:999px;
-            padding:8px 14px;
-            font-size:11px;
-            font-weight:700;
-            transition:var(--transition);
+        .back-link {
+            border: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.42);
+            color: #ffffff;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 11px;
+            font-weight: 700;
+            transition: var(--transition);
         }
 
-        .back-link:hover{
-            border-color:var(--gold);
-            background:rgba(229,193,88,.10);
+        .back-link:hover {
+            border-color: var(--gold);
+            background: rgba(229, 193, 88, 0.10);
         }
 
-        .page-wrap{
-            width:min(1180px,calc(100% - 28px));
-            margin:22px auto 36px;
+        .page-wrap {
+            width: min(1180px, calc(100% - 28px));
+            margin: 22px auto 36px;
         }
 
-        .hero{
-            border:1px solid var(--border-color);
-            border-radius:22px;
+        .hero {
+            border: 1px solid var(--border-color);
+            border-radius: 22px;
             background:
-                radial-gradient(circle at 16% 0%,rgba(229,193,88,.18),transparent 28%),
-                rgba(6,6,6,.68);
-            backdrop-filter:var(--blur);
-            -webkit-backdrop-filter:var(--blur);
-            padding:26px 28px;
-            display:grid;
-            grid-template-columns:1fr auto;
-            gap:18px;
-            align-items:center;
-            box-shadow:0 24px 60px rgba(0,0,0,.42);
+                radial-gradient(circle at 16% 0%, rgba(229, 193, 88, 0.18), transparent 28%),
+                rgba(6, 6, 6, 0.68);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            padding: 26px 28px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 18px;
+            align-items: center;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.42);
         }
 
-        .eyebrow{
-            color:var(--gold);
-            font-size:10px;
-            font-weight:800;
-            letter-spacing:2px;
-            text-transform:uppercase;
-            margin-bottom:8px;
+        .eyebrow {
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
         }
 
-        .hero h1{
-            font-family:var(--font-serif);
-            font-size:clamp(24px,4vw,42px);
-            letter-spacing:3px;
-            text-transform:uppercase;
-            line-height:1;
-            margin-bottom:10px;
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(24px, 4vw, 42px);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 10px;
         }
 
-        .hero p{
-            color:var(--text-muted);
-            font-size:12px;
-            line-height:1.6;
-            max-width:760px;
+        .hero p {
+            color: var(--text-muted);
+            font-size: 12px;
+            line-height: 1.6;
+            max-width: 760px;
         }
 
-        .total-card{
-            min-width:132px;
-            border:1px solid rgba(229,193,88,.32);
-            background:rgba(0,0,0,.44);
-            border-radius:18px;
-            padding:14px 16px;
-            text-align:center;
+        .total-card {
+            min-width: 132px;
+            border: 1px solid rgba(229,193,88,0.32);
+            background: rgba(0,0,0,0.44);
+            border-radius: 18px;
+            padding: 14px 16px;
+            text-align: center;
         }
 
-        .total-card strong{
-            display:block;
-            color:var(--gold);
-            font-family:var(--font-serif);
-            font-size:30px;
-            line-height:1;
+        .total-card strong {
+            display: block;
+            color: var(--gold);
+            font-family: var(--font-serif);
+            font-size: 30px;
+            line-height: 1;
         }
 
-        .total-card span{
-            color:var(--text-soft);
-            font-size:9px;
-            font-weight:700;
-            text-transform:uppercase;
-            letter-spacing:1px;
+        .total-card span {
+            color: var(--text-soft);
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .toolbar{
-            margin:14px 0;
-            display:grid;
-            grid-template-columns:1fr auto auto;
-            gap:10px;
+        .toolbar {
+            margin: 14px 0;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
         }
 
         .search-input,
-        .category-select{
-            height:36px;
-            background:rgba(0,0,0,.56);
-            border:1px solid rgba(255,255,255,.12);
-            border-radius:999px;
-            color:#fff;
-            font-family:var(--font-sans);
-            font-size:11px;
-            outline:none;
+        .category-select {
+            height: 36px;
+            background: rgba(0,0,0,0.56);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 999px;
+            color: #ffffff;
+            font-family: var(--font-sans);
+            font-size: 11px;
+            outline: none;
         }
 
-        .search-input{
-            padding:0 15px;
+        .search-input {
+            padding: 0 15px;
         }
 
-        .category-select{
-            padding:0 12px;
-            min-width:210px;
-            cursor:pointer;
+        .category-select {
+            padding: 0 12px;
+            min-width: 210px;
+            cursor: pointer;
         }
 
-        .location-button{
-            height:36px;
-            border:1px solid var(--border-color);
-            background:rgba(229,193,88,.12);
-            color:#fff;
-            border-radius:999px;
-            padding:0 14px;
-            font-size:11px;
-            font-weight:800;
-            cursor:pointer;
-            font-family:var(--font-sans);
-            display:none;
+        .category-section {
+            margin-top: 14px;
+            border: 1px solid rgba(229,193,88,0.16);
+            border-radius: 18px;
+            background: rgba(5,5,5,0.52);
+            overflow: hidden;
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
         }
 
-        body[data-page="cerca"] .location-button{
-            display:block;
+        .category-header {
+            padding: 12px 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
         }
 
-        .category-section{
-            margin-top:14px;
-            border:1px solid rgba(229,193,88,.16);
-            border-radius:18px;
-            background:rgba(5,5,5,.52);
-            overflow:hidden;
-            backdrop-filter:var(--blur);
-            -webkit-backdrop-filter:var(--blur);
+        .category-header h2 {
+            color: var(--gold);
+            font-family: var(--font-serif);
+            font-size: 13px;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
         }
 
-        .category-header{
-            padding:12px 14px;
-            border-bottom:1px solid rgba(255,255,255,.07);
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:12px;
+        .category-header span {
+            color: #000000;
+            background: var(--gold);
+            border-radius: 999px;
+            padding: 4px 9px;
+            font-size: 9px;
+            font-weight: 800;
+            white-space: nowrap;
         }
 
-        .category-header h2{
-            color:var(--gold);
-            font-family:var(--font-serif);
-            font-size:13px;
-            letter-spacing:1.4px;
-            text-transform:uppercase;
+        .business-grid {
+            padding: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 10px;
         }
 
-        .category-header span{
-            color:#000;
-            background:var(--gold);
-            border-radius:999px;
-            padding:4px 9px;
-            font-size:9px;
-            font-weight:800;
-            white-space:nowrap;
+        .business-card {
+            border: 1px solid rgba(255,255,255,0.09);
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 10px;
+            min-height: 112px;
+            transition: var(--transition);
         }
 
-        .business-grid{
-            padding:12px;
-            display:grid;
-            grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
-            gap:10px;
+        .business-card:hover {
+            border-color: rgba(229,193,88,0.50);
+            background: rgba(229,193,88,0.08);
+            transform: translateY(-2px);
         }
 
-        .business-card{
-            border:1px solid rgba(255,255,255,.09);
-            background:var(--bg-card);
-            border-radius:14px;
-            padding:10px;
-            min-height:112px;
-            transition:var(--transition);
+        .business-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
         }
 
-        .business-card:hover{
-            border-color:rgba(229,193,88,.50);
-            background:rgba(229,193,88,.08);
-            transform:translateY(-2px);
+        .business-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
         }
 
-        .business-top{
-            display:flex;
-            align-items:flex-start;
-            justify-content:space-between;
-            gap:8px;
-            margin-bottom:6px;
+        .business-status {
+            color: var(--success);
+            border: 1px solid rgba(46,213,115,0.34);
+            background: rgba(46,213,115,0.10);
+            border-radius: 999px;
+            padding: 3px 7px;
+            font-size: 7.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            white-space: nowrap;
         }
 
-        .business-title{
-            font-size:12px;
-            font-weight:800;
-            color:#fff;
-            line-height:1.2;
+        .business-segment {
+            color: var(--gold);
+            font-size: 9px;
+            font-weight: 700;
+            margin-bottom: 6px;
         }
 
-        .business-status{
-            color:var(--success);
-            border:1px solid rgba(46,213,115,.34);
-            background:rgba(46,213,115,.10);
-            border-radius:999px;
-            padding:3px 7px;
-            font-size:7.5px;
-            font-weight:800;
-            text-transform:uppercase;
-            white-space:nowrap;
+        .business-description {
+            color: var(--text-muted);
+            font-size: 9px;
+            line-height: 1.45;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        .business-segment{
-            color:var(--gold);
-            font-size:9px;
-            font-weight:700;
-            margin-bottom:6px;
+        .business-footer {
+            margin-top: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
         }
 
-        .business-description{
-            color:var(--text-muted);
-            font-size:9px;
-            line-height:1.45;
-            display:-webkit-box;
-            -webkit-line-clamp:3;
-            -webkit-box-orient:vertical;
-            overflow:hidden;
+        .rating {
+            color: var(--gold);
+            font-size: 9px;
+            font-weight: 800;
         }
 
-        .extra-info{
-            margin-top:8px;
-            color:#fff;
-            font-size:8.7px;
-            line-height:1.5;
+        .profile-link {
+            border: 1px solid rgba(229,193,88,0.28);
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 8px;
+            font-weight: 800;
+            color: #ffffff;
         }
 
-        .extra-info strong,
-        .offer-list,
-        .distance-info{
-            color:var(--gold);
+        .empty-state {
+            display: none;
         }
 
-        .offer-list{
-            margin-top:8px;
-            padding-left:14px;
-            font-size:8.7px;
-            line-height:1.5;
+        .loading-state {
+            margin-top: 14px;
+            color: var(--text-muted);
+            font-size: 12px;
+            text-align: center;
         }
 
-        .distance-info{
-            margin-top:8px;
-            font-size:8.7px;
-            font-weight:800;
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 24px;
+            background-color: #000000;
+            color: #8c8c8c;
+            font-size: 11px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+            z-index: 50;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
-        .business-footer{
-            margin-top:9px;
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:8px;
-        }
-
-        .rating{
-            color:var(--gold);
-            font-size:9px;
-            font-weight:800;
-        }
-
-        .profile-link{
-            border:1px solid rgba(229,193,88,.28);
-            border-radius:999px;
-            padding:4px 8px;
-            font-size:8px;
-            font-weight:800;
-            color:#fff;
-        }
-
-        .empty-state{
-            margin-top:14px;
-            border:1px dashed rgba(229,193,88,.34);
-            border-radius:18px;
-            padding:24px;
-            text-align:center;
-            background:rgba(0,0,0,.44);
-            color:var(--text-muted);
-            font-size:12px;
-            display:none;
-        }
-
-        .loading-state{
-            margin-top:14px;
-            color:var(--text-muted);
-            font-size:12px;
-            text-align:center;
-        }
-
-        .footer{
-            position:fixed;
-            left:0;
-            bottom:0;
-            width:100%;
-            height:24px;
-            background-color:#000;
-            color:#8c8c8c;
-            font-size:11px;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            text-align:center;
-            border-top:1px solid #1a1a1a;
-            z-index:50;
-            font-family:Arial,Helvetica,sans-serif;
-        }
-
-        @media(max-width:720px){
-            .header-top{
-                height:auto;
-                padding:12px;
-                gap:10px;
-                flex-direction:column;
+        @media (max-width: 720px) {
+            .header-top {
+                height: auto;
+                padding: 12px;
+                gap: 10px;
+                flex-direction: column;
             }
 
-            .hero{
-                grid-template-columns:1fr;
-                padding:22px;
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 22px;
             }
 
-            .total-card{
-                width:100%;
+            .total-card {
+                width: 100%;
             }
 
-            .toolbar{
-                grid-template-columns:1fr;
+            .toolbar {
+                grid-template-columns: 1fr;
             }
 
-            .category-select,
-            .location-button{
-                width:100%;
+            .category-select {
+                width: 100%;
             }
         }
-
     </style>
 </head>
 
-<body data-page="domicilio">
+<body>
 
 <header class="header-top">
     <a href="../boulevard.html" class="brand-box" title="Volver al Boulevard">
@@ -437,28 +382,26 @@
         <div>
             <div class="eyebrow">Filtro global</div>
             <h1>A Domicilio</h1>
-            <p>Negocios con servicio a domicilio alimentados desde los HTML finales de cada comercio registrado en Urbanex.</p>
+            <p>Locales con servicio a domicilio declarado explícitamente en el HTML final del negocio.</p>
         </div>
 
         <div class="total-card">
-            <strong id="totalBusinesses">0</strong>
+            <strong id="totalResults">0</strong>
             <span>Con domicilio</span>
         </div>
     </section>
 
     <section class="toolbar">
-        <input type="search" id="globalSearch" class="search-input" placeholder="Buscar servicio a domicilio..." autocomplete="off">
+        <input type="search" id="globalSearch" class="search-input" placeholder="Buscar resultado..." autocomplete="off">
 
         <select id="categoryFilter" class="category-select">
             <option value="todas">Todas las categorías</option>
         </select>
-
-        <button id="locationButton" class="location-button" type="button">Usar mi ubicación</button>
     </section>
 
-    <div id="loadingState" class="loading-state">Cargando servicios a domicilio desde los HTML finales...</div>
+    <div id="loadingState" class="loading-state">Cargando resultados...</div>
     <div id="resultsContainer"></div>
-    <div id="emptyState" class="empty-state">No hay negocios con servicio a domicilio registrados en los HTML finales.</div>
+    <div id="emptyState" class="empty-state"></div>
 </main>
 
 <footer class="footer">
@@ -466,772 +409,630 @@
 </footer>
 
 <script>
-window.URBANEX_INFO_CONFIG = {
-    pageType: "domicilio",
-    singleLabel: "negocio",
-    pluralLabel: "negocios"
-};
-</script>
-
-<script>
-(function(){
-    const CONFIG = window.URBANEX_INFO_CONFIG;
-
-    const DISCOVERY_SOURCES = [
-        "../categorias/hogar/electrodomesticos.html",
-        "../categorias/hogar.html",
-        "../categorias/gastronomia.html",
-        "../categorias/comercio.html",
-        "../categorias/salud.html",
-        "../categorias/turismo.html",
-        "../categorias/movilidad.html",
-        "../categorias/finanzas.html"
+(function () {
+    const CATEGORY_SOURCES = [
+        {
+            nombre: "Hogar y Tecnología",
+            archivo: "../categorias/hogar.html",
+            hijos: [
+                "../categorias/hogar/electrodomesticos.html"
+            ]
+        },
+        {
+            nombre: "Gastronomía",
+            archivo: "../categorias/gastronomia.html",
+            hijos: []
+        },
+        {
+            nombre: "Salud y Bienestar",
+            archivo: "../categorias/salud.html",
+            hijos: []
+        },
+        {
+            nombre: "Movilidad",
+            archivo: "../categorias/movilidad.html",
+            hijos: []
+        },
+        {
+            nombre: "Turismo y Hospedaje",
+            archivo: "../categorias/turismo.html",
+            hijos: []
+        },
+        {
+            nombre: "Finanzas",
+            archivo: "../categorias/finanzas.html",
+            hijos: []
+        },
+        {
+            nombre: "Comercio y Educación",
+            archivo: "../categorias/comercio.html",
+            hijos: []
+        }
     ];
 
-    const FINAL_BUSINESS_SOURCES = [
-        "../empresas/hogar/electrodomesticos/electromas.html",
-        "../empresas/hogar/electrodomesticos/E0001.html",
-        "../categorias/hogar/electrodomesticos/E0001.html"
+    const DOMICILIO_BOOLEAN_KEYS = [
+        "domicilio",
+        "delivery",
+        "aDomicilio",
+        "servicioDomicilio",
+        "entregaDomicilio",
+        "tieneDomicilio",
+        "envio",
+        "envios"
     ];
 
-    const searchInput = document.getElementById("globalSearch");
-    const categoryFilter = document.getElementById("categoryFilter");
-    const locationButton = document.getElementById("locationButton");
+    const DOMICILIO_DATA_KEYS = [
+        "domicilio",
+        "delivery",
+        "a-domicilio",
+        "servicio-domicilio",
+        "entrega-domicilio",
+        "tiene-domicilio",
+        "envio",
+        "envios"
+    ];
+
     const resultsContainer = document.getElementById("resultsContainer");
     const emptyState = document.getElementById("emptyState");
     const loadingState = document.getElementById("loadingState");
-    const totalBusinesses = document.getElementById("totalBusinesses");
+    const totalResults = document.getElementById("totalResults");
+    const searchInput = document.getElementById("globalSearch");
+    const categoryFilter = document.getElementById("categoryFilter");
 
-    let allBusinesses = [];
-    let userLocation = null;
+    const cache = new Map();
+    let allResults = [];
 
-    function escapeHtml(value){
-        return String(value ?? "").replace(/[&<>"']/g,function(char){
-            return {
-                "&":"&amp;",
-                "<":"&lt;",
-                ">":"&gt;",
-                '"':"&quot;",
-                "'":"&#039;"
-            }[char];
-        });
+    function escapeHtml(value) {
+        return String(value || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
 
-    function normalizeText(value){
-        return String(value ?? "")
+    function normalizeText(value) {
+        return String(value || "")
             .toLowerCase()
             .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g,"")
-            .replace(/[^a-z0-9ñ\s./_-]/gi," ")
-            .replace(/\s+/g," ")
+            .replace(/[\u0300-\u036f]/g, "")
             .trim();
     }
 
-    function titleFromPath(path){
-        try{
-            const pathname = new URL(path, window.location.href).pathname;
-            const file = pathname.split("/").pop() || "Negocio";
-            return file.replace(/\.html?$/i,"").replace(/[-_]/g," ").trim() || "Negocio";
-        }catch(error){
-            const file = String(path || "").split("/").pop() || "Negocio";
-            return file.replace(/\.html?$/i,"").replace(/[-_]/g," ").trim() || "Negocio";
+    function escapeRegExp(value) {
+        return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function uniqueArray(values) {
+        return Array.from(new Set(values.filter(Boolean)));
+    }
+
+    function resolveProjectUrl(src, baseUrl) {
+        if (!src) return "";
+        if (/^https?:\/\//i.test(src)) return src;
+        if (src.startsWith("/")) return new URL(src, window.location.origin).href;
+        return new URL(src, baseUrl || window.location.href).href;
+    }
+
+    async function fetchHtml(src, baseUrl) {
+        const normalizedUrl = resolveProjectUrl(src, baseUrl);
+
+        if (cache.has(normalizedUrl)) {
+            return cache.get(normalizedUrl);
         }
+
+        const requestUrl = new URL(normalizedUrl);
+        requestUrl.searchParams.set("_consulta", Date.now().toString());
+
+        const response = await fetch(requestUrl.href, { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo cargar " + normalizedUrl);
+
+        const htmlText = await response.text();
+        cache.set(normalizedUrl, htmlText);
+        return htmlText;
     }
 
-    function absoluteUrl(path, base){
-        try{
-            return new URL(path, base || window.location.href).href;
-        }catch(error){
-            return String(path || "");
-        }
-    }
+    function getBalancedText(sourceText, startIndex, openChar, closeChar) {
+        const firstOpen = sourceText.indexOf(openChar, startIndex);
+        if (firstOpen === -1) return "";
 
-    function sameOrigin(url){
-        try{
-            return new URL(url, window.location.href).origin === window.location.origin;
-        }catch(error){
-            return false;
-        }
-    }
-
-    function toBoolean(value){
-        if(typeof value === "boolean") return value;
-        if(typeof value === "number") return value === 1;
-        if(typeof value === "string"){
-            const normalized = normalizeText(value);
-            return ["si","sí","true","1","activo","activa","disponible","abierto","open","delivery","domicilio","envio","envío","oferta","promo","promocion","promoción"].includes(normalized);
-        }
-        return Boolean(value);
-    }
-
-    function safeArray(value){
-        if(Array.isArray(value)) return value.map(item => String(item).trim()).filter(Boolean);
-        if(typeof value === "string" && value.trim()){
-            return value.split("|").map(item => item.trim()).filter(Boolean);
-        }
-        return [];
-    }
-
-    function parseNumber(value){
-        const number = Number(String(value ?? "").replace(",",".").replace(/[^\d.-]/g,""));
-        return Number.isFinite(number) ? number : null;
-    }
-
-    function getMeta(doc,name){
-        return doc.querySelector(`meta[name="${name}"]`)?.getAttribute("content")?.trim() || "";
-    }
-
-    function getFirstText(doc,selectors){
-        for(const selector of selectors){
-            const node = doc.querySelector(selector);
-            const text = node?.textContent?.trim();
-            if(text) return text;
-        }
-        return "";
-    }
-
-    function getFirstAttr(doc,selectors,attribute){
-        for(const selector of selectors){
-            const node = doc.querySelector(selector);
-            const value = node?.getAttribute(attribute)?.trim();
-            if(value) return value;
-        }
-        return "";
-    }
-
-    function documentText(doc){
-        return normalizeText((doc.body && (doc.body.innerText || doc.body.textContent)) || "");
-    }
-
-    function hasNegativeDeliveryEvidence(text){
-        const normalized = normalizeText(text);
-        return /\b(no|sin)\s+(servicio\s+a\s+)?(domicilio|delivery|envio|entrega)\b/.test(normalized) ||
-               /\b(domicilio|delivery|envio|entrega)\s+(no\s+)?(no disponible|inactivo|desactivado|suspendido)\b/.test(normalized) ||
-               /\b(no ofrecemos|no realiza|no realizamos|no cuenta con)\s+(servicio\s+a\s+)?(domicilio|delivery|envio|entrega)\b/.test(normalized);
-    }
-
-    function hasDeliveryEvidence(text){
-        const normalized = normalizeText(text);
-        if(!normalized || hasNegativeDeliveryEvidence(normalized)) return false;
-
-        return /\b(servicio\s+a\s+domicilio|a\s+domicilio|entrega\s+a\s+domicilio|entregas\s+a\s+domicilio|delivery|envio\s+a\s+domicilio|envios\s+a\s+domicilio|envio\s+local|envios\s+locales|entrega\s+local|entregas\s+locales|delivery\s+disponible|domicilio\s+disponible)\b/.test(normalized);
-    }
-
-    function detectDeliveryFromFinalHtml(doc){
-        const explicit = [
-            getMeta(doc,"urbanex:domicilio"),
-            getMeta(doc,"urbanex:delivery"),
-            getMeta(doc,"urbanex:envio"),
-            getFirstText(doc,["[data-urbanex-domicilio]","[data-delivery]","[data-envio]",".delivery-info",".domicilio-info",".delivery",".domicilio",".envio",".servicio-domicilio"])
-        ].filter(Boolean).join(" ");
-
-        if(explicit && toBoolean(explicit)) return true;
-        if(explicit && hasDeliveryEvidence(explicit)) return true;
-
-        const text = documentText(doc);
-        return hasDeliveryEvidence(text);
-    }
-
-    function extractBalancedStructure(source,startIndex){
-        if(startIndex < 0) return "";
-
-        const opener = source[startIndex];
-        const closer = opener === "{" ? "}" : "]";
         let depth = 0;
-        let quote = null;
+        let quote = "";
         let escaped = false;
 
-        for(let index = startIndex; index < source.length; index++){
-            const char = source[index];
+        for (let i = firstOpen; i < sourceText.length; i++) {
+            const char = sourceText[i];
 
-            if(quote){
-                if(escaped){
-                    escaped = false;
-                    continue;
-                }
-
-                if(char === "\\"){
-                    escaped = true;
-                    continue;
-                }
-
-                if(char === quote){
-                    quote = null;
-                }
-
+            if (escaped) {
+                escaped = false;
                 continue;
             }
 
-            if(char === "\"" || char === "'" || char === "`"){
+            if (char === "\\") {
+                escaped = true;
+                continue;
+            }
+
+            if (quote) {
+                if (char === quote) quote = "";
+                continue;
+            }
+
+            if (char === "'" || char === '"' || char === "`") {
                 quote = char;
                 continue;
             }
 
-            if(char === opener) depth++;
-            if(char === closer) depth--;
+            if (char === openChar) depth++;
+            if (char === closeChar) depth--;
 
-            if(depth === 0){
-                return source.slice(startIndex,index + 1);
+            if (depth === 0) {
+                return sourceText.slice(firstOpen, i + 1);
             }
         }
 
         return "";
     }
 
-    function extractAssignedStructures(source,names){
-        const found = [];
-
-        names.forEach(function(name){
-            const pattern = new RegExp("(?:const|let|var)\\s+" + name + "\\s*=|window\\." + name + "\\s*=","g");
-            let match;
-
-            while((match = pattern.exec(source)) !== null){
-                const objectStart = source.indexOf("{",match.index);
-                const arrayStart = source.indexOf("[",match.index);
-                const candidates = [objectStart,arrayStart].filter(index => index >= 0);
-                const startIndex = Math.min.apply(null,candidates);
-
-                if(!Number.isFinite(startIndex)) continue;
-
-                const raw = extractBalancedStructure(source,startIndex);
-                if(!raw) continue;
-
-                try{
-                    found.push((new Function("return (" + raw + ");"))());
-                }catch(error){
-                    console.warn("No se pudo interpretar " + name,error);
-                }
-            }
-        });
-
-        return found;
+    function getArrayText(sourceText, arrayStartIndex) {
+        return getBalancedText(sourceText, arrayStartIndex, "[", "]");
     }
 
-    function getScriptText(doc){
-        return Array.from(doc.querySelectorAll("script"))
-            .map(script => script.textContent || "")
-            .join("\n");
+    function getObjectText(sourceText, objectStartIndex) {
+        return getBalancedText(sourceText, objectStartIndex, "{", "}");
     }
 
-    async function fetchHtml(url){
-        const response = await fetch(url,{cache:"no-store"});
-        if(!response.ok) throw new Error("No se pudo cargar " + url);
-        return await response.text();
-    }
+    function getObjectBlocks(arrayText) {
+        const blocks = [];
+        let index = 0;
 
-    function looksLikeFinalBusinessUrl(url){
-        try{
-            const parsed = new URL(url,window.location.href);
-            const pathname = parsed.pathname.toLowerCase();
+        while (index < arrayText.length) {
+            const objectStart = arrayText.indexOf("{", index);
+            if (objectStart === -1) break;
 
-            if(pathname.includes("/informativos/")) return false;
-            if(pathname.endsWith("/index.html")) return false;
-            if(pathname.endsWith("/boulevard.html")) return false;
-            if(pathname === "/" || pathname.endsWith("/")) return false;
+            const objectText = getObjectText(arrayText, objectStart);
+            if (!objectText) break;
 
-            return pathname.includes("/empresas/") || /\/e\d+\.html$/i.test(pathname) || pathname.includes("/negocios/") || pathname.includes("/locales/");
-        }catch(error){
-            return false;
-        }
-    }
-
-    async function discoverFinalBusinessSources(){
-        const sources = new Set();
-
-        FINAL_BUSINESS_SOURCES.forEach(function(source){
-            const resolved = absoluteUrl(source,window.location.href);
-            if(sameOrigin(resolved)) sources.add(resolved);
-        });
-
-        for(const discoverySource of DISCOVERY_SOURCES){
-            const discoveryUrl = absoluteUrl(discoverySource,window.location.href);
-
-            try{
-                const htmlText = await fetchHtml(discoveryUrl);
-                const doc = new DOMParser().parseFromString(htmlText,"text/html");
-                const scriptText = getScriptText(doc);
-
-                const assignedSources = extractAssignedStructures(scriptText,[
-                    "EMPRESAS_DATA_SOURCES",
-                    "BUSINESS_DATA_SOURCES",
-                    "FINAL_BUSINESS_SOURCES",
-                    "EMPRESAS_FINAL_SOURCES",
-                    "URBANEX_BUSINESS_SOURCES"
-                ]);
-
-                assignedSources.forEach(function(value){
-                    const items = Array.isArray(value) ? value : [value];
-
-                    items.forEach(function(item){
-                        if(typeof item === "string"){
-                            const resolved = absoluteUrl(item,discoveryUrl);
-                            if(sameOrigin(resolved)) sources.add(resolved);
-                        }
-                    });
-                });
-
-                Array.from(doc.querySelectorAll("a[href]")).forEach(function(anchor){
-                    const href = anchor.getAttribute("href");
-                    if(!href) return;
-
-                    const resolved = absoluteUrl(href,discoveryUrl);
-                    if(sameOrigin(resolved) && looksLikeFinalBusinessUrl(resolved)){
-                        sources.add(resolved);
-                    }
-                });
-            }catch(error){
-                console.warn(error);
-            }
+            blocks.push(objectText);
+            index = objectStart + objectText.length;
         }
 
-        return Array.from(sources);
+        return blocks;
     }
 
-    function parseJsonBusiness(doc,sourcePath){
-        const jsonNode = doc.querySelector(
-            "#urbanex-empresa-data, #urbanex-empresas-data, #businessData, #empresa-data, script[type='application/json'][data-urbanex='empresa'], script[type='application/json'][data-urbanex='empresas']"
-        );
-
-        if(!jsonNode || !jsonNode.textContent.trim()) return null;
-
-        try{
-            const parsed = JSON.parse(jsonNode.textContent.trim());
-            return Array.isArray(parsed) ? parsed : [parsed];
-        }catch(error){
-            console.warn("JSON inválido en " + sourcePath,error);
-            return null;
+    function readStringProperty(block, propertyNames) {
+        for (const propertyName of propertyNames) {
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*([\\\"'`])([\\s\\S]*?)\\1", "i");
+            const match = pattern.exec(block);
+            if (match) return match[2];
         }
+
+        return "";
     }
 
-    function parseAssignedBusiness(doc){
-        const scriptText = getScriptText(doc);
-        const assignedData = extractAssignedStructures(scriptText,[
-            "EMPRESA",
-            "URBANEX_EMPRESA",
-            "EMPRESA_DATA",
-            "BUSINESS_DATA",
-            "NEGOCIO_DATA",
-            "EMPRESAS",
-            "URBANEX_EMPRESAS",
-            "EMPRESAS_ELECTRODOMESTICOS"
-        ]);
+    function readNumberProperty(block, propertyNames) {
+        for (const propertyName of propertyNames) {
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*([0-9]+(?:\\.[0-9]+)?)", "i");
+            const match = pattern.exec(block);
+            if (match) return match[1];
+        }
 
-        for(const value of assignedData){
-            if(!value) continue;
-            if(Array.isArray(value)) return value;
-            if(typeof value === "object") return [value];
+        return "";
+    }
+
+    function readBooleanProperty(block, propertyNames) {
+        for (const propertyName of propertyNames) {
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*(true|false)", "i");
+            const match = pattern.exec(block);
+            if (match) return match[1].toLowerCase() === "true";
         }
 
         return null;
     }
 
-    function isGenericBusiness(rawBusiness){
-        const name = normalizeText(rawBusiness.nombre || rawBusiness.name || rawBusiness.titulo || "");
-        const description = normalizeText(rawBusiness.descripcion || rawBusiness.description || rawBusiness.detalle || "");
-        const genericNames = [
-            "urbanex",
-            "urbanex ofertas",
-            "urbanex abiertos ahora",
-            "urbanex a domicilio",
-            "urbanex cerca de mi",
-            "hogar y tecnologia",
-            "turismo y hospedaje",
-            "comercio y educacion",
-            "salud y bienestar",
-            "gastronomica",
-            "finanzas",
-            "movilidad"
-        ];
-
-        return genericNames.includes(name) && !description;
+    function isExplicitDomicilioBlock(block) {
+        return readBooleanProperty(block, DOMICILIO_BOOLEAN_KEYS) === true;
     }
 
-    function fallbackBusiness(doc,sourcePath){
-        const explicitOffers = Array.from(doc.querySelectorAll("[data-urbanex-oferta], [data-oferta], .business-offer, .offer-item, .oferta-item, .promo-item, .discount-item"))
-            .map(node => node.textContent.trim())
-            .filter(Boolean);
+    function isExplicitDomicilioElement(element) {
+        return DOMICILIO_DATA_KEYS.some(function (key) {
+            const value = element.getAttribute("data-" + key);
+            return normalizeText(value) === "true" || value === "1";
+        });
+    }
 
-        const explicitDelivery = getMeta(doc,"urbanex:domicilio") || getMeta(doc,"urbanex:delivery") || getMeta(doc,"urbanex:envio") || getFirstText(doc,["[data-urbanex-domicilio]","[data-delivery]","[data-envio]",".delivery-info",".domicilio-info",".delivery",".domicilio",".envio",".servicio-domicilio"]);
-        const detectedDelivery = detectDeliveryFromFinalHtml(doc);
-        const explicitOpen = getMeta(doc,"urbanex:abierto") || getMeta(doc,"urbanex:estado") || getFirstText(doc,["[data-urbanex-estado]",".business-status",".estado"]);
+    function getBusinessNameFromPath(path) {
+        try {
+            const url = new URL(path, window.location.href);
+            const fileName = url.pathname.split("/").filter(Boolean).pop() || "Negocio";
+            return fileName.replace(/\.html?$/i, "").replace(/[-_]/g, " ");
+        } catch (error) {
+            return "Negocio";
+        }
+    }
 
-        const raw = {
-            codigo:getMeta(doc,"urbanex:codigo") || titleFromPath(sourcePath),
-            nombre:getMeta(doc,"urbanex:nombre") || getFirstText(doc,[".company-name",".business-name",".profile-title","h1"]) || doc.title || titleFromPath(sourcePath),
-            categoria:getMeta(doc,"urbanex:categoria") || getFirstText(doc,[".business-category",".category-pill",".categoria"]),
-            segmento:getMeta(doc,"urbanex:segmento") || getFirstText(doc,[".business-segment",".segmento"]),
-            descripcion:getMeta(doc,"description") || getMeta(doc,"urbanex:descripcion") || getFirstText(doc,[".business-description",".company-description",".descripcion",".profile-description"]),
-            rating:getFirstText(doc,[".rating",".business-rating",".calificacion"]).replace(/[^\d.]/g,"") || getMeta(doc,"urbanex:rating"),
-            estado:explicitOpen,
-            abierto:toBoolean(explicitOpen),
-            ofertas:explicitOffers,
-            tieneOferta:toBoolean(getMeta(doc,"urbanex:tieneOferta") || getMeta(doc,"urbanex:oferta")) || explicitOffers.length > 0,
-            domicilio:toBoolean(explicitDelivery) || detectedDelivery,
-            _htmlDeliveryDetected:detectedDelivery,
-            costoDomicilio:getMeta(doc,"urbanex:costoDomicilio") || getFirstText(doc,[".delivery-cost",".costo-domicilio"]),
-            cobertura:getMeta(doc,"urbanex:cobertura") || getFirstText(doc,[".delivery-area",".cobertura"]),
-            direccion:getMeta(doc,"urbanex:direccion") || getFirstText(doc,[".address",".direccion"]),
-            latitud:getMeta(doc,"urbanex:latitud") || getFirstAttr(doc,["[data-lat]"],"data-lat"),
-            longitud:getMeta(doc,"urbanex:longitud") || getFirstAttr(doc,["[data-lng]","[data-lon]"],"data-lng") || getFirstAttr(doc,["[data-lon]"],"data-lon"),
-            telefono:getMeta(doc,"urbanex:telefono") || getFirstText(doc,[".telefono",".phone"]),
-            whatsapp:getMeta(doc,"urbanex:whatsapp") || getFirstText(doc,[".whatsapp"]),
-            perfil:sourcePath
+    function getCategoryFromPathOrTitle(doc, categoryName) {
+        const metaCategory = doc.querySelector('meta[name="urbanex:categoria"], meta[property="urbanex:categoria"]');
+        if (metaCategory && metaCategory.content) return metaCategory.content.trim();
+
+        const visibleCategory = doc.querySelector(".business-category, .category-pill, .categoria, [data-category]");
+        if (visibleCategory) {
+            const value = visibleCategory.getAttribute("data-category") || visibleCategory.textContent;
+            if (value && value.trim()) return value.trim();
+        }
+
+        return categoryName;
+    }
+
+    function extractQuotedHtmlSources(arrayText, baseUrl) {
+        const sources = [];
+        const quotedPattern = /(["'`])([^"'`]+\.html?)\1/g;
+        let match;
+
+        while ((match = quotedPattern.exec(arrayText)) !== null) {
+            sources.push(resolveProjectUrl(match[2], baseUrl));
+        }
+
+        return sources;
+    }
+
+    function discoverHtmlFinalSources(htmlText, baseUrl) {
+        const sources = [];
+        const sourceArrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:DATA_SOURCES|SOURCES|FUENTES|EMPRESAS_DATA_SOURCES|BUSINESS_DATA_SOURCES)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
+        let match;
+
+        while ((match = sourceArrayPattern.exec(htmlText)) !== null) {
+            const arrayText = getArrayText(htmlText, match.index);
+            if (!arrayText) continue;
+            sources.push.apply(sources, extractQuotedHtmlSources(arrayText, baseUrl));
+        }
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+
+        Array.from(doc.querySelectorAll("[data-count-src], [data-business-src], [data-empresa-src], [data-profile-src], [data-src]")).forEach(function (element) {
+            const value = element.getAttribute("data-count-src") ||
+                element.getAttribute("data-business-src") ||
+                element.getAttribute("data-empresa-src") ||
+                element.getAttribute("data-profile-src") ||
+                element.getAttribute("data-src");
+
+            if (value && /\.html?(?:$|[?#])/i.test(value)) {
+                sources.push(resolveProjectUrl(value, baseUrl));
+            }
+        });
+
+        return uniqueArray(sources);
+    }
+
+    function blockToBusiness(block, categoryName, sourceUrl) {
+        if (!isExplicitDomicilioBlock(block)) return null;
+
+        const nombre = readStringProperty(block, ["nombre", "name", "titulo", "title", "empresa"]) || getBusinessNameFromPath(sourceUrl);
+        const segmento = readStringProperty(block, ["segmento", "categoria", "category", "tipo"]) || categoryName;
+        const descripcion = readStringProperty(block, ["descripcion", "description", "detalle", "venta", "resumen"]) || "Sin descripción registrada.";
+        const rating = readNumberProperty(block, ["rating", "calificacion", "valoracion"]);
+        const perfil = readStringProperty(block, ["url", "href", "perfil", "link"]) || sourceUrl;
+
+        return {
+            nombre: nombre,
+            categoria: categoryName,
+            segmento: segmento,
+            descripcion: descripcion,
+            rating: rating,
+            perfil: resolveProjectUrl(perfil, sourceUrl),
+            searchable: normalizeText([nombre, categoryName, segmento, descripcion].join(" "))
         };
-
-        if(isGenericBusiness(raw)) return [];
-        return [raw];
     }
 
-    function parseBusinessDataFromFinalHtml(htmlText,sourcePath){
-        const doc = new DOMParser().parseFromString(htmlText,"text/html");
-        const detectedDelivery = detectDeliveryFromFinalHtml(doc);
-        const parsed = parseJsonBusiness(doc,sourcePath) || parseAssignedBusiness(doc) || fallbackBusiness(doc,sourcePath);
+    function extractBusinessBlocksFromScripts(htmlText) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+        const blocks = [];
 
-        return parsed
-            .filter(function(rawBusiness){
-                return rawBusiness && !isGenericBusiness(rawBusiness);
-            })
-            .map(function(rawBusiness){
-                const enriched = Object.assign({}, rawBusiness);
-                enriched._htmlDeliveryDetected = detectedDelivery || toBoolean(enriched.domicilio || enriched.aDomicilio || enriched.delivery || enriched.envio || enriched.envío || enriched.envios);
-                return enriched;
-            });
+        Array.from(doc.querySelectorAll("script")).forEach(function (script) {
+            const scriptText = script.textContent || "";
+            const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
+            let arrayMatch;
+
+            while ((arrayMatch = arrayPattern.exec(scriptText)) !== null) {
+                const arrayText = getArrayText(scriptText, arrayMatch.index);
+                if (!arrayText) continue;
+                blocks.push.apply(blocks, getObjectBlocks(arrayText));
+            }
+
+            const objectPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|local|negocio|servicio|business)[a-zA-Z0-9_$]*)\s*=\s*\{/gi;
+            let objectMatch;
+
+            while ((objectMatch = objectPattern.exec(scriptText)) !== null) {
+                const objectText = getObjectText(scriptText, objectMatch.index);
+                if (objectText) blocks.push(objectText);
+            }
+        });
+
+        return blocks;
     }
 
-    function normalizeBusiness(rawBusiness,sourcePath,index){
-        const ofertas = safeArray(rawBusiness.ofertas || rawBusiness.promociones || rawBusiness.promos || rawBusiness.descuentos || rawBusiness.offers);
-        const perfilRaw = rawBusiness.perfil || rawBusiness.url || rawBusiness.href || rawBusiness.link || sourcePath;
-        const perfil = absoluteUrl(perfilRaw,sourcePath);
+    function extractBusinessesFromJsonScripts(htmlText, categoryName, sourceUrl) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+        const businesses = [];
 
-        const business = {
-            codigo:rawBusiness.codigo || rawBusiness.code || titleFromPath(sourcePath),
-            nombre:rawBusiness.nombre || rawBusiness.name || rawBusiness.titulo || rawBusiness.title || titleFromPath(sourcePath),
-            categoria:rawBusiness.categoria || rawBusiness.category || "Sin categoría",
-            segmento:rawBusiness.segmento || rawBusiness.tipo || rawBusiness.category || rawBusiness.categoria || "Negocio",
-            descripcion:rawBusiness.descripcion || rawBusiness.description || rawBusiness.detalle || "",
-            rating:Number(rawBusiness.rating || rawBusiness.calificacion || rawBusiness.valoracion || rawBusiness.estrellas || 0),
-            estado:rawBusiness.estado || rawBusiness.status || "",
-            abierto:rawBusiness.abierto ?? rawBusiness.open ?? rawBusiness.isOpen ?? rawBusiness.estaAbierto ?? false,
-            horario:rawBusiness.horario || rawBusiness.schedule || null,
-            ofertas:ofertas,
-            tieneOferta:toBoolean(rawBusiness.tieneOferta || rawBusiness.enOferta || rawBusiness.oferta || rawBusiness.promo || rawBusiness.promocion || rawBusiness.promoción) || ofertas.length > 0,
-            domicilio:toBoolean(rawBusiness.domicilio || rawBusiness.aDomicilio || rawBusiness.delivery || rawBusiness.envio || rawBusiness.envío || rawBusiness.envios) || rawBusiness._htmlDeliveryDetected === true || hasDeliveryEvidence([rawBusiness.descripcion, rawBusiness.description, rawBusiness.detalle, rawBusiness.cobertura, rawBusiness.deliveryArea, rawBusiness.zonaDomicilio].join(" ")),
-            costoDomicilio:rawBusiness.costoDomicilio || rawBusiness.deliveryCost || rawBusiness.costoEnvio || "",
-            cobertura:rawBusiness.cobertura || rawBusiness.deliveryArea || rawBusiness.zonaDomicilio || "",
-            direccion:rawBusiness.direccion || rawBusiness.address || "",
-            latitud:parseNumber(rawBusiness.latitud || rawBusiness.lat || rawBusiness.latitude),
-            longitud:parseNumber(rawBusiness.longitud || rawBusiness.lng || rawBusiness.lon || rawBusiness.longitude),
-            telefono:rawBusiness.telefono || rawBusiness.phone || "",
-            whatsapp:rawBusiness.whatsapp || rawBusiness.celular || rawBusiness.telefono || "",
-            perfil:perfil,
-            fuente:sourcePath,
-            orden:index,
-            distancia:null,
-            searchable:""
-        };
+        Array.from(doc.querySelectorAll("#urbanex-empresa-data, #urbanex-empresas-data, #empresa-data, script[type='application/json'][data-urbanex='empresa']")).forEach(function (node) {
+            const rawText = node.textContent.trim();
+            if (!rawText) return;
 
-        if(!Number.isFinite(business.rating)) business.rating = 0;
+            try {
+                const parsed = JSON.parse(rawText);
+                const items = Array.isArray(parsed) ? parsed : [parsed];
 
-        business.searchable = normalizeText([
-            business.codigo,
-            business.nombre,
-            business.categoria,
-            business.segmento,
-            business.descripcion,
-            business.estado,
-            business.ofertas.join(" "),
-            business.costoDomicilio,
-            business.cobertura,
-            business.direccion
-        ].join(" "));
+                items.forEach(function (item) {
+                    if (!item || typeof item !== "object") return;
 
-        return business;
-    }
+                    const explicitDomicilio = DOMICILIO_BOOLEAN_KEYS.some(function (key) {
+                        return item[key] === true;
+                    });
 
-    async function loadBusinessesFromFinalPages(){
-        const finalSources = await discoverFinalBusinessSources();
-        const loaded = [];
-        const seenKeys = new Set();
+                    if (!explicitDomicilio) return;
 
-        for(const sourcePath of finalSources){
-            try{
-                const htmlText = await fetchHtml(sourcePath);
-                const parsedBusinesses = parseBusinessDataFromFinalHtml(htmlText,sourcePath);
+                    const nombre = item.nombre || item.name || item.titulo || item.title || getBusinessNameFromPath(sourceUrl);
+                    const segmento = item.segmento || item.categoria || item.category || item.tipo || categoryName;
+                    const descripcion = item.descripcion || item.description || item.detalle || item.resumen || "Sin descripción registrada.";
+                    const perfil = item.perfil || item.url || item.href || item.link || sourceUrl;
 
-                parsedBusinesses.forEach(function(rawBusiness,index){
-                    const business = normalizeBusiness(rawBusiness,sourcePath,index);
-                    const key = normalizeText(business.codigo + "|" + business.nombre + "|" + business.perfil);
-
-                    if(!business.nombre || seenKeys.has(key) || normalizeText(business.nombre) === "urbanex") return;
-
-                    seenKeys.add(key);
-                    loaded.push(business);
+                    businesses.push({
+                        nombre: nombre,
+                        categoria: item.categoria || item.category || categoryName,
+                        segmento: segmento,
+                        descripcion: descripcion,
+                        rating: item.rating || item.calificacion || item.valoracion || "",
+                        perfil: resolveProjectUrl(perfil, sourceUrl),
+                        searchable: normalizeText([nombre, categoryName, segmento, descripcion].join(" "))
+                    });
                 });
-            }catch(error){
-                console.warn(error);
+            } catch (error) {
+                console.warn("JSON inválido en", sourceUrl, error);
+            }
+        });
+
+        return businesses;
+    }
+
+    function extractBusinessesFromScriptBlocks(htmlText, categoryName, sourceUrl) {
+        return extractBusinessBlocksFromScripts(htmlText)
+            .map(function (block) {
+                return blockToBusiness(block, categoryName, sourceUrl);
+            })
+            .filter(Boolean);
+    }
+
+    function extractBusinessesFromMarkup(htmlText, categoryName, sourceUrl) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, "text/html");
+        const businesses = [];
+
+        const metaDomicilio = doc.querySelector('meta[name="urbanex:domicilio"], meta[name="urbanex:delivery"], meta[name="urbanex:envio"]');
+        const hasExplicitMetaDomicilio = metaDomicilio && (
+            normalizeText(metaDomicilio.getAttribute("content")) === "true" ||
+            metaDomicilio.getAttribute("content") === "1"
+        );
+
+        const selectors = [
+            ".empresa-electrodomesticos",
+            ".empresa-card",
+            ".business-card",
+            ".local-card",
+            ".restaurant-card",
+            ".service-card",
+            "[data-business]",
+            "[data-empresa]",
+            "[data-domicilio]",
+            "[data-delivery]",
+            "[data-a-domicilio]",
+            "[data-servicio-domicilio]",
+            "[data-entrega-domicilio]",
+            "[data-tiene-domicilio]",
+            "[data-envio]",
+            "[data-envios]"
+        ].join(",");
+
+        const elements = Array.from(doc.querySelectorAll(selectors));
+
+        elements.forEach(function (element) {
+            if (!isExplicitDomicilioElement(element)) return;
+
+            const text = element.textContent || "";
+            const nameElement = element.querySelector(".business-title, .shop-title, h1, h2, h3, [data-name]");
+            const segmentElement = element.querySelector(".business-category, .shop-segment, .segmento, [data-segment]");
+            const descriptionElement = element.querySelector(".business-description, .descripcion, .company-description, p");
+            const linkElement = element.querySelector("a[href$='.html'], a.profile-link, a.action-btn.primary, a[href]");
+
+            const nombre = nameElement ? nameElement.textContent.trim() : getBusinessNameFromPath(sourceUrl);
+            const segmento = segmentElement ? segmentElement.textContent.trim() : getCategoryFromPathOrTitle(doc, categoryName);
+            const descripcion = descriptionElement ? descriptionElement.textContent.trim() : "Sin descripción registrada.";
+            const perfil = linkElement ? resolveProjectUrl(linkElement.getAttribute("href"), sourceUrl) : sourceUrl;
+
+            businesses.push({
+                nombre: nombre,
+                categoria: getCategoryFromPathOrTitle(doc, categoryName),
+                segmento: segmento,
+                descripcion: descripcion,
+                rating: "",
+                perfil: perfil,
+                searchable: normalizeText(text + " " + categoryName)
+            });
+        });
+
+        if (!businesses.length && hasExplicitMetaDomicilio) {
+            const h1 = doc.querySelector("h1");
+            const descriptionMeta = doc.querySelector('meta[name="description"]');
+            const segmentElement = doc.querySelector(".business-category, .category-pill, .segmento, [data-category]");
+            const ratingElement = doc.querySelector(".rating, .business-rating, [data-rating]");
+
+            const nombre = h1 ? h1.textContent.trim() : getBusinessNameFromPath(sourceUrl);
+            const segmento = segmentElement ? (segmentElement.getAttribute("data-category") || segmentElement.textContent).trim() : getCategoryFromPathOrTitle(doc, categoryName);
+            const descripcion = descriptionMeta ? descriptionMeta.content.trim() : "Sin descripción registrada.";
+
+            businesses.push({
+                nombre: nombre,
+                categoria: getCategoryFromPathOrTitle(doc, categoryName),
+                segmento: segmento,
+                descripcion: descripcion,
+                rating: ratingElement ? ratingElement.textContent.replace(/[^0-9.]/g, "") : "",
+                perfil: sourceUrl,
+                searchable: normalizeText([nombre, categoryName, segmento, descripcion].join(" "))
+            });
+        }
+
+        return businesses;
+    }
+
+    function extractBusinessesFromHtml(htmlText, categoryName, sourceUrl) {
+        const fromJson = extractBusinessesFromJsonScripts(htmlText, categoryName, sourceUrl);
+        const fromScripts = extractBusinessesFromScriptBlocks(htmlText, categoryName, sourceUrl);
+        const fromMarkup = extractBusinessesFromMarkup(htmlText, categoryName, sourceUrl);
+
+        return fromJson.concat(fromScripts, fromMarkup);
+    }
+
+    async function loadBusinessesFromSource(source, categoryName, depth) {
+        const sourceUrl = resolveProjectUrl(source, window.location.href);
+        const htmlText = await fetchHtml(sourceUrl, window.location.href);
+
+        if (depth > 0) {
+            const finalSources = discoverHtmlFinalSources(htmlText, sourceUrl);
+
+            if (finalSources.length) {
+                const childResults = await Promise.all(
+                    finalSources.map(function (childSource) {
+                        return loadBusinessesFromSource(childSource, categoryName, depth - 1).catch(function () {
+                            return [];
+                        });
+                    })
+                );
+
+                return childResults.flat();
             }
         }
 
-        return loaded;
+        return extractBusinessesFromHtml(htmlText, categoryName, sourceUrl);
     }
 
-    function getDayKey(date){
-        const days = ["domingo","lunes","martes","miercoles","jueves","viernes","sabado"];
-        return days[date.getDay()];
+    async function loadAllResults() {
+        const results = await Promise.all(
+            CATEGORY_SOURCES.map(async function (category) {
+                const sources = category.hijos && category.hijos.length ? category.hijos : [category.archivo];
+
+                const categoryResults = await Promise.all(
+                    sources.map(function (source) {
+                        return loadBusinessesFromSource(source, category.nombre, 3).catch(function () {
+                            return [];
+                        });
+                    })
+                );
+
+                return categoryResults.flat();
+            })
+        );
+
+        return deduplicateResults(results.flat());
     }
 
-    function minutesFromTime(value){
-        const match = String(value || "").trim().match(/^(\d{1,2}):(\d{2})$/);
-        if(!match) return null;
-        return Number(match[1]) * 60 + Number(match[2]);
-    }
+    function deduplicateResults(results) {
+        const map = new Map();
 
-    function isOpenBySchedule(horario){
-        if(!horario || typeof horario !== "object") return false;
-
-        const now = new Date();
-        const dayKey = getDayKey(now);
-        const rawRange = horario[dayKey];
-
-        if(!rawRange || normalizeText(rawRange) === "cerrado") return false;
-
-        const parts = String(rawRange).split("-");
-        if(parts.length !== 2) return false;
-
-        const openMinutes = minutesFromTime(parts[0]);
-        const closeMinutes = minutesFromTime(parts[1]);
-        const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-        if(openMinutes === null || closeMinutes === null) return false;
-
-        if(closeMinutes < openMinutes){
-            return currentMinutes >= openMinutes || currentMinutes <= closeMinutes;
-        }
-
-        return currentMinutes >= openMinutes && currentMinutes <= closeMinutes;
-    }
-
-    function isBusinessOpen(business){
-        const estado = normalizeText(business.estado);
-
-        if(estado.includes("abierto")) return true;
-        if(estado.includes("cerrado")) return false;
-        if(toBoolean(business.abierto)) return true;
-
-        return isOpenBySchedule(business.horario);
-    }
-
-    function calculateDistanceKm(lat1,lng1,lat2,lng2){
-        if(lat1 === null || lng1 === null || lat2 === null || lng2 === null) return null;
-
-        const earthRadius = 6371;
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLng = (lng2 - lng1) * Math.PI / 180;
-
-        const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * Math.PI / 180) *
-            Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLng / 2) *
-            Math.sin(dLng / 2);
-
-        const c = 2 * Math.atan2(Math.sqrt(a),Math.sqrt(1 - a));
-
-        return earthRadius * c;
-    }
-
-    function updateDistances(){
-        allBusinesses.forEach(function(business){
-            if(userLocation && business.latitud !== null && business.longitud !== null){
-                business.distancia = calculateDistanceKm(userLocation.latitud,userLocation.longitud,business.latitud,business.longitud);
-            }else{
-                business.distancia = null;
-            }
+        results.forEach(function (business) {
+            const key = normalizeText((business.nombre || "") + "|" + (business.perfil || ""));
+            if (!key) return;
+            if (!map.has(key)) map.set(key, business);
         });
+
+        return Array.from(map.values());
     }
 
-    function businessMatchesPageFilter(business){
-        if(CONFIG.pageType === "ofertas") return business.tieneOferta === true || business.ofertas.length > 0;
-        if(CONFIG.pageType === "abiertos") return isBusinessOpen(business);
-        if(CONFIG.pageType === "domicilio") return business.domicilio === true;
-        return true;
+    function populateCategoryFilter(businesses) {
+        const categories = Array.from(new Set(businesses.map(function (business) {
+            return business.categoria;
+        }))).filter(Boolean).sort();
+
+        categoryFilter.innerHTML = '<option value="todas">Todas las categorías</option>' +
+            categories.map(function (category) {
+                return '<option value="' + escapeHtml(category) + '">' + escapeHtml(category) + '</option>';
+            }).join("");
     }
 
-    function badgeText(){
-        if(CONFIG.pageType === "ofertas") return "Oferta";
-        if(CONFIG.pageType === "abiertos") return "Abierto";
-        if(CONFIG.pageType === "domicilio") return "Domicilio";
-        return "Cerca";
-    }
-
-    function createExtraHtml(business){
-        if(CONFIG.pageType === "ofertas"){
-            return business.ofertas.length
-                ? `<ul class="offer-list">${business.ofertas.map(offer => `<li>${escapeHtml(offer)}</li>`).join("")}</ul>`
-                : "";
-        }
-
-        if(CONFIG.pageType === "domicilio"){
-            const lines = [];
-            if(business.cobertura) lines.push(`<div><strong>Cobertura:</strong> ${escapeHtml(business.cobertura)}</div>`);
-            if(business.costoDomicilio) lines.push(`<div><strong>Costo:</strong> ${escapeHtml(business.costoDomicilio)}</div>`);
-            return lines.length ? `<div class="extra-info">${lines.join("")}</div>` : "";
-        }
-
-        if(CONFIG.pageType === "cerca"){
-            const distanceText = business.distancia !== null
-                ? `${business.distancia.toFixed(2)} km de usted`
-                : business.direccion
-                    ? escapeHtml(business.direccion)
-                    : "Ubicación registrada en el perfil";
-            return `<div class="distance-info">${distanceText}</div>`;
-        }
-
-        return "";
-    }
-
-    function createBusinessCard(business){
-        const article = document.createElement("article");
-        article.className = "business-card";
-
-        article.innerHTML = `
-            <div class="business-top">
-                <h3 class="business-title">${escapeHtml(business.nombre)}</h3>
-                <span class="business-status">${escapeHtml(badgeText())}</span>
-            </div>
-
-            <div class="business-segment">${escapeHtml(business.segmento)}</div>
-            <p class="business-description">${escapeHtml(business.descripcion || "Sin descripción registrada.")}</p>
-            ${createExtraHtml(business)}
-
-            <div class="business-footer">
-                <span class="rating">${business.rating > 0 ? "★ " + business.rating.toFixed(1) : "★"}</span>
-                <a class="profile-link" href="${escapeHtml(business.perfil)}">Ver perfil</a>
-            </div>
-        `;
-
-        return article;
-    }
-
-    function groupByCategory(businesses){
-        return businesses.reduce(function(groups,business){
-            const category = business.categoria || "Sin categoría";
-            if(!groups[category]) groups[category] = [];
-            groups[category].push(business);
-            return groups;
-        },{});
-    }
-
-    function updateCategoryFilter(businesses){
-        const categories = [...new Set(businesses.map(business => business.categoria || "Sin categoría"))].sort();
-
-        categories.forEach(function(category){
-            const option = document.createElement("option");
-            option.value = category;
-            option.textContent = category;
-            categoryFilter.appendChild(option);
-        });
-    }
-
-    function renderBusinesses(){
+    function renderResults() {
         const query = normalizeText(searchInput.value);
         const selectedCategory = categoryFilter.value;
 
-        let filtered = allBusinesses.filter(function(business){
-            const categoryMatches = selectedCategory === "todas" || business.categoria === selectedCategory;
-            const searchMatches = !query || business.searchable.includes(query);
-            return businessMatchesPageFilter(business) && categoryMatches && searchMatches;
+        const filtered = allResults.filter(function (business) {
+            const matchesSearch = !query || business.searchable.includes(query);
+            const matchesCategory = selectedCategory === "todas" || business.categoria === selectedCategory;
+
+            return matchesSearch && matchesCategory;
         });
 
-        if(CONFIG.pageType === "cerca"){
-            filtered = filtered.sort(function(a,b){
-                if(a.distancia !== null && b.distancia !== null) return a.distancia - b.distancia;
-                if(a.distancia !== null) return -1;
-                if(b.distancia !== null) return 1;
-                return a.nombre.localeCompare(b.nombre);
-            });
-        }else{
-            filtered = filtered.sort(function(a,b){
-                return a.nombre.localeCompare(b.nombre);
-            });
-        }
+        totalResults.textContent = filtered.length;
+        emptyState.style.display = "none";
 
-        resultsContainer.innerHTML = "";
-        totalBusinesses.textContent = filtered.length;
-        emptyState.style.display = filtered.length ? "none" : "block";
+        const grouped = filtered.reduce(function (accumulator, business) {
+            if (!accumulator[business.categoria]) accumulator[business.categoria] = [];
+            accumulator[business.categoria].push(business);
+            return accumulator;
+        }, {});
 
-        const groups = groupByCategory(filtered);
+        resultsContainer.innerHTML = Object.keys(grouped).map(function (categoryName) {
+            const items = grouped[categoryName].map(function (business) {
+                return `
+                    <article class="business-card">
+                        <div class="business-top">
+                            <h3 class="business-title">${escapeHtml(business.nombre)}</h3>
+                            <span class="business-status">Domicilio</span>
+                        </div>
+                        <div class="business-segment">${escapeHtml(business.segmento)}</div>
+                        <p class="business-description">${escapeHtml(business.descripcion)}</p>
+                        <div class="business-footer">
+                            <span class="rating">${business.rating ? "★ " + escapeHtml(business.rating) : ""}</span>
+                            <a class="profile-link" href="${escapeHtml(business.perfil)}">Ver perfil</a>
+                        </div>
+                    </article>
+                `;
+            }).join("");
 
-        Object.keys(groups).sort().forEach(function(category){
-            const section = document.createElement("section");
-            section.className = "category-section";
-
-            section.innerHTML = `
-                <div class="category-header">
-                    <h2>${escapeHtml(category)}</h2>
-                    <span>${groups[category].length} ${groups[category].length === 1 ? CONFIG.singleLabel : CONFIG.pluralLabel}</span>
-                </div>
-                <div class="business-grid"></div>
+            return `
+                <section class="category-section">
+                    <div class="category-header">
+                        <h2>${escapeHtml(categoryName)}</h2>
+                        <span>${grouped[categoryName].length} resultados</span>
+                    </div>
+                    <div class="business-grid">
+                        ${items}
+                    </div>
+                </section>
             `;
-
-            const grid = section.querySelector(".business-grid");
-            groups[category].forEach(function(business){
-                grid.appendChild(createBusinessCard(business));
-            });
-
-            resultsContainer.appendChild(section);
-        });
+        }).join("");
     }
 
-    function requestLocation(){
-        if(!navigator.geolocation){
-            renderBusinesses();
-            return;
+    async function init() {
+        try {
+            allResults = await loadAllResults();
+            populateCategoryFilter(allResults);
+            loadingState.style.display = "none";
+            renderResults();
+        } catch (error) {
+            console.warn(error);
+            loadingState.style.display = "none";
+            emptyState.style.display = "none";
+            resultsContainer.innerHTML = "";
+            totalResults.textContent = "0";
         }
-
-        locationButton.textContent = "Obteniendo ubicación...";
-
-        navigator.geolocation.getCurrentPosition(
-            function(position){
-                userLocation = {
-                    latitud:position.coords.latitude,
-                    longitud:position.coords.longitude
-                };
-
-                updateDistances();
-                locationButton.textContent = "Ubicación aplicada";
-                renderBusinesses();
-            },
-            function(){
-                locationButton.textContent = "Usar mi ubicación";
-                renderBusinesses();
-            },
-            {
-                enableHighAccuracy:true,
-                timeout:8000,
-                maximumAge:300000
-            }
-        );
     }
 
-    async function init(){
-        allBusinesses = await loadBusinessesFromFinalPages();
-        updateDistances();
-        updateCategoryFilter(allBusinesses.filter(businessMatchesPageFilter));
-        loadingState.style.display = "none";
-        renderBusinesses();
-    }
-
-    searchInput.addEventListener("input",renderBusinesses);
-    categoryFilter.addEventListener("change",renderBusinesses);
-
-    if(locationButton){
-        locationButton.addEventListener("click",requestLocation);
-    }
+    searchInput.addEventListener("input", renderResults);
+    categoryFilter.addEventListener("change", renderResults);
 
     init();
 })();
-
 </script>
 
 </body>
