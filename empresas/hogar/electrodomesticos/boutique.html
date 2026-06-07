@@ -48,7 +48,7 @@
             padding-bottom: 24px;
             background:
                 linear-gradient(135deg, rgba(0,0,0,0.72), rgba(0,0,0,0.48)),
-                url("https://lrobertojacomeg.github.io/nias-boutique/images/gallery/1.jpg") center center / cover fixed no-repeat;
+                url("https://casamexicoloja.com/assets/img/banner/2026-03-06/f.png") center center / cover fixed no-repeat;
             color: var(--text-main);
             font-family: var(--font-sans);
             overflow-x: hidden;
@@ -220,9 +220,10 @@
         .logo-box img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            padding: 0;
+            object-fit: contain;
+            padding: 6px;
             display: block;
+            background: #000000;
         }
 
         .logo-fallback {
@@ -386,19 +387,20 @@
         }
 
         .product-grid {
-            padding: 12px;
+            padding: 16px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
         }
 
         .product-card {
             min-height: 100%;
             border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 14px;
+            border-radius: 18px;
             background:
-                radial-gradient(circle at 20% 0%, rgba(229,193,88,0.10), transparent 34%),
-                rgba(0,0,0,0.28);
+                radial-gradient(circle at 18% 0%, rgba(229,193,88,0.12), transparent 34%),
+                linear-gradient(180deg, rgba(255,255,255,0.055), rgba(0,0,0,0.24)),
+                rgba(10,10,10,0.72);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -406,27 +408,37 @@
         }
 
         .product-card:hover {
-            border-color: rgba(229,193,88,0.48);
-            transform: translateY(-2px);
-            box-shadow: 0 18px 36px rgba(0,0,0,0.34);
+            border-color: rgba(229,193,88,0.46);
+            transform: translateY(-3px);
+            box-shadow: 0 22px 44px rgba(0,0,0,0.42);
         }
 
         .product-media {
-            padding: 10px 10px 0;
+            padding: 0;
         }
 
         .product-main-image {
             position: relative;
-            height: 128px;
-            border: 1px solid rgba(255,255,255,0.10);
-            border-radius: 12px;
+            height: 176px;
+            border: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+            border-radius: 18px 18px 0 0;
             background:
-                radial-gradient(circle at 50% 24%, rgba(229,193,88,0.20), transparent 34%),
-                linear-gradient(145deg, rgba(255,255,255,0.10), rgba(0,0,0,0.22));
+                radial-gradient(circle at 50% 24%, rgba(229,193,88,0.18), transparent 34%),
+                linear-gradient(145deg, rgba(255,255,255,0.10), rgba(0,0,0,0.28));
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .product-main-image::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.10), transparent 38%, rgba(0,0,0,0.42));
+            pointer-events: none;
+            z-index: 1;
         }
 
         .product-main-image img {
@@ -435,6 +447,12 @@
             object-fit: cover;
             display: block;
             cursor: zoom-in;
+            transition: transform 0.35s ease, filter 0.35s ease;
+        }
+
+        .product-card:hover .product-main-image img {
+            transform: scale(1.035);
+            filter: saturate(1.04) contrast(1.03);
         }
 
         .product-main-image.image-empty img {
@@ -449,10 +467,18 @@
             color: var(--gold);
             text-align: center;
             gap: 7px;
+            z-index: 2;
         }
 
         .product-main-image.image-empty .product-placeholder {
             display: flex;
+        }
+
+        .product-main-image.image-empty .product-image-nav,
+        .product-main-image.image-empty .product-image-count,
+        .product-main-image.image-empty .product-zoom-hint,
+        .product-main-image.image-empty .product-thumbs {
+            display: none;
         }
 
         .product-placeholder svg {
@@ -473,49 +499,132 @@
 
         .offer-badge {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            z-index: 2;
-            border: 1px solid rgba(229,193,88,0.52);
+            top: 10px;
+            right: 10px;
+            z-index: 4;
+            border: 1px solid rgba(229,193,88,0.58);
             border-radius: 999px;
-            color: var(--gold);
-            background: rgba(0,0,0,0.76);
-            padding: 4px 8px;
-            font-size: 6.8px;
+            color: #000000;
+            background: rgba(229,193,88,0.92);
+            padding: 5px 9px;
+            font-size: 6.9px;
             font-weight: 900;
             letter-spacing: 0.8px;
             text-transform: uppercase;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.24);
+        }
+
+        .product-image-count {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 4;
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 999px;
+            color: #ffffff;
+            background: rgba(0,0,0,0.60);
+            padding: 5px 8px;
+            font-size: 7px;
+            font-weight: 900;
+            letter-spacing: 0.7px;
+        }
+
+        .product-image-nav {
+            position: absolute;
+            top: 50%;
+            z-index: 4;
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(255,255,255,0.22);
+            border-radius: 50%;
+            background: rgba(0,0,0,0.58);
+            color: #ffffff;
+            font-size: 22px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(-50%);
+            transition: var(--transition);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .product-image-nav.prev {
+            left: 10px;
+        }
+
+        .product-image-nav.next {
+            right: 10px;
+        }
+
+        .product-card:hover .product-image-nav,
+        .product-main-image:focus-within .product-image-nav {
+            opacity: 1;
+        }
+
+        .product-image-nav:hover {
+            color: #000000;
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .product-zoom-hint {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            z-index: 4;
+            border: 1px solid rgba(229,193,88,0.46);
+            border-radius: 999px;
+            background: rgba(0,0,0,0.64);
+            color: var(--gold);
+            padding: 6px 9px;
+            font-size: 7px;
+            font-weight: 900;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            cursor: zoom-in;
+            transition: var(--transition);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .product-zoom-hint:hover {
+            background: var(--gold);
+            color: #000000;
+            border-color: var(--gold);
         }
 
         .product-thumbs {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            position: absolute;
+            left: 50%;
+            bottom: 14px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 6px;
-            margin-top: 7px;
+            transform: translateX(-50%);
         }
 
         .product-thumb {
-            height: 38px;
-            border: 1px solid rgba(255,255,255,0.10);
-            border-radius: 9px;
-            background: rgba(255,255,255,0.04);
-            overflow: hidden;
+            width: 7px;
+            height: 7px;
+            border: 0;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.58);
             cursor: pointer;
             transition: var(--transition);
             padding: 0;
         }
 
-        .product-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
         .product-thumb.is-active,
         .product-thumb:hover {
-            border-color: rgba(229,193,88,0.64);
-            box-shadow: 0 0 0 1px rgba(229,193,88,0.18);
+            width: 21px;
+            background: var(--gold);
+            box-shadow: 0 0 0 3px rgba(229,193,88,0.18);
         }
 
         .product-body {
@@ -648,6 +757,42 @@
             text-align: right;
         }
 
+        .schedule-slots {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            text-align: right;
+        }
+
+        .schedule-slot {
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-end;
+            min-width: 92px;
+            border: 1px solid rgba(229,193,88,0.22);
+            border-radius: 999px;
+            padding: 3px 8px;
+            background: rgba(229,193,88,0.06);
+            color: #ffffff;
+            font-size: 9.5px;
+            font-weight: 800;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .schedule-slot.closed {
+            border-color: rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.04);
+            color: var(--text-muted);
+        }
+
+        .schedule-row.today .schedule-slot {
+            border-color: rgba(229,193,88,0.42);
+            background: rgba(229,193,88,0.12);
+            color: #ffffff;
+        }
+
         .service-list {
             padding: 14px 16px;
             display: grid;
@@ -767,6 +912,48 @@
             min-width: 56px;
             font-size: 10px;
             letter-spacing: 0.4px;
+        }
+
+
+
+        .image-viewer-nav {
+            position: absolute;
+            top: 50%;
+            z-index: 2;
+            width: 44px;
+            height: 44px;
+            transform: translateY(-50%);
+            border: 1px solid rgba(229,193,88,0.52);
+            border-radius: 50%;
+            background: rgba(0,0,0,0.72);
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .image-viewer-nav:hover {
+            background: var(--gold);
+            color: #000000;
+            border-color: var(--gold);
+        }
+
+        .image-viewer-nav:disabled {
+            opacity: 0.28;
+            cursor: not-allowed;
+            background: rgba(0,0,0,0.45);
+            color: #ffffff;
+            border-color: rgba(255,255,255,0.18);
+        }
+
+        .image-viewer-nav.prev {
+            left: 14px;
+        }
+
+        .image-viewer-nav.next {
+            right: 14px;
         }
 
         .image-viewer-caption {
@@ -895,7 +1082,7 @@
 <div class="page-shell">
 
     <header class="header-top">
-        <a href="/" class="brand-box" title="Volver a Urbanex">
+        <a href="/" class="brand-box" title="Volver a la página anterior" onclick="volverPaginaAnterior(event)">
             <img src="/imagenes/logo.png" alt="Urbanex">
         </a>
 
@@ -1035,6 +1222,9 @@
                 <img id="imageViewerImg" src="" alt="">
             </div>
 
+            <button type="button" class="image-viewer-nav prev" id="imageViewerPrev" aria-label="Imagen anterior">‹</button>
+            <button type="button" class="image-viewer-nav next" id="imageViewerNext" aria-label="Imagen siguiente">›</button>
+
             <div class="image-viewer-tools">
                 <button type="button" id="zoomOutButton" aria-label="Alejar imagen">−</button>
                 <button type="button" id="zoomResetButton" aria-label="Restablecer zoom">100%</button>
@@ -1058,50 +1248,68 @@
 
 const EMPRESA = {
     nombre: "Nia's Boutique",
-    categoria: "Moda Infantil",
-    tipo: "moda infantil ropa infantil bebes niñas niños calzado cobijas accesorios boutique",
-    descripcion: "Boutique de moda infantil en Loja. Ofrece prendas, calzado, accesorios y productos para bebés, niñas y niños, con marcas como Carter's, Disney, Milon, Marvel, OshKosh B'gosh y Klin.",
+    categoria: "Moda infantil",
+    tipo: "moda infantil ropa para bebes niñas niños cobijas accesorios Carter's Disney Milon Marvel OshKosh B'gosh Klin",
+    descripcion: "Boutique de moda infantil en Loja, Ecuador, especializada en ropa, calzado, accesorios y complementos para bebés, niñas y niños, con opciones de marcas como Carter's, Disney, Milon, Marvel, OshKosh B'gosh y Klin.",
 
     logo: "https://lrobertojacomeg.github.io/nias-boutique/images/logo.png",
-    portada: "https://lrobertojacomeg.github.io/nias-boutique/images/gallery/1.jpg",
+    portada: "https://lrobertojacomeg.github.io/nias-boutique/images/categories/bebes.jpg",
 
     celular: "+593993493918",
-    correo: "niasboutiqueloja@gmail.com",
+    correo: "",
     web: "https://lrobertojacomeg.github.io/nias-boutique/",
-    direccion: "Loja, Ecuador",
-    mapa: "https://www.google.com/maps/search/?api=1&query=Nia%27s+Boutique+Loja+Ecuador",
+    direccion: "Loja - Ecuador",
+    mapa: "https://www.google.com/maps/search/?api=1&query=Loja,+Ecuador",
     moneda: "$",
     zonaHoraria: "America/Guayaquil",
 
-    entregaDomicilio: true,
+    entregaDomicilio: false,
     creditoDirecto: false,
 
     horario: {
         domingo: [],
-        lunes: [{ abre: "10:00", cierra: "13:30", abre: "15:00", cierra: "19:00" }],
-        martes: [{ abre: "10:00", cierra: "13:30", abre: "15:00", cierra: "19:00" }],
-        miercoles: [{ abre: "10:00", cierra: "13:30", abre: "15:00", cierra: "19:00" }],
-        jueves: [{ abre: "10:00", cierra: "13:30", abre: "15:00", cierra: "19:00" }],
-        viernes: [{ abre: "10:00", cierra: "13:30", abre: "15:00", cierra: "19:00" }],
-        sabado: [{ abre: "10:00", cierra: "13:30", abre: "15:00", cierra: "19:00" }]
+        lunes: [
+            { abre: "10:00", cierra: "13:30" },
+            { abre: "15:00", cierra: "19:00" }
+        ],
+        martes: [
+            { abre: "10:00", cierra: "13:30" },
+            { abre: "15:00", cierra: "19:00" }
+        ],
+        miercoles: [
+            { abre: "10:00", cierra: "13:30" },
+            { abre: "15:00", cierra: "19:00" }
+        ],
+        jueves: [
+            { abre: "10:00", cierra: "13:30" },
+            { abre: "15:00", cierra: "19:00" }
+        ],
+        viernes: [
+            { abre: "10:00", cierra: "13:30" },
+            { abre: "15:00", cierra: "19:00" }
+        ],
+        sabado: [
+            { abre: "10:00", cierra: "13:30" },
+            { abre: "15:00", cierra: "19:00" }
+        ]
     },
 
     productos: [
         {
             nombre: "Conjuntos para bebés",
-            precio: 22.50,
-            descripcion: "Prendas infantiles para bebés, con opciones de vestir cómodas y elegantes.",
+            precio: "",
+            descripcion: "Prendas infantiles para bebés, con opciones de vestir cómodas, elegantes y adecuadas para distintas ocasiones.",
             oferta: false,
             imagenes: [
                 "https://lrobertojacomeg.github.io/nias-boutique/images/categories/bebes.jpg",
-                "https://lrobertojacomeg.github.io/nias-boutique/images/gallery/1.jpg",
+                "https://lrobertojacomeg.github.io/nias-boutique/images/gallery/4.jpg",
                 "https://lrobertojacomeg.github.io/nias-boutique/images/gallery/6.jpg"
             ]
         },
         {
             nombre: "Vestidos para niñas",
-            precio: 13.88,
-            descripcion: "Vestidos y prendas para niñas en diferentes tallas, estilos y ocasiones.",
+            precio: "",
+            descripcion: "Vestidos y prendas infantiles para niñas, orientados a estilo, comodidad y presentación.",
             oferta: false,
             imagenes: [
                 "https://lrobertojacomeg.github.io/nias-boutique/images/categories/ninas.jpg",
@@ -1110,20 +1318,20 @@ const EMPRESA = {
             ]
         },
         {
-            nombre: "Ropa para niños",
-            precio: null,
-            descripcion: "Ropa infantil para niños, con alternativas casuales, formales y de temporada.",
+            nombre: "Moda para niños",
+            precio: "",
+            descripcion: "Ropa infantil para niños, con alternativas formales, casuales y de temporada.",
             oferta: false,
             imagenes: [
                 "https://lrobertojacomeg.github.io/nias-boutique/images/categories/ninos.jpg",
-                "https://lrobertojacomeg.github.io/nias-boutique/images/categories/bebes.jpg",
+                "https://lrobertojacomeg.github.io/nias-boutique/images/gallery/3.jpg",
                 "https://lrobertojacomeg.github.io/nias-boutique/images/gallery/5.jpg"
             ]
         },
         {
             nombre: "Calzado infantil",
-            precio: 29.35,
-            descripcion: "Zapatos y calzado infantil para distintas edades y tallas.",
+            precio: "",
+            descripcion: "Zapatos infantiles para diferentes edades, con modelos casuales y de vestir.",
             oferta: false,
             imagenes: [
                 "https://lrobertojacomeg.github.io/nias-boutique/images/gallery/2.jpg",
@@ -1133,19 +1341,19 @@ const EMPRESA = {
         },
         {
             nombre: "Accesorios infantiles",
-            precio: 19.99,
-            descripcion: "Accesorios para complementar outfits infantiles y productos de boutique.",
+            precio: "",
+            descripcion: "Accesorios y complementos infantiles para combinar con ropa, calzado y prendas de temporada.",
             oferta: false,
             imagenes: [
                 "https://lrobertojacomeg.github.io/nias-boutique/images/gallery/4.jpg",
-                "https://lrobertojacomeg.github.io/nias-boutique/images/gallery/2.jpg",
-                "https://lrobertojacomeg.github.io/nias-boutique/images/gallery/1.jpg"
+                "https://lrobertojacomeg.github.io/nias-boutique/images/gallery/6.jpg",
+                "https://lrobertojacomeg.github.io/nias-boutique/images/gallery/5.jpg"
             ]
         },
         {
-            nombre: "Productos infantiles de cuidado",
-            precio: 23.55,
-            descripcion: "Productos complementarios para niños y niñas, incluyendo líneas temáticas infantiles.",
+            nombre: "Marcas infantiles",
+            precio: "",
+            descripcion: "Productos asociados a marcas infantiles como Carter's, Disney, Milon, Marvel, OshKosh B'gosh y Klin.",
             oferta: false,
             imagenes: [
                 "https://lrobertojacomeg.github.io/nias-boutique/images/gallery/5.jpg",
@@ -1171,6 +1379,17 @@ const DIAS_LABEL = {
     viernes: "Viernes",
     sabado: "Sábado"
 };
+
+function volverPaginaAnterior(event) {
+    event.preventDefault();
+
+    if (window.history.length > 1) {
+        window.history.back();
+        return;
+    }
+
+    window.location.href = "/";
+}
 
 function escapeHtml(value) {
     return String(value ?? "")
@@ -1342,6 +1561,7 @@ function renderCompany() {
     document.getElementById("webButton").href = EMPRESA.web || "#";
 
     document.getElementById("emailButton").style.display = EMPRESA.correo ? "inline-flex" : "none";
+    document.getElementById("emailButton").style.display = EMPRESA.correo ? "inline-flex" : "none";
     document.getElementById("webButton").style.display = EMPRESA.web ? "inline-flex" : "none";
     document.getElementById("deliveryStatus").style.display = EMPRESA.entregaDomicilio ? "inline-flex" : "none";
     document.getElementById("creditStatus").style.display = EMPRESA.creditoDirecto ? "inline-flex" : "none";
@@ -1389,30 +1609,24 @@ function renderStatus() {
 }
 
 function renderSchedule() {
+    const now = getNowInTimeZone(EMPRESA.zonaHoraria || "America/Guayaquil");
     const scheduleList = document.getElementById("scheduleList");
 
-    if (!hasPublishedSchedule()) {
-        scheduleList.innerHTML = `
-            <div class="schedule-row today">
-                <span>Horario</span>
-                <span>No publicado</span>
-            </div>
-        `;
-        return;
-    }
-
-    const now = getNowInTimeZone(EMPRESA.zonaHoraria || "America/Guayaquil");
-
     scheduleList.innerHTML = Object.keys(DIAS_LABEL).map(day => {
-        const ranges = EMPRESA.horario[day] || [];
-        const label = ranges.length
-            ? ranges.map(range => range.abre + " - " + range.cierra).join(" / ")
-            : "Cerrado";
+        const ranges = Array.isArray(EMPRESA.horario[day]) ? EMPRESA.horario[day] : [];
+
+        const slots = ranges.length
+            ? ranges.map(range => `
+                <span class="schedule-slot">${escapeHtml(range.abre)} - ${escapeHtml(range.cierra)}</span>
+            `).join("")
+            : `<span class="schedule-slot closed">Cerrado</span>`;
 
         return `
             <div class="schedule-row ${day === now.dia ? "today" : ""}">
                 <span>${DIAS_LABEL[day]}</span>
-                <span>${label}</span>
+                <div class="schedule-slots">
+                    ${slots}
+                </div>
             </div>
         `;
     }).join("");
@@ -1426,18 +1640,28 @@ function renderProducts() {
         const mainImage = images[0] || "";
         const imageClass = mainImage ? "" : " image-empty";
         const offerBadge = product.oferta ? `<span class="offer-badge">Oferta</span>` : "";
+        const hasGallery = images.length > 1;
 
-        const thumbs = images.map((image, thumbIndex) => `
+        const dots = hasGallery ? images.map((image, thumbIndex) => `
             <button
                 class="product-thumb ${thumbIndex === 0 ? "is-active" : ""}"
                 type="button"
                 data-product-index="${index}"
-                data-image="${escapeHtml(image)}"
+                data-image-index="${thumbIndex}"
                 aria-label="Ver imagen ${thumbIndex + 1} de ${escapeHtml(product.nombre)}"
-            >
-                <img src="${escapeHtml(image)}" alt="${escapeHtml(product.nombre)} imagen ${thumbIndex + 1}">
-            </button>
-        `).join("");
+            ></button>
+        `).join("") : "";
+
+        const galleryControls = hasGallery ? `
+            <button class="product-image-nav prev" type="button" data-product-index="${index}" data-direction="-1" aria-label="Imagen anterior">‹</button>
+            <button class="product-image-nav next" type="button" data-product-index="${index}" data-direction="1" aria-label="Imagen siguiente">›</button>
+            <span class="product-image-count" id="productImageCounter-${index}">1 / ${images.length}</span>
+            <div class="product-thumbs">${dots}</div>
+        ` : "";
+
+        const zoomButton = mainImage ? `
+            <button class="product-zoom-hint" type="button" data-product-index="${index}" aria-label="Ampliar imagen de ${escapeHtml(product.nombre)}">Ver foto</button>
+        ` : "";
 
         return `
             <article
@@ -1455,20 +1679,20 @@ function renderProducts() {
                         ${offerBadge}
                         <img
                             id="productMainImage-${index}"
+                            data-product-index="${index}"
+                            data-image-index="0"
                             src="${escapeHtml(mainImage)}"
                             alt="${escapeHtml(product.nombre)}"
                             onerror="this.style.display='none'; this.parentElement.classList.add('image-empty');"
                         >
+                        ${galleryControls}
+                        ${zoomButton}
                         <div class="product-placeholder">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zM10 4h4v2h-4V4zm10 15H4V8h16v11z"/>
                             </svg>
                             <span>Producto destacado</span>
                         </div>
-                    </div>
-
-                    <div class="product-thumbs">
-                        ${thumbs}
                     </div>
                 </div>
 
@@ -1494,33 +1718,80 @@ function renderProducts() {
     bindProductGallery();
 }
 
+function setProductImage(productIndex, imageIndex) {
+    const product = EMPRESA.productos[Number(productIndex)] || {};
+    const images = getSafeImages(product);
+    const mainImage = document.getElementById("productMainImage-" + productIndex);
+    const imageBox = document.getElementById("productImageBox-" + productIndex);
+    const counter = document.getElementById("productImageCounter-" + productIndex);
+
+    if (!mainImage || !imageBox || !images.length) return;
+
+    const normalizedIndex = (Number(imageIndex) + images.length) % images.length;
+
+    mainImage.style.display = "block";
+    mainImage.src = images[normalizedIndex];
+    mainImage.dataset.imageIndex = String(normalizedIndex);
+    imageBox.classList.remove("image-empty");
+
+    if (counter) {
+        counter.textContent = (normalizedIndex + 1) + " / " + images.length;
+    }
+
+    document
+        .querySelectorAll('.product-thumb[data-product-index="' + productIndex + '"]')
+        .forEach(thumb => thumb.classList.remove("is-active"));
+
+    const activeDot = document.querySelector('.product-thumb[data-product-index="' + productIndex + '"][data-image-index="' + normalizedIndex + '"]');
+    if (activeDot) activeDot.classList.add("is-active");
+}
+
+function openProductImageViewer(productIndex) {
+    const mainImage = document.getElementById("productMainImage-" + productIndex);
+    const imageBox = document.getElementById("productImageBox-" + productIndex);
+
+    if (!mainImage || !mainImage.src || !imageBox || imageBox.classList.contains("image-empty")) return;
+
+    const product = EMPRESA.productos[Number(productIndex)] || {};
+    const images = getSafeImages(product);
+    const imageIndex = Number(mainImage.dataset.imageIndex || 0);
+
+    if (!images.length) return;
+
+    openImageViewer(images, imageIndex, product.nombre || mainImage.alt || "Imagen del producto");
+}
+
 function bindProductGallery() {
     document.querySelectorAll(".product-thumb").forEach(button => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", event => {
+            event.stopPropagation();
+            setProductImage(button.dataset.productIndex, Number(button.dataset.imageIndex || 0));
+        });
+    });
+
+    document.querySelectorAll(".product-image-nav").forEach(button => {
+        button.addEventListener("click", event => {
+            event.stopPropagation();
+
             const productIndex = button.dataset.productIndex;
-            const image = button.dataset.image;
+            const direction = Number(button.dataset.direction || 1);
             const mainImage = document.getElementById("productMainImage-" + productIndex);
-            const imageBox = document.getElementById("productImageBox-" + productIndex);
+            const currentIndex = Number(mainImage?.dataset.imageIndex || 0);
 
-            if (!mainImage || !imageBox || !image) return;
+            setProductImage(productIndex, currentIndex + direction);
+        });
+    });
 
-            mainImage.style.display = "block";
-            mainImage.src = image;
-            imageBox.classList.remove("image-empty");
-
-            document
-                .querySelectorAll('.product-thumb[data-product-index="' + productIndex + '"]')
-                .forEach(thumb => thumb.classList.remove("is-active"));
-
-            button.classList.add("is-active");
+    document.querySelectorAll(".product-zoom-hint").forEach(button => {
+        button.addEventListener("click", event => {
+            event.stopPropagation();
+            openProductImageViewer(button.dataset.productIndex);
         });
     });
 
     document.querySelectorAll(".product-main-image img").forEach(image => {
         image.addEventListener("click", () => {
-            if (!image.src || image.closest(".product-main-image").classList.contains("image-empty")) return;
-
-            openImageViewer(image.src, image.alt || "Imagen del producto");
+            openProductImageViewer(image.dataset.productIndex);
         });
     });
 }
@@ -1533,6 +1804,9 @@ let viewerStartX = 0;
 let viewerStartY = 0;
 let viewerBaseX = 0;
 let viewerBaseY = 0;
+let viewerGalleryImages = [];
+let viewerCurrentIndex = 0;
+let viewerCurrentTitle = "Imagen del producto";
 
 function applyViewerTransform() {
     const viewerImage = document.getElementById("imageViewerImg");
@@ -1562,21 +1836,58 @@ function setViewerZoom(nextScale) {
     applyViewerTransform();
 }
 
-function openImageViewer(src, alt) {
-    const viewer = document.getElementById("imageViewer");
+function updateViewerNavButtons() {
+    const prevButton = document.getElementById("imageViewerPrev");
+    const nextButton = document.getElementById("imageViewerNext");
+
+    if (!prevButton || !nextButton) return;
+
+    const disabled = viewerGalleryImages.length <= 1;
+    prevButton.disabled = disabled;
+    nextButton.disabled = disabled;
+}
+
+function showViewerImage(index) {
     const viewerImage = document.getElementById("imageViewerImg");
     const caption = document.getElementById("imageViewerCaption");
 
-    if (!viewer || !viewerImage || !caption) return;
+    if (!viewerImage || !caption || !viewerGalleryImages.length) return;
 
-    viewerImage.src = src;
-    viewerImage.alt = alt || "Imagen del producto";
-    caption.textContent = alt || "Imagen del producto";
+    viewerCurrentIndex = (index + viewerGalleryImages.length) % viewerGalleryImages.length;
+    viewerImage.src = viewerGalleryImages[viewerCurrentIndex];
+    viewerImage.alt = viewerCurrentTitle;
 
+    const counter = viewerGalleryImages.length > 1
+        ? " · " + (viewerCurrentIndex + 1) + " / " + viewerGalleryImages.length
+        : "";
+
+    caption.textContent = viewerCurrentTitle + counter;
     resetViewerZoom();
+    updateViewerNavButtons();
+}
+
+function changeViewerImage(direction) {
+    if (viewerGalleryImages.length <= 1) return;
+    showViewerImage(viewerCurrentIndex + direction);
+}
+
+function openImageViewer(images, startIndex, title) {
+    const viewer = document.getElementById("imageViewer");
+
+    if (!viewer) return;
+
+    viewerGalleryImages = Array.isArray(images)
+        ? images.map(image => String(image || "").trim()).filter(Boolean)
+        : [String(images || "").trim()].filter(Boolean);
+
+    if (!viewerGalleryImages.length) return;
+
+    viewerCurrentTitle = title || "Imagen del producto";
     viewer.classList.add("is-open");
     viewer.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
+
+    showViewerImage(Number(startIndex || 0));
 }
 
 function closeImageViewer() {
@@ -1588,6 +1899,8 @@ function closeImageViewer() {
     viewer.classList.remove("is-open");
     viewer.setAttribute("aria-hidden", "true");
     viewerImage.src = "";
+    viewerGalleryImages = [];
+    viewerCurrentIndex = 0;
     document.body.style.overflow = "";
 }
 
@@ -1598,13 +1911,17 @@ function bindImageViewer() {
     const zoomInButton = document.getElementById("zoomInButton");
     const zoomOutButton = document.getElementById("zoomOutButton");
     const zoomResetButton = document.getElementById("zoomResetButton");
+    const prevButton = document.getElementById("imageViewerPrev");
+    const nextButton = document.getElementById("imageViewerNext");
 
-    if (!viewer || !stage || !closeButton || !zoomInButton || !zoomOutButton || !zoomResetButton) return;
+    if (!viewer || !stage || !closeButton || !zoomInButton || !zoomOutButton || !zoomResetButton || !prevButton || !nextButton) return;
 
     closeButton.addEventListener("click", closeImageViewer);
     zoomInButton.addEventListener("click", () => setViewerZoom(viewerScale + 0.25));
     zoomOutButton.addEventListener("click", () => setViewerZoom(viewerScale - 0.25));
     zoomResetButton.addEventListener("click", resetViewerZoom);
+    prevButton.addEventListener("click", () => changeViewerImage(-1));
+    nextButton.addEventListener("click", () => changeViewerImage(1));
 
     viewer.addEventListener("click", event => {
         if (event.target === viewer) closeImageViewer();
@@ -1653,6 +1970,8 @@ function bindImageViewer() {
         if (event.key === "+" || event.key === "=") setViewerZoom(viewerScale + 0.25);
         if (event.key === "-") setViewerZoom(viewerScale - 0.25);
         if (event.key === "0") resetViewerZoom();
+        if (event.key === "ArrowLeft") changeViewerImage(-1);
+        if (event.key === "ArrowRight") changeViewerImage(1);
     });
 }
 
