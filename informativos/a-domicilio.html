@@ -599,6 +599,39 @@ window.URBANEX_INFO_CONFIG = {
         return "";
     }
 
+    function documentText(doc){
+        return normalizeText((doc.body && (doc.body.innerText || doc.body.textContent)) || "");
+    }
+
+    function hasNegativeDeliveryEvidence(text){
+        const normalized = normalizeText(text);
+        return /\b(no|sin)\s+(servicio\s+a\s+)?(domicilio|delivery|envio|entrega)\b/.test(normalized) ||
+               /\b(domicilio|delivery|envio|entrega)\s+(no\s+)?(no disponible|inactivo|desactivado|suspendido)\b/.test(normalized) ||
+               /\b(no ofrecemos|no realiza|no realizamos|no cuenta con)\s+(servicio\s+a\s+)?(domicilio|delivery|envio|entrega)\b/.test(normalized);
+    }
+
+    function hasDeliveryEvidence(text){
+        const normalized = normalizeText(text);
+        if(!normalized || hasNegativeDeliveryEvidence(normalized)) return false;
+
+        return /\b(servicio\s+a\s+domicilio|a\s+domicilio|entrega\s+a\s+domicilio|entregas\s+a\s+domicilio|delivery|envio\s+a\s+domicilio|envios\s+a\s+domicilio|envio\s+local|envios\s+locales|entrega\s+local|entregas\s+locales|delivery\s+disponible|domicilio\s+disponible)\b/.test(normalized);
+    }
+
+    function detectDeliveryFromFinalHtml(doc){
+        const explicit = [
+            getMeta(doc,"urbanex:domicilio"),
+            getMeta(doc,"urbanex:delivery"),
+            getMeta(doc,"urbanex:envio"),
+            getFirstText(doc,["[data-urbanex-domicilio]","[data-delivery]","[data-envio]",".delivery-info",".domicilio-info",".delivery",".domicilio",".envio",".servicio-domicilio"])
+        ].filter(Boolean).join(" ");
+
+        if(explicit && toBoolean(explicit)) return true;
+        if(explicit && hasDeliveryEvidence(explicit)) return true;
+
+        const text = documentText(doc);
+        return hasDeliveryEvidence(text);
+    }
+
     function extractBalancedStructure(source,startIndex){
         if(startIndex < 0) return "";
 
@@ -818,7 +851,8 @@ window.URBANEX_INFO_CONFIG = {
             .map(node => node.textContent.trim())
             .filter(Boolean);
 
-        const explicitDelivery = getMeta(doc,"urbanex:domicilio") || getMeta(doc,"urbanex:delivery") || getFirstText(doc,["[data-urbanex-domicilio]","[data-delivery]",".delivery-info",".domicilio-info"]);
+        const explicitDelivery = getMeta(doc,"urbanex:domicilio") || getMeta(doc,"urbanex:delivery") || getMeta(doc,"urbanex:envio") || getFirstText(doc,["[data-urbanex-domicilio]","[data-delivery]","[data-envio]",".delivery-info",".domicilio-info",".delivery",".domicilio",".envio",".servicio-domicilio"]);
+        const detectedDelivery = detectDeliveryFromFinalHtml(doc);
         const explicitOpen = getMeta(doc,"urbanex:abierto") || getMeta(doc,"urbanex:estado") || getFirstText(doc,["[data-urbanex-estado]",".business-status",".estado"]);
 
         const raw = {
@@ -832,7 +866,8 @@ window.URBANEX_INFO_CONFIG = {
             abierto:toBoolean(explicitOpen),
             ofertas:explicitOffers,
             tieneOferta:toBoolean(getMeta(doc,"urbanex:tieneOferta") || getMeta(doc,"urbanex:oferta")) || explicitOffers.length > 0,
-            domicilio:toBoolean(explicitDelivery),
+            domicilio:toBoolean(explicitDelivery) || detectedDelivery,
+            _htmlDeliveryDetected:detectedDelivery,
             costoDomicilio:getMeta(doc,"urbanex:costoDomicilio") || getFirstText(doc,[".delivery-cost",".costo-domicilio"]),
             cobertura:getMeta(doc,"urbanex:cobertura") || getFirstText(doc,[".delivery-area",".cobertura"]),
             direccion:getMeta(doc,"urbanex:direccion") || getFirstText(doc,[".address",".direccion"]),
@@ -849,11 +884,18 @@ window.URBANEX_INFO_CONFIG = {
 
     function parseBusinessDataFromFinalHtml(htmlText,sourcePath){
         const doc = new DOMParser().parseFromString(htmlText,"text/html");
+        const detectedDelivery = detectDeliveryFromFinalHtml(doc);
         const parsed = parseJsonBusiness(doc,sourcePath) || parseAssignedBusiness(doc) || fallbackBusiness(doc,sourcePath);
 
-        return parsed.filter(function(rawBusiness){
-            return rawBusiness && !isGenericBusiness(rawBusiness);
-        });
+        return parsed
+            .filter(function(rawBusiness){
+                return rawBusiness && !isGenericBusiness(rawBusiness);
+            })
+            .map(function(rawBusiness){
+                const enriched = Object.assign({}, rawBusiness);
+                enriched._htmlDeliveryDetected = detectedDelivery || toBoolean(enriched.domicilio || enriched.aDomicilio || enriched.delivery || enriched.envio || enriched.envío || enriched.envios);
+                return enriched;
+            });
     }
 
     function normalizeBusiness(rawBusiness,sourcePath,index){
@@ -873,7 +915,7 @@ window.URBANEX_INFO_CONFIG = {
             horario:rawBusiness.horario || rawBusiness.schedule || null,
             ofertas:ofertas,
             tieneOferta:toBoolean(rawBusiness.tieneOferta || rawBusiness.enOferta || rawBusiness.oferta || rawBusiness.promo || rawBusiness.promocion || rawBusiness.promoción) || ofertas.length > 0,
-            domicilio:toBoolean(rawBusiness.domicilio || rawBusiness.aDomicilio || rawBusiness.delivery || rawBusiness.envio || rawBusiness.envío || rawBusiness.envios),
+            domicilio:toBoolean(rawBusiness.domicilio || rawBusiness.aDomicilio || rawBusiness.delivery || rawBusiness.envio || rawBusiness.envío || rawBusiness.envios) || rawBusiness._htmlDeliveryDetected === true || hasDeliveryEvidence([rawBusiness.descripcion, rawBusiness.description, rawBusiness.detalle, rawBusiness.cobertura, rawBusiness.deliveryArea, rawBusiness.zonaDomicilio].join(" ")),
             costoDomicilio:rawBusiness.costoDomicilio || rawBusiness.deliveryCost || rawBusiness.costoEnvio || "",
             cobertura:rawBusiness.cobertura || rawBusiness.deliveryArea || rawBusiness.zonaDomicilio || "",
             direccion:rawBusiness.direccion || rawBusiness.address || "",
