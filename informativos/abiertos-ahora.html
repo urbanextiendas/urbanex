@@ -392,8 +392,7 @@
             <div class="eyebrow">Filtro global</div>
             <h1>Abiertos Ahora</h1>
             <p>
-                Locales abiertos en este momento, reunidos desde todas las categorías activas de Urbanex.
-                El listado se alimenta de los archivos de cada categoría y sus subcategorías.
+                Locales abiertos en este momento, alimentados directamente desde el último eslabón de cada negocio registrado en Urbanex.
             </p>
         </div>
 
@@ -422,55 +421,24 @@
 
 <script>
 (function () {
-    const CATEGORY_SOURCES = [
+    const FILTER_TYPE = "abiertos";
+
+    const BUSINESS_SOURCES = [
         {
             nombre: "Hogar y Tecnología",
-            archivo: "../categorias/hogar.html",
-            hijos: [
-                "../categorias/hogar/electrodomesticos.html"
-            ]
-        },
-        {
-            nombre: "Gastronomía",
-            archivo: "../categorias/gastronomia.html",
-            hijos: []
-        },
-        {
-            nombre: "Salud y Bienestar",
-            archivo: "../categorias/salud.html",
-            hijos: []
-        },
-        {
-            nombre: "Movilidad",
-            archivo: "../categorias/movilidad.html",
-            hijos: []
-        },
-        {
-            nombre: "Turismo y Hospedaje",
-            archivo: "../categorias/turismo.html",
-            hijos: []
-        },
-        {
-            nombre: "Finanzas",
-            archivo: "../categorias/finanzas.html",
-            hijos: []
-        },
-        {
-            nombre: "Comercio y Educación",
-            archivo: "../categorias/comercio.html",
-            hijos: []
+            archivo: "../categorias/hogar/electrodomesticos/E0001.html"
         }
     ];
 
     const resultsContainer = document.getElementById("resultsContainer");
     const emptyState = document.getElementById("emptyState");
     const loadingState = document.getElementById("loadingState");
-    const totalOpenNow = document.getElementById("totalOpenNow");
+    const totalCounter = document.getElementById("totalResults") || document.getElementById("totalOpenNow");
     const searchInput = document.getElementById("globalSearch");
     const categoryFilter = document.getElementById("categoryFilter");
 
     const cache = new Map();
-    let allOpenBusinesses = [];
+    let allResults = [];
 
     function escapeHtml(value) {
         return String(value || "")
@@ -485,7 +453,9 @@
         return String(value || "")
             .toLowerCase()
             .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "");
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, " ")
+            .trim();
     }
 
     function escapeRegExp(value) {
@@ -494,11 +464,6 @@
 
     function resolveProjectUrl(src, baseUrl) {
         if (/^https?:\/\//i.test(src)) return src;
-
-        if (/^(categorias|imagenes)\//i.test(src)) {
-            return new URL(src, window.location.href).href;
-        }
-
         return new URL(src, baseUrl || window.location.href).href;
     }
 
@@ -566,6 +531,10 @@
         return getBalancedText(sourceText, arrayStartIndex, "[", "]");
     }
 
+    function getObjectText(sourceText, objectStartIndex) {
+        return getBalancedText(sourceText, objectStartIndex, "{", "}");
+    }
+
     function getObjectBlocks(arrayText) {
         const blocks = [];
         let index = 0;
@@ -574,7 +543,7 @@
             const objectStart = arrayText.indexOf("{", index);
             if (objectStart === -1) break;
 
-            const objectText = getBalancedText(arrayText, objectStart, "{", "}");
+            const objectText = getObjectText(arrayText, objectStart);
             if (!objectText) break;
 
             blocks.push(objectText);
@@ -586,7 +555,7 @@
 
     function readStringProperty(block, propertyNames) {
         for (const propertyName of propertyNames) {
-            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*([\"'`])([\\s\\S]*?)\\1", "i");
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*([\\\"'`])([\\s\\S]*?)\\1", "i");
             const match = pattern.exec(block);
             if (match) return match[2];
         }
@@ -596,7 +565,7 @@
 
     function readNumberProperty(block, propertyNames) {
         for (const propertyName of propertyNames) {
-            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*([0-9]+(?:\\.[0-9]+)?)", "i");
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*(-?[0-9]+(?:\\.[0-9]+)?)", "i");
             const match = pattern.exec(block);
             if (match) return match[1];
         }
@@ -614,30 +583,151 @@
         return null;
     }
 
-    function blockToBusiness(block, categoryName, sourceUrl) {
-        const estado = readStringProperty(block, ["estado", "status", "disponibilidad", "horario"]);
-        const abiertoBoolean = readBooleanProperty(block, ["abierto", "open", "isOpen", "estaAbierto"]);
-        const openByText = /\babierto\b/.test(normalizeText(estado));
+    function readArrayProperty(block, propertyNames) {
+        for (const propertyName of propertyNames) {
+            const pattern = new RegExp("\\b" + escapeRegExp(propertyName) + "\\s*:\\s*\\[", "i");
+            const match = pattern.exec(block);
+            if (!match) continue;
 
-        if (!(abiertoBoolean === true || openByText)) {
-            return null;
+            const arrayText = getArrayText(block, match.index);
+            if (!arrayText) continue;
+
+            const values = [];
+            const stringPattern = /(["'`])([\s\S]*?)\1/g;
+            let itemMatch;
+
+            while ((itemMatch = stringPattern.exec(arrayText)) !== null) {
+                values.push(itemMatch[2]);
+            }
+
+            return values;
         }
 
-        const nombre = readStringProperty(block, ["nombre", "name", "titulo", "title"]) || "Local sin nombre";
-        const segmento = readStringProperty(block, ["segmento", "categoria", "category", "tipo"]) || categoryName;
-        const descripcion = readStringProperty(block, ["descripcion", "description", "detalle", "venta"]) || "Sin descripción registrada.";
-        const rating = readNumberProperty(block, ["rating", "calificacion", "valoracion"]);
-        const perfil = readStringProperty(block, ["url", "href", "perfil", "link"]) || sourceUrl;
+        return [];
+    }
+
+    function toBoolean(value) {
+        if (typeof value === "boolean") return value;
+        if (typeof value === "number") return value === 1;
+
+        const normalized = normalizeText(value);
+        return ["si", "sí", "true", "1", "activo", "activa", "abierto", "disponible", "domicilio", "delivery", "envio", "envío", "oferta", "promo"].includes(normalized);
+    }
+
+    function getMeta(doc, name) {
+        return doc.querySelector('meta[name="' + name + '"]')?.getAttribute("content")?.trim() || "";
+    }
+
+    function getFirstText(doc, selectors) {
+        for (const selector of selectors) {
+            const node = doc.querySelector(selector);
+            if (node && node.textContent.trim()) return node.textContent.trim();
+        }
+
+        return "";
+    }
+
+    function normalizeBusiness(rawBusiness, categoryName, sourceUrl) {
+        const nombre = rawBusiness.nombre || rawBusiness.name || rawBusiness.titulo || rawBusiness.title || "Local sin nombre";
+        const categoria = rawBusiness.categoria || rawBusiness.category || categoryName || "Sin categoría";
+        const segmento = rawBusiness.segmento || rawBusiness.tipo || rawBusiness.category || categoria;
+        const descripcion = rawBusiness.descripcion || rawBusiness.description || rawBusiness.detalle || rawBusiness.venta || "Sin descripción registrada.";
+        const rating = rawBusiness.rating || rawBusiness.calificacion || rawBusiness.valoracion || "";
+        const perfil = rawBusiness.perfil || rawBusiness.url || rawBusiness.href || rawBusiness.link || sourceUrl;
+        const estado = rawBusiness.estado || rawBusiness.status || "";
+        const ofertas = Array.isArray(rawBusiness.ofertas) ? rawBusiness.ofertas :
+            Array.isArray(rawBusiness.promos) ? rawBusiness.promos :
+            Array.isArray(rawBusiness.promociones) ? rawBusiness.promociones :
+            Array.isArray(rawBusiness.descuentos) ? rawBusiness.descuentos : [];
+
+        const domicilio = toBoolean(rawBusiness.domicilio || rawBusiness.delivery || rawBusiness.aDomicilio || rawBusiness.envio || rawBusiness.envios);
+        const tieneOferta = toBoolean(rawBusiness.oferta || rawBusiness.promo || rawBusiness.promocion || rawBusiness.tieneOferta || rawBusiness.enOferta) || ofertas.length > 0;
+        const abierto = toBoolean(rawBusiness.abierto || rawBusiness.open || rawBusiness.isOpen || rawBusiness.estaAbierto) || normalizeText(estado).includes("abierto");
+        const cerca = toBoolean(rawBusiness.cerca || rawBusiness.cercano || rawBusiness.cercaDeMi || rawBusiness.nearby) || Boolean(rawBusiness.distancia || rawBusiness.distance || rawBusiness.lat || rawBusiness.lng || rawBusiness.latitude || rawBusiness.longitude || rawBusiness.zona || rawBusiness.direccion);
+
+        const searchable = normalizeText([
+            nombre,
+            categoria,
+            segmento,
+            descripcion,
+            estado,
+            ofertas.join(" "),
+            rawBusiness.direccion || rawBusiness.address || "",
+            rawBusiness.zona || ""
+        ].join(" "));
 
         return {
             nombre: nombre,
-            categoria: categoryName,
+            categoria: categoria,
             segmento: segmento,
             descripcion: descripcion,
             rating: rating,
             perfil: perfil,
-            searchable: normalizeText([nombre, categoryName, segmento, descripcion].join(" "))
+            estado: estado,
+            ofertas: ofertas,
+            domicilio: domicilio,
+            tieneOferta: tieneOferta,
+            abierto: abierto,
+            cerca: cerca,
+            searchable: searchable
         };
+    }
+
+    function jsonToBusinesses(doc, categoryName, sourceUrl) {
+        const jsonSelectors = [
+            "#urbanex-empresa-data",
+            "#businessData",
+            "#empresa-data",
+            "script[type='application/json'][data-urbanex='empresa']",
+            "script[type='application/json'][data-business]",
+            "script[type='application/json']"
+        ];
+
+        for (const selector of jsonSelectors) {
+            const nodes = Array.from(doc.querySelectorAll(selector));
+
+            for (const node of nodes) {
+                const text = node.textContent.trim();
+                if (!text) continue;
+
+                try {
+                    const parsed = JSON.parse(text);
+                    const records = Array.isArray(parsed) ? parsed : [parsed];
+                    const businesses = records
+                        .filter(function (record) { return record && typeof record === "object"; })
+                        .map(function (record) { return normalizeBusiness(record, categoryName, sourceUrl); });
+
+                    if (businesses.length) return businesses;
+                } catch (error) {
+                    continue;
+                }
+            }
+        }
+
+        return [];
+    }
+
+    function blockToBusiness(block, categoryName, sourceUrl) {
+        const ofertas = readArrayProperty(block, ["ofertas", "promos", "promociones", "descuentos"]);
+
+        return normalizeBusiness({
+            nombre: readStringProperty(block, ["nombre", "name", "titulo", "title"]),
+            categoria: readStringProperty(block, ["categoria", "category"]),
+            segmento: readStringProperty(block, ["segmento", "tipo"]),
+            descripcion: readStringProperty(block, ["descripcion", "description", "detalle", "venta"]),
+            rating: readNumberProperty(block, ["rating", "calificacion", "valoracion"]),
+            perfil: readStringProperty(block, ["url", "href", "perfil", "link"]),
+            estado: readStringProperty(block, ["estado", "status"]),
+            ofertas: ofertas,
+            domicilio: readBooleanProperty(block, ["domicilio", "delivery", "aDomicilio", "envio", "envios"]),
+            oferta: readBooleanProperty(block, ["oferta", "promo", "promocion", "tieneOferta", "enOferta"]),
+            abierto: readBooleanProperty(block, ["abierto", "open", "isOpen", "estaAbierto"]),
+            cerca: readBooleanProperty(block, ["cerca", "cercano", "cercaDeMi", "nearby"]),
+            distancia: readNumberProperty(block, ["distancia", "distance"]),
+            lat: readNumberProperty(block, ["lat", "latitude"]),
+            lng: readNumberProperty(block, ["lng", "longitude"]),
+            zona: readStringProperty(block, ["zona", "sector", "direccion", "address"])
+        }, categoryName, sourceUrl);
     }
 
     function extractBusinessesFromArrays(htmlText, categoryName, sourceUrl) {
@@ -650,17 +740,56 @@
             if (!arrayText) continue;
 
             getObjectBlocks(arrayText).forEach(function (block) {
-                const business = blockToBusiness(block, categoryName, sourceUrl);
-                if (business) businesses.push(business);
+                businesses.push(blockToBusiness(block, categoryName, sourceUrl));
             });
+        }
+
+        const objectPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|local|negocio|servicio|business)[a-zA-Z0-9_$]*)\s*=\s*\{/gi;
+        while ((match = objectPattern.exec(htmlText)) !== null) {
+            const objectText = getObjectText(htmlText, match.index);
+            if (!objectText) continue;
+
+            businesses.push(blockToBusiness(objectText, categoryName, sourceUrl));
         }
 
         return businesses;
     }
 
+    function extractBusinessFromProfileMarkup(doc, categoryName, sourceUrl) {
+        const bodyText = normalizeText(doc.body ? doc.body.textContent : "");
+        const ofertas = Array.from(doc.querySelectorAll("[data-oferta], .oferta, .offer, .promo, .promotion"))
+            .map(function (node) { return node.textContent.trim(); })
+            .filter(Boolean);
+
+        const rawBusiness = {
+            nombre: getMeta(doc, "urbanex:nombre") || getFirstText(doc, ["h1", ".business-title", ".shop-title", ".company-title", ".empresa-title"]),
+            categoria: getMeta(doc, "urbanex:categoria") || getFirstText(doc, [".business-category", ".category-pill", ".categoria"]),
+            segmento: getMeta(doc, "urbanex:segmento") || getFirstText(doc, [".business-segment", ".shop-segment", ".segmento"]),
+            descripcion: getMeta(doc, "description") || getFirstText(doc, [".business-description", ".company-description", ".descripcion", "main p"]),
+            rating: getFirstText(doc, [".rating", ".business-rating"]),
+            perfil: sourceUrl,
+            estado: getFirstText(doc, [".business-status", ".estado"]),
+            ofertas: ofertas,
+            domicilio: bodyText.includes("domicilio") || bodyText.includes("delivery") || bodyText.includes("envio") || bodyText.includes("envíos") || bodyText.includes("envios"),
+            oferta: bodyText.includes("oferta") || bodyText.includes("promo") || ofertas.length > 0,
+            abierto: bodyText.includes("abierto"),
+            cerca: bodyText.includes("cerca") || bodyText.includes("direccion") || Boolean(getMeta(doc, "urbanex:direccion") || getMeta(doc, "urbanex:latitud") || getMeta(doc, "urbanex:longitud")),
+            direccion: getMeta(doc, "urbanex:direccion") || getFirstText(doc, [".address", ".direccion"]),
+            lat: getMeta(doc, "urbanex:latitud"),
+            lng: getMeta(doc, "urbanex:longitud")
+        };
+
+        if (!rawBusiness.nombre) rawBusiness.nombre = doc.title || "Local sin nombre";
+
+        return [normalizeBusiness(rawBusiness, categoryName, sourceUrl)];
+    }
+
     function extractBusinessesFromMarkup(htmlText, categoryName, sourceUrl) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, "text/html");
+
+        const fromJson = jsonToBusinesses(doc, categoryName, sourceUrl);
+        if (fromJson.length) return fromJson;
 
         const selectors = [
             ".empresa-electrodomesticos",
@@ -673,85 +802,79 @@
             "[data-empresa]"
         ].join(",");
 
-        return Array.from(doc.querySelectorAll(selectors))
+        const cardBusinesses = Array.from(doc.querySelectorAll(selectors))
             .map(function (element) {
                 const text = element.textContent || "";
-                if (!/\babierto\b/i.test(normalizeText(text))) return null;
 
-                const nameElement = element.querySelector(".business-title, .shop-title, h2, h3, [data-name]");
-                const segmentElement = element.querySelector(".business-category, .shop-segment, .segmento, [data-segment]");
-                const descriptionElement = element.querySelector(".business-description, .descripcion, p");
-
-                return {
-                    nombre: nameElement ? nameElement.textContent.trim() : "Local sin nombre",
+                return normalizeBusiness({
+                    nombre: element.querySelector(".business-title, .shop-title, h2, h3, [data-name]")?.textContent?.trim() || "Local sin nombre",
                     categoria: categoryName,
-                    segmento: segmentElement ? segmentElement.textContent.trim() : categoryName,
-                    descripcion: descriptionElement ? descriptionElement.textContent.trim() : "Sin descripción registrada.",
-                    rating: "",
-                    perfil: sourceUrl,
-                    searchable: normalizeText(text + " " + categoryName)
-                };
-            })
-            .filter(Boolean);
-    }
-
-    function getSubcategorySources(htmlText, sourceUrl) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlText, "text/html");
-
-        return Array.from(doc.querySelectorAll("[data-count-src]"))
-            .map(function (element) {
-                return element.getAttribute("data-count-src");
-            })
-            .filter(Boolean)
-            .map(function (src) {
-                return resolveProjectUrl(src, sourceUrl);
+                    segmento: element.querySelector(".business-category, .shop-segment, .segmento, [data-segment]")?.textContent?.trim() || categoryName,
+                    descripcion: element.querySelector(".business-description, .descripcion, p")?.textContent?.trim() || "Sin descripción registrada.",
+                    rating: element.querySelector(".rating, .business-rating")?.textContent?.replace(/[^\d.]/g, "") || "",
+                    perfil: element.querySelector("a[href]")?.getAttribute("href") || sourceUrl,
+                    estado: element.querySelector(".business-status, .estado")?.textContent?.trim() || "",
+                    ofertas: Array.from(element.querySelectorAll("[data-oferta], .oferta, .offer, .promo, .promotion")).map(function (node) { return node.textContent.trim(); }).filter(Boolean),
+                    domicilio: normalizeText(text).includes("domicilio") || normalizeText(text).includes("delivery") || normalizeText(text).includes("envio"),
+                    oferta: normalizeText(text).includes("oferta") || normalizeText(text).includes("promo"),
+                    abierto: normalizeText(text).includes("abierto"),
+                    cerca: normalizeText(text).includes("cerca") || normalizeText(text).includes("direccion")
+                }, categoryName, sourceUrl);
             });
+
+        if (cardBusinesses.length) return cardBusinesses;
+
+        return extractBusinessFromProfileMarkup(doc, categoryName, sourceUrl);
     }
 
-    async function loadBusinessesFromSource(source, categoryName, depth) {
-        const sourceUrl = resolveProjectUrl(source, window.location.href);
-        const htmlText = await fetchHtml(sourceUrl, window.location.href);
+    function matchesFilter(business) {
+        const normalized = normalizeText([
+            business.nombre,
+            business.categoria,
+            business.segmento,
+            business.descripcion,
+            business.estado,
+            business.ofertas.join(" ")
+        ].join(" "));
 
-        if (depth > 0) {
-            const subSources = getSubcategorySources(htmlText, sourceUrl);
-            if (subSources.length) {
-                const childResults = await Promise.all(
-                    subSources.map(function (childSource) {
-                        return loadBusinessesFromSource(childSource, categoryName, depth - 1).catch(function () {
-                            return [];
-                        });
-                    })
-                );
-
-                return childResults.flat();
-            }
+        if (FILTER_TYPE === "cerca") {
+            return business.cerca || /\b(cerca|cercano|cerca de mi|zona|direccion|dirección)\b/.test(normalized);
         }
 
-        const fromArrays = extractBusinessesFromArrays(htmlText, categoryName, sourceUrl);
-        if (fromArrays.length) return fromArrays;
+        if (FILTER_TYPE === "domicilio") {
+            return business.domicilio || /\b(domicilio|delivery|envio|envíos|envios|entrega)\b/.test(normalized);
+        }
 
-        return extractBusinessesFromMarkup(htmlText, categoryName, sourceUrl);
+        if (FILTER_TYPE === "ofertas") {
+            return business.tieneOferta || business.ofertas.length > 0 || /\b(oferta|ofertas|promo|promocion|promoción|promociones|descuento|descuentos)\b/.test(normalized);
+        }
+
+        if (FILTER_TYPE === "abiertos") {
+            return business.abierto || /\b(abierto|abierta|atendiendo|activo|activa)\b/.test(normalized);
+        }
+
+        return true;
     }
 
-    async function loadAllOpenBusinesses() {
+    async function loadBusinessFromSource(source) {
+        const sourceUrl = resolveProjectUrl(source.archivo, window.location.href);
+        const htmlText = await fetchHtml(sourceUrl, window.location.href);
+        const businesses = extractBusinessesFromArrays(htmlText, source.nombre, sourceUrl);
+
+        if (businesses.length) return businesses;
+        return extractBusinessesFromMarkup(htmlText, source.nombre, sourceUrl);
+    }
+
+    async function loadAllResults() {
         const results = await Promise.all(
-            CATEGORY_SOURCES.map(async function (category) {
-                const sources = category.hijos && category.hijos.length ? category.hijos : [category.archivo];
-
-                const categoryResults = await Promise.all(
-                    sources.map(function (source) {
-                        return loadBusinessesFromSource(source, category.nombre, 2).catch(function () {
-                            return [];
-                        });
-                    })
-                );
-
-                return categoryResults.flat();
+            BUSINESS_SOURCES.map(function (source) {
+                return loadBusinessFromSource(source).catch(function () {
+                    return [];
+                });
             })
         );
 
-        return results.flat();
+        return results.flat().filter(matchesFilter);
     }
 
     function populateCategoryFilter(businesses) {
@@ -765,18 +888,26 @@
             }).join("");
     }
 
+    function getStatusLabel() {
+        if (FILTER_TYPE === "ofertas") return "Oferta";
+        if (FILTER_TYPE === "domicilio") return "Domicilio";
+        if (FILTER_TYPE === "cerca") return "Cerca";
+        if (FILTER_TYPE === "abiertos") return "Abierto";
+        return "Activo";
+    }
+
     function renderResults() {
         const query = normalizeText(searchInput.value);
         const selectedCategory = categoryFilter.value;
 
-        const filtered = allOpenBusinesses.filter(function (business) {
+        const filtered = allResults.filter(function (business) {
             const matchesSearch = !query || business.searchable.includes(query);
             const matchesCategory = selectedCategory === "todas" || business.categoria === selectedCategory;
 
             return matchesSearch && matchesCategory;
         });
 
-        totalOpenNow.textContent = filtered.length;
+        if (totalCounter) totalCounter.textContent = filtered.length;
         emptyState.style.display = filtered.length ? "none" : "block";
 
         const grouped = filtered.reduce(function (accumulator, business) {
@@ -791,7 +922,7 @@
                     <article class="business-card">
                         <div class="business-top">
                             <h3 class="business-title">${escapeHtml(business.nombre)}</h3>
-                            <span class="business-status">Abierto</span>
+                            <span class="business-status">${escapeHtml(getStatusLabel())}</span>
                         </div>
                         <div class="business-segment">${escapeHtml(business.segmento)}</div>
                         <p class="business-description">${escapeHtml(business.descripcion)}</p>
@@ -807,7 +938,7 @@
                 <section class="category-section">
                     <div class="category-header">
                         <h2>${escapeHtml(categoryName)}</h2>
-                        <span>${grouped[categoryName].length} abiertos</span>
+                        <span>${grouped[categoryName].length} resultados</span>
                     </div>
                     <div class="business-grid">
                         ${items}
@@ -819,8 +950,8 @@
 
     async function init() {
         try {
-            allOpenBusinesses = await loadAllOpenBusinesses();
-            populateCategoryFilter(allOpenBusinesses);
+            allResults = await loadAllResults();
+            populateCategoryFilter(allResults);
             loadingState.style.display = "none";
             renderResults();
         } catch (error) {
@@ -835,6 +966,7 @@
     init();
 })();
 </script>
+
 
 </body>
 </html>
