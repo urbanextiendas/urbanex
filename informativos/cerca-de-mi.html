@@ -693,6 +693,7 @@
     function normalizeBusiness(rawBusiness, sourceUrl, fallbackCategory) {
         const raw = Object.assign({}, rawBusiness || {});
         const estado = String(firstDefined(raw, ["estado", "status", "disponibilidad", "estadoManual"]) || "Disponible");
+        const codigo = String(firstDefined(raw, ["codigo", "code", "id", "empresaId", "businessId"]) || cleanPathTitle(sourceUrl));
         const nombre = String(firstDefined(raw, ["nombre", "name", "titulo", "title"]) || cleanPathTitle(sourceUrl));
         const categoria = String(firstDefined(raw, ["categoria", "category", "rubro"]) || fallbackCategory || "Sin categoría");
         const segmento = String(firstDefined(raw, ["segmento", "tipo", "subcategoria", "category"]) || categoria);
@@ -721,6 +722,7 @@
         const cercano = cercaExplicit === true || (latitud !== null && longitud !== null) || Boolean(direccion || zona || raw.distancia || raw.distance);
 
         return {
+            codigo: codigo,
             nombre: nombre,
             categoria: categoria,
             segmento: segmento,
@@ -771,7 +773,7 @@
 
         const jsonData = parseJsonData(doc);
         if (jsonData && jsonData.length) {
-            return jsonData.map(function (raw) { return normalizeBusiness(raw, sourceUrl, fallbackCategory); });
+            return [normalizeBusiness(jsonData[0], sourceUrl, fallbackCategory)];
         }
 
         const scriptText = scriptTextFromDoc(doc);
@@ -789,7 +791,7 @@
             const arrayData = Array.isArray(assignedData) ? assignedData : [assignedData];
             const objectData = arrayData.filter(function (item) { return item && typeof item === "object" && !Array.isArray(item); });
             if (objectData.length) {
-                return objectData.map(function (raw) { return normalizeBusiness(raw, sourceUrl, fallbackCategory); });
+                return [normalizeBusiness(objectData[0], sourceUrl, fallbackCategory)];
             }
         }
 
@@ -881,14 +883,17 @@
             }
         }
 
-        return parseBusinessDataFromFinalHtml(htmlText, pageUrl, fallbackCategory);
+        return [];
     }
 
     function dedupeBusinesses(businesses) {
         const map = new Map();
         businesses.forEach(function (business) {
             if (!business || !business.nombre) return;
-            const key = normalizeText((business.perfil || business.sourceUrl || "") + "|" + business.nombre);
+            const sourceKey = normalizeText(business.sourceUrl || business.perfil || "");
+            const codeKey = normalizeText(business.codigo || "");
+            const nameKey = normalizeText(business.nombre || "");
+            const key = sourceKey || codeKey || nameKey;
             if (!map.has(key)) map.set(key, business);
         });
         return Array.from(map.values());
