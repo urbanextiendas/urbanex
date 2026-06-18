@@ -187,7 +187,7 @@
         }
         .profile-avatar svg { width: 13px; height: 13px; fill: var(--gold); }
 
-        /* SIDEBAR IZQUIERDO - CATEGORÕAS */
+        /* SIDEBAR IZQUIERDO - CATEGOR√çAS */
         .aside-categories {
             grid-area: aside-left;
             background: rgba(6, 6, 6, 0.35);
@@ -251,7 +251,7 @@
         .category-item.active .category-name { color: var(--gold); font-weight: 600; }
         .category-count { color: var(--text-dark); font-size: 9px; }
 
-        /* ¡REA PRINCIPAL */
+        /* √ÅREA PRINCIPAL */
         .main-boulevard {
             grid-area: main;
             position: relative;
@@ -435,7 +435,7 @@
         </a>
 
         <div class="search-wrapper">
-            <input type="search" id="siteSearch" class="search-input" placeholder="øQuÈ producto o servicio busca?" autocomplete="off">
+            <input type="search" id="siteSearch" class="search-input" placeholder="¬øQu√© producto o servicio busca?" autocomplete="off">
             <svg class="search-icon" id="searchButton" viewBox="0 0 24 24" role="button" aria-label="Buscar">
                 <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
             </svg>
@@ -456,11 +456,11 @@
         </div>
     </header>
 
-    <!-- SIDEBAR IZQUIERDO: CATEGORÕAS -->
+    <!-- SIDEBAR IZQUIERDO: CATEGOR√çAS -->
     <aside class="aside-categories">
-        <h2 class="section-title">CategorÌas</h2>
+        <h2 class="section-title">Categor√≠as</h2>
         <ul class="categories-list" id="categoriesList">
-            <!-- Se genera din·micamente desde Supabase -->
+            <!-- Se genera din√°micamente desde Supabase -->
             <li class="shop-card-skeleton" style="height:44px; border-radius:12px;"></li>
             <li class="shop-card-skeleton" style="height:44px; border-radius:12px; margin-top:4px;"></li>
             <li class="shop-card-skeleton" style="height:44px; border-radius:12px; margin-top:4px;"></li>
@@ -468,7 +468,7 @@
         </ul>
     </aside>
 
-    <!-- ¡REA PRINCIPAL -->
+    <!-- √ÅREA PRINCIPAL -->
     <main class="main-boulevard">
         <div class="boulevard-overlay"></div>
 
@@ -484,7 +484,7 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Abiertos Ahora</span>
-                    <span class="filter-sub" id="metricOpenNow">ó locales</span>
+                    <span class="filter-sub" id="metricOpenNow">¬ó locales</span>
                 </div>
             </div>
 
@@ -493,8 +493,8 @@
                     <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                 </div>
                 <div class="filter-label-group">
-                    <span class="filter-label">Cerca de mÌ</span>
-                    <span class="filter-sub" id="metricNearby">Activar ubicaciÛn</span>
+                    <span class="filter-label">Cerca de m√≠</span>
+                    <span class="filter-sub" id="metricNearby">Activar ubicaci√≥n</span>
                 </div>
             </div>
 
@@ -504,7 +504,7 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">A Domicilio</span>
-                    <span class="filter-sub" id="metricDelivery">ó locales</span>
+                    <span class="filter-sub" id="metricDelivery">¬ó locales</span>
                 </div>
             </div>
 
@@ -514,7 +514,7 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Ofertas</span>
-                    <span class="filter-sub" id="metricOffers">ó promos</span>
+                    <span class="filter-sub" id="metricOffers">¬ó promos</span>
                 </div>
             </div>
         </div>
@@ -529,7 +529,7 @@
 
         <div class="sort-box">
             <select class="sort-select" id="sortSelect">
-                <option value="rating">Ordenar por: Mayor CalificaciÛn</option>
+                <option value="rating">Ordenar por: Mayor Calificaci√≥n</option>
                 <option value="name">Nombre A-Z</option>
             </select>
         </div>
@@ -553,7 +553,7 @@
 
 
 <!-- ============================================================
-     SUPABASE + L”GICA DE LA APLICACI”N
+     SUPABASE + L√ìGICA DE LA APLICACI√ìN
      ============================================================
      INSTRUCCIONES:
      1. Reemplaza SUPABASE_URL con tu URL del proyecto en Supabase
@@ -564,13 +564,13 @@
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-// ??? CONFIGURACI”N ??????????????????????????????????????????????
-const SUPABASE_URL  = 'https://TU_PROYECTO.supabase.co';   // ? cambia esto
-const SUPABASE_ANON_KEY = 'TU_ANON_KEY';                   // ? cambia esto
+// ??? CONFIGURACI√ìN ??????????????????????????????????????????????
+const SUPABASE_URL  = 'https://mlkynawsjqmawgxeuvks.supabase.co';   // ? cambia esto
+const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';                   // ? cambia esto
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ??? ICONOS POR CATEGORÕA (SVG paths) ???????????????????????????
+// ??? ICONOS POR CATEGOR√çA (SVG paths) ???????????????????????????
 const CATEGORY_ICONS = {
     default:        'M4 10h3v7H4zm6.5 0h3v7h-3zM2 22h19v-3H2zm15-12h3v7h-3zM11.5 2L2 7v2h19V7z',
     gastronomia:    'M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm7-3h-1v5h1V6zm0-4h-3v11h3V2zm2 19H14v-2h6v2z',
@@ -617,7 +617,7 @@ function isOpenNow(hours) {
 function renderShopCards(businesses) {
     const container = document.getElementById('shopsScrollArea');
     if (!businesses.length) {
-        container.innerHTML = '<p style="color:var(--text-dark);font-size:11px;text-align:center;padding:20px 0;">Sin negocios destacados a˙n.</p>';
+        container.innerHTML = '<p style="color:var(--text-dark);font-size:11px;text-align:center;padding:20px 0;">Sin negocios destacados a√∫n.</p>';
         return;
     }
 
@@ -630,7 +630,7 @@ function renderShopCards(businesses) {
             ? `<img src="${esc(b.cover_image)}" alt="${esc(b.name)}" class="shop-thumb" loading="lazy">`
             : `<div class="shop-thumb-placeholder">${b.categories?.icon || '??'}</div>`;
         const categoryName = b.categories?.name || '';
-        const ratingDisplay = b.avg_rating ? b.avg_rating.toFixed(1) : 'ó';
+        const ratingDisplay = b.avg_rating ? b.avg_rating.toFixed(1) : '¬ó';
         const reviewCount   = b.review_count || 0;
 
         return `
@@ -668,7 +668,7 @@ async function loadFeaturedBusinesses() {
 
     if (error) { console.error('Error cargando destacados:', error); return; }
 
-    // Calcular rating promedio y cantidad de reseÒas aprobadas
+    // Calcular rating promedio y cantidad de rese√±as aprobadas
     allFeatured = (data || []).map(b => {
         const ratings = (b.reviews || []).map(r => r.rating).filter(Boolean);
         return {
@@ -692,9 +692,9 @@ function sortAndRenderFeatured() {
     renderShopCards(sorted);
 }
 
-// ??? CARGAR CATEGORÕAS ??????????????????????????????????????????
+// ??? CARGAR CATEGOR√çAS ??????????????????????????????????????????
 async function loadCategories() {
-    // Obtener categorÌas con conteo de negocios activos
+    // Obtener categor√≠as con conteo de negocios activos
     const { data: cats, error } = await supabase
         .from('categories')
         .select('id, name, icon')
@@ -702,7 +702,7 @@ async function loadCategories() {
 
     if (error || !cats) return;
 
-    // Obtener conteos por categorÌa
+    // Obtener conteos por categor√≠a
     const { data: counts } = await supabase
         .from('businesses')
         .select('category_id')
@@ -732,7 +732,7 @@ async function loadCategories() {
     }).join('');
 }
 
-// ??? M…TRICAS DE LA BARRA DE FILTROS ????????????????????????????
+// ??? M√âTRICAS DE LA BARRA DE FILTROS ????????????????????????????
 async function loadMetrics() {
     // Total activos
     const { data: allActive } = await supabase
@@ -778,7 +778,7 @@ async function loadMetrics() {
     document.getElementById('metricOffers').textContent   = `${promoCount} promo${promoCount !== 1 ? 's' : ''}`;
 }
 
-// ??? B⁄SQUEDA EN SUPABASE ????????????????????????????????????????
+// ??? B√öSQUEDA EN SUPABASE ????????????????????????????????????????
 const searchInput  = document.getElementById('siteSearch');
 const searchButton = document.getElementById('searchButton');
 const resultsPanel = document.getElementById('searchResults');
@@ -838,17 +838,17 @@ document.addEventListener('click', e => {
     if (!e.target.closest('.search-wrapper')) hidePanel();
 });
 
-// ??? GEOLOCALIZACI”N ????????????????????????????????????????????
+// ??? GEOLOCALIZACI√ìN ????????????????????????????????????????????
 document.getElementById('pillNearby')?.addEventListener('click', () => {
     if (!navigator.geolocation) {
         document.getElementById('metricNearby').textContent = 'No disponible';
         return;
     }
-    document.getElementById('metricNearby').textContent = 'Obteniendo ubicaciÛn...';
+    document.getElementById('metricNearby').textContent = 'Obteniendo ubicaci√≥n...';
 
     navigator.geolocation.getCurrentPosition(async pos => {
         const { latitude, longitude } = pos.coords;
-        document.getElementById('locationLabel').querySelector('span').textContent = 'Tu ubicaciÛn';
+        document.getElementById('locationLabel').querySelector('span').textContent = 'Tu ubicaci√≥n';
 
         // Busca negocios a menos de 2km usando PostGIS
         const { data, error } = await supabase.rpc('businesses_near', {
@@ -865,7 +865,7 @@ document.getElementById('pillNearby')?.addEventListener('click', () => {
                 .eq('is_active', true)
                 .not('latitude', 'is', null);
             const cnt = withCoords?.length || 0;
-            document.getElementById('metricNearby').textContent = `${cnt} con ubicaciÛn`;
+            document.getElementById('metricNearby').textContent = `${cnt} con ubicaci√≥n`;
         } else {
             const cnt = data?.length || 0;
             document.getElementById('metricNearby').textContent = `${cnt} cercano${cnt !== 1 ? 's' : ''}`;
@@ -878,7 +878,7 @@ document.getElementById('pillNearby')?.addEventListener('click', () => {
 // ??? ORDENAR ????????????????????????????????????????????????????
 document.getElementById('sortSelect')?.addEventListener('change', sortAndRenderFeatured);
 
-// ??? BOT”N VER TODOS ?????????????????????????????????????????????
+// ??? BOT√ìN VER TODOS ?????????????????????????????????????????????
 document.getElementById('btnViewAll')?.addEventListener('click', () => {
     window.location.href = 'directorio.html';
 });
