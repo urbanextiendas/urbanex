@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Urbanex - Categoría</title>
+    <link rel="icon" type="image/png" href="/imagenes/log.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #020202;
+            --bg-panel: rgba(6, 6, 6, 0.65);
+            --bg-cards-glass: rgba(20, 20, 20, 0.5);
+            --gold: #e5c158;
+            --gold-dim: #a68b44;
+            --border-color: rgba(229, 193, 88, 0.15);
+            --text-main: #ffffff;
+            --text-muted: #cfcfcf;
+            --text-dark: #999999;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --blur-effect: blur(20px);
+            --green: #2ed573;
+            --red: #ff4757;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(229, 193, 88, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--bg-main);
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ---------------- HEADER ---------------- */
+        .header-top {
+            background: rgba(6, 6, 6, 0.7);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            height: 60px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .brand-box img { height: 50px; width: auto; display: block; }
+
+        .breadcrumb {
+            font-size: 11px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        .breadcrumb a:hover { color: var(--gold); }
+        .breadcrumb .sep { opacity: 0.4; }
+        .breadcrumb .current { color: var(--gold); }
+
+        .header-search {
+            flex: 1;
+            max-width: 320px;
+            position: relative;
+        }
+        .header-search input {
+            width: 100%;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: #fff;
+            font-size: 12px;
+            outline: none;
+            font-family: var(--font-sans);
+        }
+        .header-search input:focus { border-color: var(--gold); }
+
+        /* ---------------- HERO CATEGORÍA ---------------- */
+        .category-hero {
+            position: relative;
+            padding: 36px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(180deg, rgba(229,193,88,0.06), transparent);
+        }
+
+        .category-icon-circle {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: rgba(229,193,88,0.12);
+            border: 1px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 14px;
+        }
+        .category-icon-circle svg { width: 26px; height: 26px; fill: var(--gold); }
+
+        .category-hero h1 {
+            font-family: var(--font-serif);
+            font-size: 26px;
+            letter-spacing: 2px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .category-hero p {
+            font-size: 12.5px;
+            color: var(--text-dark);
+            margin-top: 6px;
+        }
+
+        /* ---------------- TOOLBAR ---------------- */
+        .toolbar {
+            max-width: 1180px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 18px 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .results-count { font-size: 12.5px; color: var(--text-muted); }
+        .results-count strong { color: var(--gold); }
+
+        .toolbar-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+        .sort-select, .filter-toggle {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #fff;
+            font-size: 11.5px;
+            outline: none;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            transition: var(--transition-smooth);
+        }
+        .sort-select:focus, .filter-toggle:hover { border-color: var(--gold); }
+
+        .filter-toggle.active { background: rgba(229,193,88,0.15); border-color: var(--gold); color: var(--gold); }
+
+        /* ---------------- GRID ---------------- */
+        .business-grid {
+            max-width: 1180px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 18px 20px 50px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        .business-card {
+            background: var(--bg-cards-glass);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        .business-card:hover {
+            border-color: rgba(229,193,88,0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .card-thumb-wrapper { width: 100%; height: 150px; position: relative; flex-shrink: 0; }
+        .card-thumb { width: 100%; height: 100%; object-fit: cover; }
+        .card-thumb-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 36px; background: rgba(229,193,88,0.08); }
+
+        .card-status {
+            position: absolute; top: 10px; right: 10px;
+            font-size: 10px; font-weight: 700;
+            padding: 3px 9px; border-radius: 12px;
+            backdrop-filter: blur(6px);
+        }
+        .card-status.open { background: rgba(46,213,115,0.2); color: var(--green); border: 1px solid var(--green); }
+        .card-status.closed { background: rgba(255,71,87,0.2); color: var(--red); border: 1px solid var(--red); }
+
+        .card-body { padding: 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+
+        .card-title { font-size: 14px; font-weight: 700; color: #fff; }
+        .card-desc { font-size: 11.5px; color: var(--text-dark); line-height: 1.5; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+        .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 6px; }
+        .card-rating { display: flex; align-items: center; gap: 4px; font-size: 11.5px; }
+        .card-rating svg { width: 12px; height: 12px; fill: var(--gold); }
+        .card-rating .num { color: #fff; font-weight: 700; }
+        .card-rating .count { color: var(--text-dark); }
+        .card-address { font-size: 10.5px; color: var(--text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px; }
+
+        /* ---------------- ESTADOS ---------------- */
+        .skeleton-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 14px;
+            height: 250px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-dark);
+        }
+        .empty-state h3 { font-family: var(--font-serif); color: var(--gold); font-size: 18px; margin-bottom: 8px; }
+        .empty-state p { font-size: 13px; }
+        .btn-back-boulevard {
+            margin-top: 16px; padding: 10px 22px;
+            background: var(--gold); color: #000; border: none;
+            border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer;
+        }
+
+        /* ---------------- PIE ---------------- */
+        .pie-pagina {
+            width: 100%; height: 24px;
+            background-color: #000; color: #8c8c8c;
+            font-size: 11px;
+            display: flex; justify-content: center; align-items: center;
+            border-top: 1px solid #1a1a1a;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        @media (max-width: 600px) {
+            .category-hero h1 { font-size: 20px; }
+            .header-search { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header-top">
+    <a href="../index.html" class="brand-box" title="Volver al Inicio">
+        <img src="../imagenes/logo.png" alt="Urbanex">
+    </a>
+
+    <div class="header-search">
+        <input type="text" id="quickFilter" placeholder="Filtrar en esta categoría..." autocomplete="off">
+    </div>
+
+    <div class="breadcrumb">
+        <a href="../boulevard.html">Boulevard</a>
+        <span class="sep">/</span>
+        <span class="current" id="breadcrumbName">Categoría</span>
+    </div>
+</header>
+
+<section class="category-hero">
+    <div class="category-icon-circle">
+        <svg viewBox="0 0 24 24" id="categoryIconSvg"><path d="M4 10h3v7H4zm6.5 0h3v7h-3zM2 22h19v-3H2zm15-12h3v7h-3zM11.5 2L2 7v2h19V7z"/></svg>
+    </div>
+    <h1 id="categoryTitle">Cargando categoría...</h1>
+    <p id="categorySubtitle">Explorando negocios</p>
+</section>
+
+<div class="toolbar">
+    <div class="results-count" id="resultsCount">Cargando negocios...</div>
+    <div class="toolbar-controls">
+        <button class="filter-toggle" id="filterOpenNow">Abiertos ahora</button>
+        <select class="sort-select" id="sortSelect">
+            <option value="rating">Mejor calificados</option>
+            <option value="name">Nombre A-Z</option>
+        </select>
+    </div>
+</div>
+
+<div class="business-grid" id="businessGrid">
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+</div>
+
+<footer class="pie-pagina">
+    <p>&copy; 2026 Urbanex. Desarrollado por Neodat Consultores.</p>
+</footer>
+
+
+<!-- ============================================================
+     SUPABASE
+     Reemplaza SUPABASE_URL y SUPABASE_ANON_KEY con tus datos
+     ============================================================ -->
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';   
+const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';                  
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const CATEGORY_ICONS = {
+    default:        'M4 10h3v7H4zm6.5 0h3v7h-3zM2 22h19v-3H2zm15-12h3v7h-3zM11.5 2L2 7v2h19V7z',
+    gastronomia:    'M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm7-3h-1v5h1V6zm0-4h-3v11h3V2zm2 19H14v-2h6v2z',
+    salud:          'M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H5v-4h4V5h4v4h4v4z',
+    movilidad:      'M22.46 6c-.77-2.3-2.89-4-5.46-4H7c-2.57 0-4.69 1.7-5.46 4L.55 9H23.5l-1.04-3zM2 11v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-9H2zm7 8H5v-4h4v4zm10 0h-4v-4h4v4z',
+    turismo:        'M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z',
+    finanzas:       'M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z',
+    comercio:       'M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z',
+    hogar:          'M4 10h3v7H4zm6.5 0h3v7h-3zM2 22h19v-3H2zm15-12h3v7h-3zM11.5 2L2 7v2h19V7z',
+};
+
+function getIconPath(categoryName) {
+    const name = (categoryName || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    for (const key of Object.keys(CATEGORY_ICONS)) {
+        if (key !== 'default' && name.includes(key)) return CATEGORY_ICONS[key];
+    }
+    return CATEGORY_ICONS.default;
+}
+
+function esc(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function getCategoryIdFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('cat');
+}
+
+function isOpenNow(hours) {
+    if (!hours || !hours.length) return false;
+    const now = new Date();
+    const todayHours = hours.find(h => h.day_of_week === now.getDay() && !h.is_closed);
+    if (!todayHours) return false;
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const [oh, om] = (todayHours.open_time || '').split(':').map(Number);
+    const [ch, cm] = (todayHours.close_time || '').split(':').map(Number);
+    if (isNaN(oh) || isNaN(ch)) return false;
+    const openM = oh * 60 + om, closeM = ch * 60 + cm;
+    return currentMinutes >= openM && currentMinutes <= closeM;
+}
+
+let allBusinesses = [];
+let currentFilterOpenOnly = false;
+
+function renderGrid() {
+    const grid = document.getElementById('businessGrid');
+    const query = document.getElementById('quickFilter').value.trim().toLowerCase();
+    const sort = document.getElementById('sortSelect').value;
+
+    let list = [...allBusinesses];
+
+    if (currentFilterOpenOnly) list = list.filter(b => b._open);
+    if (query) list = list.filter(b => b.name.toLowerCase().includes(query) || (b.description || '').toLowerCase().includes(query));
+
+    list.sort((a, b) => sort === 'rating' ? b._avgRating - a._avgRating : a.name.localeCompare(b.name));
+
+    document.getElementById('resultsCount').innerHTML = `<strong>${list.length}</strong> negocio${list.length !== 1 ? 's' : ''} encontrado${list.length !== 1 ? 's' : ''}`;
+
+    if (!list.length) {
+        grid.innerHTML = `
+            <div class="empty-state">
+                <h3>Sin resultados</h3>
+                <p>No hay negocios que coincidan con tu búsqueda en esta categoría.</p>
+                <button class="btn-back-boulevard" onclick="window.location.href='../boulevard.html'">Volver al Boulevard</button>
+            </div>`;
+        return;
+    }
+
+    grid.innerHTML = list.map(b => {
+        const thumbHtml = b.cover_image
+            ? `<img src="${esc(b.cover_image)}" alt="${esc(b.name)}" class="card-thumb" loading="lazy">`
+            : `<div class="card-thumb-placeholder">🏪</div>`;
+
+        const ratingDisplay = b._avgRating ? b._avgRating.toFixed(1) : '—';
+
+        return `
+        <a class="business-card" href="../business/index.html?slug=${esc(b.slug)}">
+            <div class="card-thumb-wrapper">
+                ${thumbHtml}
+                <span class="card-status ${b._open ? 'open' : 'closed'}">${b._open ? 'Abierto' : 'Cerrado'}</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">${esc(b.name)}</div>
+                <div class="card-desc">${esc(b.description || 'Sin descripción disponible.')}</div>
+                <div class="card-footer">
+                    <div class="card-rating">
+                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <span class="num">${ratingDisplay}</span>
+                        <span class="count">(${b._reviewCount})</span>
+                    </div>
+                    <span class="card-address">${esc(b.city || '')}</span>
+                </div>
+            </div>
+        </a>`;
+    }).join('');
+}
+
+async function loadCategoryAndBusinesses() {
+    const catId = getCategoryIdFromUrl();
+
+    if (!catId) {
+        document.getElementById('categoryTitle').textContent = 'Categoría no especificada';
+        document.getElementById('businessGrid').innerHTML = `
+            <div class="empty-state">
+                <h3>Categoría no encontrada</h3>
+                <p>No se especificó ninguna categoría válida.</p>
+                <button class="btn-back-boulevard" onclick="window.location.href='../boulevard.html'">Volver al Boulevard</button>
+            </div>`;
+        return;
+    }
+
+    // Cargar info de la categoría
+    const { data: cat, error: catError } = await supabase
+        .from('categories')
+        .select('id, name, icon')
+        .eq('id', catId)
+        .single();
+
+    if (catError || !cat) {
+        document.getElementById('categoryTitle').textContent = 'Categoría no encontrada';
+        document.getElementById('businessGrid').innerHTML = `
+            <div class="empty-state">
+                <h3>Categoría no encontrada</h3>
+                <p>La categoría que buscas no existe.</p>
+                <button class="btn-back-boulevard" onclick="window.location.href='../boulevard.html'">Volver al Boulevard</button>
+            </div>`;
+        return;
+    }
+
+    document.title = `${cat.name} - Urbanex`;
+    document.getElementById('pageTitle').textContent = `${cat.name} - Urbanex`;
+    document.getElementById('breadcrumbName').textContent = cat.name;
+    document.getElementById('categoryTitle').textContent = cat.name;
+    document.getElementById('categoryIconSvg').innerHTML = `<path d="${getIconPath(cat.name)}"/>`;
+
+    // Cargar negocios de esta categoría
+    const { data: businesses, error: bizError } = await supabase
+        .from('businesses')
+        .select(`
+            id, slug, name, description, cover_image, city,
+            business_hours ( day_of_week, open_time, close_time, is_closed ),
+            reviews ( rating, is_approved )
+        `)
+        .eq('category_id', catId)
+        .eq('is_active', true)
+        .order('name');
+
+    if (bizError) {
+        document.getElementById('businessGrid').innerHTML = `
+            <div class="empty-state">
+                <h3>Error al cargar</h3>
+                <p>Hubo un problema obteniendo los negocios. Intenta más tarde.</p>
+            </div>`;
+        return;
+    }
+
+    allBusinesses = (businesses || []).map(b => {
+        const approvedRatings = (b.reviews || []).filter(r => r.is_approved).map(r => r.rating);
+        return {
+            ...b,
+            _open: isOpenNow(b.business_hours || []),
+            _avgRating: approvedRatings.length ? approvedRatings.reduce((a,v)=>a+v,0) / approvedRatings.length : 0,
+            _reviewCount: approvedRatings.length,
+        };
+    });
+
+    document.getElementById('categorySubtitle').textContent = `${allBusinesses.length} negocio${allBusinesses.length !== 1 ? 's' : ''} disponible${allBusinesses.length !== 1 ? 's' : ''}`;
+
+    renderGrid();
+}
+
+// ─── EVENTOS ────────────────────────────────────────────────────
+document.getElementById('quickFilter').addEventListener('input', renderGrid);
+document.getElementById('sortSelect').addEventListener('change', renderGrid);
+document.getElementById('filterOpenNow').addEventListener('click', (e) => {
+    currentFilterOpenOnly = !currentFilterOpenOnly;
+    e.target.classList.toggle('active', currentFilterOpenOnly);
+    renderGrid();
+});
+
+loadCategoryAndBusinesses();
+</script>
+
+</body>
+</html>
