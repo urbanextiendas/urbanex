@@ -478,17 +478,17 @@
         </div>
 
         <div class="bottom-filter-bar">
-            <div class="filter-pill" role="button" tabindex="0">
+            <div class="filter-pill" role="button" tabindex="0" onclick="window.location.href='informativos/index.html?filtro=abiertos'">
                 <div class="filter-icon-box">
                     <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Abiertos Ahora</span>
-                    <span class="filter-sub" id="metricOpenNow"> locales</span>
+                    <span class="filter-sub" id="metricOpenNow">— locales</span>
                 </div>
             </div>
 
-            <div class="filter-pill" role="button" tabindex="0" id="pillNearby" style="cursor:pointer;">
+            <div class="filter-pill" role="button" tabindex="0" id="pillNearby" onclick="window.location.href='informativos/index.html?filtro=cerca'">
                 <div class="filter-icon-box">
                     <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                 </div>
@@ -504,17 +504,17 @@
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">A Domicilio</span>
-                    <span class="filter-sub" id="metricDelivery"> locales</span>
+                    <span class="filter-sub" id="metricDelivery">— locales</span>
                 </div>
             </div>
 
-            <div class="filter-pill" role="button" tabindex="0">
+            <div class="filter-pill" role="button" tabindex="0" onclick="window.location.href='informativos/index.html?filtro=ofertas'">
                 <div class="filter-icon-box">
                     <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
                 </div>
                 <div class="filter-label-group">
                     <span class="filter-label">Ofertas</span>
-                    <span class="filter-sub" id="metricOffers"> promos</span>
+                    <span class="filter-sub" id="metricOffers">— promos</span>
                 </div>
             </div>
         </div>
@@ -558,19 +558,19 @@
      INSTRUCCIONES:
      1. Reemplaza SUPABASE_URL con tu URL del proyecto en Supabase
      2. Reemplaza SUPABASE_ANON_KEY con tu clave anon/public
-     Ambas las encuentras en: Supabase ? Project Settings ? API
+     Ambas las encuentras en: Supabase → Project Settings → API
      ============================================================ -->
 
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-// ??? CONFIGURACIÓN ??????????????????????????????????????????????
-const SUPABASE_URL  = 'https://mlkynawsjqmawgxeuvks.supabase.co';   // ? cambia esto
-const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';                   // ? cambia esto
+// ─── CONFIGURACIÓN ──────────────────────────────────────────────
+const SUPABASE_URL  = 'https://mlkynawsjqmawgxeuvks.supabase.co';   // ← cambia esto
+const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';                   // ← cambia esto
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ??? ICONOS POR CATEGORÍA (SVG paths) ???????????????????????????
+// ─── ICONOS POR CATEGORÍA (SVG paths) ───────────────────────────
 const CATEGORY_ICONS = {
     default:        'M4 10h3v7H4zm6.5 0h3v7h-3zM2 22h19v-3H2zm15-12h3v7h-3zM11.5 2L2 7v2h19V7z',
     gastronomia:    'M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm7-3h-1v5h1V6zm0-4h-3v11h3V2zm2 19H14v-2h6v2z',
@@ -590,7 +590,7 @@ function getIconPath(categoryName) {
     return CATEGORY_ICONS.default;
 }
 
-// ??? UTILIDADES ?????????????????????????????????????????????????
+// ─── UTILIDADES ─────────────────────────────────────────────────
 function esc(str) {
     return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -613,7 +613,7 @@ function isOpenNow(hours) {
     return currentMinutes >= openMinutes && currentMinutes <= closeMinutes;
 }
 
-// ??? RENDERIZAR CARDS DE NEGOCIOS ???????????????????????????????
+// ─── RENDERIZAR CARDS DE NEGOCIOS ───────────────────────────────
 function renderShopCards(businesses) {
     const container = document.getElementById('shopsScrollArea');
     if (!businesses.length) {
@@ -628,9 +628,9 @@ function renderShopCards(businesses) {
             : '<span class="status-closed">Cerrado</span>';
         const thumbHtml = b.cover_image
             ? `<img src="${esc(b.cover_image)}" alt="${esc(b.name)}" class="shop-thumb" loading="lazy">`
-            : `<div class="shop-thumb-placeholder">${b.categories?.icon || '??'}</div>`;
+            : `<div class="shop-thumb-placeholder">${b.categories?.icon || '🏪'}</div>`;
         const categoryName = b.categories?.name || '';
-        const ratingDisplay = b.avg_rating ? b.avg_rating.toFixed(1) : '';
+        const ratingDisplay = b.avg_rating ? b.avg_rating.toFixed(1) : '—';
         const reviewCount   = b.review_count || 0;
 
         return `
@@ -650,7 +650,7 @@ function renderShopCards(businesses) {
     }).join('');
 }
 
-// ??? CARGAR NEGOCIOS DESTACADOS ?????????????????????????????????
+// ─── CARGAR NEGOCIOS DESTACADOS ─────────────────────────────────
 let allFeatured = [];
 
 async function loadFeaturedBusinesses() {
@@ -692,7 +692,7 @@ function sortAndRenderFeatured() {
     renderShopCards(sorted);
 }
 
-// ??? CARGAR CATEGORÍAS ??????????????????????????????????????????
+// ─── CARGAR CATEGORÍAS ──────────────────────────────────────────
 async function loadCategories() {
     // Obtener categorías con conteo de negocios activos
     const { data: cats, error } = await supabase
@@ -732,7 +732,7 @@ async function loadCategories() {
     }).join('');
 }
 
-// ??? MÉTRICAS DE LA BARRA DE FILTROS ????????????????????????????
+// ─── MÉTRICAS DE LA BARRA DE FILTROS ────────────────────────────
 async function loadMetrics() {
     // Total activos
     const { data: allActive } = await supabase
@@ -778,7 +778,7 @@ async function loadMetrics() {
     document.getElementById('metricOffers').textContent   = `${promoCount} promo${promoCount !== 1 ? 's' : ''}`;
 }
 
-// ??? BÚSQUEDA EN SUPABASE ????????????????????????????????????????
+// ─── BÚSQUEDA EN SUPABASE ────────────────────────────────────────
 const searchInput  = document.getElementById('siteSearch');
 const searchButton = document.getElementById('searchButton');
 const resultsPanel = document.getElementById('searchResults');
@@ -838,52 +838,20 @@ document.addEventListener('click', e => {
     if (!e.target.closest('.search-wrapper')) hidePanel();
 });
 
-// ??? GEOLOCALIZACIÓN ????????????????????????????????????????????
-document.getElementById('pillNearby')?.addEventListener('click', () => {
-    if (!navigator.geolocation) {
-        document.getElementById('metricNearby').textContent = 'No disponible';
-        return;
-    }
-    document.getElementById('metricNearby').textContent = 'Obteniendo ubicación...';
+// Nota: el filtro "Cerca de mí" ahora navega directo a
+// informativos/index.html?filtro=cerca, donde se pide la
+// geolocalización y se calcula la distancia real.
+document.getElementById('metricNearby').textContent = 'Ver cercanos';
 
-    navigator.geolocation.getCurrentPosition(async pos => {
-        const { latitude, longitude } = pos.coords;
-        document.getElementById('locationLabel').querySelector('span').textContent = 'Tu ubicación';
-
-        // Busca negocios a menos de 2km usando PostGIS
-        const { data, error } = await supabase.rpc('businesses_near', {
-            user_lat: latitude,
-            user_lng: longitude,
-            radius_meters: 2000
-        });
-
-        if (error) {
-            // Fallback: mostrar total de negocios con coordenadas
-            const { data: withCoords } = await supabase
-                .from('businesses')
-                .select('id')
-                .eq('is_active', true)
-                .not('latitude', 'is', null);
-            const cnt = withCoords?.length || 0;
-            document.getElementById('metricNearby').textContent = `${cnt} con ubicación`;
-        } else {
-            const cnt = data?.length || 0;
-            document.getElementById('metricNearby').textContent = `${cnt} cercano${cnt !== 1 ? 's' : ''}`;
-        }
-    }, () => {
-        document.getElementById('metricNearby').textContent = 'Permiso denegado';
-    });
-});
-
-// ??? ORDENAR ????????????????????????????????????????????????????
+// ─── ORDENAR ────────────────────────────────────────────────────
 document.getElementById('sortSelect')?.addEventListener('change', sortAndRenderFeatured);
 
-// ??? BOTÓN VER TODOS ?????????????????????????????????????????????
+// ─── BOTÓN VER TODOS ─────────────────────────────────────────────
 document.getElementById('btnViewAll')?.addEventListener('click', () => {
     window.location.href = 'directorio.html';
 });
 
-// ??? INIT ????????????????????????????????????????????????????????
+// ─── INIT ────────────────────────────────────────────────────────
 Promise.all([
     loadCategories(),
     loadFeaturedBusinesses(),
