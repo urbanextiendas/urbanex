@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Urbanex - Negocio</title>
+    <link rel="icon" type="image/png" href="/imagenes/log.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #020202;
+            --bg-panel: rgba(6, 6, 6, 0.65);
+            --bg-cards-glass: rgba(20, 20, 20, 0.5);
+            --gold: #e5c158;
+            --gold-dim: #a68b44;
+            --border-color: rgba(229, 193, 88, 0.15);
+            --text-main: #ffffff;
+            --text-muted: #cfcfcf;
+            --text-dark: #999999;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --blur-effect: blur(20px);
+            --green: #2ed573;
+            --red: #ff4757;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(229, 193, 88, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--bg-main);
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ---------------- HEADER ---------------- */
+        .header-top {
+            background: rgba(6, 6, 6, 0.7);
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            height: 60px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brand-box img { height: 50px; width: auto; display: block; }
+
+        .breadcrumb {
+            font-size: 11px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .breadcrumb a:hover { color: var(--gold); }
+        .breadcrumb .sep { opacity: 0.4; }
+        .breadcrumb .current { color: var(--gold); }
+
+        /* ---------------- LOADING / ERROR ---------------- */
+        #loadingState, #errorState {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        #errorState { display: none; }
+        .spinner {
+            width: 36px; height: 36px;
+            border: 3px solid rgba(229,193,88,0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #loadingState p, #errorState p { color: var(--text-dark); font-size: 13px; }
+        #errorState h2 { font-family: var(--font-serif); color: var(--gold); font-size: 20px; }
+        .btn-back { margin-top: 8px; padding: 10px 22px; background: var(--gold); color: #000; border: none; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer; }
+
+        /* ---------------- CONTENT WRAPPER ---------------- */
+        #content { display: none; flex: 1; flex-direction: column; }
+
+        /* ---------------- HERO / COVER ---------------- */
+        .hero-cover {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #111, #1a1a1a);
+        }
+
+        .hero-cover img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-cover::after {
+            content: "";
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.55) 75%, rgba(2,2,2,1) 100%);
+        }
+
+        .hero-content {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 24px;
+            z-index: 2;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .hero-info { display: flex; flex-direction: column; gap: 6px; }
+
+        .business-category-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(229,193,88,0.15);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: 10.5px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+            width: fit-content;
+        }
+
+        .hero-info h1 {
+            font-family: var(--font-serif);
+            font-size: 32px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .hero-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            font-size: 12.5px;
+            color: var(--text-muted);
+        }
+
+        .hero-meta-row .rating-block { display: flex; align-items: center; gap: 4px; }
+        .hero-meta-row .star-icon { width: 14px; height: 14px; fill: var(--gold); }
+        .hero-meta-row .rating-num { color: #fff; font-weight: 700; }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 14px;
+        }
+        .status-badge.open { background: rgba(46,213,115,0.15); color: var(--green); border: 1px solid var(--green); }
+        .status-badge.closed { background: rgba(255,71,87,0.15); color: var(--red); border: 1px solid var(--red); }
+
+        .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        .btn-action {
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            border: 1px solid transparent;
+        }
+        .btn-action svg { width: 15px; height: 15px; }
+
+        .btn-whatsapp { background: #25D366; color: #04230f; }
+        .btn-whatsapp:hover { background: #1ebe5a; }
+        .btn-call { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.2); backdrop-filter: blur(8px); }
+        .btn-call:hover { border-color: var(--gold); color: var(--gold); }
+        .btn-site { background: rgba(229,193,88,0.12); color: var(--gold); border-color: var(--gold); }
+        .btn-site:hover { background: rgba(229,193,88,0.25); }
+
+        /* ---------------- BODY LAYOUT ---------------- */
+        .body-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 24px;
+            max-width: 1180px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 28px 20px 50px;
+        }
+
+        @media (max-width: 900px) {
+            .body-layout { grid-template-columns: 1fr; }
+            .hero-cover { height: 260px; }
+            .hero-info h1 { font-size: 24px; }
+        }
+
+        .main-col { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+        .side-col { display: flex; flex-direction: column; gap: 18px; }
+
+        .panel {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px;
+            backdrop-filter: var(--blur-effect);
+            -webkit-backdrop-filter: var(--blur-effect);
+        }
+
+        .panel h3 {
+            font-family: var(--font-serif);
+            color: var(--gold);
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .panel p.description { font-size: 13.5px; line-height: 1.7; color: var(--text-muted); white-space: pre-line; }
+
+        /* ---------------- GALERÍA ---------------- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+        }
+        .gallery-grid img {
+            width: 100%; height: 110px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .gallery-grid img:hover { transform: scale(1.03); border-color: var(--gold); }
+
+        /* ---------------- PROMOCIONES ---------------- */
+        .promo-card {
+            border: 1px solid var(--gold-dim);
+            background: rgba(229,193,88,0.06);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 10px;
+        }
+        .promo-card:last-child { margin-bottom: 0; }
+        .promo-title { font-size: 13px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+        .promo-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 6px; }
+        .promo-dates { font-size: 10.5px; color: var(--text-dark); }
+
+        /* ---------------- HORARIOS ---------------- */
+        .hours-table { display: flex; flex-direction: column; gap: 0; }
+        .hours-row {
+            display: flex; justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-size: 12.5px;
+        }
+        .hours-row:last-child { border-bottom: none; }
+        .hours-row.today { color: var(--gold); font-weight: 700; }
+        .hours-day { color: var(--text-muted); }
+        .hours-row.today .hours-day { color: var(--gold); }
+        .hours-time { color: #fff; }
+        .hours-closed { color: var(--red); }
+
+        /* ---------------- INFO / CONTACTO ---------------- */
+        .info-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 12.5px;
+            color: var(--text-muted);
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-row svg { width: 16px; height: 16px; fill: var(--gold); flex-shrink: 0; margin-top: 1px; }
+        .info-row a:hover { color: var(--gold); }
+
+        /* ---------------- RESEÑAS ---------------- */
+        .review-card {
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 14px 0;
+        }
+        .review-card:last-child { border-bottom: none; }
+        .review-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .review-author { font-size: 12.5px; font-weight: 600; color: #fff; }
+        .review-stars { display: flex; gap: 2px; }
+        .review-stars svg { width: 12px; height: 12px; }
+        .review-stars svg.filled { fill: var(--gold); }
+        .review-stars svg.empty { fill: rgba(255,255,255,0.15); }
+        .review-comment { font-size: 12.5px; color: var(--text-muted); line-height: 1.6; }
+        .review-date { font-size: 10px; color: var(--text-dark); margin-top: 4px; }
+        .no-reviews { font-size: 12.5px; color: var(--text-dark); text-align: center; padding: 10px 0; }
+
+        /* Formulario de reseña */
+        .review-form { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color); }
+        .review-form input, .review-form textarea {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 10px 12px;
+            color: #fff;
+            font-size: 12.5px;
+            font-family: var(--font-sans);
+            outline: none;
+            resize: vertical;
+        }
+        .review-form input:focus, .review-form textarea:focus { border-color: var(--gold); }
+        .star-select { display: flex; gap: 6px; }
+        .star-select svg { width: 20px; height: 20px; cursor: pointer; fill: rgba(255,255,255,0.2); transition: var(--transition-smooth); }
+        .star-select svg.active { fill: var(--gold); }
+        .btn-submit-review {
+            background: var(--gold); color: #000; border: none;
+            border-radius: 8px; padding: 10px; font-weight: 700; font-size: 12px;
+            cursor: pointer; transition: var(--transition-smooth);
+        }
+        .btn-submit-review:hover { background: #f1cd6b; }
+        .btn-submit-review:disabled { opacity: 0.5; cursor: not-allowed; }
+        .form-msg { font-size: 11.5px; text-align: center; }
+        .form-msg.success { color: var(--green); }
+        .form-msg.error { color: var(--red); }
+
+        /* ---------------- MAPA ---------------- */
+        .map-frame {
+            width: 100%; height: 180px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+        }
+        .map-frame iframe { width: 100%; height: 100%; border: 0; filter: grayscale(0.3) invert(0.9) contrast(0.9); }
+
+        /* ---------------- PIE ---------------- */
+        .pie-pagina {
+            width: 100%; height: 24px;
+            background-color: #000; color: #8c8c8c;
+            font-size: 11px;
+            display: flex; justify-content: center; align-items: center;
+            border-top: 1px solid #1a1a1a;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header-top">
+    <a href="../index.html" class="brand-box" title="Volver al Inicio">
+        <img src="../imagenes/logo.png" alt="Urbanex">
+    </a>
+    <div class="breadcrumb">
+        <a href="../boulevard.html">Boulevard</a>
+        <span class="sep">/</span>
+        <span class="current" id="breadcrumbName">Negocio</span>
+    </div>
+</header>
+
+<div id="loadingState">
+    <div class="spinner"></div>
+    <p>Cargando información del negocio...</p>
+</div>
+
+<div id="errorState">
+    <h2>Negocio no encontrado</h2>
+    <p>El comercio que buscas no existe o ya no está disponible.</p>
+    <button class="btn-back" onclick="window.location.href='../boulevard.html'">Volver al Boulevard</button>
+</div>
+
+<div id="content">
+
+    <!-- HERO -->
+    <section class="hero-cover">
+        <img id="coverImage" src="" alt="">
+        <div class="hero-content">
+            <div class="hero-info">
+                <span class="business-category-pill" id="categoryPill">Categoría</span>
+                <h1 id="businessName">Nombre del negocio</h1>
+                <div class="hero-meta-row">
+                    <div class="rating-block">
+                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <span class="rating-num" id="ratingNum">—</span>
+                        <span id="reviewCountLabel">(0 reseñas)</span>
+                    </div>
+                    <span id="statusBadge" class="status-badge closed">Cerrado</span>
+                    <span id="cityLabel"></span>
+                </div>
+            </div>
+            <div class="hero-actions" id="heroActions"></div>
+        </div>
+    </section>
+
+    <div class="body-layout">
+
+        <!-- COLUMNA PRINCIPAL -->
+        <div class="main-col">
+
+            <div class="panel">
+                <h3>Acerca de</h3>
+                <p class="description" id="businessDescription">—</p>
+            </div>
+
+            <div class="panel" id="galleryPanel" style="display:none;">
+                <h3>Galería</h3>
+                <div class="gallery-grid" id="galleryGrid"></div>
+            </div>
+
+            <div class="panel" id="promotionsPanel" style="display:none;">
+                <h3>Promociones Activas</h3>
+                <div id="promotionsList"></div>
+            </div>
+
+            <div class="panel">
+                <h3>Reseñas</h3>
+                <div id="reviewsList"><p class="no-reviews">Cargando reseñas...</p></div>
+
+                <div class="review-form">
+                    <strong style="font-size:12px;color:#fff;">Deja tu reseña</strong>
+                    <div class="star-select" id="starSelect">
+                        <svg viewBox="0 0 24 24" data-val="1"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <svg viewBox="0 0 24 24" data-val="2"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <svg viewBox="0 0 24 24" data-val="3"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <svg viewBox="0 0 24 24" data-val="4"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <svg viewBox="0 0 24 24" data-val="5"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </div>
+                    <input type="text" id="reviewName" placeholder="Tu nombre" maxlength="60">
+                    <textarea id="reviewComment" placeholder="Cuéntanos tu experiencia..." rows="3" maxlength="500"></textarea>
+                    <button class="btn-submit-review" id="btnSubmitReview">Publicar reseña</button>
+                    <div class="form-msg" id="reviewFormMsg"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- COLUMNA LATERAL -->
+        <div class="side-col">
+
+            <div class="panel" id="hoursPanel">
+                <h3>Horario de Atención</h3>
+                <div class="hours-table" id="hoursTable">
+                    <div class="hours-row"><span class="hours-day">Cargando...</span></div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>Información de Contacto</h3>
+                <div id="contactInfo"></div>
+            </div>
+
+            <div class="panel" id="mapPanel" style="display:none;">
+                <h3>Ubicación</h3>
+                <div class="map-frame">
+                    <iframe id="mapFrame" src="" loading="lazy"></iframe>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer class="pie-pagina">
+    <p>&copy; 2026 Urbanex. Desarrollado por Neodat Consultores.</p>
+</footer>
+
+
+<!-- ============================================================
+     SUPABASE
+     Reemplaza SUPABASE_URL y SUPABASE_ANON_KEY con tus datos
+     (Project Settings → API en tu panel de Supabase)
+     ============================================================ -->
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://TU_PROYECTO.supabase.co';   // ← cambia esto
+const SUPABASE_ANON_KEY = 'TU_ANON_KEY';                  // ← cambia esto
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+function esc(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function getSlugFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('slug')) return params.get('slug');
+    // Fallback: /business/mi-slug/  o  /negocios/mi-slug/
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    return parts[parts.length - 1] || '';
+}
+
+function formatTime(t) {
+    if (!t) return '';
+    const [h, m] = t.split(':').map(Number);
+    const period = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 === 0 ? 12 : h % 12;
+    return `${h12}:${String(m).padStart(2,'0')} ${period}`;
+}
+
+function isOpenNow(hours) {
+    const now = new Date();
+    const todayHours = hours.find(h => h.day_of_week === now.getDay() && !h.is_closed);
+    if (!todayHours) return false;
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const [oh, om] = (todayHours.open_time || '').split(':').map(Number);
+    const [ch, cm] = (todayHours.close_time || '').split(':').map(Number);
+    if (isNaN(oh) || isNaN(ch)) return false;
+    const openM = oh * 60 + om, closeM = ch * 60 + cm;
+    return currentMinutes >= openM && currentMinutes <= closeM;
+}
+
+// ─── RENDER: HORARIOS ────────────────────────────────────────────
+function renderHours(hours) {
+    const container = document.getElementById('hoursTable');
+    if (!hours.length) {
+        container.innerHTML = '<div class="hours-row"><span class="hours-day">Horario no disponible</span></div>';
+        return;
+    }
+
+    const todayDow = new Date().getDay();
+    const sorted = [...hours].sort((a, b) => a.day_of_week - b.day_of_week);
+
+    container.innerHTML = sorted.map(h => {
+        const isToday = h.day_of_week === todayDow;
+        const timeHtml = h.is_closed
+            ? '<span class="hours-closed">Cerrado</span>'
+            : `<span class="hours-time">${formatTime(h.open_time)} - ${formatTime(h.close_time)}</span>`;
+        return `<div class="hours-row ${isToday ? 'today' : ''}">
+            <span class="hours-day">${DAY_NAMES[h.day_of_week]}${isToday ? ' (hoy)' : ''}</span>
+            ${timeHtml}
+        </div>`;
+    }).join('');
+}
+
+// ─── RENDER: CONTACTO ────────────────────────────────────────────
+function renderContact(b) {
+    const container = document.getElementById('contactInfo');
+    let html = '';
+
+    if (b.address) html += `
+        <div class="info-row">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            <span>${esc(b.address)}${b.city ? ', ' + esc(b.city) : ''}</span>
+        </div>`;
+
+    if (b.phone) html += `
+        <div class="info-row">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            <a href="tel:${esc(b.phone)}">${esc(b.phone)}</a>
+        </div>`;
+
+    if (b.whatsapp) html += `
+        <div class="info-row">
+            <svg viewBox="0 0 24 24"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.01 3.5c-4.87 0-8.84 3.96-8.84 8.83 0 1.56.41 3.07 1.19 4.41L3 21l4.41-1.16a8.83 8.83 0 0 0 4.59 1.25h.01c4.87 0 8.84-3.96 8.84-8.83a8.78 8.78 0 0 0-2.25-5.94zm-5.6 13.6h-.01a7.36 7.36 0 0 1-3.74-1.02l-.27-.16-2.79.73.74-2.72-.18-.28a7.35 7.35 0 0 1-1.13-3.94c0-4.07 3.31-7.38 7.39-7.38 1.97 0 3.82.77 5.22 2.16a7.34 7.34 0 0 1 2.16 5.23c0 4.07-3.31 7.38-7.39 7.38z"/></svg>
+            <a href="https://wa.me/${esc(b.whatsapp.replace(/\D/g,''))}" target="_blank" rel="noopener">WhatsApp</a>
+        </div>`;
+
+    if (b.website) html += `
+        <div class="info-row">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.93 6h-2.95a15.7 15.7 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.93 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.81 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.987 7.987 0 0 1 5.07 16zm2.95-8H5.07a7.987 7.987 0 0 1 4.33-3.56A15.65 15.65 0 0 0 8.02 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2s.07-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
+            <a href="${esc(b.website)}" target="_blank" rel="noopener">${esc(b.website.replace(/^https?:\/\//, ''))}</a>
+        </div>`;
+
+    container.innerHTML = html || '<p style="font-size:12px;color:var(--text-dark);">Sin información de contacto.</p>';
+}
+
+// ─── RENDER: HERO ACTIONS ────────────────────────────────────────
+function renderHeroActions(b) {
+    const container = document.getElementById('heroActions');
+    let html = '';
+
+    if (b.whatsapp) html += `
+        <a class="btn-action btn-whatsapp" href="https://wa.me/${esc(b.whatsapp.replace(/\D/g,''))}" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="#04230f"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.01 3.5c-4.87 0-8.84 3.96-8.84 8.83 0 1.56.41 3.07 1.19 4.41L3 21l4.41-1.16a8.83 8.83 0 0 0 4.59 1.25h.01c4.87 0 8.84-3.96 8.84-8.83a8.78 8.78 0 0 0-2.25-5.94zm-5.6 13.6h-.01a7.36 7.36 0 0 1-3.74-1.02l-.27-.16-2.79.73.74-2.72-.18-.28a7.35 7.35 0 0 1-1.13-3.94c0-4.07 3.31-7.38 7.39-7.38 1.97 0 3.82.77 5.22 2.16a7.34 7.34 0 0 1 2.16 5.23c0 4.07-3.31 7.38-7.39 7.38z"/></svg>
+            WhatsApp
+        </a>`;
+
+    if (b.phone) html += `
+        <a class="btn-action btn-call" href="tel:${esc(b.phone)}">
+            <svg viewBox="0 0 24 24" fill="#fff"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            Llamar
+        </a>`;
+
+    if (b.website) html += `
+        <a class="btn-action btn-site" href="${esc(b.website)}" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="var(--gold)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.93 6h-2.95a15.7 15.7 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.93 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26z"/></svg>
+            Sitio Web
+        </a>`;
+
+    container.innerHTML = html;
+}
+
+// ─── RENDER: GALERÍA ──────────────────────────────────────────────
+function renderGallery(images) {
+    if (!images.length) return;
+    document.getElementById('galleryPanel').style.display = 'block';
+    document.getElementById('galleryGrid').innerHTML = images
+        .sort((a,b) => (a.sort_order||0) - (b.sort_order||0))
+        .map(img => `<img src="${esc(img.url)}" alt="${esc(img.caption || '')}" onclick="window.open('${esc(img.url)}','_blank')">`)
+        .join('');
+}
+
+// ─── RENDER: PROMOCIONES ──────────────────────────────────────────
+function renderPromotions(promos) {
+    const today = new Date().toISOString().slice(0,10);
+    const active = promos.filter(p => p.is_active && (!p.end_date || p.end_date >= today));
+    if (!active.length) return;
+
+    document.getElementById('promotionsPanel').style.display = 'block';
+    document.getElementById('promotionsList').innerHTML = active.map(p => `
+        <div class="promo-card">
+            <div class="promo-title">${esc(p.title)}</div>
+            ${p.description ? `<div class="promo-desc">${esc(p.description)}</div>` : ''}
+            ${p.end_date ? `<div class="promo-dates">Válido hasta ${new Date(p.end_date + 'T00:00:00').toLocaleDateString('es-EC', {day:'numeric', month:'long'})}</div>` : ''}
+        </div>`).join('');
+}
+
+// ─── RENDER: RESEÑAS ──────────────────────────────────────────────
+function starsHtml(rating) {
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+        html += `<svg class="${i <= rating ? 'filled' : 'empty'}" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
+    }
+    return html;
+}
+
+function renderReviews(reviews) {
+    const container = document.getElementById('reviewsList');
+    const approved = reviews.filter(r => r.is_approved);
+
+    if (!approved.length) {
+        container.innerHTML = '<p class="no-reviews">Aún no hay reseñas. ¡Sé el primero en opinar!</p>';
+        return;
+    }
+
+    const sorted = [...approved].sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+    container.innerHTML = sorted.map(r => `
+        <div class="review-card">
+            <div class="review-head">
+                <span class="review-author">${esc(r.user_name)}</span>
+                <div class="review-stars">${starsHtml(r.rating)}</div>
+            </div>
+            <div class="review-comment">${esc(r.comment || '')}</div>
+            <div class="review-date">${new Date(r.created_at).toLocaleDateString('es-EC', {day:'numeric', month:'long', year:'numeric'})}</div>
+        </div>`).join('');
+}
+
+// ─── FORMULARIO DE NUEVA RESEÑA ───────────────────────────────────
+let selectedStars = 0;
+let currentBusinessId = null;
+
+document.getElementById('starSelect').addEventListener('click', e => {
+    const star = e.target.closest('svg');
+    if (!star) return;
+    selectedStars = Number(star.dataset.val);
+    document.querySelectorAll('#starSelect svg').forEach(s => {
+        s.classList.toggle('active', Number(s.dataset.val) <= selectedStars);
+    });
+});
+
+document.getElementById('btnSubmitReview').addEventListener('click', async () => {
+    const name = document.getElementById('reviewName').value.trim();
+    const comment = document.getElementById('reviewComment').value.trim();
+    const msgEl = document.getElementById('reviewFormMsg');
+    const btn = document.getElementById('btnSubmitReview');
+
+    if (!name || !selectedStars) {
+        msgEl.textContent = 'Por favor escribe tu nombre y selecciona una calificación.';
+        msgEl.className = 'form-msg error';
+        return;
+    }
+
+    btn.disabled = true;
+    msgEl.textContent = '';
+
+    const { error } = await supabase.from('reviews').insert({
+        business_id: currentBusinessId,
+        user_name: name,
+        rating: selectedStars,
+        comment: comment,
+        is_approved: false
+    });
+
+    btn.disabled = false;
+
+    if (error) {
+        msgEl.textContent = 'Hubo un error al enviar tu reseña. Intenta de nuevo.';
+        msgEl.className = 'form-msg error';
+        return;
+    }
+
+    msgEl.textContent = '¡Gracias! Tu reseña será publicada tras moderación.';
+    msgEl.className = 'form-msg success';
+    document.getElementById('reviewName').value = '';
+    document.getElementById('reviewComment').value = '';
+    selectedStars = 0;
+    document.querySelectorAll('#starSelect svg').forEach(s => s.classList.remove('active'));
+});
+
+// ─── CARGA PRINCIPAL ───────────────────────────────────────────────
+async function loadBusiness() {
+    const slug = getSlugFromUrl();
+
+    if (!slug) {
+        showError();
+        return;
+    }
+
+    const { data: b, error } = await supabase
+        .from('businesses')
+        .select(`
+            *,
+            categories ( name, icon ),
+            business_hours ( day_of_week, open_time, close_time, is_closed ),
+            business_images ( url, caption, sort_order ),
+            promotions ( title, description, start_date, end_date, is_active ),
+            reviews ( user_name, rating, comment, is_approved, created_at )
+        `)
+        .eq('slug', slug)
+        .eq('is_active', true)
+        .single();
+
+    if (error || !b) {
+        showError();
+        return;
+    }
+
+    currentBusinessId = b.id;
+
+    // Título y breadcrumb
+    document.title = `${b.name} - Urbanex`;
+    document.getElementById('pageTitle').textContent = `${b.name} - Urbanex`;
+    document.getElementById('breadcrumbName').textContent = b.name;
+
+    // Hero
+    document.getElementById('coverImage').src = b.cover_image || 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1200&q=70';
+    document.getElementById('coverImage').alt = b.name;
+    document.getElementById('businessName').textContent = b.name;
+    document.getElementById('categoryPill').textContent = b.categories?.name || 'Negocio';
+    document.getElementById('businessDescription').textContent = b.description || 'Este negocio aún no ha agregado una descripción.';
+    document.getElementById('cityLabel').textContent = b.city ? `· ${b.city}` : '';
+
+    const reviews = b.reviews || [];
+    const approvedRatings = reviews.filter(r => r.is_approved).map(r => r.rating);
+    const avgRating = approvedRatings.length ? (approvedRatings.reduce((a,v)=>a+v,0) / approvedRatings.length) : 0;
+    document.getElementById('ratingNum').textContent = avgRating ? avgRating.toFixed(1) : '—';
+    document.getElementById('reviewCountLabel').textContent = `(${approvedRatings.length} reseña${approvedRatings.length !== 1 ? 's' : ''})`;
+
+    const hours = b.business_hours || [];
+    const open = isOpenNow(hours);
+    const statusBadge = document.getElementById('statusBadge');
+    statusBadge.textContent = open ? 'Abierto ahora' : 'Cerrado';
+    statusBadge.className = `status-badge ${open ? 'open' : 'closed'}`;
+
+    renderHeroActions(b);
+    renderHours(hours);
+    renderContact(b);
+    renderGallery(b.business_images || []);
+    renderPromotions(b.promotions || []);
+    renderReviews(reviews);
+
+    // Mapa
+    if (b.latitude && b.longitude) {
+        document.getElementById('mapPanel').style.display = 'block';
+        document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${b.latitude},${b.longitude}&z=16&output=embed`;
+    }
+
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('content').style.display = 'flex';
+}
+
+function showError() {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('errorState').style.display = 'flex';
+}
+
+loadBusiness();
+</script>
+
+</body>
+</html>
