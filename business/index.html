@@ -359,6 +359,163 @@
         }
         .map-frame iframe { width: 100%; height: 100%; border: 0; filter: grayscale(0.3) invert(0.9) contrast(0.9); }
 
+        /* ================================================
+           PRODUCTOS / MENÚ  — nuevo bloque
+           ================================================ */
+
+        /* Tabs de categorías */
+        .products-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .products-tab {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border: 1px solid rgba(229,193,88,0.25);
+            background: transparent;
+            color: var(--text-muted);
+            transition: var(--transition-smooth);
+            font-family: var(--font-sans);
+        }
+        .products-tab:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        .products-tab.active {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: #000;
+        }
+
+        /* Sección de categoría */
+        .product-section { display: none; }
+        .product-section.visible { display: block; }
+
+        /* Grid de productos */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .products-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+        }
+
+        /* Tarjeta de producto */
+        .product-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+        }
+        .product-card:hover {
+            border-color: rgba(229,193,88,0.3);
+            transform: translateY(-2px);
+            background: rgba(229,193,88,0.04);
+        }
+
+        .product-img-wrap {
+            width: 100%;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            background: #111;
+            position: relative;
+        }
+        .product-img-wrap img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.35s ease;
+        }
+        .product-card:hover .product-img-wrap img { transform: scale(1.05); }
+
+        /* Placeholder cuando no hay imagen */
+        .product-img-placeholder {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: rgba(229,193,88,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-img-placeholder svg {
+            width: 36px; height: 36px;
+            fill: rgba(229,193,88,0.2);
+        }
+
+        .product-body {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+        }
+
+        .product-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.35;
+        }
+
+        .product-desc {
+            font-size: 11px;
+            color: var(--text-dark);
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .product-price-row {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: 6px;
+        }
+
+        .product-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        /* Precio con descuento */
+        .product-price.sale { color: var(--green); }
+
+        .product-price-original {
+            font-size: 11px;
+            color: var(--text-dark);
+            text-decoration: line-through;
+        }
+
+        .product-badge-sale {
+            font-size: 9.5px;
+            font-weight: 700;
+            background: rgba(46,213,115,0.15);
+            color: var(--green);
+            border: 1px solid var(--green);
+            border-radius: 4px;
+            padding: 1px 6px;
+        }
+
+        /* Sin productos */
+        .no-products {
+            font-size: 12.5px;
+            color: var(--text-dark);
+            text-align: center;
+            padding: 20px 0;
+        }
+
         /* ---------------- PIE ---------------- */
         .pie-pagina {
             width: 100%; height: 24px;
@@ -428,6 +585,17 @@
                 <p class="description" id="businessDescription">—</p>
             </div>
 
+            <!-- ══════════════════════════════════════
+                 PRODUCTOS / MENÚ
+                 ══════════════════════════════════════ -->
+            <div class="panel" id="productsPanel" style="display:none;">
+                <h3 id="productsPanelTitle">Productos</h3>
+                <!-- Tabs de categorías (se generan dinámicamente) -->
+                <div class="products-tabs" id="productsTabs"></div>
+                <!-- Contenido de cada categoría (se genera dinámicamente) -->
+                <div id="productsContent"></div>
+            </div>
+
             <div class="panel" id="galleryPanel" style="display:none;">
                 <h3>Galería</h3>
                 <div class="gallery-grid" id="galleryGrid"></div>
@@ -493,20 +661,15 @@
 </footer>
 
 
-<!-- ============================================================
-     SUPABASE
-     Reemplaza SUPABASE_URL y SUPABASE_ANON_KEY con tus datos
-     (Project Settings → API en tu panel de Supabase)
-     ============================================================ -->
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';   // ← cambia esto
-const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';                  // ← cambia esto
+const SUPABASE_URL  = 'https://mlkynawsjqmawgxeuvks.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 
 function esc(str) {
     return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -515,7 +678,6 @@ function esc(str) {
 function getSlugFromUrl() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('slug')) return params.get('slug');
-    // Fallback: /business/mi-slug/  o  /negocios/mi-slug/
     const parts = window.location.pathname.split('/').filter(Boolean);
     return parts[parts.length - 1] || '';
 }
@@ -536,8 +698,7 @@ function isOpenNow(hours) {
     const [oh, om] = (todayHours.open_time || '').split(':').map(Number);
     const [ch, cm] = (todayHours.close_time || '').split(':').map(Number);
     if (isNaN(oh) || isNaN(ch)) return false;
-    const openM = oh * 60 + om, closeM = ch * 60 + cm;
-    return currentMinutes >= openM && currentMinutes <= closeM;
+    return currentMinutes >= (oh*60+om) && currentMinutes <= (ch*60+cm);
 }
 
 // ─── RENDER: HORARIOS ────────────────────────────────────────────
@@ -547,20 +708,19 @@ function renderHours(hours) {
         container.innerHTML = '<div class="hours-row"><span class="hours-day">Horario no disponible</span></div>';
         return;
     }
-
     const todayDow = new Date().getDay();
-    const sorted = [...hours].sort((a, b) => a.day_of_week - b.day_of_week);
-
-    container.innerHTML = sorted.map(h => {
-        const isToday = h.day_of_week === todayDow;
-        const timeHtml = h.is_closed
-            ? '<span class="hours-closed">Cerrado</span>'
-            : `<span class="hours-time">${formatTime(h.open_time)} - ${formatTime(h.close_time)}</span>`;
-        return `<div class="hours-row ${isToday ? 'today' : ''}">
-            <span class="hours-day">${DAY_NAMES[h.day_of_week]}${isToday ? ' (hoy)' : ''}</span>
-            ${timeHtml}
-        </div>`;
-    }).join('');
+    container.innerHTML = [...hours]
+        .sort((a,b) => a.day_of_week - b.day_of_week)
+        .map(h => {
+            const isToday = h.day_of_week === todayDow;
+            const timeHtml = h.is_closed
+                ? '<span class="hours-closed">Cerrado</span>'
+                : `<span class="hours-time">${formatTime(h.open_time)} - ${formatTime(h.close_time)}</span>`;
+            return `<div class="hours-row ${isToday ? 'today' : ''}">
+                <span class="hours-day">${DAY_NAMES[h.day_of_week]}${isToday ? ' (hoy)' : ''}</span>
+                ${timeHtml}
+            </div>`;
+        }).join('');
 }
 
 // ─── RENDER: CONTACTO ────────────────────────────────────────────
@@ -658,22 +818,126 @@ function starsHtml(rating) {
 function renderReviews(reviews) {
     const container = document.getElementById('reviewsList');
     const approved = reviews.filter(r => r.is_approved);
-
     if (!approved.length) {
         container.innerHTML = '<p class="no-reviews">Aún no hay reseñas. ¡Sé el primero en opinar!</p>';
         return;
     }
+    container.innerHTML = [...approved]
+        .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
+        .map(r => `
+            <div class="review-card">
+                <div class="review-head">
+                    <span class="review-author">${esc(r.user_name)}</span>
+                    <div class="review-stars">${starsHtml(r.rating)}</div>
+                </div>
+                <div class="review-comment">${esc(r.comment || '')}</div>
+                <div class="review-date">${new Date(r.created_at).toLocaleDateString('es-EC', {day:'numeric', month:'long', year:'numeric'})}</div>
+            </div>`).join('');
+}
 
-    const sorted = [...approved].sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
-    container.innerHTML = sorted.map(r => `
-        <div class="review-card">
-            <div class="review-head">
-                <span class="review-author">${esc(r.user_name)}</span>
-                <div class="review-stars">${starsHtml(r.rating)}</div>
+// ═══════════════════════════════════════════════════════════════
+// RENDER: PRODUCTOS  — función nueva
+// Recibe array de product_categories, cada uno con array de products
+// ═══════════════════════════════════════════════════════════════
+function renderProducts(categories) {
+    // Filtrar categorías que tengan al menos un producto disponible
+    const validCats = (categories || [])
+        .map(cat => ({
+            ...cat,
+            products: (cat.products || [])
+                .filter(p => p.is_available !== false)
+                .sort((a,b) => (a.sort_order||0) - (b.sort_order||0))
+        }))
+        .filter(cat => cat.products.length > 0)
+        .sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
+
+    if (!validCats.length) return; // Sin productos: el panel queda oculto
+
+    const panel      = document.getElementById('productsPanel');
+    const tabsEl     = document.getElementById('productsTabs');
+    const contentEl  = document.getElementById('productsContent');
+    const titleEl    = document.getElementById('productsPanelTitle');
+
+    // Si hay una sola categoría con nombre genérico, usar "Productos"
+    // Si parece un restaurante (categorías como Entradas, Platos…) usar "Menú"
+    const menuKeywords = ['entradas','platos','postres','bebidas','sopas','ensaladas','desayunos'];
+    const isMenu = validCats.some(c =>
+        menuKeywords.some(k => c.name.toLowerCase().includes(k))
+    );
+    titleEl.textContent = isMenu ? 'Menú' : 'Productos';
+
+    // ── Tabs ──────────────────────────────────────────────────
+    tabsEl.innerHTML = validCats.map((cat, idx) => `
+        <button class="products-tab ${idx === 0 ? 'active' : ''}"
+                data-cat="${idx}"
+                type="button">
+            ${esc(cat.name)}
+            <span style="opacity:0.55;font-weight:400;margin-left:3px;">(${cat.products.length})</span>
+        </button>`).join('');
+
+    // ── Secciones ─────────────────────────────────────────────
+    contentEl.innerHTML = validCats.map((cat, idx) => `
+        <div class="product-section ${idx === 0 ? 'visible' : ''}" data-section="${idx}">
+            <div class="products-grid">
+                ${cat.products.map(p => productCardHtml(p)).join('')}
             </div>
-            <div class="review-comment">${esc(r.comment || '')}</div>
-            <div class="review-date">${new Date(r.created_at).toLocaleDateString('es-EC', {day:'numeric', month:'long', year:'numeric'})}</div>
         </div>`).join('');
+
+    // ── Interactividad de tabs ─────────────────────────────────
+    tabsEl.addEventListener('click', e => {
+        const btn = e.target.closest('.products-tab');
+        if (!btn) return;
+        const idx = btn.dataset.cat;
+
+        tabsEl.querySelectorAll('.products-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        contentEl.querySelectorAll('.product-section').forEach(s => s.classList.remove('visible'));
+        contentEl.querySelector(`.product-section[data-section="${idx}"]`).classList.add('visible');
+    });
+
+    panel.style.display = 'block';
+}
+
+// ── HTML de una tarjeta de producto ───────────────────────────────
+function productCardHtml(p) {
+    // Imagen o placeholder
+    const imgHtml = p.image_url
+        ? `<div class="product-img-wrap">
+               <img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy">
+           </div>`
+        : `<div class="product-img-placeholder">
+               <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-8.5-5.5l-2 2.5L8 13l-3 4h14l-4.5-5.5z"/></svg>
+           </div>`;
+
+    // Precio: normal o con descuento
+    let priceHtml = '';
+    if (p.price != null) {
+        if (p.sale_price != null && p.sale_price < p.price) {
+            const pct = Math.round((1 - p.sale_price / p.price) * 100);
+            priceHtml = `
+                <div class="product-price-row">
+                    <span class="product-price sale">$${Number(p.sale_price).toFixed(2)}</span>
+                    <span class="product-price-original">$${Number(p.price).toFixed(2)}</span>
+                    <span class="product-badge-sale">-${pct}%</span>
+                </div>`;
+        } else {
+            priceHtml = `
+                <div class="product-price-row">
+                    <span class="product-price">$${Number(p.price).toFixed(2)}</span>
+                </div>`;
+        }
+    }
+
+    return `
+        <div class="product-card">
+            ${imgHtml}
+            <div class="product-body">
+                <div class="product-name">${esc(p.name)}</div>
+                ${p.description ? `<div class="product-desc">${esc(p.description)}</div>` : ''}
+                ${priceHtml}
+            </div>
+        </div>`;
 }
 
 // ─── FORMULARIO DE NUEVA RESEÑA ───────────────────────────────────
@@ -690,10 +954,10 @@ document.getElementById('starSelect').addEventListener('click', e => {
 });
 
 document.getElementById('btnSubmitReview').addEventListener('click', async () => {
-    const name = document.getElementById('reviewName').value.trim();
+    const name    = document.getElementById('reviewName').value.trim();
     const comment = document.getElementById('reviewComment').value.trim();
-    const msgEl = document.getElementById('reviewFormMsg');
-    const btn = document.getElementById('btnSubmitReview');
+    const msgEl   = document.getElementById('reviewFormMsg');
+    const btn     = document.getElementById('btnSubmitReview');
 
     if (!name || !selectedStars) {
         msgEl.textContent = 'Por favor escribe tu nombre y selecciona una calificación.';
@@ -708,7 +972,7 @@ document.getElementById('btnSubmitReview').addEventListener('click', async () =>
         business_id: currentBusinessId,
         user_name: name,
         rating: selectedStars,
-        comment: comment,
+        comment,
         is_approved: false
     });
 
@@ -731,11 +995,7 @@ document.getElementById('btnSubmitReview').addEventListener('click', async () =>
 // ─── CARGA PRINCIPAL ───────────────────────────────────────────────
 async function loadBusiness() {
     const slug = getSlugFromUrl();
-
-    if (!slug) {
-        showError();
-        return;
-    }
+    if (!slug) { showError(); return; }
 
     const { data: b, error } = await supabase
         .from('businesses')
@@ -745,16 +1005,17 @@ async function loadBusiness() {
             business_hours ( day_of_week, open_time, close_time, is_closed ),
             business_images ( url, caption, sort_order ),
             promotions ( title, description, start_date, end_date, is_active ),
-            reviews ( user_name, rating, comment, is_approved, created_at )
+            reviews ( user_name, rating, comment, is_approved, created_at ),
+            product_categories (
+                id, name, sort_order,
+                products ( name, description, price, sale_price, image_url, is_available, sort_order )
+            )
         `)
         .eq('slug', slug)
         .eq('is_active', true)
         .single();
 
-    if (error || !b) {
-        showError();
-        return;
-    }
+    if (error || !b) { showError(); return; }
 
     currentBusinessId = b.id;
 
@@ -764,24 +1025,29 @@ async function loadBusiness() {
     document.getElementById('breadcrumbName').textContent = b.name;
 
     // Hero
-    document.getElementById('coverImage').src = b.cover_image || 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1200&q=70';
-    document.getElementById('coverImage').alt = b.name;
+    document.getElementById('coverImage').src = b.cover_image || '/imagenes/default-cover.jpg';
+    document.getElementById('coverImage').alt  = b.name;
     document.getElementById('businessName').textContent = b.name;
     document.getElementById('categoryPill').textContent = b.categories?.name || 'Negocio';
     document.getElementById('businessDescription').textContent = b.description || 'Este negocio aún no ha agregado una descripción.';
     document.getElementById('cityLabel').textContent = b.city ? `· ${b.city}` : '';
 
+    // Rating
     const reviews = b.reviews || [];
     const approvedRatings = reviews.filter(r => r.is_approved).map(r => r.rating);
-    const avgRating = approvedRatings.length ? (approvedRatings.reduce((a,v)=>a+v,0) / approvedRatings.length) : 0;
+    const avgRating = approvedRatings.length
+        ? approvedRatings.reduce((a,v) => a+v, 0) / approvedRatings.length
+        : 0;
     document.getElementById('ratingNum').textContent = avgRating ? avgRating.toFixed(1) : '—';
-    document.getElementById('reviewCountLabel').textContent = `(${approvedRatings.length} reseña${approvedRatings.length !== 1 ? 's' : ''})`;
+    document.getElementById('reviewCountLabel').textContent =
+        `(${approvedRatings.length} reseña${approvedRatings.length !== 1 ? 's' : ''})`;
 
+    // Estado abierto/cerrado
     const hours = b.business_hours || [];
-    const open = isOpenNow(hours);
+    const open  = isOpenNow(hours);
     const statusBadge = document.getElementById('statusBadge');
     statusBadge.textContent = open ? 'Abierto ahora' : 'Cerrado';
-    statusBadge.className = `status-badge ${open ? 'open' : 'closed'}`;
+    statusBadge.className   = `status-badge ${open ? 'open' : 'closed'}`;
 
     renderHeroActions(b);
     renderHours(hours);
@@ -789,11 +1055,13 @@ async function loadBusiness() {
     renderGallery(b.business_images || []);
     renderPromotions(b.promotions || []);
     renderReviews(reviews);
+    renderProducts(b.product_categories || []);   // ← nueva llamada
 
     // Mapa
     if (b.latitude && b.longitude) {
         document.getElementById('mapPanel').style.display = 'block';
-        document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${b.latitude},${b.longitude}&z=16&output=embed`;
+        document.getElementById('mapFrame').src =
+            `https://maps.google.com/maps?q=${b.latitude},${b.longitude}&z=16&output=embed`;
     }
 
     document.getElementById('loadingState').style.display = 'none';
