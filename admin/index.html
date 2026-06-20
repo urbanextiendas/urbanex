@@ -338,6 +338,63 @@ input,textarea,select { font-family:var(--sans); }
 }
 .img-preview.visible { display: block; }
 
+/* ── Upload de imagen ── */
+.img-upload-tabs {
+    display: flex; gap: 0;
+    border: 1px solid var(--border2);
+    border-radius: 8px; overflow: hidden;
+    margin-bottom: 8px;
+}
+.img-upload-tab {
+    flex: 1; padding: 7px 10px; font-size: 11px; font-weight: 600;
+    background: transparent; border: none; color: var(--dark);
+    cursor: pointer; transition: var(--tr); font-family: var(--sans);
+    text-align: center;
+}
+.img-upload-tab.active { background: rgba(229,193,88,.12); color: var(--gold); }
+.img-upload-tab:hover:not(.active) { background: rgba(255,255,255,.04); color: var(--muted); }
+
+.img-upload-panel { display: none; }
+.img-upload-panel.active { display: block; }
+
+.img-dropzone {
+    border: 2px dashed rgba(229,193,88,.25);
+    border-radius: 10px;
+    padding: 24px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--tr);
+    background: rgba(229,193,88,.03);
+    position: relative;
+}
+.img-dropzone:hover, .img-dropzone.dragover {
+    border-color: var(--gold);
+    background: rgba(229,193,88,.07);
+}
+.img-dropzone input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.img-dropzone-icon { font-size: 28px; margin-bottom: 6px; }
+.img-dropzone-text { font-size: 12px; color: var(--dark); line-height: 1.5; }
+.img-dropzone-text strong { color: var(--gold); }
+
+.img-upload-progress {
+    display: none; margin-top: 8px;
+    height: 4px; background: rgba(255,255,255,.08);
+    border-radius: 4px; overflow: hidden;
+}
+.img-upload-progress.visible { display: block; }
+.img-upload-progress-bar {
+    height: 100%; background: var(--gold);
+    border-radius: 4px; width: 0%;
+    transition: width .2s ease;
+}
+.img-upload-status {
+    font-size: 11px; color: var(--dark);
+    margin-top: 5px; text-align: center;
+    min-height: 16px;
+}
+
 @media(max-width:768px) {
     .admin-nav { width:52px; }
     .nav-item span, .nav-badge { display:none; }
@@ -687,10 +744,38 @@ input,textarea,select { font-family:var(--sans); }
                 <span style="font-size:10px;color:var(--dark);margin-top:3px;">Debe ser menor al precio regular para mostrar el badge de descuento.</span>
             </div>
 
-            <!-- Imagen -->
+            <!-- Imagen — tabs URL / Subir archivo -->
             <div class="form-group full">
-                <label>URL de imagen</label>
-                <input type="text" id="productImage" placeholder="https://...">
+                <label>Imagen del producto</label>
+
+                <!-- Tabs -->
+                <div class="img-upload-tabs">
+                    <button class="img-upload-tab active" type="button" data-tab="url" onclick="switchImgTab('url')">🔗 URL</button>
+                    <button class="img-upload-tab" type="button" data-tab="file" onclick="switchImgTab('file')">📁 Subir archivo</button>
+                </div>
+
+                <!-- Panel URL -->
+                <div class="img-upload-panel active" id="imgPanelUrl">
+                    <input type="text" id="productImage" placeholder="https://..." style="width:100%;background:rgba(0,0,0,.5);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:#fff;font-size:12.5px;outline:none;">
+                </div>
+
+                <!-- Panel Subir -->
+                <div class="img-upload-panel" id="imgPanelFile">
+                    <div class="img-dropzone" id="imgDropzone">
+                        <input type="file" id="productImageFile" accept="image/jpeg,image/png,image/webp,image/gif">
+                        <div class="img-dropzone-icon">🖼️</div>
+                        <div class="img-dropzone-text">
+                            <strong>Haz clic o arrastra</strong> una imagen aquí<br>
+                            JPG, PNG, WebP — máx. 5 MB
+                        </div>
+                    </div>
+                    <div class="img-upload-progress" id="imgUploadProgress">
+                        <div class="img-upload-progress-bar" id="imgUploadBar"></div>
+                    </div>
+                    <div class="img-upload-status" id="imgUploadStatus"></div>
+                </div>
+
+                <!-- Preview compartida -->
                 <img id="productImagePreview" class="img-preview" alt="Vista previa">
             </div>
 
@@ -1169,10 +1254,37 @@ document.getElementById('btnNewProduct').addEventListener('click', () => {
     document.getElementById('productAvailable').checked = true;
     document.getElementById('productImagePreview').classList.remove('visible');
     document.getElementById('productImagePreview').src = '';
+    resetImgUploader();
     openModal('productModal');
 });
 
-// Vista previa de imagen en tiempo real
+function resetImgUploader() {
+    // Volver a tab URL por defecto
+    switchImgTab('url');
+    // Limpiar file input
+    const fi = document.getElementById('productImageFile');
+    if (fi) fi.value = '';
+    // Limpiar estado de progreso
+    document.getElementById('imgUploadProgress').classList.remove('visible');
+    document.getElementById('imgUploadBar').style.width = '0%';
+    document.getElementById('imgUploadStatus').textContent = '';
+}
+
+// ══════════════════════════════════════════════════════════════
+// IMAGEN — tabs URL / Subir archivo
+// ══════════════════════════════════════════════════════════════
+const BUCKET = 'product-images';
+
+// Cambiar entre tabs URL y Archivo
+window.switchImgTab = (tab) => {
+    document.querySelectorAll('.img-upload-tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.tab === tab)
+    );
+    document.getElementById('imgPanelUrl').classList.toggle('active', tab === 'url');
+    document.getElementById('imgPanelFile').classList.toggle('active', tab === 'file');
+};
+
+// Preview desde URL
 document.getElementById('productImage').addEventListener('input', () => {
     const url = document.getElementById('productImage').value.trim();
     const preview = document.getElementById('productImagePreview');
@@ -1184,6 +1296,79 @@ document.getElementById('productImage').addEventListener('input', () => {
         preview.classList.remove('visible');
         preview.src = '';
     }
+});
+
+// Drag & drop visual
+const dropzone = document.getElementById('imgDropzone');
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+dropzone.addEventListener('drop', e => { e.preventDefault(); dropzone.classList.remove('dragover'); });
+
+// Subida al seleccionar archivo
+document.getElementById('productImageFile').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validaciones
+    if (file.size > 5 * 1024 * 1024) {
+        toast('La imagen no puede superar 5 MB.', 'error'); return;
+    }
+    if (!file.type.startsWith('image/')) {
+        toast('Solo se permiten archivos de imagen.', 'error'); return;
+    }
+
+    // UI de progreso
+    const progress  = document.getElementById('imgUploadProgress');
+    const bar       = document.getElementById('imgUploadBar');
+    const status    = document.getElementById('imgUploadStatus');
+    const preview   = document.getElementById('productImagePreview');
+
+    progress.classList.add('visible');
+    bar.style.width = '20%';
+    status.textContent = 'Subiendo imagen...';
+    status.style.color = 'var(--dark)';
+
+    // Nombre único: timestamp + nombre saneado
+    const ext  = file.name.split('.').pop().toLowerCase();
+    const safe = file.name.replace(/[^a-z0-9]/gi, '-').toLowerCase().slice(0, 40);
+    const path = `products/${Date.now()}-${safe}.${ext}`;
+
+    bar.style.width = '50%';
+
+    const { data: uploaded, error: uploadErr } = await supabase.storage
+        .from(BUCKET)
+        .upload(path, file, { upsert: false, contentType: file.type });
+
+    if (uploadErr) {
+        bar.style.width = '0%';
+        progress.classList.remove('visible');
+        status.textContent = '✗ Error: ' + uploadErr.message;
+        status.style.color = 'var(--red)';
+        toast('Error al subir imagen: ' + uploadErr.message, 'error');
+        return;
+    }
+
+    bar.style.width = '100%';
+
+    // Obtener URL pública
+    const { data: { publicUrl } } = supabase.storage
+        .from(BUCKET)
+        .getPublicUrl(uploaded.path);
+
+    // Guardar en el campo URL y mostrar preview
+    document.getElementById('productImage').value = publicUrl;
+    preview.src = publicUrl;
+    preview.classList.add('visible');
+
+    status.textContent = '✓ Imagen subida correctamente';
+    status.style.color = 'var(--green)';
+
+    setTimeout(() => {
+        progress.classList.remove('visible');
+        bar.style.width = '0%';
+    }, 2000);
+
+    toast('Imagen subida ✓', 'success');
 });
 
 // ── Editar producto ──────────────────────────────────────────
@@ -1211,6 +1396,7 @@ window.editProduct = async id => {
         preview.src = '';
     }
 
+    resetImgUploader();
     openModal('productModal');
 };
 
