@@ -198,6 +198,146 @@ input,textarea,select { font-family:var(--sans); }
 #toast.error { border-color:var(--red); }
 @keyframes slideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
 
+/* ════════════════════════════════════════
+   PRODUCTOS — estilos nuevos
+   ════════════════════════════════════════ */
+
+/* Selector de negocio + categorías en la sección de productos */
+.products-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+@media(max-width:900px) { .products-layout { grid-template-columns: 1fr; } }
+
+/* Panel izquierdo: categorías del negocio */
+.cat-panel {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.cat-panel-header {
+    padding: 12px 16px;
+    background: rgba(0,0,0,.3);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.cat-panel-header span {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold);
+}
+.cat-list { padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+.cat-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: var(--tr);
+    gap: 6px;
+}
+.cat-item:hover { background: rgba(255,255,255,.04); color: #fff; }
+.cat-item.active { background: rgba(229,193,88,.08); border-color: var(--gold); color: var(--gold); font-weight: 600; }
+.cat-item-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cat-item-count { font-size: 10px; color: var(--dark); flex-shrink: 0; }
+.cat-item-actions { display: flex; gap: 4px; opacity: 0; transition: var(--tr); }
+.cat-item:hover .cat-item-actions { opacity: 1; }
+.cat-action-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--dark); font-size: 13px; padding: 2px 4px;
+    border-radius: 4px; transition: var(--tr); line-height: 1;
+}
+.cat-action-btn:hover { color: #fff; background: rgba(255,255,255,.1); }
+.cat-action-btn.del:hover { color: var(--red); }
+.cat-empty { padding: 20px; text-align: center; font-size: 11.5px; color: var(--dark); }
+
+/* Formulario inline para nueva categoría */
+.cat-add-form {
+    padding: 10px 8px;
+    border-top: 1px solid var(--border2);
+    display: flex;
+    gap: 6px;
+}
+.cat-add-form input {
+    flex: 1;
+    background: rgba(0,0,0,.5);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 6px 10px;
+    color: #fff;
+    font-size: 12px;
+    outline: none;
+    font-family: var(--sans);
+}
+.cat-add-form input:focus { border-color: var(--gold); }
+.cat-add-form button {
+    background: var(--gold); color: #000;
+    border: none; border-radius: 6px;
+    padding: 6px 10px; font-size: 12px;
+    font-weight: 700; cursor: pointer;
+}
+
+/* Panel derecho: tabla de productos */
+.products-right { display: flex; flex-direction: column; gap: 14px; }
+
+/* Imagen thumbnail en tabla */
+.prod-thumb {
+    width: 40px; height: 40px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid var(--border2);
+    background: rgba(229,193,88,.05);
+}
+.prod-thumb-placeholder {
+    width: 40px; height: 40px;
+    border-radius: 6px;
+    background: rgba(229,193,88,.05);
+    border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: var(--dark);
+}
+
+/* Precio con descuento en tabla */
+.price-original { text-decoration: line-through; color: var(--dark); font-size: 10.5px; }
+.price-sale { color: var(--green); font-weight: 700; }
+
+/* Sort order input pequeño */
+.sort-input {
+    width: 50px;
+    background: rgba(0,0,0,.4);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 4px 6px;
+    color: #fff;
+    font-size: 11px;
+    text-align: center;
+    outline: none;
+}
+
+/* Vista previa de imagen en modal */
+.img-preview {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--border2);
+    background: rgba(229,193,88,.03);
+    display: none;
+    margin-top: 6px;
+}
+.img-preview.visible { display: block; }
+
 @media(max-width:768px) {
     .admin-nav { width:52px; }
     .nav-item span, .nav-badge { display:none; }
@@ -251,6 +391,11 @@ input,textarea,select { font-family:var(--sans); }
             <div class="nav-item" data-section="businesses">
                 <svg viewBox="0 0 24 24"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"/></svg>
                 <span>Negocios</span>
+            </div>
+            <!-- NUEVO: Productos -->
+            <div class="nav-item" data-section="products">
+                <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
+                <span>Productos</span>
             </div>
             <div class="nav-item" data-section="reviews">
                 <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
@@ -309,18 +454,82 @@ input,textarea,select { font-family:var(--sans); }
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Negocio</th>
-                                <th>Categoría</th>
-                                <th>Ciudad</th>
-                                <th>Estado</th>
-                                <th>Destacado</th>
-                                <th>Acciones</th>
+                                <th>Negocio</th><th>Categoría</th><th>Ciudad</th>
+                                <th>Estado</th><th>Destacado</th><th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="bizTableBody">
                             <tr><td colspan="6" style="text-align:center;color:var(--dark);padding:30px;">Cargando...</td></tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- ══════════════════════════════════════
+                 PRODUCTOS — sección nueva
+                 ══════════════════════════════════════ -->
+            <div class="section" id="sec-products">
+                <div class="section-header">
+                    <h2>Productos / Menú</h2>
+                    <!-- Selector de negocio en el header -->
+                    <select id="prodBizSelect" style="background:rgba(0,0,0,.5);border:1px solid var(--border2);border-radius:8px;padding:8px 14px;color:#fff;font-size:12px;outline:none;min-width:220px;">
+                        <option value="">Selecciona un negocio...</option>
+                    </select>
+                </div>
+
+                <!-- Placeholder cuando no hay negocio seleccionado -->
+                <div id="prodPlaceholder" style="text-align:center;padding:60px 20px;color:var(--dark);font-size:13px;">
+                    Selecciona un negocio para gestionar sus productos.
+                </div>
+
+                <!-- Layout principal de productos -->
+                <div class="products-layout" id="prodLayout" style="display:none;">
+
+                    <!-- COLUMNA IZQUIERDA: Categorías -->
+                    <div class="cat-panel">
+                        <div class="cat-panel-header">
+                            <span>Categorías</span>
+                            <span id="catCount" style="font-size:10px;color:var(--dark);">0</span>
+                        </div>
+                        <div class="cat-list" id="catList">
+                            <div class="cat-empty">Sin categorías aún.</div>
+                        </div>
+                        <!-- Form nueva categoría -->
+                        <div class="cat-add-form">
+                            <input type="text" id="newCatName" placeholder="Nueva categoría..." maxlength="60">
+                            <button id="btnAddCat" title="Agregar">+</button>
+                        </div>
+                    </div>
+
+                    <!-- COLUMNA DERECHA: Productos de la categoría -->
+                    <div class="products-right">
+                        <div id="prodCatHeader" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                            <span id="prodCatTitle" style="font-size:13px;color:var(--muted);">Selecciona una categoría</span>
+                            <button class="btn btn-primary btn-sm" id="btnNewProduct" disabled>
+                                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                Agregar producto
+                            </button>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width:50px;"></th>
+                                        <th>Producto</th>
+                                        <th>Precio</th>
+                                        <th>Precio oferta</th>
+                                        <th>Orden</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="prodTableBody">
+                                    <tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Selecciona una categoría para ver sus productos.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -353,12 +562,8 @@ input,textarea,select { font-family:var(--sans); }
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Negocio</th>
-                                <th>Título</th>
-                                <th>Desde</th>
-                                <th>Hasta</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
+                                <th>Negocio</th><th>Título</th><th>Desde</th>
+                                <th>Hasta</th><th>Estado</th><th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="promoTableBody">
@@ -370,9 +575,7 @@ input,textarea,select { font-family:var(--sans); }
 
             <!-- HORARIOS -->
             <div class="section" id="sec-hours">
-                <div class="section-header">
-                    <h2>Horarios de Atención</h2>
-                </div>
+                <div class="section-header"><h2>Horarios de Atención</h2></div>
                 <div class="filter-bar">
                     <select id="hoursBizSelect" style="min-width:220px;">
                         <option value="">Selecciona un negocio...</option>
@@ -401,61 +604,21 @@ input,textarea,select { font-family:var(--sans); }
         </div>
         <div class="form-grid">
             <input type="hidden" id="bizId">
-            <div class="form-group">
-                <label>Nombre *</label>
-                <input type="text" id="bizName" placeholder="Nombre del negocio">
-            </div>
-            <div class="form-group">
-                <label>Slug (URL) *</label>
-                <input type="text" id="bizSlug" placeholder="nombre-del-negocio">
-            </div>
-            <div class="form-group">
-                <label>Categoría</label>
-                <select id="bizCat"><option value="">Sin categoría</option></select>
-            </div>
-            <div class="form-group">
-                <label>Ciudad</label>
-                <input type="text" id="bizCity" placeholder="Loja">
-            </div>
-            <div class="form-group full">
-                <label>Dirección</label>
-                <input type="text" id="bizAddress" placeholder="Av. Principal 123">
-            </div>
-            <div class="form-group full">
-                <label>Descripción</label>
-                <textarea id="bizDesc" rows="3" placeholder="Descripción del negocio..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>Teléfono</label>
-                <input type="text" id="bizPhone" placeholder="0987654321">
-            </div>
-            <div class="form-group">
-                <label>WhatsApp (con código país)</label>
-                <input type="text" id="bizWa" placeholder="593987654321">
-            </div>
-            <div class="form-group">
-                <label>Sitio web</label>
-                <input type="text" id="bizWeb" placeholder="https://...">
-            </div>
-            <div class="form-group">
-                <label>Imagen de portada (URL)</label>
-                <input type="text" id="bizImg" placeholder="https://...">
-            </div>
-            <div class="form-group">
-                <label>Latitud</label>
-                <input type="number" id="bizLat" placeholder="-3.993" step="any">
-            </div>
-            <div class="form-group">
-                <label>Longitud</label>
-                <input type="number" id="bizLng" placeholder="-79.204" step="any">
-            </div>
+            <div class="form-group"><label>Nombre *</label><input type="text" id="bizName" placeholder="Nombre del negocio"></div>
+            <div class="form-group"><label>Slug (URL) *</label><input type="text" id="bizSlug" placeholder="nombre-del-negocio"></div>
+            <div class="form-group"><label>Categoría</label><select id="bizCat"><option value="">Sin categoría</option></select></div>
+            <div class="form-group"><label>Ciudad</label><input type="text" id="bizCity" placeholder="Loja"></div>
+            <div class="form-group full"><label>Dirección</label><input type="text" id="bizAddress" placeholder="Av. Principal 123"></div>
+            <div class="form-group full"><label>Descripción</label><textarea id="bizDesc" rows="3" placeholder="Descripción del negocio..."></textarea></div>
+            <div class="form-group"><label>Teléfono</label><input type="text" id="bizPhone" placeholder="0987654321"></div>
+            <div class="form-group"><label>WhatsApp (con código país)</label><input type="text" id="bizWa" placeholder="593987654321"></div>
+            <div class="form-group"><label>Sitio web</label><input type="text" id="bizWeb" placeholder="https://..."></div>
+            <div class="form-group"><label>Imagen de portada (URL)</label><input type="text" id="bizImg" placeholder="https://..."></div>
+            <div class="form-group"><label>Latitud</label><input type="number" id="bizLat" placeholder="-3.993" step="any"></div>
+            <div class="form-group"><label>Longitud</label><input type="number" id="bizLng" placeholder="-79.204" step="any"></div>
             <div class="form-group full" style="flex-direction:row;gap:20px;flex-wrap:wrap;">
-                <label class="form-check">
-                    <input type="checkbox" id="bizFeatured"> Negocio destacado
-                </label>
-                <label class="form-check">
-                    <input type="checkbox" id="bizActive" checked> Activo (visible al público)
-                </label>
+                <label class="form-check"><input type="checkbox" id="bizFeatured"> Negocio destacado</label>
+                <label class="form-check"><input type="checkbox" id="bizActive" checked> Activo (visible al público)</label>
             </div>
         </div>
         <div class="modal-footer">
@@ -474,31 +637,12 @@ input,textarea,select { font-family:var(--sans); }
         </div>
         <div class="form-grid">
             <input type="hidden" id="promoId">
-            <div class="form-group full">
-                <label>Negocio *</label>
-                <select id="promoBizSelect"><option value="">Selecciona un negocio...</option></select>
-            </div>
-            <div class="form-group full">
-                <label>Título *</label>
-                <input type="text" id="promoTitle" placeholder="2x1 en hamburguesas">
-            </div>
-            <div class="form-group full">
-                <label>Descripción</label>
-                <textarea id="promoDesc" rows="2" placeholder="Detalle de la promoción..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>Fecha de inicio</label>
-                <input type="date" id="promoStart">
-            </div>
-            <div class="form-group">
-                <label>Fecha de fin</label>
-                <input type="date" id="promoEnd">
-            </div>
-            <div class="form-group full">
-                <label class="form-check">
-                    <input type="checkbox" id="promoActive" checked> Promoción activa
-                </label>
-            </div>
+            <div class="form-group full"><label>Negocio *</label><select id="promoBizSelect"><option value="">Selecciona un negocio...</option></select></div>
+            <div class="form-group full"><label>Título *</label><input type="text" id="promoTitle" placeholder="2x1 en hamburguesas"></div>
+            <div class="form-group full"><label>Descripción</label><textarea id="promoDesc" rows="2" placeholder="Detalle de la promoción..."></textarea></div>
+            <div class="form-group"><label>Fecha de inicio</label><input type="date" id="promoStart"></div>
+            <div class="form-group"><label>Fecha de fin</label><input type="date" id="promoEnd"></div>
+            <div class="form-group full"><label class="form-check"><input type="checkbox" id="promoActive" checked> Promoción activa</label></div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-ghost" onclick="closeModal('promoModal')">Cancelar</button>
@@ -507,17 +651,78 @@ input,textarea,select { font-family:var(--sans); }
     </div>
 </div>
 
+<!-- ══════════════════════════════════════
+     MODAL PRODUCTO — nuevo
+     ══════════════════════════════════════ -->
+<div class="modal-backdrop" id="productModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 id="productModalTitle">Nuevo Producto</h3>
+            <button class="modal-close" onclick="closeModal('productModal')">✕</button>
+        </div>
+        <div class="form-grid">
+            <input type="hidden" id="productId">
+            <input type="hidden" id="productCatId">
+
+            <!-- Nombre — ocupa toda la fila -->
+            <div class="form-group full">
+                <label>Nombre del producto *</label>
+                <input type="text" id="productName" placeholder="Ej: Lomo saltado, Camiseta azul...">
+            </div>
+
+            <!-- Descripción -->
+            <div class="form-group full">
+                <label>Descripción</label>
+                <textarea id="productDesc" rows="2" placeholder="Ingredientes, materiales, características..."></textarea>
+            </div>
+
+            <!-- Precios -->
+            <div class="form-group">
+                <label>Precio (USD)</label>
+                <input type="number" id="productPrice" placeholder="0.00" min="0" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Precio de oferta (USD)</label>
+                <input type="number" id="productSalePrice" placeholder="Dejar vacío si no aplica" min="0" step="0.01">
+                <span style="font-size:10px;color:var(--dark);margin-top:3px;">Debe ser menor al precio regular para mostrar el badge de descuento.</span>
+            </div>
+
+            <!-- Imagen -->
+            <div class="form-group full">
+                <label>URL de imagen</label>
+                <input type="text" id="productImage" placeholder="https://...">
+                <img id="productImagePreview" class="img-preview" alt="Vista previa">
+            </div>
+
+            <!-- Orden y disponibilidad -->
+            <div class="form-group">
+                <label>Orden de visualización</label>
+                <input type="number" id="productOrder" placeholder="0" min="0" step="1" value="0">
+                <span style="font-size:10px;color:var(--dark);margin-top:3px;">Número menor = aparece primero.</span>
+            </div>
+            <div class="form-group" style="justify-content:flex-end;padding-bottom:4px;">
+                <label class="form-check" style="margin-top:auto;">
+                    <input type="checkbox" id="productAvailable" checked>
+                    Disponible (visible al público)
+                </label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost" onclick="closeModal('productModal')">Cancelar</button>
+            <button class="btn btn-primary" id="btnSaveProduct">Guardar producto</button>
+        </div>
+    </div>
+</div>
+
 <!-- TOAST -->
 <div id="toast"></div>
 
-<!-- ══════════════ JS ══════════════
-     Reemplaza SUPABASE_URL y SUPABASE_ANON_KEY
-     ══════════════════════════════════════════ -->
+<!-- ══════════════ JS ══════════════ -->
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL     = 'https://mlkynawsjqmawgxeuvks.supabase.co'; // ← cambia esto
-const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';                    // ← cambia esto
+const SUPABASE_URL      = 'https://mlkynawsjqmawgxeuvks.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
@@ -572,7 +777,6 @@ async function bootApp(user) {
     loadHoursBizSelect();
 }
 
-// ── SESIÓN ACTIVA ─────────────────────────────────────────────
 const { data: { session } } = await supabase.auth.getSession();
 if (session) bootApp(session.user);
 
@@ -586,17 +790,15 @@ document.querySelectorAll('.nav-item').forEach(item => {
     });
 });
 
-// ── CATEGORÍAS ────────────────────────────────────────────────
+// ── CATEGORÍAS GLOBALES ───────────────────────────────────────
 let categories = [];
 
 async function loadCategories() {
     const { data } = await supabase.from('categories').select('id, name').order('name');
     categories = data || [];
-
     const opts = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
     document.getElementById('bizCatFilter').innerHTML = '<option value="">Todas las categorías</option>' + opts;
     document.getElementById('bizCat').innerHTML = '<option value="">Sin categoría</option>' + opts;
-    document.getElementById('promoBizSelect').innerHTML = '<option value="">Selecciona un negocio...</option>';
 }
 
 // ── DASHBOARD ────────────────────────────────────────────────
@@ -608,7 +810,6 @@ async function loadDashboard() {
         supabase.from('promotions').select('*', { count:'exact', head:true }).eq('is_active', true),
     ]);
 
-    // Actualizar badge de reseñas pendientes
     const badge = document.getElementById('reviewsBadge');
     if (pendingRev > 0) { badge.textContent = pendingRev; badge.style.display = 'block'; }
 
@@ -626,19 +827,20 @@ let allBusinesses = [];
 async function loadBusinesses() {
     const { data } = await supabase
         .from('businesses')
-        .select('id, name, slug, city, is_active, is_featured, categories(name)')
+        .select('id, name, slug, city, is_active, is_featured, category_id, categories(name)')
         .order('name');
     allBusinesses = data || [];
     renderBizTable();
-    // Poblar selects de negocio en promos y horarios
+
     const opts = allBusinesses.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
     document.getElementById('promoBizSelect').innerHTML = '<option value="">Selecciona un negocio...</option>' + opts;
     document.getElementById('hoursBizSelect').innerHTML = '<option value="">Selecciona un negocio...</option>' + opts;
+    document.getElementById('prodBizSelect').innerHTML  = '<option value="">Selecciona un negocio...</option>' + opts;
 }
 
 function renderBizTable() {
     const search = document.getElementById('bizSearch').value.toLowerCase();
-    const cat = document.getElementById('bizCatFilter').value;
+    const cat    = document.getElementById('bizCatFilter').value;
     const status = document.getElementById('bizStatusFilter').value;
 
     let list = allBusinesses.filter(b => {
@@ -656,10 +858,7 @@ function renderBizTable() {
 
     tbody.innerHTML = list.map(b => `
         <tr>
-            <td>
-                <strong style="color:#fff;">${b.name}</strong><br>
-                <span style="font-size:10px;color:var(--dark);">${b.slug}</span>
-            </td>
+            <td><strong style="color:#fff;">${b.name}</strong><br><span style="font-size:10px;color:var(--dark);">${b.slug}</span></td>
             <td>${b.categories?.name || '<span style="color:var(--dark)">—</span>'}</td>
             <td>${b.city || '—'}</td>
             <td><span class="badge ${b.is_active ? 'badge-green' : 'badge-red'}">${b.is_active ? 'Activo' : 'Inactivo'}</span></td>
@@ -678,7 +877,6 @@ function renderBizTable() {
     document.getElementById(id).addEventListener('input', renderBizTable)
 );
 
-// Nuevo negocio
 document.getElementById('btnNewBusiness').addEventListener('click', () => {
     document.getElementById('bizId').value = '';
     document.getElementById('bizModalTitle').textContent = 'Nuevo Negocio';
@@ -689,7 +887,6 @@ document.getElementById('btnNewBusiness').addEventListener('click', () => {
     openModal('bizModal');
 });
 
-// Auto-slug desde nombre
 document.getElementById('bizName').addEventListener('input', () => {
     if (!document.getElementById('bizId').value) {
         document.getElementById('bizSlug').value = document.getElementById('bizName').value
@@ -698,7 +895,6 @@ document.getElementById('bizName').addEventListener('input', () => {
     }
 });
 
-// Editar negocio
 window.editBusiness = async id => {
     const { data: b } = await supabase.from('businesses').select('*').eq('id', id).single();
     if (!b) return;
@@ -721,7 +917,6 @@ window.editBusiness = async id => {
     openModal('bizModal');
 };
 
-// Guardar negocio
 document.getElementById('btnSaveBusiness').addEventListener('click', async () => {
     const id = document.getElementById('bizId').value;
     const name = document.getElementById('bizName').value.trim();
@@ -749,14 +944,12 @@ document.getElementById('btnSaveBusiness').addEventListener('click', async () =>
         : await supabase.from('businesses').insert(payload);
 
     if (error) { toast('Error al guardar: ' + error.message, 'error'); return; }
-
     toast(id ? 'Negocio actualizado ✓' : 'Negocio creado ✓');
     closeModal('bizModal');
     await loadBusinesses();
     loadDashboard();
 });
 
-// Activar / desactivar
 window.toggleBizActive = async (id, current) => {
     const { error } = await supabase.from('businesses').update({ is_active: !current }).eq('id', id);
     if (error) { toast('Error al actualizar.', 'error'); return; }
@@ -765,7 +958,332 @@ window.toggleBizActive = async (id, current) => {
     loadDashboard();
 };
 
-// ── RESEÑAS ──────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════
+// PRODUCTOS — lógica nueva
+// ════════════════════════════════════════════════════════════════
+
+let currentProdBizId   = null;   // negocio activo en la sección productos
+let currentProdCatId   = null;   // categoría activa (para mostrar sus productos)
+let prodCategories     = [];     // categorías del negocio actual
+
+// Cambio de negocio en el selector de productos
+document.getElementById('prodBizSelect').addEventListener('change', async () => {
+    const bizId = document.getElementById('prodBizSelect').value;
+    currentProdBizId = bizId || null;
+    currentProdCatId = null;
+
+    if (!bizId) {
+        document.getElementById('prodLayout').style.display = 'none';
+        document.getElementById('prodPlaceholder').style.display = 'block';
+        return;
+    }
+
+    document.getElementById('prodPlaceholder').style.display = 'none';
+    document.getElementById('prodLayout').style.display = 'grid';
+    document.getElementById('btnNewProduct').disabled = true;
+    document.getElementById('prodCatTitle').textContent = 'Selecciona una categoría';
+    document.getElementById('prodTableBody').innerHTML =
+        '<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Selecciona una categoría.</td></tr>';
+
+    await loadProdCategories();
+});
+
+// ── Cargar categorías del negocio ────────────────────────────
+async function loadProdCategories() {
+    const { data } = await supabase
+        .from('product_categories')
+        .select('id, name, sort_order, products(count)')
+        .eq('business_id', currentProdBizId)
+        .order('sort_order');
+
+    prodCategories = data || [];
+    renderCatList();
+}
+
+function renderCatList() {
+    const list = document.getElementById('catList');
+    document.getElementById('catCount').textContent = prodCategories.length;
+
+    if (!prodCategories.length) {
+        list.innerHTML = '<div class="cat-empty">Sin categorías aún.<br>Agrega una abajo.</div>';
+        return;
+    }
+
+    list.innerHTML = prodCategories.map(c => {
+        const count = c.products?.[0]?.count ?? 0;
+        const isActive = c.id === currentProdCatId;
+        return `
+        <div class="cat-item ${isActive ? 'active' : ''}" data-catid="${c.id}" onclick="selectCat('${c.id}', '${escAttr(c.name)}')">
+            <span class="cat-item-name">${esc(c.name)}</span>
+            <span class="cat-item-count">${count}</span>
+            <span class="cat-item-actions">
+                <button class="cat-action-btn" onclick="event.stopPropagation();renameCat('${c.id}','${escAttr(c.name)}')" title="Renombrar">✎</button>
+                <button class="cat-action-btn del" onclick="event.stopPropagation();deleteCat('${c.id}')" title="Eliminar">✕</button>
+            </span>
+        </div>`;
+    }).join('');
+}
+
+// Seleccionar categoría → cargar productos
+window.selectCat = async (catId, catName) => {
+    currentProdCatId = catId;
+    document.getElementById('prodCatTitle').textContent = catName;
+    document.getElementById('btnNewProduct').disabled = false;
+    renderCatList(); // actualiza .active
+    await loadProducts();
+};
+
+// ── Agregar categoría ────────────────────────────────────────
+document.getElementById('btnAddCat').addEventListener('click', addCategory);
+document.getElementById('newCatName').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addCategory();
+});
+
+async function addCategory() {
+    const nameEl = document.getElementById('newCatName');
+    const name = nameEl.value.trim();
+    if (!name || !currentProdBizId) return;
+
+    const maxOrder = prodCategories.length
+        ? Math.max(...prodCategories.map(c => c.sort_order || 0)) + 1
+        : 0;
+
+    const { error } = await supabase.from('product_categories').insert({
+        business_id: currentProdBizId,
+        name,
+        sort_order: maxOrder
+    });
+
+    if (error) { toast('Error al crear categoría: ' + error.message, 'error'); return; }
+    nameEl.value = '';
+    toast(`Categoría "${name}" creada ✓`);
+    await loadProdCategories();
+}
+
+// ── Renombrar categoría ───────────────────────────────────────
+window.renameCat = async (id, currentName) => {
+    const newName = prompt('Nuevo nombre para la categoría:', currentName);
+    if (!newName || newName.trim() === currentName) return;
+
+    const { error } = await supabase.from('product_categories').update({ name: newName.trim() }).eq('id', id);
+    if (error) { toast('Error al renombrar.', 'error'); return; }
+    toast('Categoría renombrada ✓');
+
+    // Si era la activa, actualizar el título
+    if (id === currentProdCatId) {
+        document.getElementById('prodCatTitle').textContent = newName.trim();
+    }
+    await loadProdCategories();
+};
+
+// ── Eliminar categoría ────────────────────────────────────────
+window.deleteCat = async id => {
+    if (!confirm('¿Eliminar esta categoría? Se eliminarán también todos sus productos.')) return;
+    const { error } = await supabase.from('product_categories').delete().eq('id', id);
+    if (error) { toast('Error al eliminar.', 'error'); return; }
+    toast('Categoría eliminada.');
+    if (id === currentProdCatId) {
+        currentProdCatId = null;
+        document.getElementById('prodCatTitle').textContent = 'Selecciona una categoría';
+        document.getElementById('btnNewProduct').disabled = true;
+        document.getElementById('prodTableBody').innerHTML =
+            '<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Selecciona una categoría.</td></tr>';
+    }
+    await loadProdCategories();
+};
+
+// ── Cargar productos de la categoría activa ──────────────────
+async function loadProducts() {
+    if (!currentProdCatId) return;
+
+    const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('product_category_id', currentProdCatId)
+        .order('sort_order');
+
+    const tbody = document.getElementById('prodTableBody');
+
+    if (error) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--red);padding:30px;">Error: ${error.message}</td></tr>`;
+        return;
+    }
+
+    const products = data || [];
+
+    if (!products.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Sin productos en esta categoría. Agrega el primero.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = products.map(p => {
+        // Thumbnail
+        const thumb = p.image_url
+            ? `<img class="prod-thumb" src="${esc(p.image_url)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`
+            : `<div class="prod-thumb-placeholder">📦</div>`;
+
+        // Precio
+        let priceHtml = p.price != null ? `$${Number(p.price).toFixed(2)}` : `<span style="color:var(--dark)">—</span>`;
+        let salePriceHtml = '—';
+        if (p.sale_price != null && p.price != null && p.sale_price < p.price) {
+            const pct = Math.round((1 - p.sale_price / p.price) * 100);
+            salePriceHtml = `<span class="price-sale">$${Number(p.sale_price).toFixed(2)}</span> <span class="badge badge-green" style="font-size:9px;">-${pct}%</span>`;
+        } else if (p.sale_price != null) {
+            salePriceHtml = `$${Number(p.sale_price).toFixed(2)}`;
+        }
+
+        return `
+        <tr>
+            <td>${thumb}</td>
+            <td>
+                <strong style="color:#fff;">${esc(p.name)}</strong>
+                ${p.description ? `<br><span style="font-size:10.5px;color:var(--dark);">${esc(p.description.slice(0,60))}${p.description.length>60?'…':''}</span>` : ''}
+            </td>
+            <td>${priceHtml}</td>
+            <td>${salePriceHtml}</td>
+            <td>
+                <input class="sort-input" type="number" value="${p.sort_order||0}" min="0"
+                    onchange="updateProductOrder('${p.id}', this.value)">
+            </td>
+            <td><span class="badge ${p.is_available !== false ? 'badge-green' : 'badge-red'}">${p.is_available !== false ? 'Disponible' : 'Oculto'}</span></td>
+            <td>
+                <div class="td-actions">
+                    <button class="btn btn-ghost btn-sm" onclick="editProduct('${p.id}')">Editar</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}')">Eliminar</button>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+// ── Nuevo producto ───────────────────────────────────────────
+document.getElementById('btnNewProduct').addEventListener('click', () => {
+    if (!currentProdCatId) return;
+    document.getElementById('productId').value = '';
+    document.getElementById('productCatId').value = currentProdCatId;
+    document.getElementById('productModalTitle').textContent = 'Nuevo Producto';
+    ['productName','productDesc','productPrice','productSalePrice','productImage'].forEach(id =>
+        document.getElementById(id).value = ''
+    );
+    document.getElementById('productOrder').value = '0';
+    document.getElementById('productAvailable').checked = true;
+    document.getElementById('productImagePreview').classList.remove('visible');
+    document.getElementById('productImagePreview').src = '';
+    openModal('productModal');
+});
+
+// Vista previa de imagen en tiempo real
+document.getElementById('productImage').addEventListener('input', () => {
+    const url = document.getElementById('productImage').value.trim();
+    const preview = document.getElementById('productImagePreview');
+    if (url) {
+        preview.src = url;
+        preview.classList.add('visible');
+        preview.onerror = () => preview.classList.remove('visible');
+    } else {
+        preview.classList.remove('visible');
+        preview.src = '';
+    }
+});
+
+// ── Editar producto ──────────────────────────────────────────
+window.editProduct = async id => {
+    const { data: p } = await supabase.from('products').select('*').eq('id', id).single();
+    if (!p) return;
+
+    document.getElementById('productId').value = p.id;
+    document.getElementById('productCatId').value = p.product_category_id;
+    document.getElementById('productModalTitle').textContent = 'Editar Producto';
+    document.getElementById('productName').value = p.name || '';
+    document.getElementById('productDesc').value = p.description || '';
+    document.getElementById('productPrice').value = p.price ?? '';
+    document.getElementById('productSalePrice').value = p.sale_price ?? '';
+    document.getElementById('productImage').value = p.image_url || '';
+    document.getElementById('productOrder').value = p.sort_order ?? 0;
+    document.getElementById('productAvailable').checked = p.is_available !== false;
+
+    const preview = document.getElementById('productImagePreview');
+    if (p.image_url) {
+        preview.src = p.image_url;
+        preview.classList.add('visible');
+    } else {
+        preview.classList.remove('visible');
+        preview.src = '';
+    }
+
+    openModal('productModal');
+};
+
+// ── Guardar producto (crear o editar) ────────────────────────
+document.getElementById('btnSaveProduct').addEventListener('click', async () => {
+    const id    = document.getElementById('productId').value;
+    const catId = document.getElementById('productCatId').value;
+    const name  = document.getElementById('productName').value.trim();
+
+    if (!name) { toast('El nombre del producto es obligatorio.', 'error'); return; }
+
+    const priceRaw    = document.getElementById('productPrice').value;
+    const salePriceRaw = document.getElementById('productSalePrice').value;
+    const price     = priceRaw     !== '' ? parseFloat(priceRaw)     : null;
+    const salePrice = salePriceRaw !== '' ? parseFloat(salePriceRaw) : null;
+
+    if (salePrice !== null && price !== null && salePrice >= price) {
+        toast('El precio de oferta debe ser menor al precio regular.', 'error');
+        return;
+    }
+
+    const payload = {
+        product_category_id: catId,
+        business_id: currentProdBizId,
+        name,
+        description: document.getElementById('productDesc').value.trim() || null,
+        price,
+        sale_price: salePrice,
+        image_url: document.getElementById('productImage').value.trim() || null,
+        sort_order: parseInt(document.getElementById('productOrder').value) || 0,
+        is_available: document.getElementById('productAvailable').checked,
+    };
+
+    const { error } = id
+        ? await supabase.from('products').update(payload).eq('id', id)
+        : await supabase.from('products').insert(payload);
+
+    if (error) { toast('Error al guardar: ' + error.message, 'error'); return; }
+
+    toast(id ? 'Producto actualizado ✓' : 'Producto creado ✓');
+    closeModal('productModal');
+    await loadProducts();
+    await loadProdCategories(); // actualiza contadores
+});
+
+// ── Actualizar solo el orden del producto ────────────────────
+window.updateProductOrder = async (id, value) => {
+    const { error } = await supabase.from('products').update({ sort_order: parseInt(value)||0 }).eq('id', id);
+    if (error) { toast('Error al actualizar orden.', 'error'); return; }
+    toast('Orden actualizado ✓');
+};
+
+// ── Eliminar producto ────────────────────────────────────────
+window.deleteProduct = async id => {
+    if (!confirm('¿Eliminar este producto definitivamente?')) return;
+    const { error } = await supabase.from('products').delete().eq('id', id);
+    if (error) { toast('Error al eliminar.', 'error'); return; }
+    toast('Producto eliminado.');
+    await loadProducts();
+    await loadProdCategories();
+};
+
+// ── Helpers de escape ────────────────────────────────────────
+function esc(str) {
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(str) {
+    return String(str||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+}
+
+// ════════════════════════════════════════════════════════════════
+// RESEÑAS
+// ════════════════════════════════════════════════════════════════
 async function loadReviews() {
     const filter = document.getElementById('reviewFilter').value;
     let q = supabase.from('reviews').select('*, businesses(name, slug)').order('created_at', { ascending:false });
@@ -775,7 +1293,6 @@ async function loadReviews() {
     const { data } = await q;
     const reviews = data || [];
 
-    // Actualizar badge
     const pending = reviews.filter(r => !r.is_approved).length;
     const badge = document.getElementById('reviewsBadge');
     if (pending > 0 && filter !== 'approved') { badge.textContent = pending; badge.style.display = 'block'; }
@@ -788,20 +1305,20 @@ async function loadReviews() {
     }
 
     container.innerHTML = reviews.map(r => {
-        const stars = '★'.repeat(r.rating || 0) + '☆'.repeat(5 - (r.rating || 0));
+        const stars = '★'.repeat(r.rating||0) + '☆'.repeat(5-(r.rating||0));
         return `
         <div class="review-block">
             <div class="review-meta">
-                <span class="review-author">${r.user_name || 'Anónimo'}</span>
+                <span class="review-author">${r.user_name||'Anónimo'}</span>
                 <span class="review-stars">${stars}</span>
-                <span class="review-biz">${r.businesses?.name || '—'}</span>
-                <span class="badge ${r.is_approved ? 'badge-green' : 'badge-gold'}" style="margin-left:auto;">${r.is_approved ? 'Aprobada' : 'Pendiente'}</span>
+                <span class="review-biz">${r.businesses?.name||'—'}</span>
+                <span class="badge ${r.is_approved?'badge-green':'badge-gold'}" style="margin-left:auto;">${r.is_approved?'Aprobada':'Pendiente'}</span>
             </div>
-            <div class="review-comment">${r.comment || '<em style="color:var(--dark)">Sin comentario</em>'}</div>
+            <div class="review-comment">${r.comment||'<em style="color:var(--dark)">Sin comentario</em>'}</div>
             <div class="review-actions">
-                ${!r.is_approved ? `<button class="btn btn-success btn-sm" onclick="approveReview('${r.id}')">✓ Aprobar</button>` : ''}
+                ${!r.is_approved?`<button class="btn btn-success btn-sm" onclick="approveReview('${r.id}')">✓ Aprobar</button>`:''}
                 <button class="btn btn-danger btn-sm" onclick="deleteReview('${r.id}')">✕ Eliminar</button>
-                ${r.businesses?.slug ? `<a href="../business/index.html?slug=${r.businesses.slug}" target="_blank" class="btn btn-ghost btn-sm">Ver negocio</a>` : ''}
+                ${r.businesses?.slug?`<a href="../business/index.html?slug=${r.businesses.slug}" target="_blank" class="btn btn-ghost btn-sm">Ver negocio</a>`:''}
             </div>
         </div>`;
     }).join('');
@@ -818,13 +1335,14 @@ window.approveReview = async id => {
 
 window.deleteReview = async id => {
     if (!confirm('¿Eliminar esta reseña definitivamente?')) return;
-    const { error } = await supabase.from('reviews').delete().eq('id', id);
-    if (error) { toast('Error al eliminar.', 'error'); return; }
+    await supabase.from('reviews').delete().eq('id', id);
     toast('Reseña eliminada.');
     loadReviews(); loadDashboard();
 };
 
-// ── PROMOCIONES ───────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════
+// PROMOCIONES
+// ════════════════════════════════════════════════════════════════
 async function loadPromotions() {
     const { data } = await supabase
         .from('promotions')
@@ -847,10 +1365,10 @@ async function loadPromotions() {
             : `<span class="badge badge-green">Activa</span>`;
         return `
         <tr>
-            <td>${p.businesses?.name || '—'}</td>
-            <td><strong style="color:#fff;">${p.title}</strong><br><span style="font-size:10.5px;color:var(--dark);">${p.description ? p.description.slice(0,60)+'...' : ''}</span></td>
-            <td>${p.start_date || '—'}</td>
-            <td>${p.end_date || '—'}</td>
+            <td>${p.businesses?.name||'—'}</td>
+            <td><strong style="color:#fff;">${p.title}</strong><br><span style="font-size:10.5px;color:var(--dark);">${p.description?p.description.slice(0,60)+'...':''}</span></td>
+            <td>${p.start_date||'—'}</td>
+            <td>${p.end_date||'—'}</td>
             <td>${statusBadge}</td>
             <td>
                 <div class="td-actions">
@@ -919,26 +1437,21 @@ window.deletePromo = async id => {
     loadPromotions();
 };
 
-// ── HORARIOS ─────────────────────────────────────────────────
-function loadHoursBizSelect() {
-    // El select ya fue poblado en loadBusinesses()
-}
+// ════════════════════════════════════════════════════════════════
+// HORARIOS
+// ════════════════════════════════════════════════════════════════
+function loadHoursBizSelect() { /* poblado en loadBusinesses() */ }
 
 document.getElementById('hoursBizSelect').addEventListener('change', async () => {
     const bizId = document.getElementById('hoursBizSelect').value;
     const container = document.getElementById('hoursEditorContainer');
     if (!bizId) { container.style.display = 'none'; return; }
 
-    const { data: hours } = await supabase
-        .from('business_hours')
-        .select('*')
-        .eq('business_id', bizId);
-
+    const { data: hours } = await supabase.from('business_hours').select('*').eq('business_id', bizId);
     const hoursMap = {};
-    (hours || []).forEach(h => { hoursMap[h.day_of_week] = h; });
+    (hours||[]).forEach(h => { hoursMap[h.day_of_week] = h; });
 
-    const editor = document.getElementById('hoursEditor');
-    editor.innerHTML = DAY_NAMES.map((day, dow) => {
+    document.getElementById('hoursEditor').innerHTML = DAY_NAMES.map((day, dow) => {
         const h = hoursMap[dow] || {};
         return `
         <div class="hours-row-edit">
@@ -946,7 +1459,7 @@ document.getElementById('hoursBizSelect').addEventListener('change', async () =>
             <input type="time" id="open_${dow}" value="${h.open_time ? h.open_time.slice(0,5) : '08:00'}">
             <input type="time" id="close_${dow}" value="${h.close_time ? h.close_time.slice(0,5) : '22:00'}">
             <label class="form-check">
-                <input type="checkbox" id="closed_${dow}" ${h.is_closed ? 'checked' : ''}> Cerrado
+                <input type="checkbox" id="closed_${dow}" ${h.is_closed?'checked':''}> Cerrado
             </label>
         </div>`;
     }).join('');
@@ -966,7 +1479,6 @@ document.getElementById('btnSaveHours').addEventListener('click', async () => {
         is_closed: document.getElementById(`closed_${dow}`).checked,
     }));
 
-    // Borrar horarios existentes y reinsertar
     await supabase.from('business_hours').delete().eq('business_id', bizId);
     const { error } = await supabase.from('business_hours').insert(rows);
 
