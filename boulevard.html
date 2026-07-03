@@ -874,14 +874,47 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+<div id="pwa-banner">
+    <img src="/imagenes/logo.png" alt="Urbanex">
+    <div id="pwa-banner-text">
+        <strong>Instalar Urbanex</strong>
+        <span>Accede rápido desde tu pantalla de inicio</span>
+    </div>
+    <button id="pwa-install-btn">Instalar</button>
+    <button id="pwa-dismiss-btn">✕</button>
+</div>
+
 <script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('[SW] Registrado:', reg.scope))
-            .catch(err => console.warn('[SW] Error:', err));
-    });
-}
+let deferredPrompt;
+const banner = document.getElementById('pwa-banner');
+
+window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    // Mostrar solo si no fue descartado antes
+    if (!localStorage.getItem('pwa-dismissed')) {
+        setTimeout(() => banner.classList.add('visible'), 2000);
+    }
+});
+
+document.getElementById('pwa-install-btn').addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    banner.classList.remove('visible');
+});
+
+document.getElementById('pwa-dismiss-btn').addEventListener('click', () => {
+    banner.classList.remove('visible');
+    localStorage.setItem('pwa-dismissed', '1');
+});
+
+// Ocultar banner si ya está instalada
+window.addEventListener('appinstalled', () => {
+    banner.classList.remove('visible');
+});
 </script>
+
 </body>
 </html>
