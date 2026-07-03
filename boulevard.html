@@ -285,7 +285,47 @@
             .main-boulevard { min-height: 360px; height: 48vh; }
             .welcome-billboard h2 { font-size: 18px; letter-spacing: 4px; }
         }
+
+
+        #pwa-banner {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #0d0d0d;
+    border-top: 1px solid rgba(229,193,88,0.3);
+    padding: 14px 20px;
+    z-index: 999;
+    align-items: center;
+    gap: 14px;
+    backdrop-filter: blur(10px);
+}
+#pwa-banner.visible { display: flex; }
+#pwa-banner img { width: 44px; height: 44px; border-radius: 10px; }
+#pwa-banner-text { flex: 1; }
+#pwa-banner-text strong { display: block; font-size: 13px; color: #fff; }
+#pwa-banner-text span { font-size: 11px; color: #888; }
+#pwa-install-btn {
+    background: #e5c158; color: #000; border: none;
+    border-radius: 8px; padding: 9px 18px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    white-space: nowrap;
+}
+#pwa-dismiss-btn {
+    background: none; border: none; color: #666;
+    font-size: 20px; cursor: pointer; padding: 0 4px;
+}
     </style>
+
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#e5c158">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Urbanex">
+    <link rel="apple-touch-icon" href="/imagenes/logo.png">
 </head>
 <body>
 
@@ -823,5 +863,25 @@ searchInput.addEventListener('input', ()=>{
 document.addEventListener('click', e=>{ if(!e.target.closest('.search-wrapper')){ resultsPanel.style.display='none'; } });
 </script>
 
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('[SW] Registrado:', reg.scope))
+            .catch(err => console.warn('[SW] Error:', err));
+    });
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('[SW] Registrado:', reg.scope))
+            .catch(err => console.warn('[SW] Error:', err));
+    });
+}
+</script>
 </body>
 </html>
