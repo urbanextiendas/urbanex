@@ -842,25 +842,106 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDirectorio()
 
 boot();
 
-// ── Búsqueda (resultados en dropdown header) ──────────────────
+// ── Búsqueda (negocios + productos en tiempo real) ───────────
 const searchInput  = document.getElementById('siteSearch');
 const resultsPanel = document.getElementById('searchResults');
 
-searchInput.addEventListener('input', ()=>{
-    const q = searchInput.value.trim();
-    if (!q) { resultsPanel.style.display='none'; return; }
-    const results = allBusinesses.filter(b=>`${b.name} ${b.address||''} ${b.categories?.name||''} ${b.subcategories?.name||''}`.toLowerCase().includes(q.toLowerCase())).slice(0,6);
-    if (!results.length) { resultsPanel.innerHTML='<div class="search-results-status">Sin resultados.</div>'; resultsPanel.style.display='block'; return; }
-    resultsPanel.innerHTML = results.map(b=>`
-        <a class="search-result-item" href="${NEGOCIO_URL(b.slug)}">
-            <div class="search-result-title">${esc(b.name)}</div>
-            <div class="search-result-path">${b.categories?.icon||''} ${b.categories?.name||''} ${b.subcategories?'› '+b.subcategories.name:''}</div>
-            <div class="search-result-snippet">${b.address?'📍 '+esc(b.address):''}</div>
-        </a>`).join('');
-    resultsPanel.style.display='block';
+let searchTimer = null;
+
+function showResults(html) {
+    resultsPanel.innerHTML = html;
+    resultsPanel.style.display = 'block';
     resultsPanel.classList.add('active');
+}
+function hideResults() {
+    resultsPanel.style.display = 'none';
+    resultsPanel.classList.remove('active');
+}
+
+searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim();
+    if (!q || q.length < 3) { hideResults(); return; }
+    showResults('<div class="search-results-status">Buscando...</div>');
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => runSearch(q), 350);
 });
-document.addEventListener('click', e=>{ if(!e.target.closest('.search-wrapper')){ resultsPanel.style.display='none'; } });
+
+async function runSearch(q) {
+    const qLow = q.toLowerCase();
+
+    // 1. Negocios por nombre/dirección (local)
+    const bizResults = allBusinesses
+        .filter(b => `${b.name} ${b.address||''} ${b.categories?.name||''} ${b.subcategories?.name||''}`.toLowerCase().includes(qLow))
+        .slice(0, 4);
+
+    // 2. Productos: buscar en Supabase
+    const { data: prodData } = await supabase
+        .from('products')
+        .select(`
+            name,
+            businesses!business_id(id, name, slug,
+                categories!category_id(name, icon),
+                subcategories:categories!subcategory_id(name, icon)
+            )
+        `)
+        .ilike('name', `%${q}%`)
+        .eq('is_available', true)
+        .limit(6);
+
+    // Agrupar productos por negocio
+    const prodByBiz = new Map();
+    (prodData || []).forEach(p => {
+        const biz = p.businesses;
+        if (!biz) return;
+        if (!prodByBiz.has(biz.id)) prodByBiz.set(biz.id, { biz, products: [] });
+        prodByBiz.get(biz.id).products.push(p.name);
+    });
+
+    // Excluir negocios que ya aparecen en resultados directos
+    const bizIds = new Set(bizResults.map(b => b.id));
+    const prodResults = [...prodByBiz.values()].filter(r => !bizIds.has(r.biz.id));
+
+    if (!bizResults.length && !prodResults.length) {
+        showResults(`<div class="search-results-status">Sin resultados para "${esc(q)}".</div>`);
+        return;
+    }
+
+    let html = '';
+
+    if (bizResults.length) {
+        html += `<div class="search-results-status">🏪 Negocios</div>`;
+        html += bizResults.map(b => `
+            <a class="search-result-item" href="${NEGOCIO_URL(b.slug)}">
+                <div class="search-result-title">${esc(b.name)}</div>
+                <div class="search-result-path">${b.categories?.icon||''} ${b.categories?.name||''}${b.subcategories?' › '+b.subcategories.name:''}</div>
+                <div class="search-result-snippet">${b.address ? '📍 '+esc(b.address) : ''}</div>
+            </a>`).join('');
+    }
+
+    if (prodResults.length) {
+        html += `<div class="search-results-status" style="border-top:1px solid rgba(255,255,255,.06);">🛍️ Productos encontrados en</div>`;
+        html += prodResults.map(({ biz, products }) => {
+            const catLabel = biz.subcategories?.name
+                ? `${biz.categories?.icon||''} ${biz.subcategories.name}`
+                : `${biz.categories?.icon||''} ${biz.categories?.name||''}`;
+            return `
+            <a class="search-result-item" href="${NEGOCIO_URL(biz.slug)}">
+                <div class="search-result-title">${esc(biz.name)}</div>
+                <div class="search-result-path">${catLabel}</div>
+                <div class="search-result-snippet">🛍️ ${products.slice(0,3).map(p=>esc(p)).join(' · ')}${products.length>3?' +'+(products.length-3)+' más':''}</div>
+            </a>`;
+        }).join('');
+    }
+
+    showResults(html);
+}
+
+document.addEventListener('click', e => {
+    if (!e.target.closest('.search-wrapper')) hideResults();
+});
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') hideResults();
+});
 </script>
 
 
