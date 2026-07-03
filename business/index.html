@@ -186,6 +186,17 @@
         .btn-clear-cart:hover{color:var(--red);}
         .pie-pagina{width:100%;height:24px;background-color:#000;color:#8c8c8c;font-size:11px;display:flex;justify-content:center;align-items:center;border-top:1px solid #1a1a1a;font-family:Arial,Helvetica,sans-serif;}
     </style>
+
+
+    <!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#e5c158">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Urbanex">
+<link rel="apple-touch-icon" href="/imagenes/logo.png">
+
 </head>
 <body>
 
@@ -591,5 +602,16 @@ async function loadBusiness(){
 function showError(){document.getElementById('loadingState').style.display='none';document.getElementById('errorState').style.display='flex';}
 loadBusiness();
 </script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('[SW] Registrado:', reg.scope))
+            .catch(err => console.warn('[SW] Error:', err));
+    });
+}
+</script>
+
 </body>
 </html>
