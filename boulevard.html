@@ -424,7 +424,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // ── Configuración de rutas ────────────────────────────────────
 // Cambia esta ruta según dónde esté tu negocio.html
-const NEGOCIO_URL = (slug) => `business/?slug=${slug}`;    
+const NEGOCIO_URL = (slug) => `business/?slug=${slug}`;
 // Si está en subcarpeta usa: `business/index.html?slug=${slug}`
 
 const SUPABASE_URL      = 'https://mlkynawsjqmawgxeuvks.supabase.co';
@@ -434,11 +434,14 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // ── Estado ────────────────────────────────────────────────────
 let allBusinesses  = [];
 let rootCategories = [];
-let subMap         = {};
-let activeCatId    = null;
-let activeSubId    = null;
+let subMap         = {};   // keys son NUMBER (id de la raíz)
+let activeCatId    = null; // NUMBER o null
+let activeSubId    = null; // NUMBER o null
 let activeQuick    = 'all';
 let searchQuery    = '';
+
+// Normalizar siempre a Number para comparaciones consistentes
+function toNum(v) { const n = Number(v); return isNaN(n) ? null : n; }
 
 // ── Helpers ───────────────────────────────────────────────────
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -511,11 +514,13 @@ function renderCatTree() {
     const countByRoot = {};
     const countBySub  = {};
     allBusinesses.forEach(b=>{
-        const bSub = String(b.subcategory_id ?? '');
-        if(b.subcategory_id) countBySub[bSub]=(countBySub[bSub]||0)+1;
-        const subObj = b.subcategory_id ? Object.values(subMap).flat().find(s=>String(s.id)==bSub) : null;
-        const rootId = String(b.category_id ?? (subObj?.parent_id ?? ''));
-        if(rootId) countByRoot[rootId]=(countByRoot[rootId]||0)+1;
+        const bSub = toNum(b.subcategory_id);
+        const bCat = toNum(b.category_id);
+        if(bSub !== null) countBySub[bSub]=(countBySub[bSub]||0)+1;
+        const allSubs = Object.values(subMap).flat();
+        const subObj  = bSub !== null ? allSubs.find(s=>s.id===bSub) : null;
+        const rootId  = bCat ?? (subObj ? toNum(subObj.parent_id) : null);
+        if(rootId !== null) countByRoot[rootId]=(countByRoot[rootId]||0)+1;
     });
 
     document.getElementById('totalCount').textContent = allBusinesses.length + ' locales';
@@ -558,7 +563,7 @@ window.handleRootClick = (rootId, btn) => {
     const subList = document.getElementById(`subList_${rootId}`);
 
     if (!subs.length) {
-        selectCategory(String(rootId), null, btn);
+        selectCategory(toNum(rootId), null, btn);
         return;
     }
 
@@ -571,13 +576,13 @@ window.handleRootClick = (rootId, btn) => {
         subList.classList.add('open');
         btn.classList.add('expanded');
     }
-    selectCategory(String(rootId), null, btn);
+    selectCategory(toNum(rootId), null, btn);
 };
 
 // Seleccionar categoría / subcategoría
 window.selectCategory = (rootId, subId, btnEl) => {
-    activeCatId = rootId ? String(rootId) : null;
-    activeSubId = subId  ? String(subId)  : null;
+    activeCatId = rootId ? toNum(rootId) : null;
+    activeSubId = subId  ? toNum(subId)  : null;
 
     document.querySelectorAll('.cat-root-btn,.sub-btn,.cat-all-btn').forEach(b=>b.classList.remove('active'));
 
@@ -606,8 +611,8 @@ function updateActiveFilterLabel(rootId, subId) {
     if (!rootId && !subId) { pill.classList.remove('visible'); return; }
     let text = '';
     if (subId) {
-        const sub  = Object.values(subMap).flat().find(s=>s.id==subId);
-        const root = rootCategories.find(r=>r.id==rootId);
+        const sub  = Object.values(subMap).flat().find(s=>toNum(s.id)===toNum(subId));
+        const root = rootCategories.find(r=>toNum(r.id)===toNum(rootId));
         text = `${root?.icon||''} ${root?.name||''} › ${sub?.icon||''} ${sub?.name||''}`;
     } else {
         const root = rootCategories.find(r=>r.id==rootId);
@@ -637,16 +642,16 @@ document.getElementById('siteSearch').addEventListener('input', e=>{
 // ── Filtrar lista ─────────────────────────────────────────────
 function filtered() {
     return allBusinesses.filter(b=>{
-        // Comparar como string para evitar mismatch bigint vs number
-        const bCat    = String(b.category_id    ?? '');
-        const bSub    = String(b.subcategory_id ?? '');
-        const aCat    = String(activeCatId ?? '');
-        const aSub    = String(activeSubId ?? '');
-        if (activeSubId) {
-            if (bSub !== aSub) return false;
-        } else if (activeCatId) {
-            const subObj = b.subcategory_id ? Object.values(subMap).flat().find(s=>String(s.id)==bSub) : null;
-            if (bCat !== aCat && String(subObj?.parent_id ?? '') !== aCat) return false;
+        const bCat = toNum(b.category_id);
+        const bSub = toNum(b.subcategory_id);
+        if (activeSubId !== null) {
+            if (bSub !== activeSubId) return false;
+        } else if (activeCatId !== null) {
+            const allSubs = Object.values(subMap).flat();
+            const subObj  = bSub !== null ? allSubs.find(s=>s.id === bSub) : null;
+            const matchRoot = bCat === activeCatId;
+            const matchSub  = subObj ? toNum(subObj.parent_id) === activeCatId : false;
+            if (!matchRoot && !matchSub) return false;
         }
         if (activeQuick==='open'     && !b._open)            return false;
         if (activeQuick==='delivery' && !b.delivery_available) return false;
@@ -671,14 +676,16 @@ function updateMetrics() {
 // Solo filtro de categoría (sin quick filter) para las métricas
 function allCatFiltered() {
     return allBusinesses.filter(b=>{
-        const bCat = String(b.category_id    ?? '');
-        const bSub = String(b.subcategory_id ?? '');
-        const aCat = String(activeCatId ?? '');
-        const aSub = String(activeSubId ?? '');
-        if (activeSubId) { if (bSub !== aSub) return false; }
-        else if (activeCatId) {
-            const subObj = b.subcategory_id ? Object.values(subMap).flat().find(s=>String(s.id)==bSub):null;
-            if (bCat !== aCat && String(subObj?.parent_id ?? '') !== aCat) return false;
+        const bCat = toNum(b.category_id);
+        const bSub = toNum(b.subcategory_id);
+        if (activeSubId !== null) {
+            if (bSub !== activeSubId) return false;
+        } else if (activeCatId !== null) {
+            const allSubs = Object.values(subMap).flat();
+            const subObj  = bSub !== null ? allSubs.find(s=>s.id === bSub) : null;
+            const matchRoot = bCat === activeCatId;
+            const matchSub  = subObj ? toNum(subObj.parent_id) === activeCatId : false;
+            if (!matchRoot && !matchSub) return false;
         }
         return true;
     });
