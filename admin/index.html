@@ -759,7 +759,27 @@ input,textarea,select { font-family:var(--sans); }
             <div class="form-group"><label>Teléfono</label><input type="text" id="bizPhone" placeholder="0987654321"></div>
             <div class="form-group"><label>WhatsApp (con código país)</label><input type="text" id="bizWa" placeholder="593987654321"></div>
             <div class="form-group"><label>Sitio web</label><input type="text" id="bizWeb" placeholder="https://..."></div>
-            <div class="form-group"><label>Imagen de portada (URL)</label><input type="text" id="bizImg" placeholder="https://..."></div>
+            <!-- Imagen portada — tabs URL / Subir -->
+            <div class="form-group full">
+                <label>Imagen de portada</label>
+                <div class="img-upload-tabs">
+                    <button class="img-upload-tab active" type="button" data-tab="url" onclick="switchBizImgTab('url')">🔗 URL</button>
+                    <button class="img-upload-tab" type="button" data-tab="file" onclick="switchBizImgTab('file')">📁 Subir archivo</button>
+                </div>
+                <div class="img-upload-panel active" id="bizImgPanelUrl">
+                    <input type="text" id="bizImg" placeholder="https://..." style="width:100%;background:rgba(0,0,0,.5);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:#fff;font-size:12.5px;outline:none;">
+                </div>
+                <div class="img-upload-panel" id="bizImgPanelFile">
+                    <div class="img-dropzone" id="bizImgDropzone">
+                        <input type="file" id="bizImgFile" accept="image/jpeg,image/png,image/webp,image/gif">
+                        <div class="img-dropzone-icon">🖼️</div>
+                        <div class="img-dropzone-text"><strong>Haz clic o arrastra</strong> una imagen aquí<br>JPG, PNG, WebP — máx. 5 MB</div>
+                    </div>
+                    <div class="img-upload-progress" id="bizImgProgress"><div class="img-upload-progress-bar" id="bizImgBar"></div></div>
+                    <div class="img-upload-status" id="bizImgStatus"></div>
+                </div>
+                <img id="bizImgPreview" class="img-preview" alt="Vista previa portada">
+            </div>
             <div class="form-group"><label>Latitud</label><input type="number" id="bizLat" placeholder="-3.993" step="any"></div>
             <div class="form-group"><label>Longitud</label><input type="number" id="bizLng" placeholder="-79.204" step="any"></div>
             <div class="form-group full" style="flex-direction:row;gap:20px;flex-wrap:wrap;">
@@ -1284,6 +1304,7 @@ document.getElementById('btnNewBusiness').addEventListener('click', () => {
     document.getElementById('bizSubCat').value = '';
     document.getElementById('bizFeatured').checked = false;
     document.getElementById('bizActive').checked = true;
+    resetBizImgUploader();
     openModal('bizModal');
 });
 
@@ -1309,6 +1330,11 @@ window.editBusiness = async id => {
     document.getElementById('bizWa').value = b.whatsapp || '';
     document.getElementById('bizWeb').value = b.website || '';
     document.getElementById('bizImg').value = b.cover_image || '';
+    resetBizImgUploader();
+    if (b.cover_image) {
+        const prev = document.getElementById('bizImgPreview');
+        prev.src = b.cover_image; prev.classList.add('visible');
+    }
     document.getElementById('bizLat').value = b.latitude || '';
     document.getElementById('bizLng').value = b.longitude || '';
     document.getElementById('bizFeatured').checked = !!b.is_featured;
@@ -1580,15 +1606,97 @@ document.getElementById('btnNewProduct').addEventListener('click', () => {
 });
 
 function resetImgUploader() {
-    // Volver a tab URL por defecto
     switchImgTab('url');
-    // Limpiar file input
     const fi = document.getElementById('productImageFile');
     if (fi) fi.value = '';
-    // Limpiar estado de progreso
     document.getElementById('imgUploadProgress').classList.remove('visible');
     document.getElementById('imgUploadBar').style.width = '0%';
     document.getElementById('imgUploadStatus').textContent = '';
+}
+
+// ── Imagen portada de negocio ─────────────────────────────────
+const BIZ_BUCKET = 'business-images';
+
+window.switchBizImgTab = (tab) => {
+    document.querySelectorAll('#bizModal .img-upload-tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.tab === tab)
+    );
+    document.getElementById('bizImgPanelUrl').classList.toggle('active', tab === 'url');
+    document.getElementById('bizImgPanelFile').classList.toggle('active', tab === 'file');
+};
+
+// Preview desde URL
+document.getElementById('bizImg').addEventListener('input', () => {
+    const url = document.getElementById('bizImg').value.trim();
+    const preview = document.getElementById('bizImgPreview');
+    if (url) {
+        preview.src = url; preview.classList.add('visible');
+        preview.onerror = () => preview.classList.remove('visible');
+    } else {
+        preview.classList.remove('visible'); preview.src = '';
+    }
+});
+
+// Drag & drop visual portada
+const bizDropzone = document.getElementById('bizImgDropzone');
+bizDropzone.addEventListener('dragover', e => { e.preventDefault(); bizDropzone.classList.add('dragover'); });
+bizDropzone.addEventListener('dragleave', () => bizDropzone.classList.remove('dragover'));
+bizDropzone.addEventListener('drop', e => { e.preventDefault(); bizDropzone.classList.remove('dragover'); });
+
+// Subida al seleccionar archivo portada
+document.getElementById('bizImgFile').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { toast('La imagen no puede superar 5 MB.', 'error'); return; }
+    if (!file.type.startsWith('image/')) { toast('Solo se permiten archivos de imagen.', 'error'); return; }
+
+    const progress = document.getElementById('bizImgProgress');
+    const bar      = document.getElementById('bizImgBar');
+    const status   = document.getElementById('bizImgStatus');
+    const preview  = document.getElementById('bizImgPreview');
+
+    progress.classList.add('visible');
+    bar.style.width = '20%';
+    status.textContent = 'Subiendo imagen...';
+    status.style.color = 'var(--dark)';
+
+    const ext  = file.name.split('.').pop().toLowerCase();
+    const safe = file.name.replace(/[^a-z0-9]/gi, '-').toLowerCase().slice(0, 40);
+    const path = `covers/${Date.now()}-${safe}.${ext}`;
+    bar.style.width = '50%';
+
+    const { data: uploaded, error: uploadErr } = await supabase.storage
+        .from(BIZ_BUCKET)
+        .upload(path, file, { upsert: false, contentType: file.type });
+
+    if (uploadErr) {
+        bar.style.width = '0%';
+        progress.classList.remove('visible');
+        status.textContent = '✗ Error: ' + uploadErr.message;
+        status.style.color = 'var(--red)';
+        toast('Error al subir imagen: ' + uploadErr.message, 'error');
+        return;
+    }
+    bar.style.width = '100%';
+
+    const { data: { publicUrl } } = supabase.storage.from(BIZ_BUCKET).getPublicUrl(uploaded.path);
+    document.getElementById('bizImg').value = publicUrl;
+    preview.src = publicUrl; preview.classList.add('visible');
+    status.textContent = '✓ Imagen subida correctamente';
+    status.style.color = 'var(--green)';
+    setTimeout(() => { progress.classList.remove('visible'); bar.style.width = '0%'; }, 2000);
+    toast('Imagen de portada subida ✓', 'success');
+});
+
+function resetBizImgUploader() {
+    switchBizImgTab('url');
+    const fi = document.getElementById('bizImgFile');
+    if (fi) fi.value = '';
+    document.getElementById('bizImgProgress').classList.remove('visible');
+    document.getElementById('bizImgBar').style.width = '0%';
+    document.getElementById('bizImgStatus').textContent = '';
+    document.getElementById('bizImgPreview').classList.remove('visible');
+    document.getElementById('bizImgPreview').src = '';
 }
 
 // ══════════════════════════════════════════════════════════════
