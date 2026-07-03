@@ -1189,10 +1189,15 @@ async function loadDashboard() {
 let allBusinesses = [];
 
 async function loadBusinesses() {
-    const { data } = await supabase
+    const { data, error } = await supabase
         .from('businesses')
-        .select('id, name, slug, city, is_active, is_featured, category_id, subcategory_id, categories(name, icon)')
+        .select(`
+            id, name, slug, city, is_active, is_featured, category_id, subcategory_id,
+            categories!category_id(name, icon),
+            subcategories:categories!subcategory_id(name, icon)
+        `)
         .order('name');
+    if (error) console.error('loadBusinesses:', error.message);
     allBusinesses = data || [];
     renderBizTable();
 
@@ -1201,6 +1206,21 @@ async function loadBusinesses() {
     document.getElementById('hoursBizSelect').innerHTML = '<option value="">Selecciona un negocio...</option>' + opts;
     document.getElementById('prodBizSelect').innerHTML  = '<option value="">Selecciona un negocio...</option>' + opts;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function renderBizTable() {
     const search = document.getElementById('bizSearch').value.toLowerCase();
