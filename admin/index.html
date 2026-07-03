@@ -199,6 +199,72 @@ input,textarea,select { font-family:var(--sans); }
 @keyframes slideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
 
 /* ════════════════════════════════════════
+   CATEGORÍAS — árbol de 2 niveles
+   ════════════════════════════════════════ */
+.cat-tree { display: flex; flex-direction: column; gap: 6px; }
+
+.cat-root-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.cat-root-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: var(--tr);
+}
+.cat-root-header:hover { background: rgba(255,255,255,.03); }
+.cat-root-icon { font-size: 18px; flex-shrink: 0; }
+.cat-root-name { font-size: 13px; font-weight: 600; color: #fff; flex: 1; }
+.cat-root-count { font-size: 10px; color: var(--dark); }
+.cat-root-chevron { color: var(--dark); font-size: 12px; transition: transform .2s ease; }
+.cat-root-item.expanded .cat-root-chevron { transform: rotate(90deg); }
+.cat-root-actions { display: flex; gap: 6px; opacity: 0; transition: var(--tr); }
+.cat-root-header:hover .cat-root-actions { opacity: 1; }
+
+.cat-sub-list {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 8px;
+    background: rgba(0,0,0,.2);
+    gap: 4px;
+    flex-direction: column;
+}
+.cat-root-item.expanded .cat-sub-list { display: flex; }
+
+.cat-sub-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; border-radius: 8px;
+    font-size: 12px; color: var(--muted);
+    border: 1px solid transparent;
+    transition: var(--tr);
+}
+.cat-sub-item:hover { background: rgba(255,255,255,.04); color: #fff; }
+.cat-sub-icon { font-size: 14px; }
+.cat-sub-name { flex: 1; }
+.cat-sub-count { font-size: 10px; color: var(--dark); }
+.cat-sub-actions { display: flex; gap: 4px; opacity: 0; transition: var(--tr); }
+.cat-sub-item:hover .cat-sub-actions { opacity: 1; }
+.cat-tree-action-btn {
+    background: none; border: none; cursor: pointer; color: var(--dark);
+    font-size: 12px; padding: 2px 5px; border-radius: 4px; transition: var(--tr);
+}
+.cat-tree-action-btn:hover { color: #fff; background: rgba(255,255,255,.1); }
+.cat-tree-action-btn.del:hover { color: var(--red); background: rgba(255,71,87,.1); }
+
+.cat-add-sub-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 7px 12px; border-radius: 8px;
+    background: rgba(229,193,88,.06); border: 1px dashed rgba(229,193,88,.2);
+    color: var(--gold); font-size: 11.5px; font-weight: 600;
+    cursor: pointer; font-family: var(--sans); transition: var(--tr);
+    margin-top: 2px;
+}
+.cat-add-sub-btn:hover { background: rgba(229,193,88,.12); border-style: solid; }
+
+/* ════════════════════════════════════════
    PRODUCTOS — estilos nuevos
    ════════════════════════════════════════ */
 
@@ -449,8 +515,11 @@ input,textarea,select { font-family:var(--sans); }
                 <svg viewBox="0 0 24 24"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"/></svg>
                 <span>Negocios</span>
             </div>
-            <!-- NUEVO: Productos -->
-            <div class="nav-item" data-section="products">
+            <!-- NUEVO: Categorías -->
+            <div class="nav-item" data-section="categories">
+                <svg viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5S15.01 22 17.5 22s4.5-2.01 4.5-4.5S19.99 13 17.5 13zm0 7c-1.38 0-2.5-1.12-2.5-2.5S16.12 15 17.5 15s2.5 1.12 2.5 2.5S18.88 20 17.5 20zM3 21.5h8v-8H3v8zm2-6h4v4H5v-4z"/></svg>
+                <span>Categorías</span>
+            </div>
                 <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
                 <span>Productos</span>
             </div>
@@ -519,6 +588,24 @@ input,textarea,select { font-family:var(--sans); }
                             <tr><td colspan="6" style="text-align:center;color:var(--dark);padding:30px;">Cargando...</td></tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- ══════════════════════════════════════
+                 CATEGORÍAS — árbol de 2 niveles
+                 ══════════════════════════════════════ -->
+            <div class="section" id="sec-categories">
+                <div class="section-header">
+                    <h2>Categorías</h2>
+                    <button class="btn btn-primary" id="btnNewRootCat">
+                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                        Nueva categoría
+                    </button>
+                </div>
+                <div class="cat-tree" id="catTree">
+                    <div class="skeleton" style="height:60px;border-radius:12px;"></div>
+                    <div class="skeleton" style="height:60px;border-radius:12px;"></div>
+                    <div class="skeleton" style="height:60px;border-radius:12px;"></div>
                 </div>
             </div>
 
@@ -663,7 +750,8 @@ input,textarea,select { font-family:var(--sans); }
             <input type="hidden" id="bizId">
             <div class="form-group"><label>Nombre *</label><input type="text" id="bizName" placeholder="Nombre del negocio"></div>
             <div class="form-group"><label>Slug (URL) *</label><input type="text" id="bizSlug" placeholder="nombre-del-negocio"></div>
-            <div class="form-group"><label>Categoría</label><select id="bizCat"><option value="">Sin categoría</option></select></div>
+            <div class="form-group"><label>Categoría</label><select id="bizCat" onchange="onBizCatChange()"><option value="">Sin categoría</option></select></div>
+            <div class="form-group"><label>Subcategoría</label><select id="bizSubCat"><option value="">Sin subcategoría</option></select></div>
             <div class="form-group"><label>Ciudad</label><input type="text" id="bizCity" placeholder="Loja"></div>
             <div class="form-group full"><label>Dirección</label><input type="text" id="bizAddress" placeholder="Av. Principal 123"></div>
             <div class="form-group full"><label>Descripción</label><textarea id="bizDesc" rows="3" placeholder="Descripción del negocio..."></textarea></div>
@@ -799,6 +887,40 @@ input,textarea,select { font-family:var(--sans); }
     </div>
 </div>
 
+<!-- ══ MODAL CATEGORÍA ══ -->
+<div class="modal-backdrop" id="catModal">
+    <div class="modal" style="max-width:420px;">
+        <div class="modal-header">
+            <h3 id="catModalTitle">Nueva Categoría</h3>
+            <button class="modal-close" onclick="closeModal('catModal')">✕</button>
+        </div>
+        <div class="form-grid" style="grid-template-columns:1fr;">
+            <input type="hidden" id="catModalId">
+            <input type="hidden" id="catModalParentId">
+            <div class="form-group" id="catModalParentGroup" style="display:none;">
+                <label>Categoría padre</label>
+                <input type="text" id="catModalParentName" disabled style="opacity:.6;">
+            </div>
+            <div class="form-group">
+                <label>Nombre *</label>
+                <input type="text" id="catModalName" placeholder="Ej: Restaurantes">
+            </div>
+            <div class="form-group">
+                <label>Ícono (emoji)</label>
+                <input type="text" id="catModalIcon" placeholder="🍽️" maxlength="4" style="font-size:20px;text-align:center;width:70px;">
+            </div>
+            <div class="form-group">
+                <label>Orden</label>
+                <input type="number" id="catModalOrder" value="0" min="0" style="width:100px;">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost" onclick="closeModal('catModal')">Cancelar</button>
+            <button class="btn btn-primary" id="btnSaveCat">Guardar</button>
+        </div>
+    </div>
+</div>
+
 <!-- TOAST -->
 <div id="toast"></div>
 
@@ -875,16 +997,172 @@ document.querySelectorAll('.nav-item').forEach(item => {
     });
 });
 
-// ── CATEGORÍAS GLOBALES ───────────────────────────────────────
-let categories = [];
+// ══════════════════════════════════════════════════════════════
+// CATEGORÍAS — árbol de 2 niveles
+// ══════════════════════════════════════════════════════════════
+let allCategories  = [];   // todas (raíz + sub)
+let rootCategories = [];   // solo parent_id IS NULL
+let subMap         = {};   // { parentId: [subcat, ...] }
 
 async function loadCategories() {
-    const { data } = await supabase.from('categories').select('id, name').order('name');
-    categories = data || [];
-    const opts = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-    document.getElementById('bizCatFilter').innerHTML = '<option value="">Todas las categorías</option>' + opts;
-    document.getElementById('bizCat').innerHTML = '<option value="">Sin categoría</option>' + opts;
+    const { data } = await supabase
+        .from('categories')
+        .select('id, name, icon, parent_id, sort_order, is_active')
+        .order('sort_order')
+        .order('name');
+
+    allCategories  = data || [];
+    rootCategories = allCategories.filter(c => !c.parent_id);
+    subMap         = {};
+    allCategories.filter(c => c.parent_id).forEach(c => {
+        if (!subMap[c.parent_id]) subMap[c.parent_id] = [];
+        subMap[c.parent_id].push(c);
+    });
+
+    renderCatTree();
+    populateCatSelects();
 }
+
+// ── Árbol visual en sec-categories ───────────────────────────
+function renderCatTree() {
+    const tree = document.getElementById('catTree');
+    if (!tree) return;
+    if (!rootCategories.length) {
+        tree.innerHTML = '<p style="color:var(--dark);font-size:13px;text-align:center;padding:30px;">Sin categorías. Crea la primera.</p>';
+        return;
+    }
+    tree.innerHTML = rootCategories.map(root => {
+        const subs = subMap[root.id] || [];
+        return `
+        <div class="cat-root-item" id="catRoot_${root.id}">
+            <div class="cat-root-header" onclick="toggleCatRoot(${root.id})">
+                <span class="cat-root-icon">${root.icon||'📁'}</span>
+                <span class="cat-root-name">${esc(root.name)}</span>
+                <span class="cat-root-count">${subs.length} subcategoría${subs.length!==1?'s':''}</span>
+                <span class="cat-root-chevron">▶</span>
+                <span class="cat-root-actions" onclick="event.stopPropagation()">
+                    <button class="cat-tree-action-btn" onclick="openCatModal(null,${root.id},null)" title="Nueva subcategoría">＋ Sub</button>
+                    <button class="cat-tree-action-btn" onclick="openCatModal(${root.id},null,'${escAttr(root.name)}','${root.icon||''}',${root.sort_order||0})" title="Editar">✎</button>
+                    <button class="cat-tree-action-btn del" onclick="deleteCatRoot(${root.id})" title="Eliminar">✕</button>
+                </span>
+            </div>
+            <div class="cat-sub-list">
+                ${subs.map(sub => `
+                <div class="cat-sub-item">
+                    <span class="cat-sub-icon">${sub.icon||'•'}</span>
+                    <span class="cat-sub-name">${esc(sub.name)}</span>
+                    <span class="cat-sub-count" id="subCount_${sub.id}"></span>
+                    <span class="cat-sub-actions">
+                        <button class="cat-tree-action-btn" onclick="openCatModal(${sub.id},${root.id},'${escAttr(sub.name)}','${sub.icon||''}',${sub.sort_order||0},'${escAttr(root.name)}')" title="Editar">✎</button>
+                        <button class="cat-tree-action-btn del" onclick="deleteCatSub(${sub.id})" title="Eliminar">✕</button>
+                    </span>
+                </div>`).join('')}
+                <button class="cat-add-sub-btn" onclick="openCatModal(null,${root.id},null)">＋ Agregar subcategoría</button>
+            </div>
+        </div>`;
+    }).join('');
+
+    // Contar negocios por subcategoría
+    allCategories.filter(c => c.parent_id).forEach(async sub => {
+        const el = document.getElementById(`subCount_${sub.id}`);
+        if (!el) return;
+        const { count } = await supabase.from('businesses').select('*',{count:'exact',head:true}).eq('subcategory_id', sub.id);
+        if (el) el.textContent = count ? `${count} negocio${count!==1?'s':''}` : '';
+    });
+}
+
+window.toggleCatRoot = id => {
+    document.getElementById(`catRoot_${id}`)?.classList.toggle('expanded');
+};
+
+// ── Selects en filtros y modal de negocio ─────────────────────
+function populateCatSelects() {
+    // Filter bar en negocios — solo raíces
+    const filterOpts = rootCategories.map(c => `<option value="${c.id}">${c.icon||''} ${c.name}</option>`).join('');
+    document.getElementById('bizCatFilter').innerHTML = '<option value="">Todas las categorías</option>' + filterOpts;
+
+    // Modal negocio — categoría raíz
+    document.getElementById('bizCat').innerHTML = '<option value="">Sin categoría</option>' + filterOpts;
+    document.getElementById('bizSubCat').innerHTML = '<option value="">Sin subcategoría</option>';
+}
+
+// Cuando cambia categoría raíz en modal negocio → poblar subcategorías
+window.onBizCatChange = () => {
+    const catId = document.getElementById('bizCat').value;
+    const subs  = catId ? (subMap[catId] || []) : [];
+    document.getElementById('bizSubCat').innerHTML =
+        '<option value="">Sin subcategoría</option>' +
+        subs.map(s => `<option value="${s.id}">${s.icon||''} ${s.name}</option>`).join('');
+};
+
+// ── Modal crear / editar categoría ───────────────────────────
+window.openCatModal = (id, parentId, name, icon, order, parentName) => {
+    document.getElementById('catModalId').value       = id || '';
+    document.getElementById('catModalParentId').value = parentId || '';
+    document.getElementById('catModalName').value     = name || '';
+    document.getElementById('catModalIcon').value     = icon || '';
+    document.getElementById('catModalOrder').value    = order ?? 0;
+
+    const isNew     = !id;
+    const isSub     = !!parentId;
+    const parentGrp = document.getElementById('catModalParentGroup');
+    parentGrp.style.display = isSub ? 'flex' : 'none';
+    if (isSub) document.getElementById('catModalParentName').value = parentName || '';
+
+    document.getElementById('catModalTitle').textContent =
+        isNew ? (isSub ? 'Nueva Subcategoría' : 'Nueva Categoría') :
+                (isSub ? 'Editar Subcategoría' : 'Editar Categoría');
+
+    openModal('catModal');
+    setTimeout(() => document.getElementById('catModalName').focus(), 100);
+};
+
+// Nueva categoría raíz desde header
+document.getElementById('btnNewRootCat').addEventListener('click', () => {
+    openCatModal(null, null, null, null, rootCategories.length);
+});
+
+document.getElementById('btnSaveCat').addEventListener('click', async () => {
+    const id       = document.getElementById('catModalId').value;
+    const parentId = document.getElementById('catModalParentId').value || null;
+    const name     = document.getElementById('catModalName').value.trim();
+    const icon     = document.getElementById('catModalIcon').value.trim() || null;
+    const order    = parseInt(document.getElementById('catModalOrder').value) || 0;
+
+    if (!name) { toast('El nombre es obligatorio.', 'error'); return; }
+
+    const payload = { name, icon, parent_id: parentId, sort_order: order };
+
+    const { error } = id
+        ? await supabase.from('categories').update(payload).eq('id', id)
+        : await supabase.from('categories').insert(payload);
+
+    if (error) { toast('Error: ' + error.message, 'error'); return; }
+
+    toast(id ? 'Categoría actualizada ✓' : 'Categoría creada ✓');
+    closeModal('catModal');
+    await loadCategories();
+});
+
+window.deleteCatRoot = async id => {
+    const subs = subMap[id] || [];
+    const msg  = subs.length
+        ? `¿Eliminar esta categoría y sus ${subs.length} subcategorías? Los negocios quedarán sin categoría.`
+        : '¿Eliminar esta categoría? Los negocios quedarán sin categoría.';
+    if (!confirm(msg)) return;
+    const { error } = await supabase.from('categories').delete().eq('id', id);
+    if (error) { toast('Error al eliminar: ' + error.message, 'error'); return; }
+    toast('Categoría eliminada.');
+    await loadCategories();
+};
+
+window.deleteCatSub = async id => {
+    if (!confirm('¿Eliminar esta subcategoría? Los negocios quedarán sin subcategoría.')) return;
+    const { error } = await supabase.from('categories').delete().eq('id', id);
+    if (error) { toast('Error al eliminar: ' + error.message, 'error'); return; }
+    toast('Subcategoría eliminada.');
+    await loadCategories();
+};
 
 // ── DASHBOARD ────────────────────────────────────────────────
 async function loadDashboard() {
@@ -912,7 +1190,7 @@ let allBusinesses = [];
 async function loadBusinesses() {
     const { data } = await supabase
         .from('businesses')
-        .select('id, name, slug, city, is_active, is_featured, category_id, categories(name)')
+        .select('id, name, slug, city, is_active, is_featured, category_id, subcategory_id, categories(name, icon)')
         .order('name');
     allBusinesses = data || [];
     renderBizTable();
@@ -930,7 +1208,13 @@ function renderBizTable() {
 
     let list = allBusinesses.filter(b => {
         if (search && !b.name.toLowerCase().includes(search)) return false;
-        if (cat && String(b.category_id) !== cat) return false;
+        // Filtrar por categoría raíz: comparar category_id O parent del subcategory_id
+        if (cat) {
+            const subCatObj = b.subcategory_id ? allCategories.find(c => c.id == b.subcategory_id) : null;
+            const matchRoot = String(b.category_id) === cat;
+            const matchSub  = subCatObj && String(subCatObj.parent_id) === cat;
+            if (!matchRoot && !matchSub) return false;
+        }
         if (status !== '' && String(b.is_active) !== status) return false;
         return true;
     });
@@ -941,10 +1225,17 @@ function renderBizTable() {
         return;
     }
 
-    tbody.innerHTML = list.map(b => `
+    tbody.innerHTML = list.map(b => {
+        // Construir etiqueta de categoría/subcategoría
+        const rootCat = b.categories;
+        const subCat  = b.subcategory_id ? allCategories.find(c => c.id == b.subcategory_id) : null;
+        let catLabel  = rootCat ? `${rootCat.icon||''} ${rootCat.name}` : '—';
+        if (subCat) catLabel += ` <span style="color:var(--dark)">›</span> ${subCat.icon||''} ${subCat.name}`;
+
+        return `
         <tr>
             <td><strong style="color:#fff;">${b.name}</strong><br><span style="font-size:10px;color:var(--dark);">${b.slug}</span></td>
-            <td>${b.categories?.name || '<span style="color:var(--dark)">—</span>'}</td>
+            <td style="font-size:11.5px;">${catLabel}</td>
             <td>${b.city || '—'}</td>
             <td><span class="badge ${b.is_active ? 'badge-green' : 'badge-red'}">${b.is_active ? 'Activo' : 'Inactivo'}</span></td>
             <td><span class="badge ${b.is_featured ? 'badge-gold' : 'badge-gray'}">${b.is_featured ? '⭐ Sí' : 'No'}</span></td>
@@ -955,7 +1246,8 @@ function renderBizTable() {
                     <a href="../business/index.html?slug=${b.slug}" target="_blank" class="btn btn-ghost btn-sm">Ver</a>
                 </div>
             </td>
-        </tr>`).join('');
+        </tr>`;
+    }).join('');
 }
 
 ['bizSearch','bizCatFilter','bizStatusFilter'].forEach(id =>
@@ -967,6 +1259,8 @@ document.getElementById('btnNewBusiness').addEventListener('click', () => {
     document.getElementById('bizModalTitle').textContent = 'Nuevo Negocio';
     ['bizName','bizSlug','bizCity','bizAddress','bizDesc','bizPhone','bizWa','bizWeb','bizImg','bizLat','bizLng'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('bizCat').value = '';
+    onBizCatChange();
+    document.getElementById('bizSubCat').value = '';
     document.getElementById('bizFeatured').checked = false;
     document.getElementById('bizActive').checked = true;
     openModal('bizModal');
@@ -996,9 +1290,14 @@ window.editBusiness = async id => {
     document.getElementById('bizImg').value = b.cover_image || '';
     document.getElementById('bizLat').value = b.latitude || '';
     document.getElementById('bizLng').value = b.longitude || '';
-    document.getElementById('bizCat').value = b.category_id || '';
     document.getElementById('bizFeatured').checked = !!b.is_featured;
     document.getElementById('bizActive').checked = !!b.is_active;
+
+    // Categoría raíz → poblar subcategorías → seleccionar la guardada
+    document.getElementById('bizCat').value = b.category_id || '';
+    onBizCatChange();
+    document.getElementById('bizSubCat').value = b.subcategory_id || '';
+
     openModal('bizModal');
 };
 
@@ -1020,6 +1319,7 @@ document.getElementById('btnSaveBusiness').addEventListener('click', async () =>
         latitude: parseFloat(document.getElementById('bizLat').value) || null,
         longitude: parseFloat(document.getElementById('bizLng').value) || null,
         category_id: document.getElementById('bizCat').value || null,
+        subcategory_id: document.getElementById('bizSubCat').value || null,
         is_featured: document.getElementById('bizFeatured').checked,
         is_active: document.getElementById('bizActive').checked,
     };
