@@ -632,7 +632,8 @@ function renderCatTree() {
     });
 }
 
-// Click en raíz: si tiene subcategorías, abre el modal neón. Si no, filtra directo.
+// Click en categoría raíz: si tiene subcategorías, abre el modal neón para elegir.
+// Si no tiene, filtra aquí mismo (sin salir de esta pantalla).
 window.handleRootClick = (rootId, btn) => {
     const subs = subMap[rootId]||[];
     if (!subs.length) {
@@ -649,7 +650,7 @@ window.openSubcatModal = (rootId, btn) => {
 
     document.getElementById('subcatModalTitle').textContent = `${root?.icon||''}  ${root?.name||''}`;
     document.getElementById('subcatModalGrid').innerHTML = subs.map(sub=>`
-        <button class="subcat-tile" onclick="selectCategory(${rootId},${sub.id},null); closeSubcatModal(); openDirectorio();">
+        <button class="subcat-tile" onclick="selectCategory(${rootId},${sub.id},null); closeSubcatModal();">
             <span class="subcat-tile-icon">${sub.icon||'•'}</span>
             <span class="subcat-tile-label">${esc(sub.name)}</span>
         </button>`).join('');
