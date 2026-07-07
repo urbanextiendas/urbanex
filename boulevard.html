@@ -672,26 +672,48 @@ function renderCatTree() {
     });
 }
 
-// Convierte un nombre de categoría en el nombre de archivo esperado
-// Ej: "Comida y Bebida" -> "comidaybebida", "Alojamiento" -> "alojamiento"
-function slugify(s) {
-    return String(s||'')
-        .toLowerCase()
-        .normalize('NFD').replace(/[\u0300-\u036f]/g,'') // quita tildes
-        .replace(/[^a-z0-9]+/g,''); // quita espacios y símbolos
-}
+// ── Mapeo de categorías a sus páginas HTML reales ─────────────
+// IMPORTANTE: la clave (a la izquierda) debe escribirse EXACTAMENTE
+// igual al nombre que tiene la categoría en Supabase (en minúsculas).
+// El valor (a la derecha) es la ruta real del archivo .html que ya existe.
+// Si agregas o renombras un archivo en /categorias, actualiza esta lista.
+const CATEGORY_FILE_MAP = {
+    'comida y bebida':     'categorias/comida.html',
+    'comercio':            'categorias/comercio.html',
+    'servicios':           'categorias/servicios.html',
+    'salud y bienestar':   'categorias/salud.html',
+    'alojamiento':         'categorias/alojamiento.html',
+    'entretenimiento':     'categorias/entretenimiento.html',
+    'hogar':               'categorias/hogar.html',
+    'movilidad':           'categorias/movilidad.html',
+};
 
-// Click en categoría raíz: navega directo a categorias/{slug}.html
-// Si tiene subcategorías, navega a categorias/{slug}/index.html
-window.handleRootClick = (rootId, btn) => {
+// Click en categoría raíz: navega a su página real, verificando que exista antes
+window.handleRootClick = async (rootId, btn) => {
     const root = rootCategories.find(r=>toNum(r.id)===toNum(rootId));
-    const subs = subMap[rootId]||[];
-    const slug = slugify(root?.name);
-    if (!subs.length) {
-        window.location.href = `categorias/${slug}.html`;
-    } else {
-        window.location.href = `categorias/${slug}/index.html`;
+    const key  = String(root?.name||'').toLowerCase().trim();
+    const url  = CATEGORY_FILE_MAP[key];
+
+    if (!url) {
+        alert(`Aún no hay una página configurada para "${root?.name||'esta categoría'}".\n\nRevisa la lista CATEGORY_FILE_MAP en el código y agrégala.`);
+        return;
     }
+
+    try {
+        const res  = await fetch(url);
+        const text = await res.text();
+        // Si el servidor no encuentra el archivo, tu sitio devuelve silenciosamente
+        // la página de inicio (con "REGISTRE SU NEGOCIO"), aunque el status sea 200.
+        // Detectamos eso para no navegar a una pantalla equivocada.
+        if (!res.ok || text.includes('REGISTRE SU NEGOCIO')) {
+            alert(`La página "${url}" no existe todavía en el servidor.\n\nVerifica en GitHub que el archivo esté en esa ruta exacta.`);
+            return;
+        }
+    } catch {
+        // Si falla la verificación por algún motivo, navegamos igual
+    }
+
+    window.location.href = url;
 };
 
 // Seleccionar categoría / subcategoría
