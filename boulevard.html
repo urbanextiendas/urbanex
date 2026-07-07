@@ -152,6 +152,32 @@
         .sub-icon { font-size: 13px; width: 16px; text-align: center; flex-shrink: 0; }
         .sub-count { font-size: 9px; color: var(--text-dark); margin-left: auto; }
 
+        /* Tiles neón del modal de subcategorías */
+        .subcat-tile {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 10px; padding: 18px 8px; border-radius: 14px; cursor: pointer;
+            background: linear-gradient(145deg, rgba(20,20,20,.8), rgba(10,10,10,.9));
+            border: 1px solid rgba(229,193,88,.25);
+            font-family: var(--font-sans); color: var(--text-muted);
+            transition: var(--transition-smooth);
+        }
+        .subcat-tile:hover {
+            border-color: var(--gold); background: rgba(229,193,88,.08);
+            transform: translateY(-3px);
+            box-shadow: 0 0 22px rgba(229,193,88,.25), inset 0 0 12px rgba(229,193,88,.08);
+        }
+        .subcat-tile-icon {
+            font-size: 26px; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; border: 1px solid rgba(229,193,88,.4);
+            background: rgba(229,193,88,.06);
+            box-shadow: 0 0 14px rgba(229,193,88,.15), inset 0 0 8px rgba(229,193,88,.1);
+        }
+        .subcat-tile:hover .subcat-tile-icon {
+            box-shadow: 0 0 22px rgba(229,193,88,.45), inset 0 0 10px rgba(229,193,88,.2);
+        }
+        .subcat-tile-label { font-size: 11px; font-weight: 600; text-align: center; color: #fff; letter-spacing: .3px; }
+        .subcat-tile:hover .subcat-tile-label { color: var(--gold); }
+
         /* Botón "Todos" */
         .cat-all-btn {
             width: 100%; background: rgba(10,10,10,.6); border: 1px solid rgba(229,193,88,.2);
@@ -457,6 +483,15 @@
     </div>
 </div>
 
+<!-- MODAL SUBCATEGORÍAS (nuevo, no afecta lo demás) -->
+<div id="subcatModal" style="display:none;position:fixed;inset:0;z-index:210;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);overflow-y:auto;align-items:center;justify-content:center;padding:20px;">
+    <div style="max-width:640px;width:100%;background:radial-gradient(ellipse at top, rgba(229,193,88,.06), transparent 60%),#0a0a0a;border:1px solid var(--border-color);border-radius:20px;padding:28px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.6);">
+        <button onclick="closeSubcatModal()" style="position:absolute;top:18px;right:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#aaa;font-size:16px;width:32px;height:32px;border-radius:50%;cursor:pointer;">✕</button>
+        <h2 id="subcatModalTitle" style="font-family:var(--font-serif);color:var(--gold);font-size:19px;letter-spacing:2px;text-transform:uppercase;text-align:center;margin-bottom:24px;"></h2>
+        <div id="subcatModalGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:14px;"></div>
+    </div>
+</div>
+
 <footer class="pie-pagina"><p>&copy; 2026 Urbanex. Desarrollado por Neodat Consultores.</p></footer>
 
 <script type="module">
@@ -507,54 +542,8 @@ function hasPromo(promos) {
 }
 
 // ── Carga datos ───────────────────────────────────────────────
-// Solo se necesita el horario de HOY, no los 7 días de la semana
-const TODAY_DOW = new Date().getDay();
-const CACHE_KEY = 'urbanex_cache_v1';
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutos
-
-function mapBusiness(b) {
-    return {
-        ...b,
-        _open:   isOpenNow(b.business_hours),
-        _rating: avgRating(b.reviews),
-        _promo:  hasPromo(b.promotions),
-        _reviews:(b.reviews||[]).filter(r=>r.is_approved).length,
-    };
-}
-
-function readCache() {
-    try {
-        const raw = sessionStorage.getItem(CACHE_KEY);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        if (Date.now() - parsed.ts > CACHE_TTL_MS) return null;
-        return parsed;
-    } catch { return null; }
-}
-function writeCache(data) {
-    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), ...data })); } catch {}
-}
-
 async function boot() {
-    // Si hay caché reciente (misma sesión de navegador), pintamos al instante sin llamar a Supabase
-    const cached = readCache();
-    if (cached) {
-        rootCategories = cached.rootCategories;
-        subMap = cached.subMap;
-        allBusinesses = cached.allBusinesses;
-        renderCatTree();
-        renderShowcase();
-        updateMetrics();
-        // Igual refrescamos en segundo plano por si hay datos nuevos
-        refreshFromServer(true);
-        return;
-    }
-    await refreshFromServer(false);
-}
-
-async function refreshFromServer(silent) {
-    // FASE 1 (rápida): categorías + solo los negocios destacados
-    const [catsRes, featRes] = await Promise.all([
+    const [catsRes, bizRes] = await Promise.all([
         supabase.from('categories').select('id,name,icon,parent_id,sort_order').order('sort_order').order('name'),
         supabase.from('businesses').select(`
             id,name,slug,city,address,cover_image,is_featured,delivery_available,category_id,subcategory_id,
@@ -563,12 +552,11 @@ async function refreshFromServer(silent) {
             business_hours(day_of_week,open_time,close_time,is_closed),
             reviews(is_approved,rating),
             promotions(is_active,end_date)
-        `).eq('is_active',true).eq('is_featured',true)
-          .eq('business_hours.day_of_week', TODAY_DOW)
+        `).eq('is_active',true)
     ]);
 
     if (catsRes.error) console.error('categories error:', catsRes.error.message);
-    if (featRes.error) console.error('featured businesses error:', featRes.error.message);
+    if (bizRes.error)  console.error('businesses error:', bizRes.error.message);
 
     const cats = catsRes.data || [];
     rootCategories = cats.filter(c=>!c.parent_id);
@@ -578,52 +566,24 @@ async function refreshFromServer(silent) {
         subMap[c.parent_id].push(c);
     });
 
-    allBusinesses = (featRes.data||[]).map(mapBusiness);
+    allBusinesses = (bizRes.data||[]).map(b=>({
+        ...b,
+        _open:   isOpenNow(b.business_hours),
+        _rating: avgRating(b.reviews),
+        _promo:  hasPromo(b.promotions),
+        _reviews:(b.reviews||[]).filter(r=>r.is_approved).length,
+    }));
 
-    if (!silent) {
-        // Pintar YA con lo que tenemos (destacados) para que el usuario vea contenido rápido
-        renderCatTree();
-        renderShowcase();
-        updateMetrics();
-    }
-
-    // FASE 2 (en segundo plano): el resto de negocios, sin bloquear la pantalla
-    await loadRemainingBusinesses();
-}
-
-async function loadRemainingBusinesses() {
-    const { data, error } = await supabase.from('businesses').select(`
-            id,name,slug,city,address,cover_image,is_featured,delivery_available,category_id,subcategory_id,
-            categories!category_id(name,icon),
-            subcategories:categories!subcategory_id(name,icon),
-            business_hours(day_of_week,open_time,close_time,is_closed),
-            reviews(is_approved,rating),
-            promotions(is_active,end_date)
-        `).eq('is_active',true).eq('is_featured',false)
-          .eq('business_hours.day_of_week', TODAY_DOW);
-
-    if (error) { console.error('businesses error:', error.message); return; }
-
-    allBusinesses = [...allBusinesses, ...(data||[]).map(mapBusiness)];
-
-    // Guardar en caché de la sesión para que la próxima carga sea instantánea
-    writeCache({ rootCategories, subMap, allBusinesses });
-
-    // Re-pintar con el catálogo completo
     renderCatTree();
     renderShowcase();
     updateMetrics();
-    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
 }
 
 // ── Árbol de categorías ───────────────────────────────────────
 function renderCatTree() {
     const list = document.getElementById('categoriesList');
-    // Quitar skeletons y categorías ya dibujadas, pero conservar el botón "Todos"
+    // Quitar skeletons pero conservar el botón "Todos"
     list.querySelectorAll('.skeleton').forEach(el=>el.remove());
-    list.querySelectorAll('.category-item').forEach(el=>{
-        if (!el.querySelector('#catAllBtn')) el.remove();
-    });
 
     // Contar por raíz
     const countByRoot = {};
@@ -672,48 +632,37 @@ function renderCatTree() {
     });
 }
 
-// ── Mapeo de categorías a sus páginas HTML reales ─────────────
-// IMPORTANTE: la clave (a la izquierda) debe escribirse EXACTAMENTE
-// igual al nombre que tiene la categoría en Supabase (en minúsculas).
-// El valor (a la derecha) es la ruta real del archivo .html que ya existe.
-// Si agregas o renombras un archivo en /categorias, actualiza esta lista.
-const CATEGORY_FILE_MAP = {
-    'comida y bebida':     'categorias/comida.html',
-    'comercio':            'categorias/comercio.html',
-    'servicios':           'categorias/servicios.html',
-    'salud y bienestar':   'categorias/salud.html',
-    'alojamiento':         'categorias/alojamiento.html',
-    'entretenimiento':     'categorias/entretenimiento.html',
-    'hogar':               'categorias/hogar.html',
-    'movilidad':           'categorias/movilidad.html',
-};
-
-// Click en categoría raíz: navega a su página real, verificando que exista antes
-window.handleRootClick = async (rootId, btn) => {
-    const root = rootCategories.find(r=>toNum(r.id)===toNum(rootId));
-    const key  = String(root?.name||'').toLowerCase().trim();
-    const url  = CATEGORY_FILE_MAP[key];
-
-    if (!url) {
-        alert(`Aún no hay una página configurada para "${root?.name||'esta categoría'}".\n\nRevisa la lista CATEGORY_FILE_MAP en el código y agrégala.`);
+// Click en raíz: si tiene subcategorías, abre el modal neón. Si no, filtra directo.
+window.handleRootClick = (rootId, btn) => {
+    const subs = subMap[rootId]||[];
+    if (!subs.length) {
+        selectCategory(toNum(rootId), null, btn);
         return;
     }
+    openSubcatModal(rootId, btn);
+};
 
-    try {
-        const res  = await fetch(url);
-        const text = await res.text();
-        // Si el servidor no encuentra el archivo, tu sitio devuelve silenciosamente
-        // la página de inicio (con "REGISTRE SU NEGOCIO"), aunque el status sea 200.
-        // Detectamos eso para no navegar a una pantalla equivocada.
-        if (!res.ok || text.includes('REGISTRE SU NEGOCIO')) {
-            alert(`La página "${url}" no existe todavía en el servidor.\n\nVerifica en GitHub que el archivo esté en esa ruta exacta.`);
-            return;
-        }
-    } catch {
-        // Si falla la verificación por algún motivo, navegamos igual
-    }
+// Modal de subcategorías con tiles estilo neón
+window.openSubcatModal = (rootId, btn) => {
+    const root = rootCategories.find(r=>toNum(r.id)===toNum(rootId));
+    const subs = subMap[rootId]||[];
 
-    window.location.href = url;
+    document.getElementById('subcatModalTitle').textContent = `${root?.icon||''}  ${root?.name||''}`;
+    document.getElementById('subcatModalGrid').innerHTML = subs.map(sub=>`
+        <button class="subcat-tile" onclick="selectCategory(${rootId},${sub.id},null); closeSubcatModal(); openDirectorio();">
+            <span class="subcat-tile-icon">${sub.icon||'•'}</span>
+            <span class="subcat-tile-label">${esc(sub.name)}</span>
+        </button>`).join('');
+
+    document.querySelectorAll('.cat-root-btn').forEach(b=>b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    document.getElementById('subcatModal').style.display='flex';
+    document.body.style.overflow='hidden';
+};
+
+window.closeSubcatModal = () => {
+    document.getElementById('subcatModal').style.display='none';
+    document.body.style.overflow='';
 };
 
 // Seleccionar categoría / subcategoría
@@ -739,7 +688,7 @@ window.selectCategory = (rootId, subId, btnEl) => {
     updateMetrics();
 
     // Si el modal del directorio está abierto, actualizarlo
-    if (document.getElementById('directorioModal').style.display !== 'none') { dirPage = 1; renderDir(); }
+    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
 };
 
 function updateActiveFilterLabel(rootId, subId) {
@@ -766,14 +715,14 @@ window.setQuickFilter = (filter, btn) => {
     btn.classList.add('active');
     renderShowcase();
     updateMetrics();
-    if (document.getElementById('directorioModal').style.display !== 'none') { dirPage = 1; renderDir(); }
+    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
 };
 
 // ── Búsqueda ──────────────────────────────────────────────────
 document.getElementById('siteSearch').addEventListener('input', e=>{
     searchQuery = e.target.value.toLowerCase().trim();
     renderShowcase();
-    if (document.getElementById('directorioModal').style.display !== 'none') { dirPage = 1; renderDir(); }
+    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
 });
 
 // ── Filtrar lista ─────────────────────────────────────────────
@@ -889,7 +838,6 @@ window.renderShowcase = () => {
 
 // ── Modal Directorio ──────────────────────────────────────────
 window.openDirectorio = () => {
-    dirPage = 1;
     document.getElementById('directorioModal').style.display='block';
     document.body.style.overflow='hidden';
     renderDir();
@@ -927,26 +875,16 @@ function dirCardHtml(b) {
     </a>`;
 }
 
-let dirPage = 1;
-const DIR_PAGE_SIZE = 24;
-
 function renderDir() {
     const list = filtered().sort((a,b)=>a.name.localeCompare(b.name,'es'));
     const grid = document.getElementById('dirGrid');
-    if (!list.length) {
-        grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:40px;color:#666;">No hay negocios con estos filtros.</p>`;
-        return;
-    }
-    const shown = list.slice(0, dirPage * DIR_PAGE_SIZE);
-    let html = shown.map(dirCardHtml).join('');
-    if (shown.length < list.length) {
-        html += `<button onclick="dirPage++; renderDir();" style="grid-column:1/-1;margin-top:8px;background:rgba(229,193,88,.1);border:1px solid rgba(229,193,88,.3);color:var(--gold);border-radius:8px;padding:10px;font-family:var(--font-sans);font-size:12px;font-weight:600;cursor:pointer;">Cargar más (${list.length - shown.length} restantes)</button>`;
-    }
-    grid.innerHTML = html;
+    grid.innerHTML = list.length
+        ? list.map(dirCardHtml).join('')
+        : `<p style="grid-column:1/-1;text-align:center;padding:40px;color:#666;">No hay negocios con estos filtros.</p>`;
 }
 
-// Cerrar modal con Escape
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDirectorio(); });
+// Cerrar modales con Escape
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') { closeDirectorio(); closeSubcatModal(); } });
 
 boot();
 
