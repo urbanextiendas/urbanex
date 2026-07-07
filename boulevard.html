@@ -483,15 +483,6 @@
     </div>
 </div>
 
-<!-- MODAL SUBCATEGORÍAS (nuevo, no afecta lo demás) -->
-<div id="subcatModal" style="display:none;position:fixed;inset:0;z-index:210;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);overflow-y:auto;align-items:center;justify-content:center;padding:20px;">
-    <div style="max-width:640px;width:100%;background:radial-gradient(ellipse at top, rgba(229,193,88,.06), transparent 60%),#0a0a0a;border:1px solid var(--border-color);border-radius:20px;padding:28px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.6);">
-        <button onclick="closeSubcatModal()" style="position:absolute;top:18px;right:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#aaa;font-size:16px;width:32px;height:32px;border-radius:50%;cursor:pointer;">✕</button>
-        <h2 id="subcatModalTitle" style="font-family:var(--font-serif);color:var(--gold);font-size:19px;letter-spacing:2px;text-transform:uppercase;text-align:center;margin-bottom:24px;"></h2>
-        <div id="subcatModalGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:14px;"></div>
-    </div>
-</div>
-
 <footer class="pie-pagina"><p>&copy; 2026 Urbanex. Desarrollado por Neodat Consultores.</p></footer>
 
 <script type="module">
@@ -632,38 +623,26 @@ function renderCatTree() {
     });
 }
 
-// Click en categoría raíz: si tiene subcategorías, abre el modal neón para elegir.
-// Si no tiene, filtra aquí mismo (sin salir de esta pantalla).
+// Click en raíz: expandir/colapsar subcategorías + filtrar (comportamiento original)
 window.handleRootClick = (rootId, btn) => {
-    const subs = subMap[rootId]||[];
+    const subs    = subMap[rootId]||[];
+    const subList = document.getElementById(`subList_${rootId}`);
+
     if (!subs.length) {
         selectCategory(toNum(rootId), null, btn);
         return;
     }
-    openSubcatModal(rootId, btn);
-};
 
-// Modal de subcategorías con tiles estilo neón
-window.openSubcatModal = (rootId, btn) => {
-    const root = rootCategories.find(r=>toNum(r.id)===toNum(rootId));
-    const subs = subMap[rootId]||[];
+    const isOpen = subList?.classList.contains('open');
+    // Cerrar todos
+    document.querySelectorAll('.sub-list').forEach(el=>el.classList.remove('open'));
+    document.querySelectorAll('.cat-root-btn').forEach(b=>b.classList.remove('expanded'));
 
-    document.getElementById('subcatModalTitle').textContent = `${root?.icon||''}  ${root?.name||''}`;
-    document.getElementById('subcatModalGrid').innerHTML = subs.map(sub=>`
-        <button class="subcat-tile" onclick="selectCategory(${rootId},${sub.id},null); closeSubcatModal();">
-            <span class="subcat-tile-icon">${sub.icon||'•'}</span>
-            <span class="subcat-tile-label">${esc(sub.name)}</span>
-        </button>`).join('');
-
-    document.querySelectorAll('.cat-root-btn').forEach(b=>b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    document.getElementById('subcatModal').style.display='flex';
-    document.body.style.overflow='hidden';
-};
-
-window.closeSubcatModal = () => {
-    document.getElementById('subcatModal').style.display='none';
-    document.body.style.overflow='';
+    if (!isOpen) {
+        subList.classList.add('open');
+        btn.classList.add('expanded');
+    }
+    selectCategory(toNum(rootId), null, btn);
 };
 
 // Seleccionar categoría / subcategoría
@@ -884,8 +863,8 @@ function renderDir() {
         : `<p style="grid-column:1/-1;text-align:center;padding:40px;color:#666;">No hay negocios con estos filtros.</p>`;
 }
 
-// Cerrar modales con Escape
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') { closeDirectorio(); closeSubcatModal(); } });
+// Cerrar modal con Escape
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDirectorio(); });
 
 boot();
 
