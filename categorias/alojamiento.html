@@ -1,1609 +1,863 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urbanex - Turismo y Hospedaje</title>
-    <link rel="icon" type="image/png" href="../imagenes/log.png">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --bg-main: #020202;
-            --bg-panels-glass: rgba(6, 6, 6, 0.45);
-            --bg-cards-glass: rgba(20, 20, 20, 0.58);
-            --gold: #e5c158;
-            --gold-dim: #a68b44;
-            --border-color: rgba(229, 193, 88, 0.22);
-            --text-main: #ffffff;
-            --text-muted: #e0e0e0;
-            --text-dark: #aaaaaa;
-            --font-serif: 'Cinzel', serif;
-            --font-sans: 'Montserrat', sans-serif;
-            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            --blur-effect: blur(18px);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        ::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(229, 193, 88, 0.2);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--gold);
-        }
-
-        body {
-            width: 100%;
-            min-height: 100vh;
-            background-color: var(--bg-main);
-            font-family: var(--font-sans);
-            color: var(--text-main);
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .dashboard-container {
-            flex: 1;
-            display: grid;
-            grid-template-rows: 60px 1fr;
-            grid-template-columns: 240px 1fr 290px;
-            grid-template-areas:
-                "header header header"
-                "aside-left main aside-right";
-            min-height: calc(100vh - 24px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .global-background-underlay {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .global-background-underlay img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center bottom;
-        }
-
-        .header-top {
-            grid-area: header;
-            background: rgba(6, 6, 6, 0.45);
-            backdrop-filter: var(--blur-effect);
-            -webkit-backdrop-filter: var(--blur-effect);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .brand-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            user-select: none;
-        }
-
-        .brand-box img {
-            height: 60px;
-            width: auto;
-            display: block;
-        }
-
-        .search-wrapper {
-            flex: 1;
-            max-width: 400px;
-            margin: 0 20px;
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.42);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 20px;
-            padding: 8px 40px 8px 16px;
-            color: var(--text-main);
-            font-size: 12px;
-            outline: none;
-            font-family: var(--font-sans);
-            transition: var(--transition-smooth);
-            text-align: center;
-        }
-
-        .search-input:focus {
-            border-color: var(--gold);
-            background: rgba(0, 0, 0, 0.58);
-        }
-
-        .search-icon {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 14px;
-            height: 14px;
-            fill: var(--text-dark);
-        }
-
-        .user-tools {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .location-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: #ffffff;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .location-indicator svg {
-            width: 14px;
-            height: 14px;
-            fill: var(--gold);
-        }
-
-        .tool-icon {
-            position: relative;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-
-        .tool-icon:nth-child(2) {
-            margin-right: 14px;
-        }
-
-        .tool-icon svg {
-            width: 18px;
-            height: 18px;
-            fill: #ffffff;
-            transition: var(--transition-smooth);
-        }
-
-        .tool-icon:hover svg {
-            fill: var(--gold);
-        }
-
-        .profile-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .profile-avatar svg {
-            width: 13px;
-            height: 13px;
-            fill: var(--gold);
-        }
-
-        .aside-categories {
-            grid-area: aside-left;
-            background: var(--bg-panels-glass);
-            backdrop-filter: var(--blur-effect);
-            -webkit-backdrop-filter: var(--blur-effect);
-            border-right: 1px solid var(--border-color);
-            padding: 20px 12px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            z-index: 5;
-            overflow-y: auto;
-        }
-
-        .section-title {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--gold);
-            margin-bottom: 14px;
-            padding-left: 6px;
-            font-weight: 700;
-        }
-
-        .categories-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            list-style: none;
-        }
-
-        .category-item button {
-            width: 100%;
-            background: rgba(10, 10, 10, 0.54);
-            border: 1px solid rgba(229, 193, 88, 0.28);
-            padding: 10px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 14px;
-            transition: var(--transition-smooth);
-            cursor: pointer;
-            text-align: left;
-        }
-
-        .category-item button:hover {
-            background: rgba(229, 193, 88, 0.08);
-        }
-
-        .category-item.active button {
-            border: 1px solid var(--gold);
-            background: rgba(229, 193, 88, 0.10);
-        }
-
-        .icon-container {
-            width: 26px;
-            height: 26px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: var(--transition-smooth);
-        }
-
-        .category-item.active .icon-container {
-            background: var(--gold);
-            border-color: var(--gold);
-            box-shadow: 0 0 15px rgba(229, 193, 88, 0.4);
-        }
-
-        .category-item button svg {
-            width: 18px;
-            height: 18px;
-            fill: var(--gold);
-        }
-
-        .category-item.active button svg {
-            fill: #000000;
-        }
-
-        .category-text-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            flex: 1;
-            min-width: 0;
-            text-align: left;
-        }
-
-        .category-name {
-            color: #ffffff;
-            font-size: 11.5px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: block;
-            width: 100%;
-            text-align: left;
-        }
-
-        .category-item.active .category-name {
-            color: var(--gold);
-        }
-
-        .category-count {
-            color: var(--text-dark);
-            font-size: 9px;
-            display: block;
-            width: 100%;
-            text-align: left;
-        }
-
-        .main-boulevard {
-            grid-area: main;
-            position: relative;
-            overflow: hidden;
-            background-image: url("../imagenes/Turismo.png");
-            background-size: cover;
-            background-position: center bottom;
-            background-repeat: no-repeat;
-            z-index: 2;
-        }
-
-        .boulevard-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                to bottom,
-                rgba(0,0,0,0.16) 0%,
-                rgba(0,0,0,0.03) 45%,
-                rgba(0,0,0,0.18) 100%
-            );
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .welcome-billboard {
-            position: absolute;
-            top: 42px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            width: 90%;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .welcome-billboard h2 {
-            font-family: var(--font-serif);
-            color: var(--text-main);
-            font-size: 24px;
-            letter-spacing: 7px;
-            text-transform: uppercase;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.95);
-        }
-
-        .welcome-billboard p {
-            font-size: 10px;
-            color: var(--gold);
-            font-weight: 700;
-            margin-top: 6px;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.95);
-        }
-
-        .aside-showcase-list {
-            grid-area: aside-right;
-            background: var(--bg-panels-glass);
-            backdrop-filter: var(--blur-effect);
-            -webkit-backdrop-filter: var(--blur-effect);
-            border-left: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            z-index: 5;
-            overflow: hidden;
-        }
-
-        .showcase-header {
-            padding: 20px 14px 8px 14px;
-        }
-
-        .showcase-header h2 {
-            font-family: var(--font-serif);
-            color: var(--gold);
-            font-size: 13px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .showcase-stats {
-            font-size: 10px;
-            color: #ffffff;
-            margin-top: 1px;
-        }
-
-        .sort-box {
-            padding: 0 14px 10px 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .sort-select {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.42);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 6px;
-            padding: 6px 10px;
-            color: #ffffff;
-            font-size: 11px;
-            outline: none;
-            cursor: pointer;
-            font-family: var(--font-sans);
-        }
-
-        .shops-scroll-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .shop-card {
-            background: var(--bg-cards-glass);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            cursor: pointer;
-            height: 64px;
-            transition: var(--transition-smooth);
-        }
-
-        .shop-card:hover {
-            border-color: rgba(229, 193, 88, 0.45);
-            background: rgba(229, 193, 88, 0.10);
-            transform: translateX(2px);
-        }
-
-        .shop-thumb-wrapper {
-            width: 64px;
-            height: 64px;
-            flex-shrink: 0;
-        }
-
-        .shop-thumb {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .shop-details {
-            flex: 1;
-            padding: 6px 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-width: 0;
-        }
-
-        .shop-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .shop-segment {
-            font-size: 9.5px;
-            color: var(--gold);
-            font-weight: 500;
-        }
-
-        .shop-rating-row {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: 2px;
-        }
-
-        .star-icon {
-            width: 10px;
-            height: 10px;
-            fill: var(--gold);
-        }
-
-        .rating-value {
-            font-size: 10px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .rating-count {
-            font-size: 9.5px;
-            color: var(--text-dark);
-        }
-
-        .status-indicator {
-            margin-left: auto;
-            font-size: 9.5px;
-            font-weight: 700;
-            color: #2ed573;
-        }
-
-        .action-footer-box {
-            padding: 10px 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .btn-view-all-shops {
-            width: 100%;
-            background: var(--gold);
-            border: none;
-            border-radius: 6px;
-            padding: 8px;
-            color: #000000;
-            font-family: var(--font-sans);
-            font-size: 11.5px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-        }
-
-        .btn-view-all-shops:hover {
-            background: #f1cd6b;
-        }
-
-        .pie-pagina {
-            width: 100%;
-            height: 24px;
-            background-color: #000000;
-            color: #8c8c8c;
-            font-size: 11px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            border-top: 1px solid #1a1a1a;
-            z-index: 5;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        @media (min-width: 768px) and (max-width: 1024px) {
-            .dashboard-container {
-                grid-template-columns: 200px 1fr 240px;
-            }
-
-            .user-tools {
-                gap: 12px;
-            }
-
-            .search-wrapper {
-                max-width: 250px;
-            }
-        }
-
-        @media (max-width: 1024px) {
-            body {
-                overflow-y: auto;
-                height: auto;
-            }
-
-            .dashboard-container {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto 1fr auto;
-                grid-template-areas:
-                    "header"
-                    "aside-left"
-                    "main"
-                    "aside-right";
-                min-height: auto;
-                overflow: visible;
-            }
-
-            .aside-categories {
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-                padding: 12px;
-            }
-
-            .section-title {
-                display: none;
-            }
-
-            .categories-list {
-                flex-direction: row;
-                overflow-x: auto;
-                gap: 8px;
-                padding-bottom: 4px;
-            }
-
-            .category-item button {
-                width: auto;
-                white-space: nowrap;
-                padding: 8px 12px;
-            }
-
-            .main-boulevard {
-                min-height: 380px;
-                height: 45vh;
-                background-position: center bottom;
-            }
-
-            .aside-showcase-list {
-                border-left: none;
-                border-top: 1px solid var(--border-color);
-            }
-
-            .shops-scroll-area {
-                max-height: none;
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-                gap: 10px;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .header-top {
-                flex-direction: column;
-                height: auto;
-                padding: 12px;
-                gap: 10px;
-            }
-
-            .search-wrapper {
-                width: 100%;
-                margin: 0;
-                order: 3;
-            }
-
-            .user-tools {
-                width: 100%;
-                justify-content: flex-end;
-                gap: 10px !important;
-                order: 2;
-            }
-
-            .icon-corazon {
-                margin-right: 0 !important;
-            }
-
-            .main-boulevard {
-                min-height: 360px;
-                height: 48vh;
-                background-size: cover;
-                background-position: center bottom;
-            }
-
-            .global-background-underlay img {
-                object-position: center bottom;
-            }
-
-            .boulevard-overlay {
-                background: linear-gradient(
-                    to bottom,
-                    rgba(0,0,0,0.10) 0%,
-                    transparent 45%,
-                    rgba(0,0,0,0.20) 100%
-                );
-            }
-
-            .welcome-billboard {
-                top: 26px;
-            }
-
-            .welcome-billboard h2 {
-                font-size: 18px;
-                letter-spacing: 4px;
-            }
-
-            .welcome-billboard p {
-                font-size: 9px;
-                letter-spacing: 1.4px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#020202">
+  <meta name="description" content="Directorio Urbanex de Alojamiento en Loja, Ecuador.">
+  <title>Urbanex - Alojamiento</title>
+  <link rel="icon" type="image/png" href="../imagenes/log.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #020202;
+      --panel: rgba(12, 12, 12, 0.82);
+      --panel-2: rgba(22, 22, 22, 0.72);
+      --gold: #e5c158;
+      --gold-2: #a68b44;
+      --white: #ffffff;
+      --muted: #a9a9a9;
+      --line: rgba(229, 193, 88, 0.18);
+      --green: #2ed573;
+      --red: #ff5b68;
+      --shadow: 0 20px 55px rgba(0, 0, 0, 0.38);
+      --sans: "Montserrat", sans-serif;
+      --serif: "Cinzel", serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 82% 8%, rgba(229, 193, 88, 0.12), transparent 28%),
+        radial-gradient(circle at 10% 75%, rgba(229, 193, 88, 0.07), transparent 32%),
+        var(--bg);
+      font-family: var(--sans);
+    }
+
+    button, input, select { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; }
+
+    .shell {
+      width: min(1480px, 100%);
+      margin: 0 auto;
+      padding: 0 24px 34px;
+    }
+
+    .topbar {
+      min-height: 88px;
+      display: grid;
+      grid-template-columns: 190px minmax(240px, 1fr) auto;
+      gap: 22px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(2, 2, 2, 0.9);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      min-width: 0;
+    }
+    .brand img {
+      display: block;
+      width: auto;
+      max-width: 160px;
+      height: 58px;
+      object-fit: contain;
+    }
+
+    .search-box { position: relative; }
+    .search-box input {
+      width: 100%;
+      height: 46px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.055);
+      color: #fff;
+      padding: 0 48px 0 18px;
+      outline: none;
+      transition: border-color .2s ease, background .2s ease;
+    }
+    .search-box input:focus {
+      border-color: rgba(229, 193, 88, .62);
+      background: rgba(255, 255, 255, 0.075);
+    }
+    .search-icon {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      fill: var(--gold);
+      pointer-events: none;
+    }
+
+    .location {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #ddd;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .location svg { width: 18px; fill: var(--gold); }
+
+    .hero {
+      margin: 26px 0 22px;
+      min-height: 240px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      padding: 34px;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.93) 0%, rgba(0,0,0,.66) 52%, rgba(0,0,0,.28) 100%),
+        url("../imagenes/Boulevard.png") center/cover no-repeat;
+      box-shadow: var(--shadow);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(to top, rgba(0,0,0,.35), transparent 58%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 780px; }
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+    }
+    .hero-icon { font-size: 25px; }
+    .hero h1 {
+      margin: 10px 0 8px;
+      font-family: var(--serif);
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1.05;
+      letter-spacing: 2px;
+    }
+    .hero p {
+      margin: 0;
+      color: #e5e5e5;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.4px;
+      line-height: 1.7;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .sidebar, .content-panel {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar {
+      padding: 18px;
+      position: sticky;
+      top: 112px;
+    }
+    .sidebar h2, .content-title {
+      margin: 0;
+      font-family: var(--serif);
+      color: var(--gold);
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+    .sidebar-caption {
+      margin: 6px 0 15px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .subcategory-list {
+      display: grid;
+      gap: 7px;
+    }
+    .sub-btn {
+      width: 100%;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      background: transparent;
+      padding: 10px 11px;
+      display: grid;
+      grid-template-columns: 27px 1fr auto;
+      gap: 9px;
+      align-items: center;
+      text-align: left;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .sub-btn:hover,
+    .sub-btn.active {
+      border-color: rgba(229, 193, 88, .36);
+      background: rgba(229, 193, 88, .09);
+    }
+    .sub-btn.active { color: var(--gold); }
+    .sub-icon { font-size: 16px; text-align: center; }
+    .sub-name { font-size: 11px; font-weight: 600; }
+    .sub-count {
+      min-width: 23px;
+      height: 23px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,.07);
+      color: #ccc;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .content-panel { padding: 20px; min-height: 500px; }
+    .content-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .result-count { margin-top: 5px; color: var(--muted); font-size: 10px; }
+    .sort-select {
+      min-width: 185px;
+      height: 38px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px;
+      color: #ddd;
+      background: #111;
+      padding: 0 12px;
+      outline: none;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .filter-btn {
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      padding: 8px 12px;
+      color: #cfcfcf;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      color: #111;
+      border-color: var(--gold);
+      background: var(--gold);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .business-card {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 15px;
+      background: var(--panel-2);
+      text-decoration: none;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .business-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(229, 193, 88, .5);
+      box-shadow: 0 15px 35px rgba(0,0,0,.3);
+    }
+    .card-media {
+      height: 148px;
+      background: linear-gradient(135deg, #101010, #1d1d1d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      overflow: hidden;
+      position: relative;
+    }
+    .card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .featured-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: #111;
+      background: var(--gold);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .5px;
+    }
+    .card-body { padding: 13px; }
+    .card-category {
+      color: var(--gold);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .35px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-title {
+      margin: 7px 0 5px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .card-address {
+      min-height: 28px;
+      color: #919191;
+      font-size: 9.5px;
+      line-height: 1.45;
+    }
+    .card-foot {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .rating { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #ddd; }
+    .rating strong { color: #fff; }
+    .star { color: var(--gold); }
+    .status {
+      padding: 4px 7px;
+      border-radius: 999px;
+      border: 1px solid;
+      font-size: 8px;
+      font-weight: 800;
+    }
+    .status.open { color: var(--green); border-color: rgba(46,213,115,.34); background: rgba(46,213,115,.08); }
+    .status.closed { color: var(--red); border-color: rgba(255,91,104,.28); background: rgba(255,91,104,.07); }
+
+    .empty, .error-box {
+      grid-column: 1 / -1;
+      min-height: 260px;
+      border: 1px dashed rgba(229,193,88,.26);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      color: #aaa;
+    }
+    .empty-icon { font-size: 36px; margin-bottom: 10px; }
+    .empty strong { color: #fff; font-size: 13px; }
+    .empty span, .error-box span { margin-top: 6px; font-size: 10px; line-height: 1.55; }
+    .error-box { color: #ff9da5; }
+
+    .skeleton {
+      height: 250px;
+      border-radius: 15px;
+      background: linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,.09), rgba(255,255,255,.04));
+      background-size: 220% 100%;
+      animation: loading 1.2s infinite linear;
+    }
+    @keyframes loading { to { background-position: -220% 0; } }
+
+    .footer {
+      margin-top: 24px;
+      padding: 22px 0 4px;
+      color: #6f6f6f;
+      text-align: center;
+      font-size: 10px;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    @media (max-width: 900px) {
+      .shell { padding: 0 14px 26px; }
+      .topbar {
+        grid-template-columns: 135px 1fr;
+        min-height: 76px;
+        gap: 12px;
+      }
+      .brand img { height: 45px; max-width: 125px; }
+      .location { display: none; }
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .subcategory-list {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+      .sub-btn {
+        width: auto;
+        min-width: max-content;
+        grid-template-columns: 22px auto auto;
+      }
+      .hero { min-height: 205px; padding: 25px; }
+    }
+
+    @media (max-width: 560px) {
+      .topbar { grid-template-columns: 105px 1fr; }
+      .brand img { max-width: 100px; height: 40px; }
+      .search-box input { height: 42px; font-size: 11px; }
+      .hero { margin-top: 16px; padding: 22px 18px; border-radius: 18px; }
+      .hero h1 { font-size: 29px; }
+      .hero p { font-size: 9px; }
+      .content-panel { padding: 15px; }
+      .content-head { align-items: flex-start; flex-direction: column; }
+      .sort-select { width: 100%; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="../boulevard.html" aria-label="Volver al Boulevard de Urbanex">
+        <img src="../imagenes/logo.png" alt="Urbanex">
+      </a>
 
-<div class="dashboard-container">
+      <div class="search-box">
+        <input id="searchInput" type="search" placeholder="Buscar en Alojamiento..." autocomplete="off">
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 119.5 5a4.5 4.5 0 010 9z"/>
+        </svg>
+      </div>
 
-    <div class="global-background-underlay">
-        <img src="../imagenes/Turismo.png" alt="Turismo y Hospedaje de Loja">
-    </div>
-
-    <header class="header-top">
-        <a href="../boulevard.html" class="brand-box" title="Volver al Inicio">
-            <img src="../imagenes/logo.png" alt="Logo Urbanex">
-        </a>
-
-        <div class="search-wrapper">
-            <input type="search" id="siteSearch" class="search-input" placeholder="¿Qué hotel, tour o destino busca?" autocomplete="off">
-            <svg class="search-icon" id="searchButton" viewBox="0 0 24 24" role="button" aria-label="Buscar" tabindex="0">
-                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-            </svg>
-        </div>
-
-        <div class="user-tools">
-            <div class="location-indicator">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                </svg>
-                <span>Loja, Ecuador</span>
-            </div>
-
-            <div class="tool-icon icon-corazon">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-            </div>
-
-            <div class="profile-avatar">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                </svg>
-            </div>
-        </div>
+      <div class="location">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1112 6a2.5 2.5 0 010 5.5z"/></svg>
+        <span>Loja, Ecuador</span>
+      </div>
     </header>
 
-    <aside class="aside-categories">
-        <h2 class="section-title">Categorías</h2>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-kicker"><span class="hero-icon">🏨</span> DIRECTORIO URBANEX</div>
+        <h1>ALOJAMIENTO</h1>
+        <p>HOTELES, HOSTALES Y CABAÑAS DE LOJA EN UN SOLO LUGAR</p>
+      </div>
+    </section>
 
-        <ul class="categories-list">
-
-            <li class="category-item active">
-                <button type="button"
-                        data-count-src="turismo/hoteles.html"
-                        data-count-array="empresasHoteles"
-                        data-count-target="countHoteles"
-                        data-count-singular="alojamiento"
-                        data-count-plural="alojamientos"
-                        onclick="window.location.href='turismo/hoteles.html'">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                        </svg>
-                    </div>
-                    <div class="category-text-info">
-                        <span class="category-name">Hoteles</span>
-                        <span class="category-count" id="countHoteles">0 alojamientos</span>
-                    </div>
-                </button>
-            </li>
-
-            <li class="category-item">
-                <button type="button"
-                        data-count-src="turismo/hostales.html"
-                        data-count-array="empresasHostales"
-                        data-count-target="countHostales"
-                        data-count-singular="alojamiento"
-                        data-count-plural="alojamientos"
-                        onclick="window.location.href='turismo/hostales.html'">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/>
-                        </svg>
-                    </div>
-                    <div class="category-text-info">
-                        <span class="category-name">Hostales</span>
-                        <span class="category-count" id="countHostales">0 alojamientos</span>
-                    </div>
-                </button>
-            </li>
-
-            <li class="category-item">
-                <button type="button"
-                        data-count-src="turismo/agencias-de-viaje.html"
-                        data-count-array="empresasAgenciasDeViaje"
-                        data-count-target="countAgenciasDeViaje"
-                        data-count-singular="agencia"
-                        data-count-plural="agencias"
-                        onclick="window.location.href='turismo/agencias-de-viaje.html'">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M20.56 3.91C20.1 3.36 19.42 3 18.66 3H5.34C4.58 3 3.9 3.36 3.44 3.91L1 6.85V20c0 .55.45 1 1 1h20c.55 0 1-.45 1-1V6.85l-2.44-2.94zM12 17.5L5.5 11H10V8h4v3h4.5L12 17.5z"/>
-                        </svg>
-                    </div>
-                    <div class="category-text-info">
-                        <span class="category-name">Agencias de viaje</span>
-                        <span class="category-count" id="countAgenciasDeViaje">0 agencias</span>
-                    </div>
-                </button>
-            </li>
-
-            <li class="category-item">
-                <button type="button"
-                        data-count-src="turismo/tours-y-experiencias.html"
-                        data-count-array="empresasToursExperiencias"
-                        data-count-target="countToursExperiencias"
-                        data-count-singular="opción"
-                        data-count-plural="opciones"
-                        onclick="window.location.href='turismo/tours-y-experiencias.html'">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
-                        </svg>
-                    </div>
-                    <div class="category-text-info">
-                        <span class="category-name">Tours y experiencias</span>
-                        <span class="category-count" id="countToursExperiencias">0 opciones</span>
-                    </div>
-                </button>
-            </li>
-
-            <li class="category-item">
-                <button type="button"
-                        data-count-src="turismo/guias-locales.html"
-                        data-count-array="empresasGuiasLocales"
-                        data-count-target="countGuiasLocales"
-                        data-count-singular="guía"
-                        data-count-plural="guías"
-                        onclick="window.location.href='turismo/guias-locales.html'">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                        </svg>
-                    </div>
-                    <div class="category-text-info">
-                        <span class="category-name">Guías locales</span>
-                        <span class="category-count" id="countGuiasLocales">0 guías</span>
-                    </div>
-                </button>
-            </li>
-
-            <li class="category-item">
-                <button type="button"
-                        data-count-src="turismo/transporte-turistico.html"
-                        data-count-array="empresasTransporteTuristico"
-                        data-count-target="countTransporteTuristico"
-                        data-count-singular="servicio"
-                        data-count-plural="servicios"
-                        onclick="window.location.href='turismo/transporte-turistico.html'">
-                    <div class="icon-container">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4S4 2.5 4 6v10zm3.5 1C6.67 17 6 16.33 6 15.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM6 6h12v5H6V6z"/>
-                        </svg>
-                    </div>
-                    <div class="category-text-info">
-                        <span class="category-name">Transporte turístico</span>
-                        <span class="category-count" id="countTransporteTuristico">0 servicios</span>
-                    </div>
-                </button>
-            </li>
-        </ul>
-    </aside>
-
-    <main class="main-boulevard">
-        <div class="boulevard-overlay"></div>
-
-        <div class="welcome-billboard">
-            <h2>TURISMO Y HOSPEDAJE</h2>
-            <p>HOTELES, TOURS Y EXPERIENCIAS DE LOJA EN UN SOLO LUGAR</p>
+    <main class="layout">
+      <aside class="sidebar">
+        <h2>Subcategorías</h2>
+        <p class="sidebar-caption">Seleccione una opción para filtrar automáticamente los negocios.</p>
+        <div id="subcategoryList" class="subcategory-list">
+          <div class="skeleton" style="height:44px"></div>
+          <div class="skeleton" style="height:44px"></div>
+          <div class="skeleton" style="height:44px"></div>
         </div>
+      </aside>
+
+      <section class="content-panel">
+        <div class="content-head">
+          <div>
+            <h2 id="contentTitle" class="content-title">Negocios de Alojamiento</h2>
+            <div id="resultCount" class="result-count">Cargando negocios...</div>
+          </div>
+          <select id="sortSelect" class="sort-select" aria-label="Ordenar negocios">
+            <option value="featured">Destacados primero</option>
+            <option value="rating">Mayor calificación</option>
+            <option value="name">Nombre A–Z</option>
+          </select>
+        </div>
+
+        <div class="filters" aria-label="Filtros rápidos">
+          <button class="filter-btn active" data-filter="all" type="button">Todos</button>
+          <button class="filter-btn" data-filter="open" type="button">Abiertos ahora</button>
+          <button class="filter-btn" data-filter="delivery" type="button">A domicilio</button>
+          <button class="filter-btn" data-filter="promo" type="button">Con ofertas</button>
+        </div>
+
+        <div id="businessGrid" class="grid">
+          <div class="skeleton"></div>
+          <div class="skeleton"></div>
+          <div class="skeleton"></div>
+        </div>
+      </section>
     </main>
 
-    <aside class="aside-showcase-list">
-        <div class="showcase-header">
-            <h2>TURISMO DESTACADO</h2>
-            <div class="showcase-stats">Recomendados turísticos del mes</div>
-        </div>
+    <footer class="footer">© 2026 Urbanex. Desarrollado por Neodat Consultores.</footer>
+  </div>
 
-        <div class="sort-box">
-            <select class="sort-select">
-                <option>Ordenar por: Mayor Calificación</option>
-                <option>Cercanía</option>
-                <option>Precio promedio</option>
-                <option>Disponibilidad para reservar</option>
-                <option>Tipo de experiencia</option>
-            </select>
-        </div>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-        <div class="shops-scroll-area">
-            <div class="shop-card">
-                <div class="shop-thumb-wrapper">
-                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=120&q=80" alt="Hotel Gran Loja" class="shop-thumb">
-                </div>
-                <div class="shop-details">
-                    <div class="shop-title">Hotel Gran Loja</div>
-                    <div class="shop-segment">Hotel · Centro histórico</div>
-                    <div class="shop-rating-row">
-                        <svg class="star-icon" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                        </svg>
-                        <span class="rating-value">4.9</span>
-                        <span class="rating-count">(286)</span>
-                        <span class="status-indicator">Disponible</span>
-                    </div>
-                </div>
-            </div>
+    const ROOT_CATEGORY_ID = 6;
+    const ROOT_CATEGORY_NAME = "Alojamiento";
+    const ROOT_CATEGORY_ICON = "🏨";
 
-            <div class="shop-card">
-                <div class="shop-thumb-wrapper">
-                    <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=120&q=80" alt="Hostal Mirador Andino" class="shop-thumb">
-                </div>
-                <div class="shop-details">
-                    <div class="shop-title">Hostal Mirador Andino</div>
-                    <div class="shop-segment">Hostal · Vista panorámica</div>
-                    <div class="shop-rating-row">
-                        <svg class="star-icon" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                        </svg>
-                        <span class="rating-value">4.8</span>
-                        <span class="rating-count">(174)</span>
-                        <span class="status-indicator">Disponible</span>
-                    </div>
-                </div>
-            </div>
+    const SUPABASE_URL = "https://mlkynawsjqmawgxeuvks.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-            <div class="shop-card">
-                <div class="shop-thumb-wrapper">
-                    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=120&q=80" alt="Ruta Podocarpus" class="shop-thumb">
-                </div>
-                <div class="shop-details">
-                    <div class="shop-title">Ruta Podocarpus</div>
-                    <div class="shop-segment">Tour natural · Senderismo</div>
-                    <div class="shop-rating-row">
-                        <svg class="star-icon" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                        </svg>
-                        <span class="rating-value">4.8</span>
-                        <span class="rating-count">(221)</span>
-                        <span class="status-indicator">Activo</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="shop-card">
-                <div class="shop-thumb-wrapper">
-                    <img src="https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=120&q=80" alt="City Tour Loja" class="shop-thumb">
-                </div>
-                <div class="shop-details">
-                    <div class="shop-title">City Tour Loja</div>
-                    <div class="shop-segment">Experiencia urbana · Guía local</div>
-                    <div class="shop-rating-row">
-                        <svg class="star-icon" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                        </svg>
-                        <span class="rating-value">4.7</span>
-                        <span class="rating-count">(139)</span>
-                        <span class="status-indicator">Activo</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="action-footer-box">
-            <button class="btn-view-all-shops">Ver servicios de Turismo y Hospedaje</button>
-        </div>
-    </aside>
-
-</div>
-
-<footer class="pie-pagina">
-    <p>&copy; 2026 Urbanex. Desarrollado por Neodat Consultores.</p>
-</footer>
-
-
-<script>
-(function () {
-    const categoryButtons = Array.from(document.querySelectorAll("[data-count-src][data-count-target]"));
-    if (!categoryButtons.length) return;
-
-    const countableSelectors = [
-        ".empresa-electrodomesticos",
-        ".empresa-card",
-        ".business-card",
-        ".local-card",
-        ".restaurant-card",
-        ".service-card",
-        "[data-business]",
-        "[data-empresa]"
-    ].join(",");
-
-    function formatCount(target, total, singular, plural) {
-        target.textContent = total + " " + (total === 1 ? singular : plural);
-    }
-
-    function escapeRegExp(value) {
-        return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    }
-
-    function getBalancedArrayText(sourceText, arrayStartIndex) {
-        const bracketStart = sourceText.indexOf("[", arrayStartIndex);
-        if (bracketStart === -1) return "";
-
-        let depth = 0;
-        let quote = "";
-        let escaped = false;
-
-        for (let i = bracketStart; i < sourceText.length; i++) {
-            const char = sourceText[i];
-
-            if (escaped) {
-                escaped = false;
-                continue;
-            }
-
-            if (char === "\\") {
-                escaped = true;
-                continue;
-            }
-
-            if (quote) {
-                if (char === quote) quote = "";
-                continue;
-            }
-
-            if (char === "'" || char === '"' || char === "`") {
-                quote = char;
-                continue;
-            }
-
-            if (char === "[") depth++;
-            if (char === "]") depth--;
-
-            if (depth === 0) {
-                return sourceText.slice(bracketStart, i + 1);
-            }
-        }
-
-        return "";
-    }
-
-    function countObjectsInArray(arrayText) {
-        const nombreMatches = arrayText.match(/\bnombre\s*:/g);
-        if (nombreMatches) return nombreMatches.length;
-
-        const titleMatches = arrayText.match(/\b(title|titulo|name)\s*:/gi);
-        if (titleMatches) return titleMatches.length;
-
-        const objectMatches = arrayText.match(/\{[\s\S]*?\}/g);
-        return objectMatches ? objectMatches.length : 0;
-    }
-
-    function countFromSpecificArray(htmlText, arrayName) {
-        if (!arrayName) return null;
-
-        const arrayPattern = new RegExp("(?:const|let|var)\\s+" + escapeRegExp(arrayName) + "\\s*=\\s*\\[");
-        const match = arrayPattern.exec(htmlText);
-
-        if (!match) return null;
-
-        const arrayText = getBalancedArrayText(htmlText, match.index);
-        if (!arrayText) return null;
-
-        return countObjectsInArray(arrayText);
-    }
-
-    function countFromAnyBusinessArray(htmlText) {
-        const arrayPattern = /(?:const|let|var)\s+([a-zA-Z0-9_$]*(?:empresa|empresas|local|locales|negocio|negocios|servicio|servicios|business|businesses)[a-zA-Z0-9_$]*)\s*=\s*\[/gi;
-        let match;
-        let bestCount = null;
-
-        while ((match = arrayPattern.exec(htmlText)) !== null) {
-            const arrayText = getBalancedArrayText(htmlText, match.index);
-            if (!arrayText) continue;
-
-            const count = countObjectsInArray(arrayText);
-            if (bestCount === null || count > bestCount) bestCount = count;
-        }
-
-        return bestCount;
-    }
-
-    function countFromRenderedMarkup(htmlText) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlText, "text/html");
-        return doc.querySelectorAll(countableSelectors).length;
-    }
-
-    function countCategoryItems(htmlText, arrayName) {
-        const specificArrayCount = countFromSpecificArray(htmlText, arrayName);
-        if (specificArrayCount !== null) return specificArrayCount;
-
-        const genericArrayCount = countFromAnyBusinessArray(htmlText);
-        if (genericArrayCount !== null) return genericArrayCount;
-
-        return countFromRenderedMarkup(htmlText);
-    }
-
-    async function updateCategoryCount(button) {
-        const src = button.dataset.countSrc;
-        const arrayName = button.dataset.countArray;
-        const target = document.getElementById(button.dataset.countTarget);
-        const singular = button.dataset.countSingular || "local";
-        const plural = button.dataset.countPlural || "locales";
-
-        if (!src || !target) return;
-
-        formatCount(target, 0, singular, plural);
-
-        try {
-            const url = new URL(src, window.location.href);
-            url.searchParams.set("_conteo", Date.now().toString());
-
-            const response = await fetch(url.href, { cache: "no-store" });
-            if (!response.ok) {
-                formatCount(target, 0, singular, plural);
-                return;
-            }
-
-            const htmlText = await response.text();
-            const total = countCategoryItems(htmlText, arrayName);
-
-            formatCount(target, total || 0, singular, plural);
-        } catch (error) {
-            formatCount(target, 0, singular, plural);
-        }
-    }
-
-    categoryButtons.forEach(updateCategoryCount);
-})();
-</script>
-
-<script>
-(function () {
-    const REPO_CONFIG = {
-        owner: "",
-        repo: "",
-        branch: "main",
-        siteBasePath: "",
-        maxResults: 6,
-        maxFileSize: 250000,
-        includeExtensions: [".html", ".htm", ".json", ".txt", ".md", ".csv"],
-        skipFolders: [".git/", "node_modules/", "vendor/", "dist/", "build/"]
+    const state = {
+      subcategories: [],
+      businesses: [],
+      activeSubcategoryId: null,
+      quickFilter: "all",
+      search: "",
+      sort: "featured"
     };
 
-    const MIN_QUERY_LENGTH = 3;
-    const GENERIC_TITLES = [
-        "urbanex",
-        "loja - centro comercial digital",
-        "loja centro comercial digital",
-        "loja - turismo y hospedaje",
-        "loja turismo y hospedaje",
-        "centro comercial digital"
-    ];
+    const subcategoryList = document.getElementById("subcategoryList");
+    const businessGrid = document.getElementById("businessGrid");
+    const resultCount = document.getElementById("resultCount");
+    const contentTitle = document.getElementById("contentTitle");
+    const searchInput = document.getElementById("searchInput");
+    const sortSelect = document.getElementById("sortSelect");
 
-    const searchInput = document.getElementById("siteSearch");
-    const searchButton = document.getElementById("searchButton");
+    const escapeHtml = (value) => String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
 
-    if (!searchInput || !searchButton) return;
+    const numberOrNull = (value) => {
+      const number = Number(value);
+      return Number.isFinite(number) ? number : null;
+    };
 
-    let searchDocuments = [];
-    let indexLoaded = false;
-    let indexLoading = null;
-
-    function decodeEntities(text) {
-        const decoder = document.createElement("textarea");
-        decoder.innerHTML = String(text || "");
-        return decoder.value;
+    function approvedReviews(reviews) {
+      return (reviews || []).filter((review) => review.is_approved === true);
     }
 
-    function removeBoilerplate(text) {
-        return String(text || "")
-            .replace(/Negocios confiables/gi, " ")
-            .replace(/Comunidad local/gi, " ")
-            .replace(/Registre su negocio/gi, " ")
-            .replace(/©\s*2026\s*Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
-            .replace(/Urbanex\.\s*Todos los derechos reservados\.?/gi, " ")
-            .replace(/Todos los derechos reservados\.?/gi, " ")
-            .replace(/¿Qué producto o servicio busca\?/gi, " ")
-            .replace(/¿Qué restaurante, cafetería o plato busca\?/gi, " ")
-            .replace(/¿Qué hotel, tour o destino busca\?/gi, " ");
+    function averageRating(reviews) {
+      const approved = approvedReviews(reviews);
+      if (!approved.length) return null;
+      return approved.reduce((sum, review) => sum + Number(review.rating || 0), 0) / approved.length;
     }
 
-    function cleanSearchText(value) {
-        return removeBoilerplate(decodeEntities(value))
-            .replace(/<[^>]*>/g, " ")
-            .replace(/\b(class|href|onclick|src|alt|style|id)=['\"][^'\"]*['\"]/gi, " ")
-            .replace(/window\.location\.href\s*=\s*['\"][^'\"]+['\"]/gi, " ")
-            .replace(/\s+/g, " ")
-            .trim();
+    function hasActivePromotion(promotions) {
+      const today = new Date().toISOString().slice(0, 10);
+      return (promotions || []).some((promotion) =>
+        promotion.is_active === true && (!promotion.end_date || promotion.end_date >= today)
+      );
     }
 
-    function normalizeText(value) {
-        return cleanSearchText(value)
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/[^a-z0-9ñáéíóúü\s./_-]/gi, " ")
-            .replace(/\s+/g, " ")
-            .trim();
+    function isOpenNow(hours) {
+      if (!Array.isArray(hours) || !hours.length) return false;
+
+      const now = new Date();
+      const today = now.getDay();
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const todayHours = hours.find((item) => Number(item.day_of_week) === today && item.is_closed !== true);
+      if (!todayHours?.open_time || !todayHours?.close_time) return false;
+
+      const [openHour, openMinute] = todayHours.open_time.split(":").map(Number);
+      const [closeHour, closeMinute] = todayHours.close_time.split(":").map(Number);
+      if (![openHour, openMinute, closeHour, closeMinute].every(Number.isFinite)) return false;
+
+      const open = openHour * 60 + openMinute;
+      const close = closeHour * 60 + closeMinute;
+
+      if (close < open) {
+        return currentMinutes >= open || currentMinutes <= close;
+      }
+      return currentMinutes >= open && currentMinutes <= close;
     }
 
-    function isGenericTitle(title) {
-        const normalizedTitle = normalizeText(title);
-        return !normalizedTitle || GENERIC_TITLES.includes(normalizedTitle);
+    function normalizeBusiness(business) {
+      const reviews = approvedReviews(business.reviews);
+      return {
+        ...business,
+        category_id: numberOrNull(business.category_id),
+        subcategory_id: numberOrNull(business.subcategory_id),
+        _rating: averageRating(reviews),
+        _reviewCount: reviews.length,
+        _open: isOpenNow(business.business_hours),
+        _promo: hasActivePromotion(business.promotions)
+      };
     }
 
-    function getExtension(path) {
-        const cleanPath = String(path || "").split("?")[0].split("#")[0];
-        const dotIndex = cleanPath.lastIndexOf(".");
-        return dotIndex >= 0 ? cleanPath.slice(dotIndex).toLowerCase() : "";
+    async function loadData() {
+      showLoading();
+
+      const { data: subcategories, error: categoryError } = await supabase
+        .from("categories")
+        .select("id,name,icon,parent_id,sort_order,is_active")
+        .eq("parent_id", ROOT_CATEGORY_ID)
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true })
+        .order("name", { ascending: true });
+
+      if (categoryError) {
+        showError(`No se pudieron cargar las subcategorías: ${categoryError.message}`);
+        return;
+      }
+
+      state.subcategories = (subcategories || []).map((item) => ({
+        ...item,
+        id: numberOrNull(item.id),
+        parent_id: numberOrNull(item.parent_id)
+      }));
+
+      const subcategoryIds = state.subcategories.map((item) => item.id).filter(Number.isFinite);
+      const categoryFilter = subcategoryIds.length
+        ? `category_id.eq.${ROOT_CATEGORY_ID},subcategory_id.in.(${subcategoryIds.join(",")})`
+        : `category_id.eq.${ROOT_CATEGORY_ID}`;
+
+      const { data: businesses, error: businessError } = await supabase
+        .from("businesses")
+        .select(`
+          id,
+          name,
+          slug,
+          city,
+          address,
+          cover_image,
+          is_featured,
+          delivery_available,
+          category_id,
+          subcategory_id,
+          categories!category_id(name,icon),
+          subcategories:categories!subcategory_id(name,icon),
+          business_hours(day_of_week,open_time,close_time,is_closed),
+          reviews(is_approved,rating),
+          promotions(is_active,end_date)
+        `)
+        .eq("is_active", true)
+        .or(categoryFilter);
+
+      if (businessError) {
+        showError(`No se pudieron cargar los negocios: ${businessError.message}`);
+        return;
+      }
+
+      state.businesses = (businesses || []).map(normalizeBusiness);
+      renderAll();
     }
 
-    function isTextFile(path) {
-        return REPO_CONFIG.includeExtensions.includes(getExtension(path));
+    function showLoading() {
+      subcategoryList.innerHTML = `
+        <div class="skeleton" style="height:44px"></div>
+        <div class="skeleton" style="height:44px"></div>
+        <div class="skeleton" style="height:44px"></div>`;
+      businessGrid.innerHTML = `
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>`;
+      resultCount.textContent = "Cargando negocios...";
     }
 
-    function shouldSkipPath(path) {
-        return REPO_CONFIG.skipFolders.some(function (folder) {
-            return path.includes(folder);
+    function showError(message) {
+      subcategoryList.innerHTML = "";
+      businessGrid.innerHTML = `<div class="error-box"><strong>Error de carga</strong><span>${escapeHtml(message)}</span></div>`;
+      resultCount.textContent = "No se pudieron cargar los datos";
+      console.error(message);
+    }
+
+    function renderAll() {
+      renderSubcategories();
+      renderBusinesses();
+    }
+
+    function countBySubcategory(subcategoryId) {
+      return state.businesses.filter((business) => business.subcategory_id === subcategoryId).length;
+    }
+
+    function renderSubcategories() {
+      const allActive = state.activeSubcategoryId === null ? "active" : "";
+      const allButton = `
+        <button class="sub-btn ${allActive}" type="button" data-subcategory="all">
+          <span class="sub-icon">${ROOT_CATEGORY_ICON}</span>
+          <span class="sub-name">Todos</span>
+          <span class="sub-count">${state.businesses.length}</span>
+        </button>`;
+
+      const buttons = state.subcategories.map((subcategory) => {
+        const active = state.activeSubcategoryId === subcategory.id ? "active" : "";
+        return `
+          <button class="sub-btn ${active}" type="button" data-subcategory="${subcategory.id}">
+            <span class="sub-icon">${escapeHtml(subcategory.icon || "•")}</span>
+            <span class="sub-name">${escapeHtml(subcategory.name)}</span>
+            <span class="sub-count">${countBySubcategory(subcategory.id)}</span>
+          </button>`;
+      }).join("");
+
+      subcategoryList.innerHTML = allButton + buttons;
+
+      subcategoryList.querySelectorAll("[data-subcategory]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const value = button.dataset.subcategory;
+          state.activeSubcategoryId = value === "all" ? null : Number(value);
+          renderAll();
         });
+      });
     }
 
-    function getInferredGithubPagesConfig() {
-        const host = window.location.hostname;
-        if (!host.endsWith(".github.io")) return null;
+    function getFilteredBusinesses() {
+      let list = [...state.businesses];
 
-        const owner = host.replace(".github.io", "");
-        const parts = window.location.pathname.split("/").filter(Boolean);
-        const repo = parts[0] || owner + ".github.io";
-        const siteBasePath = repo === owner + ".github.io" ? "" : "/" + repo;
+      if (state.activeSubcategoryId !== null) {
+        list = list.filter((business) => business.subcategory_id === state.activeSubcategoryId);
+      }
 
-        return {
-            owner: owner,
-            repo: repo,
-            branch: REPO_CONFIG.branch,
-            siteBasePath: siteBasePath
-        };
-    }
+      if (state.quickFilter === "open") {
+        list = list.filter((business) => business._open);
+      } else if (state.quickFilter === "delivery") {
+        list = list.filter((business) => business.delivery_available === true);
+      } else if (state.quickFilter === "promo") {
+        list = list.filter((business) => business._promo);
+      }
 
-    function getActiveRepoConfig() {
-        const inferred = getInferredGithubPagesConfig() || {};
-        return {
-            owner: REPO_CONFIG.owner || inferred.owner || "",
-            repo: REPO_CONFIG.repo || inferred.repo || "",
-            branch: REPO_CONFIG.branch || inferred.branch || "main",
-            siteBasePath: REPO_CONFIG.siteBasePath || inferred.siteBasePath || ""
-        };
-    }
-
-    function pageUrlFromRepoPath(path, config) {
-        const cleanBase = (config.siteBasePath || "").replace(/\/$/, "");
-        const cleanPath = String(path || "").replace(/^\/+/, "");
-
-        if (window.location.protocol === "file:") {
-            return cleanPath;
-        }
-
-        return window.location.origin + cleanBase + "/" + cleanPath;
-    }
-
-    function titleFromPath(path) {
-        const fileName = String(path || "").split("/").pop() || path;
-        const withoutExtension = fileName.replace(/\.[^/.]+$/, "");
-
-        if (/^index$/i.test(withoutExtension)) return "Inicio";
-
-        return withoutExtension
-            .replace(/[-_]+/g, " ")
-            .replace(/\b\w/g, function (letter) { return letter.toUpperCase(); });
-    }
-
-    function collectTextFromJson(value, output) {
-        if (value === null || value === undefined) return;
-
-        if (["string", "number", "boolean"].includes(typeof value)) {
-            output.push(String(value));
-            return;
-        }
-
-        if (Array.isArray(value)) {
-            value.forEach(function (item) { collectTextFromJson(item, output); });
-            return;
-        }
-
-        if (typeof value === "object") {
-            Object.keys(value).forEach(function (key) {
-                output.push(key);
-                collectTextFromJson(value[key], output);
-            });
-        }
-    }
-
-    function textFromStructuredFile(rawText, extension) {
-        if (extension === ".json") {
-            try {
-                const output = [];
-                collectTextFromJson(JSON.parse(rawText), output);
-                return output.join(" ");
-            } catch (error) {
-                return rawText;
-            }
-        }
-
-        return rawText;
-    }
-
-    function getTextContent(element) {
-        return cleanSearchText(element ? element.textContent : "");
-    }
-
-    function makeDocument(path, url, title, content) {
-        const cleanTitle = cleanSearchText(title) || titleFromPath(path);
-        const cleanContent = cleanSearchText(content || path);
-
-        return {
-            title: cleanTitle,
-            path: path,
-            url: url,
-            content: cleanContent,
-            normalizedTitle: normalizeText(cleanTitle),
-            normalizedPath: normalizeText(path),
-            normalizedContent: normalizeText(cleanContent)
-        };
-    }
-
-    function extractHtmlDocument(path, url, rawText) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(rawText || "", "text/html");
-
-        doc.querySelectorAll("script, style, noscript, svg, template, link, meta, header, footer, .header-top, .pie-pagina, .search-wrapper, .user-tools, .brand-box, .location-indicator, .tool-icon, .profile-avatar").forEach(function (node) {
-            node.remove();
+      if (state.search) {
+        const query = state.search.toLocaleLowerCase("es");
+        list = list.filter((business) => {
+          const text = [
+            business.name,
+            business.city,
+            business.address,
+            business.categories?.name,
+            business.subcategories?.name
+          ].filter(Boolean).join(" ").toLocaleLowerCase("es");
+          return text.includes(query);
         });
+      }
 
-        const titleCandidates = Array.from(doc.querySelectorAll(".page-title, .category-title, .categoria-title, main h1, main h2, article h1, article h2, h1, h2, title"))
-            .map(getTextContent)
-            .filter(function (title) {
-                const normalized = normalizeText(title);
-                return normalized && !isGenericTitle(title) && !["bienvenido", "categorias", "destacados", "sabores destacados"].includes(normalized);
-            });
-
-        let title = titleCandidates[0] || titleFromPath(path);
-        if (isGenericTitle(title)) title = titleFromPath(path);
-
-        const priorityParts = Array.from(doc.querySelectorAll("main, article, section, .category-item, .shop-card, .card, .business-card, .local-card, .restaurant-card, .service-card"))
-            .map(getTextContent)
-            .filter(Boolean);
-
-        const content = priorityParts.length ? priorityParts.join(". ") : getTextContent(doc.body || doc.documentElement);
-
-        return makeDocument(path, url, title, content);
-    }
-
-    function extractDocument(path, url, rawText) {
-        const extension = getExtension(path);
-
-        if (extension === ".html" || extension === ".htm" || /<[a-z][\s\S]*>/i.test(rawText || "")) {
-            return extractHtmlDocument(path, url, rawText || "");
-        }
-
-        return makeDocument(path, url, titleFromPath(path), textFromStructuredFile(rawText || path, extension));
-    }
-
-    async function fetchJson(url) {
-        const response = await fetch(url, { cache: "no-store" });
-        if (!response.ok) throw new Error("No se pudo cargar: " + url);
-        return response.json();
-    }
-
-    async function fetchText(url) {
-        const response = await fetch(url, { cache: "no-store" });
-        if (!response.ok) throw new Error("No se pudo cargar: " + url);
-        return response.text();
-    }
-
-    async function buildGithubRepositoryIndex() {
-        const config = getActiveRepoConfig();
-        if (!config.owner || !config.repo) throw new Error("Repositorio no configurado");
-
-        const branches = Array.from(new Set([config.branch, "main", "master"].filter(Boolean)));
-        let treeData = null;
-        let activeBranch = config.branch;
-
-        for (const branch of branches) {
-            try {
-                treeData = await fetchJson("https://api.github.com/repos/" + encodeURIComponent(config.owner) + "/" + encodeURIComponent(config.repo) + "/git/trees/" + encodeURIComponent(branch) + "?recursive=1");
-                activeBranch = branch;
-                break;
-            } catch (error) {
-                treeData = null;
-            }
-        }
-
-        if (!treeData || !Array.isArray(treeData.tree)) throw new Error("No se pudo leer el repositorio");
-
-        const files = treeData.tree
-            .filter(function (item) {
-                return item.type === "blob" &&
-                    item.path &&
-                    !shouldSkipPath(item.path) &&
-                    isTextFile(item.path) &&
-                    (!item.size || item.size <= REPO_CONFIG.maxFileSize);
-            })
-            .slice(0, 250);
-
-        const loadedDocuments = [];
-        const pathOnlyFiles = files.map(function (item) {
-            return makeDocument(
-                item.path,
-                pageUrlFromRepoPath(item.path, Object.assign({}, config, { branch: activeBranch })),
-                titleFromPath(item.path),
-                item.path
-            );
+      if (state.sort === "rating") {
+        list.sort((a, b) => (b._rating || 0) - (a._rating || 0));
+      } else if (state.sort === "name") {
+        list.sort((a, b) => String(a.name).localeCompare(String(b.name), "es"));
+      } else {
+        list.sort((a, b) => {
+          const featuredDifference = Number(Boolean(b.is_featured)) - Number(Boolean(a.is_featured));
+          if (featuredDifference !== 0) return featuredDifference;
+          const ratingDifference = (b._rating || 0) - (a._rating || 0);
+          if (ratingDifference !== 0) return ratingDifference;
+          return String(a.name).localeCompare(String(b.name), "es");
         });
+      }
 
-        const rawBase = "https://raw.githubusercontent.com/" + encodeURIComponent(config.owner) + "/" + encodeURIComponent(config.repo) + "/" + encodeURIComponent(activeBranch) + "/";
-
-        for (let index = 0; index < files.length; index += 8) {
-            const batch = files.slice(index, index + 8);
-            const results = await Promise.allSettled(batch.map(async function (item) {
-                const rawText = await fetchText(rawBase + item.path);
-                return extractDocument(item.path, pageUrlFromRepoPath(item.path, Object.assign({}, config, { branch: activeBranch })), rawText);
-            }));
-
-            results.forEach(function (result) {
-                if (result.status === "fulfilled") loadedDocuments.push(result.value);
-            });
-        }
-
-        return loadedDocuments.concat(pathOnlyFiles);
+      return list;
     }
 
-    function sameOriginHtmlUrl(url) {
-        try {
-            const parsed = new URL(url, window.location.href);
-            if (parsed.origin !== window.location.origin) return null;
-            if (["mailto:", "tel:", "javascript:"].includes(parsed.protocol)) return null;
-            const extension = getExtension(parsed.pathname);
-            if (extension && extension !== ".html" && extension !== ".htm") return null;
-            parsed.hash = "";
-            return parsed.href;
-        } catch (error) {
-            return null;
-        }
+    function businessCard(business) {
+      const categoryName = business.subcategories?.name || business.categories?.name || ROOT_CATEGORY_NAME;
+      const categoryIcon = business.subcategories?.icon || business.categories?.icon || ROOT_CATEGORY_ICON;
+      const media = business.cover_image
+        ? `<img src="${escapeHtml(business.cover_image)}" alt="${escapeHtml(business.name)}" loading="lazy">`
+        : `<span aria-hidden="true">${escapeHtml(categoryIcon)}</span>`;
+      const featured = business.is_featured
+        ? `<span class="featured-badge">DESTACADO</span>`
+        : "";
+      const rating = business._rating !== null
+        ? `<span class="star">★</span><strong>${business._rating.toFixed(1)}</strong><span>(${business._reviewCount})</span>`
+        : `<span>Sin reseñas</span>`;
+      const statusClass = business._open ? "open" : "closed";
+      const statusText = business._open ? "Abierto" : "Cerrado";
+      const businessUrl = `../business/?slug=${encodeURIComponent(business.slug || "")}`;
+
+      return `
+        <a class="business-card" href="${businessUrl}">
+          <div class="card-media">${media}${featured}</div>
+          <div class="card-body">
+            <div class="card-category">${escapeHtml(categoryIcon)} ${escapeHtml(categoryName)}</div>
+            <div class="card-title">${escapeHtml(business.name)}</div>
+            <div class="card-address">${escapeHtml(business.address || business.city || "Loja, Ecuador")}</div>
+            <div class="card-foot">
+              <div class="rating">${rating}</div>
+              <span class="status ${statusClass}">${statusText}</span>
+            </div>
+          </div>
+        </a>`;
     }
 
-    function collectPageLinks(doc, baseUrl) {
-        return Array.from(doc.querySelectorAll("a[href], button[onclick]"))
-            .map(function (element) {
-                const href = element.getAttribute("href");
-                if (href) return sameOriginHtmlUrl(new URL(href, baseUrl).href);
+    function renderBusinesses() {
+      const list = getFilteredBusinesses();
+      const activeSubcategory = state.subcategories.find((item) => item.id === state.activeSubcategoryId);
+      contentTitle.textContent = activeSubcategory
+        ? `${activeSubcategory.icon || ""} ${activeSubcategory.name}`
+        : `Negocios de ${ROOT_CATEGORY_NAME}`;
+      resultCount.textContent = `${list.length} negocio${list.length === 1 ? "" : "s"} encontrado${list.length === 1 ? "" : "s"}`;
 
-                const onclick = element.getAttribute("onclick") || "";
-                const match = onclick.match(/window\.location\.href\s*=\s*['\"]([^'\"]+)['\"]/);
-                if (match) return sameOriginHtmlUrl(new URL(match[1], baseUrl).href);
+      if (!list.length) {
+        businessGrid.innerHTML = `
+          <div class="empty">
+            <div class="empty-icon">${activeSubcategory?.icon || ROOT_CATEGORY_ICON}</div>
+            <strong>No hay negocios con estos filtros.</strong>
+            <span>Cuando se registre un negocio activo en Supabase aparecerá aquí automáticamente.</span>
+          </div>`;
+        return;
+      }
 
-                return null;
-            })
-            .filter(Boolean);
+      businessGrid.innerHTML = list.map(businessCard).join("");
     }
 
-    async function buildLocalSiteIndex() {
-        const visited = new Set();
-        const queue = [window.location.href].concat(collectPageLinks(document, window.location.href));
-        const documents = [];
-
-        while (queue.length && visited.size < 80) {
-            const url = queue.shift();
-            if (!url || visited.has(url)) continue;
-            visited.add(url);
-
-            try {
-                const html = url === window.location.href ? document.documentElement.outerHTML : await fetchText(url);
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, "text/html");
-                const path = new URL(url).pathname.replace(/^\//, "") || "index.html";
-                documents.push(extractDocument(path, url, html));
-
-                collectPageLinks(doc, url).forEach(function (nextUrl) {
-                    if (!visited.has(nextUrl)) queue.push(nextUrl);
-                });
-            } catch (error) {
-                continue;
-            }
-        }
-
-        return documents;
-    }
-
-    async function loadSearchIndex() {
-        if (indexLoaded) return searchDocuments;
-        if (indexLoading) return indexLoading;
-
-        indexLoading = (async function () {
-            let documents = [];
-
-            try {
-                documents = await buildGithubRepositoryIndex();
-            } catch (githubError) {
-                documents = await buildLocalSiteIndex();
-            }
-
-            searchDocuments = documents.filter(function (documentItem) {
-                return documentItem.normalizedTitle || documentItem.normalizedPath || documentItem.normalizedContent;
-            });
-
-            indexLoaded = true;
-            return searchDocuments;
-        })();
-
-        return indexLoading;
-    }
-
-    function getSearchTerms(query) {
-        return normalizeText(query)
-            .split(" ")
-            .map(function (term) { return term.trim(); })
-            .filter(function (term) { return term.length >= MIN_QUERY_LENGTH; });
-    }
-
-    function scoreDocument(documentItem, terms, fullQuery) {
-        let score = 0;
-        const title = documentItem.normalizedTitle;
-        const path = documentItem.normalizedPath;
-        const content = documentItem.normalizedContent;
-
-        if (fullQuery.length >= MIN_QUERY_LENGTH) {
-            if (title.includes(fullQuery)) score += 100;
-            if (path.includes(fullQuery)) score += 70;
-            if (content.includes(fullQuery)) score += 45;
-        }
-
-        terms.forEach(function (term) {
-            if (title.includes(term)) score += 40;
-            if (path.includes(term)) score += 25;
-            if (content.includes(term)) score += 12;
-        });
-
-        return score;
-    }
-
-    function searchDocumentsByQuery(query) {
-        const fullQuery = normalizeText(query);
-        const terms = getSearchTerms(query);
-
-        if (!terms.length && fullQuery.length < MIN_QUERY_LENGTH) return [];
-
-        return searchDocuments
-            .map(function (documentItem) {
-                return {
-                    item: documentItem,
-                    score: scoreDocument(documentItem, terms, fullQuery)
-                };
-            })
-            .filter(function (result) { return result.score > 0; })
-            .sort(function (a, b) { return b.score - a.score; })
-            .slice(0, REPO_CONFIG.maxResults)
-            .map(function (result) { return result.item; });
-    }
-
-    async function runSearch() {
-        const query = searchInput.value.trim();
-        if (query.length < MIN_QUERY_LENGTH) return;
-
-        try {
-            await loadSearchIndex();
-            const results = searchDocumentsByQuery(query);
-
-            if (results.length) {
-                window.location.href = results[0].url;
-            }
-        } catch (error) {
-            return;
-        }
-    }
-
-    searchInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            runSearch();
-        }
+    searchInput.addEventListener("input", (event) => {
+      state.search = event.target.value.trim();
+      renderBusinesses();
     });
 
-    searchButton.addEventListener("click", runSearch);
-
-    searchButton.addEventListener("keydown", function (event) {
-        if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            runSearch();
-        }
+    sortSelect.addEventListener("change", (event) => {
+      state.sort = event.target.value;
+      renderBusinesses();
     });
 
-    loadSearchIndex().catch(function () {});
-})();
-</script>
+    document.querySelectorAll(".filter-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        state.quickFilter = button.dataset.filter;
+        renderBusinesses();
+      });
+    });
 
+    let realtimeTimer = null;
+    function refreshSoon() {
+      clearTimeout(realtimeTimer);
+      realtimeTimer = setTimeout(loadData, 350);
+    }
 
+    supabase
+      .channel(`urbanex-category-${ROOT_CATEGORY_ID}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "businesses" }, refreshSoon)
+      .on("postgres_changes", { event: "*", schema: "public", table: "categories" }, refreshSoon)
+      .on("postgres_changes", { event: "*", schema: "public", table: "business_hours" }, refreshSoon)
+      .on("postgres_changes", { event: "*", schema: "public", table: "reviews" }, refreshSoon)
+      .on("postgres_changes", { event: "*", schema: "public", table: "promotions" }, refreshSoon)
+      .subscribe();
+
+    loadData();
+  </script>
 </body>
 </html>
