@@ -457,17 +457,6 @@
     </div>
 </div>
 
-<!-- MODAL SUBCATEGORÍAS -->
-<div id="subcatModal" style="display:none;position:fixed;inset:0;z-index:210;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);overflow-y:auto;padding:20px;">
-    <div style="max-width:380px;margin:80px auto;background:#0a0a0a;border:1px solid var(--border-color);border-radius:16px;padding:20px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-            <h2 id="subcatModalTitle" style="font-family:var(--font-serif);color:var(--gold);font-size:15px;letter-spacing:1px;"></h2>
-            <button onclick="closeSubcatModal()" style="background:none;border:none;color:#888;font-size:22px;cursor:pointer;">✕</button>
-        </div>
-        <div id="subcatModalList" style="display:flex;flex-direction:column;gap:6px;"></div>
-    </div>
-</div>
-
 <footer class="pie-pagina"><p>&copy; 2026 Urbanex. Desarrollado por Neodat Consultores.</p></footer>
 
 <script type="module">
@@ -518,8 +507,54 @@ function hasPromo(promos) {
 }
 
 // ── Carga datos ───────────────────────────────────────────────
+// Solo se necesita el horario de HOY, no los 7 días de la semana
+const TODAY_DOW = new Date().getDay();
+const CACHE_KEY = 'urbanex_cache_v1';
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutos
+
+function mapBusiness(b) {
+    return {
+        ...b,
+        _open:   isOpenNow(b.business_hours),
+        _rating: avgRating(b.reviews),
+        _promo:  hasPromo(b.promotions),
+        _reviews:(b.reviews||[]).filter(r=>r.is_approved).length,
+    };
+}
+
+function readCache() {
+    try {
+        const raw = sessionStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (Date.now() - parsed.ts > CACHE_TTL_MS) return null;
+        return parsed;
+    } catch { return null; }
+}
+function writeCache(data) {
+    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), ...data })); } catch {}
+}
+
 async function boot() {
-    const [catsRes, bizRes] = await Promise.all([
+    // Si hay caché reciente (misma sesión de navegador), pintamos al instante sin llamar a Supabase
+    const cached = readCache();
+    if (cached) {
+        rootCategories = cached.rootCategories;
+        subMap = cached.subMap;
+        allBusinesses = cached.allBusinesses;
+        renderCatTree();
+        renderShowcase();
+        updateMetrics();
+        // Igual refrescamos en segundo plano por si hay datos nuevos
+        refreshFromServer(true);
+        return;
+    }
+    await refreshFromServer(false);
+}
+
+async function refreshFromServer(silent) {
+    // FASE 1 (rápida): categorías + solo los negocios destacados
+    const [catsRes, featRes] = await Promise.all([
         supabase.from('categories').select('id,name,icon,parent_id,sort_order').order('sort_order').order('name'),
         supabase.from('businesses').select(`
             id,name,slug,city,address,cover_image,is_featured,delivery_available,category_id,subcategory_id,
@@ -528,11 +563,12 @@ async function boot() {
             business_hours(day_of_week,open_time,close_time,is_closed),
             reviews(is_approved,rating),
             promotions(is_active,end_date)
-        `).eq('is_active',true)
+        `).eq('is_active',true).eq('is_featured',true)
+          .eq('business_hours.day_of_week', TODAY_DOW)
     ]);
 
     if (catsRes.error) console.error('categories error:', catsRes.error.message);
-    if (bizRes.error)  console.error('businesses error:', bizRes.error.message);
+    if (featRes.error) console.error('featured businesses error:', featRes.error.message);
 
     const cats = catsRes.data || [];
     rootCategories = cats.filter(c=>!c.parent_id);
@@ -542,24 +578,52 @@ async function boot() {
         subMap[c.parent_id].push(c);
     });
 
-    allBusinesses = (bizRes.data||[]).map(b=>({
-        ...b,
-        _open:   isOpenNow(b.business_hours),
-        _rating: avgRating(b.reviews),
-        _promo:  hasPromo(b.promotions),
-        _reviews:(b.reviews||[]).filter(r=>r.is_approved).length,
-    }));
+    allBusinesses = (featRes.data||[]).map(mapBusiness);
 
+    if (!silent) {
+        // Pintar YA con lo que tenemos (destacados) para que el usuario vea contenido rápido
+        renderCatTree();
+        renderShowcase();
+        updateMetrics();
+    }
+
+    // FASE 2 (en segundo plano): el resto de negocios, sin bloquear la pantalla
+    await loadRemainingBusinesses();
+}
+
+async function loadRemainingBusinesses() {
+    const { data, error } = await supabase.from('businesses').select(`
+            id,name,slug,city,address,cover_image,is_featured,delivery_available,category_id,subcategory_id,
+            categories!category_id(name,icon),
+            subcategories:categories!subcategory_id(name,icon),
+            business_hours(day_of_week,open_time,close_time,is_closed),
+            reviews(is_approved,rating),
+            promotions(is_active,end_date)
+        `).eq('is_active',true).eq('is_featured',false)
+          .eq('business_hours.day_of_week', TODAY_DOW);
+
+    if (error) { console.error('businesses error:', error.message); return; }
+
+    allBusinesses = [...allBusinesses, ...(data||[]).map(mapBusiness)];
+
+    // Guardar en caché de la sesión para que la próxima carga sea instantánea
+    writeCache({ rootCategories, subMap, allBusinesses });
+
+    // Re-pintar con el catálogo completo
     renderCatTree();
     renderShowcase();
     updateMetrics();
+    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
 }
 
 // ── Árbol de categorías ───────────────────────────────────────
 function renderCatTree() {
     const list = document.getElementById('categoriesList');
-    // Quitar skeletons pero conservar el botón "Todos"
+    // Quitar skeletons y categorías ya dibujadas, pero conservar el botón "Todos"
     list.querySelectorAll('.skeleton').forEach(el=>el.remove());
+    list.querySelectorAll('.category-item').forEach(el=>{
+        if (!el.querySelector('#catAllBtn')) el.remove();
+    });
 
     // Contar por raíz
     const countByRoot = {};
@@ -608,35 +672,26 @@ function renderCatTree() {
     });
 }
 
-// Click en raíz: abrir modal con subcategorías (o filtrar directo si no tiene subs)
-window.handleRootClick = (rootId, btn) => {
-    const subs = subMap[rootId]||[];
-    if (!subs.length) {
-        selectCategory(toNum(rootId), null, btn);
-        return;
-    }
-    openSubcatModal(rootId, btn);
-};
+// Convierte un nombre de categoría en el nombre de archivo esperado
+// Ej: "Comida y Bebida" -> "comidaybebida", "Alojamiento" -> "alojamiento"
+function slugify(s) {
+    return String(s||'')
+        .toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'') // quita tildes
+        .replace(/[^a-z0-9]+/g,''); // quita espacios y símbolos
+}
 
-// Abrir modal de subcategorías
-window.openSubcatModal = (rootId, btn) => {
+// Click en categoría raíz: navega directo a categorias/{slug}.html
+// Si tiene subcategorías, navega a categorias/{slug}/index.html
+window.handleRootClick = (rootId, btn) => {
     const root = rootCategories.find(r=>toNum(r.id)===toNum(rootId));
     const subs = subMap[rootId]||[];
-    document.getElementById('subcatModalTitle').textContent = `${root?.icon||''} ${root?.name||''}`;
-    document.getElementById('subcatModalList').innerHTML = subs.map(sub=>`
-        <button class="sub-btn" style="padding:10px 12px;" onclick="selectCategory(${rootId},${sub.id},null); closeSubcatModal();">
-            <span class="sub-icon">${sub.icon||'•'}</span>
-            <span>${esc(sub.name)}</span>
-        </button>`).join('');
-    document.querySelectorAll('.cat-root-btn').forEach(b=>b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    document.getElementById('subcatModal').style.display='block';
-    document.body.style.overflow='hidden';
-};
-
-window.closeSubcatModal = () => {
-    document.getElementById('subcatModal').style.display='none';
-    document.body.style.overflow='';
+    const slug = slugify(root?.name);
+    if (!subs.length) {
+        window.location.href = `categorias/${slug}.html`;
+    } else {
+        window.location.href = `categorias/${slug}/index.html`;
+    }
 };
 
 // Seleccionar categoría / subcategoría
@@ -662,7 +717,7 @@ window.selectCategory = (rootId, subId, btnEl) => {
     updateMetrics();
 
     // Si el modal del directorio está abierto, actualizarlo
-    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
+    if (document.getElementById('directorioModal').style.display !== 'none') { dirPage = 1; renderDir(); }
 };
 
 function updateActiveFilterLabel(rootId, subId) {
@@ -689,14 +744,14 @@ window.setQuickFilter = (filter, btn) => {
     btn.classList.add('active');
     renderShowcase();
     updateMetrics();
-    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
+    if (document.getElementById('directorioModal').style.display !== 'none') { dirPage = 1; renderDir(); }
 };
 
 // ── Búsqueda ──────────────────────────────────────────────────
 document.getElementById('siteSearch').addEventListener('input', e=>{
     searchQuery = e.target.value.toLowerCase().trim();
     renderShowcase();
-    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
+    if (document.getElementById('directorioModal').style.display !== 'none') { dirPage = 1; renderDir(); }
 });
 
 // ── Filtrar lista ─────────────────────────────────────────────
@@ -812,6 +867,7 @@ window.renderShowcase = () => {
 
 // ── Modal Directorio ──────────────────────────────────────────
 window.openDirectorio = () => {
+    dirPage = 1;
     document.getElementById('directorioModal').style.display='block';
     document.body.style.overflow='hidden';
     renderDir();
@@ -849,16 +905,26 @@ function dirCardHtml(b) {
     </a>`;
 }
 
+let dirPage = 1;
+const DIR_PAGE_SIZE = 24;
+
 function renderDir() {
     const list = filtered().sort((a,b)=>a.name.localeCompare(b.name,'es'));
     const grid = document.getElementById('dirGrid');
-    grid.innerHTML = list.length
-        ? list.map(dirCardHtml).join('')
-        : `<p style="grid-column:1/-1;text-align:center;padding:40px;color:#666;">No hay negocios con estos filtros.</p>`;
+    if (!list.length) {
+        grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:40px;color:#666;">No hay negocios con estos filtros.</p>`;
+        return;
+    }
+    const shown = list.slice(0, dirPage * DIR_PAGE_SIZE);
+    let html = shown.map(dirCardHtml).join('');
+    if (shown.length < list.length) {
+        html += `<button onclick="dirPage++; renderDir();" style="grid-column:1/-1;margin-top:8px;background:rgba(229,193,88,.1);border:1px solid rgba(229,193,88,.3);color:var(--gold);border-radius:8px;padding:10px;font-family:var(--font-sans);font-size:12px;font-weight:600;cursor:pointer;">Cargar más (${list.length - shown.length} restantes)</button>`;
+    }
+    grid.innerHTML = html;
 }
 
-// Cerrar modales con Escape
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') { closeDirectorio(); closeSubcatModal(); } });
+// Cerrar modal con Escape
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDirectorio(); });
 
 boot();
 
