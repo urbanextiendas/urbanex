@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="es" data-category="entretenimiento">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Urbanex - Entretenimiento</title>
+  <link rel="icon" type="image/png" href="../imagenes/log.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #020202;
+      --panel: rgba(6, 6, 6, 0.68);
+      --panel-strong: rgba(6, 6, 6, 0.88);
+      --card: rgba(18, 18, 20, 0.66);
+      --gold: #e5c158;
+      --gold-soft: rgba(229, 193, 88, 0.14);
+      --gold-line: rgba(229, 193, 88, 0.38);
+      --border: rgba(229, 193, 88, 0.18);
+      --text-main: #ffffff;
+      --text-muted: #d9d9d9;
+      --text-dark: #9d9d9d;
+      --green: #2ed573;
+      --red: #ff4757;
+      --font-serif: 'Cinzel', serif;
+      --font-sans: 'Montserrat', sans-serif;
+      --blur: blur(20px);
+      --category-bg: url("../imagenes/Entretenimiento.png");
+      --fallback-bg: url("../imagenes/Boulevard.png");
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; min-height: 100%; background: #000; }
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(229,193,88,.08), transparent 28%),
+        #020203;
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font-family: var(--font-sans); }
+
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(229,193,88,.24); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    .dashboard-container {
+      flex: 1;
+      min-height: calc(100vh - 26px);
+      display: grid;
+      grid-template-rows: 74px 1fr;
+      grid-template-columns: 272px minmax(0, 1fr) 360px;
+      grid-template-areas:
+        "header header header"
+        "aside-left main aside-right";
+      position: relative;
+      overflow: hidden;
+      background: #050506;
+    }
+
+    .global-background-underlay {
+      position: absolute;
+      inset: 74px 0 0 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: .54;
+      filter: saturate(.95) contrast(1.06);
+      background-image:
+        linear-gradient(90deg, rgba(0,0,0,.86) 0%, rgba(0,0,0,.28) 34%, rgba(0,0,0,.28) 66%, rgba(0,0,0,.86) 100%),
+        linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.56)),
+        var(--category-bg),
+        var(--fallback-bg);
+      background-size: cover;
+      background-position: center bottom;
+    }
+
+    .header-top {
+      grid-area: header;
+      position: relative;
+      z-index: 10;
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: linear-gradient(90deg, rgba(5,5,7,.96), rgba(10,10,12,.80), rgba(5,5,7,.96));
+      border-bottom: 1px solid rgba(229,193,88,.18);
+      box-shadow: 0 12px 34px rgba(0,0,0,.28);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+    }
+    .header-top::after {
+      content: "";
+      position: absolute;
+      left: 272px;
+      right: 360px;
+      bottom: -1px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(229,193,88,.72), transparent);
+      pointer-events: none;
+    }
+    .brand-box { min-width: 224px; display: flex; align-items: center; }
+    .brand-box img { height: 62px; width: auto; display: block; filter: drop-shadow(0 7px 18px rgba(0,0,0,.48)); }
+
+    .search-wrapper { flex: 1; max-width: 560px; margin: 0 20px; position: relative; }
+    .search-input {
+      width: 100%;
+      height: 42px;
+      border: 1px solid rgba(255,255,255,.105);
+      border-radius: 14px;
+      background: rgba(9,9,12,.72);
+      color: #fff;
+      padding: 0 44px 0 18px;
+      outline: none;
+      font-size: 11.5px;
+      text-align: left;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 10px 28px rgba(0,0,0,.18);
+      transition: all .22s ease;
+    }
+    .search-input::placeholder { color: rgba(255,255,255,.52); }
+    .search-input:focus {
+      border-color: rgba(229,193,88,.78);
+      box-shadow: 0 0 0 3px rgba(229,193,88,.08), inset 0 1px 0 rgba(255,255,255,.05);
+      background: rgba(0,0,0,.68);
+    }
+    .search-icon {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      fill: var(--gold);
+      opacity: .9;
+    }
+
+    .user-tools { display: flex; align-items: center; gap: 14px; }
+    .location-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      background: rgba(255,255,255,.035);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .location-indicator svg { width: 14px; height: 14px; fill: var(--gold); }
+    .tool-icon, .profile-avatar {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      background: rgba(255,255,255,.035);
+      cursor: pointer;
+    }
+    .tool-icon svg { width: 18px; height: 18px; fill: #fff; transition: .2s ease; }
+    .tool-icon:hover svg { fill: var(--gold); }
+    .profile-avatar { border-color: rgba(229,193,88,.40); }
+    .profile-avatar svg { width: 13px; height: 13px; fill: var(--gold); }
+
+    .aside-categories {
+      grid-area: aside-left;
+      position: relative;
+      z-index: 5;
+      padding: 22px 16px 18px;
+      background: linear-gradient(180deg, rgba(7,7,9,.89), rgba(4,4,5,.78)), var(--panel);
+      border-right: 1px solid rgba(229,193,88,.16);
+      box-shadow: 18px 0 45px rgba(0,0,0,.18);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      overflow-y: auto;
+    }
+    .sidebar-intro {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(229,193,88,.23);
+      border-radius: 18px;
+      background: radial-gradient(circle at 10% 0%, rgba(229,193,88,.15), transparent 42%), rgba(255,255,255,.035);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .sidebar-intro-icon {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(145deg, #f0d275, #b99438);
+      color: #090909;
+      font-size: 20px;
+      box-shadow: 0 10px 24px rgba(229,193,88,.20);
+    }
+    .sidebar-intro-copy span {
+      display: block;
+      color: rgba(255,255,255,.50);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    .sidebar-intro-copy strong {
+      display: block;
+      color: #fff;
+      font-family: var(--font-serif);
+      font-size: 13px;
+      letter-spacing: .5px;
+      line-height: 1.2;
+    }
+    .section-title {
+      margin: 0 0 10px 4px;
+      color: rgba(255,255,255,.48);
+      font-size: 8.5px;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .categories-list { display: flex; flex-direction: column; gap: 8px; list-style: none; }
+    .category-item { list-style: none; }
+    .category-item a, .sub-root-btn {
+      position: relative;
+      width: 100%;
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 9px 10px;
+      border: 1px solid rgba(255,255,255,.072);
+      border-radius: 16px;
+      background: rgba(255,255,255,.027);
+      color: inherit;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all .22s ease;
+      text-align: left;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+    }
+    .category-item a::before, .sub-root-btn::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 12px;
+      bottom: 12px;
+      width: 3px;
+      border-radius: 0 6px 6px 0;
+      background: transparent;
+      transition: all .22s ease;
+    }
+    .category-item a:hover, .sub-root-btn:hover {
+      transform: translateX(3px);
+      border-color: rgba(229,193,88,.26);
+      background: rgba(229,193,88,.055);
+    }
+    .category-item.active a, .sub-root-btn.active {
+      border-color: rgba(229,193,88,.50);
+      background: linear-gradient(90deg, rgba(229,193,88,.13), rgba(229,193,88,.045));
+      box-shadow: 0 12px 28px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.035);
+    }
+    .category-item.active a::before, .sub-root-btn.active::before {
+      background: var(--gold);
+      box-shadow: 0 0 14px rgba(229,193,88,.65);
+    }
+    .icon-container {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.08);
+      font-size: 17px;
+    }
+    .category-item.active .icon-container, .sub-root-btn.active .icon-container {
+      background: linear-gradient(145deg, #f0d275, #b99438);
+      border-color: transparent;
+      box-shadow: 0 9px 22px rgba(229,193,88,.20);
+      color: #000;
+    }
+    .category-text-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex: 1;
+      min-width: 0;
+    }
+    .category-name {
+      width: 100%;
+      color: #fff;
+      font-size: 11.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .category-item.active .category-name, .sub-root-btn.active .category-name { color: var(--gold); }
+    .category-count { color: var(--text-dark); font-size: 9px; margin-top: 2px; }
+
+    .main-boulevard {
+      grid-area: main;
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      background-image:
+        linear-gradient(to bottom, rgba(0,0,0,.28) 0%, rgba(0,0,0,.04) 42%, rgba(0,0,0,.62) 100%),
+        var(--category-bg),
+        var(--fallback-bg);
+      background-size: cover;
+      background-position: center bottom;
+      background-repeat: no-repeat;
+    }
+    .main-boulevard::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.28), transparent 36%, transparent 64%, rgba(0,0,0,.28)),
+        radial-gradient(circle at 50% 40%, transparent 0%, rgba(0,0,0,.18) 62%, rgba(0,0,0,.40) 100%);
+      pointer-events: none;
+    }
+    .welcome-billboard {
+      position: absolute;
+      top: 34px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(92%, 760px);
+      text-align: center;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .welcome-billboard h2 {
+      font-family: var(--font-serif);
+      color: #fff;
+      font-size: clamp(24px, 3.5vw, 42px);
+      letter-spacing: 7px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 12px rgba(0,0,0,.98);
+    }
+    .welcome-billboard p {
+      margin-top: 8px;
+      color: var(--gold);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 8px rgba(0,0,0,.95);
+    }
+
+    .category-console {
+      position: absolute;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      width: calc(100% - 34px);
+      max-width: 860px;
+      z-index: 4;
+      padding: 10px;
+      border: 1px solid rgba(229,193,88,.22);
+      border-radius: 18px;
+      background: rgba(8,8,10,.78);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      box-shadow: 0 22px 55px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .console-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 2px 4px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.055);
+      margin-bottom: 9px;
+    }
+    .console-title {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+    .console-title span {
+      color: rgba(255,255,255,.50);
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 1.7px;
+      text-transform: uppercase;
+    }
+    .console-title strong {
+      color: #fff;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .console-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .console-actions button {
+      height: 30px;
+      padding: 0 12px;
+      border: 1px solid rgba(229,193,88,.26);
+      border-radius: 10px;
+      background: rgba(255,255,255,.035);
+      color: var(--gold);
+      font-size: 10.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .console-actions button:hover {
+      background: rgba(229,193,88,.12);
+      border-color: var(--gold);
+    }
+
+    .subcat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(138px, 1fr));
+      gap: 8px;
+      max-height: 166px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+    .subcat-tile {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border: 1px solid rgba(229,193,88,.18);
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(20,20,20,.82), rgba(8,8,8,.88));
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all .22s ease;
+      text-align: left;
+    }
+    .subcat-tile:hover, .subcat-tile.active {
+      border-color: var(--gold);
+      background: rgba(229,193,88,.10);
+      transform: translateY(-2px);
+      box-shadow: 0 0 22px rgba(229,193,88,.18), inset 0 0 12px rgba(229,193,88,.08);
+    }
+    .subcat-tile-icon {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(229,193,88,.28);
+      border-radius: 11px;
+      background: rgba(229,193,88,.06);
+      font-size: 16px;
+    }
+    .subcat-tile-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .subcat-tile-label strong {
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .subcat-tile-label span {
+      color: var(--text-dark);
+      font-size: 8.5px;
+    }
+    .subcat-tile.active .subcat-tile-label strong { color: var(--gold); }
+
+    .floating-filter-pill {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      z-index: 5;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border: 1px solid rgba(229,193,88,.44);
+      border-radius: 20px;
+      background: rgba(0,0,0,.76);
+      backdrop-filter: blur(12px);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .floating-filter-pill.visible { display: flex; }
+    .floating-filter-pill button {
+      border: none;
+      background: transparent;
+      color: var(--gold);
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .aside-showcase-list {
+      grid-area: aside-right;
+      position: relative;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, rgba(7,7,9,.89), rgba(4,4,5,.78)), var(--panel);
+      border-left: 1px solid rgba(229,193,88,.16);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      overflow: hidden;
+    }
+    .showcase-header { padding: 22px 18px 10px; }
+    .showcase-header h2 {
+      font-family: var(--font-serif);
+      color: var(--gold);
+      font-size: 13px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+    .showcase-stats {
+      margin-top: 2px;
+      color: #fff;
+      font-size: 10.5px;
+    }
+    .sort-box {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 0 18px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.055);
+    }
+    .sort-select {
+      width: 100%;
+      height: 34px;
+      border: 1px solid rgba(255,255,255,.11);
+      border-radius: 9px;
+      background: rgba(0,0,0,.42);
+      color: #fff;
+      outline: none;
+      padding: 0 10px;
+      font-size: 11px;
+    }
+    .right-search {
+      width: 100%;
+      height: 34px;
+      border: 1px solid rgba(255,255,255,.11);
+      border-radius: 9px;
+      background: rgba(0,0,0,.42);
+      color: #fff;
+      outline: none;
+      padding: 0 10px;
+      font-size: 11px;
+    }
+    .right-search:focus,
+    .sort-select:focus {
+      border-color: rgba(229,193,88,.56);
+    }
+    .shops-scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .shop-card {
+      min-height: 74px;
+      display: flex;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 13px;
+      background: var(--card);
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all .22s ease;
+    }
+    .shop-card:hover {
+      border-color: rgba(229,193,88,.45);
+      background: rgba(229,193,88,.09);
+      transform: translateX(2px);
+    }
+    .shop-thumb-wrapper {
+      width: 74px;
+      height: 74px;
+      flex: 0 0 74px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(229,193,88,.26), transparent 38%),
+        linear-gradient(135deg, rgba(229,193,88,.12), rgba(0,0,0,.72));
+      color: var(--gold);
+      font-size: 26px;
+    }
+    .shop-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .shop-details {
+      min-width: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8px 10px;
+    }
+    .shop-title {
+      color: #fff;
+      font-size: 12.2px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .shop-segment {
+      margin-top: 2px;
+      color: var(--gold);
+      font-size: 9.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .shop-rating-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .star-icon { width: 10px; height: 10px; fill: var(--gold); }
+    .rating-value { color: #fff; font-size: 10px; font-weight: 700; }
+    .rating-count { color: var(--text-dark); font-size: 9.5px; }
+    .status-open { margin-left: auto; color: var(--green); font-size: 9.5px; font-weight: 700; }
+    .status-closed { margin-left: auto; color: var(--red); font-size: 9.5px; font-weight: 700; }
+    .featured-label {
+      display: inline-flex;
+      align-items: center;
+      margin-left: 4px;
+      padding: 1px 4px;
+      border: 1px solid rgba(229,193,88,.38);
+      border-radius: 4px;
+      color: var(--gold);
+      font-size: 7px;
+      letter-spacing: .6px;
+      vertical-align: middle;
+    }
+    .shop-card-empty {
+      min-height: 120px;
+      display: grid;
+      place-items: center;
+      border: 1px dashed rgba(229,193,88,.24);
+      border-radius: 12px;
+      background: rgba(0,0,0,.24);
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 11.5px;
+      line-height: 1.6;
+      padding: 18px;
+    }
+    .action-footer-box {
+      padding: 12px 18px;
+      border-top: 1px solid rgba(255,255,255,.055);
+    }
+    .btn-view-all-shops {
+      width: 100%;
+      height: 38px;
+      border: none;
+      border-radius: 10px;
+      background: var(--gold);
+      color: #000;
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .btn-view-all-shops:hover {
+      background: #f1cd6b;
+      transform: translateY(-1px);
+    }
+
+    .pie-pagina {
+      width: 100%;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      border-top: 1px solid #1a1a1a;
+      color: #8c8c8c;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11px;
+      z-index: 5;
+    }
+
+    @media (max-width: 1180px) {
+      .dashboard-container {
+        grid-template-columns: 244px minmax(0, 1fr) 320px;
+      }
+      .header-top::after {
+        left: 244px;
+        right: 320px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 430px auto;
+        grid-template-areas:
+          "header"
+          "aside-left"
+          "main"
+          "aside-right";
+        min-height: auto;
+        overflow: visible;
+      }
+      .global-background-underlay { inset: 0; }
+      .header-top {
+        height: auto;
+        min-height: 74px;
+        flex-wrap: wrap;
+        padding: 12px;
+        gap: 10px;
+      }
+      .header-top::after { display: none; }
+      .brand-box { min-width: auto; }
+      .brand-box img { height: 56px; }
+      .search-wrapper { order: 3; flex-basis: 100%; max-width: none; margin: 0; }
+      .user-tools { margin-left: auto; }
+      .aside-categories {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 12px;
+      }
+      .sidebar-intro { display: none; }
+      .section-title { display: none; }
+      .categories-list {
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 8px;
+        padding-bottom: 4px;
+      }
+      .category-item { flex: 0 0 auto; }
+      .category-item a, .sub-root-btn { width: auto; min-height: 50px; white-space: nowrap; }
+      #subCategoryList { display: none; }
+      .main-boulevard { min-height: 430px; }
+      .welcome-billboard { top: 28px; }
+      .welcome-billboard h2 { font-size: 26px; letter-spacing: 5px; }
+      .category-console { bottom: 14px; width: calc(100% - 24px); }
+      .subcat-grid { grid-template-columns: repeat(auto-fill, minmax(136px, 1fr)); max-height: 150px; }
+      .aside-showcase-list {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        min-height: 360px;
+      }
+      .shops-scroll-area {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header-top { align-items: stretch; }
+      .user-tools { width: 100%; justify-content: flex-end; gap: 10px; }
+      .location-indicator span { display: none; }
+      .welcome-billboard h2 { font-size: 20px; letter-spacing: 3px; }
+      .welcome-billboard p { font-size: 8px; letter-spacing: 1.3px; }
+      .category-console { border-radius: 14px; }
+      .console-top { flex-direction: column; align-items: flex-start; }
+      .console-actions { width: 100%; }
+      .console-actions button { flex: 1; }
+      .subcat-grid { grid-template-columns: 1fr 1fr; }
+      .subcat-tile { min-height: 54px; padding: 8px; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="dashboard-container">
+  <div class="global-background-underlay"></div>
+
+  <header class="header-top">
+    <a href="../boulevard.html" class="brand-box" title="Volver al Boulevard">
+      <img src="../imagenes/logo.png" alt="Logo Urbanex">
+    </a>
+
+    <div class="search-wrapper">
+      <input type="search" id="siteSearch" class="search-input" placeholder="¿Qué producto o servicio busca?" autocomplete="off">
+      <svg class="search-icon" viewBox="0 0 24 24">
+        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+    </div>
+
+    <div class="user-tools">
+      <div class="location-indicator">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+        <span>Loja, Ecuador</span>
+      </div>
+
+      <a class="tool-icon" href="../boulevard.html" title="Volver al boulevard">
+        <svg viewBox="0 0 24 24"><path d="M10.59 7.41 9.17 6 3.17 12l6 6 1.42-1.41L7 13h14v-2H7l3.59-3.59z"/></svg>
+      </a>
+
+      <div class="profile-avatar" title="Perfil">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <aside class="aside-categories">
+    <div class="sidebar-intro">
+      <div class="sidebar-intro-icon">🎭</div>
+      <div class="sidebar-intro-copy">
+        <span>Categoría activa</span>
+        <strong>Entretenimiento</strong>
+      </div>
+    </div>
+
+    <h2 class="section-title">Categorías</h2>
+    <ul class="categories-list" id="rootCategoryList">
+      <li class="category-item">
+        <a href="../boulevard.html">
+          <div class="icon-container">⌂</div>
+          <div class="category-text-info">
+            <span class="category-name">Todos los negocios</span>
+            <span class="category-count">Vista general</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+
+    <div style="height:1px;background:rgba(229,193,88,.16);margin:18px 0;"></div>
+
+    <h2 class="section-title">Subcategorías</h2>
+    <ul class="categories-list" id="subCategoryList"></ul>
+  </aside>
+
+  <main class="main-boulevard">
+    <div class="floating-filter-pill" id="activeFilterPill">
+      <span id="activeFilterText"></span>
+      <button type="button" onclick="selectSubcategory(null)">✕</button>
+    </div>
+
+    <div class="welcome-billboard">
+      <h2 id="categoryTitle">Entretenimiento</h2>
+      <p id="categorySubtitle">OCIO, CULTURA Y EXPERIENCIAS EN LOJA</p>
+    </div>
+
+    <section class="category-console">
+      <div class="console-top">
+        <div class="console-title">
+          <span>Explorar subcategorías</span>
+          <strong id="consoleTitle">Entretenimiento: Ocio, cultura, diversión y experiencias locales</strong>
+        </div>
+
+        <div class="console-actions">
+          <button type="button" onclick="selectSubcategory(null)">Todos</button>
+          <button type="button" onclick="goToDirectory()">Directorio</button>
+        </div>
+      </div>
+
+      <div class="subcat-grid" id="subcatGrid">
+        <button class="subcat-tile active" type="button" onclick="selectSubcategory(null)">
+          <span class="subcat-tile-icon">🎭</span>
+          <span class="subcat-tile-label">
+            <strong>Todos</strong>
+            <span>Cargando...</span>
+          </span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <aside class="aside-showcase-list">
+    <div class="showcase-header">
+      <h2>DESTACADOS</h2>
+      <div class="showcase-stats" id="showcaseStats">Cargando negocios...</div>
+    </div>
+
+    <div class="sort-box">
+      <input class="right-search" id="rightSearch" type="search" placeholder="Buscar en esta categoría">
+      <select class="sort-select" id="showcaseSort" onchange="renderShowcase()">
+        <option value="featured">Ordenar por: Destacados</option>
+        <option value="rating">Ordenar por: Mayor Calificación</option>
+        <option value="name">Nombre A–Z</option>
+      </select>
+    </div>
+
+    <div class="shops-scroll-area" id="shopsScrollArea">
+      <div class="shop-card-empty">Cargando negocios...</div>
+    </div>
+
+    <div class="action-footer-box">
+      <button class="btn-view-all-shops" type="button" onclick="goToDirectory()">Explorar Directorio Completo</button>
+    </div>
+  </aside>
+</div>
+
+<footer class="pie-pagina">
+  <p>&copy; 2026 Urbanex. Desarrollado por Neodat Consultores.</p>
+</footer>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const NEGOCIO_URL = (slug) => `../business/?slug=${slug}`;
+const CATEGORY_KEY = document.documentElement.dataset.category || 'entretenimiento';
+
+const CATEGORY_CONFIG = {
+  comida: {
+    title: 'Comida y Bebida',
+    icon: '🍽️',
+    subtitle: 'Restaurantes, cafeterías y sabores locales en Loja',
+    aliases: ['comida y bebida', 'comida', 'gastronomia', 'gastronomía'],
+    route: 'comida.html'
+  },
+  comercio: {
+    title: 'Comercio',
+    icon: '🛍️',
+    subtitle: 'Tiendas, productos y comercios locales en un solo lugar',
+    aliases: ['comercio'],
+    route: 'comercio.html'
+  },
+  servicios: {
+    title: 'Servicios',
+    icon: '🔧',
+    subtitle: 'Soluciones profesionales, técnicas y especializadas',
+    aliases: ['servicios', 'servicio'],
+    route: 'servicios.html'
+  },
+  salud: {
+    title: 'Salud y Bienestar',
+    icon: '💊',
+    subtitle: 'Cuidado, salud, bienestar y atención local',
+    aliases: ['salud y bienestar', 'salud'],
+    route: 'salud.html'
+  },
+  entretenimiento: {
+    title: 'Entretenimiento',
+    icon: '🎭',
+    subtitle: 'Ocio, cultura, experiencias y diversión local',
+    aliases: ['entretenimiento'],
+    route: 'entretenimiento.html'
+  },
+  alojamiento: {
+    title: 'Alojamiento',
+    icon: '🏨',
+    subtitle: 'Hoteles, hostales y cabañas para descansar en Loja',
+    aliases: ['alojamiento', 'turismo', 'turismo y hospedaje'],
+    route: 'alojamiento.html'
+  }
+};
+
+let allBusinesses = [];
+let rootCategories = [];
+let subCategories = [];
+let currentRoot = null;
+let activeSubId = null;
+let searchQuery = '';
+
+function esc(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function toNum(value) {
+  const number = Number(value);
+  return Number.isNaN(number) ? null : number;
+}
+
+function normalize(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ');
+}
+
+function isOpenNow(hours) {
+  if (!hours?.length) return false;
+
+  const now = new Date();
+  const row = hours.find(item => item.day_of_week === now.getDay() && !item.is_closed);
+
+  if (!row) return false;
+
+  const current = now.getHours() * 60 + now.getMinutes();
+  const [oh, om] = String(row.open_time || '').split(':').map(Number);
+  const [ch, cm] = String(row.close_time || '').split(':').map(Number);
+
+  if (Number.isNaN(oh) || Number.isNaN(ch)) return false;
+
+  return current >= (oh * 60 + (om || 0)) &&
+         current <= (ch * 60 + (cm || 0));
+}
+
+function avgRating(reviews) {
+  const approved = (reviews || []).filter(review => review.is_approved);
+  return approved.length
+    ? approved.reduce((sum, review) => sum + review.rating, 0) / approved.length
+    : null;
+}
+
+function categorySlugByName(name) {
+  const normalized = normalize(name);
+
+  return Object.entries(CATEGORY_CONFIG).find(([, config]) => {
+    return config.aliases.some(alias => normalize(alias) === normalized);
+  })?.[0] || null;
+}
+
+function findCurrentRoot() {
+  const config = CATEGORY_CONFIG[CATEGORY_KEY];
+
+  return rootCategories.find(category => {
+    const normalized = normalize(category.name);
+    return config.aliases.some(alias => normalize(alias) === normalized);
+  });
+}
+
+function businessBelongsToRoot(business, root) {
+  if (!root) return false;
+
+  const rootId = toNum(root.id);
+  const bCat = toNum(business.category_id);
+  const bSub = toNum(business.subcategory_id);
+
+  if (bCat === rootId) return true;
+
+  const sub = subCategories.find(item => toNum(item.id) === bSub);
+
+  return sub ? toNum(sub.parent_id) === rootId : false;
+}
+
+function currentRootBusinesses() {
+  return allBusinesses.filter(business => businessBelongsToRoot(business, currentRoot));
+}
+
+function filteredBusinesses() {
+  return currentRootBusinesses().filter(business => {
+    if (activeSubId && toNum(business.subcategory_id) !== toNum(activeSubId)) return false;
+
+    if (searchQuery) {
+      const haystack = `${business.name} ${business.address || ''} ${business.categories?.name || ''} ${business.subcategories?.name || ''}`.toLowerCase();
+      if (!haystack.includes(searchQuery)) return false;
+    }
+
+    return true;
+  });
+}
+
+async function boot() {
+  const config = CATEGORY_CONFIG[CATEGORY_KEY];
+
+  if (config) {
+    document.title = `Urbanex - ${config.title}`;
+    document.getElementById('categoryTitle').textContent = config.title.toUpperCase();
+    document.getElementById('categorySubtitle').textContent = config.subtitle.toUpperCase();
+    document.getElementById('consoleTitle').textContent = `${config.title}: ${config.subtitle}`;
+  }
+
+  const [catsRes, bizRes] = await Promise.all([
+    supabase
+      .from('categories')
+      .select('id,name,icon,parent_id,sort_order')
+      .order('sort_order')
+      .order('name'),
+
+    supabase
+      .from('businesses')
+      .select(`
+        id,name,slug,city,address,cover_image,is_featured,delivery_available,category_id,subcategory_id,
+        categories!category_id(name,icon),
+        subcategories:categories!subcategory_id(name,icon),
+        business_hours(day_of_week,open_time,close_time,is_closed),
+        reviews(is_approved,rating),
+        promotions(is_active,end_date)
+      `)
+      .eq('is_active', true)
+  ]);
+
+  if (catsRes.error) console.error('categories error:', catsRes.error.message);
+  if (bizRes.error) console.error('businesses error:', bizRes.error.message);
+
+  const cats = catsRes.data || [];
+
+  rootCategories = cats.filter(category => !category.parent_id);
+  subCategories = cats.filter(category => category.parent_id);
+
+  currentRoot = findCurrentRoot();
+
+  allBusinesses = (bizRes.data || []).map(business => ({
+    ...business,
+    _open: isOpenNow(business.business_hours),
+    _rating: avgRating(business.reviews),
+    _reviews: (business.reviews || []).filter(review => review.is_approved).length
+  }));
+
+  renderRootNavigation();
+  renderSubcategories();
+  renderShowcase();
+}
+
+function renderRootNavigation() {
+  const list = document.getElementById('rootCategoryList');
+
+  rootCategories.forEach(category => {
+    const slug = categorySlugByName(category.name);
+    if (!slug || !CATEGORY_CONFIG[slug]) return;
+
+    const count = allBusinesses.filter(business => businessBelongsToRoot(business, category)).length;
+    const li = document.createElement('li');
+
+    li.className = 'category-item';
+
+    if (currentRoot && toNum(category.id) === toNum(currentRoot.id)) {
+      li.classList.add('active');
+    }
+
+    li.innerHTML = `
+      <a href="${CATEGORY_CONFIG[slug].route}">
+        <div class="icon-container">${category.icon || CATEGORY_CONFIG[slug].icon || '📁'}</div>
+        <div class="category-text-info">
+          <span class="category-name">${esc(category.name)}</span>
+          <span class="category-count">${count} local${count !== 1 ? 'es' : ''}</span>
+        </div>
+      </a>
+    `;
+
+    list.appendChild(li);
+  });
+}
+
+function renderSubcategories() {
+  const sidebar = document.getElementById('subCategoryList');
+  const grid = document.getElementById('subcatGrid');
+  const rootCount = currentRootBusinesses().length;
+
+  sidebar.innerHTML = '';
+  grid.innerHTML = `
+    <button class="subcat-tile active" type="button" onclick="selectSubcategory(null)">
+      <span class="subcat-tile-icon">${CATEGORY_CONFIG[CATEGORY_KEY]?.icon || '📍'}</span>
+      <span class="subcat-tile-label">
+        <strong>Todos</strong>
+        <span>${rootCount} local${rootCount !== 1 ? 'es' : ''}</span>
+      </span>
+    </button>
+  `;
+
+  sidebar.innerHTML = `
+    <li class="category-item">
+      <button class="sub-root-btn active" type="button" onclick="selectSubcategory(null)">
+        <div class="icon-container">${CATEGORY_CONFIG[CATEGORY_KEY]?.icon || '📍'}</div>
+        <div class="category-text-info">
+          <span class="category-name">Todos</span>
+          <span class="category-count">${rootCount} local${rootCount !== 1 ? 'es' : ''}</span>
+        </div>
+      </button>
+    </li>
+  `;
+
+  if (!currentRoot) {
+    grid.innerHTML = `
+      <div class="shop-card-empty">
+        No se encontró esta categoría en Supabase.
+      </div>
+    `;
+    return;
+  }
+
+  const rootId = toNum(currentRoot.id);
+
+  const subs = subCategories
+    .filter(sub => toNum(sub.parent_id) === rootId)
+    .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0) || a.name.localeCompare(b.name, 'es'));
+
+  subs.forEach(sub => {
+    const count = allBusinesses.filter(business => toNum(business.subcategory_id) === toNum(sub.id)).length;
+
+    sidebar.insertAdjacentHTML('beforeend', `
+      <li class="category-item">
+        <button class="sub-root-btn" type="button" data-sub-id="${sub.id}" onclick="selectSubcategory(${sub.id})">
+          <div class="icon-container">${sub.icon || '•'}</div>
+          <div class="category-text-info">
+            <span class="category-name">${esc(sub.name)}</span>
+            <span class="category-count">${count} local${count !== 1 ? 'es' : ''}</span>
+          </div>
+        </button>
+      </li>
+    `);
+
+    grid.insertAdjacentHTML('beforeend', `
+      <button class="subcat-tile" type="button" data-sub-id="${sub.id}" onclick="selectSubcategory(${sub.id})">
+        <span class="subcat-tile-icon">${sub.icon || '•'}</span>
+        <span class="subcat-tile-label">
+          <strong>${esc(sub.name)}</strong>
+          <span>${count} local${count !== 1 ? 'es' : ''}</span>
+        </span>
+      </button>
+    `);
+  });
+}
+
+window.selectSubcategory = (subId) => {
+  activeSubId = subId ? toNum(subId) : null;
+
+  document.querySelectorAll('.sub-root-btn, .subcat-tile').forEach(button => button.classList.remove('active'));
+
+  if (!activeSubId) {
+    document.querySelectorAll('.sub-root-btn:not([data-sub-id]), .subcat-tile:not([data-sub-id])').forEach(button => button.classList.add('active'));
+  } else {
+    document.querySelectorAll(`[data-sub-id="${activeSubId}"]`).forEach(button => button.classList.add('active'));
+  }
+
+  updateActiveFilter();
+  renderShowcase();
+};
+
+function updateActiveFilter() {
+  const pill = document.getElementById('activeFilterPill');
+  const text = document.getElementById('activeFilterText');
+
+  if (!activeSubId) {
+    pill.classList.remove('visible');
+    text.textContent = '';
+    return;
+  }
+
+  const sub = subCategories.find(item => toNum(item.id) === activeSubId);
+  text.textContent = `${sub?.icon || ''} ${sub?.name || 'Subcategoría'}`;
+  pill.classList.add('visible');
+}
+
+function shopCardHtml(business) {
+  const thumb = business.cover_image
+    ? `<img class="shop-thumb" src="${esc(business.cover_image)}" alt="${esc(business.name)}" loading="lazy">`
+    : `${business.subcategories?.icon || business.categories?.icon || '🏪'}`;
+
+  const categoryLabel = business.subcategories?.name
+    ? `${business.categories?.icon || ''} ${business.subcategories.name}`
+    : `${business.categories?.icon || ''} ${business.categories?.name || 'Sin categoría'}`;
+
+  const ratingHtml = business._rating
+    ? `<svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+       <span class="rating-value">${business._rating.toFixed(1)}</span>
+       <span class="rating-count">(${business._reviews})</span>`
+    : `<span class="rating-count">Sin reseñas</span>`;
+
+  const statusHtml = business._open
+    ? `<span class="status-open">Abierto</span>`
+    : `<span class="status-closed">Cerrado</span>`;
+
+  const featured = business.is_featured ? `<span class="featured-label">TOP</span>` : '';
+
+  return `
+    <a class="shop-card" href="${NEGOCIO_URL(business.slug)}">
+      <div class="shop-thumb-wrapper">${thumb}</div>
+      <div class="shop-details">
+        <div class="shop-title">${esc(business.name)}${featured}</div>
+        <div class="shop-segment">${categoryLabel}</div>
+        <div class="shop-rating-row">${ratingHtml}${statusHtml}</div>
+      </div>
+    </a>
+  `;
+}
+
+window.renderShowcase = () => {
+  const sort = document.getElementById('showcaseSort').value;
+  let list = filteredBusinesses();
+
+  if (sort === 'featured') {
+    list = list.sort((a, b) => Number(b.is_featured) - Number(a.is_featured) || (b._rating || 0) - (a._rating || 0));
+  }
+
+  if (sort === 'rating') {
+    list = list.sort((a, b) => (b._rating || 0) - (a._rating || 0));
+  }
+
+  if (sort === 'name') {
+    list = list.sort((a, b) => a.name.localeCompare(b.name, 'es'));
+  }
+
+  const area = document.getElementById('shopsScrollArea');
+  const stats = document.getElementById('showcaseStats');
+
+  stats.textContent = `${list.length} negocio${list.length !== 1 ? 's' : ''} encontrado${list.length !== 1 ? 's' : ''}`;
+
+  if (!list.length) {
+    area.innerHTML = `
+      <div class="shop-card-empty">
+        No hay negocios con estos filtros.
+      </div>
+    `;
+    return;
+  }
+
+  area.innerHTML = list.map(shopCardHtml).join('');
+};
+
+window.goToDirectory = () => {
+  window.location.href = '../boulevard.html';
+};
+
+document.getElementById('siteSearch').addEventListener('input', event => {
+  searchQuery = event.target.value.toLowerCase().trim();
+  document.getElementById('rightSearch').value = event.target.value;
+  renderShowcase();
+});
+
+document.getElementById('rightSearch').addEventListener('input', event => {
+  searchQuery = event.target.value.toLowerCase().trim();
+  document.getElementById('siteSearch').value = event.target.value;
+  renderShowcase();
+});
+
+boot();
+</script>
+</body>
+</html>
