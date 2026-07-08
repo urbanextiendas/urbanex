@@ -467,6 +467,67 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const NEGOCIO_URL = (slug) => `business/?slug=${slug}`;
 // Si está en subcarpeta usa: `business/index.html?slug=${slug}`
 
+// ── Rutas oficiales de páginas de categorías ──────────────────
+// GitHub mantiene las páginas HTML en /categorias.
+// Supabase solo entrega los datos; NO cambia la estructura de GitHub.
+const CATEGORY_PAGE_ROUTES = {
+    "comida y bebida": "categorias/comida.html",
+    "comida": "categorias/comida.html",
+    "gastronomia": "categorias/comida.html",
+    "gastronomía": "categorias/comida.html",
+
+    "comercio": "categorias/comercio.html",
+
+    "servicios": "categorias/servicios.html",
+    "servicio": "categorias/servicios.html",
+
+    "salud y bienestar": "categorias/salud.html",
+    "salud": "categorias/salud.html",
+
+    "entretenimiento": "categorias/entretenimiento.html",
+
+    "alojamiento": "categorias/alojamiento.html",
+    "turismo": "categorias/alojamiento.html",
+    "turismo y hospedaje": "categorias/alojamiento.html",
+
+    "hogar": "categorias/hogar/index.html",
+    "hogar y tecnologia": "categorias/hogar/index.html",
+    "hogar y tecnología": "categorias/hogar/index.html"
+};
+
+function normalizeCategoryName(value) {
+    return String(value || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ");
+}
+
+function buildFallbackCategoryPath(name) {
+    const slug = normalizeCategoryName(name)
+        .replace(/&/g, "y")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+    return `categorias/${slug}.html`;
+}
+
+function getCategoryPageUrl(category) {
+    const key = normalizeCategoryName(category?.name);
+
+    if (CATEGORY_PAGE_ROUTES[key]) {
+        return CATEGORY_PAGE_ROUTES[key];
+    }
+
+    return buildFallbackCategoryPath(category?.name);
+}
+
+window.openCategoryPage = (url) => {
+    if (!url) return;
+    window.location.href = url;
+};
+
 const SUPABASE_URL      = 'https://mlkynawsjqmawgxeuvks.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -568,6 +629,7 @@ function renderCatTree() {
     rootCategories.forEach(root=>{
         const subs = subMap[root.id]||[];
         const total = countByRoot[root.id]||0;
+        const categoryUrl = getCategoryPageUrl(root);
         const li = document.createElement('li');
         li.className = 'category-item';
 
@@ -575,13 +637,13 @@ function renderCatTree() {
 
         li.innerHTML = `
         <button class="cat-root-btn" id="catRoot_${root.id}"
-                onclick="handleRootClick(${root.id}, this)">
+                onclick="openCategoryPage('${categoryUrl}')">
             ${iconHtml}
             <div class="category-text-info">
                 <span class="category-name">${esc(root.name)}</span>
                 <span class="category-count">${total} local${total!==1?'es':''}</span>
             </div>
-            ${subs.length ? `<span class="cat-arrow">▶</span>` : ''}
+            ${subs.length ? `<span class="cat-arrow">›</span>` : ''}
         </button>
         ${subs.length ? `
         <div class="sub-list" id="subList_${root.id}">
@@ -597,26 +659,17 @@ function renderCatTree() {
     });
 }
 
-// Click en raíz: expandir/colapsar subcategorías + filtrar
+// Click en raíz: abrir la página HTML oficial de la categoría.
+// Se conserva esta función para compatibilidad, pero ya NO despliega subcategorías en el sidebar.
 window.handleRootClick = (rootId, btn) => {
-    const subs    = subMap[rootId]||[];
-    const subList = document.getElementById(`subList_${rootId}`);
+    const root = rootCategories.find(r => toNum(r.id) === toNum(rootId));
 
-    if (!subs.length) {
+    if (!root) {
         selectCategory(toNum(rootId), null, btn);
         return;
     }
 
-    const isOpen = subList?.classList.contains('open');
-    // Cerrar todos
-    document.querySelectorAll('.sub-list').forEach(el=>el.classList.remove('open'));
-    document.querySelectorAll('.cat-root-btn').forEach(b=>b.classList.remove('expanded'));
-
-    if (!isOpen) {
-        subList.classList.add('open');
-        btn.classList.add('expanded');
-    }
-    selectCategory(toNum(rootId), null, btn);
+    window.location.href = getCategoryPageUrl(root);
 };
 
 // Seleccionar categoría / subcategoría
