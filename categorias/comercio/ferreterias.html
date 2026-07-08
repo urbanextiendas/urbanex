@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urbanex - Entretenimiento</title>
-    <link rel="icon" type="image/png" href="../imagenes/log.png">
+    <title>Urbanex - Ferreterías</title>
+    <link rel="icon" type="image/png" href="../../imagenes/log.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -212,19 +212,19 @@ button, select, input { font-family: var(--font-sans); }
     .aside-showcase-list { height:210px !important; }
 }
 
-        :root { --page-bg: url("../imagenes/Boulevard.png"); }
+        :root { --page-bg: url("../../imagenes/Comercio.png"); }
     </style>
 </head>
 <body>
 <div class="dashboard-container">
-    <div class="global-background-underlay"><img src="../imagenes/Boulevard.png" alt="Entretenimiento de Loja"></div>
+    <div class="global-background-underlay"><img src="../../imagenes/Comercio.png" alt="Comercio de Loja"></div>
 
     <header class="header-top">
-        <a href="../boulevard.html" class="brand-box" title="Volver al Boulevard">
-            <img src="../imagenes/logo.png" alt="Logo Urbanex">
+        <a href="../../boulevard.html" class="brand-box" title="Volver al Boulevard">
+            <img src="../../imagenes/logo.png" alt="Logo Urbanex">
         </a>
         <div class="search-wrapper">
-            <input type="search" id="siteSearch" class="search-input" placeholder="¿Qué actividad o lugar de entretenimiento busca?" autocomplete="off">
+            <input type="search" id="siteSearch" class="search-input" placeholder="Buscar en Ferreterías..." autocomplete="off">
             <svg class="search-icon" viewBox="0 0 24 24" role="button" aria-label="Buscar" tabindex="0"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         </div>
         <div class="user-tools">
@@ -238,39 +238,57 @@ button, select, input { font-family: var(--font-sans); }
         <h2 class="section-title">Subcategorías</h2>
         <ul class="categories-list">
             
+            <li class="category-item">
+                <button type="button" onclick="window.location.href='ropa-y-moda.html'">
+                    <div class="icon-container"><span class="category-emoji">👕</span></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Ropa y Moda</span>
+                        <span class="category-count" id="count_ropa_y_moda">0 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button type="button" onclick="window.location.href='calzado.html'">
+                    <div class="icon-container"><span class="category-emoji">👟</span></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Calzado</span>
+                        <span class="category-count" id="count_calzado">0 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button type="button" onclick="window.location.href='electronica.html'">
+                    <div class="icon-container"><span class="category-emoji">💻</span></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Electrónica</span>
+                        <span class="category-count" id="count_electronica">0 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button type="button" onclick="window.location.href='supermercados.html'">
+                    <div class="icon-container"><span class="category-emoji">🛒</span></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Supermercados</span>
+                        <span class="category-count" id="count_supermercados">0 locales</span>
+                    </div>
+                </button>
+            </li>
             <li class="category-item active">
-                <button type="button" onclick="window.location.href='entretenimiento/cines.html'">
-                    <div class="icon-container"><span class="category-emoji">🎬</span></div>
+                <button type="button" onclick="window.location.href='ferreterias.html'">
+                    <div class="icon-container"><span class="category-emoji">🔩</span></div>
                     <div class="category-text-info">
-                        <span class="category-name">Cines</span>
-                        <span class="category-count" id="count_cines">0 locales</span>
+                        <span class="category-name">Ferreterías</span>
+                        <span class="category-count" id="count_ferreterias">0 locales</span>
                     </div>
                 </button>
             </li>
             <li class="category-item">
-                <button type="button" onclick="window.location.href='entretenimiento/canchas.html'">
-                    <div class="icon-container"><span class="category-emoji">⚽</span></div>
+                <button type="button" onclick="window.location.href='farmacias.html'">
+                    <div class="icon-container"><span class="category-emoji">💊</span></div>
                     <div class="category-text-info">
-                        <span class="category-name">Canchas</span>
-                        <span class="category-count" id="count_canchas">0 locales</span>
-                    </div>
-                </button>
-            </li>
-            <li class="category-item">
-                <button type="button" onclick="window.location.href='entretenimiento/karaoke.html'">
-                    <div class="icon-container"><span class="category-emoji">🎤</span></div>
-                    <div class="category-text-info">
-                        <span class="category-name">Karaoke</span>
-                        <span class="category-count" id="count_karaoke">0 locales</span>
-                    </div>
-                </button>
-            </li>
-            <li class="category-item">
-                <button type="button" onclick="window.location.href='entretenimiento/juegos.html'">
-                    <div class="icon-container"><span class="category-emoji">🎮</span></div>
-                    <div class="category-text-info">
-                        <span class="category-name">Juegos</span>
-                        <span class="category-count" id="count_juegos">0 locales</span>
+                        <span class="category-name">Farmacias</span>
+                        <span class="category-count" id="count_farmacias">0 locales</span>
                     </div>
                 </button>
             </li>
@@ -280,17 +298,17 @@ button, select, input { font-family: var(--font-sans); }
     <main class="main-boulevard">
         <div class="boulevard-overlay"></div>
         <div class="welcome-billboard">
-            <h2>ENTRETENIMIENTO</h2>
-            <p>OCIO, DIVERSIÓN Y EXPERIENCIAS LOCALES EN LOJA</p>
+            <h2>FERRETERÍAS</h2>
+            <p>FERRETERÍAS DE LOJA EN UN SOLO LUGAR</p>
         </div>
-        
+        <div class="subcategory-badge"><span>🔩</span><span>Ferreterías</span></div>
     </main>
 
     <aside class="aside-showcase-list">
         <div class="showcase-header"><h2>Destacados</h2><p class="showcase-stats" id="showcaseStats">Cargando negocios...</p></div>
         <div class="sort-box"><select class="sort-select" id="sortSelect"><option value="featured">Ordenar por: Destacados</option><option value="rating">Ordenar por: Mayor Calificación</option><option value="name">Ordenar por: Nombre</option></select></div>
         <div class="shops-scroll-area" id="shopsList"><div class="empty-state">Cargando información desde Supabase...</div></div>
-        <div class="action-footer-box"><button type="button" class="btn-view-all-shops" onclick="window.location.href='../boulevard.html'">Volver al Boulevard</button></div>
+        <div class="action-footer-box"><button type="button" class="btn-view-all-shops" onclick="window.location.href='../comercio.html'">Volver a Comercio</button></div>
     </aside>
 </div>
 <footer class="pie-pagina">© 2026 Urbanex. Desarrollado por Neodat Consultores.</footer>
@@ -302,51 +320,85 @@ const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const ROOT_NAME = "Entretenimiento";
-const ROOT_TITLE = "Entretenimiento";
+const ROOT_NAME = "Comercio";
+const ROOT_TITLE = "Comercio";
 const ROOT_ALIASES = [
-    "entretenimiento"
+    "comercio"
 ];
-const CURRENT_SUB = null;
+const CURRENT_SUB = {
+    "slug": "ferreterias",
+    "name": "Ferreterías",
+    "icon": "🔩",
+    "aliases": [
+        "ferreterias",
+        "ferreterías",
+        "ferreteria",
+        "ferretería"
+    ]
+};
 const SUBCATEGORIES = [
     {
-        "slug": "cines",
-        "name": "Cines",
-        "icon": "🎬",
+        "slug": "ropa-y-moda",
+        "name": "Ropa y Moda",
+        "icon": "👕",
         "aliases": [
-            "cines",
-            "cine"
+            "ropa y moda",
+            "ropa",
+            "moda"
         ]
     },
     {
-        "slug": "canchas",
-        "name": "Canchas",
-        "icon": "⚽",
+        "slug": "calzado",
+        "name": "Calzado",
+        "icon": "👟",
         "aliases": [
-            "canchas",
-            "cancha"
+            "calzado",
+            "zapatos"
         ]
     },
     {
-        "slug": "karaoke",
-        "name": "Karaoke",
-        "icon": "🎤",
+        "slug": "electronica",
+        "name": "Electrónica",
+        "icon": "💻",
         "aliases": [
-            "karaoke",
-            "karaokes"
+            "electronica",
+            "electrónica",
+            "tecnologia",
+            "tecnología"
         ]
     },
     {
-        "slug": "juegos",
-        "name": "Juegos",
-        "icon": "🎮",
+        "slug": "supermercados",
+        "name": "Supermercados",
+        "icon": "🛒",
         "aliases": [
-            "juegos",
-            "juego"
+            "supermercados",
+            "supermercado",
+            "markets"
+        ]
+    },
+    {
+        "slug": "ferreterias",
+        "name": "Ferreterías",
+        "icon": "🔩",
+        "aliases": [
+            "ferreterias",
+            "ferreterías",
+            "ferreteria",
+            "ferretería"
+        ]
+    },
+    {
+        "slug": "farmacias",
+        "name": "Farmacias",
+        "icon": "💊",
+        "aliases": [
+            "farmacias",
+            "farmacia"
         ]
     }
 ];
-const BUSINESS_URL = (slug) => `../business/?slug=${slug}`;
+const BUSINESS_URL = (slug) => `../../business/?slug=${slug}`;
 
 let categories = [];
 let rootCategories = [];
@@ -543,7 +595,7 @@ function renderSubcategoryCounts() {
 function shopCard(business) {
     const img = business.cover_image
         ? `<img class="shop-thumb" src="${esc(business.cover_image)}" alt="${esc(business.name)}" loading="lazy">`
-        : `<div class="shop-thumb-placeholder">${business.subcategories?.icon || business.categories?.icon || '🎭'}</div>`;
+        : `<div class="shop-thumb-placeholder">${business.subcategories?.icon || business.categories?.icon || '🛍️'}</div>`;
     const rating = business._rating ? business._rating.toFixed(1) : '—';
     const count = business._reviews ? `(${business._reviews})` : 'Sin reseñas';
     const status = business._open ? `<span class="status-indicator">Abierto</span>` : `<span class="status-indicator closed">Cerrado</span>`;

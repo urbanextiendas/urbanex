@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urbanex - Entretenimiento</title>
-    <link rel="icon" type="image/png" href="../imagenes/log.png">
+    <title>Urbanex - Canchas</title>
+    <link rel="icon" type="image/png" href="../../imagenes/log.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -212,19 +212,19 @@ button, select, input { font-family: var(--font-sans); }
     .aside-showcase-list { height:210px !important; }
 }
 
-        :root { --page-bg: url("../imagenes/Boulevard.png"); }
+        :root { --page-bg: url("../../imagenes/Boulevard.png"); }
     </style>
 </head>
 <body>
 <div class="dashboard-container">
-    <div class="global-background-underlay"><img src="../imagenes/Boulevard.png" alt="Entretenimiento de Loja"></div>
+    <div class="global-background-underlay"><img src="../../imagenes/Boulevard.png" alt="Entretenimiento de Loja"></div>
 
     <header class="header-top">
-        <a href="../boulevard.html" class="brand-box" title="Volver al Boulevard">
-            <img src="../imagenes/logo.png" alt="Logo Urbanex">
+        <a href="../../boulevard.html" class="brand-box" title="Volver al Boulevard">
+            <img src="../../imagenes/logo.png" alt="Logo Urbanex">
         </a>
         <div class="search-wrapper">
-            <input type="search" id="siteSearch" class="search-input" placeholder="¿Qué actividad o lugar de entretenimiento busca?" autocomplete="off">
+            <input type="search" id="siteSearch" class="search-input" placeholder="Buscar en Canchas..." autocomplete="off">
             <svg class="search-icon" viewBox="0 0 24 24" role="button" aria-label="Buscar" tabindex="0"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         </div>
         <div class="user-tools">
@@ -238,8 +238,8 @@ button, select, input { font-family: var(--font-sans); }
         <h2 class="section-title">Subcategorías</h2>
         <ul class="categories-list">
             
-            <li class="category-item active">
-                <button type="button" onclick="window.location.href='entretenimiento/cines.html'">
+            <li class="category-item">
+                <button type="button" onclick="window.location.href='cines.html'">
                     <div class="icon-container"><span class="category-emoji">🎬</span></div>
                     <div class="category-text-info">
                         <span class="category-name">Cines</span>
@@ -247,8 +247,8 @@ button, select, input { font-family: var(--font-sans); }
                     </div>
                 </button>
             </li>
-            <li class="category-item">
-                <button type="button" onclick="window.location.href='entretenimiento/canchas.html'">
+            <li class="category-item active">
+                <button type="button" onclick="window.location.href='canchas.html'">
                     <div class="icon-container"><span class="category-emoji">⚽</span></div>
                     <div class="category-text-info">
                         <span class="category-name">Canchas</span>
@@ -257,7 +257,7 @@ button, select, input { font-family: var(--font-sans); }
                 </button>
             </li>
             <li class="category-item">
-                <button type="button" onclick="window.location.href='entretenimiento/karaoke.html'">
+                <button type="button" onclick="window.location.href='karaoke.html'">
                     <div class="icon-container"><span class="category-emoji">🎤</span></div>
                     <div class="category-text-info">
                         <span class="category-name">Karaoke</span>
@@ -266,7 +266,7 @@ button, select, input { font-family: var(--font-sans); }
                 </button>
             </li>
             <li class="category-item">
-                <button type="button" onclick="window.location.href='entretenimiento/juegos.html'">
+                <button type="button" onclick="window.location.href='juegos.html'">
                     <div class="icon-container"><span class="category-emoji">🎮</span></div>
                     <div class="category-text-info">
                         <span class="category-name">Juegos</span>
@@ -280,17 +280,17 @@ button, select, input { font-family: var(--font-sans); }
     <main class="main-boulevard">
         <div class="boulevard-overlay"></div>
         <div class="welcome-billboard">
-            <h2>ENTRETENIMIENTO</h2>
-            <p>OCIO, DIVERSIÓN Y EXPERIENCIAS LOCALES EN LOJA</p>
+            <h2>CANCHAS</h2>
+            <p>CANCHAS DE LOJA EN UN SOLO LUGAR</p>
         </div>
-        
+        <div class="subcategory-badge"><span>⚽</span><span>Canchas</span></div>
     </main>
 
     <aside class="aside-showcase-list">
         <div class="showcase-header"><h2>Destacados</h2><p class="showcase-stats" id="showcaseStats">Cargando negocios...</p></div>
         <div class="sort-box"><select class="sort-select" id="sortSelect"><option value="featured">Ordenar por: Destacados</option><option value="rating">Ordenar por: Mayor Calificación</option><option value="name">Ordenar por: Nombre</option></select></div>
         <div class="shops-scroll-area" id="shopsList"><div class="empty-state">Cargando información desde Supabase...</div></div>
-        <div class="action-footer-box"><button type="button" class="btn-view-all-shops" onclick="window.location.href='../boulevard.html'">Volver al Boulevard</button></div>
+        <div class="action-footer-box"><button type="button" class="btn-view-all-shops" onclick="window.location.href='../entretenimiento.html'">Volver a Entretenimiento</button></div>
     </aside>
 </div>
 <footer class="pie-pagina">© 2026 Urbanex. Desarrollado por Neodat Consultores.</footer>
@@ -307,7 +307,15 @@ const ROOT_TITLE = "Entretenimiento";
 const ROOT_ALIASES = [
     "entretenimiento"
 ];
-const CURRENT_SUB = null;
+const CURRENT_SUB = {
+    "slug": "canchas",
+    "name": "Canchas",
+    "icon": "⚽",
+    "aliases": [
+        "canchas",
+        "cancha"
+    ]
+};
 const SUBCATEGORIES = [
     {
         "slug": "cines",
@@ -346,7 +354,7 @@ const SUBCATEGORIES = [
         ]
     }
 ];
-const BUSINESS_URL = (slug) => `../business/?slug=${slug}`;
+const BUSINESS_URL = (slug) => `../../business/?slug=${slug}`;
 
 let categories = [];
 let rootCategories = [];

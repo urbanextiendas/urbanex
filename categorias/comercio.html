@@ -1,1135 +1,318 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Urbanex - Comercio</title>
-<link href="../imagenes/log.png" rel="icon" type="image/png"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<style>
-        :root {
-            --bg-main: #020202;
-            --bg-panels-glass: rgba(6, 6, 6, 0.48);
-            --bg-cards-glass: rgba(20, 20, 20, 0.62);
-            --gold: #e5c158;
-            --gold-dim: #a68b44;
-            --border-color: rgba(229, 193, 88, 0.22);
-            --text-main: #ffffff;
-            --text-muted: #e0e0e0;
-            --text-dark: #aaaaaa;
-            --green: #2ed573;
-            --red: #ff5b68;
-            --font-serif: 'Cinzel', serif;
-            --font-sans: 'Montserrat', sans-serif;
-            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            --blur-effect: blur(18px);
-            --category-bg: url("../imagenes/Comercio.png"), url("../imagenes/Boulevard.png");
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        ::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(229, 193, 88, 0.24);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--gold);
-        }
-
-        body {
-            width: 100%;
-            min-height: 100vh;
-            background-color: var(--bg-main);
-            font-family: var(--font-sans);
-            color: var(--text-main);
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        button,
-        input,
-        select {
-            font-family: var(--font-sans);
-        }
-
-        .dashboard-container {
-            flex: 1;
-            display: grid;
-            grid-template-rows: 60px 1fr;
-            grid-template-columns: 240px 1fr 290px;
-            grid-template-areas:
-                "header header header"
-                "aside-left main aside-right";
-            min-height: calc(100vh - 24px);
-            position: relative;
-            overflow: hidden;
-            background: #030303;
-        }
-
-        .global-background-underlay {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .global-background-underlay img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center bottom;
-            opacity: 0.82;
-            filter: saturate(0.98) contrast(1.05);
-        }
-
-        .global-background-underlay::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(90deg, rgba(0,0,0,0.76), rgba(0,0,0,0.12) 48%, rgba(0,0,0,0.76)),
-                linear-gradient(180deg, rgba(0,0,0,0.16), rgba(0,0,0,0.36));
-        }
-
-        .header-top {
-            grid-area: header;
-            background: rgba(6, 6, 6, 0.58);
-            backdrop-filter: var(--blur-effect);
-            -webkit-backdrop-filter: var(--blur-effect);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .brand-box {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            user-select: none;
-            min-width: 170px;
-        }
-
-        .brand-box img {
-            height: 60px;
-            width: auto;
-            display: block;
-            filter: drop-shadow(0 8px 18px rgba(0,0,0,0.72));
-        }
-
-        .search-wrapper {
-            flex: 1;
-            max-width: 430px;
-            margin: 0 20px;
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.48);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 20px;
-            padding: 8px 40px 8px 16px;
-            color: var(--text-main);
-            font-size: 12px;
-            outline: none;
-            transition: var(--transition-smooth);
-            text-align: center;
-        }
-
-        .search-input:focus {
-            border-color: var(--gold);
-            background: rgba(0, 0, 0, 0.64);
-            box-shadow: 0 0 0 3px rgba(229, 193, 88, 0.08);
-        }
-
-        .search-icon {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 14px;
-            height: 14px;
-            fill: var(--gold);
-            opacity: .88;
-        }
-
-        .user-tools {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .location-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: #ffffff;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .location-indicator svg {
-            width: 14px;
-            height: 14px;
-            fill: var(--gold);
-        }
-
-        .tool-icon {
-            position: relative;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-
-        .tool-icon:nth-child(2) {
-            margin-right: 14px;
-        }
-
-        .tool-icon svg {
-            width: 18px;
-            height: 18px;
-            fill: #ffffff;
-            transition: var(--transition-smooth);
-        }
-
-        .tool-icon:hover svg {
-            fill: var(--gold);
-        }
-
-        .profile-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: rgba(0,0,0,0.35);
-            border: 1px solid var(--gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .profile-avatar svg {
-            width: 13px;
-            height: 13px;
-            fill: var(--gold);
-        }
-
-        .aside-categories {
-            grid-area: aside-left;
-            background: var(--bg-panels-glass);
-            backdrop-filter: var(--blur-effect);
-            -webkit-backdrop-filter: var(--blur-effect);
-            border-right: 1px solid var(--border-color);
-            padding: 20px 12px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            z-index: 5;
-            overflow-y: auto;
-        }
-
-        .section-title {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--gold);
-            margin-bottom: 14px;
-            padding-left: 6px;
-            font-weight: 700;
-        }
-
-        .categories-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            list-style: none;
-        }
-
-        .category-item button {
-            width: 100%;
-            min-height: 50px;
-            background: rgba(10, 10, 10, 0.58);
-            border: 1px solid rgba(229, 193, 88, 0.28);
-            padding: 10px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 14px;
-            transition: var(--transition-smooth);
-            cursor: pointer;
-            text-align: left;
-            color: #fff;
-        }
-
-        .category-item button:hover {
-            background: rgba(229, 193, 88, 0.08);
-            transform: translateX(2px);
-        }
-
-        .category-item.active button,
-        .category-item button.active {
-            border: 1px solid var(--gold);
-            background: rgba(229, 193, 88, 0.10);
-        }
-
-        .icon-container {
-            width: 28px;
-            height: 28px;
-            flex: 0 0 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: var(--transition-smooth);
-            font-size: 15px;
-        }
-
-        .category-item.active .icon-container,
-        .category-item button.active .icon-container {
-            background: var(--gold);
-            border-color: var(--gold);
-            color: #000;
-            box-shadow: 0 0 15px rgba(229, 193, 88, 0.4);
-        }
-
-        .category-text-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            flex: 1;
-            min-width: 0;
-            text-align: left;
-        }
-
-        .category-name {
-            color: #ffffff;
-            font-size: 11.5px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: block;
-            width: 100%;
-            text-align: left;
-        }
-
-        .category-item.active .category-name,
-        .category-item button.active .category-name {
-            color: var(--gold);
-        }
-
-        .category-count {
-            color: var(--text-dark);
-            font-size: 9px;
-            display: block;
-            width: 100%;
-            text-align: left;
-        }
-
-        .main-boulevard {
-            grid-area: main;
-            position: relative;
-            overflow: hidden;
-            background-image: var(--category-bg);
-            background-size: cover;
-            background-position: center bottom;
-            background-repeat: no-repeat;
-            z-index: 2;
-        }
-
-        .boulevard-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                to bottom,
-                rgba(0,0,0,0.18) 0%,
-                rgba(0,0,0,0.02) 45%,
-                rgba(0,0,0,0.25) 100%
-            );
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .welcome-billboard {
-            position: absolute;
-            top: 42px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            width: 90%;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .welcome-billboard h2 {
-            font-family: var(--font-serif);
-            color: var(--text-main);
-            font-size: 24px;
-            letter-spacing: 7px;
-            text-transform: uppercase;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.95);
-        }
-
-        .welcome-billboard p {
-            font-size: 10px;
-            color: var(--gold);
-            font-weight: 700;
-            margin-top: 6px;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.95);
-        }
-
-        .active-filter-pill {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            z-index: 4;
-            min-height: 30px;
-            display: none;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 12px;
-            border: 1px solid rgba(229,193,88,.42);
-            border-radius: 999px;
-            background: rgba(0,0,0,.72);
-            color: var(--gold);
-            font-size: 11px;
-            font-weight: 700;
-            backdrop-filter: blur(12px);
-        }
-
-        .active-filter-pill.visible {
-            display: flex;
-        }
-
-        .active-filter-pill button {
-            border: none;
-            background: transparent;
-            color: var(--gold);
-            cursor: pointer;
-            font-size: 14px;
-            line-height: 1;
-        }
-
-        .bottom-filter-bar {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            width: calc(100% - 30px);
-            max-width: 760px;
-            transform: translateX(-50%);
-            background: rgba(10,10,10,.78);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 6px;
-            display: flex;
-            gap: 6px;
-            backdrop-filter: var(--blur-effect);
-            -webkit-backdrop-filter: var(--blur-effect);
-            z-index: 5;
-        }
-
-        .filter-pill {
-            flex: 1;
-            min-width: 0;
-            background: rgba(0,0,0,.42);
-            border: 1px solid rgba(255,255,255,.06);
-            border-radius: 8px;
-            padding: 8px 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            color: #fff;
-            text-align: left;
-        }
-
-        .filter-pill:hover,
-        .filter-pill.active {
-            border-color: var(--gold);
-            background: rgba(229,193,88,.09);
-        }
-
-        .filter-icon-box {
-            color: var(--gold);
-            font-size: 14px;
-            flex: 0 0 auto;
-        }
-
-        .filter-label-group {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-
-        .filter-label {
-            font-size: 10.5px;
-            font-weight: 600;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .filter-sub {
-            font-size: 8.5px;
-            color: var(--text-dark);
-            white-space: nowrap;
-        }
-
-        .aside-showcase-list {
-            grid-area: aside-right;
-            background: var(--bg-panels-glass);
-            backdrop-filter: var(--blur-effect);
-            -webkit-backdrop-filter: var(--blur-effect);
-            border-left: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            z-index: 5;
-            overflow: hidden;
-        }
-
-        .showcase-header {
-            padding: 20px 14px 8px 14px;
-        }
-
-        .showcase-header h2 {
-            font-family: var(--font-serif);
-            color: var(--gold);
-            font-size: 13px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .showcase-stats {
-            font-size: 10px;
-            color: #ffffff;
-            margin-top: 1px;
-        }
-
-        .sort-box {
-            padding: 0 14px 10px 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .sort-select {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.42);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 6px;
-            padding: 6px 10px;
-            color: #ffffff;
-            font-size: 11px;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .shops-scroll-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .shop-card {
-            background: var(--bg-cards-glass);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            cursor: pointer;
-            min-height: 64px;
-            transition: var(--transition-smooth);
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .shop-card:hover {
-            border-color: rgba(229, 193, 88, 0.45);
-            background: rgba(229, 193, 88, 0.10);
-            transform: translateX(2px);
-        }
-
-        .shop-thumb-wrapper {
-            width: 64px;
-            height: 64px;
-            flex-shrink: 0;
-            background:
-                radial-gradient(circle at 30% 25%, rgba(229,193,88,0.22), transparent 38%),
-                linear-gradient(135deg, rgba(229,193,88,0.10), rgba(0,0,0,0.78));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gold);
-            font-size: 24px;
-        }
-
-        .shop-thumb {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .shop-details {
-            flex: 1;
-            padding: 6px 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-width: 0;
-        }
-
-        .shop-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .shop-segment {
-            font-size: 9.5px;
-            color: var(--gold);
-            font-weight: 500;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .shop-rating-row {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: 2px;
-        }
-
-        .star-icon {
-            width: 10px;
-            height: 10px;
-            color: var(--gold);
-        }
-
-        .rating-value {
-            font-size: 10px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .rating-count {
-            font-size: 9.5px;
-            color: var(--text-dark);
-        }
-
-        .status-indicator {
-            margin-left: auto;
-            font-size: 9.5px;
-            font-weight: 700;
-            color: var(--green);
-        }
-
-        .status-indicator.closed {
-            color: var(--red);
-        }
-
-        .action-footer-box {
-            padding: 10px 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .btn-view-all-shops {
-            width: 100%;
-            background: var(--gold);
-            border: none;
-            border-radius: 6px;
-            padding: 8px;
-            color: #000000;
-            font-size: 11.5px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-        }
-
-        .btn-view-all-shops:hover {
-            background: #f1cd6b;
-        }
-
-        .empty-state {
-            min-height: 86px;
-            border: 1px dashed rgba(229, 193, 88, 0.26);
-            border-radius: 8px;
-            padding: 18px 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 11px;
-            line-height: 1.5;
-            background: rgba(0,0,0,0.24);
-        }
-
-        .pie-pagina {
-            width: 100%;
-            height: 24px;
-            background-color: #000000;
-            color: #8c8c8c;
-            font-size: 11px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            border-top: 1px solid #1a1a1a;
-            z-index: 5;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        .directory-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-            background: rgba(0,0,0,.76);
-            backdrop-filter: blur(10px);
-        }
-
-        .directory-modal.open {
-            display: flex;
-        }
-
-        .directory-box {
-            width: min(980px, 96vw);
-            max-height: min(760px, 88vh);
-            display: flex;
-            flex-direction: column;
-            border: 1px solid rgba(229,193,88,.36);
-            border-radius: 18px;
-            background: rgba(8,8,8,.96);
-            overflow: hidden;
-            box-shadow: 0 28px 80px rgba(0,0,0,.72);
-        }
-
-        .directory-head {
-            padding: 18px;
-            border-bottom: 1px solid rgba(255,255,255,.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .directory-head h2 {
-            font-family: var(--font-serif);
-            color: var(--gold);
-            font-size: 18px;
-        }
-
-        .directory-head button {
-            width: 34px;
-            height: 34px;
-            border: 1px solid rgba(229,193,88,.42);
-            border-radius: 50%;
-            background: transparent;
-            color: var(--gold);
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        .directory-grid {
-            padding: 16px;
-            overflow-y: auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 12px;
-        }
-
-        @media (min-width: 768px) and (max-width: 1024px) {
-            .dashboard-container {
-                grid-template-columns: 210px 1fr 255px;
-            }
-
-            .search-wrapper {
-                max-width: 300px;
-            }
-
-            .user-tools {
-                gap: 12px;
-            }
-        }
-
-        @media (max-width: 1024px) {
-            body {
-                overflow-y: auto;
-                height: auto;
-            }
-
-            .dashboard-container {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto 1fr auto;
-                grid-template-areas:
-                    "header"
-                    "aside-left"
-                    "main"
-                    "aside-right";
-                min-height: auto;
-                overflow: visible;
-            }
-
-            .header-top {
-                min-height: 60px;
-            }
-
-            .aside-categories {
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-                padding: 12px;
-            }
-
-            .section-title {
-                display: none;
-            }
-
-            .categories-list {
-                flex-direction: row;
-                overflow-x: auto;
-                gap: 8px;
-                padding-bottom: 4px;
-            }
-
-            .category-item {
-                flex: 0 0 auto;
-            }
-
-            .category-item button {
-                width: auto;
-                min-width: max-content;
-                white-space: nowrap;
-                padding: 8px 12px;
-            }
-
-            .main-boulevard {
-                min-height: 410px;
-                height: 48vh;
-                background-position: center bottom;
-            }
-
-            .bottom-filter-bar {
-                width: calc(100% - 24px);
-                bottom: 12px;
-                overflow-x: auto;
-                border-radius: 30px;
-            }
-
-            .filter-pill {
-                flex: 0 0 auto;
-                border-radius: 20px;
-                padding: 6px 14px;
-            }
-
-            .aside-showcase-list {
-                border-left: none;
-                border-top: 1px solid var(--border-color);
-            }
-
-            .shops-scroll-area {
-                max-height: none;
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-                gap: 10px;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .header-top {
-                flex-direction: column;
-                height: auto;
-                padding: 12px;
-                gap: 10px;
-            }
-
-            .brand-box {
-                min-width: 0;
-            }
-
-            .search-wrapper {
-                width: 100%;
-                margin: 0;
-                order: 3;
-            }
-
-            .user-tools {
-                width: 100%;
-                justify-content: flex-end;
-                gap: 10px !important;
-                order: 2;
-            }
-
-            .icon-corazon {
-                margin-right: 0 !important;
-            }
-
-            .main-boulevard {
-                min-height: 360px;
-                height: 48vh;
-                background-size: cover;
-                background-position: center bottom;
-            }
-
-            .welcome-billboard {
-                top: 28px;
-            }
-
-            .welcome-billboard h2 {
-                font-size: 18px;
-                letter-spacing: 4px;
-            }
-
-            .welcome-billboard p {
-                font-size: 9px;
-                letter-spacing: 1.4px;
-            }
-
-            .filter-label-group {
-                display: none;
-            }
-        }
-    
-
-        /* =========================================================
-           URBANEX FIX — barras superior e inferior fijas
-           La cabecera y el pie no se desplazan. Solo se desplazan
-           los paneles internos cuando el contenido lo requiere.
-           ========================================================= */
-        html,
-        body {
-            height: 100%;
-            overflow: hidden;
-        }
-
-        body {
-            min-height: 100vh;
-        }
-
-        .dashboard-container {
-            height: calc(100vh - 24px) !important;
-            min-height: calc(100vh - 24px) !important;
-            overflow: hidden !important;
-        }
-
-        .header-top {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            height: 60px !important;
-            z-index: 9999 !important;
-        }
-
-        .pie-pagina {
-            position: fixed !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            height: 24px !important;
-            z-index: 9999 !important;
-        }
-
-        .aside-categories,
-        .main-boulevard,
-        .aside-showcase-list {
-            height: calc(100vh - 84px) !important;
-            max-height: calc(100vh - 84px) !important;
-            min-height: 0 !important;
-        }
-
-        .aside-categories,
-        .aside-showcase-list,
-        .shops-scroll-area {
-            overflow-y: auto !important;
-        }
-
-        .main-boulevard {
-            overflow: hidden !important;
-        }
-
-        .global-background-underlay {
-            height: 100% !important;
-        }
-
-        @media (max-width: 1024px) {
-            html,
-            body {
-                overflow: hidden !important;
-            }
-
-            .dashboard-container {
-                height: calc(100vh - 24px) !important;
-                min-height: calc(100vh - 24px) !important;
-                overflow-y: auto !important;
-            }
-
-            .header-top {
-                min-height: 60px !important;
-            }
-
-            .aside-categories,
-            .main-boulevard,
-            .aside-showcase-list {
-                height: auto !important;
-                max-height: none !important;
-            }
-        }
-
-    
-        .bottom-filter-bar, .filter-pill { display: none !important; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urbanex - Comercio</title>
+    <link rel="icon" type="image/png" href="../imagenes/log.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        
+:root {
+    --bg-main: #020202;
+    --bg-panels-glass: rgba(6, 6, 6, 0.45);
+    --bg-cards-glass: rgba(20, 20, 20, 0.58);
+    --gold: #e5c158;
+    --gold-dim: #a68b44;
+    --border-color: rgba(229, 193, 88, 0.22);
+    --text-main: #ffffff;
+    --text-muted: #e0e0e0;
+    --text-dark: #aaaaaa;
+    --green: #2ed573;
+    --red: #ff4757;
+    --font-serif: 'Cinzel', serif;
+    --font-sans: 'Montserrat', sans-serif;
+    --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --blur-effect: blur(18px);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(229, 193, 88, 0.24); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+html, body { width: 100%; height: 100%; }
+body {
+    background-color: var(--bg-main);
+    font-family: var(--font-sans);
+    color: var(--text-main);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+a { color: inherit; text-decoration: none; }
+button, select, input { font-family: var(--font-sans); }
+.dashboard-container {
+    flex: 1;
+    display: grid;
+    grid-template-rows: 60px minmax(0, 1fr);
+    grid-template-columns: 240px minmax(0, 1fr) 290px;
+    grid-template-areas:
+        "header header header"
+        "aside-left main aside-right";
+    height: calc(100vh - 24px);
+    position: relative;
+    overflow: hidden;
+}
+.global-background-underlay { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.global-background-underlay img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; filter: saturate(0.98) contrast(1.05); }
+.global-background-underlay::after {
+    content: ""; position: absolute; inset: 0;
+    background:
+        linear-gradient(90deg, rgba(0,0,0,0.74) 0%, rgba(0,0,0,0.16) 38%, rgba(0,0,0,0.16) 62%, rgba(0,0,0,0.78) 100%),
+        linear-gradient(to bottom, rgba(0,0,0,0.18), rgba(0,0,0,0.36));
+}
+.header-top {
+    grid-area: header;
+    background: rgba(6, 6, 6, 0.62);
+    backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect);
+    border-bottom: 1px solid var(--border-color);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px; position: relative; z-index: 10;
+}
+.brand-box { display: flex; align-items: center; text-decoration: none; cursor: pointer; user-select: none; }
+.brand-box img { height: 60px; width: auto; display: block; }
+.search-wrapper { flex: 1; max-width: 440px; margin: 0 20px; position: relative; }
+.search-input {
+    width: 100%; background: rgba(0,0,0,0.46); border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 20px; padding: 8px 40px 8px 16px; color: var(--text-main);
+    font-size: 12px; outline: none; transition: var(--transition-smooth); text-align: center;
+}
+.search-input:focus { border-color: var(--gold); background: rgba(0,0,0,0.62); }
+.search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; fill: var(--text-dark); }
+.user-tools { display: flex; align-items: center; gap: 22px; }
+.location-indicator { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #fff; font-weight: 600; white-space: nowrap; }
+.location-indicator svg { width: 14px; height: 14px; fill: var(--gold); }
+.tool-icon { display: flex; align-items: center; cursor: pointer; }
+.tool-icon svg { width: 18px; height: 18px; fill: #fff; transition: var(--transition-smooth); }
+.tool-icon:hover svg { fill: var(--gold); }
+.profile-avatar { width: 28px; height: 28px; border-radius: 50%; background: rgba(0,0,0,0.3); border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.profile-avatar svg { width: 13px; height: 13px; fill: var(--gold); }
+.aside-categories {
+    grid-area: aside-left; background: var(--bg-panels-glass);
+    backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect);
+    border-right: 1px solid var(--border-color);
+    padding: 20px 12px; display: flex; flex-direction: column;
+    position: relative; z-index: 5; overflow-y: auto; min-height: 0;
+}
+.section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 14px; padding-left: 6px; font-weight: 700; text-align: left; }
+.categories-list { display: flex; flex-direction: column; gap: 6px; list-style: none; }
+.category-item button {
+    width: 100%; background: rgba(10,10,10,0.54); border: 1px solid rgba(229,193,88,0.28);
+    padding: 10px; border-radius: 12px; display: flex; align-items: center; justify-content: flex-start; gap: 12px;
+    transition: var(--transition-smooth); cursor: pointer; text-align: left; color: inherit;
+}
+.category-item button:hover { background: rgba(229,193,88,0.08); transform: translateX(2px); }
+.category-item.active button { border-color: var(--gold); background: rgba(229,193,88,0.10); }
+.icon-container { width: 30px; height: 30px; flex: 0 0 30px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+.category-emoji { font-size: 16px; line-height: 1; }
+.category-item.active .icon-container { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 15px rgba(229,193,88,0.4); color:#000; }
+.category-text-info { display: flex; flex-direction: column; align-items: flex-start; flex: 1; min-width: 0; text-align: left; }
+.category-name { color: #fff; font-size: 11.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+.category-item.active .category-name { color: var(--gold); }
+.category-count { color: var(--text-dark); font-size: 9px; width: 100%; }
+.main-boulevard { grid-area: main; position: relative; overflow: hidden; background-image: var(--page-bg); background-size: cover; background-position: center bottom; background-repeat: no-repeat; z-index: 2; }
+.boulevard-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.04) 45%, rgba(0,0,0,0.28) 100%); pointer-events: none; z-index: 1; }
+.welcome-billboard { position: absolute; top: 42px; left: 50%; transform: translateX(-50%); text-align: center; width: 92%; pointer-events: none; z-index: 2; }
+.welcome-billboard h2 { font-family: var(--font-serif); color: var(--text-main); font-size: 24px; letter-spacing: 7px; text-transform: uppercase; text-shadow: 0 2px 12px rgba(0,0,0,0.95); }
+.welcome-billboard p { font-size: 10px; color: var(--gold); font-weight: 700; margin-top: 6px; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.95); }
+.subcategory-badge { position:absolute; left:50%; top:110px; transform:translateX(-50%); z-index:3; display:inline-flex; gap:8px; align-items:center; padding:7px 14px; border-radius:999px; background:rgba(0,0,0,.58); border:1px solid rgba(229,193,88,.35); color:var(--gold); font-size:11px; font-weight:700; letter-spacing:.8px; }
+.aside-showcase-list { grid-area: aside-right; background: var(--bg-panels-glass); backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; position: relative; z-index: 5; overflow: hidden; }
+.showcase-header { padding: 20px 14px 8px 14px; }
+.showcase-header h2 { font-family: var(--font-serif); color: var(--gold); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+.showcase-stats { font-size: 10px; color: #fff; margin-top: 1px; }
+.sort-box { padding: 0 14px 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sort-select { width: 100%; background: rgba(0,0,0,0.42); border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; padding: 6px 10px; color: #fff; font-size: 11px; outline: none; cursor: pointer; }
+.shops-scroll-area { flex: 1; overflow-y: auto; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.shop-card { background: var(--bg-cards-glass); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; overflow: hidden; display: flex; cursor: pointer; min-height: 64px; transition: var(--transition-smooth); }
+.shop-card:hover { border-color: rgba(229,193,88,0.45); background: rgba(229,193,88,0.10); transform: translateX(2px); }
+.shop-thumb-wrapper { width: 64px; height: 64px; flex-shrink: 0; background:#111; display:flex; align-items:center; justify-content:center; }
+.shop-thumb { width: 100%; height: 100%; object-fit: cover; }
+.shop-thumb-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:24px; background: rgba(229,193,88,0.08); }
+.shop-details { flex: 1; padding: 6px 10px; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.shop-title { font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shop-segment { font-size: 9.5px; color: var(--gold); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shop-rating-row { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+.star-icon { width: 10px; height: 10px; fill: var(--gold); }
+.rating-value { font-size: 10px; font-weight: 700; color: #fff; }
+.rating-count { font-size: 9.5px; color: var(--text-dark); }
+.status-indicator { margin-left: auto; font-size: 9.5px; font-weight: 700; color: var(--green); }
+.status-indicator.closed { color: var(--red); }
+.empty-state { color: var(--text-dark); border:1px dashed rgba(229,193,88,.25); border-radius:10px; text-align:center; padding:24px 12px; font-size:11.5px; line-height:1.55; }
+.action-footer-box { padding: 10px 14px; border-top: 1px solid rgba(255,255,255,0.08); }
+.btn-view-all-shops { width: 100%; background: var(--gold); border: none; border-radius: 6px; padding: 8px; color: #000; font-size: 11.5px; font-weight: 700; cursor: pointer; transition: var(--transition-smooth); }
+.btn-view-all-shops:hover { background: #f1cd6b; }
+.pie-pagina { width: 100%; height: 24px; background-color: #000; color: #8c8c8c; font-size: 11px; display: flex; justify-content: center; align-items: center; text-align: center; border-top: 1px solid #1a1a1a; z-index: 5; font-family: Arial, Helvetica, sans-serif; flex-shrink:0; }
+@media (min-width: 721px) and (max-width: 1024px) { .dashboard-container { grid-template-columns: 210px minmax(0,1fr) 250px; } .search-wrapper { max-width: 280px; } .user-tools { gap: 12px; } }
+@media (max-width: 720px) {
+    html, body { width: 100%; height: 100%; overflow: hidden !important; background:#020202 !important; }
+    body { min-height: 100svh !important; }
+    .dashboard-container {
+        width:100% !important; height: calc(100svh - 24px) !important; min-height:0 !important; overflow:hidden !important;
+        display:grid !important; grid-template-columns:1fr !important;
+        grid-template-rows:108px 58px minmax(0, 1fr) 225px !important;
+        grid-template-areas:"header" "aside-left" "main" "aside-right" !important;
+    }
+    .header-top {
+        height:108px !important; min-height:108px !important; display:grid !important;
+        grid-template-columns:1fr auto !important; grid-template-rows:52px 40px !important;
+        grid-template-areas:"brand tools" "search search" !important; align-items:center !important;
+        gap:6px !important; padding:7px 14px 9px !important; background:rgba(2,2,2,.96) !important;
+        border-bottom:1px solid rgba(229,193,88,.25) !important; z-index:100 !important;
+    }
+    .brand-box { grid-area:brand !important; justify-self:start !important; align-self:center !important; }
+    .brand-box img { height:48px !important; width:auto !important; }
+    .search-wrapper { grid-area:search !important; width:100% !important; max-width:none !important; margin:0 !important; z-index:20 !important; }
+    .search-input { width:100% !important; height:34px !important; padding:0 40px 0 15px !important; border-radius:999px !important; text-align:left !important; font-size:12px !important; background:rgba(0,0,0,.58) !important; border:1px solid rgba(229,193,88,.26) !important; }
+    .search-icon { right:14px !important; width:15px !important; height:15px !important; fill:#e5c158 !important; }
+    .user-tools { grid-area:tools !important; justify-self:end !important; width:auto !important; gap:10px !important; order:initial !important; }
+    .location-indicator { font-size:0 !important; gap:0 !important; }
+    .location-indicator svg { width:17px !important; height:17px !important; }
+    .tool-icon.icon-corazon { display:none !important; }
+    .profile-avatar { width:32px !important; height:32px !important; }
+    .aside-categories { height:58px !important; min-height:58px !important; padding:8px 10px !important; border-right:none !important; border-bottom:1px solid rgba(229,193,88,.22) !important; overflow-x:auto !important; overflow-y:hidden !important; display:block !important; background:rgba(5,5,5,.82) !important; z-index:50 !important; }
+    .section-title { display:none !important; }
+    .categories-list { display:flex !important; flex-direction:row !important; gap:8px !important; overflow-x:auto !important; overflow-y:hidden !important; padding:0 0 4px !important; list-style:none !important; }
+    .category-item { flex:0 0 auto !important; }
+    .category-item button { width:auto !important; min-width:145px !important; height:42px !important; padding:7px 10px !important; border-radius:12px !important; gap:9px !important; white-space:nowrap !important; }
+    .icon-container { width:25px !important; height:25px !important; flex:0 0 25px !important; }
+    .category-name { font-size:10.5px !important; max-width:100px !important; }
+    .category-count { font-size:8.5px !important; }
+    .main-boulevard { height:auto !important; min-height:0 !important; overflow:hidden !important; background-size:cover !important; background-position:center bottom !important; }
+    .global-background-underlay img { object-fit:cover !important; object-position:center bottom !important; }
+    .boulevard-overlay { background:linear-gradient(to bottom,rgba(0,0,0,.54) 0%,rgba(0,0,0,.16) 38%,rgba(0,0,0,.28) 100%) !important; }
+    .welcome-billboard { top:16px !important; width:94% !important; z-index:5 !important; }
+    .welcome-billboard h2 { font-size:20px !important; letter-spacing:5px !important; line-height:1.1 !important; text-shadow:0 3px 14px #000 !important; }
+    .welcome-billboard p { max-width:330px !important; margin:7px auto 0 !important; font-size:8.8px !important; line-height:1.35 !important; letter-spacing:1.4px !important; text-shadow:0 2px 10px #000 !important; }
+    .subcategory-badge { top:72px !important; font-size:10px !important; padding:5px 11px !important; max-width:88%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .aside-showcase-list { height:225px !important; min-height:0 !important; display:flex !important; flex-direction:column !important; border-left:none !important; border-top:1px solid rgba(229,193,88,.22) !important; overflow:hidden !important; background:rgba(5,5,5,.88) !important; z-index:50 !important; }
+    .showcase-header { padding:10px 14px 4px !important; flex-shrink:0 !important; }
+    .showcase-header h2 { font-size:15px !important; letter-spacing:2px !important; }
+    .showcase-stats { font-size:10px !important; margin-top:2px !important; }
+    .sort-box { padding:4px 14px 8px !important; flex-shrink:0 !important; }
+    .sort-select { height:34px !important; font-size:11px !important; border-radius:9px !important; }
+    .shops-scroll-area { flex:1 !important; min-height:0 !important; max-height:none !important; display:flex !important; flex-direction:column !important; gap:7px !important; overflow-y:auto !important; padding:7px 14px 12px !important; }
+    .shop-card { min-height:58px !important; height:58px !important; border-radius:9px !important; }
+    .shop-thumb-wrapper { width:58px !important; height:58px !important; }
+    .shop-details { padding:6px 9px !important; }
+    .shop-title { font-size:11.5px !important; }
+    .shop-segment, .rating-count, .status-indicator { font-size:9px !important; }
+    .empty-state { padding:18px 12px !important; font-size:11px !important; line-height:1.45 !important; }
+    .action-footer-box { display:none !important; }
+    .pie-pagina { position:fixed !important; left:0 !important; right:0 !important; bottom:0 !important; width:100% !important; height:24px !important; z-index:200 !important; background:#000 !important; border-top:1px solid #1a1a1a !important; font-size:10px !important; color:#8c8c8c !important; }
+}
+@media (max-width: 380px) {
+    .dashboard-container { grid-template-rows:104px 54px minmax(0,1fr) 210px !important; }
+    .header-top { height:104px !important; min-height:104px !important; }
+    .brand-box img { height:44px !important; }
+    .aside-categories { height:54px !important; min-height:54px !important; }
+    .category-item button { min-width:132px !important; height:38px !important; }
+    .welcome-billboard h2 { font-size:18px !important; letter-spacing:4px !important; }
+    .aside-showcase-list { height:210px !important; }
+}
+
+        :root { --page-bg: url("../imagenes/Comercio.png"); }
     </style>
 </head>
 <body>
 <div class="dashboard-container">
-<div class="global-background-underlay">
-<img alt="Comercio de Loja" onerror="this.src='../imagenes/Boulevard.png'" src="../imagenes/Comercio.png"/>
-</div>
-<header class="header-top">
-<a class="brand-box" href="../boulevard.html" title="Volver al Boulevard">
-<img alt="Logo Urbanex" src="../imagenes/logo.png"/>
-</a>
-<div class="search-wrapper">
-<input autocomplete="off" class="search-input" id="siteSearch" placeholder="¿Qué tienda, producto o comercio busca?" type="search"/>
-<svg aria-label="Buscar" class="search-icon" id="searchButton" role="button" tabindex="0" viewbox="0 0 24 24">
-<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
-</svg>
-</div>
-<div class="user-tools">
-<div class="location-indicator">
-<svg viewbox="0 0 24 24">
-<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
-</svg>
-<span>Loja, Ecuador</span>
-</div>
-<a class="tool-icon icon-corazon" href="../boulevard.html" title="Volver al Boulevard">
-<svg viewbox="0 0 24 24">
-<path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
-</svg>
-</a>
-<a class="profile-avatar" href="../admin/index.html" title="Administración">
-<svg viewbox="0 0 24 24">
-<path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
-</svg>
-</a>
-</div>
-</header>
-<aside class="aside-categories">
-<h2 class="section-title">Subcategorías</h2>
-<ul class="categories-list" id="categoriesList">
-<li class="category-item active">
-<button class="active" onclick="selectSubcategory(null)" type="button">
-<div class="icon-container">▦</div>
-<div class="category-text-info">
-<span class="category-name">Todos</span>
-<span class="category-count" id="countAll">Cargando...</span>
-</div>
-</button>
-</li>
-<li class="category-item">
-<button disabled="" type="button">
-<div class="icon-container">…</div>
-<div class="category-text-info">
-<span class="category-name">Cargando</span>
-<span class="category-count">subcategorías</span>
-</div>
-</button>
-</li>
-</ul>
-</aside>
-<main class="main-boulevard">
-<div class="boulevard-overlay"></div>
-<div class="active-filter-pill" id="activeFilterPill">
-<span id="activeFilterText">Todos</span>
-<button onclick="selectSubcategory(null)" type="button">×</button>
-</div>
-<div class="welcome-billboard">
-<h2>COMERCIO</h2>
-<p>TIENDAS, PRODUCTOS Y NEGOCIOS COMERCIALES DE LOJA</p>
-</div>
+    <div class="global-background-underlay"><img src="../imagenes/Comercio.png" alt="Comercio de Loja"></div>
 
-</main>
-<aside class="aside-showcase-list">
-<div class="showcase-header">
-<h2>Destacados</h2>
-<p class="showcase-stats" id="showcaseStats">Cargando negocios...</p>
+    <header class="header-top">
+        <a href="../boulevard.html" class="brand-box" title="Volver al Boulevard">
+            <img src="../imagenes/logo.png" alt="Logo Urbanex">
+        </a>
+        <div class="search-wrapper">
+            <input type="search" id="siteSearch" class="search-input" placeholder="¿Qué tienda, producto o servicio busca?" autocomplete="off">
+            <svg class="search-icon" viewBox="0 0 24 24" role="button" aria-label="Buscar" tabindex="0"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        </div>
+        <div class="user-tools">
+            <div class="location-indicator"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>Loja, Ecuador</span></div>
+            <div class="tool-icon icon-corazon"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+            <div class="profile-avatar"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+        </div>
+    </header>
+
+    <aside class="aside-categories">
+        <h2 class="section-title">Subcategorías</h2>
+        <ul class="categories-list">
+            
+            <li class="category-item active">
+                <button type="button" onclick="window.location.href='comercio/ropa-y-moda.html'">
+                    <div class="icon-container"><span class="category-emoji">👕</span></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Ropa y Moda</span>
+                        <span class="category-count" id="count_ropa_y_moda">0 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button type="button" onclick="window.location.href='comercio/calzado.html'">
+                    <div class="icon-container"><span class="category-emoji">👟</span></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Calzado</span>
+                        <span class="category-count" id="count_calzado">0 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button type="button" onclick="window.location.href='comercio/electronica.html'">
+                    <div class="icon-container"><span class="category-emoji">💻</span></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Electrónica</span>
+                        <span class="category-count" id="count_electronica">0 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button type="button" onclick="window.location.href='comercio/supermercados.html'">
+                    <div class="icon-container"><span class="category-emoji">🛒</span></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Supermercados</span>
+                        <span class="category-count" id="count_supermercados">0 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button type="button" onclick="window.location.href='comercio/ferreterias.html'">
+                    <div class="icon-container"><span class="category-emoji">🔩</span></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Ferreterías</span>
+                        <span class="category-count" id="count_ferreterias">0 locales</span>
+                    </div>
+                </button>
+            </li>
+            <li class="category-item">
+                <button type="button" onclick="window.location.href='comercio/farmacias.html'">
+                    <div class="icon-container"><span class="category-emoji">💊</span></div>
+                    <div class="category-text-info">
+                        <span class="category-name">Farmacias</span>
+                        <span class="category-count" id="count_farmacias">0 locales</span>
+                    </div>
+                </button>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="main-boulevard">
+        <div class="boulevard-overlay"></div>
+        <div class="welcome-billboard">
+            <h2>COMERCIO</h2>
+            <p>TIENDAS, PRODUCTOS Y COMERCIOS DE LOJA EN UN SOLO LUGAR</p>
+        </div>
+        
+    </main>
+
+    <aside class="aside-showcase-list">
+        <div class="showcase-header"><h2>Destacados</h2><p class="showcase-stats" id="showcaseStats">Cargando negocios...</p></div>
+        <div class="sort-box"><select class="sort-select" id="sortSelect"><option value="featured">Ordenar por: Destacados</option><option value="rating">Ordenar por: Mayor Calificación</option><option value="name">Ordenar por: Nombre</option></select></div>
+        <div class="shops-scroll-area" id="shopsList"><div class="empty-state">Cargando información desde Supabase...</div></div>
+        <div class="action-footer-box"><button type="button" class="btn-view-all-shops" onclick="window.location.href='../boulevard.html'">Volver al Boulevard</button></div>
+    </aside>
 </div>
-<div class="sort-box">
-<select class="sort-select" id="sortSelect">
-<option value="featured">Ordenar por: Destacados</option>
-<option value="rating">Ordenar por: Mayor Calificación</option>
-<option value="name">Ordenar por: Nombre A-Z</option>
-</select>
-</div>
-<div class="shops-scroll-area" id="shopsList">
-<div class="empty-state">Cargando negocios...</div>
-</div>
-<div class="action-footer-box">
-<button class="btn-view-all-shops" onclick="openDirectory()" type="button">
-                Explorar Directorio Completo
-            </button>
-</div>
-</aside>
-</div>
-<footer class="pie-pagina">
-<p>© 2026 Urbanex. Desarrollado por Neodat Consultores.</p>
-</footer>
-<div class="directory-modal" id="directoryModal">
-<div class="directory-box">
-<div class="directory-head">
-<h2>Directorio completo — Comercio</h2>
-<button onclick="closeDirectory()" type="button">×</button>
-</div>
-<div class="directory-grid" id="directoryGrid"></div>
-</div>
-</div>
+<footer class="pie-pagina">© 2026 Urbanex. Desarrollado por Neodat Consultores.</footer>
+
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -1137,582 +320,329 @@ const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const PAGE_CONFIG = {
-    "rootName": "Comercio",
-    "aliases": [
-        "comercio"
-    ],
-    "fallbackSubcategories": [
-        {
-            "icon": "👕",
-            "name": "Ropa y Moda"
-        },
-        {
-            "icon": "👟",
-            "name": "Calzado"
-        },
-        {
-            "icon": "💻",
-            "name": "Electrónica"
-        },
-        {
-            "icon": "🛒",
-            "name": "Supermercados"
-        },
-        {
-            "icon": "🔩",
-            "name": "Ferreterías"
-        },
-        {
-            "icon": "💊",
-            "name": "Farmacias"
-        }
-    ]
-};
+const ROOT_NAME = "Comercio";
+const ROOT_TITLE = "Comercio";
+const ROOT_ALIASES = [
+    "comercio"
+];
+const CURRENT_SUB = null;
+const SUBCATEGORIES = [
+    {
+        "slug": "ropa-y-moda",
+        "name": "Ropa y Moda",
+        "icon": "👕",
+        "aliases": [
+            "ropa y moda",
+            "ropa",
+            "moda"
+        ]
+    },
+    {
+        "slug": "calzado",
+        "name": "Calzado",
+        "icon": "👟",
+        "aliases": [
+            "calzado",
+            "zapatos"
+        ]
+    },
+    {
+        "slug": "electronica",
+        "name": "Electrónica",
+        "icon": "💻",
+        "aliases": [
+            "electronica",
+            "electrónica",
+            "tecnologia",
+            "tecnología"
+        ]
+    },
+    {
+        "slug": "supermercados",
+        "name": "Supermercados",
+        "icon": "🛒",
+        "aliases": [
+            "supermercados",
+            "supermercado",
+            "markets"
+        ]
+    },
+    {
+        "slug": "ferreterias",
+        "name": "Ferreterías",
+        "icon": "🔩",
+        "aliases": [
+            "ferreterias",
+            "ferreterías",
+            "ferreteria",
+            "ferretería"
+        ]
+    },
+    {
+        "slug": "farmacias",
+        "name": "Farmacias",
+        "icon": "💊",
+        "aliases": [
+            "farmacias",
+            "farmacia"
+        ]
+    }
+];
+const BUSINESS_URL = (slug) => `../business/?slug=${slug}`;
 
-const BUSINESS_SELECT_BASE = `
-    id,
-    name,
-    slug,
-    city,
-    address,
-    cover_image,
-    is_featured,
-    delivery_available,
-    category_id,
-    subcategory_id,
-    categories!category_id(name,icon),
-    subcategories:categories!subcategory_id(name,icon),
-    business_hours(day_of_week,open_time,close_time,is_closed),
-    reviews(is_approved,rating)
-`;
-
-const BUSINESS_SELECT_WITH_PROMOS = `
-    id,
-    name,
-    slug,
-    city,
-    address,
-    cover_image,
-    is_featured,
-    delivery_available,
-    category_id,
-    subcategory_id,
-    categories!category_id(name,icon),
-    subcategories:categories!subcategory_id(name,icon),
-    business_hours(day_of_week,open_time,close_time,is_closed),
-    reviews(is_approved,rating),
-    promotions(is_active,end_date)
-`;
-
+let categories = [];
 let rootCategories = [];
 let subCategories = [];
-let currentRoot = null;
-let currentSubcategories = [];
 let allBusinesses = [];
-let activeSubcategoryId = null;
-let activeQuickFilter = 'all';
+let currentRoot = null;
+let currentSubcategory = null;
 let searchTerm = '';
 
-function normalize(value) {
-    return String(value || '')
-        .trim()
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/\s+/g, ' ');
-}
+function esc(value) { return String(value || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function toNum(value) { const n = Number(value); return Number.isNaN(n) ? null : n; }
+function normalize(value) { return String(value || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' '); }
+function matchesAlias(name, aliases) { const n = normalize(name); return (aliases || []).some(a => normalize(a) === n); }
+function groupBy(items, key) { return (items || []).reduce((acc, item) => { const k = item[key]; if (k !== undefined && k !== null) (acc[k] ||= []).push(item); return acc; }, {}); }
 
-function esc(value) {
-    return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-}
-
-function toNum(value) {
-    const number = Number(value);
-    return Number.isNaN(number) ? null : number;
-}
-
-function plural(count, singular = 'local', pluralText = 'locales') {
-    return `${count} ${count === 1 ? singular : pluralText}`;
-}
-
-function findRootCategory() {
-    const aliases = PAGE_CONFIG.aliases.map(normalize);
-
-    return rootCategories.find(category => {
-        const name = normalize(category.name);
-        return aliases.includes(name);
-    }) || rootCategories.find(category => {
-        const name = normalize(category.name);
-        return aliases.some(alias => name.includes(alias) || alias.includes(name));
-    });
-}
-
-function getBusinessRootId(business) {
-    const directCategoryId = toNum(business.category_id);
-    const subcategoryId = toNum(business.subcategory_id);
-
-    if (currentRoot && directCategoryId === toNum(currentRoot.id)) {
-        return directCategoryId;
-    }
-
-    const subcategory = subCategories.find(item => toNum(item.id) === subcategoryId);
-
-    if (subcategory) {
-        return toNum(subcategory.parent_id);
-    }
-
-    return directCategoryId;
-}
-
-function belongsToRoot(business) {
-    if (!currentRoot) {
-        return false;
-    }
-
-    return getBusinessRootId(business) === toNum(currentRoot.id);
-}
-
-function getApprovedReviews(business) {
-    return (business.reviews || []).filter(review => review.is_approved);
-}
-
-function getRating(business) {
-    const reviews = getApprovedReviews(business);
-
-    if (!reviews.length) {
-        return null;
-    }
-
-    return reviews.reduce((sum, review) => sum + Number(review.rating || 0), 0) / reviews.length;
-}
-
-function isOpenNow(business) {
-    const hours = business.business_hours || [];
-
-    if (!hours.length) {
-        return false;
-    }
-
+function isOpenNow(hours) {
+    if (!hours?.length) return false;
     const now = new Date();
     const today = now.getDay();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
     const row = hours.find(item => Number(item.day_of_week) === today && !item.is_closed);
-
-    if (!row || !row.open_time || !row.close_time) {
-        return false;
-    }
-
-    const [openH, openM] = String(row.open_time).split(':').map(Number);
-    const [closeH, closeM] = String(row.close_time).split(':').map(Number);
-
-    if (Number.isNaN(openH) || Number.isNaN(closeH)) {
-        return false;
-    }
-
-    return currentMinutes >= (openH * 60 + (openM || 0)) &&
-           currentMinutes <= (closeH * 60 + (closeM || 0));
+    if (!row) return false;
+    const current = now.getHours() * 60 + now.getMinutes();
+    const [oh, om] = String(row.open_time || '').split(':').map(Number);
+    const [ch, cm] = String(row.close_time || '').split(':').map(Number);
+    if (Number.isNaN(oh) || Number.isNaN(ch)) return false;
+    return current >= (oh * 60 + (om || 0)) && current <= (ch * 60 + (cm || 0));
+}
+function avgRating(reviews) {
+    const approved = (reviews || []).filter(r => r.is_approved);
+    if (!approved.length) return null;
+    return approved.reduce((sum, r) => sum + Number(r.rating || 0), 0) / approved.length;
+}
+function approvedReviews(reviews) { return (reviews || []).filter(r => r.is_approved).length; }
+function hasPromo(promos) {
+    const today = new Date().toISOString().slice(0,10);
+    return (promos || []).some(p => p.is_active && (!p.end_date || p.end_date >= today));
 }
 
-function hasActivePromo(business) {
-    const promotions = business.promotions || [];
+function categoryById(id) { return categories.find(c => toNum(c.id) === toNum(id)) || null; }
+function businessCategoryFromIds(b) {
+    return categoryById(b.category_id);
+}
+function businessSubcategoryFromIds(b) {
+    const explicitSub = categoryById(b.subcategory_id);
+    if (explicitSub) return explicitSub;
 
-    if (!promotions.length) {
-        return false;
+    // Respaldo: algunos registros pueden guardar la subcategoría en category_id.
+    const categoryValue = categoryById(b.category_id);
+    if (categoryValue && categoryValue.parent_id) return categoryValue;
+
+    return null;
+}
+function businessRootFromIds(b) {
+    const explicitSub = categoryById(b.subcategory_id);
+    if (explicitSub && explicitSub.parent_id) return categoryById(explicitSub.parent_id);
+
+    const categoryValue = categoryById(b.category_id);
+    if (categoryValue && categoryValue.parent_id) return categoryById(categoryValue.parent_id);
+    if (categoryValue) return categoryValue;
+
+    return null;
+}
+function findCurrentRoot() {
+    return rootCategories.find(c => matchesAlias(c.name, ROOT_ALIASES)) || null;
+}
+function findCurrentSubcategory() {
+    if (!CURRENT_SUB) return null;
+    const aliases = CURRENT_SUB.aliases || [CURRENT_SUB.name];
+    const rootId = currentRoot ? toNum(currentRoot.id) : null;
+    return subCategories.find(c => {
+        if (rootId !== null && toNum(c.parent_id) !== rootId) return false;
+        return matchesAlias(c.name, aliases);
+    }) || subCategories.find(c => matchesAlias(c.name, aliases)) || null;
+}
+function businessBelongsRoot(b) {
+    const root = businessRootFromIds(b);
+
+    if (currentRoot && root) {
+        return toNum(root.id) === toNum(currentRoot.id);
     }
 
-    const today = new Date();
-
-    return promotions.some(promo => {
-        if (!promo.is_active) {
-            return false;
-        }
-
-        if (!promo.end_date) {
-            return true;
-        }
-
-        return new Date(promo.end_date) >= today;
-    });
+    const catName = businessCategoryFromIds(b)?.name || b.categories?.name || '';
+    const subName = businessSubcategoryFromIds(b)?.name || b.subcategories?.name || '';
+    return matchesAlias(catName, ROOT_ALIASES) || matchesAlias(subName, ROOT_ALIASES);
 }
+function businessBelongsSubcategory(b) {
+    if (!CURRENT_SUB) return true;
 
-function enrichBusiness(business) {
-    return {
-        ...business,
-        _rating: getRating(business),
-        _reviewCount: getApprovedReviews(business).length,
-        _openNow: isOpenNow(business),
-        _hasPromo: hasActivePromo(business)
-    };
+    const aliases = CURRENT_SUB.aliases || [CURRENT_SUB.name];
+    const resolvedSub = businessSubcategoryFromIds(b);
+
+    if (currentSubcategory && resolvedSub) {
+        return toNum(resolvedSub.id) === toNum(currentSubcategory.id);
+    }
+
+    const subName = resolvedSub?.name || b.subcategories?.name || '';
+    return matchesAlias(subName, aliases);
 }
-
+function businessMatchesSearch(b) {
+    if (!searchTerm) return true;
+    const text = `${b.name || ''} ${b.address || ''} ${b.categories?.name || ''} ${b.subcategories?.name || ''}`.toLowerCase();
+    return text.includes(searchTerm);
+}
 function filteredBusinesses() {
-    let list = allBusinesses.filter(belongsToRoot);
-
-    if (activeSubcategoryId !== null) {
-        list = list.filter(business => {
-            if (String(activeSubcategoryId).startsWith('fallback:')) {
-                const fallbackName = normalize(String(activeSubcategoryId).replace('fallback:', ''));
-                return normalize(business.subcategories?.name || '').includes(fallbackName);
-            }
-
-            return toNum(business.subcategory_id) === toNum(activeSubcategoryId);
-        });
-    }
-
-    if (searchTerm) {
-        list = list.filter(business => {
-            const haystack = normalize(`
-                ${business.name}
-                ${business.address || ''}
-                ${business.categories?.name || ''}
-                ${business.subcategories?.name || ''}
-            `);
-
-            return haystack.includes(searchTerm);
-        });
-    }
-
-    if (activeQuickFilter === 'open') {
-        list = list.filter(business => business._openNow);
-    }
-
-    if (activeQuickFilter === 'delivery') {
-        list = list.filter(business => business.delivery_available);
-    }
-
-    if (activeQuickFilter === 'featured') {
-        list = list.filter(business => business.is_featured);
-    }
-
-    const sort = document.getElementById('sortSelect').value;
-
-    if (sort === 'featured') {
-        list.sort((a, b) => Number(b.is_featured) - Number(a.is_featured) || (b._rating || 0) - (a._rating || 0));
-    }
-
-    if (sort === 'rating') {
-        list.sort((a, b) => (b._rating || 0) - (a._rating || 0));
-    }
-
-    if (sort === 'name') {
-        list.sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'es'));
-    }
-
-    return list;
+    return allBusinesses
+        .filter(businessBelongsRoot)
+        .filter(businessBelongsSubcategory)
+        .filter(businessMatchesSearch);
 }
 
-async function fetchBusinesses() {
-    let result = await supabase
-        .from('businesses')
-        .select(BUSINESS_SELECT_WITH_PROMOS)
-        .eq('is_active', true);
-
-    if (result.error) {
-        console.warn('Consulta con promociones falló. Reintentando sin promociones:', result.error.message);
-
-        result = await supabase
-            .from('businesses')
-            .select(BUSINESS_SELECT_BASE)
-            .eq('is_active', true);
+async function safeSelect(table, select, extra = q => q) {
+    try {
+        const res = await extra(supabase.from(table).select(select));
+        if (res.error) { console.warn(`${table}:`, res.error.message); return []; }
+        return res.data || [];
+    } catch (err) {
+        console.warn(`${table}:`, err.message || err);
+        return [];
     }
-
-    return result;
 }
 
 async function boot() {
     try {
-        const categoriesResult = await supabase
-            .from('categories')
-            .select('id,name,icon,parent_id,sort_order')
-            .order('sort_order')
-            .order('name');
+        categories = await safeSelect('categories', 'id,name,icon,parent_id,sort_order', q => q.order('sort_order').order('name'));
+        rootCategories = categories.filter(c => !c.parent_id);
+        subCategories = categories.filter(c => c.parent_id);
+        currentRoot = findCurrentRoot();
+        currentSubcategory = findCurrentSubcategory();
 
-        if (categoriesResult.error) {
-            throw categoriesResult.error;
+        const businesses = await safeSelect('businesses', 'id,name,slug,city,address,cover_image,is_featured,delivery_available,category_id,subcategory_id,is_active', q => q.eq('is_active', true));
+        const ids = businesses.map(b => b.id).filter(Boolean);
+
+        let hoursByBiz = {};
+        let reviewsByBiz = {};
+        let promosByBiz = {};
+
+        if (ids.length) {
+            const hours = await safeSelect('business_hours', 'business_id,day_of_week,open_time,close_time,is_closed', q => q.in('business_id', ids));
+            const reviews = await safeSelect('reviews', 'business_id,is_approved,rating', q => q.in('business_id', ids));
+            const promos = await safeSelect('promotions', 'business_id,is_active,end_date', q => q.in('business_id', ids));
+            hoursByBiz = groupBy(hours, 'business_id');
+            reviewsByBiz = groupBy(reviews, 'business_id');
+            promosByBiz = groupBy(promos, 'business_id');
         }
 
-        rootCategories = (categoriesResult.data || []).filter(category => !category.parent_id);
-        subCategories = (categoriesResult.data || []).filter(category => category.parent_id);
-        currentRoot = findRootCategory();
+        allBusinesses = businesses.map(b => {
+            const cat = businessRootFromIds(b) || businessCategoryFromIds(b);
+            const sub = businessSubcategoryFromIds(b);
+            const businessHours = hoursByBiz[b.id] || [];
+            const businessReviews = reviewsByBiz[b.id] || [];
+            const businessPromos = promosByBiz[b.id] || [];
+            return {
+                ...b,
+                categories: cat ? { name: cat.name, icon: cat.icon } : null,
+                subcategories: sub ? { name: sub.name, icon: sub.icon } : null,
+                business_hours: businessHours,
+                reviews: businessReviews,
+                promotions: businessPromos,
+                _open: isOpenNow(businessHours),
+                _rating: avgRating(businessReviews),
+                _reviews: approvedReviews(businessReviews),
+                _promo: hasPromo(businessPromos)
+            };
+        });
 
-        const businessResult = await fetchBusinesses();
-
-        if (businessResult.error) {
-            throw businessResult.error;
-        }
-
-        allBusinesses = (businessResult.data || []).map(enrichBusiness);
-
-        if (currentRoot) {
-            currentSubcategories = subCategories
-                .filter(subcategory => toNum(subcategory.parent_id) === toNum(currentRoot.id))
-                .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
-        }
-
-        if (!currentSubcategories.length) {
-            currentSubcategories = PAGE_CONFIG.fallbackSubcategories.map((subcategory, index) => ({
-                id: `fallback:${normalize(subcategory.name)}`,
-                name: subcategory.name,
-                icon: subcategory.icon,
-                parent_id: currentRoot?.id || null,
-                sort_order: index + 1,
-                _fallback: true
-            }));
-        }
-
-        renderSubcategories();
-        renderAll();
-    } catch (error) {
-        console.error(error);
-        document.getElementById('shopsList').innerHTML = `
-            <div class="empty-state">
-                No se pudo cargar la información. Revise la conexión con Supabase.
-            </div>
-        `;
+        renderSubcategoryCounts();
+        renderShowcase();
+    } catch (err) {
+        console.error(err);
         document.getElementById('showcaseStats').textContent = 'Error de carga';
+        document.getElementById('shopsList').innerHTML = `<div class="empty-state">No se pudo cargar la información. Revise la conexión con Supabase.</div>`;
     }
 }
 
-function countBySubcategory(subcategory) {
-    if (String(subcategory.id).startsWith('fallback:')) {
-        const fallbackName = normalize(subcategory.name);
+function countForSub(sub) {
+    return allBusinesses.filter(b => {
+        if (!businessBelongsRoot(b)) return false;
 
-        return allBusinesses.filter(business => {
-            return belongsToRoot(business) &&
-                   normalize(business.subcategories?.name || '').includes(fallbackName);
-        }).length;
-    }
+        const resolvedSub = businessSubcategoryFromIds(b);
+        const subName = resolvedSub?.name || b.subcategories?.name || '';
+        const resolvedSubId = resolvedSub ? toNum(resolvedSub.id) : null;
 
-    return allBusinesses.filter(business => {
-        return belongsToRoot(business) &&
-               toNum(business.subcategory_id) === toNum(subcategory.id);
+        return matchesAlias(subName, sub.aliases) ||
+               (resolvedSubId !== null && currentSubcategory && resolvedSubId === toNum(currentSubcategory.id) && matchesAlias(sub.name, sub.aliases));
     }).length;
 }
-
-function renderSubcategories() {
-    const container = document.getElementById('categoriesList');
-    const total = allBusinesses.filter(belongsToRoot).length;
-
-    document.getElementById('countAll').textContent = plural(total);
-
-    const allButton = `
-        <li class="category-item active">
-            <button type="button" class="active" onclick="selectSubcategory(null)">
-                <div class="icon-container">▦</div>
-                <div class="category-text-info">
-                    <span class="category-name">Todos</span>
-                    <span class="category-count">${plural(total)}</span>
-                </div>
-            </button>
-        </li>
-    `;
-
-    const subcategoryButtons = currentSubcategories.map(subcategory => {
-        const count = countBySubcategory(subcategory);
-
-        return `
-            <li class="category-item">
-                <button type="button" data-subcategory-id="${esc(subcategory.id)}" onclick="selectSubcategory('${esc(subcategory.id)}')">
-                    <div class="icon-container">${esc(subcategory.icon || '•')}</div>
-                    <div class="category-text-info">
-                        <span class="category-name">${esc(subcategory.name)}</span>
-                        <span class="category-count">${plural(count)}</span>
-                    </div>
-                </button>
-            </li>
-        `;
-    }).join('');
-
-    container.innerHTML = allButton + subcategoryButtons;
-}
-
-function updateQuickFilters() {
-    const base = allBusinesses.filter(belongsToRoot);
-
-    document.getElementById('filterTotal').textContent = plural(base.length);
-    document.getElementById('filterOpen').textContent = plural(base.filter(business => business._openNow).length);
-    document.getElementById('filterDelivery').textContent = plural(base.filter(business => business.delivery_available).length);
-    document.getElementById('filterFeatured').textContent = plural(base.filter(business => business.is_featured).length);
-
-    document.querySelectorAll('.filter-pill').forEach(button => {
-        button.classList.toggle('active', button.dataset.filter === activeQuickFilter);
+function renderSubcategoryCounts() {
+    SUBCATEGORIES.forEach(sub => {
+        const count = countForSub(sub);
+        const target = document.getElementById(`count_${sub.slug.replaceAll('-', '_')}`);
+        if (target) target.textContent = `${count} local${count === 1 ? '' : 'es'}`;
     });
 }
-
-function getActiveSubcategoryName() {
-    if (activeSubcategoryId === null) {
-        return 'Todos';
-    }
-
-    const subcategory = currentSubcategories.find(item => String(item.id) === String(activeSubcategoryId));
-
-    return subcategory ? subcategory.name : 'Filtro activo';
-}
-
-function updateActivePill() {
-    const pill = document.getElementById('activeFilterPill');
-    const text = document.getElementById('activeFilterText');
-
-    const hasActive = activeSubcategoryId !== null || activeQuickFilter !== 'all' || searchTerm;
-
-    if (!hasActive) {
-        pill.classList.remove('visible');
-        return;
-    }
-
-    const labels = [];
-
-    if (activeSubcategoryId !== null) {
-        labels.push(getActiveSubcategoryName());
-    }
-
-    if (activeQuickFilter !== 'all') {
-        labels.push({
-            open: 'Abiertos ahora',
-            delivery: 'A domicilio',
-            featured: 'Destacados'
-        }[activeQuickFilter]);
-    }
-
-    if (searchTerm) {
-        labels.push(`Búsqueda: ${searchTerm}`);
-    }
-
-    text.textContent = labels.join(' · ');
-    pill.classList.add('visible');
-}
-
-function renderAll() {
-    updateQuickFilters();
-    updateActivePill();
-    renderBusinesses();
-}
-
-function businessUrl(business) {
-    return business.slug ? `../business/?slug=${encodeURIComponent(business.slug)}` : '#';
-}
-
-function businessThumb(business) {
-    if (business.cover_image) {
-        return `<img class="shop-thumb" src="${esc(business.cover_image)}" alt="${esc(business.name)}" loading="lazy">`;
-    }
-
-    return `<span>${esc(business.subcategories?.icon || business.categories?.icon || '🏪')}</span>`;
-}
-
-function businessCard(business) {
-    const ratingText = business._rating ? business._rating.toFixed(1) : '—';
-    const reviewText = business._reviewCount ? `${business._reviewCount}` : 'Sin reseñas';
-    const segment = business.subcategories?.name || business.categories?.name || PAGE_CONFIG.rootName;
-    const statusClass = business._openNow ? '' : 'closed';
-    const statusText = business._openNow ? 'Abierto' : 'Cerrado';
-
+function shopCard(business) {
+    const img = business.cover_image
+        ? `<img class="shop-thumb" src="${esc(business.cover_image)}" alt="${esc(business.name)}" loading="lazy">`
+        : `<div class="shop-thumb-placeholder">${business.subcategories?.icon || business.categories?.icon || '🛍️'}</div>`;
+    const rating = business._rating ? business._rating.toFixed(1) : '—';
+    const count = business._reviews ? `(${business._reviews})` : 'Sin reseñas';
+    const status = business._open ? `<span class="status-indicator">Abierto</span>` : `<span class="status-indicator closed">Cerrado</span>`;
+    const resolvedSub = businessSubcategoryFromIds(business);
+    const resolvedRoot = businessRootFromIds(business);
+    const label = resolvedSub?.name || resolvedRoot?.name || business.subcategories?.name || business.categories?.name || (CURRENT_SUB?.name || ROOT_NAME);
     return `
-        <a class="shop-card" href="${businessUrl(business)}">
-            <div class="shop-thumb-wrapper">
-                ${businessThumb(business)}
-            </div>
+        <a class="shop-card" href="${BUSINESS_URL(business.slug)}">
+            <div class="shop-thumb-wrapper">${img}</div>
             <div class="shop-details">
                 <div class="shop-title">${esc(business.name)}</div>
-                <div class="shop-segment">${esc(segment)}</div>
+                <div class="shop-segment">${esc(label)}${business.is_featured ? ' · Destacado' : ''}</div>
                 <div class="shop-rating-row">
-                    <span class="star-icon">★</span>
-                    <span class="rating-value">${ratingText}</span>
-                    <span class="rating-count">${esc(reviewText)}</span>
-                    <span class="status-indicator ${statusClass}">${statusText}</span>
+                    <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    <span class="rating-value">${rating}</span>
+                    <span class="rating-count">${count}</span>
+                    ${status}
                 </div>
             </div>
-        </a>
-    `;
+        </a>`;
 }
+function renderShowcase() {
+    const baseList = filteredBusinesses();
 
-function renderBusinesses() {
-    const list = filteredBusinesses();
-    const container = document.getElementById('shopsList');
+    // IMPORTANTE: en el panel "Destacados" solo aparecen negocios marcados manualmente.
+    // No se rellena por defecto con negocios no destacados.
+    const list = baseList.filter(b => b.is_featured === true || b.is_featured === 1 || b.is_featured === 'true');
+
+    const sort = document.getElementById('sortSelect')?.value || 'featured';
+    if (sort === 'rating') list.sort((a,b) => (b._rating || 0) - (a._rating || 0));
+    if (sort === 'name') list.sort((a,b) => String(a.name).localeCompare(String(b.name), 'es'));
+    if (sort === 'featured') list.sort((a,b) => (b._rating || 0) - (a._rating || 0));
+
     const stats = document.getElementById('showcaseStats');
+    if (stats) {
+        stats.textContent = `${list.length} destacado${list.length === 1 ? '' : 's'} encontrado${list.length === 1 ? '' : 's'}`;
+    }
 
-    stats.textContent = plural(list.length, 'negocio encontrado', 'negocios encontrados');
+    const target = document.getElementById('shopsList');
+    if (!target) return;
 
+    const label = CURRENT_SUB?.name || ROOT_NAME;
     if (!list.length) {
-        container.innerHTML = `
-            <div class="empty-state">
-                No hay negocios disponibles con los filtros actuales.
-            </div>
-        `;
+        target.innerHTML = `<div class="empty-state">No hay negocios destacados en ${esc(label)} por ahora.</div>`;
         return;
     }
 
-    container.innerHTML = list.map(businessCard).join('');
+    target.innerHTML = list.map(shopCard).join('');
 }
 
-window.selectSubcategory = (subcategoryId) => {
-    activeSubcategoryId = subcategoryId === null || subcategoryId === 'null' ? null : String(subcategoryId);
-
-    document.querySelectorAll('.category-item').forEach(item => item.classList.remove('active'));
-    document.querySelectorAll('.category-item button').forEach(button => button.classList.remove('active'));
-
-    const selector = activeSubcategoryId === null
-        ? '.category-item:first-child button'
-        : `[data-subcategory-id="${CSS.escape(activeSubcategoryId)}"]`;
-
-    const button = document.querySelector(selector);
-
-    if (button) {
-        button.classList.add('active');
-        button.closest('.category-item')?.classList.add('active');
-    }
-
-    renderAll();
-};
-
-window.openDirectory = () => {
-    const list = filteredBusinesses();
-    const grid = document.getElementById('directoryGrid');
-
-    if (!list.length) {
-        grid.innerHTML = `
-            <div class="empty-state">
-                No hay negocios para mostrar.
-            </div>
-        `;
-    } else {
-        grid.innerHTML = list.map(businessCard).join('');
-    }
-
-    document.getElementById('directoryModal').classList.add('open');
-};
-
-window.closeDirectory = () => {
-    document.getElementById('directoryModal').classList.remove('open');
-};
-
-document.getElementById('directoryModal').addEventListener('click', event => {
-    if (event.target.id === 'directoryModal') {
-        closeDirectory();
-    }
+document.getElementById('siteSearch').addEventListener('input', (event) => {
+    searchTerm = event.target.value.toLowerCase().trim();
+    renderShowcase();
 });
-
-document.getElementById('siteSearch').addEventListener('input', event => {
-    searchTerm = normalize(event.target.value);
-    renderAll();
-});
-
-document.getElementById('sortSelect').addEventListener('change', renderAll);
-
-document.querySelectorAll('.filter-pill').forEach(button => {
-    button.addEventListener('click', () => {
-        activeQuickFilter = button.dataset.filter || 'all';
-        renderAll();
-    });
-});
-
+document.getElementById('sortSelect').addEventListener('change', renderShowcase);
 boot();
 </script>
+
 </body>
 </html>
