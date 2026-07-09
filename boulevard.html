@@ -578,92 +578,94 @@ body {
 
 <style id="ux-boulevard-final-requested">
 /* === CAMBIOS SOLICITADOS SOLO PARA BOULEVARD ===
-   1) En celular: encabezado fijo.
-   2) En celular: pie fijo.
-   3) En celular: logo Urbanex centrado.
-   4) Responsive en celular.
+   1) Encabezado fijo en cualquier dispositivo.
+   2) Pie fijo en cualquier dispositivo.
+   3) En celular: barra de menú de categorías fija junto al encabezado.
+   4) En celular: logo Urbanex centrado.
 */
 
-/* Escritorio y tablet grande: no forzar encabezado ni pie fijos */
-@media (min-width: 721px) {
-    html,
+html,
+body {
+    width: 100% !important;
+    min-height: 100vh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+}
+
+body {
+    padding-top: 60px !important;
+    padding-bottom: 24px !important;
+}
+
+.header-top {
+    grid-area: auto !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    z-index: 99999 !important;
+    background: rgba(6, 6, 6, 0.96) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.pie-pagina {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    z-index: 99999 !important;
+    background: #000 !important;
+}
+
+.dashboard-container {
+    min-height: calc(100vh - 84px) !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding-bottom: 0 !important;
+    grid-template-rows: minmax(0, 1fr) !important;
+    grid-template-areas: "aside-left main aside-right" !important;
+}
+
+@media (max-width: 1024px) {
     body {
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        height: auto !important;
-        min-height: 100vh !important;
-    }
-
-    .header-top {
-        position: relative !important;
-        top: auto !important;
-        left: auto !important;
-        right: auto !important;
-        height: 60px !important;
-        min-height: 60px !important;
-        z-index: 10 !important;
-    }
-
-    .pie-pagina {
-        position: relative !important;
-        left: auto !important;
-        right: auto !important;
-        bottom: auto !important;
-        height: 24px !important;
-        z-index: 5 !important;
+        padding-top: 60px !important;
+        padding-bottom: 24px !important;
     }
 
     .dashboard-container {
-        height: auto !important;
-        min-height: calc(100vh - 24px) !important;
-        padding-bottom: 0 !important;
-        overflow: visible !important;
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto minmax(360px, auto) auto !important;
+        grid-template-areas:
+            "aside-left"
+            "main"
+            "aside-right" !important;
+        min-height: calc(100vh - 84px) !important;
     }
 }
 
-/* Celular: encabezado y pie no se mueven */
 @media (max-width: 720px) {
     html,
     body {
         width: 100% !important;
-        height: auto !important;
         min-height: 100svh !important;
         overflow-x: hidden !important;
         overflow-y: auto !important;
     }
 
     body {
-        padding-top: 116px !important;
-        padding-bottom: 24px !important;
-    }
-
-    .dashboard-container {
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        grid-template-rows: auto auto auto !important;
-        grid-template-areas:
-            "aside-left"
-            "main"
-            "aside-right" !important;
-        width: 100% !important;
-        height: auto !important;
-        min-height: auto !important;
-        overflow: visible !important;
+        padding-top: 174px !important;
         padding-bottom: 24px !important;
     }
 
     .header-top {
-        grid-area: auto !important;
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
         height: 116px !important;
         min-height: 116px !important;
-        z-index: 99999 !important;
-        background: rgba(6, 6, 6, 0.96) !important;
-        border-bottom: 1px solid var(--border-color) !important;
         display: grid !important;
         grid-template-columns: 1fr !important;
         grid-template-rows: 58px 38px !important;
@@ -707,13 +709,19 @@ body {
     }
 
     .aside-categories {
-        grid-area: aside-left !important;
+        grid-area: auto !important;
+        position: fixed !important;
+        top: 116px !important;
+        left: 0 !important;
+        right: 0 !important;
         width: 100% !important;
-        height: auto !important;
-        min-height: auto !important;
-        padding: 10px !important;
+        height: 58px !important;
+        min-height: 58px !important;
+        z-index: 99998 !important;
+        padding: 8px 10px !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
+        background: rgba(6, 6, 6, 0.96) !important;
         border-right: none !important;
         border-bottom: 1px solid var(--border-color) !important;
     }
@@ -729,6 +737,8 @@ body {
         overflow-x: auto !important;
         overflow-y: hidden !important;
         padding-bottom: 2px !important;
+        height: 42px !important;
+        align-items: center !important;
     }
 
     .category-item {
@@ -739,12 +749,27 @@ body {
     .cat-all-btn {
         width: auto !important;
         min-width: max-content !important;
+        height: 40px !important;
         padding: 8px 12px !important;
         white-space: nowrap !important;
     }
 
     .sub-list {
         display: none !important;
+    }
+
+    .dashboard-container {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto auto !important;
+        grid-template-areas:
+            "main"
+            "aside-right" !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        padding-bottom: 0 !important;
     }
 
     .main-boulevard {
@@ -800,17 +825,6 @@ body {
         overflow: visible !important;
         display: flex !important;
         flex-direction: column !important;
-    }
-
-    .pie-pagina {
-        position: fixed !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        width: 100% !important;
-        height: 24px !important;
-        z-index: 99999 !important;
-        background: #000 !important;
     }
 }
 /* === FIN CAMBIOS SOLICITADOS SOLO PARA BOULEVARD === */
@@ -947,7 +961,7 @@ body {
     </div>
 </div>
 
-<footer class="pie-pagina"><p>&copy; 2026 Urbanex. Desarrollado por Neodat Consultores.</p></footer>
+<footer class="pie-pagina"><p>&copy; 2026 Urbanex. Desarrollado por NeoDat Consultores.</p></footer>
 
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
