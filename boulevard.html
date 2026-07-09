@@ -1875,7 +1875,6 @@ function goBackMenu() {
 
     if (!scroller) return;
 
-    let direction = 1;
     let paused = false;
     let resumeTimer = null;
     let lastFrame = performance.now();
@@ -1903,15 +1902,11 @@ function goBackMenu() {
             const maxScroll = scroller.scrollWidth - scroller.clientWidth;
 
             if (maxScroll > 0) {
+                scroller.scrollLeft += speed * elapsed;
+
                 if (scroller.scrollLeft >= maxScroll - 1) {
-                    direction = -1;
+                    scroller.scrollLeft = 0;
                 }
-
-                if (scroller.scrollLeft <= 1) {
-                    direction = 1;
-                }
-
-                scroller.scrollLeft += direction * speed * elapsed;
             }
         }
 
@@ -1923,7 +1918,7 @@ function goBackMenu() {
     scroller.addEventListener('wheel', pauseForFiveSeconds, { passive: true });
 
     window.addEventListener('resize', () => {
-        direction = 1;
+        scroller.scrollLeft = 0;
         lastFrame = performance.now();
     });
 
