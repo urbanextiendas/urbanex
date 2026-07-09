@@ -198,17 +198,17 @@ body {
     .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
 }
 @media (max-width: 720px) {
-    body { padding-top: 192px; padding-bottom: 24px; }
+    body { padding-top: 198px; padding-bottom: 24px; }
     .dashboard-container { display: grid; grid-template-columns: 1fr; grid-template-rows: minmax(420px, 52vh) auto; grid-template-areas: "main" "aside-right"; min-height: auto; overflow: visible; }
-    .header-top { height: 116px; min-height: 116px; display: grid; grid-template-columns: 1fr; grid-template-rows: 58px 38px; gap: 8px; padding: 8px 12px 4px; }
+    .header-top { height: 116px; min-height: 116px; display: grid; grid-template-columns: 1fr; grid-template-rows: 58px 38px; gap: 8px; padding: 8px 12px 10px 12px; }
     .brand-box { width: 100%; min-width: 0; display: flex; justify-content: center; }
     .brand-box img { height: 56px; margin: 0 auto; }
     .search-wrapper { width: 100%; max-width: none; margin: 0; }
     .search-input { height: 38px; font-size: 12px; }
     .user-tools { display: none; }
-    .aside-categories { position: fixed; top: 116px; left: 0; right: 0; height: 76px; min-height: 76px; z-index: 9998; padding: 4px 10px 10px; background: rgba(6,6,6,.96); border-right: none; border-bottom: 1px solid var(--border-color); overflow-x: auto; overflow-y: hidden; }
-    .categories-list { height: 56px; display: flex; flex-direction: row; align-items: center; gap: 8px; overflow-x: auto; overflow-y: hidden; padding-bottom: 4px; }
-    .category-item button { height: 50px; min-height: 50px; padding: 8px 12px; }
+    .aside-categories { position: fixed; top: 116px; left: 0; right: 0; height: 82px; min-height: 82px; z-index: 9998; padding: 10px 18px 12px 18px; background: rgba(6,6,6,.96); border-right: none; border-bottom: 1px solid var(--border-color); overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+    .categories-list { height: 58px; min-height: 58px; display: flex; flex-direction: row; align-items: stretch; gap: 8px; overflow-x: auto; overflow-y: hidden; padding: 0; }
+    .category-item button { height: 58px; min-height: 58px; padding: 9px 10px; }
     .main-boulevard { width: 100%; height: 52vh; min-height: 420px; background-position: center bottom; }
     .welcome-billboard { top: 48px; width: 92%; }
     .welcome-billboard h2 { font-size: 20px; letter-spacing: 4px; }
