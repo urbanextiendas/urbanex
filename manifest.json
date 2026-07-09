@@ -1,13 +1,13 @@
 {
-  "name": "Urbanex — Comercios de Loja",
+  "name": "Urbanex — Ecosistema Comercial",
   "short_name": "Urbanex",
   "description": "Todos los comercios de Loja en un solo lugar",
-  "start_url": "/boulevard.html",
+  "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#020202",
-  "theme_color": "#e5c158",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "lang": "es",
   "categories": [
     "shopping",
@@ -51,5 +51,6 @@
         }
       ]
     }
-  ]
+  ],
+  "id": "/index.html"
 }
