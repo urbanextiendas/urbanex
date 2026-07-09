@@ -287,42 +287,16 @@
         <img src="../imagenes/logo.png" alt="Urbanex">
     </a>
 
-    <div class="header-search">
-        <input type="text" id="quickFilter" placeholder="Filtrar en esta categoría..." autocomplete="off">
-    </div>
+    
 
-    <div class="breadcrumb">
-        <a href="../boulevard.html">Boulevard</a>
-        <span class="sep">/</span>
-        <span class="current" id="breadcrumbName">Categoría</span>
-    </div>
+    
 </header>
 
-<section class="category-hero">
-    <div class="category-icon-circle">
-        <svg viewBox="0 0 24 24" id="categoryIconSvg"><path d="M4 10h3v7H4zm6.5 0h3v7h-3zM2 22h19v-3H2zm15-12h3v7h-3zM11.5 2L2 7v2h19V7z"/></svg>
-    </div>
-    <h1 id="categoryTitle">Cargando categoría...</h1>
-    <p id="categorySubtitle">Explorando negocios</p>
-</section>
 
-<div class="toolbar">
-    <div class="results-count" id="resultsCount">Cargando negocios...</div>
-    <div class="toolbar-controls">
-        <button class="filter-toggle" id="filterOpenNow">Abiertos ahora</button>
-        <select class="sort-select" id="sortSelect">
-            <option value="rating">Mejor calificados</option>
-            <option value="name">Nombre A-Z</option>
-        </select>
-    </div>
-</div>
 
-<div class="business-grid" id="businessGrid">
-    <div class="skeleton-card"></div>
-    <div class="skeleton-card"></div>
-    <div class="skeleton-card"></div>
-    <div class="skeleton-card"></div>
-</div>
+
+
+
 
 <footer class="pie-pagina">
     <p>&copy; 2026 Urbanex. Desarrollado por Neodat Consultores.</p>
@@ -401,39 +375,21 @@ function renderGrid() {
 
     if (!list.length) {
         grid.innerHTML = `
-            <div class="empty-state">
-                <h3>Sin resultados</h3>
-                <p>No hay negocios que coincidan con tu búsqueda en esta categoría.</p>
-                <button class="btn-back-boulevard" onclick="window.location.href='../boulevard.html'">Volver al Boulevard</button>
-            </div>`;
+            `;
         return;
     }
 
     grid.innerHTML = list.map(b => {
         const thumbHtml = b.cover_image
             ? `<img src="${esc(b.cover_image)}" alt="${esc(b.name)}" class="card-thumb" loading="lazy">`
-            : `<div class="card-thumb-placeholder">🏪</div>`;
+            : ``;
 
         const ratingDisplay = b._avgRating ? b._avgRating.toFixed(1) : '—';
 
         return `
         <a class="business-card" href="../business/index.html?slug=${esc(b.slug)}">
-            <div class="card-thumb-wrapper">
-                ${thumbHtml}
-                <span class="card-status ${b._open ? 'open' : 'closed'}">${b._open ? 'Abierto' : 'Cerrado'}</span>
-            </div>
-            <div class="card-body">
-                <div class="card-title">${esc(b.name)}</div>
-                <div class="card-desc">${esc(b.description || 'Sin descripción disponible.')}</div>
-                <div class="card-footer">
-                    <div class="card-rating">
-                        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <span class="num">${ratingDisplay}</span>
-                        <span class="count">(${b._reviewCount})</span>
-                    </div>
-                    <span class="card-address">${esc(b.city || '')}</span>
-                </div>
-            </div>
+            
+            
         </a>`;
     }).join('');
 }
@@ -444,11 +400,7 @@ async function loadCategoryAndBusinesses() {
     if (!catId) {
         document.getElementById('categoryTitle').textContent = 'Categoría no especificada';
         document.getElementById('businessGrid').innerHTML = `
-            <div class="empty-state">
-                <h3>Categoría no encontrada</h3>
-                <p>No se especificó ninguna categoría válida.</p>
-                <button class="btn-back-boulevard" onclick="window.location.href='../boulevard.html'">Volver al Boulevard</button>
-            </div>`;
+            `;
         return;
     }
 
@@ -462,11 +414,7 @@ async function loadCategoryAndBusinesses() {
     if (catError || !cat) {
         document.getElementById('categoryTitle').textContent = 'Categoría no encontrada';
         document.getElementById('businessGrid').innerHTML = `
-            <div class="empty-state">
-                <h3>Categoría no encontrada</h3>
-                <p>La categoría que buscas no existe.</p>
-                <button class="btn-back-boulevard" onclick="window.location.href='../boulevard.html'">Volver al Boulevard</button>
-            </div>`;
+            `;
         return;
     }
 
@@ -490,10 +438,7 @@ async function loadCategoryAndBusinesses() {
 
     if (bizError) {
         document.getElementById('businessGrid').innerHTML = `
-            <div class="empty-state">
-                <h3>Error al cargar</h3>
-                <p>Hubo un problema obteniendo los negocios. Intenta más tarde.</p>
-            </div>`;
+            `;
         return;
     }
 
@@ -530,7 +475,7 @@ loadCategoryAndBusinesses();
 
 
 <script>
-/* === URBANEX PATCH MINIMO: NO MOSTRAR "ELIJA UNA SUBCATEGORÍA" === */
+/* === URBANEX PATCH MINIMO: NO MOSTRAR "" === */
 document.addEventListener('DOMContentLoaded', function () {
   const main = document.querySelector('.main-boulevard');
   if (!main) return;
@@ -551,6 +496,44 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 /* === FIN URBANEX PATCH MINIMO === */
+</script>
+
+
+<script>
+/* === UX_INSTALL_PATCH START === */
+document.addEventListener('DOMContentLoaded', function () {
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    let logoPath = 'imagenes/Urba4.png';
+
+    if (location.pathname.includes('/categorias/') && pathParts.length >= 2) {
+        logoPath = '../imagenes/Urba4.png';
+    }
+
+    if (location.pathname.includes('/categorias/') && pathParts.length >= 3) {
+        logoPath = '../../imagenes/Urba4.png';
+    }
+
+    const installNodes = document.querySelectorAll(
+        '[id*="install" i], [class*="install" i], [id*="pwa" i], [class*="pwa" i]'
+    );
+
+    installNodes.forEach(function (el) {
+        el.innerHTML = el.innerHTML
+            .replaceAll('Accede rápido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
+            .replaceAll('Accede rapido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
+            .replaceAll('desde tu pantalla', 'desde su pantalla');
+    });
+
+    document.querySelectorAll(
+        '[id*="install" i] img, [class*="install" i] img, [id*="pwa" i] img, [class*="pwa" i] img'
+    ).forEach(function (img) {
+        img.src = logoPath;
+        img.style.objectFit = 'contain';
+        img.style.background = '#000';
+        img.style.borderRadius = '10px';
+    });
+});
+/* === UX_INSTALL_PATCH END === */
 </script>
 
 </body>

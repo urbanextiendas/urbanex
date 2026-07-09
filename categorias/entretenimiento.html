@@ -35,7 +35,7 @@
 }
 /* === FIN URBANEX PATCH MINIMO === */
 
-</style></head><body><header class="ux-header"><a class="ux-brand" href="../index.html"><img src="../imagenes/logo.png" alt="Urbanex"></a><div class="ux-search"><input type="search" placeholder="Buscar en Entretenimiento..."><span>⌕</span></div><div class="ux-tools"><span class="pin">●</span><span class="loc-text">Loja, Ecuador</span><a class="heart" href="../boulevard.html">♥</a><a class="ux-round" href="../boulevard.html">⌂</a></div></header><div class="ux-app"><aside class="ux-left"><h2 class="ux-label">Subcategorías</h2><nav id="subNav" class="ux-subnav"></nav></aside><main class="ux-main"><div class="ux-main-inner"><section class="ux-hero"><h1 id="pageTitle">ENTRETENIMIENTO</h1><p id="pageSubtitle">OCIO, DIVERSIÓN Y EXPERIENCIAS LOCALES</p><div class="ux-pill">🎭 <span>Entretenimiento</span></div></section><section class="ux-business-panel"><div class="ux-panel-head"><div><h2>Elija una subcategoría</h2><p>Ingrese a cada sección para ver las empresas registradas.</p></div></div><div id="categoryGrid" class="ux-grid category-grid"><div class="ux-empty">Cargando subcategorías...</div></div></section></div></main><aside class="ux-right"><div class="ux-right-head"><h2>Destacados</h2><p id="featuredCount">Cargando...</p></div><div id="featuredList" class="ux-featured-list"><div class="ux-note">Cargando destacados...</div></div><a class="ux-back" href="../boulevard.html">Volver al Boulevard</a></aside></div><footer class="ux-footer">© 2026 Urbanex. Desarrollado por Neodat Consultores.</footer><script type="module">
+</style></head><body><header class="ux-header"><a class="ux-brand" href="../index.html"><img src="../imagenes/logo.png" alt="Urbanex"></a></header><footer class="ux-footer">© 2026 Urbanex. Desarrollado por Neodat Consultores.</footer><script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
@@ -59,7 +59,7 @@ async function boot(){
  document.getElementById('categoryGrid').innerHTML = finalSubs.map(sub=>{ const cfg=byName[norm(sub.name)]||{}; const file=cfg.file||'#'; const count=sub.id?businesses.filter(b=>matchBusinessToSub(b,sub.id)).length:0; return `<a class="ux-category-card" href="${esc(PAGE.folder+'/'+file)}"><span class="bigico">${esc(sub.icon||cfg.icon||'•')}</span><span><h3>${esc(sub.name)}</h3><p>${count} local${count===1?'':'es'} registrado${count===1?'':'s'}</p></span></a>` }).join('');
  const featured = businesses.filter(b=>b.is_featured===true && finalSubs.some(s=>s.id && matchBusinessToSub(b,s.id)));
  document.getElementById('featuredCount').textContent = `${featured.length} destacado${featured.length===1?'':'s'} encontrado${featured.length===1?'':'s'}`;
- document.getElementById('featuredList').innerHTML = featured.length ? featured.map(b=>`<a class="ux-mini" href="../business/?slug=${encodeURIComponent(b.slug||b.id)}"><div class="ux-mini-logo">★</div><div class="ux-mini-body"><strong>${esc(b.name)}</strong><span>Destacado</span><small>Ver negocio</small></div></a>`).join('') : `<div class="ux-note">No hay negocios destacados en esta sección por ahora.</div>`;
+ document.getElementById('featuredList').innerHTML = featured.length ? featured.map(b=>`<a class="ux-mini" href="../business/?slug=${encodeURIComponent(b.slug||b.id)}"></a>`).join('') : ``;
 }
 boot();
 </script>
@@ -68,7 +68,7 @@ boot();
 
 
 <script>
-/* === URBANEX PATCH MINIMO: NO MOSTRAR "ELIJA UNA SUBCATEGORÍA" === */
+/* === URBANEX PATCH MINIMO: NO MOSTRAR "" === */
 document.addEventListener('DOMContentLoaded', function () {
   const main = document.querySelector('.main-boulevard');
   if (!main) return;
@@ -89,6 +89,44 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 /* === FIN URBANEX PATCH MINIMO === */
+</script>
+
+
+<script>
+/* === UX_INSTALL_PATCH START === */
+document.addEventListener('DOMContentLoaded', function () {
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    let logoPath = 'imagenes/Urba4.png';
+
+    if (location.pathname.includes('/categorias/') && pathParts.length >= 2) {
+        logoPath = '../imagenes/Urba4.png';
+    }
+
+    if (location.pathname.includes('/categorias/') && pathParts.length >= 3) {
+        logoPath = '../../imagenes/Urba4.png';
+    }
+
+    const installNodes = document.querySelectorAll(
+        '[id*="install" i], [class*="install" i], [id*="pwa" i], [class*="pwa" i]'
+    );
+
+    installNodes.forEach(function (el) {
+        el.innerHTML = el.innerHTML
+            .replaceAll('Accede rápido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
+            .replaceAll('Accede rapido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
+            .replaceAll('desde tu pantalla', 'desde su pantalla');
+    });
+
+    document.querySelectorAll(
+        '[id*="install" i] img, [class*="install" i] img, [id*="pwa" i] img, [class*="pwa" i] img'
+    ).forEach(function (img) {
+        img.src = logoPath;
+        img.style.objectFit = 'contain';
+        img.style.background = '#000';
+        img.style.borderRadius = '10px';
+    });
+});
+/* === UX_INSTALL_PATCH END === */
 </script>
 
 </body></html>

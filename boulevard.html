@@ -371,6 +371,73 @@ html, body { height: 100% !important; overflow: hidden !important; }
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Urbanex">
     <link rel="apple-touch-icon" href="/imagenes/logo.png">
+
+<style>
+/* === UX_BOULEVARD_ONLY_FIXED_BARS START === */
+html,
+body {
+    overflow-x: hidden !important;
+}
+
+body {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+}
+
+.header-top {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+}
+
+.pie-pagina {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 24px !important;
+    z-index: 9999 !important;
+}
+
+.dashboard-container {
+    height: auto !important;
+    min-height: calc(100vh - 24px) !important;
+    overflow: visible !important;
+    padding-bottom: 24px !important;
+}
+
+.main-boulevard {
+    overflow: visible !important;
+}
+
+@media (max-width: 720px) {
+    body {
+        height: auto !important;
+        min-height: 100svh !important;
+        overflow-y: auto !important;
+    }
+
+    .dashboard-container {
+        height: auto !important;
+        min-height: calc(100svh - 24px) !important;
+        overflow: visible !important;
+        padding-bottom: 24px !important;
+    }
+
+    .header-top {
+        position: sticky !important;
+        top: 0 !important;
+    }
+
+    .pie-pagina {
+        position: fixed !important;
+        bottom: 0 !important;
+    }
+}
+/* === UX_BOULEVARD_ONLY_FIXED_BARS END === */
+</style>
+
 </head>
 <body>
 
@@ -863,18 +930,17 @@ function shopCardHtml(b) {
 window.renderShowcase = () => {
     const sort = document.getElementById('showcaseSort')?.value || 'rating';
 
-    const isFeatured = (business) => business.is_featured === true ||
+    const isFeatured = (business) =>
+        business.is_featured === true ||
         business.is_featured === 1 ||
         String(business.is_featured).toLowerCase() === 'true';
 
     let list = (typeof filtered === 'function' ? filtered() : allBusinesses).filter(isFeatured);
 
-    if (sort === 'rating') {
-        list = list.sort((a, b) => (b._rating || 0) - (a._rating || 0));
-    } else if (sort === 'name') {
+    if (sort === 'name') {
         list = list.sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'es'));
     } else {
-        list = list.sort((a, b) => Number(isFeatured(b)) - Number(isFeatured(a)) || (b._rating || 0) - (a._rating || 0));
+        list = list.sort((a, b) => (b._rating || 0) - (a._rating || 0));
     }
 
     const area = document.getElementById('shopsScrollArea') || document.getElementById('shopsList');
@@ -1126,9 +1192,9 @@ document.addEventListener('DOMContentLoaded', function () {
   installNodes.forEach(function (el) {
     if (el.innerHTML) {
       el.innerHTML = el.innerHTML
-        .replaceAll('Accede rápido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
-        .replaceAll('Accede rapido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
-        .replaceAll('desde tu pantalla', 'desde su pantalla');
+        .replaceAll('Acceda rápido desde su pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
+        .replaceAll('Acceda rápido desde su pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
+        .replaceAll('desde su pantalla', 'desde su pantalla');
     }
   });
 
@@ -1140,6 +1206,44 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 /* === FIN URBANEX PATCH MINIMO === */
+</script>
+
+
+<script>
+/* === UX_INSTALL_PATCH START === */
+document.addEventListener('DOMContentLoaded', function () {
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    let logoPath = 'imagenes/Urba4.png';
+
+    if (location.pathname.includes('/categorias/') && pathParts.length >= 2) {
+        logoPath = '../imagenes/Urba4.png';
+    }
+
+    if (location.pathname.includes('/categorias/') && pathParts.length >= 3) {
+        logoPath = '../../imagenes/Urba4.png';
+    }
+
+    const installNodes = document.querySelectorAll(
+        '[id*="install" i], [class*="install" i], [id*="pwa" i], [class*="pwa" i]'
+    );
+
+    installNodes.forEach(function (el) {
+        el.innerHTML = el.innerHTML
+            .replaceAll('Accede rápido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
+            .replaceAll('Accede rapido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
+            .replaceAll('desde tu pantalla', 'desde su pantalla');
+    });
+
+    document.querySelectorAll(
+        '[id*="install" i] img, [class*="install" i] img, [id*="pwa" i] img, [class*="pwa" i] img'
+    ).forEach(function (img) {
+        img.src = logoPath;
+        img.style.objectFit = 'contain';
+        img.style.background = '#000';
+        img.style.borderRadius = '10px';
+    });
+});
+/* === UX_INSTALL_PATCH END === */
 </script>
 
 </body>
