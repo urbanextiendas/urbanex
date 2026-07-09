@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urbanex - Comida y Bebida</title>
+<link rel="icon" type="image/png" href="../imagenes/log.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+<link rel="preconnect" href="https://esm.sh" crossorigin>
+<link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg-main: #020202;
+    --bg-panel: rgba(6, 6, 6, 0.58);
+    --bg-card: rgba(20, 20, 20, 0.62);
+    --gold: #e5c158;
+    --border-color: rgba(229, 193, 88, 0.22);
+    --text-main: #ffffff;
+    --text-muted: #e0e0e0;
+    --text-dark: #aaaaaa;
+    --green: #2ed573;
+    --red: #ff5b68;
+    --font-serif: 'Cinzel', serif;
+    --font-sans: 'Montserrat', sans-serif;
+    --blur-effect: blur(18px);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+a { color: inherit; text-decoration: none; }
+button, input, select { font-family: var(--font-sans); }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(229, 193, 88, 0.24); border-radius: 10px; }
+body {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-bottom: 24px;
+}
+.dashboard-container {
+    min-height: calc(100vh - 24px);
+    display: grid;
+    grid-template-rows: 60px minmax(0, 1fr);
+    grid-template-columns: 240px minmax(0, 1fr) 290px;
+    grid-template-areas:
+        "header header header"
+        "aside-left main aside-right";
+    background: #030303;
+    position: relative;
+    overflow: hidden;
+}
+.header-top {
+    grid-area: header;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 9999;
+    background: rgba(6, 6, 6, 0.96);
+    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: var(--blur-effect);
+    -webkit-backdrop-filter: var(--blur-effect);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+.brand-box { display: flex; align-items: center; min-width: 170px; }
+.brand-box img { height: 60px; width: auto; display: block; filter: drop-shadow(0 8px 18px rgba(0,0,0,.72)); }
+.search-wrapper { flex: 1; max-width: 430px; margin: 0 20px; position: relative; }
+.search-input {
+    width: 100%;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.48);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 20px;
+    padding: 8px 40px 8px 16px;
+    color: #fff;
+    font-size: 12px;
+    outline: none;
+    text-align: center;
+}
+.search-input:focus { border-color: var(--gold); background: rgba(0, 0, 0, 0.64); }
+.search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; fill: var(--gold); }
+.user-tools { display: flex; align-items: center; gap: 24px; }
+.location-indicator { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.location-indicator svg, .tool-icon svg { width: 18px; height: 18px; fill: var(--gold); }
+.profile-avatar { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; }
+.profile-avatar svg { width: 13px; height: 13px; fill: var(--gold); }
+.aside-categories {
+    grid-area: aside-left;
+    position: relative;
+    z-index: 5;
+    background: var(--bg-panel);
+    backdrop-filter: var(--blur-effect);
+    -webkit-backdrop-filter: var(--blur-effect);
+    border-right: 1px solid var(--border-color);
+    padding: 20px 12px;
+    overflow-y: auto;
+}
+.section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 14px; padding-left: 6px; font-weight: 700; }
+.categories-list { display: flex; flex-direction: column; gap: 6px; list-style: none; }
+.category-item { list-style: none; }
+.category-item button {
+    width: 100%;
+    min-height: 50px;
+    background: rgba(10, 10, 10, 0.58);
+    border: 1px solid rgba(229, 193, 88, 0.28);
+    padding: 10px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    text-align: left;
+    color: #fff;
+}
+.category-item button:hover, .category-item.active button, .category-item button.active { border-color: var(--gold); background: rgba(229, 193, 88, 0.10); }
+.icon-container { width: 28px; height: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); font-size: 15px; }
+.category-text-info { display: flex; flex-direction: column; align-items: flex-start; flex: 1; min-width: 0; }
+.category-name { font-size: 11.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+.category-count { color: var(--text-dark); font-size: 9px; }
+.main-boulevard {
+    grid-area: main;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    background-image: url("../imagenes/Gastronomía.png"), url("../imagenes/Boulevard.png");
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+}
+.boulevard-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.18), rgba(0,0,0,.02) 45%, rgba(0,0,0,.25)); pointer-events: none; }
+.welcome-billboard { position: absolute; top: 42px; left: 50%; transform: translateX(-50%); text-align: center; width: 90%; pointer-events: none; z-index: 2; }
+.welcome-billboard h2 { font-family: var(--font-serif); font-size: 24px; letter-spacing: 7px; text-transform: uppercase; text-shadow: 0 2px 12px rgba(0,0,0,.95); }
+.welcome-billboard p { margin-top: 6px; color: var(--gold); font-size: 10px; font-weight: 700; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,.95); }
+.aside-showcase-list {
+    grid-area: aside-right;
+    position: relative;
+    z-index: 5;
+    background: var(--bg-panel);
+    backdrop-filter: var(--blur-effect);
+    -webkit-backdrop-filter: var(--blur-effect);
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.showcase-header { padding: 20px 14px 8px 14px; }
+.showcase-header h2 { font-family: var(--font-serif); color: var(--gold); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+.showcase-stats { font-size: 10px; color: #fff; margin-top: 1px; }
+.sort-box { padding: 0 14px 10px 14px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.sort-select { width: 100%; background: rgba(0,0,0,.42); border: 1px solid rgba(255,255,255,.12); border-radius: 6px; padding: 7px 10px; color: #fff; font-size: 11px; outline: none; }
+.shops-scroll-area { flex: 1; overflow-y: auto; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
+.shop-card { min-height: 64px; display: flex; overflow: hidden; border-radius: 8px; background: var(--bg-card); border: 1px solid rgba(255,255,255,.08); color: inherit; }
+.shop-card:hover { border-color: rgba(229,193,88,.45); background: rgba(229,193,88,.10); }
+.shop-thumb-wrapper { width: 64px; height: 64px; flex: 0 0 64px; background: radial-gradient(circle at 30% 25%, rgba(229,193,88,.22), transparent 38%), linear-gradient(135deg, rgba(229,193,88,.10), rgba(0,0,0,.78)); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 24px; }
+.shop-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+.shop-details { flex: 1; min-width: 0; padding: 6px 10px; display: flex; flex-direction: column; justify-content: center; }
+.shop-title { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shop-segment { color: var(--gold); font-size: 9.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shop-rating-row { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+.star-icon { color: var(--gold); font-size: 10px; }
+.rating-value { font-size: 10px; font-weight: 700; }
+.rating-count { font-size: 9.5px; color: var(--text-dark); }
+.status-indicator { margin-left: auto; font-size: 9.5px; font-weight: 700; color: var(--green); }
+.status-indicator.closed { color: var(--red); }
+.empty-state { min-height: 86px; border: 1px dashed rgba(229,193,88,.26); border-radius: 8px; padding: 18px 14px; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--text-muted); font-size: 11px; line-height: 1.5; background: rgba(0,0,0,.24); }
+.action-footer-box { padding: 10px 14px; border-top: 1px solid rgba(255,255,255,.08); }
+.btn-view-all-shops { width: 100%; background: var(--gold); border: none; border-radius: 6px; padding: 8px; color: #000; font-size: 11.5px; font-weight: 700; cursor: pointer; }
+.pie-pagina { position: fixed; left: 0; right: 0; bottom: 0; height: 24px; z-index: 9999; background: #000; color: #8c8c8c; font-size: 11px; display: flex; align-items: center; justify-content: center; border-top: 1px solid #1a1a1a; font-family: Arial, Helvetica, sans-serif; }
+.directory-modal { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(0,0,0,.76); backdrop-filter: blur(10px); }
+.directory-modal.open { display: flex; }
+.directory-box { width: min(980px, 96vw); max-height: min(760px, 88vh); display: flex; flex-direction: column; border: 1px solid rgba(229,193,88,.36); border-radius: 18px; background: rgba(8,8,8,.96); overflow: hidden; }
+.directory-head { padding: 18px; border-bottom: 1px solid rgba(255,255,255,.08); display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.directory-head h2 { font-family: var(--font-serif); color: var(--gold); font-size: 18px; }
+.directory-head button { width: 34px; height: 34px; border: 1px solid rgba(229,193,88,.42); border-radius: 50%; background: transparent; color: var(--gold); cursor: pointer; font-size: 18px; }
+.directory-grid { padding: 16px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+@media (min-width: 1025px) {
+    .aside-categories, .main-boulevard, .aside-showcase-list { height: calc(100vh - 84px); max-height: calc(100vh - 84px); }
+}
+@media (max-width: 1024px) {
+    .dashboard-container { grid-template-columns: 1fr; grid-template-rows: 60px auto minmax(410px, 48vh) auto; grid-template-areas: "header" "aside-left" "main" "aside-right"; overflow: visible; }
+    .aside-categories { border-right: none; border-bottom: 1px solid var(--border-color); padding: 12px; overflow-x: auto; overflow-y: hidden; }
+    .section-title { display: none; }
+    .categories-list { flex-direction: row; overflow-x: auto; gap: 8px; padding-bottom: 4px; }
+    .category-item { flex: 0 0 auto; }
+    .category-item button { width: auto; min-width: max-content; white-space: nowrap; padding: 8px 12px; }
+    .main-boulevard { min-height: 410px; height: 48vh; }
+    .aside-showcase-list { border-left: none; border-top: 1px solid var(--border-color); }
+    .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+}
+@media (max-width: 720px) {
+    body { padding-top: 188px; padding-bottom: 24px; }
+    .dashboard-container { display: grid; grid-template-columns: 1fr; grid-template-rows: minmax(420px, 52vh) auto; grid-template-areas: "main" "aside-right"; min-height: auto; overflow: visible; }
+    .header-top { height: 112px; display: grid; grid-template-columns: 1fr; grid-template-rows: 58px 38px; gap: 8px; padding: 8px 12px 10px; }
+    .brand-box { width: 100%; min-width: 0; display: flex; justify-content: center; }
+    .brand-box img { height: 56px; margin: 0 auto; }
+    .search-wrapper { width: 100%; max-width: none; margin: 0; }
+    .search-input { height: 38px; font-size: 12px; }
+    .user-tools { display: none; }
+    .aside-categories { position: fixed; top: 112px; left: 0; right: 0; height: 76px; min-height: 76px; z-index: 9998; padding: 8px 10px 10px; background: rgba(6,6,6,.96); border-right: none; border-bottom: 1px solid var(--border-color); overflow-x: auto; overflow-y: hidden; }
+    .categories-list { height: 56px; display: flex; flex-direction: row; align-items: center; gap: 8px; overflow-x: auto; overflow-y: hidden; padding-bottom: 4px; }
+    .category-item button { height: 50px; min-height: 50px; padding: 8px 12px; }
+    .main-boulevard { width: 100%; height: 52vh; min-height: 420px; background-position: center bottom; }
+    .welcome-billboard { top: 48px; width: 92%; }
+    .welcome-billboard h2 { font-size: 20px; letter-spacing: 4px; }
+    .welcome-billboard p { font-size: 9px; letter-spacing: 1.4px; line-height: 1.35; }
+    .aside-showcase-list { width: 100%; height: auto; min-height: auto; max-height: none; overflow: visible; }
+    .shops-scroll-area { display: flex; flex-direction: column; overflow: visible; }
+    .pie-pagina { height: 24px; }
+}
+</style>
+
+
+<style id="ux-subcategory-autoscroll-style">
+/* Movimiento automático lento para la barra de subcategorías */
+@media (max-width: 1024px) {
+    .aside-categories {
+        scroll-behavior: auto !important;
+        scrollbar-width: thin;
+    }
+
+    .categories-list {
+        width: max-content !important;
+        min-width: max-content !important;
+        padding-right: 18px !important;
+    }
+
+    .aside-categories.ux-auto-paused {
+        box-shadow: inset 0 -1px 0 rgba(229, 193, 88, 0.18);
+    }
+}
+</style>
+</head>
+<body>
+<div class="dashboard-container">
+    <header class="header-top">
+        <a class="brand-box" href="../boulevard.html" title="Volver al Boulevard">
+            <img alt="Logo Urbanex" src="../imagenes/logo.png">
+        </a>
+        <div class="search-wrapper">
+            <input autocomplete="off" class="search-input" id="siteSearch" placeholder="¿Qué restaurante, cafetería o plato busca?" type="search">
+            <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
+        </div>
+        <div class="user-tools">
+            <div class="location-indicator">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></svg>
+                <span>Loja, Ecuador</span>
+            </div>
+            <a class="tool-icon" href="../boulevard.html" title="Volver al Boulevard">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
+            </a>
+            <a class="profile-avatar" href="../admin/index.html" title="Administración">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
+            </a>
+        </div>
+    </header>
+
+    <aside class="aside-categories">
+        <h2 class="section-title">Subcategorías</h2>
+        <ul class="categories-list" id="categoriesList"></ul>
+    </aside>
+
+    <main class="main-boulevard">
+        <div class="boulevard-overlay"></div>
+        <div class="welcome-billboard">
+            <h2>GASTRONOMÍA</h2>
+            <p>RESTAURANTES, CAFETERÍAS Y SABORES DE LOJA EN UN SOLO LUGAR</p>
+        </div>
+    </main>
+
+    <aside class="aside-showcase-list">
+        <div class="showcase-header">
+            <h2>Destacados</h2>
+            <p class="showcase-stats" id="showcaseStats">Cargando negocios...</p>
+        </div>
+        <div class="sort-box">
+            <select class="sort-select" id="sortSelect">
+                <option value="rating">Ordenar por: Mayor Calificación</option>
+                <option value="name">Ordenar por: Nombre A-Z</option>
+            </select>
+        </div>
+        <div class="shops-scroll-area" id="shopsList">
+            <div class="empty-state">Cargando negocios...</div>
+        </div>
+        <div class="action-footer-box">
+            <button class="btn-view-all-shops" onclick="openDirectory()" type="button">Explorar Directorio Completo</button>
+        </div>
+    </aside>
+</div>
+
+<footer class="pie-pagina"><p>© 2026 Urbanex. Desarrollado por Neodat Consultores.</p></footer>
+
+<div class="directory-modal" id="directoryModal">
+    <div class="directory-box">
+        <div class="directory-head">
+            <h2>Directorio completo — Comida y Bebida</h2>
+            <button onclick="closeDirectory()" type="button">×</button>
+        </div>
+        <div class="directory-grid" id="directoryGrid"></div>
+    </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const PAGE_CONFIG = {
+    "rootName": "Comida y Bebida",
+    "aliases": [
+        "comida y bebida",
+        "comida",
+        "gastronomia",
+        "gastronomía"
+    ],
+    "subcategories": [
+        {
+            "icon": "🍷",
+            "name": "Bares",
+            "url": "comida/bares.html"
+        },
+        {
+            "icon": "☕",
+            "name": "Cafeterías",
+            "url": "comida/cafeterias.html"
+        },
+        {
+            "icon": "🍔",
+            "name": "Comida rápida",
+            "url": "comida/comida-rapida.html"
+        },
+        {
+            "icon": "🍦",
+            "name": "Heladerías",
+            "url": "comida/heladerias.html"
+        },
+        {
+            "icon": "🥐",
+            "name": "Panaderías",
+            "url": "comida/panaderias.html"
+        },
+        {
+            "icon": "🍕",
+            "name": "Pizzerías",
+            "url": "comida/pizzerias.html"
+        },
+        {
+            "icon": "🍗",
+            "name": "Pollerías",
+            "url": "comida/pollerias.html"
+        },
+        {
+            "icon": "🍽️",
+            "name": "Restaurantes",
+            "url": "comida/restaurantes.html"
+        }
+    ]
+};
+
+const BUSINESS_SELECT_INITIAL = `
+    id,
+    name,
+    slug,
+    city,
+    address,
+    cover_image,
+    is_featured,
+    delivery_available,
+    category_id,
+    subcategory_id,
+    categories!category_id(name,icon),
+    subcategories:categories!subcategory_id(name,icon)
+`;
+
+let rootCategories = [];
+let subCategories = [];
+let currentRoot = null;
+let allBusinesses = [];
+let searchTerm = '';
+
+function normalize(value) {
+    return String(value || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/\s+/g, ' ');
+}
+
+function esc(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+function toNum(value) {
+    const number = Number(value);
+    return Number.isNaN(number) ? null : number;
+}
+
+function plural(count, singular = 'local', pluralText = 'locales') {
+    return `${count} ${count === 1 ? singular : pluralText}`;
+}
+
+function isFeatured(business) {
+    return business.is_featured === true ||
+           business.is_featured === 1 ||
+           String(business.is_featured).toLowerCase() === 'true';
+}
+
+function findRootCategory() {
+    const aliases = PAGE_CONFIG.aliases.map(normalize);
+    return rootCategories.find(category => aliases.includes(normalize(category.name))) ||
+           rootCategories.find(category => {
+               const name = normalize(category.name);
+               return aliases.some(alias => name.includes(alias) || alias.includes(name));
+           }) || null;
+}
+
+function getBusinessRootId(business) {
+    const directCategoryId = toNum(business.category_id);
+    const subcategoryId = toNum(business.subcategory_id);
+
+    if (currentRoot && directCategoryId === toNum(currentRoot.id)) {
+        return directCategoryId;
+    }
+
+    const subcategory = subCategories.find(item => toNum(item.id) === subcategoryId);
+    if (subcategory) {
+        return toNum(subcategory.parent_id);
+    }
+
+    return directCategoryId;
+}
+
+function belongsToRoot(business) {
+    const aliases = PAGE_CONFIG.aliases.map(normalize);
+    const catName = normalize(business.categories?.name || '');
+    const nameMatch = aliases.some(alias => catName === alias || catName.includes(alias) || alias.includes(catName));
+
+    if (currentRoot) {
+        return getBusinessRootId(business) === toNum(currentRoot.id) || nameMatch;
+    }
+
+    return nameMatch;
+}
+
+function getApprovedReviews(business) {
+    return (business.reviews || []).filter(review => review.is_approved);
+}
+
+function getRating(business) {
+    const reviews = getApprovedReviews(business);
+    if (!reviews.length) return null;
+    return reviews.reduce((sum, review) => sum + Number(review.rating || 0), 0) / reviews.length;
+}
+
+function isOpenNow(business) {
+    const hours = business.business_hours || [];
+    if (!hours.length) return false;
+
+    const now = new Date();
+    const today = now.getDay();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const row = hours.find(item => Number(item.day_of_week) === today && !item.is_closed);
+
+    if (!row || !row.open_time || !row.close_time) return false;
+
+    const [openH, openM] = String(row.open_time).split(':').map(Number);
+    const [closeH, closeM] = String(row.close_time).split(':').map(Number);
+
+    if (Number.isNaN(openH) || Number.isNaN(closeH)) return false;
+
+    return currentMinutes >= (openH * 60 + (openM || 0)) &&
+           currentMinutes <= (closeH * 60 + (closeM || 0));
+}
+
+function enrichBusiness(business) {
+    return {
+        ...business,
+        _rating: getRating(business),
+        _reviewCount: getApprovedReviews(business).length,
+        _openNow: isOpenNow(business)
+    };
+}
+
+function businessMatchesSearch(business) {
+    if (!searchTerm) return true;
+
+    const haystack = normalize(`
+        ${business.name}
+        ${business.address || ''}
+        ${business.categories?.name || ''}
+        ${business.subcategories?.name || ''}
+    `);
+
+    return haystack.includes(searchTerm);
+}
+
+function rootBusinesses() {
+    return allBusinesses.filter(business => belongsToRoot(business) && businessMatchesSearch(business));
+}
+
+function featuredBusinesses() {
+    const sort = document.getElementById('sortSelect')?.value || 'rating';
+    const list = rootBusinesses().filter(isFeatured);
+
+    if (sort === 'name') {
+        list.sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'es'));
+    } else {
+        list.sort((a, b) => (b._rating || 0) - (a._rating || 0));
+    }
+
+    return list;
+}
+
+function countByConfiguredSubcategory(item) {
+    const target = normalize(item.name);
+    return allBusinesses.filter(business => {
+        if (!belongsToRoot(business)) return false;
+        const subName = normalize(business.subcategories?.name || '');
+        return subName === target || subName.includes(target) || target.includes(subName);
+    }).length;
+}
+
+function renderSubcategories() {
+    const container = document.getElementById('categoriesList');
+    const total = allBusinesses.filter(belongsToRoot).length;
+
+    const allButton = `
+        <li class="category-item active">
+            <button type="button" class="active" onclick="window.location.href='./${location.pathname.split('/').pop()}'">
+                <div class="icon-container">▦</div>
+                <div class="category-text-info">
+                    <span class="category-name">Todos</span>
+                    <span class="category-count">${plural(total)}</span>
+                </div>
+            </button>
+        </li>
+    `;
+
+    const subButtons = PAGE_CONFIG.subcategories.map(item => {
+        const count = countByConfiguredSubcategory(item);
+        return `
+            <li class="category-item">
+                <button type="button" onclick="window.location.href='${esc(item.url)}'">
+                    <div class="icon-container">${esc(item.icon || '•')}</div>
+                    <div class="category-text-info">
+                        <span class="category-name">${esc(item.name)}</span>
+                        <span class="category-count">${plural(count)}</span>
+                    </div>
+                </button>
+            </li>
+        `;
+    }).join('');
+
+    container.innerHTML = allButton + subButtons;
+}
+
+function businessUrl(business) {
+    return business.slug ? `../business/?slug=${encodeURIComponent(business.slug)}` : '#';
+}
+
+function businessThumb(business) {
+    if (business.cover_image) {
+        return `<img class="shop-thumb" src="${esc(business.cover_image)}" alt="${esc(business.name)}" loading="lazy">`;
+    }
+    return `<span>${esc(business.subcategories?.icon || business.categories?.icon || '🏪')}</span>`;
+}
+
+function businessCard(business) {
+    const ratingText = business._rating ? business._rating.toFixed(1) : '—';
+    const reviewText = business._reviewCount ? `${business._reviewCount}` : 'Sin reseñas';
+    const segment = business.subcategories?.name || business.categories?.name || PAGE_CONFIG.rootName;
+    const statusClass = business._openNow ? '' : 'closed';
+    const statusText = business._openNow ? 'Abierto' : 'Cerrado';
+
+    return `
+        <a class="shop-card" href="${businessUrl(business)}">
+            <div class="shop-thumb-wrapper">${businessThumb(business)}</div>
+            <div class="shop-details">
+                <div class="shop-title">${esc(business.name)}</div>
+                <div class="shop-segment">${esc(segment)}</div>
+                <div class="shop-rating-row">
+                    <span class="star-icon">★</span>
+                    <span class="rating-value">${ratingText}</span>
+                    <span class="rating-count">${esc(reviewText)}</span>
+                    <span class="status-indicator ${statusClass}">${statusText}</span>
+                </div>
+            </div>
+        </a>
+    `;
+}
+
+async function fetchBusinesses() {
+    let query = supabase
+        .from('businesses')
+        .select(BUSINESS_SELECT_INITIAL)
+        .eq('is_active', true);
+
+    const rootId = currentRoot ? toNum(currentRoot.id) : null;
+
+    if (rootId !== null) {
+        const subcategoryIds = subCategories
+            .filter(item => toNum(item.parent_id) === rootId)
+            .map(item => toNum(item.id))
+            .filter(id => id !== null);
+
+        if (subcategoryIds.length) {
+            query = query.or(`category_id.eq.${rootId},subcategory_id.in.(${subcategoryIds.join(',')})`);
+        } else {
+            query = query.eq('category_id', rootId);
+        }
+    }
+
+    return await query;
+}
+
+function groupRowsByBusiness(rows) {
+    const map = new Map();
+
+    (rows || []).forEach(row => {
+        if (!map.has(row.business_id)) {
+            map.set(row.business_id, []);
+        }
+
+        map.get(row.business_id).push(row);
+    });
+
+    return map;
+}
+
+async function loadBusinessDetails() {
+    const ids = allBusinesses
+        .map(business => business.id)
+        .filter(id => id !== null && id !== undefined);
+
+    if (!ids.length) return;
+
+    try {
+        const [hoursResult, reviewsResult] = await Promise.all([
+            supabase
+                .from('business_hours')
+                .select('business_id,day_of_week,open_time,close_time,is_closed')
+                .in('business_id', ids),
+
+            supabase
+                .from('reviews')
+                .select('business_id,is_approved,rating')
+                .eq('is_approved', true)
+                .in('business_id', ids)
+        ]);
+
+        const hoursByBusiness = groupRowsByBusiness(hoursResult.data || []);
+        const reviewsByBusiness = groupRowsByBusiness(reviewsResult.data || []);
+
+        allBusinesses = allBusinesses.map(business => {
+            const updatedBusiness = {
+                ...business,
+                business_hours: hoursByBusiness.get(business.id) || [],
+                reviews: reviewsByBusiness.get(business.id) || []
+            };
+
+            return enrichBusiness(updatedBusiness);
+        });
+
+        renderSubcategories();
+        renderFeatured();
+
+        const directoryModal = document.getElementById('directoryModal');
+        if (directoryModal && directoryModal.classList.contains('open')) {
+            window.openDirectory();
+        }
+    } catch (error) {
+        console.warn('Carga secundaria omitida para acelerar la página:', error);
+    }
+}
+
+async function boot() {
+    try {
+        const categoriesResult = await supabase
+            .from('categories')
+            .select('id,name,icon,parent_id,sort_order')
+            .order('sort_order')
+            .order('name');
+
+        if (!categoriesResult.error) {
+            rootCategories = (categoriesResult.data || []).filter(category => !category.parent_id);
+            subCategories = (categoriesResult.data || []).filter(category => category.parent_id);
+            currentRoot = findRootCategory();
+        } else {
+            console.warn('No se pudo cargar categorías:', categoriesResult.error.message);
+        }
+
+        const businessResult = await fetchBusinesses();
+        if (businessResult.error) throw businessResult.error;
+
+        allBusinesses = (businessResult.data || []).map(business => enrichBusiness({
+            ...business,
+            business_hours: business.business_hours || [],
+            reviews: business.reviews || []
+        }));
+
+        renderSubcategories();
+        renderFeatured();
+
+        const runLater = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 700));
+        runLater(loadBusinessDetails);
+    } catch (error) {
+        console.error(error);
+        renderSubcategories();
+        document.getElementById('shopsList').innerHTML = `
+            <div class="empty-state">No se pudo cargar la información desde Supabase.</div>
+        `;
+        document.getElementById('showcaseStats').textContent = 'Error de carga';
+    }
+}
+
+function renderFeatured() {
+    const list = featuredBusinesses();
+    const container = document.getElementById('shopsList');
+    const stats = document.getElementById('showcaseStats');
+
+    stats.textContent = `${list.length} destacado${list.length !== 1 ? 's' : ''} seleccionado${list.length !== 1 ? 's' : ''}`;
+
+    if (!list.length) {
+        container.innerHTML = `<div class="empty-state">No hay negocios destacados seleccionados en Supabase.</div>`;
+        return;
+    }
+
+    container.innerHTML = list.map(businessCard).join('');
+}
+
+window.openDirectory = () => {
+    const list = rootBusinesses().sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'es'));
+    const grid = document.getElementById('directoryGrid');
+
+    if (!list.length) {
+        grid.innerHTML = `<div class="empty-state">No hay negocios para mostrar.</div>`;
+    } else {
+        grid.innerHTML = list.map(businessCard).join('');
+    }
+
+    document.getElementById('directoryModal').classList.add('open');
+};
+
+window.closeDirectory = () => {
+    document.getElementById('directoryModal').classList.remove('open');
+};
+
+document.getElementById('directoryModal').addEventListener('click', event => {
+    if (event.target.id === 'directoryModal') closeDirectory();
+});
+
+document.getElementById('siteSearch').addEventListener('input', event => {
+    searchTerm = normalize(event.target.value);
+    renderFeatured();
+});
+
+document.getElementById('sortSelect').addEventListener('change', renderFeatured);
+
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeDirectory();
+});
+
+boot();
+</script>
+
+
+<script id="ux-subcategory-autoscroll-script">
+(function () {
+    const SPEED_PX_PER_SECOND = 12;
+    const MOBILE_QUERY = window.matchMedia('(max-width: 1024px)');
+
+    let bar = null;
+    let paused = false;
+    let direction = 1;
+    let rafId = null;
+    let lastTime = 0;
+    let resumeTimer = null;
+
+    function canAutoScroll() {
+        return Boolean(
+            bar &&
+            MOBILE_QUERY.matches &&
+            bar.scrollWidth > bar.clientWidth + 8
+        );
+    }
+
+    function pauseAutoScroll() {
+        paused = true;
+        if (bar) bar.classList.add('ux-auto-paused');
+
+        if (resumeTimer) {
+            window.clearTimeout(resumeTimer);
+        }
+
+        resumeTimer = window.setTimeout(function () {
+            resumeAutoScroll();
+        }, 5000);
+    }
+
+    function resumeAutoScroll() {
+        paused = false;
+        lastTime = 0;
+
+        if (resumeTimer) {
+            window.clearTimeout(resumeTimer);
+            resumeTimer = null;
+        }
+
+        if (bar) bar.classList.remove('ux-auto-paused');
+    }
+
+    function stepAutoScroll(time) {
+        if (!lastTime) lastTime = time;
+
+        const delta = Math.min(40, time - lastTime) / 1000;
+        lastTime = time;
+
+        if (canAutoScroll() && !paused && document.visibilityState === 'visible') {
+            const maxScroll = bar.scrollWidth - bar.clientWidth;
+            let nextScroll = bar.scrollLeft + direction * SPEED_PX_PER_SECOND * delta;
+
+            if (nextScroll >= maxScroll) {
+                nextScroll = maxScroll;
+                direction = -1;
+            }
+
+            if (nextScroll <= 0) {
+                nextScroll = 0;
+                direction = 1;
+            }
+
+            bar.scrollLeft = nextScroll;
+        }
+
+        rafId = window.requestAnimationFrame(stepAutoScroll);
+    }
+
+    function initSubcategoryAutoScroll() {
+        bar = document.querySelector('.aside-categories');
+        const list = document.getElementById('categoriesList');
+
+        if (!bar || !list) return;
+
+        bar.addEventListener('pointerdown', function () {
+            if (canAutoScroll()) pauseAutoScroll();
+        }, { passive: true });
+
+        bar.addEventListener('wheel', function () {
+            if (canAutoScroll()) pauseAutoScroll();
+        }, { passive: true });
+
+        bar.addEventListener('click', function (event) {
+            if (!canAutoScroll()) return;
+
+            if (event.target.closest('button, a')) return;
+
+            if (paused) {
+                resumeAutoScroll();
+            } else {
+                pauseAutoScroll();
+            }
+        });
+
+        window.addEventListener('resize', function () {
+            lastTime = 0;
+            if (!canAutoScroll()) {
+                resumeAutoScroll();
+            }
+        });
+
+        document.addEventListener('visibilitychange', function () {
+            lastTime = 0;
+        });
+
+        if (!rafId) {
+            rafId = window.requestAnimationFrame(stepAutoScroll);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSubcategoryAutoScroll);
+    } else {
+        initSubcategoryAutoScroll();
+    }
+})();
+</script>
+</body>
+</html>
