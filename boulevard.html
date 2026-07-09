@@ -580,8 +580,9 @@ body {
 /* === CAMBIOS SOLICITADOS SOLO PARA BOULEVARD ===
    1) Encabezado fijo en cualquier dispositivo.
    2) Pie fijo en cualquier dispositivo.
-   3) En celular: barra de menú de categorías fija junto al encabezado.
+   3) En celular: barra de menú de categorías fija junto al encabezado y sin corte vertical.
    4) En celular: logo Urbanex centrado.
+   5) En boulevard: al hacer clic en categoría se abre su HTML. No se despliegan subcategorías.
 */
 
 html,
@@ -659,7 +660,7 @@ body {
     }
 
     body {
-        padding-top: 174px !important;
+        padding-top: 198px !important;
         padding-bottom: 24px !important;
     }
 
@@ -715,15 +716,17 @@ body {
         left: 0 !important;
         right: 0 !important;
         width: 100% !important;
-        height: 58px !important;
-        min-height: 58px !important;
+        height: 82px !important;
+        min-height: 82px !important;
         z-index: 99998 !important;
-        padding: 8px 10px !important;
+        padding: 10px 18px 12px 18px !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         background: rgba(6, 6, 6, 0.96) !important;
         border-right: none !important;
         border-bottom: 1px solid var(--border-color) !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin !important;
     }
 
     .section-title {
@@ -733,27 +736,56 @@ body {
     .categories-list {
         display: flex !important;
         flex-direction: row !important;
+        flex-wrap: nowrap !important;
         gap: 8px !important;
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
-        padding-bottom: 2px !important;
-        height: 42px !important;
-        align-items: center !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        height: 58px !important;
+        min-height: 58px !important;
+        align-items: stretch !important;
+        width: max-content !important;
     }
 
     .category-item {
-        flex: 0 0 auto !important;
+        flex: 0 0 calc((100vw - 44px) / 2) !important;
+        width: calc((100vw - 44px) / 2) !important;
+        max-width: 180px !important;
+        min-width: 150px !important;
+        height: 58px !important;
     }
 
     .cat-root-btn,
     .cat-all-btn {
-        width: auto !important;
-        min-width: max-content !important;
-        height: 40px !important;
-        padding: 8px 12px !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        height: 58px !important;
+        min-height: 58px !important;
+        padding: 9px 10px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        border-radius: 12px !important;
+    }
+
+    .category-text-info {
+        min-width: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .category-name {
+        max-width: 100% !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
         white-space: nowrap !important;
     }
 
+    .category-count {
+        max-width: 100% !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
+
+    .cat-arrow,
     .sub-list {
         display: none !important;
     }
@@ -828,88 +860,6 @@ body {
     }
 }
 /* === FIN CAMBIOS SOLICITADOS SOLO PARA BOULEVARD === */
-</style>
-
-
-
-<style id="ux-boulevard-menu-subcategory-final">
-/* === AJUSTE SOLICITADO: MENÚ COMPLETO Y SUBCATEGORÍAS === */
-@media (max-width: 720px) {
-    body {
-        padding-top: 190px !important;
-        padding-bottom: 24px !important;
-    }
-
-    .aside-categories {
-        position: fixed !important;
-        top: 116px !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
-        height: 74px !important;
-        min-height: 74px !important;
-        z-index: 99998 !important;
-        padding: 8px 10px 10px 10px !important;
-        overflow-x: auto !important;
-        overflow-y: visible !important;
-        background: rgba(6, 6, 6, 0.96) !important;
-        border-right: none !important;
-        border-bottom: 1px solid var(--border-color) !important;
-    }
-
-    .categories-list {
-        display: flex !important;
-        flex-direction: row !important;
-        gap: 8px !important;
-        overflow-x: auto !important;
-        overflow-y: visible !important;
-        padding-bottom: 4px !important;
-        height: 56px !important;
-        align-items: center !important;
-    }
-
-    .cat-root-btn,
-    .cat-all-btn {
-        height: 48px !important;
-        min-height: 48px !important;
-        padding: 8px 12px !important;
-        align-items: center !important;
-    }
-
-    .sub-list {
-        display: none !important;
-        position: fixed !important;
-        top: 190px !important;
-        left: 10px !important;
-        right: 10px !important;
-        z-index: 99997 !important;
-        background: rgba(6, 6, 6, 0.98) !important;
-        border: 1px solid var(--border-color) !important;
-        border-radius: 12px !important;
-        padding: 8px !important;
-        max-height: 240px !important;
-        overflow-y: auto !important;
-        flex-direction: column !important;
-        gap: 4px !important;
-    }
-
-    .sub-list.open {
-        display: flex !important;
-    }
-
-    .sub-btn {
-        min-height: 38px !important;
-        background: rgba(10, 10, 10, 0.65) !important;
-        border-color: rgba(229, 193, 88, 0.12) !important;
-    }
-}
-
-@media (min-width: 721px) and (max-width: 1024px) {
-    .sub-list.open {
-        display: flex !important;
-    }
-}
-/* === FIN AJUSTE SOLICITADO === */
 </style>
 
 </head>
@@ -1199,11 +1149,9 @@ function renderCatTree() {
 
     // Contar por raíz
     const countByRoot = {};
-    const countBySub  = {};
     allBusinesses.forEach(b=>{
         const bSub = toNum(b.subcategory_id);
         const bCat = toNum(b.category_id);
-        if(bSub !== null) countBySub[bSub]=(countBySub[bSub]||0)+1;
         const allSubs = Object.values(subMap).flat();
         const subObj  = bSub !== null ? allSubs.find(s=>s.id===bSub) : null;
         const rootId  = bCat ?? (subObj ? toNum(subObj.parent_id) : null);
@@ -1213,7 +1161,6 @@ function renderCatTree() {
     document.getElementById('totalCount').textContent = allBusinesses.length + ' locales';
 
     rootCategories.forEach(root=>{
-        const subs = subMap[root.id]||[];
         const total = countByRoot[root.id]||0;
         const categoryUrl = getCategoryPageUrl(root);
         const li = document.createElement('li');
@@ -1223,119 +1170,22 @@ function renderCatTree() {
 
         li.innerHTML = `
         <button class="cat-root-btn" id="catRoot_${root.id}"
-                onclick="toggleSubcategories(${root.id}, this)">
+                onclick="openCategoryPage('${categoryUrl}')">
             ${iconHtml}
             <div class="category-text-info">
                 <span class="category-name">${esc(root.name)}</span>
                 <span class="category-count">${total} local${total!==1?'es':''}</span>
             </div>
-            ${subs.length ? `<span class="cat-arrow">›</span>` : ''}
-        </button>
-        ${subs.length ? `
-        <div class="sub-list" id="subList_${root.id}">
-            ${subs.map(sub=>`
-            <button class="sub-btn" id="sub_${sub.id}"
-                    onclick="openSubcategoryPage(${root.id},${sub.id})">
-                <span class="sub-icon">${sub.icon||'•'}</span>
-                <span>${esc(sub.name)}</span>
-                ${countBySub[sub.id]?`<span class="sub-count">${countBySub[sub.id]}</span>`:''}
-            </button>`).join('')}
-        </div>` : ''}`;
+        </button>`;
         list.appendChild(li);
     });
 }
-
-
-// ── Abrir subcategorías y páginas HTML de subcategoría ───────
-const CATEGORY_FOLDER_ROUTES = {
-    "comida y bebida": "comida",
-    "comida": "comida",
-    "gastronomia": "comida",
-    "gastronomía": "comida",
-
-    "comercio": "comercio",
-
-    "servicios": "servicios",
-    "servicio": "servicios",
-
-    "salud y bienestar": "salud",
-    "salud": "salud",
-
-    "entretenimiento": "entretenimiento",
-
-    "alojamiento": "alojamiento",
-    "turismo": "alojamiento",
-    "turismo y hospedaje": "alojamiento",
-
-    "hogar": "hogar",
-    "hogar y tecnologia": "hogar",
-    "hogar y tecnología": "hogar"
-};
-
-function slugForPath(value) {
-    return normalizeCategoryName(value)
-        .replace(/ñ/g, "n")
-        .replace(/&/g, "y")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-}
-
-function getCategoryFolder(root) {
-    const key = normalizeCategoryName(root?.name);
-    return CATEGORY_FOLDER_ROUTES[key] || slugForPath(root?.name);
-}
-
-function getSubcategoryPageUrl(root, sub) {
-    const rootFolder = getCategoryFolder(root);
-    const subFile = slugForPath(sub?.name);
-    return `categorias/${rootFolder}/${subFile}.html`;
-}
-
-window.toggleSubcategories = (rootId, btn) => {
-    const id = toNum(rootId);
-    const subList = document.getElementById(`subList_${id}`);
-    const root = rootCategories.find(r => toNum(r.id) === id);
-
-    document.querySelectorAll('.cat-root-btn,.cat-all-btn,.sub-btn').forEach(el => el.classList.remove('active'));
-
-    if (!subList) {
-        if (root) window.location.href = getCategoryPageUrl(root);
-        return;
-    }
-
-    const wasOpen = subList.classList.contains('open');
-
-    document.querySelectorAll('.sub-list').forEach(el => el.classList.remove('open'));
-    document.querySelectorAll('.cat-root-btn').forEach(el => el.classList.remove('expanded'));
-
-    if (!wasOpen) {
-        subList.classList.add('open');
-        if (btn) {
-            btn.classList.add('expanded');
-            btn.classList.add('active');
-        }
-    }
-};
-
-window.openSubcategoryPage = (rootId, subId) => {
-    const root = rootCategories.find(r => toNum(r.id) === toNum(rootId));
-    const sub = Object.values(subMap).flat().find(s => toNum(s.id) === toNum(subId));
-
-    if (!root || !sub) return;
-
-    window.location.href = getSubcategoryPageUrl(root, sub);
-};
 
 // Click en raíz: abrir la página HTML oficial de la categoría.
 // Se conserva esta función para compatibilidad, pero ya NO despliega subcategorías en el sidebar.
 window.handleRootClick = (rootId, btn) => {
     const root = rootCategories.find(r => toNum(r.id) === toNum(rootId));
-
-    if (!root) {
-        selectCategory(toNum(rootId), null, btn);
-        return;
-    }
-
+    if (!root) return;
     window.location.href = getCategoryPageUrl(root);
 };
 
@@ -1485,7 +1335,9 @@ function shopCardHtml(b) {
 window.renderShowcase = () => {
     const sort = document.getElementById('showcaseSort')?.value || 'rating';
 
-    let list = filtered().filter(business => business.is_featured === true);
+    // Solo muestra negocios marcados explícitamente como destacados en Supabase.
+    // No hay negocios destacados por defecto.
+    let list = allBusinesses.filter(business => business.is_featured === true);
 
     if (sort === 'name') {
         list = list.sort((a, b) =>
