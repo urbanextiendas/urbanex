@@ -830,6 +830,88 @@ body {
 /* === FIN CAMBIOS SOLICITADOS SOLO PARA BOULEVARD === */
 </style>
 
+
+
+<style id="ux-boulevard-menu-subcategory-final">
+/* === AJUSTE SOLICITADO: MENÚ COMPLETO Y SUBCATEGORÍAS === */
+@media (max-width: 720px) {
+    body {
+        padding-top: 190px !important;
+        padding-bottom: 24px !important;
+    }
+
+    .aside-categories {
+        position: fixed !important;
+        top: 116px !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 74px !important;
+        min-height: 74px !important;
+        z-index: 99998 !important;
+        padding: 8px 10px 10px 10px !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        background: rgba(6, 6, 6, 0.96) !important;
+        border-right: none !important;
+        border-bottom: 1px solid var(--border-color) !important;
+    }
+
+    .categories-list {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 8px !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        padding-bottom: 4px !important;
+        height: 56px !important;
+        align-items: center !important;
+    }
+
+    .cat-root-btn,
+    .cat-all-btn {
+        height: 48px !important;
+        min-height: 48px !important;
+        padding: 8px 12px !important;
+        align-items: center !important;
+    }
+
+    .sub-list {
+        display: none !important;
+        position: fixed !important;
+        top: 190px !important;
+        left: 10px !important;
+        right: 10px !important;
+        z-index: 99997 !important;
+        background: rgba(6, 6, 6, 0.98) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 12px !important;
+        padding: 8px !important;
+        max-height: 240px !important;
+        overflow-y: auto !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+    }
+
+    .sub-list.open {
+        display: flex !important;
+    }
+
+    .sub-btn {
+        min-height: 38px !important;
+        background: rgba(10, 10, 10, 0.65) !important;
+        border-color: rgba(229, 193, 88, 0.12) !important;
+    }
+}
+
+@media (min-width: 721px) and (max-width: 1024px) {
+    .sub-list.open {
+        display: flex !important;
+    }
+}
+/* === FIN AJUSTE SOLICITADO === */
+</style>
+
 </head>
 <body>
 
@@ -1141,7 +1223,7 @@ function renderCatTree() {
 
         li.innerHTML = `
         <button class="cat-root-btn" id="catRoot_${root.id}"
-                onclick="openCategoryPage('${categoryUrl}')">
+                onclick="toggleSubcategories(${root.id}, this)">
             ${iconHtml}
             <div class="category-text-info">
                 <span class="category-name">${esc(root.name)}</span>
@@ -1153,7 +1235,7 @@ function renderCatTree() {
         <div class="sub-list" id="subList_${root.id}">
             ${subs.map(sub=>`
             <button class="sub-btn" id="sub_${sub.id}"
-                    onclick="selectCategory(${root.id},${sub.id},null)">
+                    onclick="openSubcategoryPage(${root.id},${sub.id})">
                 <span class="sub-icon">${sub.icon||'•'}</span>
                 <span>${esc(sub.name)}</span>
                 ${countBySub[sub.id]?`<span class="sub-count">${countBySub[sub.id]}</span>`:''}
@@ -1162,6 +1244,87 @@ function renderCatTree() {
         list.appendChild(li);
     });
 }
+
+
+// ── Abrir subcategorías y páginas HTML de subcategoría ───────
+const CATEGORY_FOLDER_ROUTES = {
+    "comida y bebida": "comida",
+    "comida": "comida",
+    "gastronomia": "comida",
+    "gastronomía": "comida",
+
+    "comercio": "comercio",
+
+    "servicios": "servicios",
+    "servicio": "servicios",
+
+    "salud y bienestar": "salud",
+    "salud": "salud",
+
+    "entretenimiento": "entretenimiento",
+
+    "alojamiento": "alojamiento",
+    "turismo": "alojamiento",
+    "turismo y hospedaje": "alojamiento",
+
+    "hogar": "hogar",
+    "hogar y tecnologia": "hogar",
+    "hogar y tecnología": "hogar"
+};
+
+function slugForPath(value) {
+    return normalizeCategoryName(value)
+        .replace(/ñ/g, "n")
+        .replace(/&/g, "y")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+}
+
+function getCategoryFolder(root) {
+    const key = normalizeCategoryName(root?.name);
+    return CATEGORY_FOLDER_ROUTES[key] || slugForPath(root?.name);
+}
+
+function getSubcategoryPageUrl(root, sub) {
+    const rootFolder = getCategoryFolder(root);
+    const subFile = slugForPath(sub?.name);
+    return `categorias/${rootFolder}/${subFile}.html`;
+}
+
+window.toggleSubcategories = (rootId, btn) => {
+    const id = toNum(rootId);
+    const subList = document.getElementById(`subList_${id}`);
+    const root = rootCategories.find(r => toNum(r.id) === id);
+
+    document.querySelectorAll('.cat-root-btn,.cat-all-btn,.sub-btn').forEach(el => el.classList.remove('active'));
+
+    if (!subList) {
+        if (root) window.location.href = getCategoryPageUrl(root);
+        return;
+    }
+
+    const wasOpen = subList.classList.contains('open');
+
+    document.querySelectorAll('.sub-list').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.cat-root-btn').forEach(el => el.classList.remove('expanded'));
+
+    if (!wasOpen) {
+        subList.classList.add('open');
+        if (btn) {
+            btn.classList.add('expanded');
+            btn.classList.add('active');
+        }
+    }
+};
+
+window.openSubcategoryPage = (rootId, subId) => {
+    const root = rootCategories.find(r => toNum(r.id) === toNum(rootId));
+    const sub = Object.values(subMap).flat().find(s => toNum(s.id) === toNum(subId));
+
+    if (!root || !sub) return;
+
+    window.location.href = getSubcategoryPageUrl(root, sub);
+};
 
 // Click en raíz: abrir la página HTML oficial de la categoría.
 // Se conserva esta función para compatibilidad, pero ya NO despliega subcategorías en el sidebar.
