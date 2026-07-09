@@ -915,132 +915,6 @@ body {
 }
 </style>
 
-
-<style id="ux-bottom-filter-seamless-style">
-/* SOLO CAMBIO: barra inferior de filtros con movimiento continuo de derecha a izquierda, sin salto visible */
-@media (max-width: 760px) {
-    .bottom-filter-bar.ux-filter-marquee-ready {
-        display: flex !important;
-        overflow: hidden !important;
-        scrollbar-width: none !important;
-    }
-
-    .bottom-filter-bar.ux-filter-marquee-ready::-webkit-scrollbar {
-        display: none !important;
-    }
-
-    .bottom-filter-bar .ux-filter-marquee-track {
-        display: flex !important;
-        align-items: stretch !important;
-        width: max-content !important;
-        max-width: none !important;
-        flex: 0 0 auto !important;
-        will-change: transform !important;
-        animation: uxFilterMoveRightToLeft 28s linear infinite !important;
-        transform: translate3d(0, 0, 0);
-    }
-
-    .bottom-filter-bar.ux-filter-marquee-paused .ux-filter-marquee-track {
-        animation-play-state: paused !important;
-    }
-
-    .bottom-filter-bar .ux-filter-marquee-set {
-        display: flex !important;
-        align-items: stretch !important;
-        flex: 0 0 auto !important;
-        gap: 8px !important;
-        padding-right: 8px !important;
-        width: max-content !important;
-        max-width: none !important;
-    }
-
-    .bottom-filter-bar .ux-filter-marquee-clone {
-        display: flex !important;
-    }
-
-    .bottom-filter-bar .filter-pill {
-        flex: 0 0 154px !important;
-        width: 154px !important;
-        min-width: 154px !important;
-        height: 42px !important;
-        min-height: 42px !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 8px !important;
-        overflow: hidden !important;
-    }
-
-    .bottom-filter-bar .filter-icon-box {
-        flex: 0 0 16px !important;
-        width: 16px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-
-    .bottom-filter-bar .filter-label-group {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        justify-content: center !important;
-        gap: 1px !important;
-        min-width: 0 !important;
-        line-height: 1.08 !important;
-        overflow: hidden !important;
-    }
-
-    .bottom-filter-bar .filter-label,
-    .bottom-filter-bar .filter-sub {
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        white-space: nowrap !important;
-    }
-
-    @keyframes uxFilterMoveRightToLeft {
-        from {
-            transform: translate3d(0, 0, 0);
-        }
-        to {
-            transform: translate3d(-50%, 0, 0);
-        }
-    }
-}
-
-@media (min-width: 761px) {
-    .bottom-filter-bar .ux-filter-marquee-track,
-    .bottom-filter-bar .ux-filter-marquee-set {
-        display: contents !important;
-    }
-
-    .bottom-filter-bar .ux-filter-marquee-clone {
-        display: none !important;
-    }
-}
-</style>
-
-
-
-<style id="ux-bottom-filter-icons-preserve">
-/* SOLO CAMBIO: conservar iconos y estructura original de la barra inferior */
-@media (max-width: 760px) {
-    .bottom-filter-bar .filter-icon-box svg {
-        width: 14px !important;
-        height: 14px !important;
-        display: block !important;
-        flex: 0 0 auto !important;
-        fill: var(--gold) !important;
-    }
-
-    .bottom-filter-bar .filter-label-group {
-        display: flex !important;
-        flex-direction: column !important;
-    }
-}
-</style>
-
 </head>
 <body>
 
@@ -1997,67 +1871,63 @@ function goBackMenu() {
 
 <script id="ux-boulevard-bottom-filter-autoscroll">
 (function () {
-    const bar = document.querySelector('.bottom-filter-bar');
-    if (!bar) return;
+    const scroller = document.querySelector('.bottom-filter-bar');
 
-    const directPills = Array.from(bar.children).filter(child => child.classList && child.classList.contains('filter-pill'));
-    if (!directPills.length) return;
+    if (!scroller) return;
 
-    const track = document.createElement('div');
-    track.className = 'ux-filter-marquee-track';
-
-    const originalSet = document.createElement('div');
-    originalSet.className = 'ux-filter-marquee-set ux-filter-marquee-original';
-
-    directPills.forEach(pill => originalSet.appendChild(pill));
-
-    const cloneSet = originalSet.cloneNode(true);
-    cloneSet.className = 'ux-filter-marquee-set ux-filter-marquee-clone';
-    cloneSet.setAttribute('aria-hidden', 'true');
-
-    cloneSet.querySelectorAll('[id]').forEach(node => {
-        const originalId = node.id;
-        node.removeAttribute('id');
-
-        // Solo se sincronizan los contadores dinámicos.
-        // No se toca el contenido completo del botón para no dañar iconos, SVG ni estructura visual.
-        if (originalId.startsWith('metric')) {
-            node.setAttribute('data-ux-source-id', originalId);
-        }
-    });
-
-    track.appendChild(originalSet);
-    track.appendChild(cloneSet);
-    bar.appendChild(track);
-    bar.classList.add('ux-filter-marquee-ready');
-
+    let direction = 1;
+    let paused = false;
     let resumeTimer = null;
+    let lastFrame = performance.now();
+    const speed = 12;
+
+    function canMove() {
+        return window.matchMedia('(max-width: 760px)').matches &&
+            scroller.scrollWidth > scroller.clientWidth + 4;
+    }
 
     function pauseForFiveSeconds() {
-        bar.classList.add('ux-filter-marquee-paused');
+        paused = true;
         window.clearTimeout(resumeTimer);
 
         resumeTimer = window.setTimeout(() => {
-            bar.classList.remove('ux-filter-marquee-paused');
+            paused = false;
         }, 5000);
     }
 
-    function syncCloneMetrics() {
-        cloneSet.querySelectorAll('[data-ux-source-id]').forEach(cloneNode => {
-            const source = document.getElementById(cloneNode.getAttribute('data-ux-source-id'));
-            if (source) cloneNode.textContent = source.textContent;
-        });
+    function moveBar(now) {
+        const elapsed = Math.min((now - lastFrame) / 1000, 0.08);
+        lastFrame = now;
+
+        if (canMove() && !paused) {
+            const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+
+            if (maxScroll > 0) {
+                if (scroller.scrollLeft >= maxScroll - 1) {
+                    direction = -1;
+                }
+
+                if (scroller.scrollLeft <= 1) {
+                    direction = 1;
+                }
+
+                scroller.scrollLeft += direction * speed * elapsed;
+            }
+        }
+
+        window.requestAnimationFrame(moveBar);
     }
 
-    bar.addEventListener('pointerdown', pauseForFiveSeconds, { passive: true });
-    bar.addEventListener('touchstart', pauseForFiveSeconds, { passive: true });
-    bar.addEventListener('wheel', pauseForFiveSeconds, { passive: true });
+    scroller.addEventListener('pointerdown', pauseForFiveSeconds, { passive: true });
+    scroller.addEventListener('touchstart', pauseForFiveSeconds, { passive: true });
+    scroller.addEventListener('wheel', pauseForFiveSeconds, { passive: true });
 
-    window.addEventListener('resize', syncCloneMetrics);
-    window.addEventListener('load', syncCloneMetrics);
+    window.addEventListener('resize', () => {
+        direction = 1;
+        lastFrame = performance.now();
+    });
 
-    setInterval(syncCloneMetrics, 1000);
-    syncCloneMetrics();
+    window.requestAnimationFrame(moveBar);
 })();
 </script>
 
