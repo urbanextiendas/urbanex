@@ -901,7 +901,7 @@ body {
         <ul class="categories-list" id="categoriesList">
             <!-- "Todos" -->
             <li class="category-item">
-                <button class="cat-all-btn active" id="catAllBtn" onclick="selectCategory(null,null,this)">
+                <button class="cat-all-btn active" id="catAllBtn" onclick="openCategoryPage('categorias/index.html')">
                     <div class="icon-container">
                         <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--gold)"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
                     </div>
@@ -1007,28 +1007,17 @@ const NEGOCIO_URL = (slug) => `business/?slug=${slug}`;
 // GitHub mantiene las páginas HTML en /categorias.
 // Supabase solo entrega los datos; NO cambia la estructura de GitHub.
 const CATEGORY_PAGE_ROUTES = {
-    "comida y bebida": "categorias/comida.html",
-    "comida": "categorias/comida.html",
-    "gastronomia": "categorias/comida.html",
-    "gastronomía": "categorias/comida.html",
-
+    "alojamiento": "categorias/alojamiento.html",
     "comercio": "categorias/comercio.html",
-
+    "comida": "categorias/comida.html",
+    "comida y bebida": "categorias/comida.html",
+    "entretenimiento": "categorias/entretenimiento.html",
+    "salud": "categorias/salud.html",
+    "salud y bienestar": "categorias/salud.html",
     "servicios": "categorias/servicios.html",
     "servicio": "categorias/servicios.html",
-
-    "salud y bienestar": "categorias/salud.html",
-    "salud": "categorias/salud.html",
-
-    "entretenimiento": "categorias/entretenimiento.html",
-
-    "alojamiento": "categorias/alojamiento.html",
-    "turismo": "categorias/alojamiento.html",
-    "turismo y hospedaje": "categorias/alojamiento.html",
-
-    "hogar": "categorias/hogar/index.html",
-    "hogar y tecnologia": "categorias/hogar/index.html",
-    "hogar y tecnología": "categorias/hogar/index.html"
+    "todos": "categorias/index.html",
+    "todos los negocios": "categorias/index.html"
 };
 
 function normalizeCategoryName(value) {
@@ -1046,7 +1035,7 @@ function buildFallbackCategoryPath(name) {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "");
 
-    return `categorias/${slug}.html`;
+    return CATEGORY_PAGE_ROUTES[slug] || "categorias/index.html";
 }
 
 function getCategoryPageUrl(category) {
