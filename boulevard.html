@@ -1688,5 +1688,70 @@ function goBackMenu() {
 }
 </script>
 
+
+<script id="ux-boulevard-menu-autoscroll">
+(function () {
+    const scroller = document.querySelector('.aside-categories');
+    const list = document.getElementById('categoriesList');
+
+    if (!scroller || !list) return;
+
+    let direction = 1;
+    let paused = false;
+    let resumeTimer = null;
+    let lastFrame = performance.now();
+    const speed = 12;
+
+    function isHorizontalMenu() {
+        return window.matchMedia('(max-width: 1024px)').matches &&
+            scroller.scrollWidth > scroller.clientWidth + 4;
+    }
+
+    function pauseForFiveSeconds() {
+        paused = true;
+        window.clearTimeout(resumeTimer);
+
+        resumeTimer = window.setTimeout(() => {
+            paused = false;
+        }, 5000);
+    }
+
+    function moveMenu(now) {
+        const elapsed = Math.min((now - lastFrame) / 1000, 0.08);
+        lastFrame = now;
+
+        if (isHorizontalMenu() && !paused) {
+            const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+
+            if (maxScroll > 0) {
+                if (scroller.scrollLeft >= maxScroll - 1) {
+                    direction = -1;
+                }
+
+                if (scroller.scrollLeft <= 1) {
+                    direction = 1;
+                }
+
+                scroller.scrollLeft += direction * speed * elapsed;
+            }
+        }
+
+        window.requestAnimationFrame(moveMenu);
+    }
+
+    scroller.addEventListener('pointerdown', pauseForFiveSeconds, { passive: true });
+    scroller.addEventListener('touchstart', pauseForFiveSeconds, { passive: true });
+    scroller.addEventListener('wheel', pauseForFiveSeconds, { passive: true });
+
+    window.addEventListener('resize', () => {
+        direction = 1;
+        lastFrame = performance.now();
+    });
+
+    window.requestAnimationFrame(moveMenu);
+})();
+</script>
+
+
 </body>
 </html>
