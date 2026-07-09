@@ -7,6 +7,9 @@
     <link rel="icon" type="image/png" href="/imagenes/log.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+    <link rel="preconnect" href="https://esm.sh" crossorigin>
+    <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
@@ -862,6 +865,56 @@ body {
 /* === FIN CAMBIOS SOLICITADOS SOLO PARA BOULEVARD === */
 </style>
 
+
+<style id="ux-boulevard-mobile-filters-visible">
+/* SOLO CAMBIO: mostrar la barra de filtros inferiores en celular */
+@media (max-width: 760px) {
+    .bottom-filter-bar {
+        display: flex !important;
+        position: absolute !important;
+        left: 50% !important;
+        bottom: 12px !important;
+        transform: translateX(-50%) !important;
+        width: calc(100% - 20px) !important;
+        max-width: none !important;
+        gap: 6px !important;
+        padding: 6px !important;
+        border-radius: 12px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        flex-wrap: nowrap !important;
+        background: rgba(10, 10, 10, 0.85) !important;
+        border: 1px solid var(--border-color) !important;
+        backdrop-filter: var(--blur-effect) !important;
+        -webkit-backdrop-filter: var(--blur-effect) !important;
+        z-index: 20 !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .filter-pill {
+        display: flex !important;
+        flex: 0 0 auto !important;
+        min-width: 142px !important;
+        height: 42px !important;
+        padding: 7px 10px !important;
+        border-radius: 8px !important;
+        background: rgba(0, 0, 0, 0.48) !important;
+    }
+
+    .filter-label-group {
+        display: flex !important;
+    }
+
+    .filter-label {
+        font-size: 10px !important;
+    }
+
+    .filter-sub {
+        font-size: 8px !important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -1095,39 +1148,131 @@ function hasPromo(promos) {
 // ── Carga datos ───────────────────────────────────────────────
 async function boot() {
     const [catsRes, bizRes] = await Promise.all([
-        supabase.from('categories').select('id,name,icon,parent_id,sort_order').order('sort_order').order('name'),
-        supabase.from('businesses').select(`
-            id,name,slug,city,address,cover_image,is_featured,delivery_available,category_id,subcategory_id,
-            categories!category_id(name,icon),
-            subcategories:categories!subcategory_id(name,icon),
-            business_hours(day_of_week,open_time,close_time,is_closed),
-            reviews(is_approved,rating),
-            promotions(is_active,end_date)
-        `).eq('is_active',true)
+        supabase
+            .from('categories')
+            .select('id,name,icon,parent_id,sort_order')
+            .order('sort_order')
+            .order('name'),
+
+        supabase
+            .from('businesses')
+            .select(`
+                id,
+                name,
+                slug,
+                city,
+                address,
+                cover_image,
+                is_featured,
+                delivery_available,
+                category_id,
+                subcategory_id,
+                categories!category_id(name,icon),
+                subcategories:categories!subcategory_id(name,icon)
+            `)
+            .eq('is_active', true)
+            .order('is_featured', { ascending: false })
+            .order('name', { ascending: true })
     ]);
 
     if (catsRes.error) console.error('categories error:', catsRes.error.message);
     if (bizRes.error)  console.error('businesses error:', bizRes.error.message);
 
     const cats = catsRes.data || [];
-    rootCategories = cats.filter(c=>!c.parent_id);
+    rootCategories = cats.filter(c => !c.parent_id);
     subMap = {};
-    cats.filter(c=>c.parent_id).forEach(c=>{
-        if(!subMap[c.parent_id]) subMap[c.parent_id]=[];
+
+    cats.filter(c => c.parent_id).forEach(c => {
+        if (!subMap[c.parent_id]) subMap[c.parent_id] = [];
         subMap[c.parent_id].push(c);
     });
 
-    allBusinesses = (bizRes.data||[]).map(b=>({
+    allBusinesses = (bizRes.data || []).map(b => ({
         ...b,
-        _open:   isOpenNow(b.business_hours),
-        _rating: avgRating(b.reviews),
-        _promo:  hasPromo(b.promotions),
-        _reviews:(b.reviews||[]).filter(r=>r.is_approved).length,
+        business_hours: [],
+        reviews: [],
+        promotions: [],
+        _open: false,
+        _rating: null,
+        _promo: false,
+        _reviews: 0,
     }));
 
     renderCatTree();
     renderShowcase();
     updateMetrics();
+
+    const runLater = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 700));
+    runLater(loadBusinessDetails);
+}
+
+async function loadBusinessDetails() {
+    const ids = allBusinesses
+        .map(business => business.id)
+        .filter(id => id !== null && id !== undefined);
+
+    if (!ids.length) return;
+
+    try {
+        const [hoursRes, reviewsRes, promotionsRes] = await Promise.all([
+            supabase
+                .from('business_hours')
+                .select('business_id,day_of_week,open_time,close_time,is_closed')
+                .in('business_id', ids),
+
+            supabase
+                .from('reviews')
+                .select('business_id,is_approved,rating')
+                .eq('is_approved', true)
+                .in('business_id', ids),
+
+            supabase
+                .from('promotions')
+                .select('business_id,is_active,end_date')
+                .eq('is_active', true)
+                .in('business_id', ids)
+        ]);
+
+        const groupByBusiness = (rows) => {
+            const map = new Map();
+
+            (rows || []).forEach(row => {
+                if (!map.has(row.business_id)) map.set(row.business_id, []);
+                map.get(row.business_id).push(row);
+            });
+
+            return map;
+        };
+
+        const hoursByBusiness = groupByBusiness(hoursRes.data || []);
+        const reviewsByBusiness = groupByBusiness(reviewsRes.data || []);
+        const promotionsByBusiness = groupByBusiness(promotionsRes.data || []);
+
+        allBusinesses = allBusinesses.map(business => {
+            const businessHours = hoursByBusiness.get(business.id) || [];
+            const reviews = reviewsByBusiness.get(business.id) || [];
+            const promotions = promotionsByBusiness.get(business.id) || [];
+
+            return {
+                ...business,
+                business_hours: businessHours,
+                reviews,
+                promotions,
+                _open: isOpenNow(businessHours),
+                _rating: avgRating(reviews),
+                _promo: hasPromo(promotions),
+                _reviews: reviews.length,
+            };
+        });
+
+        renderShowcase();
+        updateMetrics();
+
+        const modal = document.getElementById('directorioModal');
+        if (modal && modal.style.display !== 'none') renderDir();
+    } catch (error) {
+        console.warn('Urbanex: carga secundaria omitida para acelerar la página.', error);
+    }
 }
 
 // ── Árbol de categorías ───────────────────────────────────────
@@ -1512,15 +1657,6 @@ document.addEventListener('keydown', e => {
 </script>
 
 
-<script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('[SW] Registrado:', reg.scope))
-            .catch(err => console.warn('[SW] Error:', err));
-    });
-}
-</script>
 
 <div id="pwa-banner">
     <img src="/imagenes/logo.png" alt="Urbanex">
@@ -1602,31 +1738,10 @@ window.addEventListener('appinstalled', () => {
     return;
   }
 
-  async function clearOldUrbanexCaches() {
-    if (!('caches' in window)) return;
-
-    const keys = await caches.keys();
-
-    await Promise.all(
-      keys
-        .filter(key => key.startsWith('urbanex-v1') || key.startsWith('urbanex-static-v1') || key.includes('pwa-fix'))
-        .map(key => caches.delete(key))
-    );
-  }
-
   if ('serviceWorker' in navigator) {
-    window.addEventListener('load', async function () {
-      try {
-        await clearOldUrbanexCaches();
-
-        const registration = await navigator.serviceWorker.register('/sw.js', {
-          updateViaCache: 'none'
-        });
-
-        await registration.update();
-      } catch (error) {
-        console.warn('Urbanex Service Worker:', error);
-      }
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js')
+        .catch(error => console.warn('Urbanex Service Worker:', error));
     });
   }
 
@@ -1752,6 +1867,69 @@ function goBackMenu() {
 })();
 </script>
 
+
+
+<script id="ux-boulevard-bottom-filter-autoscroll">
+(function () {
+    const scroller = document.querySelector('.bottom-filter-bar');
+
+    if (!scroller) return;
+
+    let direction = 1;
+    let paused = false;
+    let resumeTimer = null;
+    let lastFrame = performance.now();
+    const speed = 12;
+
+    function canMove() {
+        return window.matchMedia('(max-width: 760px)').matches &&
+            scroller.scrollWidth > scroller.clientWidth + 4;
+    }
+
+    function pauseForFiveSeconds() {
+        paused = true;
+        window.clearTimeout(resumeTimer);
+
+        resumeTimer = window.setTimeout(() => {
+            paused = false;
+        }, 5000);
+    }
+
+    function moveBar(now) {
+        const elapsed = Math.min((now - lastFrame) / 1000, 0.08);
+        lastFrame = now;
+
+        if (canMove() && !paused) {
+            const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+
+            if (maxScroll > 0) {
+                if (scroller.scrollLeft >= maxScroll - 1) {
+                    direction = -1;
+                }
+
+                if (scroller.scrollLeft <= 1) {
+                    direction = 1;
+                }
+
+                scroller.scrollLeft += direction * speed * elapsed;
+            }
+        }
+
+        window.requestAnimationFrame(moveBar);
+    }
+
+    scroller.addEventListener('pointerdown', pauseForFiveSeconds, { passive: true });
+    scroller.addEventListener('touchstart', pauseForFiveSeconds, { passive: true });
+    scroller.addEventListener('wheel', pauseForFiveSeconds, { passive: true });
+
+    window.addEventListener('resize', () => {
+        direction = 1;
+        lastFrame = performance.now();
+    });
+
+    window.requestAnimationFrame(moveBar);
+})();
+</script>
 
 </body>
 </html>
