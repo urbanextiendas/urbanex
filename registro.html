@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urbanex - Registro de Negocio</title>
+<link rel="icon" type="image/png" href="imagenes/log.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+<link rel="preconnect" href="https://esm.sh" crossorigin>
+<link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg-main:#020202;
+    --bg-panel:rgba(7,7,7,.82);
+    --bg-field:rgba(0,0,0,.58);
+    --gold:#e5c158;
+    --gold-soft:#f2d574;
+    --border:rgba(229,193,88,.24);
+    --text:#ffffff;
+    --muted:#cfcfcf;
+    --soft:#969696;
+    --green:#2ed573;
+    --red:#ff5b68;
+    --font-serif:'Cinzel',serif;
+    --font-sans:'Montserrat',sans-serif;
+    --blur:blur(18px);
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+    min-height:100vh;
+    background:
+        linear-gradient(135deg, rgba(0,0,0,.72), rgba(0,0,0,.46)),
+        url("imagenes/Boulevard.png") center bottom / cover fixed no-repeat;
+    color:var(--text);
+    font-family:var(--font-sans);
+    padding-bottom:24px;
+}
+a { color:inherit; text-decoration:none; }
+button, input, textarea, select { font-family:var(--font-sans); }
+.header-top {
+    height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 22px;
+    background:rgba(6,6,6,.78);
+    border-bottom:1px solid var(--border);
+    backdrop-filter:var(--blur);
+    -webkit-backdrop-filter:var(--blur);
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+.brand-box img { height:60px; display:block; }
+.header-actions { display:flex; align-items:center; gap:10px; }
+.link-pill {
+    border:1px solid var(--border);
+    border-radius:999px;
+    background:rgba(0,0,0,.52);
+    color:#fff;
+    padding:8px 14px;
+    font-size:11px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.8px;
+}
+.link-pill:hover { border-color:var(--gold); background:rgba(229,193,88,.10); }
+.page {
+    width:min(1180px, calc(100% - 28px));
+    margin:24px auto 42px;
+}
+.hero {
+    border:1px solid var(--border);
+    border-radius:24px;
+    background:radial-gradient(circle at 14% 0%, rgba(229,193,88,.18), transparent 30%), rgba(4,4,4,.72);
+    box-shadow:0 24px 70px rgba(0,0,0,.56);
+    backdrop-filter:var(--blur);
+    -webkit-backdrop-filter:var(--blur);
+    padding:28px;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:20px;
+    align-items:center;
+}
+.eyebrow {
+    color:var(--gold);
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-bottom:8px;
+}
+.hero h1 {
+    font-family:var(--font-serif);
+    font-size:clamp(28px,4vw,46px);
+    letter-spacing:3px;
+    line-height:1;
+    text-transform:uppercase;
+    margin-bottom:10px;
+}
+.hero p {
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.65;
+    max-width:760px;
+}
+.status-box {
+    min-width:180px;
+    border:1px solid rgba(229,193,88,.34);
+    border-radius:18px;
+    background:rgba(0,0,0,.48);
+    padding:16px;
+    text-align:center;
+}
+.status-box strong {
+    display:block;
+    color:var(--gold);
+    font-family:var(--font-serif);
+    font-size:18px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+}
+.status-box span {
+    display:block;
+    color:var(--soft);
+    font-size:10px;
+    font-weight:800;
+    margin-top:5px;
+    text-transform:uppercase;
+    letter-spacing:.8px;
+}
+.form-shell {
+    margin-top:18px;
+    border:1px solid var(--border);
+    border-radius:24px;
+    background:rgba(5,5,5,.76);
+    backdrop-filter:var(--blur);
+    -webkit-backdrop-filter:var(--blur);
+    overflow:hidden;
+}
+.form-head {
+    padding:18px 20px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:14px;
+}
+.form-head h2 {
+    color:var(--gold);
+    font-family:var(--font-serif);
+    font-size:17px;
+    letter-spacing:1.4px;
+    text-transform:uppercase;
+}
+.form-head p { color:var(--soft); font-size:11px; margin-top:4px; }
+.badge-pending {
+    border:1px solid rgba(229,193,88,.32);
+    color:var(--gold-soft);
+    border-radius:999px;
+    padding:7px 11px;
+    font-size:9px;
+    font-weight:900;
+    text-transform:uppercase;
+    white-space:nowrap;
+    background:rgba(229,193,88,.08);
+}
+.form-grid {
+    padding:18px 20px 20px;
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+    gap:14px;
+}
+.field { display:flex; flex-direction:column; gap:6px; }
+.field.full { grid-column:1 / -1; }
+label {
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.3px;
+}
+label span { color:var(--gold); }
+input, textarea, select {
+    width:100%;
+    border:1px solid rgba(255,255,255,.13);
+    background:var(--bg-field);
+    color:#fff;
+    border-radius:12px;
+    outline:none;
+    font-size:12px;
+}
+input, select { height:40px; padding:0 12px; }
+textarea { min-height:98px; resize:vertical; padding:12px; line-height:1.5; }
+input:focus, textarea:focus, select:focus { border-color:var(--gold); background:rgba(0,0,0,.72); }
+select option { background:#080808; color:#fff; }
+.help { color:var(--soft); font-size:9.5px; line-height:1.4; }
+.check-row {
+    grid-column:1 / -1;
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+    gap:10px;
+}
+.check-card {
+    border:1px solid rgba(229,193,88,.18);
+    border-radius:14px;
+    padding:12px;
+    background:rgba(0,0,0,.38);
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+}
+.check-card input { width:16px; height:16px; margin-top:1px; accent-color:#e5c158; flex:0 0 auto; }
+.check-card strong { display:block; font-size:11px; margin-bottom:3px; }
+.check-card small { display:block; color:var(--soft); font-size:9.5px; line-height:1.35; }
+.actions {
+    grid-column:1 / -1;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    border-top:1px solid rgba(255,255,255,.08);
+    margin-top:4px;
+    padding-top:16px;
+}
+.submit-btn {
+    border:0;
+    border-radius:999px;
+    background:var(--gold);
+    color:#000;
+    height:42px;
+    padding:0 22px;
+    font-size:12px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.8px;
+    cursor:pointer;
+}
+.submit-btn:hover { background:#f3d775; box-shadow:0 0 16px rgba(229,193,88,.30); }
+.submit-btn:disabled { opacity:.62; cursor:not-allowed; box-shadow:none; }
+.cancel-link { color:var(--muted); font-size:11px; font-weight:800; }
+.message {
+    grid-column:1 / -1;
+    display:none;
+    border-radius:14px;
+    padding:13px 14px;
+    font-size:12px;
+    line-height:1.5;
+}
+.message.ok { display:block; color:#dfffe9; border:1px solid rgba(46,213,115,.34); background:rgba(46,213,115,.10); }
+.message.error { display:block; color:#ffe1e4; border:1px solid rgba(255,91,104,.34); background:rgba(255,91,104,.10); }
+.footer {
+    position:fixed;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#000;
+    border-top:1px solid #1a1a1a;
+    color:#8c8c8c;
+    font-size:11px;
+    font-family:Arial, Helvetica, sans-serif;
+    z-index:30;
+}
+@media(max-width:760px) {
+    .header-top { height:auto; flex-direction:column; gap:8px; padding:10px 12px; }
+    .brand-box img { height:56px; }
+    .header-actions { width:100%; justify-content:center; }
+    .hero { grid-template-columns:1fr; padding:22px; }
+    .status-box { width:100%; }
+    .form-head { flex-direction:column; align-items:flex-start; }
+    .form-grid { grid-template-columns:1fr; padding:16px 14px 18px; }
+    .check-row { grid-template-columns:1fr; }
+    .actions { flex-direction:column-reverse; align-items:stretch; }
+    .submit-btn { width:100%; }
+    .cancel-link { text-align:center; }
+}
+</style>
+</head>
+<body>
+<header class="header-top">
+    <a href="index.html" class="brand-box" title="Volver al inicio">
+        <img src="imagenes/logo.png" alt="Logo Urbanex">
+    </a>
+    <div class="header-actions">
+        <a class="link-pill" href="index.html">Inicio</a>
+        <a class="link-pill" href="boulevard.html">Boulevard</a>
+    </div>
+</header>
+
+<main class="page">
+    <section class="hero">
+        <div>
+            <div class="eyebrow">Registro comercial</div>
+            <h1>Registre su negocio</h1>
+            <p>
+                Complete la información del comercio. La solicitud se guardará en Supabase como negocio inactivo.
+                El administrador podrá revisarla y activarla para que aparezca en Urbanex.
+            </p>
+        </div>
+        <div class="status-box">
+            <strong>Pendiente</strong>
+            <span>Aprobación del administrador</span>
+        </div>
+    </section>
+
+    <section class="form-shell">
+        <div class="form-head">
+            <div>
+                <h2>Datos del comercio</h2>
+                <p>La información marcada con * es obligatoria.</p>
+            </div>
+            <span class="badge-pending">No visible hasta aprobación</span>
+        </div>
+
+        <form id="businessForm" class="form-grid" autocomplete="on">
+            <div id="formMessage" class="message"></div>
+
+            <div class="field">
+                <label for="name">Nombre del negocio <span>*</span></label>
+                <input id="name" name="name" type="text" maxlength="120" required placeholder="Ej.: Café Central Loja">
+            </div>
+
+            <div class="field">
+                <label for="city">Ciudad <span>*</span></label>
+                <input id="city" name="city" type="text" maxlength="80" required value="Loja" placeholder="Loja">
+            </div>
+
+            <div class="field">
+                <label for="category">Categoría <span>*</span></label>
+                <select id="category" name="category" required>
+                    <option value="">Cargando categorías...</option>
+                </select>
+                <div class="help">Se carga desde la tabla categories de Supabase.</div>
+            </div>
+
+            <div class="field">
+                <label for="subcategory">Subcategoría</label>
+                <select id="subcategory" name="subcategory">
+                    <option value="">Seleccione primero una categoría</option>
+                </select>
+            </div>
+
+            <div class="field full">
+                <label for="address">Dirección <span>*</span></label>
+                <input id="address" name="address" type="text" maxlength="180" required placeholder="Calle, referencia o sector">
+            </div>
+
+            <div class="field full">
+                <label for="description">Descripción <span>*</span></label>
+                <textarea id="description" name="description" maxlength="1000" required placeholder="Describa qué ofrece el negocio, servicios principales y productos destacados."></textarea>
+            </div>
+
+            <div class="field">
+                <label for="phone">Teléfono</label>
+                <input id="phone" name="phone" type="tel" maxlength="30" placeholder="Ej.: 072000000">
+            </div>
+
+            <div class="field">
+                <label for="whatsapp">WhatsApp</label>
+                <input id="whatsapp" name="whatsapp" type="tel" maxlength="30" placeholder="Ej.: 593987654321">
+            </div>
+
+            <div class="field">
+                <label for="website">Sitio web o red social</label>
+                <input id="website" name="website" type="url" maxlength="220" placeholder="https://...">
+            </div>
+
+            <div class="field">
+                <label for="cover_image">Imagen de portada</label>
+                <input id="cover_image" name="cover_image" type="url" maxlength="500" placeholder="https://...">
+                <div class="help">Use una URL de imagen. El administrador puede reemplazarla luego.</div>
+            </div>
+
+            <div class="field">
+                <label for="latitude">Latitud</label>
+                <input id="latitude" name="latitude" type="number" step="any" placeholder="-3.9931">
+            </div>
+
+            <div class="field">
+                <label for="longitude">Longitud</label>
+                <input id="longitude" name="longitude" type="number" step="any" placeholder="-79.2042">
+            </div>
+
+            <div class="check-row">
+                <label class="check-card" for="delivery_available">
+                    <input id="delivery_available" name="delivery_available" type="checkbox">
+                    <span>
+                        <strong>Ofrece servicio a domicilio</strong>
+                        <small>Se usará para aparecer en el filtro A Domicilio cuando el negocio sea aprobado.</small>
+                    </span>
+                </label>
+
+                <label class="check-card" for="accept_terms">
+                    <input id="accept_terms" name="accept_terms" type="checkbox" required>
+                    <span>
+                        <strong>Confirmo que la información es correcta</strong>
+                        <small>Urbanex podrá revisar, aprobar o rechazar esta solicitud.</small>
+                    </span>
+                </label>
+            </div>
+
+            <div class="actions">
+                <a class="cancel-link" href="index.html">Cancelar y volver al inicio</a>
+                <button id="submitBtn" class="submit-btn" type="submit">Enviar solicitud</button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<footer class="footer">
+    <p>&copy; 2026 Urbanex. Desarrollado por NeoDat Consultores.</p>
+</footer>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const form = document.getElementById('businessForm');
+const submitBtn = document.getElementById('submitBtn');
+const messageBox = document.getElementById('formMessage');
+const categorySelect = document.getElementById('category');
+const subcategorySelect = document.getElementById('subcategory');
+let categories = [];
+
+function showMessage(type, text) {
+    messageBox.className = 'message ' + type;
+    messageBox.textContent = text;
+    messageBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function normalize(value) {
+    return String(value || '')
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 80);
+}
+
+function numericOrNull(value) {
+    if (value === null || value === undefined || String(value).trim() === '') return null;
+    const number = Number(value);
+    return Number.isFinite(number) ? number : null;
+}
+
+function rootCategories() {
+    return categories
+        .filter(category => !category.parent_id)
+        .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0) || String(a.name || '').localeCompare(String(b.name || ''), 'es'));
+}
+
+function childCategories(parentId) {
+    return categories
+        .filter(category => String(category.parent_id) === String(parentId))
+        .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0) || String(a.name || '').localeCompare(String(b.name || ''), 'es'));
+}
+
+function renderCategories() {
+    const roots = rootCategories();
+
+    if (!roots.length) {
+        categorySelect.innerHTML = '<option value="">No hay categorías disponibles</option>';
+        return;
+    }
+
+    categorySelect.innerHTML = '<option value="">Seleccione una categoría</option>' +
+        roots.map(category => `<option value="${category.id}">${category.icon || ''} ${category.name}</option>`).join('');
+}
+
+function renderSubcategories() {
+    const categoryId = categorySelect.value;
+    const children = childCategories(categoryId);
+
+    if (!categoryId) {
+        subcategorySelect.innerHTML = '<option value="">Seleccione primero una categoría</option>';
+        subcategorySelect.disabled = true;
+        return;
+    }
+
+    if (!children.length) {
+        subcategorySelect.innerHTML = '<option value="">Sin subcategoría</option>';
+        subcategorySelect.disabled = true;
+        return;
+    }
+
+    subcategorySelect.disabled = false;
+    subcategorySelect.innerHTML = '<option value="">Sin subcategoría</option>' +
+        children.map(category => `<option value="${category.id}">${category.icon || ''} ${category.name}</option>`).join('');
+}
+
+async function loadCategories() {
+    const { data, error } = await supabase
+        .from('categories')
+        .select('id,name,icon,parent_id,sort_order')
+        .order('sort_order', { ascending: true })
+        .order('name', { ascending: true });
+
+    if (error) {
+        console.error(error);
+        categorySelect.innerHTML = '<option value="">No se pudieron cargar categorías</option>';
+        showMessage('error', 'No se pudieron cargar las categorías desde Supabase. Revise permisos de lectura en la tabla categories.');
+        return;
+    }
+
+    categories = data || [];
+    renderCategories();
+    renderSubcategories();
+}
+
+async function makeUniqueSlug(baseSlug) {
+    const safeBase = baseSlug || 'negocio';
+    const candidate = safeBase;
+
+    const { data, error } = await supabase
+        .from('businesses')
+        .select('slug')
+        .eq('slug', candidate)
+        .limit(1);
+
+    if (error) {
+        return `${safeBase}-${Date.now().toString().slice(-6)}`;
+    }
+
+    if (!data || !data.length) return candidate;
+    return `${safeBase}-${Date.now().toString().slice(-6)}`;
+}
+
+function cleanUrl(value) {
+    const text = String(value || '').trim();
+    return text || null;
+}
+
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+    messageBox.className = 'message';
+    messageBox.textContent = '';
+
+    try {
+        const formData = new FormData(form);
+        const name = String(formData.get('name') || '').trim();
+        const categoryId = formData.get('category') ? Number(formData.get('category')) : null;
+        const subcategoryId = formData.get('subcategory') ? Number(formData.get('subcategory')) : null;
+
+        if (!name || !categoryId) {
+            throw new Error('Ingrese el nombre del negocio y seleccione una categoría.');
+        }
+
+        const slug = await makeUniqueSlug(normalize(name));
+
+        const payload = {
+            name: name,
+            slug: slug,
+            category_id: categoryId,
+            subcategory_id: subcategoryId,
+            city: String(formData.get('city') || '').trim() || 'Loja',
+            address: String(formData.get('address') || '').trim(),
+            description: String(formData.get('description') || '').trim(),
+            phone: String(formData.get('phone') || '').trim() || null,
+            whatsapp: String(formData.get('whatsapp') || '').trim() || null,
+            website: cleanUrl(formData.get('website')),
+            cover_image: cleanUrl(formData.get('cover_image')),
+            latitude: numericOrNull(formData.get('latitude')),
+            longitude: numericOrNull(formData.get('longitude')),
+            delivery_available: formData.get('delivery_available') === 'on',
+            is_featured: false,
+            is_active: false
+        };
+
+        const { error } = await supabase
+            .from('businesses')
+            .insert(payload);
+
+        if (error) throw error;
+
+        form.reset();
+        document.getElementById('city').value = 'Loja';
+        renderCategories();
+        renderSubcategories();
+
+        showMessage('ok', 'Solicitud enviada correctamente. El negocio quedó registrado como inactivo y pendiente de aprobación del administrador. Cuando se active en el panel, aparecerá en Urbanex.');
+    } catch (error) {
+        console.error(error);
+        showMessage('error', 'No se pudo enviar la solicitud: ' + (error.message || 'revise la conexión y las políticas de Supabase.'));
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Enviar solicitud';
+    }
+});
+
+categorySelect.addEventListener('change', renderSubcategories);
+loadCategories();
+</script>
+</body>
+</html>
