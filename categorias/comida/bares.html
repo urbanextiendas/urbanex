@@ -207,12 +207,38 @@
 /* === FIN URBANEX PATCH: BARES SIN BARRA DE SUBCATEGORIAS === */
 
 
-<style id="ux-hide-hero-subcategory-text">
-/* SOLO CAMBIO: ocultar el subtítulo y la cápsula de Bares */
-#pageSubtitle,
-#pagePill {
-  display: none !important;
+
+/* === URBANEX AJUSTE FINAL BARES === */
+.ux-panel-head {
+    padding-bottom: 18px !important;
 }
+.ux-panel-actions {
+    margin-bottom: 4px !important;
+}
+@media(max-width:900px) {
+    .ux-panel-head {
+        padding-bottom: 16px !important;
+    }
+    .ux-panel-actions {
+        margin-bottom: 2px !important;
+    }
+}
+/* === FIN URBANEX AJUSTE FINAL BARES === */
+
+
+/* === URBANEX AJUSTE: SEPARAR BUSCADOR DE LINEA INFERIOR === */
+@media(max-width:900px) {
+    .header-top {
+        height: 124px !important;
+        min-height: 124px !important;
+        padding: 8px 12px 18px 12px !important;
+    }
+
+    .ux-app {
+        top: 124px !important;
+    }
+}
+/* === FIN URBANEX AJUSTE: SEPARAR BUSCADOR DE LINEA INFERIOR === */
 </style>
 </head>
 <body>
@@ -243,7 +269,7 @@
   <aside class="ux-left"><h2 class="ux-label">Subcategorías</h2><nav id="subNav" class="ux-subnav"></nav></aside>
   <main class="ux-main">
     <div class="ux-main-inner">
-      <section class="ux-hero"><h1 id="pageTitle">BARES</h1><p id="pageSubtitle">BARES DE LOJA EN UN SOLO LUGAR</p><div id="pagePill" class="ux-pill">🍷 <span>Bares</span></div></section>
+      <section class="ux-hero"><h1 id="pageTitle">BARES</h1></section>
       <section class="ux-business-panel">
         <div class="ux-panel-head"><div><h2 id="panelTitle">Negocios en Bares</h2><p id="businessCount">Cargando negocios...</p></div><div class="ux-panel-actions"><input id="panelSearch" type="search" placeholder="Buscar negocio"><select id="sortBusiness"><option value="featured">Destacados primero</option><option value="name">Nombre A–Z</option></select></div></div>
         <div id="businessGrid" class="ux-grid"><div class="ux-empty">Cargando información desde Supabase...</div></div>
@@ -252,14 +278,14 @@
   </main>
   <aside class="ux-right"><div class="ux-right-head"><h2>Destacados</h2><p id="featuredCount">Cargando...</p></div><div class="ux-sort"><select><option>Ordenar por: Destacados</option></select></div><div id="featuredList" class="ux-featured-list"><div class="ux-note">Cargando destacados...</div></div><a id="backLink" class="ux-back" href="../comida.html">Volver</a></aside>
 </div>
-<footer class="pie-pagina"><p>© 2026 Urbanex. Desarrollado por Neodat Consultores.</p></footer>
+<footer class="pie-pagina"><p>© 2026 Urbanex. Desarrollado por NeoDat Consultores.</p></footer>
 <script type="module">
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-const PAGE = {"parentKey": "comida", "parentName": "Comida y Bebida", "title": "BARES", "name": "Bares", "icon": "🍷", "subtitle": "BARES DE LOJA EN UN SOLO LUGAR", "bg": "Gastronomía.png", "back": "../comida.html", "aliases": ["Bares", "Bares", "bares"], "siblings": [{"name": "Restaurantes", "file": "restaurantes.html"}, {"name": "Cafeterías", "file": "cafeterias.html"}, {"name": "Pizzerías", "file": "pizzerias.html"}, {"name": "Pollerías", "file": "pollerias.html"}, {"name": "Comida rápida", "file": "comida-rapida.html"}, {"name": "Heladerías", "file": "heladerias.html"}, {"name": "Bares", "file": "bares.html"}, {"name": "Panaderías", "file": "panaderias.html"}], "siblingIcons": {"restaurantes": "🍽️", "cafeterias": "☕", "pizzerias": "🍕", "pollerias": "🍗", "comida rapida": "🍔", "heladerias": "🍦", "bares": "🍷", "panaderias": "🥐"}};
+const PAGE = {"parentKey": "comida", "parentName": "Comida y Bebida", "title": "BARES", "name": "Bares", "icon": "🍷", "subtitle": "", "bg": "Gastronomía.png", "back": "../comida.html", "aliases": ["Bares", "Bares", "bares"], "siblings": [{"name": "Restaurantes", "file": "restaurantes.html"}, {"name": "Cafeterías", "file": "cafeterias.html"}, {"name": "Pizzerías", "file": "pizzerias.html"}, {"name": "Pollerías", "file": "pollerias.html"}, {"name": "Comida rápida", "file": "comida-rapida.html"}, {"name": "Heladerías", "file": "heladerias.html"}, {"name": "Bares", "file": "bares.html"}, {"name": "Panaderías", "file": "panaderias.html"}], "siblingIcons": {"restaurantes": "🍽️", "cafeterias": "☕", "pizzerias": "🍕", "pollerias": "🍗", "comida rapida": "🍔", "heladerias": "🍦", "bares": "🍷", "panaderias": "🥐"}};
 let categories = [], allBusinesses = [], currentSub = null, siblingSubs = [], businessesHere = [], textFilter = '';
 const $ = (id)=>document.getElementById(id);
 const norm = (v)=>String(v||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
@@ -273,7 +299,7 @@ function statusText(b){ if(typeof b.is_open === 'boolean') return b.is_open ? 'A
 function businessLink(b){ return '../../business/?slug=' + encodeURIComponent(b.slug || b.id || ''); }
 async function boot(){
   document.documentElement.style.setProperty('--page-bg', `url("../../imagenes/${PAGE.bg}")`);
-  $('pageTitle').textContent = PAGE.title; $('pageSubtitle').textContent = PAGE.subtitle; $('pagePill').innerHTML = `${PAGE.icon} <span>${esc(PAGE.name)}</span>`;
+  $('pageTitle').textContent = PAGE.title;
   $('searchInput').placeholder = `Buscar en ${PAGE.name}...`; $('panelTitle').textContent = `Negocios en ${PAGE.name}`; $('backLink').href = PAGE.back; $('backLink').textContent = 'Volver a ' + PAGE.parentName;
   const [catRes, bizRes] = await Promise.all([
     supabase.from('categories').select('id,name,icon,parent_id,sort_order').order('sort_order', { ascending: true }).order('name', { ascending: true }),
