@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urbanex - Calzado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* URBANEX REAL SUBCATEGORY PAGE FIX 2026-07-08 */
+
+:root{--gold:#e5c158;--gold2:#f4d675;--line:rgba(229,193,88,.24);--muted:#b9b9b9}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#000;color:#fff;font-family:Montserrat,Arial,sans-serif;overflow:hidden}a{text-decoration:none;color:inherit}button,input,select{font-family:inherit}
+.ux-header{position:fixed;left:0;right:0;top:0;height:58px;z-index:50;display:grid;grid-template-columns:240px 1fr 330px;align-items:center;gap:14px;padding:0 18px;background:linear-gradient(90deg,#050505,rgba(10,8,6,.97),#050505);border-bottom:1px solid var(--line)}
+.ux-brand img{height:50px;display:block}.ux-search{position:relative;max-width:440px;width:100%;justify-self:center}.ux-search input{width:100%;height:34px;border-radius:999px;border:1px solid rgba(255,255,255,.13);background:rgba(0,0,0,.55);color:#fff;text-align:center;padding:0 42px 0 18px;outline:none;font-size:12px}.ux-search span{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--gold)}
+.ux-tools{display:flex;align-items:center;justify-content:flex-end;gap:14px;font-size:12px;font-weight:800}.ux-tools .pin{color:var(--gold)}.ux-round{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--gold);border-radius:50%;color:var(--gold);background:rgba(0,0,0,.36)}
+.ux-footer{position:fixed;left:0;right:0;bottom:0;height:24px;z-index:60;display:grid;place-items:center;background:#000;border-top:1px solid #1b1b1b;color:#8d8d8d;font-size:11px}
+.ux-app{position:fixed;left:0;right:0;top:58px;bottom:24px;display:grid;grid-template-columns:240px minmax(0,1fr) 292px;min-height:0;background:#000}
+.ux-left{min-height:0;overflow-y:auto;padding:17px 12px;background:linear-gradient(180deg,rgba(10,7,4,.92),rgba(0,0,0,.92));border-right:1px solid var(--line)}.ux-label{margin:0 0 15px 6px;color:var(--gold);font-size:10px;font-weight:900;letter-spacing:2.4px;text-transform:uppercase}.ux-subnav{display:grid;gap:7px}.ux-subitem{min-height:52px;display:flex;align-items:center;gap:11px;padding:8px 10px;border:1px solid rgba(229,193,88,.22);border-radius:12px;background:rgba(6,6,6,.68);transition:.18s ease}.ux-subitem:hover{border-color:var(--gold);background:rgba(229,193,88,.10);transform:translateX(2px)}.ux-subitem.active{border-color:var(--gold);background:linear-gradient(90deg,rgba(229,193,88,.28),rgba(12,8,0,.72))}.ux-ico{width:32px;height:32px;display:grid;place-items:center;flex:0 0 32px;border-radius:11px;background:rgba(255,255,255,.08);font-size:16px}.active .ux-ico{background:var(--gold);color:#111}.ux-subtxt{min-width:0}.ux-subtxt strong{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ux-subtxt span{display:block;margin-top:2px;color:var(--muted);font-size:10px}.ux-subitem.active strong{color:var(--gold2)}
+.ux-main{position:relative;min-width:0;min-height:0;overflow:hidden;background:#050505}.ux-main::before{content:"";position:absolute;inset:0;background-image:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.66)),var(--page-bg);background-size:cover;background-position:center;background-repeat:no-repeat;z-index:0}.ux-main::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 16%,rgba(229,193,88,.16),transparent 24%),linear-gradient(90deg,rgba(0,0,0,.40),transparent 35%,rgba(0,0,0,.40));z-index:1;pointer-events:none}.ux-main-inner{position:relative;z-index:2;height:100%;padding:38px 34px 26px;display:grid;grid-template-rows:auto minmax(0,1fr);gap:18px}.ux-hero{text-align:center}.ux-hero h1{margin:0;font-family:Cinzel,Georgia,serif;font-size:clamp(32px,4vw,56px);letter-spacing:11px;line-height:1;color:#fff;text-shadow:0 7px 26px #000}.ux-hero p{margin:12px auto 0;color:var(--gold);font-size:11px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase}.ux-pill{margin:17px auto 0;width:max-content;max-width:95%;display:inline-flex;align-items:center;gap:9px;padding:8px 18px;border:1px solid var(--gold);border-radius:999px;background:rgba(0,0,0,.62);font-size:13px;font-weight:900;color:var(--gold2)}
+.ux-business-panel{min-height:0;align-self:end;width:min(980px,96%);margin:0 auto;padding:16px;border:1px solid rgba(229,193,88,.28);border-radius:20px;background:rgba(3,3,3,.72);backdrop-filter:blur(16px);box-shadow:0 24px 70px rgba(0,0,0,.75)}.ux-panel-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:2px 4px 12px;border-bottom:1px solid rgba(229,193,88,.14)}.ux-panel-head h2{margin:0;font-family:Cinzel,Georgia,serif;color:var(--gold);font-size:19px;letter-spacing:2px;text-transform:uppercase}.ux-panel-head p{margin:4px 0 0;color:var(--muted);font-size:11px}.ux-panel-actions{display:flex;gap:8px;align-items:center}.ux-panel-actions input,.ux-panel-actions select{height:34px;border:1px solid rgba(255,255,255,.13);border-radius:10px;background:rgba(0,0,0,.65);color:#fff;padding:0 11px;font-size:11px;outline:none}.ux-grid{margin-top:13px;max-height:calc(100vh - 280px);overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;padding-right:4px}.ux-card{display:grid;grid-template-columns:74px 1fr;min-height:104px;overflow:hidden;border:1px solid rgba(255,255,255,.10);border-radius:14px;background:linear-gradient(135deg,rgba(18,18,18,.92),rgba(6,6,6,.88));transition:.18s ease}.ux-card:hover{transform:translateY(-3px);border-color:rgba(229,193,88,.54);background:rgba(229,193,88,.10)}.ux-logo{width:74px;height:104px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(229,193,88,.18),rgba(0,0,0,.65));color:var(--gold);font-size:24px;font-weight:900;overflow:hidden}.ux-logo img{width:100%;height:100%;object-fit:cover}.ux-card-body{min-width:0;padding:11px 12px;display:flex;flex-direction:column;justify-content:center}.ux-card-body h3{margin:0;color:#fff;font-size:14px;line-height:1.25}.ux-card-body .tag{margin-top:5px;color:var(--gold);font-size:10px;font-weight:800}.ux-card-body .addr{margin-top:6px;color:#bcbcbc;font-size:10px;line-height:1.35}.ux-card-bottom{margin-top:9px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px}.ux-badge{color:#000;background:var(--gold);border-radius:999px;padding:3px 8px;font-weight:900}.ux-featured{color:var(--gold);font-weight:900}.ux-empty{grid-column:1/-1;min-height:160px;display:grid;place-items:center;text-align:center;border:1px dashed rgba(229,193,88,.32);border-radius:15px;background:rgba(0,0,0,.46);color:#d0d0d0;padding:24px;font-size:13px;line-height:1.5}
+.ux-right{min-height:0;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(10,7,4,.92),rgba(0,0,0,.94));border-left:1px solid var(--line);overflow:hidden}.ux-right-head{padding:21px 14px 10px}.ux-right-head h2{margin:0;font-family:Cinzel,Georgia,serif;color:var(--gold);font-size:16px;letter-spacing:1.5px;text-transform:uppercase}.ux-right-head p{margin:4px 0 0;font-size:11px;color:#fff}.ux-sort{padding:0 14px 12px}.ux-sort select{width:100%;height:36px;border:1px solid rgba(255,255,255,.13);border-radius:8px;background:#080808;color:#fff;padding:0 9px;font-size:11px}.ux-featured-list{min-height:0;flex:1;overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:8px}.ux-mini{display:grid;grid-template-columns:58px 1fr;min-height:64px;border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden;background:rgba(16,16,16,.74)}.ux-mini-logo{width:58px;height:64px;display:grid;place-items:center;background:#101010;color:var(--gold);overflow:hidden}.ux-mini-logo img{width:100%;height:100%;object-fit:cover}.ux-mini-body{min-width:0;padding:8px 9px;display:flex;flex-direction:column;justify-content:center}.ux-mini-body strong{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ux-mini-body span{margin-top:3px;color:var(--gold);font-size:9px}.ux-mini-body small{margin-top:3px;color:#aaa;font-size:9px}.ux-back{margin:12px 14px 10px;height:36px;border-radius:8px;background:var(--gold);color:#111;display:grid;place-items:center;font-size:12px;font-weight:900}.ux-note{padding:16px;border:1px dashed rgba(229,193,88,.25);border-radius:12px;color:#cfcfcf;text-align:center;font-size:12px;line-height:1.45}
+@media(max-width:900px){.ux-header{height:104px;grid-template-columns:1fr auto;grid-template-rows:52px 38px;grid-template-areas:"brand tools" "search search";padding:7px 12px}.ux-brand{grid-area:brand}.ux-brand img{height:48px}.ux-search{grid-area:search;max-width:none}.ux-tools{grid-area:tools}.ux-tools .loc-text,.ux-tools .heart{display:none}.ux-app{top:104px;bottom:24px;grid-template-columns:1fr;grid-template-rows:58px minmax(0,1fr);overflow:hidden}.ux-left{height:58px;overflow-x:auto;overflow-y:hidden;border-right:none;border-bottom:1px solid var(--line);padding:8px 10px}.ux-label{display:none}.ux-subnav{display:flex;gap:8px}.ux-subitem{min-width:148px;height:42px;min-height:42px;padding:6px 9px}.ux-ico{width:28px;height:28px;flex-basis:28px}.ux-subtxt strong{font-size:11px}.ux-subtxt span{font-size:9px}.ux-main-inner{padding:18px 12px 16px;gap:12px;overflow-y:auto}.ux-hero h1{font-size:24px;letter-spacing:5px}.ux-hero p{font-size:8.5px;letter-spacing:1.4px}.ux-pill{margin-top:10px;padding:6px 13px;font-size:11px}.ux-business-panel{width:100%;align-self:start;padding:12px;border-radius:16px}.ux-panel-head{align-items:flex-start;flex-direction:column}.ux-panel-actions{width:100%;display:grid;grid-template-columns:1fr}.ux-grid{max-height:none;grid-template-columns:1fr;overflow:visible}.ux-right{display:none}.ux-footer{font-size:10px}.ux-card{grid-template-columns:70px 1fr}.ux-logo{width:70px}}
+
+
+/* === URBANEX PATCH MINIMO: LOGO INSTALACION CLARO === */
+[id*="install" i] img,
+[class*="install" i] img,
+[id*="pwa" i] img,
+[class*="pwa" i] img {
+  object-fit: contain !important;
+  background: #000 !important;
+  border-radius: 10px !important;
+}
+/* === FIN URBANEX PATCH MINIMO === */
+
+
+
+/* === URBANEX HEADER Y PIE COMO CATEGORIAS === */
+.header-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 9999;
+    background: rgba(6, 6, 6, 0.96);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+.brand-box {
+    display: flex;
+    align-items: center;
+    min-width: 170px;
+}
+.brand-box img {
+    height: 60px;
+    width: auto;
+    display: block;
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,.72));
+}
+.search-wrapper {
+    flex: 1;
+    max-width: 430px;
+    margin: 0 20px;
+    position: relative;
+}
+.search-input {
+    width: 100%;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.48);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 20px;
+    padding: 8px 40px 8px 16px;
+    color: #fff;
+    font-size: 12px;
+    outline: none;
+    text-align: center;
+}
+.search-input:focus {
+    border-color: var(--gold);
+    background: rgba(0, 0, 0, 0.64);
+}
+.search-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    fill: var(--gold);
+}
+.user-tools {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+.location-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.location-indicator svg,
+.tool-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--gold);
+}
+.profile-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-avatar svg {
+    width: 13px;
+    height: 13px;
+    fill: var(--gold);
+}
+.pie-pagina {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 24px;
+    z-index: 9999;
+    background: #000;
+    color: #8c8c8c;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #1a1a1a;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.pie-pagina p {
+    margin: 0;
+}
+.ux-app {
+    top: 60px !important;
+    bottom: 24px !important;
+}
+@media(max-width:900px) {
+    .header-top {
+        height: 112px;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 58px 38px;
+        gap: 8px;
+        padding: 8px 12px 10px;
+    }
+    .brand-box {
+        width: 100%;
+        min-width: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .brand-box img {
+        height: 56px;
+        margin: 0 auto;
+    }
+    .search-wrapper {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+    }
+    .search-input {
+        height: 38px;
+        font-size: 12px;
+    }
+    .user-tools {
+        display: none;
+    }
+    .ux-app {
+        top: 112px !important;
+    }
+}
+/* === FIN URBANEX HEADER Y PIE COMO CATEGORIAS === */
+
+
+/* === URBANEX PATCH: SUBCATEGORIA SIN BARRA DE SUBCATEGORIAS === */
+.ux-left {
+    display: none !important;
+}
+.ux-app {
+    grid-template-columns: minmax(0, 1fr) 292px !important;
+}
+@media(max-width:900px) {
+    .ux-app {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: minmax(0, 1fr) !important;
+    }
+}
+/* === FIN URBANEX PATCH: SUBCATEGORIA SIN BARRA DE SUBCATEGORIAS === */
+
+
+/* === URBANEX AJUSTE FINAL SUBCATEGORIA === */
+.ux-panel-head {
+    padding-bottom: 18px !important;
+}
+.ux-panel-actions {
+    margin-bottom: 4px !important;
+}
+@media(max-width:900px) {
+    .ux-panel-head {
+        padding-bottom: 16px !important;
+    }
+    .ux-panel-actions {
+        margin-bottom: 2px !important;
+    }
+}
+/* === FIN URBANEX AJUSTE FINAL SUBCATEGORIA === */
+
+
+/* === URBANEX AJUSTE: SEPARAR BUSCADOR DE LINEA INFERIOR === */
+@media(max-width:900px) {
+    .header-top {
+        height: 124px !important;
+        min-height: 124px !important;
+        padding: 8px 12px 18px 12px !important;
+    }
+
+    .ux-app {
+        top: 124px !important;
+    }
+}
+/* === FIN URBANEX AJUSTE: SEPARAR BUSCADOR DE LINEA INFERIOR === */
+
+
+/* === URBANEX PATCH: PERMITIR ACTUALIZAR AL BAJAR EN CELULAR === */
+@media(max-width:900px) {
+    html {
+        height: auto !important;
+        min-height: 100% !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        overscroll-behavior-y: auto !important;
+    }
+
+    body {
+        height: auto !important;
+        min-height: calc(100svh + 2px) !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        overscroll-behavior-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .ux-main-inner {
+        overscroll-behavior-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+}
+/* === FIN URBANEX PATCH: PERMITIR ACTUALIZAR AL BAJAR EN CELULAR === */
+
+</style>
+</head>
+<body>
+<header class="header-top">
+  <a class="brand-box" href="../comercio.html" title="Volver a Comercio">
+    <img src="../../imagenes/logo.png" alt="Logo Urbanex">
+  </a>
+  <div class="search-wrapper">
+    <input autocomplete="off" class="search-input" id="searchInput" placeholder="Buscar en Calzado..." type="search">
+    <svg class="search-icon" viewBox="0 0 24 24" aria-label="Buscar">
+      <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+    </svg>
+  </div>
+  <div class="user-tools">
+    <div class="location-indicator">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></svg>
+      <span>Loja, Ecuador</span>
+    </div>
+    <a class="tool-icon" href="../../boulevard.html" title="Volver al Boulevard">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg>
+    </a>
+    <a class="profile-avatar" href="../../admin/index.html" title="Administración">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
+    </a>
+  </div>
+</header>
+<div class="ux-app">
+  <aside class="ux-left"><h2 class="ux-label">Subcategorías</h2><nav id="subNav" class="ux-subnav"></nav></aside>
+  <main class="ux-main">
+    <div class="ux-main-inner">
+      <section class="ux-hero"><h1 id="pageTitle">CALZADO</h1></section>
+      <section class="ux-business-panel">
+        <div class="ux-panel-head"><div><h2 id="panelTitle">Negocios en Calzado</h2><p id="businessCount">Cargando negocios...</p></div><div class="ux-panel-actions"><input id="panelSearch" type="search" placeholder="Buscar negocio"><select id="sortBusiness"><option value="featured">Destacados primero</option><option value="name">Nombre A–Z</option></select></div></div>
+        <div id="businessGrid" class="ux-grid"><div class="ux-empty">Cargando información desde Supabase...</div></div>
+      </section>
+    </div>
+  </main>
+  <aside class="ux-right"><div class="ux-right-head"><h2>Destacados</h2><p id="featuredCount">Cargando...</p></div><div class="ux-sort"><select><option>Ordenar por: Destacados</option></select></div><div id="featuredList" class="ux-featured-list"><div class="ux-note">Cargando destacados...</div></div><a id="backLink" class="ux-back" href="../comercio.html">Volver</a></aside>
+</div>
+<footer class="pie-pagina"><p>© 2026 Urbanex. Desarrollado por NeoDat Consultores.</p></footer>
+<script type="module">
+
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const PAGE = {"parentKey": "comercio", "parentName": "Comercio", "title": "CALZADO", "name": "Calzado", "icon": "👟", "subtitle": "", "bg": "Comercio.png", "back": "../comercio.html", "aliases": ["Calzado", "Calzado", "calzado"], "siblings": [{"name": "Ropa y Moda", "file": "ropa-y-moda.html"}, {"name": "Calzado", "file": "calzado.html"}, {"name": "Electrónica", "file": "electronica.html"}, {"name": "Supermercados", "file": "supermercados.html"}, {"name": "Ferreterías", "file": "ferreterias.html"}, {"name": "Farmacias", "file": "farmacias.html"}], "siblingIcons": {"ropa y moda": "👕", "calzado": "👟", "electronica": "💻", "supermercados": "🛒", "ferreterias": "🛠️", "farmacias": "💊"}};
+let categories = [], allBusinesses = [], currentSub = null, siblingSubs = [], businessesHere = [], textFilter = '';
+const $ = (id)=>document.getElementById(id);
+const norm = (v)=>String(v||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
+const esc = (v)=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const num = (v)=>{ const n=Number(v); return Number.isFinite(n)?n:null; };
+function assetUrl(v){ const s=String(v||'').trim(); if(!s) return ''; if(/^https?:\/\//i.test(s) || /^data:/i.test(s)) return s; if(s.startsWith('/')) return '../..' + s; return '../../' + s.replace(/^\.\//,''); }
+function logoOf(b){ return assetUrl(b.logo_url || b.logo || b.logo_image || b.logo_path || b.image_url || b.cover_image || b.banner_image || ''); }
+function businessMatchesSub(b, subId){ const sid = num(subId); return num(b.subcategory_id) === sid || num(b.category_id) === sid; }
+function countForSub(sub){ return allBusinesses.filter(b=>businessMatchesSub(b, sub.id)).length; }
+function statusText(b){ if(typeof b.is_open === 'boolean') return b.is_open ? 'Abierto' : 'Cerrado'; if(typeof b.open_now === 'boolean') return b.open_now ? 'Abierto' : 'Cerrado'; return 'Ver negocio'; }
+function businessLink(b){ return '../../business/?slug=' + encodeURIComponent(b.slug || b.id || ''); }
+async function boot(){
+  document.documentElement.style.setProperty('--page-bg', `url("../../imagenes/${PAGE.bg}")`);
+  $('pageTitle').textContent = PAGE.title;
+  $('searchInput').placeholder = `Buscar en ${PAGE.name}...`; $('panelTitle').textContent = `Negocios en ${PAGE.name}`; $('backLink').href = PAGE.back; $('backLink').textContent = 'Volver a ' + PAGE.parentName;
+  const [catRes, bizRes] = await Promise.all([
+    supabase.from('categories').select('id,name,icon,parent_id,sort_order').order('sort_order', { ascending: true }).order('name', { ascending: true }),
+    supabase.from('businesses').select('*').eq('is_active', true)
+  ]);
+  if(catRes.error){ console.error(catRes.error); showLoadError('No se pudieron cargar las categorías desde Supabase.'); return; }
+  if(bizRes.error){ console.error(bizRes.error); showLoadError('No se pudieron cargar los negocios desde Supabase.'); return; }
+  categories = catRes.data || []; allBusinesses = (bizRes.data || []).filter(b=>b.is_active !== false);
+  const aliases = PAGE.aliases.map(norm);
+  currentSub = categories.find(c => aliases.includes(norm(c.name)) && c.parent_id) || categories.find(c => aliases.includes(norm(c.name)));
+  const parentId = currentSub ? num(currentSub.parent_id) : null;
+  siblingSubs = parentId ? categories.filter(c => num(c.parent_id) === parentId) : categories.filter(c => PAGE.siblings.map(s=>norm(s.name)).includes(norm(c.name)));
+  siblingSubs.sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+  businessesHere = currentSub ? allBusinesses.filter(b=>businessMatchesSub(b, currentSub.id)) : [];
+  renderSubnav(); renderAll();
+}
+function showLoadError(msg){ $('businessGrid').innerHTML = `<div class="ux-empty">${esc(msg)}</div>`; $('featuredList').innerHTML = `<div class="ux-note">No hay destacados para mostrar.</div>`; }
+function renderSubnav(){
+  const linksByName = Object.fromEntries(PAGE.siblings.map(s=>[norm(s.name),s.file]));
+  $('subNav').innerHTML = siblingSubs.map(sub=>{
+    const file = linksByName[norm(sub.name)] || (norm(sub.name).replace(/[^a-z0-9]+/g,'-') + '.html');
+    const active = currentSub && num(sub.id)===num(currentSub.id);
+    const c = countForSub(sub);
+    return `<a class="ux-subitem ${active?'active':''}" href="${esc(file)}"><span class="ux-ico">${esc(sub.icon || PAGE.siblingIcons[norm(sub.name)] || '•')}</span><span class="ux-subtxt"><strong>${esc(sub.name)}</strong><span>${c} local${c===1?'':'es'}</span></span></a>`;
+  }).join('');
+}
+function filteredBusinesses(){
+  let list = [...businessesHere];
+  if(textFilter){ const t = norm(textFilter); list = list.filter(b=>norm(`${b.name||''} ${b.address||''} ${b.description||''} ${b.city||''}`).includes(t)); }
+  const sort = $('sortBusiness').value;
+  if(sort==='name') list.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'es'));
+  if(sort==='featured') list.sort((a,b)=>Number(b.is_featured===true)-Number(a.is_featured===true));
+  return list;
+}
+function renderAll(){ renderBusinesses(); renderFeatured(); }
+function cardHtml(b){
+  const logo = logoOf(b); const logoHtml = logo ? `<img src="${esc(logo)}" alt="${esc(b.name)}" loading="lazy">` : (PAGE.icon || '🏪');
+  const featured = b.is_featured === true ? '<span class="ux-featured">Destacado</span>' : '<span></span>';
+  return `<a class="ux-card" href="${esc(businessLink(b))}"><div class="ux-logo">${logoHtml}</div><div class="ux-card-body"><h3>${esc(b.name || 'Negocio')}</h3><div class="tag">${esc(PAGE.name)}</div><div class="addr">${b.address ? '📍 '+esc(b.address) : 'Dirección no registrada'}</div><div class="ux-card-bottom"><span class="ux-badge">${esc(statusText(b))}</span>${featured}</div></div></a>`;
+}
+function renderBusinesses(){
+  const list = filteredBusinesses();
+  $('businessCount').textContent = `${list.length} negocio${list.length===1?'':'s'} encontrado${list.length===1?'':'s'}`;
+  if(!list.length){ $('businessGrid').innerHTML = `<div class="ux-empty">No hay empresas registradas en ${esc(PAGE.name)} por ahora.<br>Cuando se carguen en Supabase con esta subcategoría, aparecerán aquí.</div>`; return; }
+  $('businessGrid').innerHTML = list.map(cardHtml).join('');
+}
+function renderFeatured(){
+  const featured = businessesHere.filter(b=>b.is_featured === true);
+  $('featuredCount').textContent = `${featured.length} destacado${featured.length===1?'':'s'} encontrado${featured.length===1?'':'s'}`;
+  if(!featured.length){ $('featuredList').innerHTML = `<div class="ux-note">No hay negocios destacados en esta sección por ahora.</div>`; return; }
+  $('featuredList').innerHTML = featured.map(b=>{
+    const logo = logoOf(b); const logoHtml = logo ? `<img src="${esc(logo)}" alt="${esc(b.name)}" loading="lazy">` : (PAGE.icon || '🏪');
+    return `<a class="ux-mini" href="${esc(businessLink(b))}"><div class="ux-mini-logo">${logoHtml}</div><div class="ux-mini-body"><strong>${esc(b.name || 'Negocio')}</strong><span>${esc(PAGE.name)} · Destacado</span><small>★ — Sin reseñas</small></div></a>`;
+  }).join('');
+}
+$('searchInput').addEventListener('input',e=>{textFilter=e.target.value; renderBusinesses();});
+$('panelSearch').addEventListener('input',e=>{textFilter=e.target.value; $('searchInput').value=e.target.value; renderBusinesses();});
+$('sortBusiness').addEventListener('change',renderBusinesses);
+boot();
+
+</script>
+
+<script>
+/* === URBANEX PATCH MINIMO: PWA SIN TUTEO Y LOGO URBA4 === */
+document.addEventListener('DOMContentLoaded', function () {
+  const depth = location.pathname.split('/').filter(Boolean).length;
+
+  let logoPath = 'imagenes/Urba4.png';
+
+  if (location.pathname.includes('/categorias/') && depth >= 2) {
+    logoPath = '../imagenes/Urba4.png';
+  }
+
+  if (location.pathname.includes('/categorias/') && depth >= 3) {
+    logoPath = '../../imagenes/Urba4.png';
+  }
+
+  const installNodes = document.querySelectorAll('[id*="install" i], [class*="install" i], [id*="pwa" i], [class*="pwa" i]');
+
+  installNodes.forEach(function (el) {
+    if (el.innerHTML) {
+      el.innerHTML = el.innerHTML
+        .replaceAll('Acceda rápido desde su pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
+        .replaceAll('Acceda rápido desde su pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
+        .replaceAll('desde su pantalla', 'desde su pantalla');
+    }
+  });
+
+  document.querySelectorAll('[id*="install" i] img, [class*="install" i] img, [id*="pwa" i] img, [class*="pwa" i] img').forEach(function (img) {
+    img.src = logoPath;
+    img.style.objectFit = 'contain';
+    img.style.background = '#000';
+    img.style.borderRadius = '10px';
+  });
+});
+/* === FIN URBANEX PATCH MINIMO === */
+</script>
+
+
+
+
+</body>
+</html>
