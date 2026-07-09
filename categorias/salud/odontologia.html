@@ -1,642 +1,131 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urbanex - Odontología</title>
-    <link rel="icon" type="image/png" href="../../imagenes/log.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        
-:root {
-    --bg-main: #020202;
-    --bg-panels-glass: rgba(6, 6, 6, 0.45);
-    --bg-cards-glass: rgba(20, 20, 20, 0.58);
-    --gold: #e5c158;
-    --gold-dim: #a68b44;
-    --border-color: rgba(229, 193, 88, 0.22);
-    --text-main: #ffffff;
-    --text-muted: #e0e0e0;
-    --text-dark: #aaaaaa;
-    --green: #2ed573;
-    --red: #ff4757;
-    --font-serif: 'Cinzel', serif;
-    --font-sans: 'Montserrat', sans-serif;
-    --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    --blur-effect: blur(18px);
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(229, 193, 88, 0.24); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: var(--gold); }
-html, body { width: 100%; height: 100%; }
-body {
-    background-color: var(--bg-main);
-    font-family: var(--font-sans);
-    color: var(--text-main);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-a { color: inherit; text-decoration: none; }
-button, select, input { font-family: var(--font-sans); }
-.dashboard-container {
-    flex: 1;
-    display: grid;
-    grid-template-rows: 60px minmax(0, 1fr);
-    grid-template-columns: 240px minmax(0, 1fr) 290px;
-    grid-template-areas:
-        "header header header"
-        "aside-left main aside-right";
-    height: calc(100vh - 24px);
-    position: relative;
-    overflow: hidden;
-}
-.global-background-underlay { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-.global-background-underlay img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; filter: saturate(0.98) contrast(1.05); }
-.global-background-underlay::after {
-    content: ""; position: absolute; inset: 0;
-    background:
-        linear-gradient(90deg, rgba(0,0,0,0.74) 0%, rgba(0,0,0,0.16) 38%, rgba(0,0,0,0.16) 62%, rgba(0,0,0,0.78) 100%),
-        linear-gradient(to bottom, rgba(0,0,0,0.18), rgba(0,0,0,0.36));
-}
-.header-top {
-    grid-area: header;
-    background: rgba(6, 6, 6, 0.62);
-    backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect);
-    border-bottom: 1px solid var(--border-color);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 20px; position: relative; z-index: 10;
-}
-.brand-box { display: flex; align-items: center; text-decoration: none; cursor: pointer; user-select: none; }
-.brand-box img { height: 60px; width: auto; display: block; }
-.search-wrapper { flex: 1; max-width: 440px; margin: 0 20px; position: relative; }
-.search-input {
-    width: 100%; background: rgba(0,0,0,0.46); border: 1px solid rgba(255,255,255,0.14);
-    border-radius: 20px; padding: 8px 40px 8px 16px; color: var(--text-main);
-    font-size: 12px; outline: none; transition: var(--transition-smooth); text-align: center;
-}
-.search-input:focus { border-color: var(--gold); background: rgba(0,0,0,0.62); }
-.search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; fill: var(--text-dark); }
-.user-tools { display: flex; align-items: center; gap: 22px; }
-.location-indicator { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #fff; font-weight: 600; white-space: nowrap; }
-.location-indicator svg { width: 14px; height: 14px; fill: var(--gold); }
-.tool-icon { display: flex; align-items: center; cursor: pointer; }
-.tool-icon svg { width: 18px; height: 18px; fill: #fff; transition: var(--transition-smooth); }
-.tool-icon:hover svg { fill: var(--gold); }
-.profile-avatar { width: 28px; height: 28px; border-radius: 50%; background: rgba(0,0,0,0.3); border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; cursor: pointer; }
-.profile-avatar svg { width: 13px; height: 13px; fill: var(--gold); }
-.aside-categories {
-    grid-area: aside-left; background: var(--bg-panels-glass);
-    backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect);
-    border-right: 1px solid var(--border-color);
-    padding: 20px 12px; display: flex; flex-direction: column;
-    position: relative; z-index: 5; overflow-y: auto; min-height: 0;
-}
-.section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 14px; padding-left: 6px; font-weight: 700; text-align: left; }
-.categories-list { display: flex; flex-direction: column; gap: 6px; list-style: none; }
-.category-item button {
-    width: 100%; background: rgba(10,10,10,0.54); border: 1px solid rgba(229,193,88,0.28);
-    padding: 10px; border-radius: 12px; display: flex; align-items: center; justify-content: flex-start; gap: 12px;
-    transition: var(--transition-smooth); cursor: pointer; text-align: left; color: inherit;
-}
-.category-item button:hover { background: rgba(229,193,88,0.08); transform: translateX(2px); }
-.category-item.active button { border-color: var(--gold); background: rgba(229,193,88,0.10); }
-.icon-container { width: 30px; height: 30px; flex: 0 0 30px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-.category-emoji { font-size: 16px; line-height: 1; }
-.category-item.active .icon-container { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 15px rgba(229,193,88,0.4); color:#000; }
-.category-text-info { display: flex; flex-direction: column; align-items: flex-start; flex: 1; min-width: 0; text-align: left; }
-.category-name { color: #fff; font-size: 11.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
-.category-item.active .category-name { color: var(--gold); }
-.category-count { color: var(--text-dark); font-size: 9px; width: 100%; }
-.main-boulevard { grid-area: main; position: relative; overflow: hidden; background-image: var(--page-bg); background-size: cover; background-position: center bottom; background-repeat: no-repeat; z-index: 2; }
-.boulevard-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.04) 45%, rgba(0,0,0,0.28) 100%); pointer-events: none; z-index: 1; }
-.welcome-billboard { position: absolute; top: 42px; left: 50%; transform: translateX(-50%); text-align: center; width: 92%; pointer-events: none; z-index: 2; }
-.welcome-billboard h2 { font-family: var(--font-serif); color: var(--text-main); font-size: 24px; letter-spacing: 7px; text-transform: uppercase; text-shadow: 0 2px 12px rgba(0,0,0,0.95); }
-.welcome-billboard p { font-size: 10px; color: var(--gold); font-weight: 700; margin-top: 6px; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.95); }
-.subcategory-badge { position:absolute; left:50%; top:110px; transform:translateX(-50%); z-index:3; display:inline-flex; gap:8px; align-items:center; padding:7px 14px; border-radius:999px; background:rgba(0,0,0,.58); border:1px solid rgba(229,193,88,.35); color:var(--gold); font-size:11px; font-weight:700; letter-spacing:.8px; }
-.aside-showcase-list { grid-area: aside-right; background: var(--bg-panels-glass); backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; position: relative; z-index: 5; overflow: hidden; }
-.showcase-header { padding: 20px 14px 8px 14px; }
-.showcase-header h2 { font-family: var(--font-serif); color: var(--gold); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
-.showcase-stats { font-size: 10px; color: #fff; margin-top: 1px; }
-.sort-box { padding: 0 14px 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-.sort-select { width: 100%; background: rgba(0,0,0,0.42); border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; padding: 6px 10px; color: #fff; font-size: 11px; outline: none; cursor: pointer; }
-.shops-scroll-area { flex: 1; overflow-y: auto; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
-.shop-card { background: var(--bg-cards-glass); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; overflow: hidden; display: flex; cursor: pointer; min-height: 64px; transition: var(--transition-smooth); }
-.shop-card:hover { border-color: rgba(229,193,88,0.45); background: rgba(229,193,88,0.10); transform: translateX(2px); }
-.shop-thumb-wrapper { width: 64px; height: 64px; flex-shrink: 0; background:#111; display:flex; align-items:center; justify-content:center; }
-.shop-thumb { width: 100%; height: 100%; object-fit: cover; }
-.shop-thumb-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:24px; background: rgba(229,193,88,0.08); }
-.shop-details { flex: 1; padding: 6px 10px; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
-.shop-title { font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.shop-segment { font-size: 9.5px; color: var(--gold); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.shop-rating-row { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
-.star-icon { width: 10px; height: 10px; fill: var(--gold); }
-.rating-value { font-size: 10px; font-weight: 700; color: #fff; }
-.rating-count { font-size: 9.5px; color: var(--text-dark); }
-.status-indicator { margin-left: auto; font-size: 9.5px; font-weight: 700; color: var(--green); }
-.status-indicator.closed { color: var(--red); }
-.empty-state { color: var(--text-dark); border:1px dashed rgba(229,193,88,.25); border-radius:10px; text-align:center; padding:24px 12px; font-size:11.5px; line-height:1.55; }
-.action-footer-box { padding: 10px 14px; border-top: 1px solid rgba(255,255,255,0.08); }
-.btn-view-all-shops { width: 100%; background: var(--gold); border: none; border-radius: 6px; padding: 8px; color: #000; font-size: 11.5px; font-weight: 700; cursor: pointer; transition: var(--transition-smooth); }
-.btn-view-all-shops:hover { background: #f1cd6b; }
-.pie-pagina { width: 100%; height: 24px; background-color: #000; color: #8c8c8c; font-size: 11px; display: flex; justify-content: center; align-items: center; text-align: center; border-top: 1px solid #1a1a1a; z-index: 5; font-family: Arial, Helvetica, sans-serif; flex-shrink:0; }
-@media (min-width: 721px) and (max-width: 1024px) { .dashboard-container { grid-template-columns: 210px minmax(0,1fr) 250px; } .search-wrapper { max-width: 280px; } .user-tools { gap: 12px; } }
-@media (max-width: 720px) {
-    html, body { width: 100%; height: 100%; overflow: hidden !important; background:#020202 !important; }
-    body { min-height: 100svh !important; }
-    .dashboard-container {
-        width:100% !important; height: calc(100svh - 24px) !important; min-height:0 !important; overflow:hidden !important;
-        display:grid !important; grid-template-columns:1fr !important;
-        grid-template-rows:108px 58px minmax(0, 1fr) 225px !important;
-        grid-template-areas:"header" "aside-left" "main" "aside-right" !important;
-    }
-    .header-top {
-        height:108px !important; min-height:108px !important; display:grid !important;
-        grid-template-columns:1fr auto !important; grid-template-rows:52px 40px !important;
-        grid-template-areas:"brand tools" "search search" !important; align-items:center !important;
-        gap:6px !important; padding:7px 14px 9px !important; background:rgba(2,2,2,.96) !important;
-        border-bottom:1px solid rgba(229,193,88,.25) !important; z-index:100 !important;
-    }
-    .brand-box { grid-area:brand !important; justify-self:start !important; align-self:center !important; }
-    .brand-box img { height:48px !important; width:auto !important; }
-    .search-wrapper { grid-area:search !important; width:100% !important; max-width:none !important; margin:0 !important; z-index:20 !important; }
-    .search-input { width:100% !important; height:34px !important; padding:0 40px 0 15px !important; border-radius:999px !important; text-align:left !important; font-size:12px !important; background:rgba(0,0,0,.58) !important; border:1px solid rgba(229,193,88,.26) !important; }
-    .search-icon { right:14px !important; width:15px !important; height:15px !important; fill:#e5c158 !important; }
-    .user-tools { grid-area:tools !important; justify-self:end !important; width:auto !important; gap:10px !important; order:initial !important; }
-    .location-indicator { font-size:0 !important; gap:0 !important; }
-    .location-indicator svg { width:17px !important; height:17px !important; }
-    .tool-icon.icon-corazon { display:none !important; }
-    .profile-avatar { width:32px !important; height:32px !important; }
-    .aside-categories { height:58px !important; min-height:58px !important; padding:8px 10px !important; border-right:none !important; border-bottom:1px solid rgba(229,193,88,.22) !important; overflow-x:auto !important; overflow-y:hidden !important; display:block !important; background:rgba(5,5,5,.82) !important; z-index:50 !important; }
-    .section-title { display:none !important; }
-    .categories-list { display:flex !important; flex-direction:row !important; gap:8px !important; overflow-x:auto !important; overflow-y:hidden !important; padding:0 0 4px !important; list-style:none !important; }
-    .category-item { flex:0 0 auto !important; }
-    .category-item button { width:auto !important; min-width:145px !important; height:42px !important; padding:7px 10px !important; border-radius:12px !important; gap:9px !important; white-space:nowrap !important; }
-    .icon-container { width:25px !important; height:25px !important; flex:0 0 25px !important; }
-    .category-name { font-size:10.5px !important; max-width:100px !important; }
-    .category-count { font-size:8.5px !important; }
-    .main-boulevard { height:auto !important; min-height:0 !important; overflow:hidden !important; background-size:cover !important; background-position:center bottom !important; }
-    .global-background-underlay img { object-fit:cover !important; object-position:center bottom !important; }
-    .boulevard-overlay { background:linear-gradient(to bottom,rgba(0,0,0,.54) 0%,rgba(0,0,0,.16) 38%,rgba(0,0,0,.28) 100%) !important; }
-    .welcome-billboard { top:16px !important; width:94% !important; z-index:5 !important; }
-    .welcome-billboard h2 { font-size:20px !important; letter-spacing:5px !important; line-height:1.1 !important; text-shadow:0 3px 14px #000 !important; }
-    .welcome-billboard p { max-width:330px !important; margin:7px auto 0 !important; font-size:8.8px !important; line-height:1.35 !important; letter-spacing:1.4px !important; text-shadow:0 2px 10px #000 !important; }
-    .subcategory-badge { top:72px !important; font-size:10px !important; padding:5px 11px !important; max-width:88%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    .aside-showcase-list { height:225px !important; min-height:0 !important; display:flex !important; flex-direction:column !important; border-left:none !important; border-top:1px solid rgba(229,193,88,.22) !important; overflow:hidden !important; background:rgba(5,5,5,.88) !important; z-index:50 !important; }
-    .showcase-header { padding:10px 14px 4px !important; flex-shrink:0 !important; }
-    .showcase-header h2 { font-size:15px !important; letter-spacing:2px !important; }
-    .showcase-stats { font-size:10px !important; margin-top:2px !important; }
-    .sort-box { padding:4px 14px 8px !important; flex-shrink:0 !important; }
-    .sort-select { height:34px !important; font-size:11px !important; border-radius:9px !important; }
-    .shops-scroll-area { flex:1 !important; min-height:0 !important; max-height:none !important; display:flex !important; flex-direction:column !important; gap:7px !important; overflow-y:auto !important; padding:7px 14px 12px !important; }
-    .shop-card { min-height:58px !important; height:58px !important; border-radius:9px !important; }
-    .shop-thumb-wrapper { width:58px !important; height:58px !important; }
-    .shop-details { padding:6px 9px !important; }
-    .shop-title { font-size:11.5px !important; }
-    .shop-segment, .rating-count, .status-indicator { font-size:9px !important; }
-    .empty-state { padding:18px 12px !important; font-size:11px !important; line-height:1.45 !important; }
-    .action-footer-box { display:none !important; }
-    .pie-pagina { position:fixed !important; left:0 !important; right:0 !important; bottom:0 !important; width:100% !important; height:24px !important; z-index:200 !important; background:#000 !important; border-top:1px solid #1a1a1a !important; font-size:10px !important; color:#8c8c8c !important; }
-}
-@media (max-width: 380px) {
-    .dashboard-container { grid-template-rows:104px 54px minmax(0,1fr) 210px !important; }
-    .header-top { height:104px !important; min-height:104px !important; }
-    .brand-box img { height:44px !important; }
-    .aside-categories { height:54px !important; min-height:54px !important; }
-    .category-item button { min-width:132px !important; height:38px !important; }
-    .welcome-billboard h2 { font-size:18px !important; letter-spacing:4px !important; }
-    .aside-showcase-list { height:210px !important; }
-}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urbanex - Odontología</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* URBANEX REAL SUBCATEGORY PAGE FIX 2026-07-08 */
 
-        :root { --page-bg: url("../../imagenes/Salud.png"); }
-    </style>
+:root{--gold:#e5c158;--gold2:#f4d675;--line:rgba(229,193,88,.24);--muted:#b9b9b9}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#000;color:#fff;font-family:Montserrat,Arial,sans-serif;overflow:hidden}a{text-decoration:none;color:inherit}button,input,select{font-family:inherit}
+.ux-header{position:fixed;left:0;right:0;top:0;height:58px;z-index:50;display:grid;grid-template-columns:240px 1fr 330px;align-items:center;gap:14px;padding:0 18px;background:linear-gradient(90deg,#050505,rgba(10,8,6,.97),#050505);border-bottom:1px solid var(--line)}
+.ux-brand img{height:50px;display:block}.ux-search{position:relative;max-width:440px;width:100%;justify-self:center}.ux-search input{width:100%;height:34px;border-radius:999px;border:1px solid rgba(255,255,255,.13);background:rgba(0,0,0,.55);color:#fff;text-align:center;padding:0 42px 0 18px;outline:none;font-size:12px}.ux-search span{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--gold)}
+.ux-tools{display:flex;align-items:center;justify-content:flex-end;gap:14px;font-size:12px;font-weight:800}.ux-tools .pin{color:var(--gold)}.ux-round{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--gold);border-radius:50%;color:var(--gold);background:rgba(0,0,0,.36)}
+.ux-footer{position:fixed;left:0;right:0;bottom:0;height:24px;z-index:60;display:grid;place-items:center;background:#000;border-top:1px solid #1b1b1b;color:#8d8d8d;font-size:11px}
+.ux-app{position:fixed;left:0;right:0;top:58px;bottom:24px;display:grid;grid-template-columns:240px minmax(0,1fr) 292px;min-height:0;background:#000}
+.ux-left{min-height:0;overflow-y:auto;padding:17px 12px;background:linear-gradient(180deg,rgba(10,7,4,.92),rgba(0,0,0,.92));border-right:1px solid var(--line)}.ux-label{margin:0 0 15px 6px;color:var(--gold);font-size:10px;font-weight:900;letter-spacing:2.4px;text-transform:uppercase}.ux-subnav{display:grid;gap:7px}.ux-subitem{min-height:52px;display:flex;align-items:center;gap:11px;padding:8px 10px;border:1px solid rgba(229,193,88,.22);border-radius:12px;background:rgba(6,6,6,.68);transition:.18s ease}.ux-subitem:hover{border-color:var(--gold);background:rgba(229,193,88,.10);transform:translateX(2px)}.ux-subitem.active{border-color:var(--gold);background:linear-gradient(90deg,rgba(229,193,88,.28),rgba(12,8,0,.72))}.ux-ico{width:32px;height:32px;display:grid;place-items:center;flex:0 0 32px;border-radius:11px;background:rgba(255,255,255,.08);font-size:16px}.active .ux-ico{background:var(--gold);color:#111}.ux-subtxt{min-width:0}.ux-subtxt strong{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ux-subtxt span{display:block;margin-top:2px;color:var(--muted);font-size:10px}.ux-subitem.active strong{color:var(--gold2)}
+.ux-main{position:relative;min-width:0;min-height:0;overflow:hidden;background:#050505}.ux-main::before{content:"";position:absolute;inset:0;background-image:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.66)),var(--page-bg);background-size:cover;background-position:center;background-repeat:no-repeat;z-index:0}.ux-main::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 16%,rgba(229,193,88,.16),transparent 24%),linear-gradient(90deg,rgba(0,0,0,.40),transparent 35%,rgba(0,0,0,.40));z-index:1;pointer-events:none}.ux-main-inner{position:relative;z-index:2;height:100%;padding:38px 34px 26px;display:grid;grid-template-rows:auto minmax(0,1fr);gap:18px}.ux-hero{text-align:center}.ux-hero h1{margin:0;font-family:Cinzel,Georgia,serif;font-size:clamp(32px,4vw,56px);letter-spacing:11px;line-height:1;color:#fff;text-shadow:0 7px 26px #000}.ux-hero p{margin:12px auto 0;color:var(--gold);font-size:11px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase}.ux-pill{margin:17px auto 0;width:max-content;max-width:95%;display:inline-flex;align-items:center;gap:9px;padding:8px 18px;border:1px solid var(--gold);border-radius:999px;background:rgba(0,0,0,.62);font-size:13px;font-weight:900;color:var(--gold2)}
+.ux-business-panel{min-height:0;align-self:end;width:min(980px,96%);margin:0 auto;padding:16px;border:1px solid rgba(229,193,88,.28);border-radius:20px;background:rgba(3,3,3,.72);backdrop-filter:blur(16px);box-shadow:0 24px 70px rgba(0,0,0,.75)}.ux-panel-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:2px 4px 12px;border-bottom:1px solid rgba(229,193,88,.14)}.ux-panel-head h2{margin:0;font-family:Cinzel,Georgia,serif;color:var(--gold);font-size:19px;letter-spacing:2px;text-transform:uppercase}.ux-panel-head p{margin:4px 0 0;color:var(--muted);font-size:11px}.ux-panel-actions{display:flex;gap:8px;align-items:center}.ux-panel-actions input,.ux-panel-actions select{height:34px;border:1px solid rgba(255,255,255,.13);border-radius:10px;background:rgba(0,0,0,.65);color:#fff;padding:0 11px;font-size:11px;outline:none}.ux-grid{margin-top:13px;max-height:calc(100vh - 280px);overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;padding-right:4px}.ux-card{display:grid;grid-template-columns:74px 1fr;min-height:104px;overflow:hidden;border:1px solid rgba(255,255,255,.10);border-radius:14px;background:linear-gradient(135deg,rgba(18,18,18,.92),rgba(6,6,6,.88));transition:.18s ease}.ux-card:hover{transform:translateY(-3px);border-color:rgba(229,193,88,.54);background:rgba(229,193,88,.10)}.ux-logo{width:74px;height:104px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(229,193,88,.18),rgba(0,0,0,.65));color:var(--gold);font-size:24px;font-weight:900;overflow:hidden}.ux-logo img{width:100%;height:100%;object-fit:cover}.ux-card-body{min-width:0;padding:11px 12px;display:flex;flex-direction:column;justify-content:center}.ux-card-body h3{margin:0;color:#fff;font-size:14px;line-height:1.25}.ux-card-body .tag{margin-top:5px;color:var(--gold);font-size:10px;font-weight:800}.ux-card-body .addr{margin-top:6px;color:#bcbcbc;font-size:10px;line-height:1.35}.ux-card-bottom{margin-top:9px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px}.ux-badge{color:#000;background:var(--gold);border-radius:999px;padding:3px 8px;font-weight:900}.ux-featured{color:var(--gold);font-weight:900}.ux-empty{grid-column:1/-1;min-height:160px;display:grid;place-items:center;text-align:center;border:1px dashed rgba(229,193,88,.32);border-radius:15px;background:rgba(0,0,0,.46);color:#d0d0d0;padding:24px;font-size:13px;line-height:1.5}
+.ux-right{min-height:0;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(10,7,4,.92),rgba(0,0,0,.94));border-left:1px solid var(--line);overflow:hidden}.ux-right-head{padding:21px 14px 10px}.ux-right-head h2{margin:0;font-family:Cinzel,Georgia,serif;color:var(--gold);font-size:16px;letter-spacing:1.5px;text-transform:uppercase}.ux-right-head p{margin:4px 0 0;font-size:11px;color:#fff}.ux-sort{padding:0 14px 12px}.ux-sort select{width:100%;height:36px;border:1px solid rgba(255,255,255,.13);border-radius:8px;background:#080808;color:#fff;padding:0 9px;font-size:11px}.ux-featured-list{min-height:0;flex:1;overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:8px}.ux-mini{display:grid;grid-template-columns:58px 1fr;min-height:64px;border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden;background:rgba(16,16,16,.74)}.ux-mini-logo{width:58px;height:64px;display:grid;place-items:center;background:#101010;color:var(--gold);overflow:hidden}.ux-mini-logo img{width:100%;height:100%;object-fit:cover}.ux-mini-body{min-width:0;padding:8px 9px;display:flex;flex-direction:column;justify-content:center}.ux-mini-body strong{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ux-mini-body span{margin-top:3px;color:var(--gold);font-size:9px}.ux-mini-body small{margin-top:3px;color:#aaa;font-size:9px}.ux-back{margin:12px 14px 10px;height:36px;border-radius:8px;background:var(--gold);color:#111;display:grid;place-items:center;font-size:12px;font-weight:900}.ux-note{padding:16px;border:1px dashed rgba(229,193,88,.25);border-radius:12px;color:#cfcfcf;text-align:center;font-size:12px;line-height:1.45}
+@media(max-width:900px){.ux-header{height:104px;grid-template-columns:1fr auto;grid-template-rows:52px 38px;grid-template-areas:"brand tools" "search search";padding:7px 12px}.ux-brand{grid-area:brand}.ux-brand img{height:48px}.ux-search{grid-area:search;max-width:none}.ux-tools{grid-area:tools}.ux-tools .loc-text,.ux-tools .heart{display:none}.ux-app{top:104px;bottom:24px;grid-template-columns:1fr;grid-template-rows:58px minmax(0,1fr);overflow:hidden}.ux-left{height:58px;overflow-x:auto;overflow-y:hidden;border-right:none;border-bottom:1px solid var(--line);padding:8px 10px}.ux-label{display:none}.ux-subnav{display:flex;gap:8px}.ux-subitem{min-width:148px;height:42px;min-height:42px;padding:6px 9px}.ux-ico{width:28px;height:28px;flex-basis:28px}.ux-subtxt strong{font-size:11px}.ux-subtxt span{font-size:9px}.ux-main-inner{padding:18px 12px 16px;gap:12px;overflow-y:auto}.ux-hero h1{font-size:24px;letter-spacing:5px}.ux-hero p{font-size:8.5px;letter-spacing:1.4px}.ux-pill{margin-top:10px;padding:6px 13px;font-size:11px}.ux-business-panel{width:100%;align-self:start;padding:12px;border-radius:16px}.ux-panel-head{align-items:flex-start;flex-direction:column}.ux-panel-actions{width:100%;display:grid;grid-template-columns:1fr}.ux-grid{max-height:none;grid-template-columns:1fr;overflow:visible}.ux-right{display:none}.ux-footer{font-size:10px}.ux-card{grid-template-columns:70px 1fr}.ux-logo{width:70px}}
+
+</style>
 </head>
 <body>
-<div class="dashboard-container">
-    <div class="global-background-underlay"><img src="../../imagenes/Salud.png" alt="Salud de Loja"></div>
-
-    <header class="header-top">
-        <a href="../../boulevard.html" class="brand-box" title="Volver al Boulevard">
-            <img src="../../imagenes/logo.png" alt="Logo Urbanex">
-        </a>
-        <div class="search-wrapper">
-            <input type="search" id="siteSearch" class="search-input" placeholder="Buscar en Odontología..." autocomplete="off">
-            <svg class="search-icon" viewBox="0 0 24 24" role="button" aria-label="Buscar" tabindex="0"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-        </div>
-        <div class="user-tools">
-            <div class="location-indicator"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>Loja, Ecuador</span></div>
-            <div class="tool-icon icon-corazon"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
-            <div class="profile-avatar"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
-        </div>
-    </header>
-
-    <aside class="aside-categories">
-        <h2 class="section-title">Subcategorías</h2>
-        <ul class="categories-list">
-            
-            <li class="category-item">
-                <button type="button" onclick="window.location.href='clinicas.html'">
-                    <div class="icon-container"><span class="category-emoji">🏥</span></div>
-                    <div class="category-text-info">
-                        <span class="category-name">Clínicas</span>
-                        <span class="category-count" id="count_clinicas">0 locales</span>
-                    </div>
-                </button>
-            </li>
-            <li class="category-item active">
-                <button type="button" onclick="window.location.href='odontologia.html'">
-                    <div class="icon-container"><span class="category-emoji">🦷</span></div>
-                    <div class="category-text-info">
-                        <span class="category-name">Odontología</span>
-                        <span class="category-count" id="count_odontologia">0 locales</span>
-                    </div>
-                </button>
-            </li>
-            <li class="category-item">
-                <button type="button" onclick="window.location.href='opticas.html'">
-                    <div class="icon-container"><span class="category-emoji">👓</span></div>
-                    <div class="category-text-info">
-                        <span class="category-name">Ópticas</span>
-                        <span class="category-count" id="count_opticas">0 locales</span>
-                    </div>
-                </button>
-            </li>
-            <li class="category-item">
-                <button type="button" onclick="window.location.href='gimnasios.html'">
-                    <div class="icon-container"><span class="category-emoji">🏋️</span></div>
-                    <div class="category-text-info">
-                        <span class="category-name">Gimnasios</span>
-                        <span class="category-count" id="count_gimnasios">0 locales</span>
-                    </div>
-                </button>
-            </li>
-            <li class="category-item">
-                <button type="button" onclick="window.location.href='spas.html'">
-                    <div class="icon-container"><span class="category-emoji">🧖</span></div>
-                    <div class="category-text-info">
-                        <span class="category-name">Spas</span>
-                        <span class="category-count" id="count_spas">0 locales</span>
-                    </div>
-                </button>
-            </li>
-        </ul>
-    </aside>
-
-    <main class="main-boulevard">
-        <div class="boulevard-overlay"></div>
-        <div class="welcome-billboard">
-            <h2>ODONTOLOGÍA</h2>
-            <p>ODONTOLOGÍA DE LOJA EN UN SOLO LUGAR</p>
-        </div>
-        <div class="subcategory-badge"><span>🦷</span><span>Odontología</span></div>
-    </main>
-
-    <aside class="aside-showcase-list">
-        <div class="showcase-header"><h2>Destacados</h2><p class="showcase-stats" id="showcaseStats">Cargando negocios...</p></div>
-        <div class="sort-box"><select class="sort-select" id="sortSelect"><option value="featured">Ordenar por: Destacados</option><option value="rating">Ordenar por: Mayor Calificación</option><option value="name">Ordenar por: Nombre</option></select></div>
-        <div class="shops-scroll-area" id="shopsList"><div class="empty-state">Cargando información desde Supabase...</div></div>
-        <div class="action-footer-box"><button type="button" class="btn-view-all-shops" onclick="window.location.href='../salud.html'">Volver a Salud y Bienestar</button></div>
-    </aside>
+<header class="ux-header">
+  <a class="ux-brand" href="../../index.html"><img src="../../imagenes/logo.png" alt="Urbanex"></a>
+  <div class="ux-search"><input id="searchInput" type="search" placeholder="Buscar"><span>⌕</span></div>
+  <div class="ux-tools"><span class="pin">●</span><span class="loc-text">Loja, Ecuador</span><a class="heart" href="../../boulevard.html">♥</a><a class="ux-round" href="../../boulevard.html">⌂</a></div>
+</header>
+<div class="ux-app">
+  <aside class="ux-left"><h2 class="ux-label">Subcategorías</h2><nav id="subNav" class="ux-subnav"></nav></aside>
+  <main class="ux-main">
+    <div class="ux-main-inner">
+      <section class="ux-hero"><h1 id="pageTitle">ODONTOLOGÍA</h1><p id="pageSubtitle">ODONTOLOGÍA DE LOJA EN UN SOLO LUGAR</p><div id="pagePill" class="ux-pill">🦷 <span>Odontología</span></div></section>
+      <section class="ux-business-panel">
+        <div class="ux-panel-head"><div><h2 id="panelTitle">Negocios en Odontología</h2><p id="businessCount">Cargando negocios...</p></div><div class="ux-panel-actions"><input id="panelSearch" type="search" placeholder="Buscar negocio"><select id="sortBusiness"><option value="featured">Destacados primero</option><option value="name">Nombre A–Z</option></select></div></div>
+        <div id="businessGrid" class="ux-grid"><div class="ux-empty">Cargando información desde Supabase...</div></div>
+      </section>
+    </div>
+  </main>
+  <aside class="ux-right"><div class="ux-right-head"><h2>Destacados</h2><p id="featuredCount">Cargando...</p></div><div class="ux-sort"><select><option>Ordenar por: Destacados</option></select></div><div id="featuredList" class="ux-featured-list"><div class="ux-note">Cargando destacados...</div></div><a id="backLink" class="ux-back" href="../salud.html">Volver</a></aside>
 </div>
-<footer class="pie-pagina">© 2026 Urbanex. Desarrollado por Neodat Consultores.</footer>
-
+<footer class="ux-footer">© 2026 Urbanex. Desarrollado por Neodat Consultores.</footer>
 <script type="module">
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-const ROOT_NAME = "Salud y Bienestar";
-const ROOT_TITLE = "Salud";
-const ROOT_ALIASES = [
-    "salud y bienestar",
-    "salud",
-    "bienestar"
-];
-const CURRENT_SUB = {
-    "slug": "odontologia",
-    "name": "Odontología",
-    "icon": "🦷",
-    "aliases": [
-        "odontologia",
-        "odontología",
-        "odontologo",
-        "odontólogo"
-    ]
-};
-const SUBCATEGORIES = [
-    {
-        "slug": "clinicas",
-        "name": "Clínicas",
-        "icon": "🏥",
-        "aliases": [
-            "clinicas",
-            "clínicas",
-            "clinica",
-            "clínica"
-        ]
-    },
-    {
-        "slug": "odontologia",
-        "name": "Odontología",
-        "icon": "🦷",
-        "aliases": [
-            "odontologia",
-            "odontología",
-            "odontologo",
-            "odontólogo"
-        ]
-    },
-    {
-        "slug": "opticas",
-        "name": "Ópticas",
-        "icon": "👓",
-        "aliases": [
-            "opticas",
-            "ópticas",
-            "optica",
-            "óptica"
-        ]
-    },
-    {
-        "slug": "gimnasios",
-        "name": "Gimnasios",
-        "icon": "🏋️",
-        "aliases": [
-            "gimnasios",
-            "gimnasio"
-        ]
-    },
-    {
-        "slug": "spas",
-        "name": "Spas",
-        "icon": "🧖",
-        "aliases": [
-            "spas",
-            "spa"
-        ]
-    }
-];
-const BUSINESS_URL = (slug) => `../../business/?slug=${slug}`;
-
-let categories = [];
-let rootCategories = [];
-let subCategories = [];
-let allBusinesses = [];
-let currentRoot = null;
-let currentSubcategory = null;
-let searchTerm = '';
-
-function esc(value) { return String(value || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function toNum(value) { const n = Number(value); return Number.isNaN(n) ? null : n; }
-function normalize(value) { return String(value || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' '); }
-function matchesAlias(name, aliases) { const n = normalize(name); return (aliases || []).some(a => normalize(a) === n); }
-function groupBy(items, key) { return (items || []).reduce((acc, item) => { const k = item[key]; if (k !== undefined && k !== null) (acc[k] ||= []).push(item); return acc; }, {}); }
-
-function isOpenNow(hours) {
-    if (!hours?.length) return false;
-    const now = new Date();
-    const today = now.getDay();
-    const row = hours.find(item => Number(item.day_of_week) === today && !item.is_closed);
-    if (!row) return false;
-    const current = now.getHours() * 60 + now.getMinutes();
-    const [oh, om] = String(row.open_time || '').split(':').map(Number);
-    const [ch, cm] = String(row.close_time || '').split(':').map(Number);
-    if (Number.isNaN(oh) || Number.isNaN(ch)) return false;
-    return current >= (oh * 60 + (om || 0)) && current <= (ch * 60 + (cm || 0));
+const PAGE = {"parentKey": "salud", "parentName": "Salud y Bienestar", "title": "ODONTOLOGÍA", "name": "Odontología", "icon": "🦷", "subtitle": "ODONTOLOGÍA DE LOJA EN UN SOLO LUGAR", "bg": "Salud.png", "back": "../salud.html", "aliases": ["Odontología", "Odontologia", "odontologia"], "siblings": [{"name": "Clínicas", "file": "clinicas.html"}, {"name": "Odontología", "file": "odontologia.html"}, {"name": "Ópticas", "file": "opticas.html"}, {"name": "Gimnasios", "file": "gimnasios.html"}, {"name": "Spas", "file": "spas.html"}], "siblingIcons": {"clinicas": "🏥", "odontologia": "🦷", "opticas": "👓", "gimnasios": "🏋️", "spas": "🧖"}};
+let categories = [], allBusinesses = [], currentSub = null, siblingSubs = [], businessesHere = [], textFilter = '';
+const $ = (id)=>document.getElementById(id);
+const norm = (v)=>String(v||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');
+const esc = (v)=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const num = (v)=>{ const n=Number(v); return Number.isFinite(n)?n:null; };
+function assetUrl(v){ const s=String(v||'').trim(); if(!s) return ''; if(/^https?:\/\//i.test(s) || /^data:/i.test(s)) return s; if(s.startsWith('/')) return '../..' + s; return '../../' + s.replace(/^\.\//,''); }
+function logoOf(b){ return assetUrl(b.logo_url || b.logo || b.logo_image || b.logo_path || b.image_url || b.cover_image || b.banner_image || ''); }
+function businessMatchesSub(b, subId){ const sid = num(subId); return num(b.subcategory_id) === sid || num(b.category_id) === sid; }
+function countForSub(sub){ return allBusinesses.filter(b=>businessMatchesSub(b, sub.id)).length; }
+function statusText(b){ if(typeof b.is_open === 'boolean') return b.is_open ? 'Abierto' : 'Cerrado'; if(typeof b.open_now === 'boolean') return b.open_now ? 'Abierto' : 'Cerrado'; return 'Ver negocio'; }
+function businessLink(b){ return '../../business/?slug=' + encodeURIComponent(b.slug || b.id || ''); }
+async function boot(){
+  document.documentElement.style.setProperty('--page-bg', `url("../../imagenes/${PAGE.bg}")`);
+  $('pageTitle').textContent = PAGE.title; $('pageSubtitle').textContent = PAGE.subtitle; $('pagePill').innerHTML = `${PAGE.icon} <span>${esc(PAGE.name)}</span>`;
+  $('searchInput').placeholder = `Buscar en ${PAGE.name}...`; $('panelTitle').textContent = `Negocios en ${PAGE.name}`; $('backLink').href = PAGE.back; $('backLink').textContent = 'Volver a ' + PAGE.parentName;
+  const [catRes, bizRes] = await Promise.all([
+    supabase.from('categories').select('id,name,icon,parent_id,sort_order').order('sort_order', { ascending: true }).order('name', { ascending: true }),
+    supabase.from('businesses').select('*').eq('is_active', true)
+  ]);
+  if(catRes.error){ console.error(catRes.error); showLoadError('No se pudieron cargar las categorías desde Supabase.'); return; }
+  if(bizRes.error){ console.error(bizRes.error); showLoadError('No se pudieron cargar los negocios desde Supabase.'); return; }
+  categories = catRes.data || []; allBusinesses = (bizRes.data || []).filter(b=>b.is_active !== false);
+  const aliases = PAGE.aliases.map(norm);
+  currentSub = categories.find(c => aliases.includes(norm(c.name)) && c.parent_id) || categories.find(c => aliases.includes(norm(c.name)));
+  const parentId = currentSub ? num(currentSub.parent_id) : null;
+  siblingSubs = parentId ? categories.filter(c => num(c.parent_id) === parentId) : categories.filter(c => PAGE.siblings.map(s=>norm(s.name)).includes(norm(c.name)));
+  siblingSubs.sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+  businessesHere = currentSub ? allBusinesses.filter(b=>businessMatchesSub(b, currentSub.id)) : [];
+  renderSubnav(); renderAll();
 }
-function avgRating(reviews) {
-    const approved = (reviews || []).filter(r => r.is_approved);
-    if (!approved.length) return null;
-    return approved.reduce((sum, r) => sum + Number(r.rating || 0), 0) / approved.length;
+function showLoadError(msg){ $('businessGrid').innerHTML = `<div class="ux-empty">${esc(msg)}</div>`; $('featuredList').innerHTML = `<div class="ux-note">No hay destacados para mostrar.</div>`; }
+function renderSubnav(){
+  const linksByName = Object.fromEntries(PAGE.siblings.map(s=>[norm(s.name),s.file]));
+  $('subNav').innerHTML = siblingSubs.map(sub=>{
+    const file = linksByName[norm(sub.name)] || (norm(sub.name).replace(/[^a-z0-9]+/g,'-') + '.html');
+    const active = currentSub && num(sub.id)===num(currentSub.id);
+    const c = countForSub(sub);
+    return `<a class="ux-subitem ${active?'active':''}" href="${esc(file)}"><span class="ux-ico">${esc(sub.icon || PAGE.siblingIcons[norm(sub.name)] || '•')}</span><span class="ux-subtxt"><strong>${esc(sub.name)}</strong><span>${c} local${c===1?'':'es'}</span></span></a>`;
+  }).join('');
 }
-function approvedReviews(reviews) { return (reviews || []).filter(r => r.is_approved).length; }
-function hasPromo(promos) {
-    const today = new Date().toISOString().slice(0,10);
-    return (promos || []).some(p => p.is_active && (!p.end_date || p.end_date >= today));
+function filteredBusinesses(){
+  let list = [...businessesHere];
+  if(textFilter){ const t = norm(textFilter); list = list.filter(b=>norm(`${b.name||''} ${b.address||''} ${b.description||''} ${b.city||''}`).includes(t)); }
+  const sort = $('sortBusiness').value;
+  if(sort==='name') list.sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'es'));
+  if(sort==='featured') list.sort((a,b)=>Number(b.is_featured===true)-Number(a.is_featured===true));
+  return list;
 }
-
-function categoryById(id) { return categories.find(c => toNum(c.id) === toNum(id)) || null; }
-function businessCategoryFromIds(b) {
-    return categoryById(b.category_id);
+function renderAll(){ renderBusinesses(); renderFeatured(); }
+function cardHtml(b){
+  const logo = logoOf(b); const logoHtml = logo ? `<img src="${esc(logo)}" alt="${esc(b.name)}" loading="lazy">` : (PAGE.icon || '🏪');
+  const featured = b.is_featured === true ? '<span class="ux-featured">Destacado</span>' : '<span></span>';
+  return `<a class="ux-card" href="${esc(businessLink(b))}"><div class="ux-logo">${logoHtml}</div><div class="ux-card-body"><h3>${esc(b.name || 'Negocio')}</h3><div class="tag">${esc(PAGE.name)}</div><div class="addr">${b.address ? '📍 '+esc(b.address) : 'Dirección no registrada'}</div><div class="ux-card-bottom"><span class="ux-badge">${esc(statusText(b))}</span>${featured}</div></div></a>`;
 }
-function businessSubcategoryFromIds(b) {
-    const explicitSub = categoryById(b.subcategory_id);
-    if (explicitSub) return explicitSub;
-
-    // Respaldo: algunos registros pueden guardar la subcategoría en category_id.
-    const categoryValue = categoryById(b.category_id);
-    if (categoryValue && categoryValue.parent_id) return categoryValue;
-
-    return null;
+function renderBusinesses(){
+  const list = filteredBusinesses();
+  $('businessCount').textContent = `${list.length} negocio${list.length===1?'':'s'} encontrado${list.length===1?'':'s'}`;
+  if(!list.length){ $('businessGrid').innerHTML = `<div class="ux-empty">No hay empresas registradas en ${esc(PAGE.name)} por ahora.<br>Cuando se carguen en Supabase con esta subcategoría, aparecerán aquí.</div>`; return; }
+  $('businessGrid').innerHTML = list.map(cardHtml).join('');
 }
-function businessRootFromIds(b) {
-    const explicitSub = categoryById(b.subcategory_id);
-    if (explicitSub && explicitSub.parent_id) return categoryById(explicitSub.parent_id);
-
-    const categoryValue = categoryById(b.category_id);
-    if (categoryValue && categoryValue.parent_id) return categoryById(categoryValue.parent_id);
-    if (categoryValue) return categoryValue;
-
-    return null;
+function renderFeatured(){
+  const featured = businessesHere.filter(b=>b.is_featured === true);
+  $('featuredCount').textContent = `${featured.length} destacado${featured.length===1?'':'s'} encontrado${featured.length===1?'':'s'}`;
+  if(!featured.length){ $('featuredList').innerHTML = `<div class="ux-note">No hay negocios destacados en esta sección por ahora.</div>`; return; }
+  $('featuredList').innerHTML = featured.map(b=>{
+    const logo = logoOf(b); const logoHtml = logo ? `<img src="${esc(logo)}" alt="${esc(b.name)}" loading="lazy">` : (PAGE.icon || '🏪');
+    return `<a class="ux-mini" href="${esc(businessLink(b))}"><div class="ux-mini-logo">${logoHtml}</div><div class="ux-mini-body"><strong>${esc(b.name || 'Negocio')}</strong><span>${esc(PAGE.name)} · Destacado</span><small>★ — Sin reseñas</small></div></a>`;
+  }).join('');
 }
-function findCurrentRoot() {
-    return rootCategories.find(c => matchesAlias(c.name, ROOT_ALIASES)) || null;
-}
-function findCurrentSubcategory() {
-    if (!CURRENT_SUB) return null;
-    const aliases = CURRENT_SUB.aliases || [CURRENT_SUB.name];
-    const rootId = currentRoot ? toNum(currentRoot.id) : null;
-    return subCategories.find(c => {
-        if (rootId !== null && toNum(c.parent_id) !== rootId) return false;
-        return matchesAlias(c.name, aliases);
-    }) || subCategories.find(c => matchesAlias(c.name, aliases)) || null;
-}
-function businessBelongsRoot(b) {
-    const root = businessRootFromIds(b);
-
-    if (currentRoot && root) {
-        return toNum(root.id) === toNum(currentRoot.id);
-    }
-
-    const catName = businessCategoryFromIds(b)?.name || b.categories?.name || '';
-    const subName = businessSubcategoryFromIds(b)?.name || b.subcategories?.name || '';
-    return matchesAlias(catName, ROOT_ALIASES) || matchesAlias(subName, ROOT_ALIASES);
-}
-function businessBelongsSubcategory(b) {
-    if (!CURRENT_SUB) return true;
-
-    const aliases = CURRENT_SUB.aliases || [CURRENT_SUB.name];
-    const resolvedSub = businessSubcategoryFromIds(b);
-
-    if (currentSubcategory && resolvedSub) {
-        return toNum(resolvedSub.id) === toNum(currentSubcategory.id);
-    }
-
-    const subName = resolvedSub?.name || b.subcategories?.name || '';
-    return matchesAlias(subName, aliases);
-}
-function businessMatchesSearch(b) {
-    if (!searchTerm) return true;
-    const text = `${b.name || ''} ${b.address || ''} ${b.categories?.name || ''} ${b.subcategories?.name || ''}`.toLowerCase();
-    return text.includes(searchTerm);
-}
-function filteredBusinesses() {
-    return allBusinesses
-        .filter(businessBelongsRoot)
-        .filter(businessBelongsSubcategory)
-        .filter(businessMatchesSearch);
-}
-
-async function safeSelect(table, select, extra = q => q) {
-    try {
-        const res = await extra(supabase.from(table).select(select));
-        if (res.error) { console.warn(`${table}:`, res.error.message); return []; }
-        return res.data || [];
-    } catch (err) {
-        console.warn(`${table}:`, err.message || err);
-        return [];
-    }
-}
-
-async function boot() {
-    try {
-        categories = await safeSelect('categories', 'id,name,icon,parent_id,sort_order', q => q.order('sort_order').order('name'));
-        rootCategories = categories.filter(c => !c.parent_id);
-        subCategories = categories.filter(c => c.parent_id);
-        currentRoot = findCurrentRoot();
-        currentSubcategory = findCurrentSubcategory();
-
-        const businesses = await safeSelect('businesses', 'id,name,slug,city,address,cover_image,is_featured,delivery_available,category_id,subcategory_id,is_active', q => q.eq('is_active', true));
-        const ids = businesses.map(b => b.id).filter(Boolean);
-
-        let hoursByBiz = {};
-        let reviewsByBiz = {};
-        let promosByBiz = {};
-
-        if (ids.length) {
-            const hours = await safeSelect('business_hours', 'business_id,day_of_week,open_time,close_time,is_closed', q => q.in('business_id', ids));
-            const reviews = await safeSelect('reviews', 'business_id,is_approved,rating', q => q.in('business_id', ids));
-            const promos = await safeSelect('promotions', 'business_id,is_active,end_date', q => q.in('business_id', ids));
-            hoursByBiz = groupBy(hours, 'business_id');
-            reviewsByBiz = groupBy(reviews, 'business_id');
-            promosByBiz = groupBy(promos, 'business_id');
-        }
-
-        allBusinesses = businesses.map(b => {
-            const cat = businessRootFromIds(b) || businessCategoryFromIds(b);
-            const sub = businessSubcategoryFromIds(b);
-            const businessHours = hoursByBiz[b.id] || [];
-            const businessReviews = reviewsByBiz[b.id] || [];
-            const businessPromos = promosByBiz[b.id] || [];
-            return {
-                ...b,
-                categories: cat ? { name: cat.name, icon: cat.icon } : null,
-                subcategories: sub ? { name: sub.name, icon: sub.icon } : null,
-                business_hours: businessHours,
-                reviews: businessReviews,
-                promotions: businessPromos,
-                _open: isOpenNow(businessHours),
-                _rating: avgRating(businessReviews),
-                _reviews: approvedReviews(businessReviews),
-                _promo: hasPromo(businessPromos)
-            };
-        });
-
-        renderSubcategoryCounts();
-        renderShowcase();
-    } catch (err) {
-        console.error(err);
-        document.getElementById('showcaseStats').textContent = 'Error de carga';
-        document.getElementById('shopsList').innerHTML = `<div class="empty-state">No se pudo cargar la información. Revise la conexión con Supabase.</div>`;
-    }
-}
-
-function countForSub(sub) {
-    return allBusinesses.filter(b => {
-        if (!businessBelongsRoot(b)) return false;
-
-        const resolvedSub = businessSubcategoryFromIds(b);
-        const subName = resolvedSub?.name || b.subcategories?.name || '';
-        const resolvedSubId = resolvedSub ? toNum(resolvedSub.id) : null;
-
-        return matchesAlias(subName, sub.aliases) ||
-               (resolvedSubId !== null && currentSubcategory && resolvedSubId === toNum(currentSubcategory.id) && matchesAlias(sub.name, sub.aliases));
-    }).length;
-}
-function renderSubcategoryCounts() {
-    SUBCATEGORIES.forEach(sub => {
-        const count = countForSub(sub);
-        const target = document.getElementById(`count_${sub.slug.replaceAll('-', '_')}`);
-        if (target) target.textContent = `${count} local${count === 1 ? '' : 'es'}`;
-    });
-}
-function shopCard(business) {
-    const img = business.cover_image
-        ? `<img class="shop-thumb" src="${esc(business.cover_image)}" alt="${esc(business.name)}" loading="lazy">`
-        : `<div class="shop-thumb-placeholder">${business.subcategories?.icon || business.categories?.icon || '💊'}</div>`;
-    const rating = business._rating ? business._rating.toFixed(1) : '—';
-    const count = business._reviews ? `(${business._reviews})` : 'Sin reseñas';
-    const status = business._open ? `<span class="status-indicator">Abierto</span>` : `<span class="status-indicator closed">Cerrado</span>`;
-    const resolvedSub = businessSubcategoryFromIds(business);
-    const resolvedRoot = businessRootFromIds(business);
-    const label = resolvedSub?.name || resolvedRoot?.name || business.subcategories?.name || business.categories?.name || (CURRENT_SUB?.name || ROOT_NAME);
-    return `
-        <a class="shop-card" href="${BUSINESS_URL(business.slug)}">
-            <div class="shop-thumb-wrapper">${img}</div>
-            <div class="shop-details">
-                <div class="shop-title">${esc(business.name)}</div>
-                <div class="shop-segment">${esc(label)}${business.is_featured ? ' · Destacado' : ''}</div>
-                <div class="shop-rating-row">
-                    <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                    <span class="rating-value">${rating}</span>
-                    <span class="rating-count">${count}</span>
-                    ${status}
-                </div>
-            </div>
-        </a>`;
-}
-function renderShowcase() {
-    const baseList = filteredBusinesses();
-
-    // IMPORTANTE: en el panel "Destacados" solo aparecen negocios marcados manualmente.
-    // No se rellena por defecto con negocios no destacados.
-    const list = baseList.filter(b => b.is_featured === true || b.is_featured === 1 || b.is_featured === 'true');
-
-    const sort = document.getElementById('sortSelect')?.value || 'featured';
-    if (sort === 'rating') list.sort((a,b) => (b._rating || 0) - (a._rating || 0));
-    if (sort === 'name') list.sort((a,b) => String(a.name).localeCompare(String(b.name), 'es'));
-    if (sort === 'featured') list.sort((a,b) => (b._rating || 0) - (a._rating || 0));
-
-    const stats = document.getElementById('showcaseStats');
-    if (stats) {
-        stats.textContent = `${list.length} destacado${list.length === 1 ? '' : 's'} encontrado${list.length === 1 ? '' : 's'}`;
-    }
-
-    const target = document.getElementById('shopsList');
-    if (!target) return;
-
-    const label = CURRENT_SUB?.name || ROOT_NAME;
-    if (!list.length) {
-        target.innerHTML = `<div class="empty-state">No hay negocios destacados en ${esc(label)} por ahora.</div>`;
-        return;
-    }
-
-    target.innerHTML = list.map(shopCard).join('');
-}
-
-document.getElementById('siteSearch').addEventListener('input', (event) => {
-    searchTerm = event.target.value.toLowerCase().trim();
-    renderShowcase();
-});
-document.getElementById('sortSelect').addEventListener('change', renderShowcase);
+$('searchInput').addEventListener('input',e=>{textFilter=e.target.value; renderBusinesses();});
+$('panelSearch').addEventListener('input',e=>{textFilter=e.target.value; $('searchInput').value=e.target.value; renderBusinesses();});
+$('sortBusiness').addEventListener('change',renderBusinesses);
 boot();
-</script>
 
+</script>
 </body>
 </html>

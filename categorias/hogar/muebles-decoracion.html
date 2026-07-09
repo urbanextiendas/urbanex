@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Urbanex - Farmacias</title>
+<title>Urbanex - Muebles y Decoración</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@400;500;700;800;900&display=swap" rel="stylesheet">
@@ -35,9 +35,9 @@
   <aside class="ux-left"><h2 class="ux-label">Subcategorías</h2><nav id="subNav" class="ux-subnav"></nav></aside>
   <main class="ux-main">
     <div class="ux-main-inner">
-      <section class="ux-hero"><h1 id="pageTitle">FARMACIAS</h1><p id="pageSubtitle">FARMACIAS DE LOJA EN UN SOLO LUGAR</p><div id="pagePill" class="ux-pill">💊 <span>Farmacias</span></div></section>
+      <section class="ux-hero"><h1 id="pageTitle">MUEBLES Y DECORACIÓN</h1><p id="pageSubtitle">MUEBLES Y DECORACIÓN DE LOJA EN UN SOLO LUGAR</p><div id="pagePill" class="ux-pill">🛋️ <span>Muebles y Decoración</span></div></section>
       <section class="ux-business-panel">
-        <div class="ux-panel-head"><div><h2 id="panelTitle">Negocios en Farmacias</h2><p id="businessCount">Cargando negocios...</p></div><div class="ux-panel-actions"><input id="panelSearch" type="search" placeholder="Buscar negocio"><select id="sortBusiness"><option value="featured">Destacados primero</option><option value="name">Nombre A–Z</option></select></div></div>
+        <div class="ux-panel-head"><div><h2 id="panelTitle">Negocios en Muebles y Decoración</h2><p id="businessCount">Cargando negocios...</p></div><div class="ux-panel-actions"><input id="panelSearch" type="search" placeholder="Buscar negocio"><select id="sortBusiness"><option value="featured">Destacados primero</option><option value="name">Nombre A–Z</option></select></div></div>
         <div id="businessGrid" class="ux-grid"><div class="ux-empty">Cargando información desde Supabase...</div></div>
       </section>
     </div>
@@ -51,7 +51,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-const PAGE = {"parentKey": "comercio", "parentName": "Comercio", "title": "FARMACIAS", "name": "Farmacias", "icon": "💊", "subtitle": "FARMACIAS DE LOJA EN UN SOLO LUGAR", "bg": "Comercio.png", "back": "../comercio.html", "aliases": ["Farmacias", "Farmacias", "farmacias"], "siblings": [{"name": "Ropa y Moda", "file": "ropa-y-moda.html"}, {"name": "Calzado", "file": "calzado.html"}, {"name": "Electrónica", "file": "electronica.html"}, {"name": "Supermercados", "file": "supermercados.html"}, {"name": "Ferreterías", "file": "ferreterias.html"}, {"name": "Farmacias", "file": "farmacias.html"}], "siblingIcons": {"ropa y moda": "👕", "calzado": "👟", "electronica": "💻", "supermercados": "🛒", "ferreterias": "🛠️", "farmacias": "💊"}};
+const PAGE = {"parentKey": "hogar", "parentName": "Hogar", "title": "MUEBLES Y DECORACIÓN", "name": "Muebles y Decoración", "icon": "🛋️", "subtitle": "MUEBLES Y DECORACIÓN DE LOJA EN UN SOLO LUGAR", "bg": "Hogar.png", "back": "../comercio.html", "aliases": ["Muebles y Decoración", "Muebles y Decoracion", "muebles decoracion"], "siblings": [{"name": "Electrodomésticos", "file": "electrodomesticos.html"}, {"name": "Muebles y Decoración", "file": "muebles-decoracion.html"}, {"name": "Reparación Técnica", "file": "reparacion-tecnica.html"}], "siblingIcons": {"electrodomesticos": "🔌", "muebles y decoracion": "🛋️", "reparacion tecnica": "🧰"}};
 let categories = [], allBusinesses = [], currentSub = null, siblingSubs = [], businessesHere = [], textFilter = '';
 const $ = (id)=>document.getElementById(id);
 const norm = (v)=>String(v||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ');

@@ -315,7 +315,38 @@
     background: none; border: none; color: #666;
     font-size: 20px; cursor: pointer; padding: 0 4px;
 }
-    </style>
+    
+/* URBANEX BOULEVARD STATIC FIX START */
+html, body { height: 100% !important; overflow: hidden !important; }
+.dashboard-container { height: calc(100svh - 24px) !important; min-height: 0 !important; overflow: hidden !important; }
+.header-top { position: sticky !important; top: 0 !important; z-index: 1000 !important; flex-shrink: 0 !important; }
+.aside-categories, .aside-showcase-list { min-height: 0 !important; overflow-y: auto !important; }
+.main-boulevard { min-height: 0 !important; overflow: hidden !important; background-attachment: initial !important; }
+.global-background-underlay, .global-background-underlay img { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center !important; }
+.pie-pagina { position: fixed !important; left: 0 !important; right: 0 !important; bottom: 0 !important; height: 24px !important; z-index: 2000 !important; background: #000 !important; border-top: 1px solid #1a1a1a !important; }
+@media (max-width: 760px) {
+  html, body { height: 100% !important; overflow: hidden !important; }
+  .dashboard-container { height: calc(100svh - 24px) !important; grid-template-columns: 1fr !important; grid-template-rows: 104px 56px minmax(0,1fr) 210px !important; overflow: hidden !important; }
+  .header-top { height: 104px !important; min-height: 104px !important; display: grid !important; grid-template-columns: 1fr auto !important; grid-template-rows: 52px 38px !important; grid-template-areas: "brand tools" "search search" !important; padding: 7px 12px !important; }
+  .brand-box { grid-area: brand !important; } .brand-box img { height: 48px !important; }
+  .search-wrapper { grid-area: search !important; width: 100% !important; max-width: none !important; }
+  .user-tools { grid-area: tools !important; justify-self: end !important; }
+  .location-indicator span, .tool-icon.icon-corazon { display: none !important; }
+  .aside-categories { height: 56px !important; min-height: 56px !important; overflow-x: auto !important; overflow-y: hidden !important; border-right: none !important; border-bottom: 1px solid rgba(229,193,88,.22) !important; padding: 8px 10px !important; }
+  .categories-list { display: flex !important; gap: 8px !important; overflow-x: auto !important; overflow-y: hidden !important; }
+  .category-item { flex: 0 0 auto !important; }
+  .section-title { display: none !important; }
+  .main-boulevard { height: auto !important; min-height: 0 !important; overflow: hidden !important; }
+  .welcome-billboard { top: 14px !important; width: 94% !important; }
+  .welcome-billboard h2 { font-size: 22px !important; letter-spacing: 5px !important; }
+  .welcome-billboard p { font-size: 9px !important; line-height: 1.35 !important; }
+  .bottom-filter-bar { display: none !important; }
+  .aside-showcase-list { height: 210px !important; min-height: 0 !important; overflow: hidden !important; border-left: none !important; border-top: 1px solid rgba(229,193,88,.22) !important; }
+  .shops-scroll-area { overflow-y: auto !important; max-height: none !important; }
+}
+/* URBANEX BOULEVARD STATIC FIX END */
+
+</style>
 
 
     <!-- PWA -->
