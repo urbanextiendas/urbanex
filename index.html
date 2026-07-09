@@ -140,7 +140,7 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    z-index: 3;
+    z-index: 15;
     pointer-events: auto;
 }
 
@@ -157,6 +157,12 @@ html, body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     cursor: pointer;
     text-decoration: none;
+    pointer-events: auto;
+}
+
+.item-caracteristica:hover {
+    border-left-color: #f4d675;
+    background: rgba(229, 193, 88, 0.10);
 }
 
 .item-caracteristica svg {
@@ -406,19 +412,19 @@ html, body {
     </div>
 
     <div class="caracteristicas-lista">
-        <a class="item-caracteristica" href="informativos/cerca-de-mi.html" title="Ver negocios cerca de usted">
+        <a class="item-caracteristica" href="informativos/cerca-de-mi.html" title="Ver negocios cerca de usted" onclick="event.stopPropagation();">
             <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
             <span>Cerca de usted</span>
         </a>
-        <a class="item-caracteristica" href="informativos/abiertos-ahora.html" title="Ver negocios abiertos ahora">
+        <a class="item-caracteristica" href="informativos/abiertos-ahora.html" title="Ver negocios abiertos ahora" onclick="event.stopPropagation();">
             <svg viewBox="0 0 24 24"><path d="M12 1.75A10.25 10.25 0 1 0 22.25 12 10.262 10.262 0 0 0 12 1.75zm0 18.5A8.25 8.25 0 1 1 20.25 12 8.259 8.259 0 0 1 12 20.25zm.75-13.5h-1.5v6l5 3 .75-1.23-4.25-2.52z"/></svg>
             <span>Abiertos ahora</span>
         </a>
-        <a class="item-caracteristica" href="informativos/a-domicilio.html" title="Ver negocios con servicio a domicilio">
+        <a class="item-caracteristica" href="informativos/a-domicilio.html" title="Ver negocios con servicio a domicilio" onclick="event.stopPropagation();">
             <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM17 12V9.5h2.5l1.88 2.5H17z"/></svg>
             <span>A domicilio</span>
         </a>
-        <a class="item-caracteristica" href="informativos/ofertas.html" title="Ver ofertas disponibles">
+        <a class="item-caracteristica" href="informativos/ofertas.html" title="Ver ofertas disponibles" onclick="event.stopPropagation();">
             <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
             <span>Ofertas</span>
         </a>
