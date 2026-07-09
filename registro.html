@@ -193,6 +193,25 @@ input, textarea, select {
     font-size:12px;
 }
 input, select { height:40px; padding:0 12px; }
+input[type="file"] {
+    height:auto;
+    padding:10px 12px;
+    cursor:pointer;
+}
+input[type="file"]::file-selector-button {
+    border:1px solid rgba(229,193,88,.34);
+    border-radius:999px;
+    background:rgba(229,193,88,.12);
+    color:var(--gold);
+    font-size:10px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    padding:7px 11px;
+    margin-right:10px;
+    cursor:pointer;
+}
+input[type="file"]::file-selector-button:hover { background:rgba(229,193,88,.22); }
 textarea { min-height:98px; resize:vertical; padding:12px; line-height:1.5; }
 input:focus, textarea:focus, select:focus { border-color:var(--gold); background:rgba(0,0,0,.72); }
 select option { background:#080808; color:#fff; }
@@ -299,7 +318,7 @@ select option { background:#080808; color:#fff; }
             <div class="eyebrow">Registro comercial</div>
             <h1>Registre su negocio</h1>
             <p>
-                Complete la información del comercio. La solicitud se guardará en Supabase como negocio inactivo.
+                Complete la información del comercio. La solicitud se guardará como negocio inactivo.
                 El administrador podrá revisarla y activarla para que aparezca en Urbanex.
             </p>
         </div>
@@ -372,9 +391,19 @@ select option { background:#080808; color:#fff; }
             </div>
 
             <div class="field">
-                <label for="cover_image">Imagen de portada</label>
-                <input id="cover_image" name="cover_image" type="url" maxlength="500" placeholder="https://...">
-                <div class="help">Use una URL de imagen. El administrador puede reemplazarla luego.</div>
+                <label for="cover_image_file">Imagen de portada</label>
+                <input id="cover_image_file" name="cover_image_file" type="file" accept="image/jpeg,image/png">
+                <div class="help">Solo se permiten imágenes JPG o PNG. Tamaño máximo sugerido: 5 MB.</div>
+            </div>
+
+            <div class="field">
+                <label for="open_time">Hora de apertura <span>*</span></label>
+                <input id="open_time" name="open_time" type="time" required>
+            </div>
+
+            <div class="field">
+                <label for="close_time">Hora de cierre <span>*</span></label>
+                <input id="close_time" name="close_time" type="time" required>
             </div>
 
             <div class="field">
@@ -423,6 +452,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const IMAGE_BUCKET = 'business-images';
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
 const form = document.getElementById('businessForm');
 const submitBtn = document.getElementById('submitBtn');
@@ -541,6 +572,46 @@ function cleanUrl(value) {
     return text || null;
 }
 
+function validateImageFile(file) {
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    if (!allowedTypes.includes(file.type)) {
+        throw new Error('La imagen de portada debe estar en formato JPG o PNG.');
+    }
+
+    if (file.size > MAX_IMAGE_BYTES) {
+        throw new Error('La imagen de portada no debe superar los 5 MB.');
+    }
+}
+
+async function uploadCoverImage(file, slug) {
+    if (!file) return null;
+
+    validateImageFile(file);
+
+    const extension = file.type === 'image/png' ? 'png' : 'jpg';
+    const filePath = `registro-negocios/${slug}-${Date.now()}.${extension}`;
+
+    const { error: uploadError } = await supabase.storage
+        .from(IMAGE_BUCKET)
+        .upload(filePath, file, {
+            cacheControl: '3600',
+            contentType: file.type,
+            upsert: false
+        });
+
+    if (uploadError) {
+        throw new Error('No se pudo subir la imagen. Revise el bucket business-images y las políticas de Storage en Supabase.');
+    }
+
+    const { data } = supabase.storage
+        .from(IMAGE_BUCKET)
+        .getPublicUrl(filePath);
+
+    return data?.publicUrl || null;
+}
+
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
     submitBtn.disabled = true;
@@ -558,30 +629,39 @@ form.addEventListener('submit', async (event) => {
             throw new Error('Ingrese el nombre del negocio y seleccione una categoría.');
         }
 
+        const openTime = String(formData.get('open_time') || '').trim();
+        const closeTime = String(formData.get('close_time') || '').trim();
+
+        if (!openTime || !closeTime) {
+            throw new Error('Ingrese la hora de apertura y la hora de cierre del local.');
+        }
+
+        if (openTime >= closeTime) {
+            throw new Error('La hora de apertura debe ser menor que la hora de cierre.');
+        }
+
         const slug = await makeUniqueSlug(normalize(name));
+        const coverImageFile = document.getElementById('cover_image_file').files[0] || null;
+        const coverImageUrl = await uploadCoverImage(coverImageFile, slug);
 
-        const payload = {
-            name: name,
-            slug: slug,
-            category_id: categoryId,
-            subcategory_id: subcategoryId,
-            city: String(formData.get('city') || '').trim() || 'Loja',
-            address: String(formData.get('address') || '').trim(),
-            description: String(formData.get('description') || '').trim(),
-            phone: String(formData.get('phone') || '').trim() || null,
-            whatsapp: String(formData.get('whatsapp') || '').trim() || null,
-            website: cleanUrl(formData.get('website')),
-            cover_image: cleanUrl(formData.get('cover_image')),
-            latitude: numericOrNull(formData.get('latitude')),
-            longitude: numericOrNull(formData.get('longitude')),
-            delivery_available: formData.get('delivery_available') === 'on',
-            is_featured: false,
-            is_active: false
-        };
-
-        const { error } = await supabase
-            .from('businesses')
-            .insert(payload);
+        const { error } = await supabase.rpc('submit_business_registration', {
+            p_name: name,
+            p_slug: slug,
+            p_category_id: categoryId,
+            p_subcategory_id: subcategoryId,
+            p_city: String(formData.get('city') || '').trim() || 'Loja',
+            p_address: String(formData.get('address') || '').trim(),
+            p_description: String(formData.get('description') || '').trim(),
+            p_phone: String(formData.get('phone') || '').trim() || null,
+            p_whatsapp: String(formData.get('whatsapp') || '').trim() || null,
+            p_website: cleanUrl(formData.get('website')),
+            p_cover_image: coverImageUrl,
+            p_latitude: numericOrNull(formData.get('latitude')),
+            p_longitude: numericOrNull(formData.get('longitude')),
+            p_delivery_available: formData.get('delivery_available') === 'on',
+            p_open_time: openTime,
+            p_close_time: closeTime
+        });
 
         if (error) throw error;
 
@@ -590,7 +670,7 @@ form.addEventListener('submit', async (event) => {
         renderCategories();
         renderSubcategories();
 
-        showMessage('ok', 'Solicitud enviada correctamente. El negocio quedó registrado como inactivo y pendiente de aprobación del administrador. Cuando se active en el panel, aparecerá en Urbanex.');
+        showMessage('ok', 'Solicitud enviada correctamente. El negocio quedó registrado como inactivo, con horario de atención e imagen de portada si fue cargada. Queda pendiente de aprobación del administrador.');
     } catch (error) {
         console.error(error);
         showMessage('error', 'No se pudo enviar la solicitud: ' + (error.message || 'revise la conexión y las políticas de Supabase.'));
