@@ -16,24 +16,7 @@
 
 
 
-/* === URBANEX PATCH MINIMO: QUITAR PANEL CENTRAL AMONTONADO === */
-.main-boulevard .subcategory-grid,
-.main-boulevard .subcategories-grid,
-.main-boulevard .subcategory-cards,
-.main-boulevard .subcategories-cards,
-.main-boulevard .subcategory-hub,
-.main-boulevard .category-hub,
-.main-boulevard .subcategory-panel,
-.main-boulevard .subcategories-panel,
-.main-boulevard .subcategory-selector,
-.main-boulevard .subcategory-selector-panel,
-.main-boulevard .category-selector-panel,
-.main-boulevard .choose-subcategory,
-.main-boulevard .subcat-grid,
-.main-boulevard .subcat-panel {
-  display: none !important;
-}
-/* === FIN URBANEX PATCH MINIMO === */
+
 
 </style></head><body><header class="ux-header"><a class="ux-brand" href="../index.html"><img src="../imagenes/logo.png" alt="Urbanex"></a></header><footer class="ux-footer">© 2026 Urbanex. Desarrollado por Neodat Consultores.</footer><script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -67,66 +50,9 @@ boot();
 </script>
 
 
-<script>
-/* === URBANEX PATCH MINIMO: NO MOSTRAR "" === */
-document.addEventListener('DOMContentLoaded', function () {
-  const main = document.querySelector('.main-boulevard');
-  if (!main) return;
-
-  const normalizeText = (value) => String(value || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toUpperCase();
-
-  Array.from(main.querySelectorAll('*')).forEach(function (node) {
-    const text = normalizeText(node.textContent);
-    if (!text.includes('ELIJA UNA SUBCATEGORIA')) return;
-
-    const panel = node.closest('section, article, .subcategory-panel, .subcategories-panel, .subcategory-selector-panel, .category-selector-panel, .subcategory-hub, .category-hub, .subcat-panel, div');
-    if (panel && panel !== main) {
-      panel.remove();
-    }
-  });
-});
-/* === FIN URBANEX PATCH MINIMO === */
-</script>
 
 
-<script>
-/* === UX_INSTALL_PATCH START === */
-document.addEventListener('DOMContentLoaded', function () {
-    const pathParts = location.pathname.split('/').filter(Boolean);
-    let logoPath = 'imagenes/Urba4.png';
 
-    if (location.pathname.includes('/categorias/') && pathParts.length >= 2) {
-        logoPath = '../imagenes/Urba4.png';
-    }
 
-    if (location.pathname.includes('/categorias/') && pathParts.length >= 3) {
-        logoPath = '../../imagenes/Urba4.png';
-    }
-
-    const installNodes = document.querySelectorAll(
-        '[id*="install" i], [class*="install" i], [id*="pwa" i], [class*="pwa" i]'
-    );
-
-    installNodes.forEach(function (el) {
-        el.innerHTML = el.innerHTML
-            .replaceAll('Accede rápido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
-            .replaceAll('Accede rapido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
-            .replaceAll('desde tu pantalla', 'desde su pantalla');
-    });
-
-    document.querySelectorAll(
-        '[id*="install" i] img, [class*="install" i] img, [id*="pwa" i] img, [class*="pwa" i] img'
-    ).forEach(function (img) {
-        img.src = logoPath;
-        img.style.objectFit = 'contain';
-        img.style.background = '#000';
-        img.style.borderRadius = '10px';
-    });
-});
-/* === UX_INSTALL_PATCH END === */
-</script>
 
 </body></html>

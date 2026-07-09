@@ -177,42 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 
-<script>
-/* === UX_INSTALL_PATCH START === */
-document.addEventListener('DOMContentLoaded', function () {
-    const pathParts = location.pathname.split('/').filter(Boolean);
-    let logoPath = 'imagenes/Urba4.png';
 
-    if (location.pathname.includes('/categorias/') && pathParts.length >= 2) {
-        logoPath = '../imagenes/Urba4.png';
-    }
-
-    if (location.pathname.includes('/categorias/') && pathParts.length >= 3) {
-        logoPath = '../../imagenes/Urba4.png';
-    }
-
-    const installNodes = document.querySelectorAll(
-        '[id*="install" i], [class*="install" i], [id*="pwa" i], [class*="pwa" i]'
-    );
-
-    installNodes.forEach(function (el) {
-        el.innerHTML = el.innerHTML
-            .replaceAll('Accede rápido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
-            .replaceAll('Accede rapido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
-            .replaceAll('desde tu pantalla', 'desde su pantalla');
-    });
-
-    document.querySelectorAll(
-        '[id*="install" i] img, [class*="install" i] img, [id*="pwa" i] img, [class*="pwa" i] img'
-    ).forEach(function (img) {
-        img.src = logoPath;
-        img.style.objectFit = 'contain';
-        img.style.background = '#000';
-        img.style.borderRadius = '10px';
-    });
-});
-/* === UX_INSTALL_PATCH END === */
-</script>
 
 </body>
 </html>
