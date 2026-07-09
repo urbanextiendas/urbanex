@@ -575,6 +575,247 @@ body {
   }
 </style>
 
+
+<style id="ux-boulevard-final-requested">
+/* === CAMBIOS SOLICITADOS SOLO PARA BOULEVARD ===
+   1) En celular: encabezado fijo.
+   2) En celular: pie fijo.
+   3) En celular: logo Urbanex centrado.
+   4) Responsive en celular.
+*/
+
+/* Escritorio y tablet grande: no forzar encabezado ni pie fijos */
+@media (min-width: 721px) {
+    html,
+    body {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        height: auto !important;
+        min-height: 100vh !important;
+    }
+
+    .header-top {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        height: 60px !important;
+        min-height: 60px !important;
+        z-index: 10 !important;
+    }
+
+    .pie-pagina {
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        height: 24px !important;
+        z-index: 5 !important;
+    }
+
+    .dashboard-container {
+        height: auto !important;
+        min-height: calc(100vh - 24px) !important;
+        padding-bottom: 0 !important;
+        overflow: visible !important;
+    }
+}
+
+/* Celular: encabezado y pie no se mueven */
+@media (max-width: 720px) {
+    html,
+    body {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100svh !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+    }
+
+    body {
+        padding-top: 116px !important;
+        padding-bottom: 24px !important;
+    }
+
+    .dashboard-container {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto auto auto !important;
+        grid-template-areas:
+            "aside-left"
+            "main"
+            "aside-right" !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        padding-bottom: 24px !important;
+    }
+
+    .header-top {
+        grid-area: auto !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 116px !important;
+        min-height: 116px !important;
+        z-index: 99999 !important;
+        background: rgba(6, 6, 6, 0.96) !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        grid-template-rows: 58px 38px !important;
+        gap: 8px !important;
+        padding: 8px 12px 10px 12px !important;
+    }
+
+    .brand-box {
+        grid-row: 1 !important;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+    }
+
+    .brand-box img {
+        height: 56px !important;
+        width: auto !important;
+        display: block !important;
+        margin: 0 auto !important;
+        object-fit: contain !important;
+    }
+
+    .search-wrapper {
+        grid-row: 2 !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .search-input {
+        height: 38px !important;
+    }
+
+    .user-tools {
+        display: none !important;
+    }
+
+    .aside-categories {
+        grid-area: aside-left !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        padding: 10px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        border-right: none !important;
+        border-bottom: 1px solid var(--border-color) !important;
+    }
+
+    .section-title {
+        display: none !important;
+    }
+
+    .categories-list {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 8px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        padding-bottom: 2px !important;
+    }
+
+    .category-item {
+        flex: 0 0 auto !important;
+    }
+
+    .cat-root-btn,
+    .cat-all-btn {
+        width: auto !important;
+        min-width: max-content !important;
+        padding: 8px 12px !important;
+        white-space: nowrap !important;
+    }
+
+    .sub-list {
+        display: none !important;
+    }
+
+    .main-boulevard {
+        grid-area: main !important;
+        width: 100% !important;
+        height: 420px !important;
+        min-height: 420px !important;
+        overflow: hidden !important;
+        background-position: center bottom !important;
+    }
+
+    .welcome-billboard {
+        top: 28px !important;
+        width: 92% !important;
+    }
+
+    .welcome-billboard h2 {
+        font-size: 20px !important;
+        letter-spacing: 4px !important;
+    }
+
+    .welcome-billboard p {
+        font-size: 9px !important;
+        line-height: 1.35 !important;
+    }
+
+    .bottom-filter-bar {
+        width: calc(100% - 20px) !important;
+        bottom: 12px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .filter-pill {
+        flex: 0 0 auto !important;
+        min-width: 135px !important;
+    }
+
+    .aside-showcase-list {
+        grid-area: aside-right !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        border-left: none !important;
+        border-top: 1px solid var(--border-color) !important;
+    }
+
+    .shops-scroll-area {
+        max-height: none !important;
+        overflow: visible !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .pie-pagina {
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 24px !important;
+        z-index: 99999 !important;
+        background: #000 !important;
+    }
+}
+/* === FIN CAMBIOS SOLICITADOS SOLO PARA BOULEVARD === */
+</style>
+
 </head>
 <body>
 
@@ -582,7 +823,7 @@ body {
 
     <!-- HEADER -->
     <header class="header-top">
-        <a href="index.html" class="brand-box" title="Volver al Inicio">
+        <a href="javascript:void(0)" class="brand-box" title="Volver al menú previo" onclick="goBackMenu()">
             <img src="imagenes/logo.png" alt="Logo Urbanex" style="height:60px;width:auto;display:block;">
         </a>
 
@@ -1067,38 +1308,35 @@ function shopCardHtml(b) {
 window.renderShowcase = () => {
     const sort = document.getElementById('showcaseSort')?.value || 'rating';
 
-    const isFeatured = (business) =>
-        business.is_featured === true ||
-        business.is_featured === 1 ||
-        String(business.is_featured).toLowerCase() === 'true';
-
-    let list = (typeof filtered === 'function' ? filtered() : allBusinesses).filter(isFeatured);
+    let list = filtered().filter(business => business.is_featured === true);
 
     if (sort === 'name') {
-        list = list.sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'es'));
+        list = list.sort((a, b) =>
+            String(a.name || '').localeCompare(String(b.name || ''), 'es')
+        );
     } else {
         list = list.sort((a, b) => (b._rating || 0) - (a._rating || 0));
     }
 
-    const area = document.getElementById('shopsScrollArea') || document.getElementById('shopsList');
+    const area = document.getElementById('shopsScrollArea');
     const stats = document.getElementById('showcaseStats');
 
     if (stats) {
-        stats.textContent = `${list.length} destacado${list.length !== 1 ? 's' : ''} encontrado${list.length !== 1 ? 's' : ''}`;
+        stats.textContent = `${list.length} destacado${list.length !== 1 ? 's' : ''} seleccionado${list.length !== 1 ? 's' : ''}`;
     }
 
     if (!area) return;
 
     if (!list.length) {
-        area.innerHTML = `<div class="shop-card-empty">No hay negocios destacados<br>en esta sección por ahora.</div>`;
+        area.innerHTML = `
+            <div class="shop-card-empty">
+                No hay negocios destacados seleccionados en Supabase.
+            </div>
+        `;
         return;
     }
 
-    const cardFn = typeof shopCardHtml === 'function'
-        ? shopCardHtml
-        : (typeof businessCard === 'function' ? businessCard : null);
-
-    area.innerHTML = cardFn ? list.slice(0, 20).map(cardFn).join('') : '';
+    area.innerHTML = list.slice(0, 20).map(shopCardHtml).join('');
 };
 
 // ── Modal Directorio ──────────────────────────────────────────
@@ -1419,6 +1657,17 @@ window.addEventListener('appinstalled', () => {
     hideInstallBar();
   });
 })();
+</script>
+
+
+<script id="ux-go-back-menu-script">
+function goBackMenu() {
+    if (document.referrer && document.referrer !== window.location.href) {
+        window.history.back();
+    } else {
+        window.location.href = "index.html";
+    }
+}
 </script>
 
 </body>
