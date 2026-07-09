@@ -255,7 +255,29 @@
             .category-hero h1 { font-size: 20px; }
             .header-search { display: none; }
         }
-    </style>
+    
+
+
+/* === URBANEX PATCH MINIMO: QUITAR PANEL CENTRAL AMONTONADO === */
+.main-boulevard .subcategory-grid,
+.main-boulevard .subcategories-grid,
+.main-boulevard .subcategory-cards,
+.main-boulevard .subcategories-cards,
+.main-boulevard .subcategory-hub,
+.main-boulevard .category-hub,
+.main-boulevard .subcategory-panel,
+.main-boulevard .subcategories-panel,
+.main-boulevard .subcategory-selector,
+.main-boulevard .subcategory-selector-panel,
+.main-boulevard .category-selector-panel,
+.main-boulevard .choose-subcategory,
+.main-boulevard .subcat-grid,
+.main-boulevard .subcat-panel {
+  display: none !important;
+}
+/* === FIN URBANEX PATCH MINIMO === */
+
+</style>
 </head>
 
 <body>
@@ -500,6 +522,35 @@ document.getElementById('filterOpenNow').addEventListener('click', (e) => {
 });
 
 loadCategoryAndBusinesses();
+</script>
+
+
+<script>
+</script>
+
+
+<script>
+/* === URBANEX PATCH MINIMO: NO MOSTRAR "ELIJA UNA SUBCATEGORÍA" === */
+document.addEventListener('DOMContentLoaded', function () {
+  const main = document.querySelector('.main-boulevard');
+  if (!main) return;
+
+  const normalizeText = (value) => String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toUpperCase();
+
+  Array.from(main.querySelectorAll('*')).forEach(function (node) {
+    const text = normalizeText(node.textContent);
+    if (!text.includes('ELIJA UNA SUBCATEGORIA')) return;
+
+    const panel = node.closest('section, article, .subcategory-panel, .subcategories-panel, .subcategory-selector-panel, .category-selector-panel, .subcategory-hub, .category-hub, .subcat-panel, div');
+    if (panel && panel !== main) {
+      panel.remove();
+    }
+  });
+});
+/* === FIN URBANEX PATCH MINIMO === */
 </script>
 
 </body>

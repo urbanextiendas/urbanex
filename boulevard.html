@@ -346,6 +346,20 @@ html, body { height: 100% !important; overflow: hidden !important; }
 }
 /* URBANEX BOULEVARD STATIC FIX END */
 
+
+
+
+/* === URBANEX PATCH MINIMO: LOGO INSTALACION CLARO === */
+[id*="install" i] img,
+[class*="install" i] img,
+[id*="pwa" i] img,
+[class*="pwa" i] img {
+  object-fit: contain !important;
+  background: #000 !important;
+  border-radius: 10px !important;
+}
+/* === FIN URBANEX PATCH MINIMO === */
+
 </style>
 
 
@@ -847,31 +861,41 @@ function shopCardHtml(b) {
 
 // ── Render: panel derecho ─────────────────────────────────────
 window.renderShowcase = () => {
-    const sort  = document.getElementById('showcaseSort').value;
-    let list = filtered();
+    const sort = document.getElementById('showcaseSort')?.value || 'rating';
 
-    // Primero destacados, luego el resto
-    let featured = list.filter(b=>b.is_featured);
-    let rest     = list.filter(b=>!b.is_featured);
+    const isFeatured = (business) => business.is_featured === true ||
+        business.is_featured === 1 ||
+        String(business.is_featured).toLowerCase() === 'true';
 
-    if (sort==='rating') {
-        featured = featured.sort((a,b)=>(b._rating||0)-(a._rating||0));
-        rest     = rest.sort((a,b)=>(b._rating||0)-(a._rating||0));
+    let list = (typeof filtered === 'function' ? filtered() : allBusinesses).filter(isFeatured);
+
+    if (sort === 'rating') {
+        list = list.sort((a, b) => (b._rating || 0) - (a._rating || 0));
+    } else if (sort === 'name') {
+        list = list.sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'es'));
     } else {
-        featured = featured.sort((a,b)=>a.name.localeCompare(b.name,'es'));
-        rest     = rest.sort((a,b)=>a.name.localeCompare(b.name,'es'));
+        list = list.sort((a, b) => Number(isFeatured(b)) - Number(isFeatured(a)) || (b._rating || 0) - (a._rating || 0));
     }
 
-    const sorted = [...featured, ...rest];
-    const area   = document.getElementById('shopsScrollArea');
-    const stats  = document.getElementById('showcaseStats');
-    stats.textContent = `${sorted.length} negocio${sorted.length!==1?'s':''} encontrado${sorted.length!==1?'s':''}`;
+    const area = document.getElementById('shopsScrollArea') || document.getElementById('shopsList');
+    const stats = document.getElementById('showcaseStats');
 
-    if (!sorted.length) {
-        area.innerHTML = `<div class="shop-card-empty">No hay negocios<br>con estos filtros.</div>`;
+    if (stats) {
+        stats.textContent = `${list.length} destacado${list.length !== 1 ? 's' : ''} encontrado${list.length !== 1 ? 's' : ''}`;
+    }
+
+    if (!area) return;
+
+    if (!list.length) {
+        area.innerHTML = `<div class="shop-card-empty">No hay negocios destacados<br>en esta sección por ahora.</div>`;
         return;
     }
-    area.innerHTML = sorted.slice(0,20).map(shopCardHtml).join('');
+
+    const cardFn = typeof shopCardHtml === 'function'
+        ? shopCardHtml
+        : (typeof businessCard === 'function' ? businessCard : null);
+
+    area.innerHTML = cardFn ? list.slice(0, 20).map(cardFn).join('') : '';
 };
 
 // ── Modal Directorio ──────────────────────────────────────────
@@ -1043,7 +1067,7 @@ if ('serviceWorker' in navigator) {
     <img src="/imagenes/logo.png" alt="Urbanex">
     <div id="pwa-banner-text">
         <strong>Instalar Urbanex</strong>
-        <span>Accede rápido desde tu pantalla de inicio</span>
+        <span>Acceda rápido desde su pantalla de inicio</span>
     </div>
     <button id="pwa-install-btn">Instalar</button>
     <button id="pwa-dismiss-btn">✕</button>
@@ -1079,6 +1103,43 @@ document.getElementById('pwa-dismiss-btn').addEventListener('click', () => {
 window.addEventListener('appinstalled', () => {
     banner.classList.remove('visible');
 });
+</script>
+
+
+<script>
+/* === URBANEX PATCH MINIMO: PWA SIN TUTEO Y LOGO URBA4 === */
+document.addEventListener('DOMContentLoaded', function () {
+  const depth = location.pathname.split('/').filter(Boolean).length;
+
+  let logoPath = 'imagenes/Urba4.png';
+
+  if (location.pathname.includes('/categorias/') && depth >= 2) {
+    logoPath = '../imagenes/Urba4.png';
+  }
+
+  if (location.pathname.includes('/categorias/') && depth >= 3) {
+    logoPath = '../../imagenes/Urba4.png';
+  }
+
+  const installNodes = document.querySelectorAll('[id*="install" i], [class*="install" i], [id*="pwa" i], [class*="pwa" i]');
+
+  installNodes.forEach(function (el) {
+    if (el.innerHTML) {
+      el.innerHTML = el.innerHTML
+        .replaceAll('Accede rápido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
+        .replaceAll('Accede rapido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
+        .replaceAll('desde tu pantalla', 'desde su pantalla');
+    }
+  });
+
+  document.querySelectorAll('[id*="install" i] img, [class*="install" i] img, [id*="pwa" i] img, [class*="pwa" i] img').forEach(function (img) {
+    img.src = logoPath;
+    img.style.objectFit = 'contain';
+    img.style.background = '#000';
+    img.style.borderRadius = '10px';
+  });
+});
+/* === FIN URBANEX PATCH MINIMO === */
 </script>
 
 </body>

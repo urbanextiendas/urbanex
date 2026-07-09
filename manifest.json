@@ -12,13 +12,13 @@
   "categories": ["shopping", "local", "business"],
   "icons": [
     {
-      "src": "/imagenes/logo.png",
+      "src": "/imagenes/Urba4.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/imagenes/logo.png",
+      "src": "/imagenes/Urba4.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -39,7 +39,7 @@
       "short_name": "Directorio",
       "description": "Ver todos los comercios",
       "url": "/boulevard.html",
-      "icons": [{ "src": "/imagenes/logo.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/imagenes/Urba4.png", "sizes": "192x192" }]
     }
   ]
 }
