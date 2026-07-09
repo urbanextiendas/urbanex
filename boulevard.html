@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
     <link rel="preconnect" href="https://esm.sh" crossorigin>
     <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
+    <link rel="preload" as="image" href="imagenes/Boulevard.png" fetchpriority="high">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
@@ -915,6 +916,29 @@ body {
 }
 </style>
 
+
+<style id="ux-performance-patch">
+/* SOLO OPTIMIZACIÓN: reduce trabajo de repintado sin cambiar diseño */
+.aside-categories,
+.aside-showcase-list,
+.bottom-filter-bar,
+.shops-scroll-area {
+    contain: layout paint !important;
+}
+.shop-card,
+.filter-pill,
+.cat-root-btn,
+.cat-all-btn {
+    content-visibility: auto;
+    contain-intrinsic-size: 64px;
+}
+@media (max-width: 760px) {
+    .main-boulevard {
+        background-size: cover !important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -1118,6 +1142,36 @@ let activeCatId    = null; // NUMBER o null
 let activeSubId    = null; // NUMBER o null
 let activeQuick    = 'all';
 let searchQuery    = '';
+let fullDirectoryLoaded = false;
+let fullDirectoryLoadPromise = null;
+
+const BUSINESS_SELECT_FAST = `
+    id,
+    name,
+    slug,
+    city,
+    address,
+    cover_image,
+    is_featured,
+    delivery_available,
+    category_id,
+    subcategory_id,
+    categories!category_id(name,icon),
+    subcategories:categories!subcategory_id(name,icon)
+`;
+
+function normalizeBusinessRows(rows) {
+    return (rows || []).map(business => ({
+        ...business,
+        business_hours: business.business_hours || [],
+        reviews: business.reviews || [],
+        promotions: business.promotions || [],
+        _open: false,
+        _rating: null,
+        _promo: false,
+        _reviews: 0,
+    }));
+}
 
 // Normalizar siempre a Number para comparaciones consistentes
 function toNum(v) { const n = Number(v); return isNaN(n) ? null : n; }
@@ -1147,7 +1201,7 @@ function hasPromo(promos) {
 
 // ── Carga datos ───────────────────────────────────────────────
 async function boot() {
-    const [catsRes, bizRes] = await Promise.all([
+    const [catsRes, featuredRes] = await Promise.all([
         supabase
             .from('categories')
             .select('id,name,icon,parent_id,sort_order')
@@ -1156,29 +1210,18 @@ async function boot() {
 
         supabase
             .from('businesses')
-            .select(`
-                id,
-                name,
-                slug,
-                city,
-                address,
-                cover_image,
-                is_featured,
-                delivery_available,
-                category_id,
-                subcategory_id,
-                categories!category_id(name,icon),
-                subcategories:categories!subcategory_id(name,icon)
-            `)
+            .select(BUSINESS_SELECT_FAST)
             .eq('is_active', true)
-            .order('is_featured', { ascending: false })
+            .eq('is_featured', true)
             .order('name', { ascending: true })
+            .limit(20)
     ]);
 
     if (catsRes.error) console.error('categories error:', catsRes.error.message);
-    if (bizRes.error)  console.error('businesses error:', bizRes.error.message);
+    if (featuredRes.error) console.error('featured businesses error:', featuredRes.error.message);
 
     const cats = catsRes.data || [];
+
     rootCategories = cats.filter(c => !c.parent_id);
     subMap = {};
 
@@ -1187,28 +1230,78 @@ async function boot() {
         subMap[c.parent_id].push(c);
     });
 
-    allBusinesses = (bizRes.data || []).map(b => ({
-        ...b,
-        business_hours: [],
-        reviews: [],
-        promotions: [],
-        _open: false,
-        _rating: null,
-        _promo: false,
-        _reviews: 0,
-    }));
+    // Carga inicial liviana: solo destacados. Esto hace visible la página mucho más rápido.
+    allBusinesses = normalizeBusinessRows(featuredRes.data || []);
 
     renderCatTree();
     renderShowcase();
     updateMetrics();
 
-    const runLater = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 700));
-    runLater(loadBusinessDetails);
+    const runLater = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 900));
+
+    // Carga el directorio completo después de que la pantalla ya esté visible.
+    runLater(() => ensureAllBusinessesLoaded(false));
+
+    // Carga detalles solo de destacados para no bloquear la apertura.
+    runLater(() => loadBusinessDetails(allBusinesses.filter(business => business.is_featured === true).map(business => business.id)));
 }
 
-async function loadBusinessDetails() {
-    const ids = allBusinesses
-        .map(business => business.id)
+async function ensureAllBusinessesLoaded(renderAfterLoad = true) {
+    if (fullDirectoryLoaded) return;
+
+    if (fullDirectoryLoadPromise) {
+        await fullDirectoryLoadPromise;
+        return;
+    }
+
+    fullDirectoryLoadPromise = (async () => {
+        const { data, error } = await supabase
+            .from('businesses')
+            .select(BUSINESS_SELECT_FAST)
+            .eq('is_active', true)
+            .order('is_featured', { ascending: false })
+            .order('name', { ascending: true });
+
+        if (error) {
+            console.error('businesses full load error:', error.message);
+            return;
+        }
+
+        allBusinesses = normalizeBusinessRows(data || []);
+        fullDirectoryLoaded = true;
+
+        if (renderAfterLoad) {
+            renderCatTree();
+            renderShowcase();
+            updateMetrics();
+
+            const modal = document.getElementById('directorioModal');
+            if (modal && modal.style.display !== 'none') renderDir();
+        } else {
+            renderCatTree();
+            updateMetrics();
+        }
+
+        // Después de cargar lo básico, actualiza detalles sin bloquear la interfaz.
+        const runLater = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 1200));
+        const featuredIds = allBusinesses
+            .filter(business => business.is_featured === true)
+            .map(business => business.id);
+
+        runLater(() => loadBusinessDetails(featuredIds));
+    })();
+
+    try {
+        await fullDirectoryLoadPromise;
+    } finally {
+        fullDirectoryLoadPromise = null;
+    }
+}
+
+async function loadBusinessDetails(targetIds = null) {
+    const ids = (targetIds && targetIds.length ? targetIds : allBusinesses
+        .filter(business => business.is_featured === true)
+        .map(business => business.id))
         .filter(id => id !== null && id !== undefined);
 
     if (!ids.length) return;
@@ -1249,6 +1342,8 @@ async function loadBusinessDetails() {
         const promotionsByBusiness = groupByBusiness(promotionsRes.data || []);
 
         allBusinesses = allBusinesses.map(business => {
+            if (!ids.includes(business.id)) return business;
+
             const businessHours = hoursByBusiness.get(business.id) || [];
             const reviews = reviewsByBusiness.get(business.id) || [];
             const promotions = promotionsByBusiness.get(business.id) || [];
@@ -1275,11 +1370,14 @@ async function loadBusinessDetails() {
     }
 }
 
+
 // ── Árbol de categorías ───────────────────────────────────────
 function renderCatTree() {
     const list = document.getElementById('categoriesList');
-    // Quitar skeletons pero conservar el botón "Todos"
-    list.querySelectorAll('.skeleton').forEach(el=>el.remove());
+    // Reconstruir menú sin duplicar categorías y conservando el botón "Todos"
+    Array.from(list.children).forEach(item => {
+        if (!item.querySelector('#catAllBtn')) item.remove();
+    });
 
     // Contar por raíz
     const countByRoot = {};
@@ -1503,9 +1601,22 @@ window.renderShowcase = () => {
 };
 
 // ── Modal Directorio ──────────────────────────────────────────
-window.openDirectorio = () => {
-    document.getElementById('directorioModal').style.display='block';
-    document.body.style.overflow='hidden';
+window.openDirectorio = async () => {
+    const modal = document.getElementById('directorioModal');
+    const grid = document.getElementById('dirGrid');
+
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+
+    if (!fullDirectoryLoaded && grid) {
+        grid.innerHTML = `
+            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
+            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
+            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
+        `;
+    }
+
+    await ensureAllBusinessesLoaded(true);
     renderDir();
 };
 window.closeDirectorio = () => {
@@ -1807,17 +1918,15 @@ function goBackMenu() {
 <script id="ux-boulevard-menu-autoscroll">
 (function () {
     const scroller = document.querySelector('.aside-categories');
-    const list = document.getElementById('categoriesList');
 
-    if (!scroller || !list) return;
+    if (!scroller) return;
 
     let direction = 1;
     let paused = false;
     let resumeTimer = null;
-    let lastFrame = performance.now();
-    const speed = 12;
+    const speed = 0.75;
 
-    function isHorizontalMenu() {
+    function canMove() {
         return window.matchMedia('(max-width: 1024px)').matches &&
             scroller.scrollWidth > scroller.clientWidth + 4;
     }
@@ -1831,39 +1940,25 @@ function goBackMenu() {
         }, 5000);
     }
 
-    function moveMenu(now) {
-        const elapsed = Math.min((now - lastFrame) / 1000, 0.08);
-        lastFrame = now;
+    function moveMenu() {
+        if (!canMove() || paused) return;
 
-        if (isHorizontalMenu() && !paused) {
-            const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+        const maxScroll = scroller.scrollWidth - scroller.clientWidth;
 
-            if (maxScroll > 0) {
-                if (scroller.scrollLeft >= maxScroll - 1) {
-                    direction = -1;
-                }
+        if (scroller.scrollLeft >= maxScroll - 1) direction = -1;
+        if (scroller.scrollLeft <= 1) direction = 1;
 
-                if (scroller.scrollLeft <= 1) {
-                    direction = 1;
-                }
-
-                scroller.scrollLeft += direction * speed * elapsed;
-            }
-        }
-
-        window.requestAnimationFrame(moveMenu);
+        scroller.scrollLeft += direction * speed;
     }
 
     scroller.addEventListener('pointerdown', pauseForFiveSeconds, { passive: true });
     scroller.addEventListener('touchstart', pauseForFiveSeconds, { passive: true });
     scroller.addEventListener('wheel', pauseForFiveSeconds, { passive: true });
-
     window.addEventListener('resize', () => {
         direction = 1;
-        lastFrame = performance.now();
     });
 
-    window.requestAnimationFrame(moveMenu);
+    window.setInterval(moveMenu, 70);
 })();
 </script>
 
@@ -1878,8 +1973,7 @@ function goBackMenu() {
     let direction = 1;
     let paused = false;
     let resumeTimer = null;
-    let lastFrame = performance.now();
-    const speed = 12;
+    const speed = 0.75;
 
     function canMove() {
         return window.matchMedia('(max-width: 760px)').matches &&
@@ -1895,39 +1989,25 @@ function goBackMenu() {
         }, 5000);
     }
 
-    function moveBar(now) {
-        const elapsed = Math.min((now - lastFrame) / 1000, 0.08);
-        lastFrame = now;
+    function moveBar() {
+        if (!canMove() || paused) return;
 
-        if (canMove() && !paused) {
-            const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+        const maxScroll = scroller.scrollWidth - scroller.clientWidth;
 
-            if (maxScroll > 0) {
-                if (scroller.scrollLeft >= maxScroll - 1) {
-                    direction = -1;
-                }
+        if (scroller.scrollLeft >= maxScroll - 1) direction = -1;
+        if (scroller.scrollLeft <= 1) direction = 1;
 
-                if (scroller.scrollLeft <= 1) {
-                    direction = 1;
-                }
-
-                scroller.scrollLeft += direction * speed * elapsed;
-            }
-        }
-
-        window.requestAnimationFrame(moveBar);
+        scroller.scrollLeft += direction * speed;
     }
 
     scroller.addEventListener('pointerdown', pauseForFiveSeconds, { passive: true });
     scroller.addEventListener('touchstart', pauseForFiveSeconds, { passive: true });
     scroller.addEventListener('wheel', pauseForFiveSeconds, { passive: true });
-
     window.addEventListener('resize', () => {
         direction = 1;
-        lastFrame = performance.now();
     });
 
-    window.requestAnimationFrame(moveBar);
+    window.setInterval(moveBar, 70);
 })();
 </script>
 
