@@ -9,19 +9,23 @@
   "background_color": "#020202",
   "theme_color": "#e5c158",
   "lang": "es",
-  "categories": ["shopping", "local", "business"],
+  "categories": [
+    "shopping",
+    "local",
+    "business"
+  ],
   "icons": [
     {
       "src": "/imagenes/Urba4.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/imagenes/Urba4.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ],
   "screenshots": [
@@ -39,7 +43,13 @@
       "short_name": "Directorio",
       "description": "Ver todos los comercios",
       "url": "/boulevard.html",
-      "icons": [{ "src": "/imagenes/Urba4.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "/imagenes/Urba4.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }

@@ -438,6 +438,143 @@ body {
 /* === UX_BOULEVARD_ONLY_FIXED_BARS END === */
 </style>
 
+
+<style id="ux-boulevard-bars-style">
+  /* Solo fijar encabezado y pie. No congela todo el boulevard. */
+  html,
+  body {
+    overflow-x: hidden !important;
+  }
+
+  body {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+  }
+
+  .header-top {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+  }
+
+  .pie-pagina {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 24px !important;
+    z-index: 9999 !important;
+  }
+
+  .dashboard-container {
+    height: auto !important;
+    min-height: calc(100vh - 24px) !important;
+    padding-bottom: 24px !important;
+  }
+</style>
+
+
+<style id="ux-final-pwa-style">
+  .ux-final-pwa-install {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 24px;
+    z-index: 100000;
+    display: none;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 22px;
+    background: rgba(3, 3, 3, 0.96);
+    border-top: 1px solid rgba(229, 193, 88, 0.28);
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    font-family: inherit;
+  }
+
+  .ux-final-pwa-install.show {
+    display: flex;
+  }
+
+  .ux-final-pwa-install img {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+    background: #000000;
+    border-radius: 12px;
+    flex: 0 0 auto;
+  }
+
+  .ux-final-pwa-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ux-final-pwa-info strong {
+    display: block;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .ux-final-pwa-info span {
+    display: block;
+    margin-top: 3px;
+    color: #bdbdbd;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  .ux-final-pwa-btn {
+    height: 38px;
+    padding: 0 22px;
+    border: none;
+    border-radius: 10px;
+    background: #e5c158;
+    color: #000000;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  .ux-final-pwa-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: #9a9a9a;
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  @media (max-width: 720px) {
+    .ux-final-pwa-install {
+      padding: 10px 14px;
+      gap: 10px;
+    }
+
+    .ux-final-pwa-install img {
+      width: 48px;
+      height: 48px;
+    }
+
+    .ux-final-pwa-info strong {
+      font-size: 13px;
+    }
+
+    .ux-final-pwa-info span {
+      font-size: 11px;
+    }
+
+    .ux-final-pwa-btn {
+      height: 36px;
+      padding: 0 16px;
+    }
+  }
+</style>
+
 </head>
 <body>
 
@@ -1172,78 +1309,116 @@ window.addEventListener('appinstalled', () => {
 </script>
 
 
-<script>
-/* === URBANEX PATCH MINIMO: PWA SIN TUTEO Y LOGO URBA4 === */
-document.addEventListener('DOMContentLoaded', function () {
-  const depth = location.pathname.split('/').filter(Boolean).length;
 
-  let logoPath = 'imagenes/Urba4.png';
 
-  if (location.pathname.includes('/categorias/') && depth >= 2) {
-    logoPath = '../imagenes/Urba4.png';
+
+
+
+
+<div id="uxFinalPwaInstall" class="ux-final-pwa-install" hidden>
+  <img src="/imagenes/Urba4.png" alt="Urbanex">
+  <div class="ux-final-pwa-info">
+    <strong>Instalar Urbanex</strong>
+    <span id="uxFinalPwaText">Acceda rápido desde su pantalla de inicio.</span>
+  </div>
+  <button id="uxFinalPwaBtn" class="ux-final-pwa-btn" type="button">Instalar</button>
+  <button id="uxFinalPwaClose" class="ux-final-pwa-close" type="button" aria-label="Cerrar">×</button>
+</div>
+
+
+<script id="ux-final-pwa-script">
+(function () {
+  let deferredPrompt = null;
+
+  const bar = document.getElementById('uxFinalPwaInstall');
+  const btn = document.getElementById('uxFinalPwaBtn');
+  const close = document.getElementById('uxFinalPwaClose');
+  const text = document.getElementById('uxFinalPwaText');
+
+  if (!bar || !btn || !close || !text) return;
+
+  const isStandalone =
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true;
+
+  if (isStandalone) {
+    bar.remove();
+    return;
   }
 
-  if (location.pathname.includes('/categorias/') && depth >= 3) {
-    logoPath = '../../imagenes/Urba4.png';
-  }
+  async function clearOldUrbanexCaches() {
+    if (!('caches' in window)) return;
 
-  const installNodes = document.querySelectorAll('[id*="install" i], [class*="install" i], [id*="pwa" i], [class*="pwa" i]');
+    const keys = await caches.keys();
 
-  installNodes.forEach(function (el) {
-    if (el.innerHTML) {
-      el.innerHTML = el.innerHTML
-        .replaceAll('Acceda rápido desde su pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
-        .replaceAll('Acceda rápido desde su pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
-        .replaceAll('desde su pantalla', 'desde su pantalla');
-    }
-  });
-
-  document.querySelectorAll('[id*="install" i] img, [class*="install" i] img, [id*="pwa" i] img, [class*="pwa" i] img').forEach(function (img) {
-    img.src = logoPath;
-    img.style.objectFit = 'contain';
-    img.style.background = '#000';
-    img.style.borderRadius = '10px';
-  });
-});
-/* === FIN URBANEX PATCH MINIMO === */
-</script>
-
-
-<script>
-/* === UX_INSTALL_PATCH START === */
-document.addEventListener('DOMContentLoaded', function () {
-    const pathParts = location.pathname.split('/').filter(Boolean);
-    let logoPath = 'imagenes/Urba4.png';
-
-    if (location.pathname.includes('/categorias/') && pathParts.length >= 2) {
-        logoPath = '../imagenes/Urba4.png';
-    }
-
-    if (location.pathname.includes('/categorias/') && pathParts.length >= 3) {
-        logoPath = '../../imagenes/Urba4.png';
-    }
-
-    const installNodes = document.querySelectorAll(
-        '[id*="install" i], [class*="install" i], [id*="pwa" i], [class*="pwa" i]'
+    await Promise.all(
+      keys
+        .filter(key => key.startsWith('urbanex-v1') || key.startsWith('urbanex-static-v1') || key.includes('pwa-fix'))
+        .map(key => caches.delete(key))
     );
+  }
 
-    installNodes.forEach(function (el) {
-        el.innerHTML = el.innerHTML
-            .replaceAll('Accede rápido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
-            .replaceAll('Accede rapido desde tu pantalla de inicio', 'Acceda rápido desde su pantalla de inicio')
-            .replaceAll('desde tu pantalla', 'desde su pantalla');
-    });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async function () {
+      try {
+        await clearOldUrbanexCaches();
 
-    document.querySelectorAll(
-        '[id*="install" i] img, [class*="install" i] img, [id*="pwa" i] img, [class*="pwa" i] img'
-    ).forEach(function (img) {
-        img.src = logoPath;
-        img.style.objectFit = 'contain';
-        img.style.background = '#000';
-        img.style.borderRadius = '10px';
+        const registration = await navigator.serviceWorker.register('/sw.js', {
+          updateViaCache: 'none'
+        });
+
+        await registration.update();
+      } catch (error) {
+        console.warn('Urbanex Service Worker:', error);
+      }
     });
-});
-/* === UX_INSTALL_PATCH END === */
+  }
+
+  function showInstallBar() {
+    if (localStorage.getItem('urbanex_install_closed') === '1') return;
+
+    bar.hidden = false;
+    bar.classList.add('show');
+  }
+
+  function hideInstallBar() {
+    bar.classList.remove('show');
+    bar.hidden = true;
+  }
+
+  window.addEventListener('beforeinstallprompt', function (event) {
+    event.preventDefault();
+    deferredPrompt = event;
+    showInstallBar();
+  });
+
+  btn.addEventListener('click', async function () {
+    if (!deferredPrompt) {
+      text.textContent = 'En Android, use el menú del navegador y seleccione “Agregar a pantalla principal”.';
+      showInstallBar();
+      return;
+    }
+
+    deferredPrompt.prompt();
+
+    const choice = await deferredPrompt.userChoice;
+
+    if (choice && choice.outcome === 'accepted') {
+      hideInstallBar();
+    }
+
+    deferredPrompt = null;
+  });
+
+  close.addEventListener('click', function () {
+    localStorage.setItem('urbanex_install_closed', '1');
+    hideInstallBar();
+  });
+
+  window.addEventListener('appinstalled', function () {
+    hideInstallBar();
+  });
+})();
 </script>
 
 </body>

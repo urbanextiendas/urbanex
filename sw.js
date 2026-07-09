@@ -12,7 +12,7 @@ const STATIC_ASSETS = [
     '/index.html',
     '/boulevard.html',
     '/business/index.html',
-    '/imagenes/logo.png',
+    '/imagenes/Urba4.png',
     '/imagenes/Boulevard.png',
     '/manifest.json',
     // Fuentes Google (se cachean en runtime)
