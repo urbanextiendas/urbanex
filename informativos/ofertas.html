@@ -398,7 +398,7 @@
 
         <div class="total-card">
             <strong id="totalResults">0</strong>
-            <span>Promociones</span>
+            <span>Ofertas</span>
         </div>
     </section>
 
@@ -630,6 +630,7 @@ function isActivePromotion(promotion) {
 }
 
 function hasOffer(business) {
+    if ((business.product_offers || []).length > 0) return true;
     if ((business.promotions || []).some(isActivePromotion)) return true;
 
     const value = firstDefined(business, [
@@ -749,7 +750,27 @@ function populateCategoryFilter(businesses) {
         categoryNames.map(category => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`).join("");
 }
 
+function formatMoney(value) {
+    const number = Number(value || 0);
+    return Number.isFinite(number) && number > 0 ? `$${number.toFixed(2)}` : "Consultar precio";
+}
+
+function offerSummary(business) {
+    const offers = business.product_offers || [];
+    if (!offers.length) return "";
+
+    return offers.slice(0, 3).map(product => {
+        const sale = Number(product.sale_price || 0) > 0 ? ` - ${formatMoney(product.sale_price)}` : "";
+        return `${product.name || "Producto en oferta"}${sale}`;
+    }).join(" · ");
+}
+
 function cardDescription(business) {
+    if (FILTER_TYPE === "ofertas") {
+        const products = offerSummary(business);
+        if (products) return `Productos en oferta: ${products}`;
+    }
+
     const description = business.description || business.short_description || "";
     if (description) return description;
 
@@ -763,6 +784,11 @@ function cardDescription(business) {
 function statusText(business) {
     if (FILTER_TYPE === "cerca" && typeof business._distanceKm === "number") {
         return `${business._distanceKm.toFixed(1)} km`;
+    }
+
+    if (FILTER_TYPE === "ofertas" && (business.product_offers || []).length) {
+        const count = business.product_offers.length;
+        return `${count} oferta${count === 1 ? "" : "s"}`;
     }
 
     return STATUS_LABEL;
@@ -783,7 +809,7 @@ function renderResults() {
     if (!filtered.length) {
         if (resultsContainer) resultsContainer.innerHTML = "";
         if (emptyState) {
-            emptyState.textContent = "No hay promociones activas registradas en Supabase.";
+            emptyState.textContent = "No hay productos en oferta registrados en Supabase.";
             emptyState.style.display = "block";
         }
         return;
@@ -870,7 +896,9 @@ async function loadDetailsForBusinesses(businesses) {
 
     if (!ids.length) return businesses;
 
-    const [hoursResult, reviewsResult, promotionsResult] = await Promise.allSettled([
+    const textIds = ids.map(id => String(id));
+
+    const [hoursResult, reviewsResult, promotionsResult, productOffersResult] = await Promise.allSettled([
         supabase
             .from("business_hours")
             .select("business_id,day_of_week,open_time,close_time,is_closed")
@@ -885,7 +913,14 @@ async function loadDetailsForBusinesses(businesses) {
         supabase
             .from("promotions")
             .select("*")
-            .in("business_id", ids)
+            .in("business_id", ids),
+
+        supabase
+            .from("business_products")
+            .select("business_id,name,description,price,sale_price,offer_label,is_on_sale,is_active,image_1_url")
+            .eq("is_active", true)
+            .eq("is_on_sale", true)
+            .in("business_id", textIds)
     ]);
 
     const hoursByBusiness = hoursResult.status === "fulfilled" && !hoursResult.value.error
@@ -900,11 +935,16 @@ async function loadDetailsForBusinesses(businesses) {
         ? groupRowsByBusiness(promotionsResult.value.data || [])
         : new Map();
 
+    const productOffersByBusiness = productOffersResult.status === "fulfilled" && !productOffersResult.value.error
+        ? groupRowsByBusiness(productOffersResult.value.data || [])
+        : new Map();
+
     return businesses.map(business => ({
         ...business,
         business_hours: hoursByBusiness.get(business.id) || [],
         reviews: reviewsByBusiness.get(business.id) || [],
-        promotions: promotionsByBusiness.get(business.id) || []
+        promotions: promotionsByBusiness.get(business.id) || [],
+        product_offers: productOffersByBusiness.get(String(business.id)) || productOffersByBusiness.get(business.id) || []
     }));
 }
 
