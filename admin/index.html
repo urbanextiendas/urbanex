@@ -574,7 +574,8 @@ input,textarea,select { font-family:var(--sans); }
                     <select id="bizStatusFilter">
                         <option value="">Todos</option>
                         <option value="true">Activos</option>
-                        <option value="false">Inactivos</option>
+                        <option value="pending">Pendientes</option>
+                        <option value="rejected">Rechazados</option>
                     </select>
                 </div>
                 <div class="table-wrap">
@@ -1212,7 +1213,7 @@ async function loadBusinesses() {
     const { data, error } = await supabase
         .from('businesses')
         .select(`
-            id, name, slug, city, is_active, is_featured, category_id, subcategory_id,
+            id, name, slug, city, is_active, is_featured, category_id, subcategory_id, approval_status, owner_email,
             categories!category_id(name, icon),
             subcategories:categories!subcategory_id(name, icon)
         `)
@@ -1256,7 +1257,9 @@ function renderBizTable() {
             const matchSub  = subCatObj && String(subCatObj.parent_id) === cat;
             if (!matchRoot && !matchSub) return false;
         }
-        if (status !== '' && String(b.is_active) !== status) return false;
+        if (status === 'true' && !b.is_active) return false;
+        if (status === 'pending' && (b.is_active || b.approval_status === 'rejected')) return false;
+        if (status === 'rejected' && b.approval_status !== 'rejected') return false;
         return true;
     });
 
@@ -1273,17 +1276,31 @@ function renderBizTable() {
         let catLabel  = rootCat ? `${rootCat.icon||''} ${rootCat.name}` : '—';
         if (subCat) catLabel += ` <span style="color:var(--dark)">›</span> ${subCat.icon||''} ${subCat.name}`;
 
+        const isRejected = b.approval_status === 'rejected';
+        const statusHtml = b.is_active
+            ? '<span class="badge badge-green">Activo</span>'
+            : isRejected
+                ? '<span class="badge badge-gray">Rechazado</span>'
+                : '<span class="badge badge-red">Pendiente</span>';
+
+        const actionButtons = b.is_active
+            ? `<button class="btn btn-danger btn-sm" onclick="toggleBizActive('${b.id}', true)">Desactivar</button>`
+            : isRejected
+                ? `<button class="btn btn-success btn-sm" onclick="toggleBizActive('${b.id}', false)">Aprobar</button>`
+                : `<button class="btn btn-success btn-sm" onclick="toggleBizActive('${b.id}', false)">Aprobar</button>
+                   <button class="btn btn-danger btn-sm" onclick="rejectBusiness('${b.id}', '${escAttr(b.name)}')">Rechazar</button>`;
+
         return `
         <tr>
             <td><strong style="color:#fff;">${b.name}</strong><br><span style="font-size:10px;color:var(--dark);">${b.slug}</span></td>
             <td style="font-size:11.5px;">${catLabel}</td>
             <td>${b.city || '—'}</td>
-            <td><span class="badge ${b.is_active ? 'badge-green' : 'badge-red'}">${b.is_active ? 'Activo' : 'Inactivo'}</span></td>
+            <td>${statusHtml}</td>
             <td><span class="badge ${b.is_featured ? 'badge-gold' : 'badge-gray'}">${b.is_featured ? '⭐ Sí' : 'No'}</span></td>
             <td>
                 <div class="td-actions">
                     <button class="btn btn-ghost btn-sm" onclick="editBusiness('${b.id}')">Editar</button>
-                    <button class="btn ${b.is_active ? 'btn-danger' : 'btn-success'} btn-sm" onclick="toggleBizActive('${b.id}', ${b.is_active})">${b.is_active ? 'Desactivar' : 'Aprobar'}</button>
+                    ${actionButtons}
                     <a href="../business/index.html?slug=${b.slug}" target="_blank" class="btn btn-ghost btn-sm">Ver</a>
                 </div>
             </td>
@@ -1369,6 +1386,7 @@ document.getElementById('btnSaveBusiness').addEventListener('click', async () =>
         subcategory_id: document.getElementById('bizSubCat').value || null,
         is_featured: document.getElementById('bizFeatured').checked,
         is_active: document.getElementById('bizActive').checked,
+        approval_status: document.getElementById('bizActive').checked ? 'approved' : 'pending',
     };
 
     const { error } = id
@@ -1386,7 +1404,10 @@ window.toggleBizActive = async (id, current) => {
     if (current) {
         if (!confirm('¿Desactivar este negocio? Dejará de verse en la página pública.')) return;
 
-        const { error } = await supabase.from('businesses').update({ is_active: false }).eq('id', id);
+        const { error } = await supabase.from('businesses').update({
+            is_active: false,
+            is_featured: false
+        }).eq('id', id);
         if (error) { toast('Error al desactivar: ' + error.message, 'error'); return; }
 
         toast('Negocio desactivado.');
@@ -1422,7 +1443,7 @@ window.toggleBizActive = async (id, current) => {
             throw new Error(result.error || 'No se pudo aprobar el negocio.');
         }
 
-        toast('Negocio aprobado. Cuenta creada y correo enviado ✓');
+        toast(result.message || 'Negocio aprobado. Cuenta creada y correo enviado ✓');
         await loadBusinesses();
         loadDashboard();
     } catch (error) {
@@ -1430,6 +1451,37 @@ window.toggleBizActive = async (id, current) => {
         toast('Error al aprobar: ' + (error.message || 'revise la función aprobar-negocio.'), 'error');
     }
 };
+
+window.rejectBusiness = async (id, name) => {
+    const reason = prompt(`Motivo del rechazo para ${name}:`, 'Solicitud rechazada por revisión administrativa.');
+    if (reason === null) return;
+
+    if (!confirm('¿Rechazar este negocio? No será visible al público y quedará marcado como rechazado.')) return;
+
+    try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const adminEmail = sessionData?.session?.user?.email || '';
+
+        const { error } = await supabase.from('businesses').update({
+            is_active: false,
+            is_featured: false,
+            approval_status: 'rejected',
+            rejected_at: new Date().toISOString(),
+            rejected_by: adminEmail,
+            rejection_reason: reason.trim() || 'Solicitud rechazada por revisión administrativa.'
+        }).eq('id', id);
+
+        if (error) throw error;
+
+        toast('Negocio rechazado.');
+        await loadBusinesses();
+        loadDashboard();
+    } catch (error) {
+        console.error(error);
+        toast('Error al rechazar: ' + (error.message || 'revise permisos de Supabase.'), 'error');
+    }
+};
+
 
 // ════════════════════════════════════════════════════════════════
 // PRODUCTOS — lógica nueva
