@@ -10,678 +10,153 @@
 <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
 <link rel="preconnect" href="https://esm.sh" crossorigin>
 <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-    --bg-main:#020202;
-    --bg-panel:rgba(7,7,7,.82);
-    --bg-field:rgba(0,0,0,.58);
-    --gold:#e5c158;
-    --gold-soft:#f2d574;
-    --border:rgba(229,193,88,.24);
-    --text:#ffffff;
-    --muted:#cfcfcf;
-    --soft:#969696;
-    --green:#2ed573;
-    --red:#ff5b68;
-    --font-serif:'Cinzel',serif;
-    --font-sans:'Montserrat',sans-serif;
-    --blur:blur(18px);
-}
-* { box-sizing:border-box; margin:0; padding:0; }
-body {
-    min-height:100vh;
-    background:
-        linear-gradient(135deg, rgba(0,0,0,.72), rgba(0,0,0,.46)),
-        url("imagenes/Boulevard.png") center bottom / cover fixed no-repeat;
-    color:var(--text);
-    font-family:var(--font-sans);
-    padding-bottom:24px;
-}
-a { color:inherit; text-decoration:none; }
-button, input, textarea, select { font-family:var(--font-sans); }
-.header-top {
-    height:64px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 22px;
-    background:rgba(6,6,6,.78);
-    border-bottom:1px solid var(--border);
-    backdrop-filter:var(--blur);
-    -webkit-backdrop-filter:var(--blur);
-    position:sticky;
-    top:0;
-    z-index:20;
-}
-.brand-box img { height:60px; display:block; }
-.header-actions { display:flex; align-items:center; gap:10px; }
-.link-pill {
-    border:1px solid var(--border);
-    border-radius:999px;
-    background:rgba(0,0,0,.52);
-    color:#fff;
-    padding:8px 14px;
-    font-size:11px;
-    font-weight:800;
-    text-transform:uppercase;
-    letter-spacing:.8px;
-}
-.link-pill:hover { border-color:var(--gold); background:rgba(229,193,88,.10); }
-.page {
-    width:min(1180px, calc(100% - 28px));
-    margin:24px auto 42px;
-}
-.hero {
-    border:1px solid var(--border);
-    border-radius:24px;
-    background:radial-gradient(circle at 14% 0%, rgba(229,193,88,.18), transparent 30%), rgba(4,4,4,.72);
-    box-shadow:0 24px 70px rgba(0,0,0,.56);
-    backdrop-filter:var(--blur);
-    -webkit-backdrop-filter:var(--blur);
-    padding:28px;
-    display:grid;
-    grid-template-columns:1fr auto;
-    gap:20px;
-    align-items:center;
-}
-.eyebrow {
-    color:var(--gold);
-    font-size:10px;
-    font-weight:900;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    margin-bottom:8px;
-}
-.hero h1 {
-    font-family:var(--font-serif);
-    font-size:clamp(28px,4vw,46px);
-    letter-spacing:3px;
-    line-height:1;
-    text-transform:uppercase;
-    margin-bottom:10px;
-}
-.hero p {
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.65;
-    max-width:760px;
-}
-.status-box {
-    min-width:180px;
-    border:1px solid rgba(229,193,88,.34);
-    border-radius:18px;
-    background:rgba(0,0,0,.48);
-    padding:16px;
-    text-align:center;
-}
-.status-box strong {
-    display:block;
-    color:var(--gold);
-    font-family:var(--font-serif);
-    font-size:18px;
-    letter-spacing:1px;
-    text-transform:uppercase;
-}
-.status-box span {
-    display:block;
-    color:var(--soft);
-    font-size:10px;
-    font-weight:800;
-    margin-top:5px;
-    text-transform:uppercase;
-    letter-spacing:.8px;
-}
-.form-shell {
-    margin-top:18px;
-    border:1px solid var(--border);
-    border-radius:24px;
-    background:rgba(5,5,5,.76);
-    backdrop-filter:var(--blur);
-    -webkit-backdrop-filter:var(--blur);
-    overflow:hidden;
-}
-.form-head {
-    padding:18px 20px;
-    border-bottom:1px solid rgba(255,255,255,.08);
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-end;
-    gap:14px;
-}
-.form-head h2 {
-    color:var(--gold);
-    font-family:var(--font-serif);
-    font-size:17px;
-    letter-spacing:1.4px;
-    text-transform:uppercase;
-}
-.form-head p { color:var(--soft); font-size:11px; margin-top:4px; }
-.badge-pending {
-    border:1px solid rgba(229,193,88,.32);
-    color:var(--gold-soft);
-    border-radius:999px;
-    padding:7px 11px;
-    font-size:9px;
-    font-weight:900;
-    text-transform:uppercase;
-    white-space:nowrap;
-    background:rgba(229,193,88,.08);
-}
-.form-grid {
-    padding:18px 20px 20px;
-    display:grid;
-    grid-template-columns:repeat(2, minmax(0,1fr));
-    gap:14px;
-}
-.field { display:flex; flex-direction:column; gap:6px; }
-.field.full { grid-column:1 / -1; }
-label {
-    color:#fff;
-    font-size:11px;
-    font-weight:800;
-    letter-spacing:.3px;
-}
-label span { color:var(--gold); }
-input, textarea, select {
-    width:100%;
-    border:1px solid rgba(255,255,255,.13);
-    background:var(--bg-field);
-    color:#fff;
-    border-radius:12px;
-    outline:none;
-    font-size:12px;
-}
-input, select { height:40px; padding:0 12px; }
-input[type="file"] {
-    height:auto;
-    padding:10px 12px;
-    cursor:pointer;
-}
-input[type="file"]::file-selector-button {
-    border:1px solid rgba(229,193,88,.34);
-    border-radius:999px;
-    background:rgba(229,193,88,.12);
-    color:var(--gold);
-    font-size:10px;
-    font-weight:900;
-    text-transform:uppercase;
-    letter-spacing:.5px;
-    padding:7px 11px;
-    margin-right:10px;
-    cursor:pointer;
-}
-input[type="file"]::file-selector-button:hover { background:rgba(229,193,88,.22); }
-textarea { min-height:98px; resize:vertical; padding:12px; line-height:1.5; }
-input:focus, textarea:focus, select:focus { border-color:var(--gold); background:rgba(0,0,0,.72); }
-select option { background:#080808; color:#fff; }
-.help { color:var(--soft); font-size:9.5px; line-height:1.4; }
-.check-row {
-    grid-column:1 / -1;
-    display:grid;
-    grid-template-columns:repeat(2, minmax(0,1fr));
-    gap:10px;
-}
-.check-card {
-    border:1px solid rgba(229,193,88,.18);
-    border-radius:14px;
-    padding:12px;
-    background:rgba(0,0,0,.38);
-    display:flex;
-    gap:10px;
-    align-items:flex-start;
-}
-.check-card input { width:16px; height:16px; margin-top:1px; accent-color:#e5c158; flex:0 0 auto; }
-.check-card strong { display:block; font-size:11px; margin-bottom:3px; }
-.check-card small { display:block; color:var(--soft); font-size:9.5px; line-height:1.35; }
-.actions {
-    grid-column:1 / -1;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:12px;
-    border-top:1px solid rgba(255,255,255,.08);
-    margin-top:4px;
-    padding-top:16px;
-}
-.submit-btn {
-    border:0;
-    border-radius:999px;
-    background:var(--gold);
-    color:#000;
-    height:42px;
-    padding:0 22px;
-    font-size:12px;
-    font-weight:900;
-    text-transform:uppercase;
-    letter-spacing:.8px;
-    cursor:pointer;
-}
-.submit-btn:hover { background:#f3d775; box-shadow:0 0 16px rgba(229,193,88,.30); }
-.submit-btn:disabled { opacity:.62; cursor:not-allowed; box-shadow:none; }
-.cancel-link { color:var(--muted); font-size:11px; font-weight:800; }
-.message {
-    grid-column:1 / -1;
-    display:none;
-    border-radius:14px;
-    padding:13px 14px;
-    font-size:12px;
-    line-height:1.5;
-}
-.message.ok { display:block; color:#dfffe9; border:1px solid rgba(46,213,115,.34); background:rgba(46,213,115,.10); }
-.message.error { display:block; color:#ffe1e4; border:1px solid rgba(255,91,104,.34); background:rgba(255,91,104,.10); }
-.footer {
-    position:fixed;
-    left:0;
-    bottom:0;
-    width:100%;
-    height:24px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#000;
-    border-top:1px solid #1a1a1a;
-    color:#8c8c8c;
-    font-size:11px;
-    font-family:Arial, Helvetica, sans-serif;
-    z-index:30;
-}
-@media(max-width:760px) {
-    .header-top { height:auto; flex-direction:column; gap:8px; padding:10px 12px; }
-    .brand-box img { height:56px; }
-    .header-actions { width:100%; justify-content:center; }
-    .hero { grid-template-columns:1fr; padding:22px; }
-    .status-box { width:100%; }
-    .form-head { flex-direction:column; align-items:flex-start; }
-    .form-grid { grid-template-columns:1fr; padding:16px 14px 18px; }
-    .check-row { grid-template-columns:1fr; }
-    .actions { flex-direction:column-reverse; align-items:stretch; }
-    .submit-btn { width:100%; }
-    .cancel-link { text-align:center; }
-}
+:root{--bg:#020202;--panel:rgba(8,8,8,.84);--field:rgba(0,0,0,.58);--gold:#e5c158;--gold2:#f2d574;--line:rgba(229,193,88,.25);--text:#fff;--muted:#d8d8d8;--soft:#969696;--green:#2ed573;--red:#ff5b68;--font-serif:'Cinzel',serif;--font-sans:'Montserrat',sans-serif;--blur:blur(18px)}
+*{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;background:linear-gradient(135deg,rgba(0,0,0,.75),rgba(0,0,0,.50)),url("imagenes/Boulevard.png") center bottom/cover fixed no-repeat;color:var(--text);font-family:var(--font-sans);padding-bottom:28px}a{color:inherit;text-decoration:none}button,input,textarea,select{font-family:var(--font-sans)}.header-top{min-height:68px;display:flex;align-items:center;justify-content:space-between;padding:8px 22px;background:rgba(6,6,6,.82);border-bottom:1px solid var(--line);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);position:sticky;top:0;z-index:40}.brand-box img{height:60px;display:block}.header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.link-pill{border:1px solid var(--line);border-radius:999px;background:rgba(0,0,0,.52);color:#fff;padding:9px 15px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.8px}.link-pill:hover{border-color:var(--gold);background:rgba(229,193,88,.10)}.page{width:min(1180px,calc(100% - 28px));margin:24px auto 46px}.hero{border:1px solid var(--line);border-radius:26px;background:radial-gradient(circle at 14% 0%,rgba(229,193,88,.20),transparent 30%),rgba(4,4,4,.76);box-shadow:0 24px 70px rgba(0,0,0,.58);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);padding:28px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}.eyebrow{color:var(--gold);font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}.hero h1{font-family:var(--font-serif);font-size:clamp(28px,4vw,48px);letter-spacing:3px;line-height:1;text-transform:uppercase;margin-bottom:10px}.hero p{color:var(--muted);font-size:12px;line-height:1.7;max-width:790px}.status-box{min-width:210px;border:1px solid rgba(229,193,88,.34);border-radius:18px;background:rgba(0,0,0,.48);padding:16px;text-align:center}.status-box strong{display:block;color:var(--gold);font-family:var(--font-serif);font-size:19px;letter-spacing:1px;text-transform:uppercase}.status-box span{display:block;color:var(--soft);font-size:10px;font-weight:900;margin-top:5px;text-transform:uppercase;letter-spacing:.8px}.form-shell{margin-top:18px;border:1px solid var(--line);border-radius:26px;background:rgba(5,5,5,.78);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);overflow:hidden}.form-head{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:flex-end;gap:14px}.form-head h2{color:var(--gold);font-family:var(--font-serif);font-size:18px;letter-spacing:1.4px;text-transform:uppercase}.form-head p{color:var(--soft);font-size:11px;margin-top:4px}.badge{border:1px solid rgba(229,193,88,.32);color:var(--gold2);border-radius:999px;padding:7px 11px;font-size:9px;font-weight:900;text-transform:uppercase;white-space:nowrap;background:rgba(229,193,88,.08)}.section{padding:20px;border-bottom:1px solid rgba(255,255,255,.08)}.section:last-child{border-bottom:0}.section-title{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}.section-title h3{font-family:var(--font-serif);color:var(--gold);font-size:16px;text-transform:uppercase;letter-spacing:1.2px}.section-title p{color:var(--soft);font-size:10.5px;line-height:1.45}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field.third{grid-column:auto}.mini-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.days-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px}.day-chip{border:1px solid rgba(229,193,88,.20);background:rgba(0,0,0,.42);border-radius:14px;padding:10px 8px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:10px;font-weight:900;text-transform:uppercase;color:#fff;cursor:pointer}.day-chip input{width:15px;height:15px;accent-color:#e5c158}.day-chip:has(input:checked){border-color:rgba(229,193,88,.58);background:rgba(229,193,88,.14);color:var(--gold2)}label{color:#fff;font-size:11px;font-weight:800;letter-spacing:.3px}label span{color:var(--gold)}input,textarea,select{width:100%;border:1px solid rgba(255,255,255,.14);background:var(--field);color:#fff;border-radius:13px;outline:none;font-size:12px}input,select{height:42px;padding:0 12px}input[type=file]{height:auto;padding:11px;background:rgba(0,0,0,.45)}textarea{min-height:104px;resize:vertical;padding:12px;line-height:1.5}input:focus,textarea:focus,select:focus{border-color:var(--gold);background:rgba(0,0,0,.76)}select option{background:#080808;color:#fff}.help{color:var(--soft);font-size:9.5px;line-height:1.4}.card{border:1px solid rgba(229,193,88,.16);border-radius:18px;background:rgba(0,0,0,.36);padding:14px}.product-card{border:1px solid rgba(229,193,88,.18);border-radius:20px;background:linear-gradient(180deg,rgba(229,193,88,.07),rgba(0,0,0,.35));padding:15px;margin-bottom:12px}.product-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.product-title strong{font-family:var(--font-serif);color:var(--gold);font-size:14px;text-transform:uppercase;letter-spacing:.9px}.product-title small{color:var(--soft);font-size:9.5px}.product-images-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}.map-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:14px}.map-box{height:360px;border:1px solid rgba(229,193,88,.25);border-radius:18px;overflow:hidden;background:#101010}.leaflet-container{background:#0b0b0b}.map-tools{display:flex;gap:10px;align-items:center;margin-bottom:10px}.map-tools input{flex:1}.small-btn{border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.56);color:#fff;height:42px;padding:0 13px;font-size:10px;font-weight:900;text-transform:uppercase;cursor:pointer;white-space:nowrap}.small-btn:hover{border-color:var(--gold);background:rgba(229,193,88,.12)}.check-card{border:1px solid rgba(229,193,88,.18);border-radius:16px;padding:13px;background:rgba(0,0,0,.38);display:flex;gap:10px;align-items:flex-start}.check-card input{width:16px;height:16px;margin-top:1px;accent-color:#e5c158;flex:0 0 auto}.check-card strong{display:block;font-size:11px;margin-bottom:3px}.check-card small{display:block;color:var(--soft);font-size:9.5px;line-height:1.35}.message{display:none;border-radius:15px;padding:14px 15px;font-size:12px;line-height:1.55;margin:0 20px 18px}.message.ok{display:block;color:#dfffe9;border:1px solid rgba(46,213,115,.34);background:rgba(46,213,115,.10)}.message.error{display:block;color:#ffe1e4;border:1px solid rgba(255,91,104,.34);background:rgba(255,91,104,.10)}.actions{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px;border-top:1px solid rgba(255,255,255,.08)}.submit-btn{border:0;border-radius:999px;background:var(--gold);color:#000;height:44px;padding:0 24px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.8px;cursor:pointer}.submit-btn:hover{background:#f3d775;box-shadow:0 0 16px rgba(229,193,88,.30)}.submit-btn:disabled{opacity:.62;cursor:not-allowed;box-shadow:none}.cancel-link{color:var(--muted);font-size:11px;font-weight:800}.footer{position:fixed;left:0;bottom:0;width:100%;height:24px;display:flex;align-items:center;justify-content:center;background:#000;border-top:1px solid #1a1a1a;color:#8c8c8c;font-size:11px;font-family:Arial,Helvetica,sans-serif;z-index:50}@media(max-width:900px){.hero{grid-template-columns:1fr}.status-box{width:100%}.form-grid,.map-layout{grid-template-columns:1fr}.mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.days-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.product-images-grid{grid-template-columns:1fr}.header-top{flex-direction:column;gap:8px;padding:10px 12px}.brand-box img{height:56px}.header-actions{justify-content:center}.section-title,.form-head,.actions{flex-direction:column;align-items:flex-start}.submit-btn{width:100%}.cancel-link{text-align:center;width:100%}.map-box{height:310px}.map-tools{flex-direction:column}.map-tools input,.small-btn{width:100%}}
+.offer-row{border:1px solid rgba(46,213,115,.26);background:rgba(46,213,115,.07);border-radius:15px;padding:12px;margin-top:10px}.offer-row label{display:flex;align-items:center;gap:9px}.offer-row input[type=checkbox]{width:16px;height:16px;accent-color:#2ed573}.offer-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}.time-format-note{color:var(--gold2);font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px}
 </style>
 </head>
 <body>
 <header class="header-top">
-    <a href="index.html" class="brand-box" title="Volver al inicio">
-        <img src="imagenes/logo.png" alt="Logo Urbanex">
-    </a>
-    <div class="header-actions">
-        <a class="link-pill" href="index.html">Inicio</a>
-        <a class="link-pill" href="boulevard.html">Boulevard</a>
-    </div>
+    <a href="index.html" class="brand-box" title="Volver al inicio"><img src="imagenes/logo.png" alt="Logo Urbanex"></a>
+    <div class="header-actions"><a class="link-pill" href="index.html">Inicio</a><a class="link-pill" href="boulevard.html">Boulevard</a></div>
 </header>
-
 <main class="page">
     <section class="hero">
         <div>
-            <div class="eyebrow">Registro comercial</div>
-            <h1>Registre su negocio</h1>
-            <p>
-                Complete la información del comercio. La solicitud se guardará como negocio inactivo.
-                El administrador podrá revisarla y activarla para que aparezca en Urbanex.
-            </p>
+            <div class="eyebrow">Solicitud comercial</div>
+            <h1>Registro profesional</h1>
+            <p>Complete la información del comercio, documentos de verificación, horario de atención, ubicación y productos iniciales. La solicitud quedará pendiente hasta aprobación del administrador.</p>
         </div>
-        <div class="status-box">
-            <strong>Pendiente</strong>
-            <span>Aprobación del administrador</span>
-        </div>
+        <div class="status-box"><strong>Pendiente</strong><span>Aprobación del administrador</span></div>
     </section>
 
     <section class="form-shell">
-        <div class="form-head">
-            <div>
-                <h2>Datos del comercio</h2>
-                <p>La información marcada con * es obligatoria.</p>
+        <form id="businessForm" autocomplete="on">
+            <div class="form-head">
+                <div><h2>Datos del comercio</h2><p>La información marcada con * es obligatoria. La cédula no se muestra en la página pública.</p></div>
+                <span class="badge">No visible hasta aprobación</span>
             </div>
-            <span class="badge-pending">No visible hasta aprobación</span>
-        </div>
-
-        <form id="businessForm" class="form-grid" autocomplete="on">
             <div id="formMessage" class="message"></div>
 
-            <div class="field">
-                <label for="name">Nombre del negocio <span>*</span></label>
-                <input id="name" name="name" type="text" maxlength="120" required placeholder="Ej.: Café Central Loja">
+            <div class="section">
+                <div class="section-title"><h3>Información principal</h3><p>Estos datos se visualizarán en la landing page pública cuando el negocio sea aprobado.</p></div>
+                <div class="form-grid">
+                    <div class="field"><label for="name">Nombre del negocio <span>*</span></label><input id="name" name="name" type="text" maxlength="120" required placeholder="Ej.: Electromás"></div>
+                    <div class="field"><label for="owner_email">Correo del propietario <span>*</span></label><input id="owner_email" name="owner_email" type="email" maxlength="160" required placeholder="propietario@correo.com"><div class="help">Se usará para enviar el aviso cuando el comercio sea aprobado.</div></div>
+                    <div class="field"><label for="city">Ciudad <span>*</span></label><input id="city" name="city" type="text" maxlength="80" required value="Loja" placeholder="Loja"></div>
+                    <div class="field"><label for="category">Categoría <span>*</span></label><select id="category" name="category" required><option value="">Cargando categorías...</option></select><div class="help">Se carga desde la tabla categories de Supabase.</div></div>
+                    <div class="field"><label for="subcategory">Subcategoría</label><select id="subcategory" name="subcategory"><option value="">Seleccione primero una categoría</option></select></div>
+                    <div class="field"><label for="phone">Teléfono</label><input id="phone" name="phone" type="tel" maxlength="30" placeholder="Ej.: 072000000"></div>
+                    <div class="field"><label for="whatsapp">WhatsApp <span>*</span></label><input id="whatsapp" name="whatsapp" type="tel" maxlength="30" required placeholder="Ej.: 593987654321"><div class="help">El mensaje público indicará que el contacto llega desde Urbanex.</div></div>
+                    <div class="field"><label for="website">Sitio web o red social</label><input id="website" name="website" type="url" maxlength="220" placeholder="https://..."></div>
+                    <div class="field full"><label for="description">Descripción <span>*</span></label><textarea id="description" name="description" maxlength="1000" required placeholder="Describa qué ofrece el negocio, servicios principales y productos destacados."></textarea></div>
+                    <div class="field full"><label for="cover_image_file">Imagen de portada del negocio JPG o PNG</label><input id="cover_image_file" name="cover_image_file" type="file" accept="image/jpeg,image/png"><div class="help">Formato permitido: JPG, JPEG o PNG. Tamaño máximo recomendado: 5 MB.</div></div>
+                    <label class="check-card field full" for="delivery_available"><input id="delivery_available" name="delivery_available" type="checkbox"><span><strong>Ofrece servicio a domicilio</strong><small>Se usará para aparecer en el filtro A Domicilio cuando el negocio sea aprobado.</small></span></label>
+                </div>
             </div>
 
-            <div class="field">
-                <label for="city">Ciudad <span>*</span></label>
-                <input id="city" name="city" type="text" maxlength="80" required value="Loja" placeholder="Loja">
+            <div class="section">
+                <div class="section-title"><h3>Documentos de verificación</h3><p>Estos documentos quedan reservados para revisión administrativa. No se publican en la página del negocio.</p></div>
+                <div class="form-grid">
+                    <div class="field"><label for="cedula_front">Foto de cédula - frente <span>*</span></label><input id="cedula_front" name="cedula_front" type="file" accept="image/jpeg,image/png" required><div class="help">Solo JPG, JPEG o PNG.</div></div>
+                    <div class="field"><label for="cedula_back">Foto de cédula - posterior <span>*</span></label><input id="cedula_back" name="cedula_back" type="file" accept="image/jpeg,image/png" required><div class="help">Solo JPG, JPEG o PNG.</div></div>
+                </div>
             </div>
 
-            <div class="field">
-                <label for="category">Categoría <span>*</span></label>
-                <select id="category" name="category" required>
-                    <option value="">Cargando categorías...</option>
-                </select>
-                <div class="help">Se carga desde la tabla categories de Supabase.</div>
+            <div class="section">
+                <div class="section-title"><h3>Horario de atención</h3><p>Seleccione los días de atención y registre hasta dos jornadas: apertura/cierre principal y apertura/cierre complementaria.</p></div>
+                <div class="card">
+                    <label>Días de atención <span>*</span></label>
+                    <div class="days-grid" style="margin-top:9px;">
+                        <label class="day-chip"><input type="checkbox" name="days" value="1" checked>Lun</label>
+                        <label class="day-chip"><input type="checkbox" name="days" value="2" checked>Mar</label>
+                        <label class="day-chip"><input type="checkbox" name="days" value="3" checked>Mié</label>
+                        <label class="day-chip"><input type="checkbox" name="days" value="4" checked>Jue</label>
+                        <label class="day-chip"><input type="checkbox" name="days" value="5" checked>Vie</label>
+                        <label class="day-chip"><input type="checkbox" name="days" value="6" checked>Sáb</label>
+                        <label class="day-chip"><input type="checkbox" name="days" value="0">Dom</label>
+                    </div>
+                    <div class="mini-grid" style="margin-top:14px;">
+                        <div class="field"><label for="open_time_1">Apertura 1 <span>*</span></label><input id="open_time_1" name="open_time_1" type="text" inputmode="numeric" maxlength="5" required value="08h00" placeholder="08h00"><div class="help">Formato 24 horas: 00h00 a 23h59.</div></div>
+                        <div class="field"><label for="close_time_1">Cierre 1 <span>*</span></label><input id="close_time_1" name="close_time_1" type="text" inputmode="numeric" maxlength="5" required value="13h00" placeholder="13h00"><div class="help">Ejemplo: 18h30.</div></div>
+                        <div class="field"><label for="open_time_2">Apertura 2</label><input id="open_time_2" name="open_time_2" type="text" inputmode="numeric" maxlength="5" value="15h00" placeholder="15h00"><div class="help">Opcional si no hay segunda jornada.</div></div>
+                        <div class="field"><label for="close_time_2">Cierre 2</label><input id="close_time_2" name="close_time_2" type="text" inputmode="numeric" maxlength="5" value="18h00" placeholder="18h00"><div class="help">Formato 24 horas.</div></div>
+                    </div>
+                    <div class="time-format-note" style="margin-top:10px;">Las horas se registran en formato 24 horas: 00h00, 08h00, 13h30, 23h59. Use únicamente formato de 24 horas.</div>
+                </div>
             </div>
 
-            <div class="field">
-                <label for="subcategory">Subcategoría</label>
-                <select id="subcategory" name="subcategory">
-                    <option value="">Seleccione primero una categoría</option>
-                </select>
+            <div class="section">
+                <div class="section-title"><h3>Ubicación en mapa</h3><p>Busque la dirección o seleccione directamente en el mapa. La latitud y longitud se guardan automáticamente.</p></div>
+                <div class="map-layout">
+                    <div>
+                        <div class="map-tools"><input id="address" name="address" type="text" maxlength="180" required placeholder="Dirección o referencia del negocio"><button id="searchAddressBtn" class="small-btn" type="button">Buscar dirección</button></div>
+                        <div id="map" class="map-box"></div>
+                    </div>
+                    <div class="card">
+                        <div class="field"><label for="latitude">Latitud <span>*</span></label><input id="latitude" name="latitude" type="number" step="any" readonly required placeholder="Seleccione en el mapa"></div>
+                        <div class="field" style="margin-top:12px;"><label for="longitude">Longitud <span>*</span></label><input id="longitude" name="longitude" type="number" step="any" readonly required placeholder="Seleccione en el mapa"></div>
+                        <button id="useMyLocationBtn" class="small-btn" type="button" style="width:100%;margin-top:14px;">Usar mi ubicación</button>
+                        <div class="help" style="margin-top:10px;">Puede mover el marcador o tocar otro punto del mapa para corregir la ubicación.</div>
+                    </div>
+                </div>
             </div>
 
-            <div class="field full">
-                <label for="address">Dirección <span>*</span></label>
-                <input id="address" name="address" type="text" maxlength="180" required placeholder="Calle, referencia o sector">
+            <div class="section">
+                <div class="section-title"><h3>Productos iniciales</h3><p>Puede ingresar máximo 4 productos. Cada producto permite máximo 3 imágenes JPG o PNG e indicar si está en oferta. Se publicarán cuando el negocio sea aprobado.</p></div>
+                <div id="productsBox"></div>
             </div>
 
-            <div class="field full">
-                <label for="description">Descripción <span>*</span></label>
-                <textarea id="description" name="description" maxlength="1000" required placeholder="Describa qué ofrece el negocio, servicios principales y productos destacados."></textarea>
+            <div class="section">
+                <label class="check-card" for="accept_terms"><input id="accept_terms" name="accept_terms" type="checkbox" required><span><strong>Confirmo que la información enviada es correcta</strong><small>Urbanex podrá revisar, aprobar, rechazar o solicitar correcciones sobre esta solicitud.</small></span></label>
             </div>
 
-            <div class="field">
-                <label for="phone">Teléfono</label>
-                <input id="phone" name="phone" type="tel" maxlength="30" placeholder="Ej.: 072000000">
-            </div>
-
-            <div class="field">
-                <label for="whatsapp">WhatsApp</label>
-                <input id="whatsapp" name="whatsapp" type="tel" maxlength="30" placeholder="Ej.: 593987654321">
-            </div>
-
-            <div class="field">
-                <label for="website">Sitio web o red social</label>
-                <input id="website" name="website" type="url" maxlength="220" placeholder="https://...">
-            </div>
-
-            <div class="field">
-                <label for="cover_image_file">Imagen de portada</label>
-                <input id="cover_image_file" name="cover_image_file" type="file" accept="image/jpeg,image/png">
-                <div class="help">Solo se permiten imágenes JPG o PNG. Tamaño máximo sugerido: 5 MB.</div>
-            </div>
-
-            <div class="field">
-                <label for="open_time">Hora de apertura <span>*</span></label>
-                <input id="open_time" name="open_time" type="time" required>
-            </div>
-
-            <div class="field">
-                <label for="close_time">Hora de cierre <span>*</span></label>
-                <input id="close_time" name="close_time" type="time" required>
-            </div>
-
-            <div class="field">
-                <label for="latitude">Latitud</label>
-                <input id="latitude" name="latitude" type="number" step="any" placeholder="-3.9931">
-            </div>
-
-            <div class="field">
-                <label for="longitude">Longitud</label>
-                <input id="longitude" name="longitude" type="number" step="any" placeholder="-79.2042">
-            </div>
-
-            <div class="check-row">
-                <label class="check-card" for="delivery_available">
-                    <input id="delivery_available" name="delivery_available" type="checkbox">
-                    <span>
-                        <strong>Ofrece servicio a domicilio</strong>
-                        <small>Se usará para aparecer en el filtro A Domicilio cuando el negocio sea aprobado.</small>
-                    </span>
-                </label>
-
-                <label class="check-card" for="accept_terms">
-                    <input id="accept_terms" name="accept_terms" type="checkbox" required>
-                    <span>
-                        <strong>Confirmo que la información es correcta</strong>
-                        <small>Urbanex podrá revisar, aprobar o rechazar esta solicitud.</small>
-                    </span>
-                </label>
-            </div>
-
-            <div class="actions">
-                <a class="cancel-link" href="index.html">Cancelar y volver al inicio</a>
-                <button id="submitBtn" class="submit-btn" type="submit">Enviar solicitud</button>
-            </div>
+            <div class="actions"><a class="cancel-link" href="index.html">Cancelar y volver al inicio</a><button id="submitBtn" class="submit-btn" type="submit">Enviar solicitud</button></div>
         </form>
     </section>
 </main>
-
-<footer class="footer">
-    <p>&copy; 2026 Urbanex. Desarrollado por NeoDat Consultores.</p>
-</footer>
-
+<footer class="footer"><p>&copy; 2026 Urbanex. Desarrollado por NeoDat Consultores.</p></footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-const IMAGE_BUCKET = 'business-images';
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
-
-const form = document.getElementById('businessForm');
-const submitBtn = document.getElementById('submitBtn');
-const messageBox = document.getElementById('formMessage');
-const categorySelect = document.getElementById('category');
-const subcategorySelect = document.getElementById('subcategory');
-let categories = [];
-
-function showMessage(type, text) {
-    messageBox.className = 'message ' + type;
-    messageBox.textContent = text;
-    messageBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
-
-function normalize(value) {
-    return String(value || '')
-        .trim()
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '')
-        .slice(0, 80);
-}
-
-function numericOrNull(value) {
-    if (value === null || value === undefined || String(value).trim() === '') return null;
-    const number = Number(value);
-    return Number.isFinite(number) ? number : null;
-}
-
-function rootCategories() {
-    return categories
-        .filter(category => !category.parent_id)
-        .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0) || String(a.name || '').localeCompare(String(b.name || ''), 'es'));
-}
-
-function childCategories(parentId) {
-    return categories
-        .filter(category => String(category.parent_id) === String(parentId))
-        .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0) || String(a.name || '').localeCompare(String(b.name || ''), 'es'));
-}
-
-function renderCategories() {
-    const roots = rootCategories();
-
-    if (!roots.length) {
-        categorySelect.innerHTML = '<option value="">No hay categorías disponibles</option>';
-        return;
-    }
-
-    categorySelect.innerHTML = '<option value="">Seleccione una categoría</option>' +
-        roots.map(category => `<option value="${category.id}">${category.icon || ''} ${category.name}</option>`).join('');
-}
-
-function renderSubcategories() {
-    const categoryId = categorySelect.value;
-    const children = childCategories(categoryId);
-
-    if (!categoryId) {
-        subcategorySelect.innerHTML = '<option value="">Seleccione primero una categoría</option>';
-        subcategorySelect.disabled = true;
-        return;
-    }
-
-    if (!children.length) {
-        subcategorySelect.innerHTML = '<option value="">Sin subcategoría</option>';
-        subcategorySelect.disabled = true;
-        return;
-    }
-
-    subcategorySelect.disabled = false;
-    subcategorySelect.innerHTML = '<option value="">Sin subcategoría</option>' +
-        children.map(category => `<option value="${category.id}">${category.icon || ''} ${category.name}</option>`).join('');
-}
-
-async function loadCategories() {
-    const { data, error } = await supabase
-        .from('categories')
-        .select('id,name,icon,parent_id,sort_order')
-        .order('sort_order', { ascending: true })
-        .order('name', { ascending: true });
-
-    if (error) {
-        console.error(error);
-        categorySelect.innerHTML = '<option value="">No se pudieron cargar categorías</option>';
-        showMessage('error', 'No se pudieron cargar las categorías desde Supabase. Revise permisos de lectura en la tabla categories.');
-        return;
-    }
-
-    categories = data || [];
-    renderCategories();
-    renderSubcategories();
-}
-
-async function makeUniqueSlug(baseSlug) {
-    const safeBase = baseSlug || 'negocio';
-    const candidate = safeBase;
-
-    const { data, error } = await supabase
-        .from('businesses')
-        .select('slug')
-        .eq('slug', candidate)
-        .limit(1);
-
-    if (error) {
-        return `${safeBase}-${Date.now().toString().slice(-6)}`;
-    }
-
-    if (!data || !data.length) return candidate;
-    return `${safeBase}-${Date.now().toString().slice(-6)}`;
-}
-
-function cleanUrl(value) {
-    const text = String(value || '').trim();
-    return text || null;
-}
-
-function validateImageFile(file) {
-    if (!file) return;
-
-    const allowedTypes = ['image/jpeg', 'image/png'];
-    if (!allowedTypes.includes(file.type)) {
-        throw new Error('La imagen de portada debe estar en formato JPG o PNG.');
-    }
-
-    if (file.size > MAX_IMAGE_BYTES) {
-        throw new Error('La imagen de portada no debe superar los 5 MB.');
-    }
-}
-
-async function uploadCoverImage(file, slug) {
-    if (!file) return null;
-
-    validateImageFile(file);
-
-    const extension = file.type === 'image/png' ? 'png' : 'jpg';
-    const filePath = `registro-negocios/${slug}-${Date.now()}.${extension}`;
-
-    const { error: uploadError } = await supabase.storage
-        .from(IMAGE_BUCKET)
-        .upload(filePath, file, {
-            cacheControl: '3600',
-            contentType: file.type,
-            upsert: false
-        });
-
-    if (uploadError) {
-        throw new Error('No se pudo subir la imagen. Revise el bucket business-images y las políticas de Storage en Supabase.');
-    }
-
-    const { data } = supabase.storage
-        .from(IMAGE_BUCKET)
-        .getPublicUrl(filePath);
-
-    return data?.publicUrl || null;
-}
-
-form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Enviando...';
-    messageBox.className = 'message';
-    messageBox.textContent = '';
-
-    try {
-        const formData = new FormData(form);
-        const name = String(formData.get('name') || '').trim();
-        const categoryId = formData.get('category') ? Number(formData.get('category')) : null;
-        const subcategoryId = formData.get('subcategory') ? Number(formData.get('subcategory')) : null;
-
-        if (!name || !categoryId) {
-            throw new Error('Ingrese el nombre del negocio y seleccione una categoría.');
-        }
-
-        const openTime = String(formData.get('open_time') || '').trim();
-        const closeTime = String(formData.get('close_time') || '').trim();
-
-        if (!openTime || !closeTime) {
-            throw new Error('Ingrese la hora de apertura y la hora de cierre del local.');
-        }
-
-        if (openTime >= closeTime) {
-            throw new Error('La hora de apertura debe ser menor que la hora de cierre.');
-        }
-
-        const slug = await makeUniqueSlug(normalize(name));
-        const coverImageFile = document.getElementById('cover_image_file').files[0] || null;
-        const coverImageUrl = await uploadCoverImage(coverImageFile, slug);
-
-        const { error } = await supabase.rpc('submit_business_registration', {
-            p_name: name,
-            p_slug: slug,
-            p_category_id: categoryId,
-            p_subcategory_id: subcategoryId,
-            p_city: String(formData.get('city') || '').trim() || 'Loja',
-            p_address: String(formData.get('address') || '').trim(),
-            p_description: String(formData.get('description') || '').trim(),
-            p_phone: String(formData.get('phone') || '').trim() || null,
-            p_whatsapp: String(formData.get('whatsapp') || '').trim() || null,
-            p_website: cleanUrl(formData.get('website')),
-            p_cover_image: coverImageUrl,
-            p_latitude: numericOrNull(formData.get('latitude')),
-            p_longitude: numericOrNull(formData.get('longitude')),
-            p_delivery_available: formData.get('delivery_available') === 'on',
-            p_open_time: openTime,
-            p_close_time: closeTime
-        });
-
-        if (error) throw error;
-
-        form.reset();
-        document.getElementById('city').value = 'Loja';
-        renderCategories();
-        renderSubcategories();
-
-        showMessage('ok', 'Solicitud enviada correctamente. El negocio quedó registrado como inactivo, con horario de atención e imagen de portada si fue cargada. Queda pendiente de aprobación del administrador.');
-    } catch (error) {
-        console.error(error);
-        showMessage('error', 'No se pudo enviar la solicitud: ' + (error.message || 'revise la conexión y las políticas de Supabase.'));
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Enviar solicitud';
-    }
-});
-
-categorySelect.addEventListener('change', renderSubcategories);
-loadCategories();
+const SUPABASE_URL='https://mlkynawsjqmawgxeuvks.supabase.co';
+const SUPABASE_ANON_KEY='sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const supabase=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const $=id=>document.getElementById(id);
+const form=$('businessForm'), submitBtn=$('submitBtn'), messageBox=$('formMessage'), categorySelect=$('category'), subcategorySelect=$('subcategory');
+let categories=[];let map,marker;
+const MAX_FILE_MB=5;
+function esc(value){return String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function showMessage(type,text){messageBox.className='message '+type;messageBox.textContent=text;messageBox.scrollIntoView({behavior:'smooth',block:'center'});}
+function normalize(value){return String(value||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80);}
+function numericOrNull(value){if(value===null||value===undefined||String(value).trim()==='')return null;const n=Number(value);return Number.isFinite(n)?n:null;}
+function cleanUrl(value){const text=String(value||'').trim();return text||null;}
+function cleanFileName(name){return String(name||'archivo').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9._-]/g,'-').replace(/-+/g,'-').toLowerCase();}
+function validateImage(file,required=false){if(!file){if(required)throw new Error('Debe cargar los documentos obligatorios.');return false;}const allowed=['image/jpeg','image/png'];if(!allowed.includes(file.type))throw new Error(`El archivo ${file.name} debe estar en formato JPG o PNG.`);if(file.size>MAX_FILE_MB*1024*1024)throw new Error(`El archivo ${file.name} supera ${MAX_FILE_MB} MB.`);return true;}
+function rootCategories(){return categories.filter(c=>!c.parent_id).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)||String(a.name||'').localeCompare(String(b.name||''),'es'));}
+function childCategories(parentId){return categories.filter(c=>String(c.parent_id)===String(parentId)).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)||String(a.name||'').localeCompare(String(b.name||''),'es'));}
+function renderCategories(){const roots=rootCategories();if(!roots.length){categorySelect.innerHTML='<option value="">No hay categorías disponibles</option>';return;}categorySelect.innerHTML='<option value="">Seleccione una categoría</option>'+roots.map(c=>`<option value="${c.id}">${c.icon||''} ${esc(c.name)}</option>`).join('');}
+function renderSubcategories(){const categoryId=categorySelect.value;const children=childCategories(categoryId);if(!categoryId){subcategorySelect.innerHTML='<option value="">Seleccione primero una categoría</option>';subcategorySelect.disabled=true;return;}if(!children.length){subcategorySelect.innerHTML='<option value="">Sin subcategoría</option>';subcategorySelect.disabled=true;return;}subcategorySelect.disabled=false;subcategorySelect.innerHTML='<option value="">Sin subcategoría</option>'+children.map(c=>`<option value="${c.id}">${c.icon||''} ${esc(c.name)}</option>`).join('');}
+async function loadCategories(){const {data,error}=await supabase.from('categories').select('id,name,icon,parent_id,sort_order').order('sort_order',{ascending:true}).order('name',{ascending:true});if(error){categorySelect.innerHTML='<option value="">No se pudieron cargar categorías</option>';showMessage('error','No se pudieron cargar las categorías desde Supabase. Revise permisos de lectura en la tabla categories.');return;}categories=data||[];renderCategories();renderSubcategories();}
+function renderProductInputs(){const box=$('productsBox');box.innerHTML='';for(let i=1;i<=4;i++){box.insertAdjacentHTML('beforeend',`<div class="product-card"><div class="product-title"><strong>Producto ${i}</strong><small>Opcional · máximo 3 imágenes · puede marcarse como oferta</small></div><div class="form-grid"><div class="field"><label for="product_${i}_name">Nombre del producto</label><input id="product_${i}_name" name="product_${i}_name" type="text" maxlength="120" placeholder="Ej.: Refrigeradora"></div><div class="field"><label for="product_${i}_price">Precio normal</label><input id="product_${i}_price" name="product_${i}_price" type="number" min="0" step="0.01" placeholder="0.00"></div><div class="field full"><label for="product_${i}_description">Descripción</label><textarea id="product_${i}_description" name="product_${i}_description" maxlength="600" placeholder="Detalle breve del producto."></textarea></div></div><div class="offer-row"><label for="product_${i}_is_on_sale"><input id="product_${i}_is_on_sale" name="product_${i}_is_on_sale" type="checkbox"><span><strong>Producto en oferta</strong></span></label><div class="offer-fields"><div class="field"><label for="product_${i}_sale_price">Precio de oferta</label><input id="product_${i}_sale_price" name="product_${i}_sale_price" type="number" min="0" step="0.01" placeholder="0.00"></div><div class="field"><label for="product_${i}_offer_label">Texto de oferta</label><input id="product_${i}_offer_label" name="product_${i}_offer_label" type="text" maxlength="80" placeholder="Ej.: Oferta por apertura"></div></div><div class="help">Si marca oferta, se mostrará una etiqueta visible en la página del negocio.</div></div><div class="product-images-grid"><div class="field"><label for="product_${i}_image_1">Imagen 1</label><input id="product_${i}_image_1" type="file" accept="image/jpeg,image/png"></div><div class="field"><label for="product_${i}_image_2">Imagen 2</label><input id="product_${i}_image_2" type="file" accept="image/jpeg,image/png"></div><div class="field"><label for="product_${i}_image_3">Imagen 3</label><input id="product_${i}_image_3" type="file" accept="image/jpeg,image/png"></div></div></div>`);}}
+function initMap(){map=L.map('map',{scrollWheelZoom:true}).setView([-3.99313,-79.20422],14);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(map);map.on('click',e=>setMapPoint(e.latlng.lat,e.latlng.lng,map.getZoom()));setTimeout(()=>map.invalidateSize(),300);}
+async function searchAddress(){const address=$('address').value.trim();const city=$('city').value.trim()||'Loja';if(!address)return showMessage('error','Ingrese una dirección antes de buscar en el mapa.');try{const url=`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(address+', '+city+', Ecuador')}`;const response=await fetch(url,{headers:{'Accept':'application/json'}});const results=await response.json();if(!results?.length)throw new Error('No se encontró la dirección. Seleccione la ubicación directamente en el mapa.');setMapPoint(Number(results[0].lat),Number(results[0].lon),17);}catch(error){showMessage('error',error.message||'No se pudo buscar la dirección. Seleccione la ubicación directamente en el mapa.');}}
+function useMyLocation(){if(!navigator.geolocation)return showMessage('error','El navegador no permite obtener ubicación. Seleccione el punto manualmente en el mapa.');navigator.geolocation.getCurrentPosition(pos=>setMapPoint(pos.coords.latitude,pos.coords.longitude,17),()=>showMessage('error','No se pudo obtener la ubicación. Seleccione el punto manualmente en el mapa.'),{enableHighAccuracy:true,timeout:10000});}
+function normalizeHour(value,fieldName){const raw=String(value||'').trim().toLowerCase().replace(/\s+/g,'');if(!raw)return '';const match=raw.match(/^(\d{1,2})(?:h|:)?(\d{2})$/);if(!match)throw new Error(`${fieldName} debe escribirse en formato 24 horas: 08h00, 13h30 o 23h59.`);const hh=Number(match[1]),mm=Number(match[2]);if(hh<0||hh>23||mm<0||mm>59)throw new Error(`${fieldName} debe estar entre 00h00 y 23h59.`);return String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0');}
+function minutesOf(value){const [h,m]=value.split(':').map(Number);return h*60+m;}
+function validateTimes(open1,close1,open2,close2){if(!open1||!close1)throw new Error('Ingrese la apertura 1 y el cierre 1.');if(minutesOf(open1)>=minutesOf(close1))throw new Error('En la jornada principal, la hora de apertura debe ser menor que la hora de cierre.');if((open2&&!close2)||(!open2&&close2))throw new Error('Si registra segunda jornada, debe ingresar apertura 2 y cierre 2.');if(open2&&close2&&minutesOf(open2)>=minutesOf(close2))throw new Error('En la jornada complementaria, la hora de apertura debe ser menor que la hora de cierre.');if(open2&&close2&&minutesOf(close1)>minutesOf(open2))throw new Error('La apertura 2 debe ser posterior al cierre 1.');}
+function selectedDays(){return Array.from(document.querySelectorAll('input[name="days"]:checked')).map(input=>Number(input.value));}
+function collectHours(){const days=selectedDays();if(!days.length)throw new Error('Seleccione al menos un día de atención.');const open1=normalizeHour($('open_time_1').value,'Apertura 1'),close1=normalizeHour($('close_time_1').value,'Cierre 1'),open2=normalizeHour($('open_time_2').value,'Apertura 2'),close2=normalizeHour($('close_time_2').value,'Cierre 2');validateTimes(open1,close1,open2,close2);const hours=[];days.forEach(day=>{hours.push({day_of_week:day,session_number:1,open_time:open1,close_time:close1,is_closed:false});if(open2&&close2)hours.push({day_of_week:day,session_number:2,open_time:open2,close_time:close2,is_closed:false});});return hours;}
+async function uploadFile(bucket,file,path,publicUrl=false){validateImage(file,true);const {error}=await supabase.storage.from(bucket).upload(path,file,{cacheControl:'3600',upsert:true,contentType:file.type});if(error)throw error;if(publicUrl){const {data}=supabase.storage.from(bucket).getPublicUrl(path);return data.publicUrl;}return path;}
+async function uploadOptionalPublic(bucket,file,path){if(!file)return null;validateImage(file,false);const {error}=await supabase.storage.from(bucket).upload(path,file,{cacheControl:'3600',upsert:true,contentType:file.type});if(error)throw error;const {data}=supabase.storage.from(bucket).getPublicUrl(path);return data.publicUrl;}
+async function collectProducts(submissionId){const products=[];for(let i=1;i<=4;i++){const name=$(`product_${i}_name`).value.trim();const description=$(`product_${i}_description`).value.trim();const price=Number($(`product_${i}_price`).value||0);const isOnSale=$(`product_${i}_is_on_sale`).checked;const salePrice=Number($(`product_${i}_sale_price`).value||0);const offerLabel=$(`product_${i}_offer_label`).value.trim();const files=[$(`product_${i}_image_1`).files[0],$(`product_${i}_image_2`).files[0],$(`product_${i}_image_3`).files[0]].filter(Boolean);if(!name&&!description&&!price&&!salePrice&&!files.length&&!isOnSale)continue;if(!name)throw new Error(`Ingrese el nombre del producto ${i} o deje el bloque vacío.`);if(isOnSale&&salePrice<=0)throw new Error(`Ingrese el precio de oferta del producto ${i}.`);if(isOnSale&&price>0&&salePrice>=price)throw new Error(`El precio de oferta del producto ${i} debe ser menor que el precio normal.`);files.forEach(file=>validateImage(file,false));const urls=[];for(let j=0;j<files.length;j++){const file=files[j];const ext=cleanFileName(file.name).split('.').pop()||'jpg';const path=`registro/${submissionId}/producto-${i}/imagen-${j+1}-${Date.now()}.${ext}`;urls.push(await uploadOptionalPublic('product-images',file,path));}
+products.push({name,description,price,currency:'USD',sort_order:i-1,image_1_url:urls[0]||null,image_2_url:urls[1]||null,image_3_url:urls[2]||null,is_on_sale:isOnSale,sale_price:isOnSale?salePrice:null,offer_label:isOnSale?(offerLabel||'Oferta Urbanex'):null,is_active:true});}
+return products;}
+async function submitForm(event){event.preventDefault();submitBtn.disabled=true;submitBtn.textContent='Enviando...';messageBox.className='message';messageBox.textContent='';try{const submissionId=crypto.randomUUID();const name=$('name').value.trim();const categoryId=$('category').value?Number($('category').value):null;const subcategoryId=$('subcategory').value?Number($('subcategory').value):null;if(!name||!categoryId)throw new Error('Ingrese el nombre del negocio y seleccione una categoría.');if(!$('latitude').value||!$('longitude').value)throw new Error('Seleccione la ubicación del negocio en el mapa.');const hours=collectHours();const coverFile=$('cover_image_file').files[0];let coverUrl=null;if(coverFile){const ext=cleanFileName(coverFile.name).split('.').pop()||'jpg';coverUrl=await uploadOptionalPublic('business-images',coverFile,`registro/${submissionId}/portada-${Date.now()}.${ext}`);}const cedFront=$('cedula_front').files[0];const cedBack=$('cedula_back').files[0];const frontExt=cleanFileName(cedFront.name).split('.').pop()||'jpg';const backExt=cleanFileName(cedBack.name).split('.').pop()||'jpg';const cedulaFrontPath=await uploadFile('business-documents',cedFront,`registro/${submissionId}/cedula-frente-${Date.now()}.${frontExt}`);const cedulaBackPath=await uploadFile('business-documents',cedBack,`registro/${submissionId}/cedula-posterior-${Date.now()}.${backExt}`);const products=await collectProducts(submissionId);const business={name,slug:normalize(name),category_id:categoryId,subcategory_id:subcategoryId,city:$('city').value.trim()||'Loja',address:$('address').value.trim(),description:$('description').value.trim(),phone:$('phone').value.trim()||null,whatsapp:$('whatsapp').value.trim()||null,website:cleanUrl($('website').value),cover_image:coverUrl,latitude:numericOrNull($('latitude').value),longitude:numericOrNull($('longitude').value),delivery_available:$('delivery_available').checked,owner_email:$('owner_email').value.trim().toLowerCase(),is_featured:false,is_active:false};const documents={cedula_front_path:cedulaFrontPath,cedula_back_path:cedulaBackPath,submission_id:submissionId};const {data,error}=await supabase.rpc('submit_business_registration',{p_business:business,p_hours:hours,p_products:products,p_documents:documents});if(error)throw error;form.reset();$('city').value='Loja';renderCategories();renderSubcategories();renderProductInputs();setMapPoint(-3.99313,-79.20422,14);showMessage('ok','Solicitud enviada correctamente. El negocio, horario, ubicación, documentos y productos iniciales quedaron pendientes de aprobación del administrador.');}catch(error){console.error(error);showMessage('error','No se pudo enviar la solicitud: '+(error.message||'revise la conexión, los permisos y las políticas de Supabase.'));}finally{submitBtn.disabled=false;submitBtn.textContent='Enviar solicitud';}}
+categorySelect.addEventListener('change',renderSubcategories);$('searchAddressBtn').addEventListener('click',searchAddress);$('useMyLocationBtn').addEventListener('click',useMyLocation);form.addEventListener('submit',submitForm);renderProductInputs();initMap();loadCategories();
 </script>
 </body>
 </html>
