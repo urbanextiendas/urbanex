@@ -1283,7 +1283,7 @@ function renderBizTable() {
             <td>
                 <div class="td-actions">
                     <button class="btn btn-ghost btn-sm" onclick="editBusiness('${b.id}')">Editar</button>
-                    <button class="btn ${b.is_active ? 'btn-danger' : 'btn-success'} btn-sm" onclick="toggleBizActive('${b.id}', ${b.is_active})">${b.is_active ? 'Desactivar' : 'Activar'}</button>
+                    <button class="btn ${b.is_active ? 'btn-danger' : 'btn-success'} btn-sm" onclick="toggleBizActive('${b.id}', ${b.is_active})">${b.is_active ? 'Desactivar' : 'Aprobar'}</button>
                     <a href="../business/index.html?slug=${b.slug}" target="_blank" class="btn btn-ghost btn-sm">Ver</a>
                 </div>
             </td>
@@ -1383,11 +1383,52 @@ document.getElementById('btnSaveBusiness').addEventListener('click', async () =>
 });
 
 window.toggleBizActive = async (id, current) => {
-    const { error } = await supabase.from('businesses').update({ is_active: !current }).eq('id', id);
-    if (error) { toast('Error al actualizar.', 'error'); return; }
-    toast(current ? 'Negocio desactivado.' : 'Negocio activado.');
-    await loadBusinesses();
-    loadDashboard();
+    if (current) {
+        if (!confirm('¿Desactivar este negocio? Dejará de verse en la página pública.')) return;
+
+        const { error } = await supabase.from('businesses').update({ is_active: false }).eq('id', id);
+        if (error) { toast('Error al desactivar: ' + error.message, 'error'); return; }
+
+        toast('Negocio desactivado.');
+        await loadBusinesses();
+        loadDashboard();
+        return;
+    }
+
+    if (!confirm('¿Aprobar este negocio? Se activará públicamente, se creará la cuenta del propietario y se enviará el correo de acceso.')) return;
+
+    try {
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+
+        if (sessionError || !sessionData?.session?.access_token) {
+            toast('Debe iniciar sesión como administrador para aprobar negocios.', 'error');
+            return;
+        }
+
+        toast('Aprobando negocio y enviando correo...');
+
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/aprobar-negocio`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sessionData.session.access_token}`,
+            },
+            body: JSON.stringify({ business_id: id }),
+        });
+
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok || result.ok === false) {
+            throw new Error(result.error || 'No se pudo aprobar el negocio.');
+        }
+
+        toast('Negocio aprobado. Cuenta creada y correo enviado ✓');
+        await loadBusinesses();
+        loadDashboard();
+    } catch (error) {
+        console.error(error);
+        toast('Error al aprobar: ' + (error.message || 'revise la función aprobar-negocio.'), 'error');
+    }
 };
 
 // ════════════════════════════════════════════════════════════════
