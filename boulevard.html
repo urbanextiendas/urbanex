@@ -1026,7 +1026,7 @@ body {
             </div>
             <div class="filter-pill" id="pillPromo" onclick="window.location.href='informativos/ofertas.html'">
                 <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg></div>
-                <div class="filter-label-group"><span class="filter-label">Ofertas</span><span class="filter-sub" id="metricOffers">0 promos</span></div>
+                <div class="filter-label-group"><span class="filter-label">Ofertas</span><span class="filter-sub" id="metricOffers">0 ofertas</span></div>
             </div>
         </div>
     </main>
@@ -1144,6 +1144,9 @@ let activeQuick    = 'all';
 let searchQuery    = '';
 let fullDirectoryLoaded = false;
 let fullDirectoryLoadPromise = null;
+let offerMetricsLoaded = false;
+let offerCountByBusiness = new Map();
+let activeOfferBusinessIds = new Set();
 
 const BUSINESS_SELECT_FAST = `
     id,
@@ -1242,6 +1245,9 @@ async function boot() {
     // Carga el directorio completo después de que la pantalla ya esté visible.
     runLater(() => ensureAllBusinessesLoaded(false));
 
+    // Carga el contador real de ofertas desde productos marcados en oferta.
+    runLater(() => loadOfferMetrics());
+
     // Carga detalles solo de destacados para no bloquear la apertura.
     runLater(() => loadBusinessDetails(allBusinesses.filter(business => business.is_featured === true).map(business => business.id)));
 }
@@ -1267,7 +1273,10 @@ async function ensureAllBusinessesLoaded(renderAfterLoad = true) {
             return;
         }
 
-        allBusinesses = normalizeBusinessRows(data || []);
+        allBusinesses = normalizeBusinessRows(data || []).map(business => ({
+            ...business,
+            _promo: offerMetricsLoaded ? activeOfferBusinessIds.has(toNum(business.id)) : business._promo
+        }));
         fullDirectoryLoaded = true;
 
         if (renderAfterLoad) {
@@ -1289,6 +1298,7 @@ async function ensureAllBusinessesLoaded(renderAfterLoad = true) {
             .map(business => business.id);
 
         runLater(() => loadBusinessDetails(featuredIds));
+        runLater(() => loadOfferMetrics());
     })();
 
     try {
@@ -1355,7 +1365,7 @@ async function loadBusinessDetails(targetIds = null) {
                 promotions,
                 _open: isOpenNow(businessHours),
                 _rating: avgRating(reviews),
-                _promo: hasPromo(promotions),
+                _promo: hasPromo(promotions) || activeOfferBusinessIds.has(toNum(business.id)),
                 _reviews: reviews.length,
             };
         });
@@ -1367,6 +1377,47 @@ async function loadBusinessDetails(targetIds = null) {
         if (modal && modal.style.display !== 'none') renderDir();
     } catch (error) {
         console.warn('Urbanex: carga secundaria omitida para acelerar la página.', error);
+    }
+}
+
+
+async function loadOfferMetrics() {
+    try {
+        const { data, error } = await supabase
+            .from('business_products')
+            .select('business_id')
+            .eq('is_active', true)
+            .eq('is_on_sale', true);
+
+        if (error) {
+            console.warn('Urbanex: no se pudieron cargar productos en oferta.', error.message);
+            return;
+        }
+
+        const counts = new Map();
+
+        (data || []).forEach(row => {
+            const businessId = toNum(row.business_id);
+            if (businessId === null) return;
+            counts.set(businessId, (counts.get(businessId) || 0) + 1);
+        });
+
+        offerCountByBusiness = counts;
+        activeOfferBusinessIds = new Set(counts.keys());
+        offerMetricsLoaded = true;
+
+        allBusinesses = allBusinesses.map(business => ({
+            ...business,
+            _promo: activeOfferBusinessIds.has(toNum(business.id)) || business._promo
+        }));
+
+        updateMetrics();
+
+        if (document.getElementById('directorioModal').style.display !== 'none') {
+            renderDir();
+        }
+    } catch (error) {
+        console.warn('Urbanex: carga de ofertas omitida.', error);
     }
 }
 
@@ -1497,7 +1548,7 @@ function filtered() {
         }
         if (activeQuick==='open'     && !b._open)            return false;
         if (activeQuick==='delivery' && !b.delivery_available) return false;
-        if (activeQuick==='promo'    && !b._promo)           return false;
+        if (activeQuick==='promo'    && !(offerMetricsLoaded ? activeOfferBusinessIds.has(toNum(b.id)) : b._promo)) return false;
         if (searchQuery) {
             const hay = `${b.name} ${b.address||''} ${b.categories?.name||''} ${b.subcategories?.name||''}`.toLowerCase();
             if (!hay.includes(searchQuery)) return false;
@@ -1512,7 +1563,11 @@ function updateMetrics() {
     document.getElementById('metricAll').textContent     = base.length + ' locales';
     document.getElementById('metricOpenNow').textContent = base.filter(b=>b._open).length + ' locales';
     document.getElementById('metricDelivery').textContent= base.filter(b=>b.delivery_available).length + ' locales';
-    document.getElementById('metricOffers').textContent  = base.filter(b=>b._promo).length + ' promos';
+    const offerTotal = offerMetricsLoaded
+        ? base.reduce((total, business) => total + (offerCountByBusiness.get(toNum(business.id)) || 0), 0)
+        : base.filter(b=>b._promo).length;
+
+    document.getElementById('metricOffers').textContent  = offerTotal + (offerTotal === 1 ? ' oferta' : ' ofertas');
 }
 
 // Solo filtro de categoría (sin quick filter) para las métricas
