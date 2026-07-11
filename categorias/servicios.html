@@ -510,18 +510,64 @@ function featuredBusinesses() {
     return list;
 }
 
-function countByConfiguredSubcategory(item) {
-    const target = normalize(item.name);
+function slugify(value) {
+    return normalize(value)
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+function getRootSubcategoryItems() {
+    const configuredByName = new Map(
+        (PAGE_CONFIG.subcategories || []).map(item => [normalize(item.name), item])
+    );
+
+    if (currentRoot) {
+        const rootId = toNum(currentRoot.id);
+        const dynamicItems = subCategories
+            .filter(category => toNum(category.parent_id) === rootId)
+            .sort((a, b) => (Number(a.sort_order || 0) - Number(b.sort_order || 0)) || String(a.name || '').localeCompare(String(b.name || ''), 'es'))
+            .map(category => {
+                const configured = configuredByName.get(normalize(category.name));
+                const url = configured?.url || `${slugify(PAGE_CONFIG.rootName)}/${slugify(category.name)}.html`;
+
+                return {
+                    id: category.id,
+                    name: category.name,
+                    icon: category.icon || configured?.icon || '•',
+                    url,
+                    sort_order: category.sort_order
+                };
+            });
+
+        if (dynamicItems.length) return dynamicItems;
+    }
+
+    return PAGE_CONFIG.subcategories || [];
+}
+
+function countBySubcategory(item) {
+    const targetId = toNum(item.id);
+    const targetName = normalize(item.name);
+
     return allBusinesses.filter(business => {
         if (!belongsToRoot(business)) return false;
+
+        const businessSubcategoryId = toNum(business.subcategory_id);
+        const businessCategoryId = toNum(business.category_id);
+
+        if (targetId !== null && (businessSubcategoryId === targetId || businessCategoryId === targetId)) {
+            return true;
+        }
+
         const subName = normalize(business.subcategories?.name || '');
-        return subName === target || subName.includes(target) || target.includes(subName);
+        return subName === targetName || subName.includes(targetName) || targetName.includes(subName);
     }).length;
 }
 
 function renderSubcategories() {
     const container = document.getElementById('categoriesList');
     const total = allBusinesses.filter(belongsToRoot).length;
+    const subcategoryItems = getRootSubcategoryItems();
 
     const allButton = `
         <li class="category-item active">
@@ -535,8 +581,8 @@ function renderSubcategories() {
         </li>
     `;
 
-    const subButtons = PAGE_CONFIG.subcategories.map(item => {
-        const count = countByConfiguredSubcategory(item);
+    const subButtons = subcategoryItems.map(item => {
+        const count = countBySubcategory(item);
         return `
             <li class="category-item">
                 <button type="button" onclick="window.location.href='${esc(item.url)}'">
