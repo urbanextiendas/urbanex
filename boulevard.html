@@ -1184,16 +1184,45 @@ function businessHasOfferProduct(business) { return businessOfferProductCount(bu
 // ── Helpers ───────────────────────────────────────────────────
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+function parseScheduleTimeToMinutes(value) {
+    const text = String(value || '').trim().toLowerCase().replace('h', ':');
+
+    if (!text) return null;
+
+    const parts = text.split(':');
+    if (parts.length < 2) return null;
+
+    const hours = Number(parts[0]);
+    const minutes = Number(parts[1]);
+
+    if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null;
+    if (hours === 24 && minutes === 0) return 1440;
+    if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+
+    return hours * 60 + minutes;
+}
+
 function isOpenNow(hours) {
     if (!hours?.length) return false;
+
     const now = new Date();
-    const h = hours.find(h => h.day_of_week === now.getDay() && !h.is_closed);
-    if (!h) return false;
-    const cur = now.getHours()*60 + now.getMinutes();
-    const [oh,om] = (h.open_time||'').split(':').map(Number);
-    const [ch,cm] = (h.close_time||'').split(':').map(Number);
-    if (isNaN(oh)||isNaN(ch)) return false;
-    return cur >= oh*60+om && cur <= ch*60+cm;
+    const today = now.getDay();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    return hours.some(row => {
+        if (Number(row.day_of_week) !== today || row.is_closed) return false;
+
+        const open = parseScheduleTimeToMinutes(row.open_time);
+        const close = parseScheduleTimeToMinutes(row.close_time);
+
+        if (open === null || close === null) return false;
+
+        if (close >= open) {
+            return currentMinutes >= open && currentMinutes <= close;
+        }
+
+        return currentMinutes >= open || currentMinutes <= close;
+    });
 }
 function avgRating(reviews) {
     const a = (reviews||[]).filter(r=>r.is_approved);
@@ -1290,11 +1319,11 @@ async function ensureAllBusinessesLoaded(renderAfterLoad = true) {
 
         // Después de cargar lo básico, actualiza detalles sin bloquear la interfaz.
         const runLater = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 1200));
-        const featuredIds = allBusinesses
-            .filter(business => business.is_featured === true)
-            .map(business => business.id);
+        const allActiveIds = allBusinesses
+            .map(business => business.id)
+            .filter(id => id !== null && id !== undefined);
 
-        runLater(() => loadBusinessDetails(featuredIds));
+        runLater(() => loadBusinessDetails(allActiveIds));
         runLater(() => loadOfferMetrics());
     })();
 
@@ -1307,7 +1336,6 @@ async function ensureAllBusinessesLoaded(renderAfterLoad = true) {
 
 async function loadBusinessDetails(targetIds = null) {
     const ids = (targetIds && targetIds.length ? targetIds : allBusinesses
-        .filter(business => business.is_featured === true)
         .map(business => business.id))
         .filter(id => id !== null && id !== undefined);
 
