@@ -151,9 +151,48 @@ input,textarea,select { font-family:var(--sans); }
 .modal-footer { display:flex; justify-content:flex-end; gap:10px; margin-top:22px; padding-top:16px; border-top:1px solid var(--border2); }
 
 /* ── HORARIOS ── */
-.hours-editor { display:flex; flex-direction:column; gap:8px; }
-.hours-row-edit { display:grid; grid-template-columns:100px 1fr 1fr 80px; gap:8px; align-items:center; }
-.hours-row-edit span { font-size:11.5px; color:var(--muted); }
+.hours-editor { display:flex; flex-direction:column; gap:10px; }
+.hours-row-edit {
+    display:grid;
+    grid-template-columns:110px repeat(4, minmax(120px, 1fr)) 96px;
+    gap:8px;
+    align-items:end;
+    padding:10px;
+    border:1px solid rgba(229,193,88,.12);
+    border-radius:10px;
+    background:rgba(0,0,0,.22);
+}
+.hours-day-name { display:flex; flex-direction:column; gap:3px; align-self:center; }
+.hours-day-name strong { font-size:11.5px; color:#fff; font-weight:600; }
+.hours-day-name small { font-size:9.5px; color:var(--dark); }
+.hours-time-field { display:flex; flex-direction:column; gap:4px; }
+.hours-time-field label { font-size:9px; color:var(--gold); text-transform:uppercase; letter-spacing:.5px; font-weight:700; }
+.hours-time-field input {
+    background:rgba(0,0,0,.5);
+    border:1px solid var(--border2);
+    border-radius:8px;
+    padding:8px 10px;
+    color:#fff;
+    font-size:12px;
+    outline:none;
+}
+.hours-time-field input:focus { border-color:var(--gold); }
+.hours-row-edit.is-closed .hours-time-field { opacity:.42; }
+.hours-row-edit.is-closed .hours-time-field input { pointer-events:none; }
+.hours-help {
+    margin:0 0 12px 0;
+    padding:10px 12px;
+    border:1px solid rgba(229,193,88,.14);
+    border-radius:10px;
+    background:rgba(229,193,88,.05);
+    color:var(--dark);
+    font-size:11px;
+    line-height:1.5;
+}
+@media(max-width:1100px) {
+    .hours-row-edit { grid-template-columns:1fr 1fr; }
+    .hours-day-name { grid-column:1/-1; }
+}
 
 /* ── RESEÑAS ── */
 .review-block { background:var(--bg3); border:1px solid var(--border2); border-radius:10px; padding:14px; margin-bottom:10px; }
@@ -2110,28 +2149,135 @@ window.deletePromo = async id => {
 // ════════════════════════════════════════════════════════════════
 function loadHoursBizSelect() { /* poblado en loadBusinesses() */ }
 
+function defaultHoursForDay(dow) {
+    if (dow === 0) {
+        return { closed: true, open1: '08h00', close1: '22h00', open2: '', close2: '' };
+    }
+    if (dow === 6) {
+        return { closed: false, open1: '08h00', close1: '14h00', open2: '', close2: '' };
+    }
+    return { closed: false, open1: '08h00', close1: '13h00', open2: '15h00', close2: '18h00' };
+}
+
+function dbTimeToUx(value, fallback = '') {
+    if (!value) return fallback;
+    const time = String(value).slice(0, 5);
+    return time.replace(':', 'h');
+}
+
+function normalizeAdminHour(value, fieldName, allow24 = false) {
+    const raw = String(value || '').trim().toLowerCase().replace(/\s+/g, '');
+    if (!raw) return '';
+
+    const match = raw.match(/^(\d{1,2})(?:h|:)?(\d{2})$/);
+    if (!match) {
+        throw new Error(`${fieldName} debe estar en formato 24 horas. Ejemplo: 08h00, 13h30, 22h00.`);
+    }
+
+    const hh = Number(match[1]);
+    const mm = Number(match[2]);
+
+    if (allow24 && hh === 24 && mm === 0) return '24:00:00';
+
+    if (hh < 0 || hh > 23 || mm < 0 || mm > 59) {
+        throw new Error(`${fieldName} debe estar entre 00h00 y ${allow24 ? '24h00' : '23h59'}.`);
+    }
+
+    return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}:00`;
+}
+
+function minutesFromDbTime(value) {
+    const clean = String(value || '').slice(0, 5);
+    const [h, m] = clean.split(':').map(Number);
+    return (h || 0) * 60 + (m || 0);
+}
+
+function validateAdminSession(openTime, closeTime, label) {
+    if (!openTime || !closeTime) {
+        throw new Error(`${label}: complete apertura y cierre.`);
+    }
+    if (minutesFromDbTime(openTime) >= minutesFromDbTime(closeTime)) {
+        throw new Error(`${label}: la apertura debe ser menor que el cierre.`);
+    }
+}
+
+function setClosedVisual(dow) {
+    const row = document.getElementById(`hours_row_${dow}`);
+    const closed = document.getElementById(`closed_${dow}`)?.checked;
+    if (row) row.classList.toggle('is-closed', Boolean(closed));
+}
+
+function buildHoursRow(day, dow, hoursByDay) {
+    const defaults = defaultHoursForDay(dow);
+    const rows = (hoursByDay[dow] || []).slice().sort((a, b) =>
+        Number(a.session_number || 1) - Number(b.session_number || 1)
+    );
+
+    const openRows = rows.filter(row => !row.is_closed);
+    const isClosed = rows.length ? !openRows.length : defaults.closed;
+    const first = openRows[0] || {};
+    const second = openRows[1] || {};
+
+    return `
+        <div class="hours-row-edit ${isClosed ? 'is-closed' : ''}" id="hours_row_${dow}">
+            <div class="hours-day-name">
+                <strong>${day}</strong>
+                <small>${dow === 0 ? 'Domingo' : dow === 6 ? 'Sábado' : 'Lunes a viernes'}</small>
+            </div>
+            <div class="hours-time-field">
+                <label>Apertura 1</label>
+                <input type="text" inputmode="numeric" maxlength="5" id="open1_${dow}" value="${dbTimeToUx(first.open_time, defaults.open1)}" placeholder="08h00">
+            </div>
+            <div class="hours-time-field">
+                <label>Cierre 1</label>
+                <input type="text" inputmode="numeric" maxlength="5" id="close1_${dow}" value="${dbTimeToUx(first.close_time, defaults.close1)}" placeholder="13h00">
+            </div>
+            <div class="hours-time-field">
+                <label>Apertura 2</label>
+                <input type="text" inputmode="numeric" maxlength="5" id="open2_${dow}" value="${dbTimeToUx(second.open_time, defaults.open2)}" placeholder="15h00">
+            </div>
+            <div class="hours-time-field">
+                <label>Cierre 2</label>
+                <input type="text" inputmode="numeric" maxlength="5" id="close2_${dow}" value="${dbTimeToUx(second.close_time, defaults.close2)}" placeholder="18h00">
+            </div>
+            <label class="form-check" style="align-self:center;">
+                <input type="checkbox" id="closed_${dow}" ${isClosed ? 'checked' : ''} onchange="setClosedVisual(${dow})"> Cerrado
+            </label>
+        </div>`;
+}
+
 document.getElementById('hoursBizSelect').addEventListener('change', async () => {
     const bizId = document.getElementById('hoursBizSelect').value;
     const container = document.getElementById('hoursEditorContainer');
     if (!bizId) { container.style.display = 'none'; return; }
 
-    const { data: hours } = await supabase.from('business_hours').select('*').eq('business_id', bizId);
-    const hoursMap = {};
-    (hours||[]).forEach(h => { hoursMap[h.day_of_week] = h; });
+    const { data: hours, error } = await supabase
+        .from('business_hours')
+        .select('*')
+        .eq('business_id', bizId)
+        .order('day_of_week')
+        .order('session_number');
 
-    document.getElementById('hoursEditor').innerHTML = DAY_NAMES.map((day, dow) => {
-        const h = hoursMap[dow] || {};
-        return `
-        <div class="hours-row-edit">
-            <span>${day}</span>
-            <input type="time" id="open_${dow}" value="${h.open_time ? h.open_time.slice(0,5) : '08:00'}">
-            <input type="time" id="close_${dow}" value="${h.close_time ? h.close_time.slice(0,5) : '22:00'}">
-            <label class="form-check">
-                <input type="checkbox" id="closed_${dow}" ${h.is_closed?'checked':''}> Cerrado
-            </label>
-        </div>`;
-    }).join('');
+    if (error) {
+        toast('Error al cargar horarios: ' + error.message, 'error');
+        return;
+    }
 
+    const hoursByDay = {};
+    (hours || []).forEach(row => {
+        const dow = Number(row.day_of_week);
+        if (!hoursByDay[dow]) hoursByDay[dow] = [];
+        hoursByDay[dow].push(row);
+    });
+
+    document.getElementById('hoursEditor').innerHTML = `
+        <div class="hours-help">
+            Use formato 24 horas: 00h00 a 24h00. Cada día permite dos jornadas: Apertura 1 / Cierre 1 y Apertura 2 / Cierre 2. Si no hay segunda jornada, deje Apertura 2 y Cierre 2 vacíos.
+        </div>
+        ${DAY_NAMES.map((day, dow) => buildHoursRow(day, dow, hoursByDay)).join('')}
+    `;
+
+    DAY_NAMES.forEach((_, dow) => setClosedVisual(dow));
     container.style.display = 'block';
 });
 
@@ -2139,20 +2285,82 @@ document.getElementById('btnSaveHours').addEventListener('click', async () => {
     const bizId = document.getElementById('hoursBizSelect').value;
     if (!bizId) return;
 
-    const rows = DAY_NAMES.map((_, dow) => ({
-        business_id: bizId,
-        day_of_week: dow,
-        open_time: document.getElementById(`open_${dow}`).value + ':00',
-        close_time: document.getElementById(`close_${dow}`).value + ':00',
-        is_closed: document.getElementById(`closed_${dow}`).checked,
-    }));
+    try {
+        const rows = [];
 
-    await supabase.from('business_hours').delete().eq('business_id', bizId);
-    const { error } = await supabase.from('business_hours').insert(rows);
+        DAY_NAMES.forEach((day, dow) => {
+            const isClosed = document.getElementById(`closed_${dow}`).checked;
+            const open1 = normalizeAdminHour(document.getElementById(`open1_${dow}`).value, `${day} - Apertura 1`, false);
+            const close1 = normalizeAdminHour(document.getElementById(`close1_${dow}`).value, `${day} - Cierre 1`, true);
+            const open2 = normalizeAdminHour(document.getElementById(`open2_${dow}`).value, `${day} - Apertura 2`, false);
+            const close2 = normalizeAdminHour(document.getElementById(`close2_${dow}`).value, `${day} - Cierre 2`, true);
 
-    if (error) { toast('Error al guardar horarios: ' + error.message, 'error'); return; }
-    toast('Horarios guardados ✓');
+            if (isClosed) {
+                rows.push({
+                    business_id: bizId,
+                    day_of_week: dow,
+                    session_number: 1,
+                    open_time: open1 || '08:00:00',
+                    close_time: close1 || '22:00:00',
+                    is_closed: true,
+                });
+                return;
+            }
+
+            validateAdminSession(open1, close1, `${day} - Jornada 1`);
+
+            rows.push({
+                business_id: bizId,
+                day_of_week: dow,
+                session_number: 1,
+                open_time: open1,
+                close_time: close1,
+                is_closed: false,
+            });
+
+            if ((open2 && !close2) || (!open2 && close2)) {
+                throw new Error(`${day}: si registra Apertura 2, también debe registrar Cierre 2.`);
+            }
+
+            if (open2 && close2) {
+                validateAdminSession(open2, close2, `${day} - Jornada 2`);
+
+                if (minutesFromDbTime(close1) > minutesFromDbTime(open2)) {
+                    throw new Error(`${day}: la Apertura 2 debe ser posterior al Cierre 1.`);
+                }
+
+                rows.push({
+                    business_id: bizId,
+                    day_of_week: dow,
+                    session_number: 2,
+                    open_time: open2,
+                    close_time: close2,
+                    is_closed: false,
+                });
+            }
+        });
+
+        const { error: deleteError } = await supabase
+            .from('business_hours')
+            .delete()
+            .eq('business_id', bizId);
+
+        if (deleteError) throw deleteError;
+
+        const { error } = await supabase
+            .from('business_hours')
+            .insert(rows);
+
+        if (error) throw error;
+
+        toast('Horarios guardados ✓');
+        document.getElementById('hoursBizSelect').dispatchEvent(new Event('change'));
+    } catch (error) {
+        console.error(error);
+        toast('Error al guardar horarios: ' + (error.message || 'revise los datos ingresados.'), 'error');
+    }
 });
+
 </script>
 
 </body>
