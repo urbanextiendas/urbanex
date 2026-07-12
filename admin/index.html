@@ -612,50 +612,30 @@ input,textarea,select { font-family:var(--sans); }
             </div>
 
             <!-- ══════════════════════════════════════
-                 PRODUCTOS — sección nueva
+                 PRODUCTOS — administración directa de productos del negocio
                  ══════════════════════════════════════ -->
             <div class="section" id="sec-products">
                 <div class="section-header">
                     <h2>Productos / Menú</h2>
-                    <!-- Selector de negocio en el header -->
                     <select id="prodBizSelect" style="background:rgba(0,0,0,.5);border:1px solid var(--border2);border-radius:8px;padding:8px 14px;color:#fff;font-size:12px;outline:none;min-width:220px;">
                         <option value="">Selecciona un negocio...</option>
                     </select>
                 </div>
 
-                <!-- Placeholder cuando no hay negocio seleccionado -->
                 <div id="prodPlaceholder" style="text-align:center;padding:60px 20px;color:var(--dark);font-size:13px;">
-                    Selecciona un negocio para gestionar sus productos.
+                    Seleccione un negocio para ver, editar o agregar sus productos registrados.
                 </div>
 
-                <!-- Layout principal de productos -->
-                <div class="products-layout" id="prodLayout" style="display:none;">
-
-                    <!-- COLUMNA IZQUIERDA: Categorías -->
-                    <div class="cat-panel">
-                        <div class="cat-panel-header">
-                            <span>Categorías</span>
-                            <span id="catCount" style="font-size:10px;color:var(--dark);">0</span>
-                        </div>
-                        <div class="cat-list" id="catList">
-                            <div class="cat-empty">Sin categorías aún.</div>
-                        </div>
-                        <!-- Form nueva categoría -->
-                        <div class="cat-add-form">
-                            <input type="text" id="newCatName" placeholder="Nueva categoría..." maxlength="60">
-                            <button id="btnAddCat" title="Agregar">+</button>
-                        </div>
-                    </div>
-
-                    <!-- COLUMNA DERECHA: Productos de la categoría -->
+                <div class="products-layout" id="prodLayout" style="display:none;grid-template-columns:1fr;">
                     <div class="products-right">
                         <div id="prodCatHeader" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-                            <span id="prodCatTitle" style="font-size:13px;color:var(--muted);">Selecciona una categoría</span>
+                            <span id="prodCatTitle" style="font-size:13px;color:var(--muted);">Productos del negocio seleccionado</span>
                             <button class="btn btn-primary btn-sm" id="btnNewProduct" disabled>
                                 <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                                 Agregar producto
                             </button>
                         </div>
+
                         <div class="table-wrap">
                             <table class="data-table">
                                 <thead>
@@ -663,19 +643,18 @@ input,textarea,select { font-family:var(--sans); }
                                         <th style="width:50px;"></th>
                                         <th>Producto</th>
                                         <th>Precio</th>
-                                        <th>Precio oferta</th>
+                                        <th>Oferta</th>
                                         <th>Orden</th>
                                         <th>Estado</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody id="prodTableBody">
-                                    <tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Selecciona una categoría para ver sus productos.</td></tr>
+                                    <tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Seleccione un negocio para ver sus productos.</td></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -819,7 +798,7 @@ input,textarea,select { font-family:var(--sans); }
 </div>
 
 <!-- ══════════════════════════════════════
-     MODAL PRODUCTO — nuevo
+     MODAL PRODUCTO — business_products
      ══════════════════════════════════════ -->
 <div class="modal-backdrop" id="productModal">
     <div class="modal">
@@ -829,47 +808,50 @@ input,textarea,select { font-family:var(--sans); }
         </div>
         <div class="form-grid">
             <input type="hidden" id="productId">
-            <input type="hidden" id="productCatId">
 
-            <!-- Nombre — ocupa toda la fila -->
             <div class="form-group full">
                 <label>Nombre del producto *</label>
-                <input type="text" id="productName" placeholder="Ej: Lomo saltado, Camiseta azul...">
+                <input type="text" id="productName" placeholder="Ej.: Refrigeradora, camiseta, menú ejecutivo...">
             </div>
 
-            <!-- Descripción -->
             <div class="form-group full">
                 <label>Descripción</label>
-                <textarea id="productDesc" rows="2" placeholder="Ingredientes, materiales, características..."></textarea>
+                <textarea id="productDesc" rows="2" placeholder="Características, medidas, materiales, ingredientes o detalle del producto..."></textarea>
             </div>
 
-            <!-- Precios -->
             <div class="form-group">
-                <label>Precio (USD)</label>
+                <label>Precio normal (USD)</label>
                 <input type="number" id="productPrice" placeholder="0.00" min="0" step="0.01">
             </div>
             <div class="form-group">
                 <label>Precio de oferta (USD)</label>
                 <input type="number" id="productSalePrice" placeholder="Dejar vacío si no aplica" min="0" step="0.01">
-                <span style="font-size:10px;color:var(--dark);margin-top:3px;">Debe ser menor al precio regular para mostrar el badge de descuento.</span>
+                <span style="font-size:10px;color:var(--dark);margin-top:3px;">Debe ser menor al precio normal.</span>
             </div>
 
-            <!-- Imagen — tabs URL / Subir archivo -->
-            <div class="form-group full">
-                <label>Imagen del producto</label>
+            <div class="form-group">
+                <label class="form-check" style="margin-top:20px;">
+                    <input type="checkbox" id="productOnSale">
+                    Producto en oferta
+                </label>
+            </div>
+            <div class="form-group">
+                <label>Texto de oferta</label>
+                <input type="text" id="productOfferLabel" placeholder="Ej.: Oferta por apertura" maxlength="80">
+            </div>
 
-                <!-- Tabs -->
+            <div class="form-group full">
+                <label>Imagen principal del producto</label>
+
                 <div class="img-upload-tabs">
                     <button class="img-upload-tab active" type="button" data-tab="url" onclick="switchImgTab('url')">🔗 URL</button>
                     <button class="img-upload-tab" type="button" data-tab="file" onclick="switchImgTab('file')">📁 Subir archivo</button>
                 </div>
 
-                <!-- Panel URL -->
                 <div class="img-upload-panel active" id="imgPanelUrl">
                     <input type="text" id="productImage" placeholder="https://..." style="width:100%;background:rgba(0,0,0,.5);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:#fff;font-size:12.5px;outline:none;">
                 </div>
 
-                <!-- Panel Subir -->
                 <div class="img-upload-panel" id="imgPanelFile">
                     <div class="img-dropzone" id="imgDropzone">
                         <input type="file" id="productImageFile" accept="image/jpeg,image/png,image/webp,image/gif">
@@ -885,11 +867,18 @@ input,textarea,select { font-family:var(--sans); }
                     <div class="img-upload-status" id="imgUploadStatus"></div>
                 </div>
 
-                <!-- Preview compartida -->
                 <img id="productImagePreview" class="img-preview" alt="Vista previa">
             </div>
 
-            <!-- Orden y disponibilidad -->
+            <div class="form-group">
+                <label>Imagen adicional 2</label>
+                <input type="text" id="productImage2" placeholder="https://...">
+            </div>
+            <div class="form-group">
+                <label>Imagen adicional 3</label>
+                <input type="text" id="productImage3" placeholder="https://...">
+            </div>
+
             <div class="form-group">
                 <label>Orden de visualización</label>
                 <input type="number" id="productOrder" placeholder="0" min="0" step="1" value="0">
@@ -898,7 +887,7 @@ input,textarea,select { font-family:var(--sans); }
             <div class="form-group" style="justify-content:flex-end;padding-bottom:4px;">
                 <label class="form-check" style="margin-top:auto;">
                     <input type="checkbox" id="productAvailable" checked>
-                    Disponible (visible al público)
+                    Activo visible al público
                 </label>
             </div>
         </div>
@@ -1484,193 +1473,116 @@ window.rejectBusiness = async (id, name) => {
 
 
 // ════════════════════════════════════════════════════════════════
-// PRODUCTOS — lógica nueva
+// PRODUCTOS — administración directa desde business_products
 // ════════════════════════════════════════════════════════════════
 
-let currentProdBizId   = null;   // negocio activo en la sección productos
-let currentProdCatId   = null;   // categoría activa (para mostrar sus productos)
-let prodCategories     = [];     // categorías del negocio actual
+let currentProdBizId = null;
+let currentProducts = [];
 
 // Cambio de negocio en el selector de productos
 document.getElementById('prodBizSelect').addEventListener('change', async () => {
     const bizId = document.getElementById('prodBizSelect').value;
     currentProdBizId = bizId || null;
-    currentProdCatId = null;
+    currentProducts = [];
 
     if (!bizId) {
         document.getElementById('prodLayout').style.display = 'none';
         document.getElementById('prodPlaceholder').style.display = 'block';
+        document.getElementById('btnNewProduct').disabled = true;
         return;
     }
 
+    const biz = allBusinesses.find(b => String(b.id) === String(bizId));
     document.getElementById('prodPlaceholder').style.display = 'none';
     document.getElementById('prodLayout').style.display = 'grid';
-    document.getElementById('btnNewProduct').disabled = true;
-    document.getElementById('prodCatTitle').textContent = 'Selecciona una categoría';
-    document.getElementById('prodTableBody').innerHTML =
-        '<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Selecciona una categoría.</td></tr>';
-
-    await loadProdCategories();
-});
-
-// ── Cargar categorías del negocio ────────────────────────────
-async function loadProdCategories() {
-    const { data } = await supabase
-        .from('product_categories')
-        .select('id, name, sort_order, products(count)')
-        .eq('business_id', currentProdBizId)
-        .order('sort_order');
-
-    prodCategories = data || [];
-    renderCatList();
-}
-
-function renderCatList() {
-    const list = document.getElementById('catList');
-    document.getElementById('catCount').textContent = prodCategories.length;
-
-    if (!prodCategories.length) {
-        list.innerHTML = '<div class="cat-empty">Sin categorías aún.<br>Agrega una abajo.</div>';
-        return;
-    }
-
-    list.innerHTML = prodCategories.map(c => {
-        const count = c.products?.[0]?.count ?? 0;
-        const isActive = c.id === currentProdCatId;
-        return `
-        <div class="cat-item ${isActive ? 'active' : ''}" data-catid="${c.id}" onclick="selectCat('${c.id}', '${escAttr(c.name)}')">
-            <span class="cat-item-name">${esc(c.name)}</span>
-            <span class="cat-item-count">${count}</span>
-            <span class="cat-item-actions">
-                <button class="cat-action-btn" onclick="event.stopPropagation();renameCat('${c.id}','${escAttr(c.name)}')" title="Renombrar">✎</button>
-                <button class="cat-action-btn del" onclick="event.stopPropagation();deleteCat('${c.id}')" title="Eliminar">✕</button>
-            </span>
-        </div>`;
-    }).join('');
-}
-
-// Seleccionar categoría → cargar productos
-window.selectCat = async (catId, catName) => {
-    currentProdCatId = catId;
-    document.getElementById('prodCatTitle').textContent = catName;
     document.getElementById('btnNewProduct').disabled = false;
-    renderCatList(); // actualiza .active
-    await loadProducts();
-};
+    document.getElementById('prodCatTitle').textContent = biz ? `Productos de ${biz.name}` : 'Productos del negocio seleccionado';
 
-// ── Agregar categoría ────────────────────────────────────────
-document.getElementById('btnAddCat').addEventListener('click', addCategory);
-document.getElementById('newCatName').addEventListener('keydown', e => {
-    if (e.key === 'Enter') addCategory();
+    await loadProducts();
 });
 
-async function addCategory() {
-    const nameEl = document.getElementById('newCatName');
-    const name = nameEl.value.trim();
-    if (!name || !currentProdBizId) return;
-
-    const maxOrder = prodCategories.length
-        ? Math.max(...prodCategories.map(c => c.sort_order || 0)) + 1
-        : 0;
-
-    const { error } = await supabase.from('product_categories').insert({
-        business_id: currentProdBizId,
-        name,
-        sort_order: maxOrder
-    });
-
-    if (error) { toast('Error al crear categoría: ' + error.message, 'error'); return; }
-    nameEl.value = '';
-    toast(`Categoría "${name}" creada ✓`);
-    await loadProdCategories();
-}
-
-// ── Renombrar categoría ───────────────────────────────────────
-window.renameCat = async (id, currentName) => {
-    const newName = prompt('Nuevo nombre para la categoría:', currentName);
-    if (!newName || newName.trim() === currentName) return;
-
-    const { error } = await supabase.from('product_categories').update({ name: newName.trim() }).eq('id', id);
-    if (error) { toast('Error al renombrar.', 'error'); return; }
-    toast('Categoría renombrada ✓');
-
-    // Si era la activa, actualizar el título
-    if (id === currentProdCatId) {
-        document.getElementById('prodCatTitle').textContent = newName.trim();
-    }
-    await loadProdCategories();
-};
-
-// ── Eliminar categoría ────────────────────────────────────────
-window.deleteCat = async id => {
-    if (!confirm('¿Eliminar esta categoría? Se eliminarán también todos sus productos.')) return;
-    const { error } = await supabase.from('product_categories').delete().eq('id', id);
-    if (error) { toast('Error al eliminar.', 'error'); return; }
-    toast('Categoría eliminada.');
-    if (id === currentProdCatId) {
-        currentProdCatId = null;
-        document.getElementById('prodCatTitle').textContent = 'Selecciona una categoría';
-        document.getElementById('btnNewProduct').disabled = true;
-        document.getElementById('prodTableBody').innerHTML =
-            '<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Selecciona una categoría.</td></tr>';
-    }
-    await loadProdCategories();
-};
-
-// ── Cargar productos de la categoría activa ──────────────────
+// ── Cargar productos existentes del negocio ──────────────────
 async function loadProducts() {
-    if (!currentProdCatId) return;
-
-    const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('product_category_id', currentProdCatId)
-        .order('sort_order');
+    if (!currentProdBizId) return;
 
     const tbody = document.getElementById('prodTableBody');
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Cargando productos...</td></tr>';
+
+    const { data, error } = await supabase
+        .from('business_products')
+        .select('*')
+        .eq('business_id', String(currentProdBizId))
+        .order('sort_order', { ascending: true })
+        .order('created_at', { ascending: true });
 
     if (error) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--red);padding:30px;">Error: ${error.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--red);padding:30px;">Error: ${esc(error.message)}</td></tr>`;
         return;
     }
 
-    const products = data || [];
+    currentProducts = data || [];
+    renderProductsTable();
+}
 
-    if (!products.length) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Sin productos en esta categoría. Agrega el primero.</td></tr>';
+function firstProductImage(product) {
+    return product.image_1_url || product.image_2_url || product.image_3_url || product.image_url || '';
+}
+
+function money(value) {
+    const n = Number(value || 0);
+    return '$' + n.toFixed(2);
+}
+
+function productIsActive(product) {
+    return product.is_active === true ||
+           product.is_active === 1 ||
+           String(product.is_active).toLowerCase() === 'true';
+}
+
+function productIsOnSale(product) {
+    return product.is_on_sale === true ||
+           product.is_on_sale === 1 ||
+           String(product.is_on_sale).toLowerCase() === 'true';
+}
+
+function renderProductsTable() {
+    const tbody = document.getElementById('prodTableBody');
+
+    if (!currentProducts.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Este negocio todavía no tiene productos registrados. Use “Agregar producto”.</td></tr>';
         return;
     }
 
-    tbody.innerHTML = products.map(p => {
-        // Thumbnail
-        const thumb = p.image_url
-            ? `<img class="prod-thumb" src="${esc(p.image_url)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`
+    tbody.innerHTML = currentProducts.map(p => {
+        const img = firstProductImage(p);
+        const thumb = img
+            ? `<img class="prod-thumb" src="${esc(img)}" alt="${esc(p.name)}" onerror="this.style.display='none'">`
             : `<div class="prod-thumb-placeholder">📦</div>`;
 
-        // Precio
-        let priceHtml = p.price != null ? `$${Number(p.price).toFixed(2)}` : `<span style="color:var(--dark)">—</span>`;
-        let salePriceHtml = '—';
-        if (p.sale_price != null && p.price != null && p.sale_price < p.price) {
-            const pct = Math.round((1 - p.sale_price / p.price) * 100);
-            salePriceHtml = `<span class="price-sale">$${Number(p.sale_price).toFixed(2)}</span> <span class="badge badge-green" style="font-size:9px;">-${pct}%</span>`;
-        } else if (p.sale_price != null) {
-            salePriceHtml = `$${Number(p.sale_price).toFixed(2)}`;
+        const isSale = productIsOnSale(p);
+        const priceHtml = Number(p.price || 0) > 0 ? money(p.price) : '<span style="color:var(--dark)">—</span>';
+
+        let saleHtml = '—';
+        if (isSale) {
+            const salePrice = p.sale_price != null ? money(p.sale_price) : 'Sin precio';
+            saleHtml = `<span class="price-sale">${salePrice}</span>`;
+            if (p.offer_label) saleHtml += `<br><span style="font-size:10px;color:var(--gold);">${esc(p.offer_label)}</span>`;
         }
 
         return `
         <tr>
             <td>${thumb}</td>
             <td>
-                <strong style="color:#fff;">${esc(p.name)}</strong>
-                ${p.description ? `<br><span style="font-size:10.5px;color:var(--dark);">${esc(p.description.slice(0,60))}${p.description.length>60?'…':''}</span>` : ''}
+                <strong style="color:#fff;">${esc(p.name || 'Producto')}</strong>
+                ${p.description ? `<br><span style="font-size:10.5px;color:var(--dark);">${esc(String(p.description).slice(0,70))}${String(p.description).length>70?'…':''}</span>` : ''}
             </td>
             <td>${priceHtml}</td>
-            <td>${salePriceHtml}</td>
+            <td>${saleHtml}</td>
             <td>
-                <input class="sort-input" type="number" value="${p.sort_order||0}" min="0"
+                <input class="sort-input" type="number" value="${p.sort_order || 0}" min="0"
                     onchange="updateProductOrder('${p.id}', this.value)">
             </td>
-            <td><span class="badge ${p.is_available !== false ? 'badge-green' : 'badge-red'}">${p.is_available !== false ? 'Disponible' : 'Oculto'}</span></td>
+            <td><span class="badge ${productIsActive(p) ? 'badge-green' : 'badge-red'}">${productIsActive(p) ? 'Activo' : 'Oculto'}</span></td>
             <td>
                 <div class="td-actions">
                     <button class="btn btn-ghost btn-sm" onclick="editProduct('${p.id}')">Editar</button>
@@ -1683,15 +1595,25 @@ async function loadProducts() {
 
 // ── Nuevo producto ───────────────────────────────────────────
 document.getElementById('btnNewProduct').addEventListener('click', () => {
-    if (!currentProdCatId) return;
+    if (!currentProdBizId) {
+        toast('Seleccione primero un negocio.', 'error');
+        return;
+    }
+
+    const activeCount = currentProducts.filter(productIsActive).length;
+    if (activeCount >= 4) {
+        toast('Este negocio ya tiene 4 productos activos. Oculte o elimine uno antes de agregar otro.', 'error');
+        return;
+    }
+
     document.getElementById('productId').value = '';
-    document.getElementById('productCatId').value = currentProdCatId;
     document.getElementById('productModalTitle').textContent = 'Nuevo Producto';
-    ['productName','productDesc','productPrice','productSalePrice','productImage'].forEach(id =>
+    ['productName','productDesc','productPrice','productSalePrice','productImage','productImage2','productImage3','productOfferLabel'].forEach(id =>
         document.getElementById(id).value = ''
     );
-    document.getElementById('productOrder').value = '0';
+    document.getElementById('productOrder').value = String(currentProducts.length);
     document.getElementById('productAvailable').checked = true;
+    document.getElementById('productOnSale').checked = false;
     document.getElementById('productImagePreview').classList.remove('visible');
     document.getElementById('productImagePreview').src = '';
     resetImgUploader();
@@ -1718,7 +1640,7 @@ window.switchBizImgTab = (tab) => {
     document.getElementById('bizImgPanelFile').classList.toggle('active', tab === 'file');
 };
 
-// Preview desde URL
+// Preview desde URL de portada
 document.getElementById('bizImg').addEventListener('input', () => {
     const url = document.getElementById('bizImg').value.trim();
     const preview = document.getElementById('bizImgPreview');
@@ -1770,6 +1692,7 @@ document.getElementById('bizImgFile').addEventListener('change', async (e) => {
         toast('Error al subir imagen: ' + uploadErr.message, 'error');
         return;
     }
+
     bar.style.width = '100%';
 
     const { data: { publicUrl } } = supabase.storage.from(BIZ_BUCKET).getPublicUrl(uploaded.path);
@@ -1793,20 +1716,19 @@ function resetBizImgUploader() {
 }
 
 // ══════════════════════════════════════════════════════════════
-// IMAGEN — tabs URL / Subir archivo
+// IMAGEN PRODUCTO — tabs URL / Subir archivo
 // ══════════════════════════════════════════════════════════════
 const BUCKET = 'product-images';
 
-// Cambiar entre tabs URL y Archivo
 window.switchImgTab = (tab) => {
-    document.querySelectorAll('.img-upload-tab').forEach(t =>
+    document.querySelectorAll('#productModal .img-upload-tab').forEach(t =>
         t.classList.toggle('active', t.dataset.tab === tab)
     );
     document.getElementById('imgPanelUrl').classList.toggle('active', tab === 'url');
     document.getElementById('imgPanelFile').classList.toggle('active', tab === 'file');
 };
 
-// Preview desde URL
+// Preview desde URL imagen 1
 document.getElementById('productImage').addEventListener('input', () => {
     const url = document.getElementById('productImage').value.trim();
     const preview = document.getElementById('productImagePreview');
@@ -1831,7 +1753,6 @@ document.getElementById('productImageFile').addEventListener('change', async (e)
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validaciones
     if (file.size > 5 * 1024 * 1024) {
         toast('La imagen no puede superar 5 MB.', 'error'); return;
     }
@@ -1839,7 +1760,6 @@ document.getElementById('productImageFile').addEventListener('change', async (e)
         toast('Solo se permiten archivos de imagen.', 'error'); return;
     }
 
-    // UI de progreso
     const progress  = document.getElementById('imgUploadProgress');
     const bar       = document.getElementById('imgUploadBar');
     const status    = document.getElementById('imgUploadStatus');
@@ -1850,10 +1770,9 @@ document.getElementById('productImageFile').addEventListener('change', async (e)
     status.textContent = 'Subiendo imagen...';
     status.style.color = 'var(--dark)';
 
-    // Nombre único: timestamp + nombre saneado
     const ext  = file.name.split('.').pop().toLowerCase();
     const safe = file.name.replace(/[^a-z0-9]/gi, '-').toLowerCase().slice(0, 40);
-    const path = `products/${Date.now()}-${safe}.${ext}`;
+    const path = `${currentProdBizId || 'admin'}/${Date.now()}-${safe}.${ext}`;
 
     bar.style.width = '50%';
 
@@ -1872,12 +1791,11 @@ document.getElementById('productImageFile').addEventListener('change', async (e)
 
     bar.style.width = '100%';
 
-    // Obtener URL pública
-    const { data: { publicUrl } } = supabase.storage
+    const { data: { publicUrl } } = supabase
+        .storage
         .from(BUCKET)
         .getPublicUrl(uploaded.path);
 
-    // Guardar en el campo URL y mostrar preview
     document.getElementById('productImage').value = publicUrl;
     preview.src = publicUrl;
     preview.classList.add('visible');
@@ -1895,91 +1813,133 @@ document.getElementById('productImageFile').addEventListener('change', async (e)
 
 // ── Editar producto ──────────────────────────────────────────
 window.editProduct = async id => {
-    const { data: p } = await supabase.from('products').select('*').eq('id', id).single();
-    if (!p) return;
+    const { data: p, error } = await supabase
+        .from('business_products')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error || !p) {
+        toast('No se pudo cargar el producto.', 'error');
+        return;
+    }
 
     document.getElementById('productId').value = p.id;
-    document.getElementById('productCatId').value = p.product_category_id;
     document.getElementById('productModalTitle').textContent = 'Editar Producto';
     document.getElementById('productName').value = p.name || '';
     document.getElementById('productDesc').value = p.description || '';
     document.getElementById('productPrice').value = p.price ?? '';
     document.getElementById('productSalePrice').value = p.sale_price ?? '';
-    document.getElementById('productImage').value = p.image_url || '';
+    document.getElementById('productImage').value = p.image_1_url || p.image_url || '';
+    document.getElementById('productImage2').value = p.image_2_url || '';
+    document.getElementById('productImage3').value = p.image_3_url || '';
     document.getElementById('productOrder').value = p.sort_order ?? 0;
-    document.getElementById('productAvailable').checked = p.is_available !== false;
+    document.getElementById('productAvailable').checked = productIsActive(p);
+    document.getElementById('productOnSale').checked = productIsOnSale(p);
+    document.getElementById('productOfferLabel').value = p.offer_label || '';
+
+    resetImgUploader();
 
     const preview = document.getElementById('productImagePreview');
-    if (p.image_url) {
-        preview.src = p.image_url;
+    const img = firstProductImage(p);
+    if (img) {
+        preview.src = img;
         preview.classList.add('visible');
     } else {
         preview.classList.remove('visible');
         preview.src = '';
     }
 
-    resetImgUploader();
     openModal('productModal');
 };
 
-// ── Guardar producto (crear o editar) ────────────────────────
+// ── Guardar producto en business_products ─────────────────────
 document.getElementById('btnSaveProduct').addEventListener('click', async () => {
-    const id    = document.getElementById('productId').value;
-    const catId = document.getElementById('productCatId').value;
+    const currentId = document.getElementById('productId').value;
+    const productId = currentId || crypto.randomUUID();
     const name  = document.getElementById('productName').value.trim();
 
+    if (!currentProdBizId) { toast('Seleccione primero un negocio.', 'error'); return; }
     if (!name) { toast('El nombre del producto es obligatorio.', 'error'); return; }
 
-    const priceRaw    = document.getElementById('productPrice').value;
+    const priceRaw = document.getElementById('productPrice').value;
     const salePriceRaw = document.getElementById('productSalePrice').value;
-    const price     = priceRaw     !== '' ? parseFloat(priceRaw)     : null;
+    const price = priceRaw !== '' ? parseFloat(priceRaw) : 0;
+    const isOnSale = document.getElementById('productOnSale').checked;
     const salePrice = salePriceRaw !== '' ? parseFloat(salePriceRaw) : null;
 
-    if (salePrice !== null && price !== null && salePrice >= price) {
-        toast('El precio de oferta debe ser menor al precio regular.', 'error');
+    if (isOnSale && (!salePrice || salePrice <= 0)) {
+        toast('Ingrese el precio de oferta.', 'error');
+        return;
+    }
+    if (isOnSale && price > 0 && salePrice >= price) {
+        toast('El precio de oferta debe ser menor al precio normal.', 'error');
         return;
     }
 
+    if (!currentId && document.getElementById('productAvailable').checked) {
+        const activeCount = currentProducts.filter(productIsActive).length;
+        if (activeCount >= 4) {
+            toast('Este negocio ya tiene 4 productos activos. Oculte o elimine uno antes de agregar otro.', 'error');
+            return;
+        }
+    }
+
     const payload = {
-        product_category_id: catId,
-        business_id: currentProdBizId,
+        id: productId,
+        business_id: String(currentProdBizId),
         name,
         description: document.getElementById('productDesc').value.trim() || null,
         price,
-        sale_price: salePrice,
-        image_url: document.getElementById('productImage').value.trim() || null,
+        currency: 'USD',
+        is_on_sale: isOnSale,
+        sale_price: isOnSale ? salePrice : null,
+        offer_label: isOnSale ? (document.getElementById('productOfferLabel').value.trim() || 'Oferta Urbanex') : null,
+        image_1_url: document.getElementById('productImage').value.trim() || null,
+        image_2_url: document.getElementById('productImage2').value.trim() || null,
+        image_3_url: document.getElementById('productImage3').value.trim() || null,
         sort_order: parseInt(document.getElementById('productOrder').value) || 0,
-        is_available: document.getElementById('productAvailable').checked,
+        is_active: document.getElementById('productAvailable').checked,
     };
 
-    const { error } = id
-        ? await supabase.from('products').update(payload).eq('id', id)
-        : await supabase.from('products').insert(payload);
+    const { error } = await supabase
+        .from('business_products')
+        .upsert(payload, { onConflict: 'id' });
 
     if (error) { toast('Error al guardar: ' + error.message, 'error'); return; }
 
-    toast(id ? 'Producto actualizado ✓' : 'Producto creado ✓');
+    toast(currentId ? 'Producto actualizado ✓' : 'Producto creado ✓');
     closeModal('productModal');
     await loadProducts();
-    await loadProdCategories(); // actualiza contadores
 });
 
 // ── Actualizar solo el orden del producto ────────────────────
 window.updateProductOrder = async (id, value) => {
-    const { error } = await supabase.from('products').update({ sort_order: parseInt(value)||0 }).eq('id', id);
+    const { error } = await supabase
+        .from('business_products')
+        .update({ sort_order: parseInt(value) || 0 })
+        .eq('id', id);
+
     if (error) { toast('Error al actualizar orden.', 'error'); return; }
     toast('Orden actualizado ✓');
+    await loadProducts();
 };
 
 // ── Eliminar producto ────────────────────────────────────────
 window.deleteProduct = async id => {
     if (!confirm('¿Eliminar este producto definitivamente?')) return;
-    const { error } = await supabase.from('products').delete().eq('id', id);
-    if (error) { toast('Error al eliminar.', 'error'); return; }
+
+    const { error } = await supabase
+        .from('business_products')
+        .delete()
+        .eq('id', id);
+
+    if (error) { toast('Error al eliminar: ' + error.message, 'error'); return; }
+
     toast('Producto eliminado.');
     await loadProducts();
-    await loadProdCategories();
 };
+
 
 // ── Helpers de escape ────────────────────────────────────────
 function esc(str) {
