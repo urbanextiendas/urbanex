@@ -1,0 +1,56 @@
+{
+  "name": "Urbanex — Ecosistema Comercial",
+  "short_name": "Urbanex",
+  "description": "Todos los comercios de Loja en un solo lugar",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "lang": "es",
+  "categories": [
+    "shopping",
+    "local",
+    "business"
+  ],
+  "icons": [
+    {
+      "src": "/imagenes/Urba4.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/imagenes/Urba4.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/imagenes/Boulevard.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Boulevard de comercios"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Directorio",
+      "short_name": "Directorio",
+      "description": "Ver todos los comercios",
+      "url": "/boulevard.html",
+      "icons": [
+        {
+          "src": "/imagenes/Urba4.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "id": "/index.html"
+}

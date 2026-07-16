@@ -1,0 +1,2058 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urbanex - Comercios</title>
+    <link rel="icon" type="image/png" href="/imagenes/log.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+    <link rel="preconnect" href="https://esm.sh" crossorigin>
+    <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
+    <link rel="preload" as="image" href="imagenes/Boulevard.png" fetchpriority="high">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #020202;
+            --bg-panels-glass: rgba(6, 6, 6, 0.65);
+            --bg-cards-glass: rgba(20, 20, 20, 0.5);
+            --gold: #e5c158;
+            --gold-dim: #a68b44;
+            --border-color: rgba(229, 193, 88, 0.15);
+            --text-main: #ffffff;
+            --text-muted: #e0e0e0;
+            --text-dark: #aaaaaa;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --blur-effect: blur(20px);
+            --green: #2ed573;
+            --red: #ff4757;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(229,193,88,.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+        body {
+            width: 100%; min-height: 100vh;
+            background-color: var(--bg-main);
+            font-family: var(--font-sans); color: var(--text-main);
+            overflow-y: auto; display: flex; flex-direction: column;
+        }
+
+        /* ── LAYOUT PRINCIPAL ── */
+        .dashboard-container {
+            flex: 1; display: grid;
+            grid-template-rows: 60px 1fr;
+            grid-template-columns: 240px 1fr 290px;
+            grid-template-areas:
+                "header header header"
+                "aside-left main aside-right";
+            position: relative; overflow: visible;
+        }
+
+        /* ── HEADER ── */
+        .header-top {
+            grid-area: header;
+            background: rgba(6,6,6,.35);
+            backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect);
+            border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; z-index: 10;
+        }
+        .brand-box { display: flex; align-items: center; gap: 12px; text-decoration: none; cursor: pointer; transition: var(--transition-smooth); }
+        .search-wrapper { flex: 1; max-width: 400px; margin: 0 20px; position: relative; }
+        .search-input {
+            width: 100%; background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.1);
+            border-radius: 20px; padding: 8px 40px 8px 16px; color: var(--text-main);
+            font-size: 12px; outline: none; font-family: var(--font-sans);
+            transition: var(--transition-smooth); text-align: center;
+        }
+        .search-input:focus { border-color: var(--gold); background: rgba(0,0,0,.6); }
+        .search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; fill: var(--text-dark); cursor: pointer; }
+
+        /* Resultados de búsqueda */
+        .search-results-panel {
+            position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+            background: rgba(6,6,6,.95); border: 1px solid rgba(229,193,88,.28);
+            border-radius: 12px; backdrop-filter: var(--blur-effect);
+            box-shadow: 0 18px 45px rgba(0,0,0,.65);
+            overflow-y: auto; max-height: min(420px, calc(100vh - 90px));
+            display: none; z-index: 80;
+        }
+        .search-results-panel.active { display: block; }
+        .search-results-status { padding: 10px 14px; font-size: 11px; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,.06); }
+        .search-result-item { display: block; padding: 10px 14px; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.05); transition: var(--transition-smooth); }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background: rgba(229,193,88,.08); }
+        .search-result-title { font-size: 12px; color: #fff; font-weight: 600; margin-bottom: 3px; }
+        .search-result-path { font-size: 9px; color: var(--gold); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .search-result-snippet { font-size: 10px; line-height: 1.4; color: var(--text-dark); }
+
+        .user-tools { display: flex; align-items: center; gap: 24px; }
+        .location-indicator { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #fff; font-weight: 500; cursor: pointer; }
+        .location-indicator svg { width: 14px; height: 14px; fill: var(--gold); }
+        .tool-icon { position: relative; cursor: pointer; display: flex; align-items: center; }
+        .tool-icon:nth-child(2) { margin-right: 14px; }
+        .tool-icon svg { width: 18px; height: 18px; fill: #fff; transition: var(--transition-smooth); }
+        .tool-icon:hover svg { fill: var(--gold); }
+        .profile-avatar { width: 28px; height: 28px; border-radius: 50%; background: rgba(0,0,0,.3); border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .profile-avatar svg { width: 13px; height: 13px; fill: var(--gold); }
+
+        /* ── SIDEBAR CATEGORÍAS ── */
+        .aside-categories {
+            grid-area: aside-left;
+            background: rgba(6,6,6,.35);
+            backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect);
+            border-right: 1px solid var(--border-color);
+            padding: 20px 12px; display: flex; flex-direction: column;
+            z-index: 5; overflow-y: auto;
+        }
+        .section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 14px; padding-left: 6px; font-weight: 700; }
+
+        /* Botón categoría raíz */
+        .category-item { list-style: none; }
+        .cat-root-btn {
+            width: 100%; background: rgba(10,10,10,.6); border: 1px solid rgba(229,193,88,.2);
+            padding: 10px; border-radius: 12px; display: flex; align-items: center;
+            gap: 14px; text-align: left; transition: var(--transition-smooth);
+            cursor: pointer; font-family: var(--font-sans);
+        }
+        .cat-root-btn:hover:not(.active) { background: rgba(255,255,255,.05); }
+        .cat-root-btn.active { border-color: var(--gold); background: rgba(229,193,88,.05); }
+        .icon-container {
+            width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; background: linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.05));
+            border: 1px solid rgba(255,255,255,.1); box-shadow: 0 4px 12px rgba(0,0,0,.3);
+            transition: all .4s cubic-bezier(.175,.885,.32,1.275); flex-shrink: 0;
+        }
+        .cat-root-btn:hover .icon-container { transform: scale(1.1); border-color: var(--gold); background: rgba(229,193,88,.1); }
+        .cat-root-btn.active .icon-container { background: var(--gold); border: none; box-shadow: 0 0 15px rgba(229,193,88,.4); }
+        .cat-root-btn .cat-emoji { font-size: 15px; }
+        .cat-root-btn.active .cat-emoji-svg { fill: #000; }
+        .category-text-info { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; flex: 1; }
+        .category-name { color: #fff; font-size: 11.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+        .cat-root-btn.active .category-name { color: var(--gold); font-weight: 600; }
+        .category-count { color: var(--text-dark); font-size: 9px; }
+        .cat-arrow { font-size: 9px; color: var(--text-dark); transition: transform .2s ease; flex-shrink: 0; margin-left: auto; }
+        .cat-root-btn.expanded .cat-arrow { transform: rotate(90deg); }
+
+        /* Subcategorías desplegables */
+        .sub-list { display: none; flex-direction: column; gap: 2px; padding: 4px 0 4px 14px; }
+        .sub-list.open { display: flex; }
+        .sub-btn {
+            width: 100%; background: transparent; border: 1px solid transparent;
+            padding: 7px 10px; border-radius: 8px; display: flex; align-items: center;
+            gap: 8px; cursor: pointer; font-family: var(--font-sans);
+            font-size: 11px; color: var(--text-dark); text-align: left;
+            transition: var(--transition-smooth);
+        }
+        .sub-btn:hover { color: var(--text-muted); background: rgba(255,255,255,.03); }
+        .sub-btn.active { color: var(--gold); background: rgba(229,193,88,.07); border-color: rgba(229,193,88,.2); font-weight: 600; }
+        .sub-icon { font-size: 13px; width: 16px; text-align: center; flex-shrink: 0; }
+        .sub-count { font-size: 9px; color: var(--text-dark); margin-left: auto; }
+
+        /* Botón "Todos" */
+        .cat-all-btn {
+            width: 100%; background: rgba(10,10,10,.6); border: 1px solid rgba(229,193,88,.2);
+            padding: 10px; border-radius: 12px; display: flex; align-items: center;
+            gap: 14px; text-align: left; transition: var(--transition-smooth);
+            cursor: pointer; font-family: var(--font-sans); margin-bottom: 4px;
+        }
+        .cat-all-btn:hover { background: rgba(255,255,255,.05); }
+        .cat-all-btn.active { border-color: var(--gold); background: rgba(229,193,88,.05); }
+        .cat-all-btn .category-name { color: var(--gold); font-weight: 600; }
+
+        .categories-list { display: flex; flex-direction: column; gap: 4px; list-style: none; }
+
+        /* ── MAIN BOULEVARD ── */
+        .main-boulevard {
+            grid-area: main; position: relative; overflow: hidden;
+            background-image: url("imagenes/Boulevard.png");
+            background-size: cover; background-position: center bottom;
+            background-repeat: no-repeat; z-index: 2;
+        }
+        .boulevard-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom,rgba(0,0,0,.4) 0%,transparent 40%,transparent 70%,rgba(0,0,0,.6) 100%);
+            pointer-events: none;
+        }
+        .welcome-billboard {
+            position: absolute; top: 35px; left: 50%; transform: translateX(-50%);
+            text-align: center; width: 90%; pointer-events: none;
+        }
+        .welcome-billboard h2 { font-family: var(--font-serif); color: var(--text-main); font-size: 24px; letter-spacing: 6px; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,.9); }
+        .welcome-billboard p { font-size: 10px; color: var(--gold); font-weight: 600; margin-top: 6px; letter-spacing: 2px; text-shadow: 0 2px 6px rgba(0,0,0,.9); }
+
+        /* Etiqueta filtro activo */
+        .active-filter-pill {
+            position: absolute; top: 14px; right: 14px; z-index: 6;
+            display: none; align-items: center; gap: 8px;
+            background: rgba(6,6,6,.82); border: 1px solid rgba(229,193,88,.4);
+            border-radius: 20px; padding: 5px 14px;
+            font-size: 11.5px; color: var(--gold); font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+        .active-filter-pill.visible { display: flex; }
+        .active-filter-pill button { background: none; border: none; color: var(--gold); cursor: pointer; font-size: 14px; line-height: 1; padding: 0 0 0 4px; }
+
+        /* Filtros inferiores */
+        .bottom-filter-bar {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(10,10,10,.75); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 6px; display: flex; gap: 6px;
+            width: calc(100% - 30px); max-width: 760px;
+            backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect); z-index: 5;
+        }
+        .filter-pill {
+            flex: 1; background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.05);
+            border-radius: 8px; padding: 8px 12px; display: flex; align-items: center;
+            gap: 8px; cursor: pointer; transition: var(--transition-smooth); min-width: 0;
+        }
+        .filter-pill:hover, .filter-pill.active { border-color: var(--gold); background: rgba(229,193,88,.08); }
+        .filter-icon-box svg { width: 14px; height: 14px; fill: var(--gold); display: block; }
+        .filter-label-group { display: flex; flex-direction: column; min-width: 0; }
+        .filter-label { font-size: 10.5px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .filter-sub { font-size: 8.5px; color: var(--text-dark); }
+
+        /* ── PANEL DERECHO ── */
+        .aside-showcase-list {
+            grid-area: aside-right;
+            background: rgba(6,6,6,.35);
+            backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect);
+            border-left: 1px solid var(--border-color);
+            display: flex; flex-direction: column; z-index: 5; overflow: hidden;
+        }
+        .showcase-header { padding: 20px 14px 8px 14px; }
+        .showcase-header h2 { font-family: var(--font-serif); color: var(--gold); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+        .showcase-stats { font-size: 10px; color: #fff; margin-top: 1px; }
+        .sort-box { padding: 0 14px 10px 14px; border-bottom: 1px solid rgba(255,255,255,.05); }
+        .sort-select { width: 100%; background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.1); border-radius: 6px; padding: 6px 10px; color: #fff; font-size: 11px; outline: none; cursor: pointer; font-family: var(--font-sans); }
+
+        .shops-scroll-area { flex: 1; overflow-y: auto; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
+
+        /* Tarjeta de negocio en panel derecho */
+        .shop-card {
+            background: var(--bg-cards-glass); border: 1px solid rgba(255,255,255,.03);
+            border-radius: 8px; overflow: hidden; display: flex; cursor: pointer;
+            height: 64px; transition: var(--transition-smooth); text-decoration: none;
+        }
+        .shop-card:hover { border-color: rgba(229,193,88,.4); background: rgba(229,193,88,.08); transform: translateX(2px); }
+        .shop-thumb-wrapper { width: 64px; height: 64px; flex-shrink: 0; background: #111; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .shop-thumb { width: 100%; height: 100%; object-fit: cover; }
+        .shop-details { flex: 1; padding: 6px 10px; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+        .shop-title { font-size: 12px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .shop-segment { font-size: 9.5px; color: var(--gold); font-weight: 500; }
+        .shop-rating-row { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+        .star-icon { width: 10px; height: 10px; fill: var(--gold); }
+        .rating-value { font-size: 10px; font-weight: 600; color: #fff; }
+        .rating-count { font-size: 9.5px; color: var(--text-dark); }
+        .status-open { margin-left: auto; font-size: 9.5px; font-weight: 600; color: var(--green); }
+        .status-closed { margin-left: auto; font-size: 9.5px; font-weight: 600; color: var(--red); }
+
+        .shop-card-empty { text-align: center; padding: 30px 10px; color: var(--text-dark); font-size: 11.5px; line-height: 1.6; }
+
+        .action-footer-box { padding: 10px 14px; border-top: 1px solid rgba(255,255,255,.05); }
+        .btn-view-all-shops { width: 100%; background: var(--gold); border: none; border-radius: 6px; padding: 8px; color: #000; font-family: var(--font-sans); font-size: 11.5px; font-weight: 600; cursor: pointer; transition: var(--transition-smooth); }
+        .btn-view-all-shops:hover { background: #f1cd6b; }
+
+        /* skeleton */
+        .skeleton { background: rgba(255,255,255,.04); border-radius: 8px; animation: pulse 1.4s ease infinite; }
+        @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:.8} }
+
+        /* ── PIE ── */
+        .pie-pagina { width: 100%; height: 24px; background-color: #000; color: #8c8c8c; font-size: 11px; display: flex; justify-content: center; align-items: center; border-top: 1px solid #1a1a1a; z-index: 5; font-family: Arial,Helvetica,sans-serif; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+            .dashboard-container { grid-template-columns: 1fr; grid-template-rows: auto auto 1fr auto; grid-template-areas: "header" "aside-left" "main" "aside-right"; }
+            .aside-categories { border-right: none; border-bottom: 1px solid var(--border-color); padding: 12px; }
+            .section-title { display: none; }
+            .categories-list { flex-direction: row; overflow-x: auto; gap: 8px; padding-bottom: 4px; }
+            .category-item { flex-shrink: 0; }
+            .cat-root-btn { width: auto; white-space: nowrap; padding: 6px 12px; }
+            .sub-list { display: none !important; } /* En mobile ocultamos subs del sidebar */
+            .main-boulevard { min-height: 380px; height: 45vh; }
+            .bottom-filter-bar { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); width: calc(100% - 24px); flex-direction: row; overflow-x: auto; gap: 8px; background: rgba(10,10,10,.85); padding: 5px; border-radius: 30px; }
+            .filter-pill { flex: 0 0 auto; padding: 6px 14px; border-radius: 20px; background: rgba(0,0,0,.5); }
+            .aside-showcase-list { border-left: none; border-top: 1px solid var(--border-color); }
+            .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+        }
+        @media (max-width: 640px) {
+            .header-top { flex-direction: column; height: auto; padding: 12px; gap: 10px; }
+            .search-wrapper { width: 100%; margin: 0; order: 3; }
+            .user-tools { width: 100%; justify-content: flex-end; gap: 10px !important; order: 2; }
+            .main-boulevard { min-height: 360px; height: 48vh; }
+            .welcome-billboard h2 { font-size: 18px; letter-spacing: 4px; }
+        }
+
+
+        #pwa-banner {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #0d0d0d;
+    border-top: 1px solid rgba(229,193,88,0.3);
+    padding: 14px 20px;
+    z-index: 999;
+    align-items: center;
+    gap: 14px;
+    backdrop-filter: blur(10px);
+}
+#pwa-banner.visible { display: flex; }
+#pwa-banner img { width: 44px; height: 44px; border-radius: 10px; }
+#pwa-banner-text { flex: 1; }
+#pwa-banner-text strong { display: block; font-size: 13px; color: #fff; }
+#pwa-banner-text span { font-size: 11px; color: #888; }
+#pwa-install-btn {
+    background: #e5c158; color: #000; border: none;
+    border-radius: 8px; padding: 9px 18px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    white-space: nowrap;
+}
+#pwa-dismiss-btn {
+    background: none; border: none; color: #666;
+    font-size: 20px; cursor: pointer; padding: 0 4px;
+}
+    
+/* URBANEX BOULEVARD STATIC FIX START */
+html, body { height: 100% !important; overflow: hidden !important; }
+.dashboard-container { height: calc(100svh - 24px) !important; min-height: 0 !important; overflow: hidden !important; }
+.header-top { position: sticky !important; top: 0 !important; z-index: 1000 !important; flex-shrink: 0 !important; }
+.aside-categories, .aside-showcase-list { min-height: 0 !important; overflow-y: auto !important; }
+.main-boulevard { min-height: 0 !important; overflow: hidden !important; background-attachment: initial !important; }
+.global-background-underlay, .global-background-underlay img { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center !important; }
+.pie-pagina { position: fixed !important; left: 0 !important; right: 0 !important; bottom: 0 !important; height: 24px !important; z-index: 2000 !important; background: #000 !important; border-top: 1px solid #1a1a1a !important; }
+@media (max-width: 760px) {
+  html, body { height: 100% !important; overflow: hidden !important; }
+  .dashboard-container { height: calc(100svh - 24px) !important; grid-template-columns: 1fr !important; grid-template-rows: 104px 56px minmax(0,1fr) 210px !important; overflow: hidden !important; }
+  .header-top { height: 104px !important; min-height: 104px !important; display: grid !important; grid-template-columns: 1fr auto !important; grid-template-rows: 52px 38px !important; grid-template-areas: "brand tools" "search search" !important; padding: 7px 12px !important; }
+  .brand-box { grid-area: brand !important; } .brand-box img { height: 48px !important; }
+  .search-wrapper { grid-area: search !important; width: 100% !important; max-width: none !important; }
+  .user-tools { grid-area: tools !important; justify-self: end !important; }
+  .location-indicator span, .tool-icon.icon-corazon { display: none !important; }
+  .aside-categories { height: 56px !important; min-height: 56px !important; overflow-x: auto !important; overflow-y: hidden !important; border-right: none !important; border-bottom: 1px solid rgba(229,193,88,.22) !important; padding: 8px 10px !important; }
+  .categories-list { display: flex !important; gap: 8px !important; overflow-x: auto !important; overflow-y: hidden !important; }
+  .category-item { flex: 0 0 auto !important; }
+  .section-title { display: none !important; }
+  .main-boulevard { height: auto !important; min-height: 0 !important; overflow: hidden !important; }
+  .welcome-billboard { top: 14px !important; width: 94% !important; }
+  .welcome-billboard h2 { font-size: 22px !important; letter-spacing: 5px !important; }
+  .welcome-billboard p { font-size: 9px !important; line-height: 1.35 !important; }
+  .bottom-filter-bar { display: none !important; }
+  .aside-showcase-list { height: 210px !important; min-height: 0 !important; overflow: hidden !important; border-left: none !important; border-top: 1px solid rgba(229,193,88,.22) !important; }
+  .shops-scroll-area { overflow-y: auto !important; max-height: none !important; }
+}
+/* URBANEX BOULEVARD STATIC FIX END */
+
+
+
+
+/* === URBANEX PATCH MINIMO: LOGO INSTALACION CLARO === */
+[id*="install" i] img,
+[class*="install" i] img,
+[id*="pwa" i] img,
+[class*="pwa" i] img {
+  object-fit: contain !important;
+  background: #000 !important;
+  border-radius: 10px !important;
+}
+/* === FIN URBANEX PATCH MINIMO === */
+
+</style>
+
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#e5c158">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Urbanex">
+    <link rel="apple-touch-icon" href="/imagenes/logo.png">
+
+<style>
+/* === UX_BOULEVARD_ONLY_FIXED_BARS START === */
+html,
+body {
+    overflow-x: hidden !important;
+}
+
+body {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+}
+
+.header-top {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+}
+
+.pie-pagina {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 24px !important;
+    z-index: 9999 !important;
+}
+
+.dashboard-container {
+    height: auto !important;
+    min-height: calc(100vh - 24px) !important;
+    overflow: visible !important;
+    padding-bottom: 24px !important;
+}
+
+.main-boulevard {
+    overflow: visible !important;
+}
+
+@media (max-width: 720px) {
+    body {
+        height: auto !important;
+        min-height: 100svh !important;
+        overflow-y: auto !important;
+    }
+
+    .dashboard-container {
+        height: auto !important;
+        min-height: calc(100svh - 24px) !important;
+        overflow: visible !important;
+        padding-bottom: 24px !important;
+    }
+
+    .header-top {
+        position: sticky !important;
+        top: 0 !important;
+    }
+
+    .pie-pagina {
+        position: fixed !important;
+        bottom: 0 !important;
+    }
+}
+/* === UX_BOULEVARD_ONLY_FIXED_BARS END === */
+</style>
+
+
+<style id="ux-boulevard-bars-style">
+  /* Solo fijar encabezado y pie. No congela todo el boulevard. */
+  html,
+  body {
+    overflow-x: hidden !important;
+  }
+
+  body {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+  }
+
+  .header-top {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+  }
+
+  .pie-pagina {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 24px !important;
+    z-index: 9999 !important;
+  }
+
+  .dashboard-container {
+    height: auto !important;
+    min-height: calc(100vh - 24px) !important;
+    padding-bottom: 24px !important;
+  }
+</style>
+
+
+<style id="ux-final-pwa-style">
+  .ux-final-pwa-install {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 24px;
+    z-index: 100000;
+    display: none;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 22px;
+    background: rgba(3, 3, 3, 0.96);
+    border-top: 1px solid rgba(229, 193, 88, 0.28);
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    font-family: inherit;
+  }
+
+  .ux-final-pwa-install.show {
+    display: flex;
+  }
+
+  .ux-final-pwa-install img {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+    background: #000000;
+    border-radius: 12px;
+    flex: 0 0 auto;
+  }
+
+  .ux-final-pwa-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ux-final-pwa-info strong {
+    display: block;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .ux-final-pwa-info span {
+    display: block;
+    margin-top: 3px;
+    color: #bdbdbd;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  .ux-final-pwa-btn {
+    height: 38px;
+    padding: 0 22px;
+    border: none;
+    border-radius: 10px;
+    background: #e5c158;
+    color: #000000;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  .ux-final-pwa-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: #9a9a9a;
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  @media (max-width: 720px) {
+    .ux-final-pwa-install {
+      padding: 10px 14px;
+      gap: 10px;
+    }
+
+    .ux-final-pwa-install img {
+      width: 48px;
+      height: 48px;
+    }
+
+    .ux-final-pwa-info strong {
+      font-size: 13px;
+    }
+
+    .ux-final-pwa-info span {
+      font-size: 11px;
+    }
+
+    .ux-final-pwa-btn {
+      height: 36px;
+      padding: 0 16px;
+    }
+  }
+</style>
+
+
+<style id="ux-boulevard-final-requested">
+/* === CAMBIOS SOLICITADOS SOLO PARA BOULEVARD ===
+   1) Encabezado fijo en cualquier dispositivo.
+   2) Pie fijo en cualquier dispositivo.
+   3) En celular: barra de menú de categorías fija junto al encabezado y sin corte vertical.
+   4) En celular: logo Urbanex centrado.
+   5) En boulevard: al hacer clic en categoría se abre su HTML. No se despliegan subcategorías.
+*/
+
+html,
+body {
+    width: 100% !important;
+    min-height: 100vh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+}
+
+body {
+    padding-top: 60px !important;
+    padding-bottom: 24px !important;
+}
+
+.header-top {
+    grid-area: auto !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    z-index: 99999 !important;
+    background: rgba(6, 6, 6, 0.96) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.pie-pagina {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    z-index: 99999 !important;
+    background: #000 !important;
+}
+
+.dashboard-container {
+    min-height: calc(100vh - 84px) !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding-bottom: 0 !important;
+    grid-template-rows: minmax(0, 1fr) !important;
+    grid-template-areas: "aside-left main aside-right" !important;
+}
+
+@media (max-width: 1024px) {
+    body {
+        padding-top: 60px !important;
+        padding-bottom: 24px !important;
+    }
+
+    .dashboard-container {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto minmax(360px, auto) auto !important;
+        grid-template-areas:
+            "aside-left"
+            "main"
+            "aside-right" !important;
+        min-height: calc(100vh - 84px) !important;
+    }
+}
+
+@media (max-width: 720px) {
+    html,
+    body {
+        width: 100% !important;
+        min-height: 100svh !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+    }
+
+    body {
+        padding-top: 198px !important;
+        padding-bottom: 24px !important;
+    }
+
+    .header-top {
+        height: 116px !important;
+        min-height: 116px !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        grid-template-rows: 58px 38px !important;
+        gap: 8px !important;
+        padding: 8px 12px 10px 12px !important;
+    }
+
+    .brand-box {
+        grid-row: 1 !important;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+    }
+
+    .brand-box img {
+        height: 56px !important;
+        width: auto !important;
+        display: block !important;
+        margin: 0 auto !important;
+        object-fit: contain !important;
+    }
+
+    .search-wrapper {
+        grid-row: 2 !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .search-input {
+        height: 38px !important;
+    }
+
+    .user-tools {
+        display: none !important;
+    }
+
+    .aside-categories {
+        grid-area: auto !important;
+        position: fixed !important;
+        top: 116px !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 82px !important;
+        min-height: 82px !important;
+        z-index: 99998 !important;
+        padding: 10px 18px 12px 18px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        background: rgba(6, 6, 6, 0.96) !important;
+        border-right: none !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: thin !important;
+    }
+
+    .section-title {
+        display: none !important;
+    }
+
+    .categories-list {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 8px !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        height: 58px !important;
+        min-height: 58px !important;
+        align-items: stretch !important;
+        width: max-content !important;
+    }
+
+    .category-item {
+        flex: 0 0 calc((100vw - 44px) / 2) !important;
+        width: calc((100vw - 44px) / 2) !important;
+        max-width: 180px !important;
+        min-width: 150px !important;
+        height: 58px !important;
+    }
+
+    .cat-root-btn,
+    .cat-all-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        height: 58px !important;
+        min-height: 58px !important;
+        padding: 9px 10px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        border-radius: 12px !important;
+    }
+
+    .category-text-info {
+        min-width: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .category-name {
+        max-width: 100% !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
+
+    .category-count {
+        max-width: 100% !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
+
+    .cat-arrow,
+    .sub-list {
+        display: none !important;
+    }
+
+    .dashboard-container {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto auto !important;
+        grid-template-areas:
+            "main"
+            "aside-right" !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        padding-bottom: 0 !important;
+    }
+
+    .main-boulevard {
+        grid-area: main !important;
+        width: 100% !important;
+        height: 420px !important;
+        min-height: 420px !important;
+        overflow: hidden !important;
+        background-position: center bottom !important;
+    }
+
+    .welcome-billboard {
+        top: 28px !important;
+        width: 92% !important;
+    }
+
+    .welcome-billboard h2 {
+        font-size: 20px !important;
+        letter-spacing: 4px !important;
+    }
+
+    .welcome-billboard p {
+        font-size: 9px !important;
+        line-height: 1.35 !important;
+    }
+
+    .bottom-filter-bar {
+        width: calc(100% - 20px) !important;
+        bottom: 12px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .filter-pill {
+        flex: 0 0 auto !important;
+        min-width: 135px !important;
+    }
+
+    .aside-showcase-list {
+        grid-area: aside-right !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        border-left: none !important;
+        border-top: 1px solid var(--border-color) !important;
+    }
+
+    .shops-scroll-area {
+        max-height: none !important;
+        overflow: visible !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+}
+/* === FIN CAMBIOS SOLICITADOS SOLO PARA BOULEVARD === */
+</style>
+
+
+<style id="ux-boulevard-mobile-filters-visible">
+/* SOLO CAMBIO: mostrar la barra de filtros inferiores en celular */
+@media (max-width: 760px) {
+    .bottom-filter-bar {
+        display: flex !important;
+        position: absolute !important;
+        left: 50% !important;
+        bottom: 12px !important;
+        transform: translateX(-50%) !important;
+        width: calc(100% - 20px) !important;
+        max-width: none !important;
+        gap: 6px !important;
+        padding: 6px !important;
+        border-radius: 12px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        flex-wrap: nowrap !important;
+        background: rgba(10, 10, 10, 0.85) !important;
+        border: 1px solid var(--border-color) !important;
+        backdrop-filter: var(--blur-effect) !important;
+        -webkit-backdrop-filter: var(--blur-effect) !important;
+        z-index: 20 !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .filter-pill {
+        display: flex !important;
+        flex: 0 0 auto !important;
+        min-width: 142px !important;
+        height: 42px !important;
+        padding: 7px 10px !important;
+        border-radius: 8px !important;
+        background: rgba(0, 0, 0, 0.48) !important;
+    }
+
+    .filter-label-group {
+        display: flex !important;
+    }
+
+    .filter-label {
+        font-size: 10px !important;
+    }
+
+    .filter-sub {
+        font-size: 8px !important;
+    }
+}
+</style>
+
+
+<style id="ux-performance-patch">
+/* SOLO OPTIMIZACIÓN: reduce trabajo de repintado sin cambiar diseño */
+.aside-categories,
+.aside-showcase-list,
+.bottom-filter-bar,
+.shops-scroll-area {
+    contain: layout paint !important;
+}
+.shop-card,
+.filter-pill,
+.cat-root-btn,
+.cat-all-btn {
+    content-visibility: auto;
+    contain-intrinsic-size: 64px;
+}
+@media (max-width: 760px) {
+    .main-boulevard {
+        background-size: cover !important;
+    }
+}
+</style>
+
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <!-- HEADER -->
+    <header class="header-top">
+        <a href="javascript:void(0)" class="brand-box" title="Volver al menú previo" onclick="goBackMenu()">
+            <img src="imagenes/logo.png" alt="Logo Urbanex" style="height:60px;width:auto;display:block;">
+        </a>
+
+        <div class="search-wrapper">
+            <input type="search" id="siteSearch" class="search-input" placeholder="¿Qué producto o servicio busca?" autocomplete="off">
+            <svg class="search-icon" id="searchButton" viewBox="0 0 24 24">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+            <div class="search-results-panel" id="searchResults" aria-live="polite"></div>
+        </div>
+
+        <div class="user-tools">
+            <div class="location-indicator">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <span>Loja, Ecuador</span>
+            </div>
+            <div class="tool-icon icon-corazon">
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+            <div class="profile-avatar">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR CATEGORÍAS -->
+    <aside class="aside-categories">
+        <h2 class="section-title">Categorías</h2>
+        <ul class="categories-list" id="categoriesList">
+            <!-- "Todos" -->
+            <li class="category-item">
+                <button class="cat-all-btn active" id="catAllBtn" onclick="openDirectorio()">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--gold)"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Todos los negocios</span>
+                        <span class="category-count" id="totalCount">cargando...</span>
+                    </div>
+                </button>
+            </li>
+            <!-- Dinámico -->
+            <li class="skeleton" style="height:46px;border-radius:12px;"></li>
+            <li class="skeleton" style="height:46px;border-radius:12px;"></li>
+            <li class="skeleton" style="height:46px;border-radius:12px;"></li>
+            <li class="skeleton" style="height:46px;border-radius:12px;"></li>
+        </ul>
+    </aside>
+
+    <!-- MAIN BOULEVARD -->
+    <main class="main-boulevard">
+        <div class="boulevard-overlay"></div>
+
+        <!-- Etiqueta filtro activo -->
+        <div class="active-filter-pill" id="activeFilterPill">
+            <span id="activeFilterLabel"></span>
+            <button onclick="selectCategory(null,null,document.getElementById('catAllBtn'))">✕</button>
+        </div>
+
+        <div class="welcome-billboard">
+            <h2>BIENVENIDO</h2>
+            <p>TODOS LOS COMERCIOS DE LOJA EN UN SOLO LUGAR</p>
+        </div>
+
+        <div class="bottom-filter-bar">
+            <div class="filter-pill" id="pillAll" onclick="window.location.href='informativos/cerca-de-mi.html'">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg></div>
+                <div class="filter-label-group"><span class="filter-label">Cerca</span><span class="filter-sub" id="metricAll">0 locales</span></div>
+            </div>
+            <div class="filter-pill" id="pillOpen" onclick="window.location.href='informativos/abiertos-ahora.html'">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+                <div class="filter-label-group"><span class="filter-label">Abiertos Ahora</span><span class="filter-sub" id="metricOpenNow">0 locales</span></div>
+            </div>
+            <div class="filter-pill" id="pillDelivery" onclick="window.location.href='informativos/a-domicilio.html'">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/></svg></div>
+                <div class="filter-label-group"><span class="filter-label">A Domicilio</span><span class="filter-sub" id="metricDelivery">0 locales</span></div>
+            </div>
+            <div class="filter-pill" id="pillPromo" onclick="window.location.href='informativos/ofertas.html'">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg></div>
+                <div class="filter-label-group"><span class="filter-label">Ofertas</span><span class="filter-sub" id="metricOffers">0 ofertas</span></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PANEL DERECHO: DESTACADOS -->
+    <aside class="aside-showcase-list">
+        <div class="showcase-header">
+            <h2>DESTACADOS</h2>
+            <div class="showcase-stats" id="showcaseStats">Recomendados del mes</div>
+        </div>
+        <div class="sort-box">
+            <select class="sort-select" id="showcaseSort" onchange="renderShowcase()">
+                <option value="rating">Ordenar por: Mayor Calificación</option>
+                <option value="name">Nombre A–Z</option>
+            </select>
+        </div>
+        <div class="shops-scroll-area" id="shopsScrollArea">
+            <div class="skeleton" style="height:64px;border-radius:8px;"></div>
+            <div class="skeleton" style="height:64px;border-radius:8px;"></div>
+            <div class="skeleton" style="height:64px;border-radius:8px;"></div>
+        </div>
+        <div class="action-footer-box">
+            <button class="btn-view-all-shops" onclick="openDirectorio()">Explorar Directorio Completo</button>
+        </div>
+    </aside>
+
+</div>
+
+<!-- MODAL DIRECTORIO -->
+<div id="directorioModal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);overflow-y:auto;padding:20px;">
+    <div style="max-width:1100px;margin:0 auto;background:#0a0a0a;border:1px solid var(--border-color);border-radius:16px;padding:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+            <h2 style="font-family:var(--font-serif);color:var(--gold);font-size:18px;letter-spacing:1px;">Directorio Completo</h2>
+            <button onclick="closeDirectorio()" style="background:none;border:none;color:#888;font-size:22px;cursor:pointer;">✕</button>
+        </div>
+        <div id="dirGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;">
+            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
+            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
+            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
+        </div>
+    </div>
+</div>
+
+<footer class="pie-pagina"><p>&copy; 2026 Urbanex. Desarrollado por NeoDat Consultores.</p></footer>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+// ── Configuración de rutas ────────────────────────────────────
+// Cambia esta ruta según dónde esté tu negocio.html
+const NEGOCIO_URL = (slug) => `business/?slug=${slug}`;
+// Si está en subcarpeta usa: `business/index.html?slug=${slug}`
+
+// ── Página dinámica única para todas las categorías ───────────
+// La categoría se identifica por su ID de Supabase.
+// No se requiere crear un HTML nuevo al registrar otra categoría.
+function getCategoryPageUrl(category) {
+    const id = category?.id;
+
+    if (id === null || id === undefined || String(id).trim() === '') {
+        return 'categorias/index.html';
+    }
+
+    return `categorias/index.html?categoria=${encodeURIComponent(id)}`;
+}
+
+window.openCategoryPage = (url) => {
+    if (!url) return;
+    window.location.href = url;
+};
+
+const SUPABASE_URL      = 'https://mlkynawsjqmawgxeuvks.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ── Estado ────────────────────────────────────────────────────
+let allBusinesses  = [];
+let rootCategories = [];
+let subMap         = {};   // keys son NUMBER (id de la raíz)
+let activeCatId    = null; // NUMBER o null
+let activeSubId    = null; // NUMBER o null
+let activeQuick    = 'all';
+let searchQuery    = '';
+let fullDirectoryLoaded = false;
+let fullDirectoryLoadPromise = null;
+let offerProductCountByBusiness = new Map();
+let offerMetricsLoaded = false;
+
+const BUSINESS_SELECT_FAST = `
+    id,
+    name,
+    slug,
+    city,
+    address,
+    cover_image,
+    is_featured,
+    delivery_available,
+    category_id,
+    subcategory_id,
+    categories!category_id(name,icon),
+    subcategories:categories!subcategory_id(name,icon)
+`;
+
+function normalizeBusinessRows(rows) {
+    return (rows || []).map(business => ({
+        ...business,
+        business_hours: business.business_hours || [],
+        reviews: business.reviews || [],
+        promotions: business.promotions || [],
+        _open: false,
+        _rating: null,
+        _promo: false,
+        _reviews: 0,
+    }));
+}
+
+// Normalizar siempre a Number para comparaciones consistentes
+function toNum(v) { const n = Number(v); return isNaN(n) ? null : n; }
+function businessKey(v) { return String(v ?? '').trim(); }
+function businessOfferProductCount(business) { return offerProductCountByBusiness.get(businessKey(business?.id)) || 0; }
+function businessHasOfferProduct(business) { return businessOfferProductCount(business) > 0; }
+
+// ── Helpers ───────────────────────────────────────────────────
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function parseScheduleTimeToMinutes(value) {
+    const text = String(value || '').trim().toLowerCase().replace('h', ':');
+
+    if (!text) return null;
+
+    const parts = text.split(':');
+    if (parts.length < 2) return null;
+
+    const hours = Number(parts[0]);
+    const minutes = Number(parts[1]);
+
+    if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null;
+    if (hours === 24 && minutes === 0) return 1440;
+    if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+
+    return hours * 60 + minutes;
+}
+
+function isOpenNow(hours) {
+    if (!hours?.length) return false;
+
+    const now = new Date();
+    const today = now.getDay();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    return hours.some(row => {
+        if (Number(row.day_of_week) !== today || row.is_closed) return false;
+
+        const open = parseScheduleTimeToMinutes(row.open_time);
+        const close = parseScheduleTimeToMinutes(row.close_time);
+
+        if (open === null || close === null) return false;
+
+        if (close >= open) {
+            return currentMinutes >= open && currentMinutes <= close;
+        }
+
+        return currentMinutes >= open || currentMinutes <= close;
+    });
+}
+function avgRating(reviews) {
+    const a = (reviews||[]).filter(r=>r.is_approved);
+    return a.length ? a.reduce((s,r)=>s+r.rating,0)/a.length : null;
+}
+function hasPromo(promos) {
+    const today = new Date().toISOString().slice(0,10);
+    return (promos||[]).some(p=>p.is_active&&(!p.end_date||p.end_date>=today));
+}
+
+// ── Carga datos ───────────────────────────────────────────────
+async function boot() {
+    const [catsRes, featuredRes] = await Promise.all([
+        supabase
+            .from('categories')
+            .select('id,name,icon,parent_id,sort_order')
+            .order('sort_order')
+            .order('name'),
+
+        supabase
+            .from('businesses')
+            .select(BUSINESS_SELECT_FAST)
+            .eq('is_active', true)
+            .eq('is_featured', true)
+            .order('name', { ascending: true })
+            .limit(20)
+    ]);
+
+    if (catsRes.error) console.error('categories error:', catsRes.error.message);
+    if (featuredRes.error) console.error('featured businesses error:', featuredRes.error.message);
+
+    const cats = catsRes.data || [];
+
+    rootCategories = cats.filter(c => !c.parent_id);
+    subMap = {};
+
+    cats.filter(c => c.parent_id).forEach(c => {
+        if (!subMap[c.parent_id]) subMap[c.parent_id] = [];
+        subMap[c.parent_id].push(c);
+    });
+
+    // Carga inicial liviana: solo destacados. Esto hace visible la página mucho más rápido.
+    allBusinesses = normalizeBusinessRows(featuredRes.data || []);
+
+    renderCatTree();
+    renderShowcase();
+    updateMetrics();
+
+    const runLater = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 900));
+
+    // Carga el directorio completo después de que la pantalla ya esté visible.
+    runLater(() => ensureAllBusinessesLoaded(false));
+
+    // Carga detalles solo de destacados para no bloquear la apertura.
+    runLater(() => loadBusinessDetails(allBusinesses.filter(business => business.is_featured === true).map(business => business.id)));
+    runLater(() => loadOfferMetrics());
+}
+
+async function ensureAllBusinessesLoaded(renderAfterLoad = true) {
+    if (fullDirectoryLoaded) return;
+
+    if (fullDirectoryLoadPromise) {
+        await fullDirectoryLoadPromise;
+        return;
+    }
+
+    fullDirectoryLoadPromise = (async () => {
+        const { data, error } = await supabase
+            .from('businesses')
+            .select(BUSINESS_SELECT_FAST)
+            .eq('is_active', true)
+            .order('is_featured', { ascending: false })
+            .order('name', { ascending: true });
+
+        if (error) {
+            console.error('businesses full load error:', error.message);
+            return;
+        }
+
+        allBusinesses = normalizeBusinessRows(data || []);
+        fullDirectoryLoaded = true;
+
+        if (renderAfterLoad) {
+            renderCatTree();
+            renderShowcase();
+            updateMetrics();
+
+            const modal = document.getElementById('directorioModal');
+            if (modal && modal.style.display !== 'none') renderDir();
+        } else {
+            renderCatTree();
+            updateMetrics();
+        }
+
+        // Después de cargar lo básico, actualiza detalles sin bloquear la interfaz.
+        const runLater = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 1200));
+        const allActiveIds = allBusinesses
+            .map(business => business.id)
+            .filter(id => id !== null && id !== undefined);
+
+        runLater(() => loadBusinessDetails(allActiveIds));
+        runLater(() => loadOfferMetrics());
+    })();
+
+    try {
+        await fullDirectoryLoadPromise;
+    } finally {
+        fullDirectoryLoadPromise = null;
+    }
+}
+
+async function loadBusinessDetails(targetIds = null) {
+    const ids = (targetIds && targetIds.length ? targetIds : allBusinesses
+        .map(business => business.id))
+        .filter(id => id !== null && id !== undefined);
+
+    if (!ids.length) return;
+
+    try {
+        const [hoursRes, reviewsRes, promotionsRes] = await Promise.all([
+            supabase
+                .from('business_hours')
+                .select('business_id,day_of_week,open_time,close_time,is_closed')
+                .in('business_id', ids),
+
+            supabase
+                .from('reviews')
+                .select('business_id,is_approved,rating')
+                .eq('is_approved', true)
+                .in('business_id', ids),
+
+            supabase
+                .from('promotions')
+                .select('business_id,is_active,end_date')
+                .eq('is_active', true)
+                .in('business_id', ids)
+        ]);
+
+        const groupByBusiness = (rows) => {
+            const map = new Map();
+
+            (rows || []).forEach(row => {
+                if (!map.has(row.business_id)) map.set(row.business_id, []);
+                map.get(row.business_id).push(row);
+            });
+
+            return map;
+        };
+
+        const hoursByBusiness = groupByBusiness(hoursRes.data || []);
+        const reviewsByBusiness = groupByBusiness(reviewsRes.data || []);
+        const promotionsByBusiness = groupByBusiness(promotionsRes.data || []);
+
+        allBusinesses = allBusinesses.map(business => {
+            if (!ids.includes(business.id)) return business;
+
+            const businessHours = hoursByBusiness.get(business.id) || [];
+            const reviews = reviewsByBusiness.get(business.id) || [];
+            const promotions = promotionsByBusiness.get(business.id) || [];
+
+            return {
+                ...business,
+                business_hours: businessHours,
+                reviews,
+                promotions,
+                _open: isOpenNow(businessHours),
+                _rating: avgRating(reviews),
+                _promo: hasPromo(promotions) || businessHasOfferProduct(business),
+                _reviews: reviews.length,
+            };
+        });
+
+        renderShowcase();
+        updateMetrics();
+
+        const modal = document.getElementById('directorioModal');
+        if (modal && modal.style.display !== 'none') renderDir();
+    } catch (error) {
+        console.warn('Urbanex: carga secundaria omitida para acelerar la página.', error);
+    }
+}
+
+
+async function loadOfferMetrics() {
+    try {
+        const { data, error } = await supabase
+            .from('business_products')
+            .select('business_id')
+            .eq('is_active', true)
+            .eq('is_on_sale', true);
+
+        if (error) {
+            console.warn('Urbanex: no se pudieron cargar las ofertas de productos.', error.message);
+            return;
+        }
+
+        const counts = new Map();
+
+        (data || []).forEach(row => {
+            const key = businessKey(row.business_id);
+            if (!key) return;
+            counts.set(key, (counts.get(key) || 0) + 1);
+        });
+
+        offerProductCountByBusiness = counts;
+        offerMetricsLoaded = true;
+
+        allBusinesses = allBusinesses.map(business => ({
+            ...business,
+            _promo: businessHasOfferProduct(business) || business._promo
+        }));
+
+        updateMetrics();
+
+        const modal = document.getElementById('directorioModal');
+        if (modal && modal.style.display !== 'none') renderDir();
+    } catch (error) {
+        console.warn('Urbanex: carga de ofertas de productos omitida.', error);
+    }
+}
+
+
+// ── Árbol de categorías ───────────────────────────────────────
+function renderCatTree() {
+    const list = document.getElementById('categoriesList');
+    // Reconstruir menú sin duplicar categorías y conservando el botón "Todos"
+    Array.from(list.children).forEach(item => {
+        if (!item.querySelector('#catAllBtn')) item.remove();
+    });
+
+    // Contar por raíz
+    const countByRoot = {};
+    allBusinesses.forEach(b=>{
+        const bSub = toNum(b.subcategory_id);
+        const bCat = toNum(b.category_id);
+        const allSubs = Object.values(subMap).flat();
+        const subObj  = bSub !== null ? allSubs.find(s=>s.id===bSub) : null;
+        const rootId  = bCat ?? (subObj ? toNum(subObj.parent_id) : null);
+        if(rootId !== null) countByRoot[rootId]=(countByRoot[rootId]||0)+1;
+    });
+
+    document.getElementById('totalCount').textContent = allBusinesses.length + ' locales';
+
+    rootCategories.forEach(root=>{
+        const total = countByRoot[root.id]||0;
+        const categoryUrl = getCategoryPageUrl(root);
+        const li = document.createElement('li');
+        li.className = 'category-item';
+
+        const iconHtml = `<div class="icon-container"><span class="cat-emoji" style="font-size:15px;">${root.icon||'📁'}</span></div>`;
+
+        li.innerHTML = `
+        <button class="cat-root-btn" id="catRoot_${root.id}"
+                onclick="openCategoryPage('${categoryUrl}')">
+            ${iconHtml}
+            <div class="category-text-info">
+                <span class="category-name">${esc(root.name)}</span>
+                <span class="category-count">${total} local${total!==1?'es':''}</span>
+            </div>
+        </button>`;
+        list.appendChild(li);
+    });
+}
+
+// Click en raíz: abrir la página HTML oficial de la categoría.
+// Se conserva esta función para compatibilidad, pero ya NO despliega subcategorías en el sidebar.
+window.handleRootClick = (rootId, btn) => {
+    const root = rootCategories.find(r => toNum(r.id) === toNum(rootId));
+    if (!root) return;
+    window.location.href = getCategoryPageUrl(root);
+};
+
+// Seleccionar categoría / subcategoría
+window.selectCategory = (rootId, subId, btnEl) => {
+    activeCatId = rootId ? toNum(rootId) : null;
+    activeSubId = subId  ? toNum(subId)  : null;
+
+    document.querySelectorAll('.cat-root-btn,.sub-btn,.cat-all-btn').forEach(b=>b.classList.remove('active'));
+
+    if (!rootId && !subId) {
+        document.getElementById('catAllBtn').classList.add('active');
+        document.querySelectorAll('.sub-list').forEach(el=>el.classList.remove('open'));
+        document.querySelectorAll('.cat-root-btn').forEach(b=>b.classList.remove('expanded'));
+    }
+    if (btnEl) btnEl.classList.add('active');
+    if (subId) {
+        const rb = document.getElementById(`catRoot_${rootId}`);
+        if (rb) rb.classList.add('active');
+    }
+
+    updateActiveFilterLabel(rootId, subId);
+    renderShowcase();
+    updateMetrics();
+
+    // Si el modal del directorio está abierto, actualizarlo
+    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
+};
+
+function updateActiveFilterLabel(rootId, subId) {
+    const pill  = document.getElementById('activeFilterPill');
+    const label = document.getElementById('activeFilterLabel');
+    if (!rootId && !subId) { pill.classList.remove('visible'); return; }
+    let text = '';
+    if (subId) {
+        const sub  = Object.values(subMap).flat().find(s=>toNum(s.id)===toNum(subId));
+        const root = rootCategories.find(r=>toNum(r.id)===toNum(rootId));
+        text = `${root?.icon||''} ${root?.name||''} › ${sub?.icon||''} ${sub?.name||''}`;
+    } else {
+        const root = rootCategories.find(r=>r.id==rootId);
+        text = `${root?.icon||''} ${root?.name||''}`;
+    }
+    label.textContent = text;
+    pill.classList.add('visible');
+}
+
+// ── Filtro rápido ─────────────────────────────────────────────
+window.setQuickFilter = (filter, btn) => {
+    activeQuick = filter;
+    document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    renderShowcase();
+    updateMetrics();
+    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
+};
+
+// ── Búsqueda ──────────────────────────────────────────────────
+document.getElementById('siteSearch').addEventListener('input', e=>{
+    searchQuery = e.target.value.toLowerCase().trim();
+    renderShowcase();
+    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
+});
+
+// ── Filtrar lista ─────────────────────────────────────────────
+function filtered() {
+    return allBusinesses.filter(b=>{
+        const bCat = toNum(b.category_id);
+        const bSub = toNum(b.subcategory_id);
+        if (activeSubId !== null) {
+            if (bSub !== activeSubId) return false;
+        } else if (activeCatId !== null) {
+            const allSubs = Object.values(subMap).flat();
+            const subObj  = bSub !== null ? allSubs.find(s=>s.id === bSub) : null;
+            const matchRoot = bCat === activeCatId;
+            const matchSub  = subObj ? toNum(subObj.parent_id) === activeCatId : false;
+            if (!matchRoot && !matchSub) return false;
+        }
+        if (activeQuick==='open'     && !b._open)            return false;
+        if (activeQuick==='delivery' && !b.delivery_available) return false;
+        if (activeQuick==='promo'    && !(businessHasOfferProduct(b) || b._promo)) return false;
+        if (searchQuery) {
+            const hay = `${b.name} ${b.address||''} ${b.categories?.name||''} ${b.subcategories?.name||''}`.toLowerCase();
+            if (!hay.includes(searchQuery)) return false;
+        }
+        return true;
+    });
+}
+
+// ── Métricas filtros inferiores ───────────────────────────────
+function updateMetrics() {
+    const base = allCatFiltered();
+    document.getElementById('metricAll').textContent     = base.length + ' locales';
+    document.getElementById('metricOpenNow').textContent = base.filter(b=>b._open).length + ' locales';
+    document.getElementById('metricDelivery').textContent= base.filter(b=>b.delivery_available).length + ' locales';
+    const offerTotal = offerMetricsLoaded ? base.reduce((total, business) => total + businessOfferProductCount(business), 0) : base.filter(b=>b._promo).length;
+    document.getElementById('metricOffers').textContent  = offerTotal + (offerTotal === 1 ? ' oferta' : ' ofertas');
+}
+
+// Solo filtro de categoría (sin quick filter) para las métricas
+function allCatFiltered() {
+    return allBusinesses.filter(b=>{
+        const bCat = toNum(b.category_id);
+        const bSub = toNum(b.subcategory_id);
+        if (activeSubId !== null) {
+            if (bSub !== activeSubId) return false;
+        } else if (activeCatId !== null) {
+            const allSubs = Object.values(subMap).flat();
+            const subObj  = bSub !== null ? allSubs.find(s=>s.id === bSub) : null;
+            const matchRoot = bCat === activeCatId;
+            const matchSub  = subObj ? toNum(subObj.parent_id) === activeCatId : false;
+            if (!matchRoot && !matchSub) return false;
+        }
+        return true;
+    });
+}
+
+// ── Tarjeta de negocio (panel derecho) ───────────────────────
+function shopCardHtml(b) {
+    const imgEl = b.cover_image
+        ? `<div class="shop-thumb-wrapper"><img class="shop-thumb" src="${esc(b.cover_image)}" alt="${esc(b.name)}" loading="lazy"></div>`
+        : `<div class="shop-thumb-wrapper">${b.subcategories?.icon||b.categories?.icon||'🏪'}</div>`;
+
+    const catLabel = b.subcategories?.name
+        ? `${b.categories?.icon||''} ${b.subcategories.name}`
+        : `${b.categories?.icon||''} ${b.categories?.name||'Sin categoría'}`;
+
+    const ratingHtml = b._rating
+        ? `<svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+           <span class="rating-value">${b._rating.toFixed(1)}</span>
+           <span class="rating-count">(${b._reviews})</span>`
+        : `<span class="rating-count">Sin reseñas</span>`;
+
+    const statusHtml = b._open
+        ? `<span class="status-open">Abierto</span>`
+        : `<span class="status-closed">Cerrado</span>`;
+
+    return `<a class="shop-card" href="${NEGOCIO_URL(b.slug)}">
+        ${imgEl}
+        <div class="shop-details">
+            <div class="shop-title">${esc(b.name)}</div>
+            <div class="shop-segment">${catLabel}</div>
+            <div class="shop-rating-row">${ratingHtml}${statusHtml}</div>
+        </div>
+    </a>`;
+}
+
+// ── Render: panel derecho ─────────────────────────────────────
+window.renderShowcase = () => {
+    const sort = document.getElementById('showcaseSort')?.value || 'rating';
+
+    // Solo muestra negocios marcados explícitamente como destacados en Supabase.
+    // No hay negocios destacados por defecto.
+    let list = allBusinesses.filter(business => business.is_featured === true);
+
+    if (sort === 'name') {
+        list = list.sort((a, b) =>
+            String(a.name || '').localeCompare(String(b.name || ''), 'es')
+        );
+    } else {
+        list = list.sort((a, b) => (b._rating || 0) - (a._rating || 0));
+    }
+
+    const area = document.getElementById('shopsScrollArea');
+    const stats = document.getElementById('showcaseStats');
+
+    if (stats) {
+        stats.textContent = `${list.length} destacado${list.length !== 1 ? 's' : ''} seleccionado${list.length !== 1 ? 's' : ''}`;
+    }
+
+    if (!area) return;
+
+    if (!list.length) {
+        area.innerHTML = `
+            <div class="shop-card-empty">
+                No hay negocios destacados seleccionados en Supabase.
+            </div>
+        `;
+        return;
+    }
+
+    area.innerHTML = list.slice(0, 20).map(shopCardHtml).join('');
+};
+
+// ── Modal Directorio ──────────────────────────────────────────
+window.openDirectorio = async () => {
+    const modal = document.getElementById('directorioModal');
+    const grid = document.getElementById('dirGrid');
+
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+
+    if (!fullDirectoryLoaded && grid) {
+        grid.innerHTML = `
+            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
+            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
+            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
+        `;
+    }
+
+    await ensureAllBusinessesLoaded(true);
+    renderDir();
+};
+window.closeDirectorio = () => {
+    document.getElementById('directorioModal').style.display='none';
+    document.body.style.overflow='';
+};
+
+function dirCardHtml(b) {
+    const imgEl = b.cover_image
+        ? `<img style="width:100%;height:130px;object-fit:cover;display:block;background:#111;" src="${esc(b.cover_image)}" alt="${esc(b.name)}" loading="lazy">`
+        : `<div style="width:100%;height:130px;background:linear-gradient(135deg,#0f0f0f,#1a1a1a);display:flex;align-items:center;justify-content:center;font-size:40px;">${b.subcategories?.icon||b.categories?.icon||'🏪'}</div>`;
+
+    const catLabel = b.subcategories?.name
+        ? `${b.categories?.icon||''} ${b.categories?.name||''} › ${b.subcategories.icon||''} ${b.subcategories.name}`
+        : `${b.categories?.icon||''} ${b.categories?.name||''}`;
+
+    const openBadge = b._open
+        ? `<span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;background:rgba(46,213,115,.12);color:#2ed573;border:1px solid rgba(46,213,115,.3);">Abierto</span>`
+        : `<span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;background:rgba(255,71,87,.08);color:#ff4757;border:1px solid rgba(255,71,87,.2);">Cerrado</span>`;
+
+    const rating = b._rating
+        ? `<span style="font-size:11px;font-weight:700;color:#fff;">★ ${b._rating.toFixed(1)}</span><span style="font-size:10px;color:#888;">(${b._reviews})</span>`
+        : '';
+
+    return `<a href="${NEGOCIO_URL(b.slug)}" style="background:rgba(20,20,20,.6);border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;transition:all .2s ease;" onmouseover="this.style.borderColor='rgba(229,193,88,.4)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
+        ${imgEl}
+        <div style="padding:12px;display:flex;flex-direction:column;gap:5px;">
+            <div style="font-size:9.5px;color:var(--gold);font-weight:700;letter-spacing:.5px;opacity:.8;">${catLabel}</div>
+            <div style="font-size:13px;font-weight:700;color:#fff;">${esc(b.name)}</div>
+            ${b.address?`<div style="font-size:10.5px;color:#888;">📍 ${esc(b.address)}</div>`:''}
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">${rating}${openBadge}</div>
+        </div>
+    </a>`;
+}
+
+function renderDir() {
+    const list = filtered().sort((a,b)=>a.name.localeCompare(b.name,'es'));
+    const grid = document.getElementById('dirGrid');
+    grid.innerHTML = list.length
+        ? list.map(dirCardHtml).join('')
+        : `<p style="grid-column:1/-1;text-align:center;padding:40px;color:#666;">No hay negocios con estos filtros.</p>`;
+}
+
+// Cerrar modal con Escape
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDirectorio(); });
+
+boot();
+
+// ── Búsqueda (negocios + productos en tiempo real) ───────────
+const searchInput  = document.getElementById('siteSearch');
+const resultsPanel = document.getElementById('searchResults');
+
+let searchTimer = null;
+
+function showResults(html) {
+    resultsPanel.innerHTML = html;
+    resultsPanel.style.display = 'block';
+    resultsPanel.classList.add('active');
+}
+function hideResults() {
+    resultsPanel.style.display = 'none';
+    resultsPanel.classList.remove('active');
+}
+
+searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim();
+    if (!q || q.length < 3) { hideResults(); return; }
+    showResults('<div class="search-results-status">Buscando...</div>');
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => runSearch(q), 350);
+});
+
+async function runSearch(q) {
+    const qLow = q.toLowerCase();
+
+    // 1. Negocios por nombre/dirección (local)
+    const bizResults = allBusinesses
+        .filter(b => `${b.name} ${b.address||''} ${b.categories?.name||''} ${b.subcategories?.name||''}`.toLowerCase().includes(qLow))
+        .slice(0, 4);
+
+    // 2. Productos: buscar en Supabase
+    const { data: prodData } = await supabase
+        .from('products')
+        .select(`
+            name,
+            businesses!business_id(id, name, slug,
+                categories!category_id(name, icon),
+                subcategories:categories!subcategory_id(name, icon)
+            )
+        `)
+        .ilike('name', `%${q}%`)
+        .eq('is_available', true)
+        .limit(6);
+
+    // Agrupar productos por negocio
+    const prodByBiz = new Map();
+    (prodData || []).forEach(p => {
+        const biz = p.businesses;
+        if (!biz) return;
+        if (!prodByBiz.has(biz.id)) prodByBiz.set(biz.id, { biz, products: [] });
+        prodByBiz.get(biz.id).products.push(p.name);
+    });
+
+    // Excluir negocios que ya aparecen en resultados directos
+    const bizIds = new Set(bizResults.map(b => b.id));
+    const prodResults = [...prodByBiz.values()].filter(r => !bizIds.has(r.biz.id));
+
+    if (!bizResults.length && !prodResults.length) {
+        showResults(`<div class="search-results-status">Sin resultados para "${esc(q)}".</div>`);
+        return;
+    }
+
+    let html = '';
+
+    if (bizResults.length) {
+        html += `<div class="search-results-status">🏪 Negocios</div>`;
+        html += bizResults.map(b => `
+            <a class="search-result-item" href="${NEGOCIO_URL(b.slug)}">
+                <div class="search-result-title">${esc(b.name)}</div>
+                <div class="search-result-path">${b.categories?.icon||''} ${b.categories?.name||''}${b.subcategories?' › '+b.subcategories.name:''}</div>
+                <div class="search-result-snippet">${b.address ? '📍 '+esc(b.address) : ''}</div>
+            </a>`).join('');
+    }
+
+    if (prodResults.length) {
+        html += `<div class="search-results-status" style="border-top:1px solid rgba(255,255,255,.06);">🛍️ Productos encontrados en</div>`;
+        html += prodResults.map(({ biz, products }) => {
+            const catLabel = biz.subcategories?.name
+                ? `${biz.categories?.icon||''} ${biz.subcategories.name}`
+                : `${biz.categories?.icon||''} ${biz.categories?.name||''}`;
+            return `
+            <a class="search-result-item" href="${NEGOCIO_URL(biz.slug)}">
+                <div class="search-result-title">${esc(biz.name)}</div>
+                <div class="search-result-path">${catLabel}</div>
+                <div class="search-result-snippet">🛍️ ${products.slice(0,3).map(p=>esc(p)).join(' · ')}${products.length>3?' +'+(products.length-3)+' más':''}</div>
+            </a>`;
+        }).join('');
+    }
+
+    showResults(html);
+}
+
+document.addEventListener('click', e => {
+    if (!e.target.closest('.search-wrapper')) hideResults();
+});
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') hideResults();
+});
+</script>
+
+
+
+<div id="pwa-banner">
+    <img src="/imagenes/logo.png" alt="Urbanex">
+    <div id="pwa-banner-text">
+        <strong>Instalar Urbanex</strong>
+        <span>Acceda rápido desde su pantalla de inicio</span>
+    </div>
+    <button id="pwa-install-btn">Instalar</button>
+    <button id="pwa-dismiss-btn">✕</button>
+</div>
+
+<script>
+let deferredPrompt;
+const banner = document.getElementById('pwa-banner');
+
+window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    // Mostrar solo si no fue descartado antes
+    if (!localStorage.getItem('pwa-dismissed')) {
+        setTimeout(() => banner.classList.add('visible'), 2000);
+    }
+});
+
+document.getElementById('pwa-install-btn').addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    banner.classList.remove('visible');
+});
+
+document.getElementById('pwa-dismiss-btn').addEventListener('click', () => {
+    banner.classList.remove('visible');
+    localStorage.setItem('pwa-dismissed', '1');
+});
+
+// Ocultar banner si ya está instalada
+window.addEventListener('appinstalled', () => {
+    banner.classList.remove('visible');
+});
+</script>
+
+
+
+
+
+
+
+
+<div id="uxFinalPwaInstall" class="ux-final-pwa-install" hidden>
+  <img src="/imagenes/Urba4.png" alt="Urbanex">
+  <div class="ux-final-pwa-info">
+    <strong>Instalar Urbanex</strong>
+    <span id="uxFinalPwaText">Acceda rápido desde su pantalla de inicio.</span>
+  </div>
+  <button id="uxFinalPwaBtn" class="ux-final-pwa-btn" type="button">Instalar</button>
+  <button id="uxFinalPwaClose" class="ux-final-pwa-close" type="button" aria-label="Cerrar">×</button>
+</div>
+
+
+<script id="ux-final-pwa-script">
+(function () {
+  let deferredPrompt = null;
+
+  const bar = document.getElementById('uxFinalPwaInstall');
+  const btn = document.getElementById('uxFinalPwaBtn');
+  const close = document.getElementById('uxFinalPwaClose');
+  const text = document.getElementById('uxFinalPwaText');
+
+  if (!bar || !btn || !close || !text) return;
+
+  const isStandalone =
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true;
+
+  if (isStandalone) {
+    bar.remove();
+    return;
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js')
+        .catch(error => console.warn('Urbanex Service Worker:', error));
+    });
+  }
+
+  function showInstallBar() {
+    if (localStorage.getItem('urbanex_install_closed') === '1') return;
+
+    bar.hidden = false;
+    bar.classList.add('show');
+  }
+
+  function hideInstallBar() {
+    bar.classList.remove('show');
+    bar.hidden = true;
+  }
+
+  window.addEventListener('beforeinstallprompt', function (event) {
+    event.preventDefault();
+    deferredPrompt = event;
+    showInstallBar();
+  });
+
+  btn.addEventListener('click', async function () {
+    if (!deferredPrompt) {
+      text.textContent = 'En Android, use el menú del navegador y seleccione “Agregar a pantalla principal”.';
+      showInstallBar();
+      return;
+    }
+
+    deferredPrompt.prompt();
+
+    const choice = await deferredPrompt.userChoice;
+
+    if (choice && choice.outcome === 'accepted') {
+      hideInstallBar();
+    }
+
+    deferredPrompt = null;
+  });
+
+  close.addEventListener('click', function () {
+    localStorage.setItem('urbanex_install_closed', '1');
+    hideInstallBar();
+  });
+
+  window.addEventListener('appinstalled', function () {
+    hideInstallBar();
+  });
+})();
+</script>
+
+
+<script id="ux-go-back-menu-script">
+function goBackMenu() {
+    if (document.referrer && document.referrer !== window.location.href) {
+        window.history.back();
+    } else {
+        window.location.href = "index.html";
+    }
+}
+</script>
+
+
+<script id="ux-boulevard-menu-autoscroll">
+(function () {
+    const scroller = document.querySelector('.aside-categories');
+
+    if (!scroller) return;
+
+    let direction = 1;
+    let paused = false;
+    let resumeTimer = null;
+    const speed = 0.75;
+
+    function canMove() {
+        return window.matchMedia('(max-width: 1024px)').matches &&
+            scroller.scrollWidth > scroller.clientWidth + 4;
+    }
+
+    function pauseForFiveSeconds() {
+        paused = true;
+        window.clearTimeout(resumeTimer);
+
+        resumeTimer = window.setTimeout(() => {
+            paused = false;
+        }, 5000);
+    }
+
+    function moveMenu() {
+        if (!canMove() || paused) return;
+
+        const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+
+        if (scroller.scrollLeft >= maxScroll - 1) direction = -1;
+        if (scroller.scrollLeft <= 1) direction = 1;
+
+        scroller.scrollLeft += direction * speed;
+    }
+
+    scroller.addEventListener('pointerdown', pauseForFiveSeconds, { passive: true });
+    scroller.addEventListener('touchstart', pauseForFiveSeconds, { passive: true });
+    scroller.addEventListener('wheel', pauseForFiveSeconds, { passive: true });
+    window.addEventListener('resize', () => {
+        direction = 1;
+    });
+
+    window.setInterval(moveMenu, 70);
+})();
+</script>
+
+
+
+<script id="ux-boulevard-bottom-filter-autoscroll">
+(function () {
+    const scroller = document.querySelector('.bottom-filter-bar');
+
+    if (!scroller) return;
+
+    let direction = 1;
+    let paused = false;
+    let resumeTimer = null;
+    const speed = 0.75;
+
+    function canMove() {
+        return window.matchMedia('(max-width: 760px)').matches &&
+            scroller.scrollWidth > scroller.clientWidth + 4;
+    }
+
+    function pauseForFiveSeconds() {
+        paused = true;
+        window.clearTimeout(resumeTimer);
+
+        resumeTimer = window.setTimeout(() => {
+            paused = false;
+        }, 5000);
+    }
+
+    function moveBar() {
+        if (!canMove() || paused) return;
+
+        const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+
+        if (scroller.scrollLeft >= maxScroll - 1) direction = -1;
+        if (scroller.scrollLeft <= 1) direction = 1;
+
+        scroller.scrollLeft += direction * speed;
+    }
+
+    scroller.addEventListener('pointerdown', pauseForFiveSeconds, { passive: true });
+    scroller.addEventListener('touchstart', pauseForFiveSeconds, { passive: true });
+    scroller.addEventListener('wheel', pauseForFiveSeconds, { passive: true });
+    window.addEventListener('resize', () => {
+        direction = 1;
+    });
+
+    window.setInterval(moveBar, 70);
+})();
+</script>
+
+</body>
+</html>
