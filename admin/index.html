@@ -561,7 +561,7 @@ input,textarea,select { font-family:var(--sans); }
             </div>
             <div class="nav-item" data-section="products">
                 <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
-                <span>Productos</span>
+                <span>Productos / Servicios</span>
             </div>
             <div class="nav-item" data-section="reviews">
                 <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
@@ -621,12 +621,12 @@ input,textarea,select { font-family:var(--sans); }
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Negocio</th><th>Categoría</th><th>Ciudad</th>
+                                <th>Negocio</th><th>Tipo</th><th>Categoría</th><th>Ubicación</th>
                                 <th>Estado</th><th>Destacado</th><th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="bizTableBody">
-                            <tr><td colspan="6" style="text-align:center;color:var(--dark);padding:30px;">Cargando...</td></tr>
+                            <tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -655,20 +655,20 @@ input,textarea,select { font-family:var(--sans); }
                  ══════════════════════════════════════ -->
             <div class="section" id="sec-products">
                 <div class="section-header">
-                    <h2>Productos / Menú</h2>
+                    <h2>Productos / Servicios</h2>
                     <select id="prodBizSelect" style="background:rgba(0,0,0,.5);border:1px solid var(--border2);border-radius:8px;padding:8px 14px;color:#fff;font-size:12px;outline:none;min-width:220px;">
                         <option value="">Selecciona un negocio...</option>
                     </select>
                 </div>
 
                 <div id="prodPlaceholder" style="text-align:center;padding:60px 20px;color:var(--dark);font-size:13px;">
-                    Seleccione un negocio para ver, editar o agregar sus productos registrados.
+                    Seleccione un negocio para ver, editar o agregar sus productos o servicios registrados.
                 </div>
 
                 <div class="products-layout" id="prodLayout" style="display:none;grid-template-columns:1fr;">
                     <div class="products-right">
                         <div id="prodCatHeader" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-                            <span id="prodCatTitle" style="font-size:13px;color:var(--muted);">Productos del negocio seleccionado</span>
+                            <span id="prodCatTitle" style="font-size:13px;color:var(--muted);">Productos o servicios del negocio seleccionado</span>
                             <button class="btn btn-primary btn-sm" id="btnNewProduct" disabled>
                                 <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                                 Agregar producto
@@ -680,7 +680,7 @@ input,textarea,select { font-family:var(--sans); }
                                 <thead>
                                     <tr>
                                         <th style="width:50px;"></th>
-                                        <th>Producto</th>
+                                        <th>Producto / Servicio</th>
                                         <th>Precio</th>
                                         <th>Oferta</th>
                                         <th>Orden</th>
@@ -770,14 +770,37 @@ input,textarea,select { font-family:var(--sans); }
             <input type="hidden" id="bizId">
             <div class="form-group"><label>Nombre *</label><input type="text" id="bizName" placeholder="Nombre del negocio"></div>
             <div class="form-group"><label>Slug (URL) *</label><input type="text" id="bizSlug" placeholder="nombre-del-negocio"></div>
+            <div class="form-group"><label>Correo del propietario</label><input type="email" id="bizOwnerEmail" placeholder="propietario@correo.com"></div>
+            <div class="form-group"><label>Tipo de negocio</label>
+                <select id="bizBusinessType">
+                    <option value="products">Venta de productos</option>
+                    <option value="services">Prestación de servicios</option>
+                    <option value="both">Productos y servicios</option>
+                </select>
+            </div>
             <div class="form-group"><label>Categoría</label><select id="bizCat" onchange="onBizCatChange()"><option value="">Sin categoría</option></select></div>
             <div class="form-group"><label>Subcategoría</label><select id="bizSubCat"><option value="">Sin subcategoría</option></select></div>
+            <div class="form-group"><label>Provincia</label><input type="text" id="bizProvince" placeholder="Loja"></div>
             <div class="form-group"><label>Ciudad</label><input type="text" id="bizCity" placeholder="Loja"></div>
             <div class="form-group full"><label>Dirección</label><input type="text" id="bizAddress" placeholder="Av. Principal 123"></div>
-            <div class="form-group full"><label>Descripción</label><textarea id="bizDesc" rows="3" placeholder="Descripción del negocio..."></textarea></div>
+            <div class="form-group full"><label id="productDescLabel">Descripción</label><textarea id="bizDesc" rows="3" placeholder="Descripción del negocio..."></textarea></div>
             <div class="form-group"><label>Teléfono</label><input type="text" id="bizPhone" placeholder="0987654321"></div>
             <div class="form-group"><label>WhatsApp (con código país)</label><input type="text" id="bizWa" placeholder="593987654321"></div>
-            <div class="form-group"><label>Sitio web</label><input type="text" id="bizWeb" placeholder="https://..."></div>
+            <div class="form-group"><label>Sitio web</label><input type="text" id="bizWeb" placeholder="https://www..."></div>
+            <div class="form-group"><label>Red social</label>
+                <select id="bizSocialNetwork">
+                    <option value="">Sin red social</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="tiktok">TikTok</option>
+                    <option value="youtube">YouTube</option>
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="x">X</option>
+                    <option value="other">Otra</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Dirección de red social</label><input type="text" id="bizSocialUrl" placeholder="https://..."></div>
+            <div class="form-group"><label>Logotipo</label><input type="text" id="bizLogo" placeholder="https://..."></div>
             <!-- Imagen portada — tabs URL / Subir -->
             <div class="form-group full">
                 <label>Imagen de portada</label>
@@ -803,6 +826,7 @@ input,textarea,select { font-family:var(--sans); }
             <div class="form-group"><label>Longitud</label><input type="number" id="bizLng" placeholder="-79.204" step="any"></div>
             <div class="form-group full" style="flex-direction:row;gap:20px;flex-wrap:wrap;">
                 <label class="form-check"><input type="checkbox" id="bizFeatured"> Negocio destacado</label>
+                <label class="form-check"><input type="checkbox" id="bizDelivery"> Servicio a domicilio</label>
                 <label class="form-check"><input type="checkbox" id="bizActive" checked> Activo (visible al público)</label>
             </div>
         </div>
@@ -848,8 +872,16 @@ input,textarea,select { font-family:var(--sans); }
         <div class="form-grid">
             <input type="hidden" id="productId">
 
+            <div class="form-group">
+                <label>Tipo de elemento</label>
+                <select id="productItemType">
+                    <option value="product">Producto</option>
+                    <option value="service">Servicio</option>
+                </select>
+            </div>
+
             <div class="form-group full">
-                <label>Nombre del producto *</label>
+                <label id="productNameLabel">Nombre del producto *</label>
                 <input type="text" id="productName" placeholder="Ej.: Refrigeradora, camiseta, menú ejecutivo...">
             </div>
 
@@ -859,7 +891,7 @@ input,textarea,select { font-family:var(--sans); }
             </div>
 
             <div class="form-group">
-                <label>Precio normal (USD)</label>
+                <label id="productPriceLabel">Precio normal (USD)</label>
                 <input type="number" id="productPrice" placeholder="0.00" min="0" step="0.01">
             </div>
             <div class="form-group">
@@ -871,7 +903,7 @@ input,textarea,select { font-family:var(--sans); }
             <div class="form-group">
                 <label class="form-check" style="margin-top:20px;">
                     <input type="checkbox" id="productOnSale">
-                    Producto en oferta
+                    <span id="productOfferText">Producto en oferta</span>
                 </label>
             </div>
             <div class="form-group">
@@ -880,7 +912,7 @@ input,textarea,select { font-family:var(--sans); }
             </div>
 
             <div class="form-group full">
-                <label>Imagen principal del producto</label>
+                <label id="productImageLabel">Imagen principal del producto</label>
 
                 <div class="img-upload-tabs">
                     <button class="img-upload-tab active" type="button" data-tab="url" onclick="switchImgTab('url')">🔗 URL</button>
@@ -932,7 +964,7 @@ input,textarea,select { font-family:var(--sans); }
         </div>
         <div class="modal-footer">
             <button class="btn btn-ghost" onclick="closeModal('productModal')">Cancelar</button>
-            <button class="btn btn-primary" id="btnSaveProduct">Guardar producto</button>
+            <button class="btn btn-primary" id="btnSaveProduct"><span id="saveProductText">Guardar producto</span></button>
         </div>
     </div>
 </div>
@@ -1241,7 +1273,7 @@ async function loadBusinesses() {
     const { data, error } = await supabase
         .from('businesses')
         .select(`
-            id, name, slug, city, is_active, is_featured, category_id, subcategory_id, approval_status, owner_email,
+            *,
             categories!category_id(name, icon),
             subcategories:categories!subcategory_id(name, icon)
         `)
@@ -1271,6 +1303,12 @@ async function loadBusinesses() {
 
 
 
+function businessTypeLabel(value) {
+    if (value === 'services') return 'Servicios';
+    if (value === 'both') return 'Productos y servicios';
+    return 'Productos';
+}
+
 function renderBizTable() {
     const search = document.getElementById('bizSearch').value.toLowerCase();
     const cat    = document.getElementById('bizCatFilter').value;
@@ -1293,7 +1331,7 @@ function renderBizTable() {
 
     const tbody = document.getElementById('bizTableBody');
     if (!list.length) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--dark);padding:30px;">Sin resultados</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Sin resultados</td></tr>';
         return;
     }
 
@@ -1320,9 +1358,10 @@ function renderBizTable() {
 
         return `
         <tr>
-            <td><strong style="color:#fff;">${b.name}</strong><br><span style="font-size:10px;color:var(--dark);">${b.slug}</span></td>
+            <td><strong style="color:#fff;">${esc(b.name)}</strong><br><span style="font-size:10px;color:var(--dark);">${esc(b.slug || '')}</span>${b.owner_email ? `<br><span style="font-size:10px;color:var(--dark);">${esc(b.owner_email)}</span>` : ''}</td>
+            <td><span class="badge badge-gold">${businessTypeLabel(b.business_type)}</span></td>
             <td style="font-size:11.5px;">${catLabel}</td>
-            <td>${b.city || '—'}</td>
+            <td>${[b.province, b.city].filter(Boolean).map(esc).join(' · ') || '—'}</td>
             <td>${statusHtml}</td>
             <td><span class="badge ${b.is_featured ? 'badge-gold' : 'badge-gray'}">${b.is_featured ? '⭐ Sí' : 'No'}</span></td>
             <td>
@@ -1330,6 +1369,7 @@ function renderBizTable() {
                     <button class="btn btn-ghost btn-sm" onclick="editBusiness('${b.id}')">Editar</button>
                     ${actionButtons}
                     <a href="../business/index.html?slug=${b.slug}" target="_blank" class="btn btn-ghost btn-sm">Ver</a>
+                    <button class="btn btn-danger btn-sm" onclick="deleteBusinessCompletely('${b.id}', '${escAttr(b.name)}')">Eliminar</button>
                 </div>
             </td>
         </tr>`;
@@ -1343,11 +1383,14 @@ function renderBizTable() {
 document.getElementById('btnNewBusiness').addEventListener('click', () => {
     document.getElementById('bizId').value = '';
     document.getElementById('bizModalTitle').textContent = 'Nuevo Negocio';
-    ['bizName','bizSlug','bizCity','bizAddress','bizDesc','bizPhone','bizWa','bizWeb','bizImg','bizLat','bizLng'].forEach(id => document.getElementById(id).value = '');
+    ['bizName','bizSlug','bizOwnerEmail','bizProvince','bizCity','bizAddress','bizDesc','bizPhone','bizWa','bizWeb','bizSocialUrl','bizLogo','bizImg','bizLat','bizLng'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('bizBusinessType').value = 'products';
+    document.getElementById('bizSocialNetwork').value = '';
     document.getElementById('bizCat').value = '';
     onBizCatChange();
     document.getElementById('bizSubCat').value = '';
     document.getElementById('bizFeatured').checked = false;
+    document.getElementById('bizDelivery').checked = false;
     document.getElementById('bizActive').checked = true;
     resetBizImgUploader();
     openModal('bizModal');
@@ -1368,12 +1411,18 @@ window.editBusiness = async id => {
     document.getElementById('bizModalTitle').textContent = 'Editar Negocio';
     document.getElementById('bizName').value = b.name || '';
     document.getElementById('bizSlug').value = b.slug || '';
+    document.getElementById('bizOwnerEmail').value = b.owner_email || '';
+    document.getElementById('bizBusinessType').value = b.business_type || 'products';
+    document.getElementById('bizProvince').value = b.province || '';
     document.getElementById('bizCity').value = b.city || '';
     document.getElementById('bizAddress').value = b.address || '';
     document.getElementById('bizDesc').value = b.description || '';
     document.getElementById('bizPhone').value = b.phone || '';
     document.getElementById('bizWa').value = b.whatsapp || '';
     document.getElementById('bizWeb').value = b.website || '';
+    document.getElementById('bizSocialNetwork').value = b.social_network || '';
+    document.getElementById('bizSocialUrl').value = b.social_url || '';
+    document.getElementById('bizLogo').value = b.logo_url || '';
     document.getElementById('bizImg').value = b.cover_image || '';
     resetBizImgUploader();
     if (b.cover_image) {
@@ -1383,6 +1432,7 @@ window.editBusiness = async id => {
     document.getElementById('bizLat').value = b.latitude || '';
     document.getElementById('bizLng').value = b.longitude || '';
     document.getElementById('bizFeatured').checked = !!b.is_featured;
+    document.getElementById('bizDelivery').checked = !!b.delivery_available;
     document.getElementById('bizActive').checked = !!b.is_active;
 
     // Categoría raíz → poblar subcategorías → seleccionar la guardada
@@ -1401,18 +1451,25 @@ document.getElementById('btnSaveBusiness').addEventListener('click', async () =>
 
     const payload = {
         name, slug,
+        owner_email: document.getElementById('bizOwnerEmail').value.trim().toLowerCase() || null,
+        business_type: document.getElementById('bizBusinessType').value || 'products',
+        province: document.getElementById('bizProvince').value.trim() || null,
         city: document.getElementById('bizCity').value.trim() || null,
         address: document.getElementById('bizAddress').value.trim() || null,
         description: document.getElementById('bizDesc').value.trim() || null,
         phone: document.getElementById('bizPhone').value.trim() || null,
         whatsapp: document.getElementById('bizWa').value.trim() || null,
         website: document.getElementById('bizWeb').value.trim() || null,
+        social_network: document.getElementById('bizSocialNetwork').value || null,
+        social_url: document.getElementById('bizSocialUrl').value.trim() || null,
+        logo_url: document.getElementById('bizLogo').value.trim() || null,
         cover_image: document.getElementById('bizImg').value.trim() || null,
         latitude: parseFloat(document.getElementById('bizLat').value) || null,
         longitude: parseFloat(document.getElementById('bizLng').value) || null,
         category_id: document.getElementById('bizCat').value || null,
         subcategory_id: document.getElementById('bizSubCat').value || null,
         is_featured: document.getElementById('bizFeatured').checked,
+        delivery_available: document.getElementById('bizDelivery').checked,
         is_active: document.getElementById('bizActive').checked,
         approval_status: document.getElementById('bizActive').checked ? 'approved' : 'pending',
     };
@@ -1480,6 +1537,53 @@ window.toggleBizActive = async (id, current) => {
     }
 };
 
+window.deleteBusinessCompletely = async (id, name) => {
+    const confirmation = prompt(
+        `Esta acción eliminará definitivamente ${name}, sus productos o servicios, horarios, promociones, reseñas, documentos, imágenes y acceso del propietario cuando no tenga otro negocio.\n\nEscriba ELIMINAR para continuar:`
+    );
+
+    if (confirmation !== 'ELIMINAR') return;
+
+    try {
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        const token = sessionData?.session?.access_token;
+
+        if (sessionError || !token) {
+            toast('Debe iniciar sesión como administrador.', 'error');
+            return;
+        }
+
+        toast('Eliminando toda la información del negocio...');
+
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/eliminar-negocio`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+                'apikey': SUPABASE_ANON_KEY,
+            },
+            body: JSON.stringify({ business_id: id }),
+        });
+
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok || result.success !== true) {
+            throw new Error(result.error || 'No se pudo eliminar completamente el negocio.');
+        }
+
+        toast('Negocio y toda su información eliminados definitivamente.');
+        await Promise.all([
+            loadBusinesses(),
+            loadDashboard(),
+            loadReviews(),
+            loadPromotions(),
+        ]);
+    } catch (error) {
+        console.error(error);
+        toast('Error al eliminar: ' + (error.message || 'revise la función eliminar-negocio.'), 'error');
+    }
+};
+
 window.rejectBusiness = async (id, name) => {
     const reason = prompt(`Motivo del rechazo para ${name}:`, 'Solicitud rechazada por revisión administrativa.');
     if (reason === null) return;
@@ -1535,7 +1639,11 @@ document.getElementById('prodBizSelect').addEventListener('change', async () => 
     document.getElementById('prodPlaceholder').style.display = 'none';
     document.getElementById('prodLayout').style.display = 'grid';
     document.getElementById('btnNewProduct').disabled = false;
-    document.getElementById('prodCatTitle').textContent = biz ? `Productos de ${biz.name}` : 'Productos del negocio seleccionado';
+
+    const mode = biz?.business_type || 'products';
+    const label = mode === 'services' ? 'Servicios' : mode === 'both' ? 'Productos y servicios' : 'Productos';
+    document.getElementById('prodCatTitle').textContent = biz ? `${label} de ${biz.name}` : 'Productos o servicios del negocio seleccionado';
+    document.getElementById('btnNewProduct').textContent = mode === 'services' ? 'Agregar servicio' : mode === 'both' ? 'Agregar producto o servicio' : 'Agregar producto';
 
     await loadProducts();
 });
@@ -1563,6 +1671,40 @@ async function loadProducts() {
     renderProductsTable();
 }
 
+function selectedBusinessType() {
+    return allBusinesses.find(b => String(b.id) === String(currentProdBizId))?.business_type || 'products';
+}
+
+function itemTypeLabel(value) {
+    return value === 'service' ? 'Servicio' : 'Producto';
+}
+
+function syncProductModalType() {
+    const businessType = selectedBusinessType();
+    const select = document.getElementById('productItemType');
+
+    if (businessType === 'services') {
+        select.value = 'service';
+        select.disabled = true;
+    } else if (businessType === 'products') {
+        select.value = 'product';
+        select.disabled = true;
+    } else {
+        select.disabled = false;
+        if (!select.value) select.value = 'product';
+    }
+
+    const isService = select.value === 'service';
+    document.getElementById('productNameLabel').textContent = isService ? 'Nombre del servicio *' : 'Nombre del producto *';
+    document.getElementById('productDescLabel').textContent = isService ? 'Descripción del servicio' : 'Descripción';
+    document.getElementById('productPriceLabel').textContent = isService ? 'Precio o tarifa (USD)' : 'Precio normal (USD)';
+    document.getElementById('productOfferText').textContent = isService ? 'Servicio en oferta' : 'Producto en oferta';
+    document.getElementById('productImageLabel').textContent = isService ? 'Imagen principal del servicio' : 'Imagen principal del producto';
+    document.getElementById('saveProductText').textContent = isService ? 'Guardar servicio' : 'Guardar producto';
+}
+
+document.getElementById('productItemType').addEventListener('change', syncProductModalType);
+
 function firstProductImage(product) {
     return product.image_1_url || product.image_2_url || product.image_3_url || product.image_url || '';
 }
@@ -1588,7 +1730,9 @@ function renderProductsTable() {
     const tbody = document.getElementById('prodTableBody');
 
     if (!currentProducts.length) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Este negocio todavía no tiene productos registrados. Use “Agregar producto”.</td></tr>';
+        const mode = selectedBusinessType();
+        const emptyLabel = mode === 'services' ? 'servicios' : mode === 'both' ? 'productos o servicios' : 'productos';
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Este negocio todavía no tiene ${emptyLabel} registrados.</td></tr>`;
         return;
     }
 
@@ -1612,7 +1756,8 @@ function renderProductsTable() {
         <tr>
             <td>${thumb}</td>
             <td>
-                <strong style="color:#fff;">${esc(p.name || 'Producto')}</strong>
+                <strong style="color:#fff;">${esc(p.name || itemTypeLabel(p.item_type))}</strong>
+                <br><span class="badge ${p.item_type === 'service' ? 'badge-gold' : 'badge-gray'}">${itemTypeLabel(p.item_type)}</span>
                 ${p.description ? `<br><span style="font-size:10.5px;color:var(--dark);">${esc(String(p.description).slice(0,70))}${String(p.description).length>70?'…':''}</span>` : ''}
             </td>
             <td>${priceHtml}</td>
@@ -1641,12 +1786,14 @@ document.getElementById('btnNewProduct').addEventListener('click', () => {
 
     const activeCount = currentProducts.filter(productIsActive).length;
     if (activeCount >= 4) {
-        toast('Este negocio ya tiene 4 productos activos. Oculte o elimine uno antes de agregar otro.', 'error');
+        toast('Este negocio ya tiene 4 productos o servicios activos. Oculte o elimine uno antes de agregar otro.', 'error');
         return;
     }
 
     document.getElementById('productId').value = '';
-    document.getElementById('productModalTitle').textContent = 'Nuevo Producto';
+    const businessType = selectedBusinessType();
+    document.getElementById('productItemType').value = businessType === 'services' ? 'service' : 'product';
+    document.getElementById('productModalTitle').textContent = businessType === 'services' ? 'Nuevo Servicio' : businessType === 'both' ? 'Nuevo Producto o Servicio' : 'Nuevo Producto';
     ['productName','productDesc','productPrice','productSalePrice','productImage','productImage2','productImage3','productOfferLabel'].forEach(id =>
         document.getElementById(id).value = ''
     );
@@ -1656,6 +1803,7 @@ document.getElementById('btnNewProduct').addEventListener('click', () => {
     document.getElementById('productImagePreview').classList.remove('visible');
     document.getElementById('productImagePreview').src = '';
     resetImgUploader();
+    syncProductModalType();
     openModal('productModal');
 });
 
@@ -1864,7 +2012,8 @@ window.editProduct = async id => {
     }
 
     document.getElementById('productId').value = p.id;
-    document.getElementById('productModalTitle').textContent = 'Editar Producto';
+    document.getElementById('productItemType').value = p.item_type || (selectedBusinessType() === 'services' ? 'service' : 'product');
+    document.getElementById('productModalTitle').textContent = document.getElementById('productItemType').value === 'service' ? 'Editar Servicio' : 'Editar Producto';
     document.getElementById('productName').value = p.name || '';
     document.getElementById('productDesc').value = p.description || '';
     document.getElementById('productPrice').value = p.price ?? '';
@@ -1878,6 +2027,7 @@ window.editProduct = async id => {
     document.getElementById('productOfferLabel').value = p.offer_label || '';
 
     resetImgUploader();
+    syncProductModalType();
 
     const preview = document.getElementById('productImagePreview');
     const img = firstProductImage(p);
@@ -1899,7 +2049,7 @@ document.getElementById('btnSaveProduct').addEventListener('click', async () => 
     const name  = document.getElementById('productName').value.trim();
 
     if (!currentProdBizId) { toast('Seleccione primero un negocio.', 'error'); return; }
-    if (!name) { toast('El nombre del producto es obligatorio.', 'error'); return; }
+    if (!name) { toast('El nombre del producto o servicio es obligatorio.', 'error'); return; }
 
     const priceRaw = document.getElementById('productPrice').value;
     const salePriceRaw = document.getElementById('productSalePrice').value;
@@ -1919,7 +2069,7 @@ document.getElementById('btnSaveProduct').addEventListener('click', async () => 
     if (!currentId && document.getElementById('productAvailable').checked) {
         const activeCount = currentProducts.filter(productIsActive).length;
         if (activeCount >= 4) {
-            toast('Este negocio ya tiene 4 productos activos. Oculte o elimine uno antes de agregar otro.', 'error');
+            toast('Este negocio ya tiene 4 productos o servicios activos. Oculte o elimine uno antes de agregar otro.', 'error');
             return;
         }
     }
@@ -1927,6 +2077,7 @@ document.getElementById('btnSaveProduct').addEventListener('click', async () => 
     const payload = {
         id: productId,
         business_id: String(currentProdBizId),
+        item_type: document.getElementById('productItemType').value || 'product',
         name,
         description: document.getElementById('productDesc').value.trim() || null,
         price,
@@ -1947,7 +2098,8 @@ document.getElementById('btnSaveProduct').addEventListener('click', async () => 
 
     if (error) { toast('Error al guardar: ' + error.message, 'error'); return; }
 
-    toast(currentId ? 'Producto actualizado ✓' : 'Producto creado ✓');
+    const savedType = document.getElementById('productItemType').value === 'service' ? 'Servicio' : 'Producto';
+    toast(currentId ? `${savedType} actualizado ✓` : `${savedType} creado ✓`);
     closeModal('productModal');
     await loadProducts();
 });
