@@ -49,7 +49,7 @@
 </select>
 <div class="help">Esta selección adapta automáticamente la sección donde registrará sus productos o servicios.</div>
 </div>
-<div class="field"><div class="field-label"><label for="category">Categoría</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><select id="category" required disabled><option value="">Cargando categorías...</option></select><div class="help" id="categoryStatus">Consultando categorías activas...</div></div>
+<div class="field"><div class="field-label"><label for="category">Categoría</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><select id="category" required><option value="">Seleccione una categoría</option><option value="1">🍽️ Comida y Bebida</option><option value="2">🛍️ Comercio</option><option value="3">🔧 Servicios</option><option value="4">💊 Salud y Bienestar</option><option value="5">🎭 Entretenimiento</option><option value="6">🏨 Alojamiento</option></select><div class="help" id="categoryStatus">Categorías disponibles. La lista se actualizará automáticamente desde la plataforma.</div></div>
 <div class="field"><div class="field-label"><label for="subcategory">Subcategoría</label><span id="subcategoryMark"></span></div><select id="subcategory" disabled><option value="">Seleccione primero una categoría</option></select><div class="help" id="subcategoryHelp">Será obligatoria cuando la categoría tenga subcategorías.</div></div>
 <div class="field full"><div class="field-label"><label for="description">Descripción</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><textarea id="description" maxlength="1000" required placeholder="Describa los productos, servicios y características principales del negocio."></textarea></div>
 <label class="check-card field full" for="delivery_available"><input id="delivery_available" type="checkbox"><span><strong>Ofrece servicio a domicilio </strong><small>Permitirá que el negocio aparezca en el filtro “A domicilio”.</small></span></label>
@@ -274,6 +274,12 @@ Arrastre una imagen aquí, haga clic para seleccionarla o copie una imagen y pre
 <div id="${def.id}_preview" class="photo-preview"></div>
 <div id="${def.id}_quality" class="quality warn">${esc(def.help)} La claridad se revisará automáticamente.</div>
 </div>`}
+function renderMainPhotos(){
+const container=$('mainPhotoGrid');
+if(!container)return;
+container.innerHTML=PHOTO_DEFS.map(photoWidget).join('');
+bindPhotoWidgets(container);
+}
 function bindPhotoWidgets(root){root.querySelectorAll('[data-photo-action="file"]').forEach(b=>b.onclick=()=>$(b.dataset.target).click());root.querySelectorAll('[data-photo-action="camera"]').forEach(b=>b.onclick=()=>$(b.dataset.target+'_camera').click());root.querySelectorAll('[data-photo-action="paste"]').forEach(b=>b.onclick=()=>pasteFromClipboard(b.dataset.target));root.querySelectorAll('input[type=file]').forEach(input=>{input.onchange=async()=>{if(input.id.endsWith('_camera')){const target=input.id.replace(/_camera$/,'');if(input.files?.[0])await assignPhoto(target,input.files[0]);input.value=''}else if(input.files?.[0])await processPhoto(input.id,input.files[0])}});root.querySelectorAll('[data-drop-target]').forEach(zone=>{zone.ondragover=e=>{e.preventDefault();zone.classList.add('drag')};zone.ondragleave=()=>zone.classList.remove('drag');zone.ondrop=async e=>{e.preventDefault();zone.classList.remove('drag');const f=[...e.dataTransfer.files].find(x=>x.type.startsWith('image/'));if(f)await assignPhoto(zone.dataset.dropTarget,f)};zone.onpaste=async e=>handlePasteEvent(e,zone.dataset.dropTarget);zone.onclick=()=>$(zone.dataset.dropTarget).click()})}
 async function pasteFromClipboard(target){activePasteTarget=target;try{if(navigator.clipboard?.read){const items=await navigator.clipboard.read();for(const item of items){const type=item.types.find(t=>t.startsWith('image/'));if(type){const blob=await item.getType(type);await assignPhoto(target,new File([blob],`foto-pegada-${Date.now()}.${type.includes('png')?'png':'jpg'}`,{type}));activePasteTarget=null;return}}}showMessage('error','No se encontró una imagen en el portapapeles. Copie una foto y vuelva a intentarlo.')}catch{showMessage('ok','Ahora presione Ctrl+V o Comando+V para pegar la imagen.')} }
 async function handlePasteEvent(e,target){const item=[...e.clipboardData.items].find(i=>i.type.startsWith('image/'));if(!item)return;const file=item.getAsFile();if(file){e.preventDefault();await assignPhoto(target,file);activePasteTarget=null}}
@@ -490,19 +496,30 @@ categoryRetryRunning=true;
 try{await loadCategories();}finally{categoryRetryRunning=false}
 };
 $('category').addEventListener('focus',retryCategories);$('searchAddressBtn').onclick=searchAddress;$('useMyLocationBtn').onclick=useMyLocation;$('addProductBtn').onclick=addProduct;form.onsubmit=submitForm;form.addEventListener('input',()=>formDirty=true);form.addEventListener('change',()=>formDirty=true);window.addEventListener('beforeunload',e=>{if(formDirty&&!isSubmitting){e.preventDefault();e.returnValue=''}});
-renderLocations();
-renderCities();
-renderSchedule();
-renderMainPhotos();
-renderOfferSection();
-loadCategories();
+try{
+applyCategoryRows(FALLBACK_CATEGORIES,'fallback');
+}catch(error){
+console.error('Categorías base:',error);
+}
+
+try{renderLocations();}catch(error){console.error('Ubicaciones:',error);}
+try{renderCities();}catch(error){console.error('Ciudades:',error);}
+try{renderSchedule();}catch(error){console.error('Horarios:',error);}
+try{renderMainPhotos();}catch(error){console.error('Fotografías:',error);}
+try{renderOfferSection();}catch(error){console.error('Productos o servicios:',error);}
+
+loadCategories().catch(error=>{
+console.error('Actualización de categorías:',error);
+});
+
 try{
 initMap();
 }catch(error){
 console.error('No se pudo iniciar el mapa:',error);
 showMessage('error','El mapa no pudo iniciarse, pero puede continuar llenando los demás datos y recargar la página antes de seleccionar la ubicación.');
 }
-loadTurnstile();
+
+try{loadTurnstile();}catch(error){console.error('Turnstile:',error);}
 setStep(1);
 </script>
 </body>
