@@ -49,7 +49,7 @@
 </select>
 <div class="help">Esta selección adapta automáticamente la sección donde registrará sus productos o servicios.</div>
 </div>
-<div class="field"><div class="field-label"><label for="category">Categoría</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><select id="category" required><option value="">Cargando categorías...</option></select></div>
+<div class="field"><div class="field-label"><label for="category">Categoría</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><select id="category" required disabled><option value="">Cargando categorías...</option></select></div>
 <div class="field"><div class="field-label"><label for="subcategory">Subcategoría</label><span id="subcategoryMark"></span></div><select id="subcategory" disabled><option value="">Seleccione primero una categoría</option></select><div class="help" id="subcategoryHelp">Será obligatoria cuando la categoría tenga subcategorías.</div></div>
 <div class="field full"><div class="field-label"><label for="description">Descripción</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><textarea id="description" maxlength="1000" required placeholder="Describa los productos, servicios y características principales del negocio."></textarea></div>
 <label class="check-card field full" for="delivery_available"><input id="delivery_available" type="checkbox"><span><strong>Ofrece servicio a domicilio </strong><small>Permitirá que el negocio aparezca en el filtro “A domicilio”.</small></span></label>
@@ -160,7 +160,84 @@ if(step===6){if(!$('accept_terms').checked||!$('accept_privacy').checked)throw n
 return true}
 function renderLocations(){const p=$('province');p.innerHTML='<option value="">Seleccione una provincia</option>'+Object.keys(ECUADOR_LOCATIONS).map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('')}
 function renderCities(){const prov=$('province').value,c=$('city');if(!prov){c.disabled=true;c.innerHTML='<option value="">Seleccione primero una provincia</option>';return}c.disabled=false;c.innerHTML='<option value="">Seleccione una ciudad / cantón</option>'+ECUADOR_LOCATIONS[prov].map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('')+'<option value="__OTHER__">Otra ciudad o localidad</option>'}
-async function loadCategories(){const {data,error}=await supabase.from('categories').select('*').eq('is_active',true).order('sort_order',{ascending:true}).order('name',{ascending:true});if(error){$('category').innerHTML='<option value="">No se pudieron cargar</option>';showMessage('error','No se pudieron cargar las categorías desde Supabase.');return}categories=data||[];const roots=categories.filter(c=>c.parent_id===null||c.parent_id===undefined||c.parent_id==='');$('category').innerHTML='<option value="">Seleccione una categoría</option>'+roots.map(c=>`<option value="${esc(c.id)}">${esc(c.icon||'')} ${esc(c.name)}</option>`).join('')}
+function categoryLoadState(message, failed=false){
+const select=$('category');
+select.disabled=true;
+select.dataset.loadFailed=failed?'true':'false';
+select.innerHTML=`<option value="">${esc(message)}</option>`;
+renderSubcategories();
+}
+async function fetchCategoriesWithClient(){
+const timeout=new Promise((_,reject)=>setTimeout(()=>reject(new Error('La consulta de categorías tardó demasiado.')),12000));
+const request=supabase
+.from('categories')
+.select('*')
+.eq('is_active',true)
+.order('sort_order',{ascending:true})
+.order('name',{ascending:true});
+return await Promise.race([request,timeout]);
+}
+async function fetchCategoriesWithRest(){
+const controller=new AbortController();
+const timeout=setTimeout(()=>controller.abort(),12000);
+try{
+const params=new URLSearchParams({
+select:'*',
+is_active:'eq.true',
+order:'sort_order.asc,name.asc'
+});
+const response=await fetch(`${SUPABASE_URL}/rest/v1/categories?${params.toString()}`,{
+headers:{
+apikey:SUPABASE_ANON_KEY,
+Authorization:`Bearer ${SUPABASE_ANON_KEY}`,
+Accept:'application/json'
+},
+signal:controller.signal
+});
+if(!response.ok){
+const body=await response.text().catch(()=> '');
+throw new Error(body||`Error ${response.status} al consultar categorías.`);
+}
+return await response.json();
+}finally{
+clearTimeout(timeout);
+}
+}
+async function loadCategories(){
+categoryLoadState('Cargando categorías...');
+clearMessage();
+let data=null;
+let firstError=null;
+try{
+const result=await fetchCategoriesWithClient();
+if(result?.error)throw result.error;
+data=result?.data||[];
+}catch(error){
+firstError=error;
+console.warn('Carga mediante cliente Supabase falló. Se utilizará REST:',error);
+try{
+data=await fetchCategoriesWithRest();
+}catch(restError){
+console.error('No se pudieron cargar las categorías:',firstError,restError);
+categoryLoadState('No se pudieron cargar. Haga clic para reintentar.',true);
+showMessage('error','No se pudieron cargar las categorías desde Supabase. Haga clic nuevamente en Categoría para reintentar.');
+return;
+}
+}
+categories=Array.isArray(data)?data:[];
+const roots=categories.filter(c=>c.parent_id===null||c.parent_id===undefined||c.parent_id==='');
+if(!roots.length){
+categoryLoadState('No existen categorías activas.',true);
+showMessage('error','No existen categorías principales activas en Supabase.');
+return;
+}
+const select=$('category');
+select.innerHTML='<option value="">Seleccione una categoría</option>'+
+roots.map(c=>`<option value="${esc(c.id)}">${esc(c.icon||'')} ${esc(c.name)}</option>`).join('');
+select.disabled=false;
+select.dataset.loadFailed='false';
+renderSubcategories();
+}
 function renderSubcategories(){const root=$('category').value;const children=categories.filter(c=>String(c.parent_id)===String(root));const s=$('subcategory');if(!root){s.disabled=true;s.required=false;s.innerHTML='<option value="">Seleccione primero una categoría</option>'}else if(!children.length){s.disabled=true;s.required=false;s.innerHTML='<option value="">Esta categoría no tiene subcategorías</option>'}else{s.disabled=false;s.required=true;s.innerHTML='<option value="">Seleccione una subcategoría</option>'+children.map(c=>`<option value="${esc(c.id)}">${esc(c.icon||'')} ${esc(c.name)}</option>`).join('')}$('subcategoryMark').className=s.required?'required-star':'';$('subcategoryMark').textContent=s.required?'*':'';$('subcategoryMark').setAttribute('aria-label',s.required?'Campo obligatorio':'')}
 function initMap(){map=L.map('map').setView([-1.8312,-78.1834],7);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);map.on('click',e=>setMarker(e.latlng.lat,e.latlng.lng))}
 function setMarker(lat,lng){if(!marker){marker=L.marker([lat,lng],{draggable:true}).addTo(map);marker.on('dragend',()=>{const p=marker.getLatLng();setCoordinates(p.lat,p.lng)})}else marker.setLatLng([lat,lng]);setCoordinates(lat,lng);map.setView([lat,lng],16)}
@@ -391,8 +468,25 @@ $('reviewGrid').innerHTML=rows.map(([t,c])=>`<div class="review-card"><h4>${t}</
 function totalFileBytes(){return [...form.querySelectorAll('input[type=file]')].reduce((sum,i)=>sum+(i.files?.[0]?.size||0),0)}
 async function submitForm(e){e.preventDefault();if(isSubmitting)return;clearMessage();try{for(let s=1;s<=6;s++)validateStep(s);validateSelectedPhotoQuality();const {categoryId,subcategoryId}={categoryId:$('category').value,subcategoryId:$('subcategory').disabled?null:$('subcategory').value};const phone=buildEcuadorPhone($('phone_local').value,'el teléfono',false),whatsapp=buildEcuadorPhone($('whatsapp_local').value,'el número de WhatsApp',true),website=buildWebsite($('website_domain').value),socialUrl=buildSocial($('social_network').value,$('social_value').value),hours=collectHours(),{products,files}=collectProducts();if(totalFileBytes()>MAX_TOTAL_BYTES)throw new Error('El peso total de las imágenes supera 30 MB.');const business={name:$('name').value.trim(),owner_email:$('owner_email').value.trim().toLowerCase(),business_type:$('business_type').value,category_id:categoryId,subcategory_id:subcategoryId,province:$('province').value,city:selectedCity(),address:$('address').value.trim(),description:$('description').value.trim(),phone,whatsapp,website,social_network:$('social_network').value||null,social_url:socialUrl,latitude:Number($('latitude').value),longitude:Number($('longitude').value),delivery_available:$('delivery_available').checked};const data=new FormData();data.append('payload',JSON.stringify({business,hours,products}));data.append('company_website',$('company_website').value);for(const id of ['logo_image_file','cover_image_file','cedula_front','cedula_back']){const f=$(id).files?.[0];if(f)data.append(id,f,f.name)}files.forEach(x=>data.append(x.key,x.file,x.file.name));if(window.turnstile&&turnstileWidgetId!==null){const token=window.turnstile.getResponse(turnstileWidgetId);if(token)data.append('turnstile_token',token)}isSubmitting=true;$('submitBtn').disabled=true;$('submitState').classList.add('visible');const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),120000);let response;try{response=await fetch(EDGE_REGISTRATION_URL,{method:'POST',headers:{apikey:SUPABASE_ANON_KEY,Authorization:`Bearer ${SUPABASE_ANON_KEY}`},body:data,signal:controller.signal})}finally{clearTimeout(timeout)}const result=await response.json().catch(()=>({}));if(!response.ok||!result.success)throw new Error(result.error||`No se pudo registrar. Código ${response.status}.`);formDirty=false;showMessage('ok','Solicitud enviada correctamente. Quedó pendiente de aprobación administrativa.');form.reset();qualityState.clear();fileUrls.forEach(URL.revokeObjectURL);fileUrls.clear();productCount=0;$('productsBox').innerHTML=`<div class="empty-products">${emptyOfferMessage()}</div>`;renderOfferSection();renderCities();renderSubcategories();renderSchedule();renderMainPhotos();if(marker){map.removeLayer(marker);marker=null}map.setView([-1.8312,-78.1834],7);setStep(1)}catch(err){console.error(err);showMessage('error',err?.name==='AbortError'?'La carga tardó demasiado. Revise su conexión.':err.message||'No se pudo enviar la solicitud.')}finally{isSubmitting=false;$('submitBtn').disabled=false;$('submitState').classList.remove('visible')}}
 function loadTurnstile(){if(!TURNSTILE_SITE_KEY)return;$('turnstileWrap').hidden=false;const s=document.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';s.async=true;s.onload=()=>{turnstileWidgetId=window.turnstile.render('#turnstileWidget',{sitekey:TURNSTILE_SITE_KEY,theme:'dark'})};document.head.appendChild(s)}
-$('nextBtn').onclick=()=>{try{validateStep(currentStep);setStep(currentStep+1)}catch(e){showMessage('error',e.message)}};$('prevBtn').onclick=()=>setStep(currentStep-1);document.querySelectorAll('.step-button').forEach(b=>b.onclick=()=>{const n=Number(b.dataset.step);if(n<=highestStep)setStep(n)});$('province').onchange=()=>{renderCities();$('otherCityField').hidden=true};$('city').onchange=()=>{$('otherCityField').hidden=$('city').value!=='__OTHER__'};$('business_type').onchange=renderOfferSection;$('category').onchange=renderSubcategories;$('searchAddressBtn').onclick=searchAddress;$('useMyLocationBtn').onclick=useMyLocation;$('addProductBtn').onclick=addProduct;form.onsubmit=submitForm;form.addEventListener('input',()=>formDirty=true);form.addEventListener('change',()=>formDirty=true);window.addEventListener('beforeunload',e=>{if(formDirty&&!isSubmitting){e.preventDefault();e.returnValue=''}});
-renderLocations();renderCities();renderSchedule();renderMainPhotos();renderOfferSection();initMap();loadCategories();loadTurnstile();setStep(1);
+$('nextBtn').onclick=()=>{try{validateStep(currentStep);setStep(currentStep+1)}catch(e){showMessage('error',e.message)}};$('prevBtn').onclick=()=>setStep(currentStep-1);document.querySelectorAll('.step-button').forEach(b=>b.onclick=()=>{const n=Number(b.dataset.step);if(n<=highestStep)setStep(n)});$('province').onchange=()=>{renderCities();$('otherCityField').hidden=true};$('city').onchange=()=>{$('otherCityField').hidden=$('city').value!=='__OTHER__'};$('business_type').onchange=renderOfferSection;
+$('category').onchange=renderSubcategories;
+$('category').addEventListener('pointerdown',()=>{
+if($('category').dataset.loadFailed==='true')loadCategories();
+});$('searchAddressBtn').onclick=searchAddress;$('useMyLocationBtn').onclick=useMyLocation;$('addProductBtn').onclick=addProduct;form.onsubmit=submitForm;form.addEventListener('input',()=>formDirty=true);form.addEventListener('change',()=>formDirty=true);window.addEventListener('beforeunload',e=>{if(formDirty&&!isSubmitting){e.preventDefault();e.returnValue=''}});
+renderLocations();
+renderCities();
+renderSchedule();
+renderMainPhotos();
+renderOfferSection();
+loadCategories();
+try{
+initMap();
+}catch(error){
+console.error('No se pudo iniciar el mapa:',error);
+showMessage('error','El mapa no pudo iniciarse, pero puede continuar llenando los demás datos y recargar la página antes de seleccionar la ubicación.');
+}
+loadTurnstile();
+setStep(1);
 </script>
 </body>
 </html>
