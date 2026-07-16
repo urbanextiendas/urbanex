@@ -109,6 +109,7 @@
 const SUPABASE_URL='https://mlkynawsjqmawgxeuvks.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 const EDGE_REGISTRATION_URL=`${SUPABASE_URL}/functions/v1/registrar-negocio`;
+const FALLBACK_CATEGORIES=[{"id":1,"name":"Comida y Bebida","icon":"🍽️","parent_id":null,"sort_order":1,"is_active":true},{"id":2,"name":"Comercio","icon":"🛍️","parent_id":null,"sort_order":2,"is_active":true},{"id":3,"name":"Servicios","icon":"🔧","parent_id":null,"sort_order":3,"is_active":true},{"id":4,"name":"Salud y Bienestar","icon":"💊","parent_id":null,"sort_order":4,"is_active":true},{"id":5,"name":"Entretenimiento","icon":"🎭","parent_id":null,"sort_order":5,"is_active":true},{"id":6,"name":"Alojamiento","icon":"🏨","parent_id":null,"sort_order":6,"is_active":true},{"id":7,"name":"Restaurantes","icon":"🍴","parent_id":1,"sort_order":1,"is_active":true},{"id":8,"name":"Cafeterías","icon":"☕","parent_id":1,"sort_order":2,"is_active":true},{"id":9,"name":"Pizzerías","icon":"🍕","parent_id":1,"sort_order":3,"is_active":true},{"id":10,"name":"Pollerías","icon":"🍗","parent_id":1,"sort_order":4,"is_active":true},{"id":11,"name":"Comida rápida","icon":"🍔","parent_id":1,"sort_order":5,"is_active":true},{"id":12,"name":"Heladerías","icon":"🍦","parent_id":1,"sort_order":6,"is_active":true},{"id":13,"name":"Bares","icon":"🍷","parent_id":1,"sort_order":7,"is_active":true},{"id":14,"name":"Panaderías","icon":"🥐","parent_id":1,"sort_order":8,"is_active":true},{"id":15,"name":"Ropa y Moda","icon":"👗","parent_id":2,"sort_order":1,"is_active":true},{"id":16,"name":"Calzado","icon":"👟","parent_id":2,"sort_order":2,"is_active":true},{"id":17,"name":"Electrónica","icon":"📱","parent_id":2,"sort_order":3,"is_active":true},{"id":18,"name":"Supermercados","icon":"🛒","parent_id":2,"sort_order":4,"is_active":true},{"id":19,"name":"Ferreterías","icon":"🛠️","parent_id":2,"sort_order":5,"is_active":true},{"id":20,"name":"Farmacias","icon":"💊","parent_id":2,"sort_order":6,"is_active":true},{"id":39,"name":"Electrodomésticos","icon":"🔌","parent_id":2,"sort_order":7,"is_active":true},{"id":21,"name":"Peluquerías","icon":"✂️","parent_id":3,"sort_order":1,"is_active":true},{"id":22,"name":"Mecánicas","icon":"🔧","parent_id":3,"sort_order":2,"is_active":true},{"id":23,"name":"Lavanderías","icon":"🧺","parent_id":3,"sort_order":3,"is_active":true},{"id":24,"name":"Imprentas","icon":"🖨️","parent_id":3,"sort_order":4,"is_active":true},{"id":25,"name":"Fotografía","icon":"📷","parent_id":3,"sort_order":5,"is_active":true},{"id":38,"name":"Consultoras","icon":"📊","parent_id":3,"sort_order":6,"is_active":true},{"id":26,"name":"Clínicas","icon":"🏥","parent_id":4,"sort_order":1,"is_active":true},{"id":27,"name":"Odontología","icon":"🦷","parent_id":4,"sort_order":2,"is_active":true},{"id":28,"name":"Ópticas","icon":"👓","parent_id":4,"sort_order":3,"is_active":true},{"id":29,"name":"Gimnasios","icon":"🏋️","parent_id":4,"sort_order":4,"is_active":true},{"id":30,"name":"Spas","icon":"💆","parent_id":4,"sort_order":5,"is_active":true},{"id":31,"name":"Cines","icon":"🎬","parent_id":5,"sort_order":1,"is_active":true},{"id":32,"name":"Canchas","icon":"⚽","parent_id":5,"sort_order":2,"is_active":true},{"id":33,"name":"Karaoke","icon":"🎤","parent_id":5,"sort_order":3,"is_active":true},{"id":34,"name":"Juegos","icon":"🎮","parent_id":5,"sort_order":4,"is_active":true},{"id":35,"name":"Hoteles","icon":"🏨","parent_id":6,"sort_order":1,"is_active":true},{"id":36,"name":"Hostales","icon":"🛏️","parent_id":6,"sort_order":2,"is_active":true},{"id":37,"name":"Cabañas","icon":"🏡","parent_id":6,"sort_order":3,"is_active":true}];
 const TURNSTILE_SITE_KEY='';
 const ECUADOR_LOCATIONS={"Azuay": ["Cuenca", "Girón", "Gualaceo", "Nabón", "Paute", "Pucara", "San Fernando", "Santa Isabel", "Sígsig", "Oña", "Chordeleg", "El Pan", "Sevilla de Oro", "Guachapala", "Camilo Ponce Enríquez"], "Bolívar": ["Guaranda", "Chillanes", "Chimbo", "Echeandía", "San Miguel", "Caluma", "Las Naves"], "Cañar": ["Azogues", "Biblián", "Cañar", "La Troncal", "El Tambo", "Déleg", "Suscal"], "Carchi": ["Tulcán", "Bolívar", "Espejo", "Mira", "Montúfar", "San Pedro de Huaca"], "Cotopaxi": ["Latacunga", "La Maná", "Pangua", "Pujili", "Salcedo", "Saquisilí", "Sigchos"], "Chimborazo": ["Riobamba", "Alausi", "Colta", "Chambo", "Chunchi", "Guamote", "Guano", "Pallatanga", "Penipe", "Cumandá"], "El Oro": ["Machala", "Arenillas", "Atahualpa", "Balsas", "Chilla", "El Guabo", "Huaquillas", "Marcabelí", "Pasaje", "Piñas", "Portovelo", "Santa Rosa", "Zaruma", "Las Lajas"], "Esmeraldas": ["Esmeraldas", "Eloy Alfaro", "Muisne", "Quinindé", "San Lorenzo", "Atacames", "Ríoverde"], "Guayas": ["Guayaquil", "Alfredo Baquerizo Moreno", "Balao", "Balzar", "Colimes", "Daule", "Durán", "El Empalme", "El Triunfo", "Milagro", "Naranjal", "Naranjito", "Palestina", "Pedro Carbo", "Samborondón", "Santa Lucía", "Salitre", "San Jacinto de Yaguachi", "Playas", "Simón Bolívar", "Coronel Marcelino Maridueña", "Lomas de Sargentillo", "Nobol", "General Antonio Elizalde", "Isidro Ayora"], "Imbabura": ["Ibarra", "Antonio Ante", "Cotacachi", "Otavalo", "Pimampiro", "San Miguel de Urcuquí"], "Loja": ["Loja", "Calvas", "Catamayo", "Celica", "Chaguarpamba", "Espíndola", "Gonzanamá", "Macará", "Paltas", "Puyango", "Saraguro", "Sozoranga", "Zapotillo", "Pindal", "Quilanga", "Olmedo"], "Los Ríos": ["Babahoyo", "Baba", "Montalvo", "Puebloviejo", "Quevedo", "Urdaneta", "Ventanas", "Vinces", "Palenque", "Buena Fé", "Valencia", "Mocache", "Quinsaloma"], "Manabí": ["Portoviejo", "Bolívar", "Chone", "El Carmen", "Flavio Alfaro", "Jipijapa", "Junín", "Manta", "Montecristi", "Paján", "Pichincha", "Rocafuerte", "Santa Ana", "Sucre", "Tosagua", "24 de Mayo", "Pedernales", "Olmedo", "Puerto López", "Jama", "Jaramijó", "San Vicente"], "Morona Santiago": ["Morona", "Gualaquiza", "Limón Indanza", "Palora", "Santiago", "Sucúa", "Huamboya", "San Juan Bosco", "Taisha", "Logroño", "Pablo Sexto", "Tiwintza", "Sevilla Don Bosco"], "Napo": ["Tena", "Archidona", "El Chaco", "Quijos", "Carlos Julio Arosemena Tola"], "Pastaza": ["Pastaza", "Mera", "Santa Clara", "Arajuno"], "Pichincha": ["Distrito Metropolitano de Quito", "Cayambe", "Mejia", "Pedro Moncayo", "Rumiñahui", "San Miguel de los Bancos", "Pedro Vicente Maldonado", "Puerto Quito"], "Tungurahua": ["Ambato", "Baños de Agua Santa", "Cevallos", "Mocha", "Patate", "Quero", "San Pedro de Pelileo", "Santiago de Píllaro", "Tisaleo"], "Zamora Chinchipe": ["Zamora", "Chinchipe", "Nangaritza", "Yacuambi", "Yantzaza", "El Pangui", "Centinela del Cóndor", "Palanda", "Paquisha"], "Galápagos": ["San Cristóbal", "Isabela", "Santa Cruz"], "Sucumbíos": ["Lago Agrio", "Gonzalo Pizarro", "Putumayo", "Shushufindi", "Sucumbíos", "Cascales", "Cuyabeno"], "Orellana": ["Francisco de Orellana", "Aguarico", "La Joya de los Sachas", "Loreto"], "Santo Domingo de los Tsáchilas": ["Santo Domingo"], "Santa Elena": ["Santa Elena", "La Libertad", "Salinas"]};
 const MAX_FILE_BYTES=5*1024*1024;
@@ -160,27 +161,58 @@ function renderLocations(){const p=$('province');p.innerHTML='<option value="">S
 function renderCities(){const prov=$('province').value,c=$('city');if(!prov){c.disabled=true;c.innerHTML='<option value="">Seleccione primero una provincia</option>';return}c.disabled=false;c.innerHTML='<option value="">Seleccione una ciudad / cantón</option>'+ECUADOR_LOCATIONS[prov].map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('')+'<option value="__OTHER__">Otra ciudad o localidad</option>'}
 function categoryLoadState(message, failed=false){
 const select=$('category');
-select.disabled=!failed;
+select.disabled=false;
 select.dataset.loadFailed=failed?'true':'false';
-select.innerHTML=`<option value="">${esc(message)}</option>`;
 const status=$('categoryStatus');
 if(status){
-status.textContent=failed
-?'No fue posible cargar las categorías. Abra el selector para reintentar.'
-:'Consultando categorías activas...';
-status.style.color=failed?'#ff8e8e':'';
+status.textContent=message;
+status.style.color=failed?'#d8b85a':'';
+}
+}
+function normalizeCategoryRows(rows){
+return (Array.isArray(rows)?rows:[])
+.filter(row=>row&&row.is_active!==false)
+.map(row=>({
+id:row.id,
+name:String(row.name||'').trim(),
+icon:String(row.icon||'').trim(),
+parent_id:row.parent_id===undefined?null:row.parent_id,
+sort_order:Number(row.sort_order||0),
+is_active:true
+}))
+.filter(row=>row.id!==null&&row.id!==undefined&&row.name);
+}
+function applyCategoryRows(rows,source='live'){
+const previousCategory=$('category').value;
+const previousSubcategory=$('subcategory').value;
+categories=normalizeCategoryRows(rows);
+const roots=categories
+.filter(row=>row.parent_id===null||row.parent_id==='')
+.sort((a,b)=>a.sort_order-b.sort_order||a.name.localeCompare(b.name,'es'));
+if(!roots.length)throw new Error('No existen categorías principales disponibles.');
+$('category').innerHTML='<option value="">Seleccione una categoría</option>'+
+roots.map(row=>`<option value="${esc(row.id)}">${esc(row.icon||'')} ${esc(row.name)}</option>`).join('');
+$('category').disabled=false;
+if(previousCategory&&roots.some(row=>String(row.id)===String(previousCategory))){
+$('category').value=previousCategory;
 }
 renderSubcategories();
+if(previousSubcategory&&!$('subcategory').disabled){
+const exists=[...$('subcategory').options].some(option=>String(option.value)===String(previousSubcategory));
+if(exists)$('subcategory').value=previousSubcategory;
 }
-async function fetchCategoriesDirect(){
+categoryLoadState(
+source==='live'
+?`${roots.length} categorías actualizadas desde la plataforma.`
+:`${roots.length} categorías disponibles.`,
+false
+);
+}
+async function fetchCategoriesFromEdge(){
 const controller=new AbortController();
-const timeout=setTimeout(()=>controller.abort(),10000);
+const timeout=setTimeout(()=>controller.abort(),15000);
 try{
-const params=new URLSearchParams({
-select:'id,name,icon,parent_id,sort_order,is_active',
-order:'sort_order.asc,name.asc'
-});
-const response=await fetch(`${SUPABASE_URL}/rest/v1/categories?${params.toString()}`,{
+const response=await fetch(`${EDGE_REGISTRATION_URL}?action=categories`,{
 method:'GET',
 headers:{
 apikey:SUPABASE_ANON_KEY,
@@ -190,58 +222,34 @@ Accept:'application/json'
 cache:'no-store',
 signal:controller.signal
 });
-const body=await response.text();
-if(!response.ok){
-let detail=body;
-try{
-const parsed=JSON.parse(body);
-detail=parsed.message||parsed.hint||parsed.details||body;
-}catch{}
-throw new Error(detail||`Error ${response.status} al consultar categorías.`);
+const result=await response.json().catch(()=>({}));
+if(!response.ok||result.success!==true){
+throw new Error(result.error||`Error ${response.status} al cargar categorías.`);
 }
-return body?JSON.parse(body):[];
+return result.categories||[];
 }finally{
 clearTimeout(timeout);
 }
 }
 async function loadCategories(){
-categoryLoadState('Cargando categorías...');
 clearMessage();
-let lastError=null;
-for(let attempt=1;attempt<=2;attempt++){
 try{
-const data=await fetchCategoriesDirect();
-categories=(Array.isArray(data)?data:[])
-.filter(category=>category.is_active!==false);
-const roots=categories
-.filter(category=>category.parent_id===null||category.parent_id===undefined||category.parent_id==='')
-.sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0)||String(a.name||'').localeCompare(String(b.name||''),'es'));
-if(!roots.length){
-throw new Error('No existen categorías principales activas en Supabase.');
-}
-const select=$('category');
-select.innerHTML='<option value="">Seleccione una categoría</option>'+
-roots.map(category=>`<option value="${esc(category.id)}">${esc(category.icon||'')} ${esc(category.name)}</option>`).join('');
-select.disabled=false;
-select.dataset.loadFailed='false';
-const status=$('categoryStatus');
-if(status){
-status.textContent=`${roots.length} categorías disponibles.`;
-status.style.color='';
-}
-renderSubcategories();
-return;
+applyCategoryRows(FALLBACK_CATEGORIES,'fallback');
 }catch(error){
-lastError=error;
-console.error(`Intento ${attempt} de carga de categorías falló:`,error);
-if(attempt<2)await new Promise(resolve=>setTimeout(resolve,900));
+console.error('No se pudieron aplicar las categorías base:',error);
 }
-}
-categoryLoadState('No se pudieron cargar. Abra para reintentar.',true);
-showMessage(
-'error',
-`No se pudieron cargar las categorías desde Supabase. ${lastError?.message||'Revise la conexión y los permisos de lectura de la tabla categories.'}`
+try{
+const liveRows=await fetchCategoriesFromEdge();
+applyCategoryRows(liveRows,'live');
+$('category').dataset.loadFailed='false';
+}catch(error){
+console.error('No se pudieron actualizar las categorías desde la Edge Function:',error);
+$('category').dataset.loadFailed='true';
+categoryLoadState(
+'Categorías disponibles. La actualización automática se reintentará al abrir el selector.',
+true
 );
+}
 }
 function renderSubcategories(){const root=$('category').value;const children=categories.filter(c=>String(c.parent_id)===String(root));const s=$('subcategory');if(!root){s.disabled=true;s.required=false;s.innerHTML='<option value="">Seleccione primero una categoría</option>'}else if(!children.length){s.disabled=true;s.required=false;s.innerHTML='<option value="">Esta categoría no tiene subcategorías</option>'}else{s.disabled=false;s.required=true;s.innerHTML='<option value="">Seleccione una subcategoría</option>'+children.map(c=>`<option value="${esc(c.id)}">${esc(c.icon||'')} ${esc(c.name)}</option>`).join('')}$('subcategoryMark').className=s.required?'required-star':'';$('subcategoryMark').textContent=s.required?'*':'';$('subcategoryMark').setAttribute('aria-label',s.required?'Campo obligatorio':'')}
 function initMap(){map=L.map('map').setView([-1.8312,-78.1834],7);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);map.on('click',e=>setMarker(e.latlng.lat,e.latlng.lng))}
@@ -475,10 +483,12 @@ async function submitForm(e){e.preventDefault();if(isSubmitting)return;clearMess
 function loadTurnstile(){if(!TURNSTILE_SITE_KEY)return;$('turnstileWrap').hidden=false;const s=document.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';s.async=true;s.onload=()=>{turnstileWidgetId=window.turnstile.render('#turnstileWidget',{sitekey:TURNSTILE_SITE_KEY,theme:'dark'})};document.head.appendChild(s)}
 $('nextBtn').onclick=()=>{try{validateStep(currentStep);setStep(currentStep+1)}catch(e){showMessage('error',e.message)}};$('prevBtn').onclick=()=>setStep(currentStep-1);document.querySelectorAll('.step-button').forEach(b=>b.onclick=()=>{const n=Number(b.dataset.step);if(n<=highestStep)setStep(n)});$('province').onchange=()=>{renderCities();$('otherCityField').hidden=true};$('city').onchange=()=>{$('otherCityField').hidden=$('city').value!=='__OTHER__'};$('business_type').onchange=renderOfferSection;
 $('category').onchange=renderSubcategories;
-const retryCategories=()=>{
-if($('category').dataset.loadFailed==='true')loadCategories();
+let categoryRetryRunning=false;
+const retryCategories=async()=>{
+if($('category').dataset.loadFailed!=='true'||categoryRetryRunning)return;
+categoryRetryRunning=true;
+try{await loadCategories();}finally{categoryRetryRunning=false}
 };
-$('category').addEventListener('pointerdown',retryCategories);
 $('category').addEventListener('focus',retryCategories);$('searchAddressBtn').onclick=searchAddress;$('useMyLocationBtn').onclick=useMyLocation;$('addProductBtn').onclick=addProduct;form.onsubmit=submitForm;form.addEventListener('input',()=>formDirty=true);form.addEventListener('change',()=>formDirty=true);window.addEventListener('beforeunload',e=>{if(formDirty&&!isSubmitting){e.preventDefault();e.returnValue=''}});
 renderLocations();
 renderCities();
