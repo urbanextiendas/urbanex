@@ -109,7 +109,27 @@ input,textarea,select { font-family:var(--sans); }
 .data-table td { padding:10px 14px; font-size:12px; color:var(--muted); border-bottom:1px solid var(--border2); vertical-align:middle; }
 .data-table tr:last-child td { border-bottom:none; }
 .data-table tr:hover td { background:rgba(255,255,255,.02); }
-.td-actions { display:flex; gap:6px; flex-wrap:wrap; }
+.td-actions {
+    display:grid;
+    grid-template-columns:repeat(2, minmax(82px, 1fr));
+    gap:7px;
+    min-width:190px;
+    align-items:center;
+}
+.td-actions .btn {
+    width:100%;
+    justify-content:center;
+    white-space:nowrap;
+    padding:6px 9px;
+}
+.td-actions .btn-delete-wide {
+    grid-column:1 / -1;
+}
+.data-table th:last-child,
+.data-table td:last-child {
+    width:215px;
+    min-width:215px;
+}
 
 /* ── BADGES ── */
 .badge { display:inline-block; padding:3px 8px; border-radius:10px; font-size:10px; font-weight:700; }
@@ -1369,7 +1389,7 @@ function renderBizTable() {
                     <button class="btn btn-ghost btn-sm" onclick="editBusiness('${b.id}')">Editar</button>
                     ${actionButtons}
                     <a href="../business/index.html?slug=${b.slug}" target="_blank" class="btn btn-ghost btn-sm">Ver</a>
-                    <button class="btn btn-danger btn-sm" onclick="deleteBusinessCompletely('${b.id}', '${escAttr(b.name)}')">Eliminar</button>
+                    <button class="btn btn-danger btn-sm btn-delete-wide" onclick="deleteBusinessCompletely('${b.id}', '${escAttr(b.name)}')">Eliminar definitivamente</button>
                 </div>
             </td>
         </tr>`;
@@ -1518,17 +1538,22 @@ window.toggleBizActive = async (id, current) => {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${sessionData.session.access_token}`,
+                'apikey': SUPABASE_ANON_KEY,
             },
             body: JSON.stringify({ business_id: id }),
         });
 
         const result = await response.json().catch(() => ({}));
 
-        if (!response.ok || result.ok === false) {
-            throw new Error(result.error || 'No se pudo aprobar el negocio.');
+        if (!response.ok || result.success !== true || result.email_sent !== true) {
+            throw new Error(
+                result.error ||
+                result.email_error ||
+                'No se pudo aprobar el negocio y enviar el correo al propietario.'
+            );
         }
 
-        toast(result.message || 'Negocio aprobado. Cuenta creada y correo enviado ✓');
+        toast(result.message || 'Negocio aprobado y correo enviado al propietario ✓');
         await loadBusinesses();
         loadDashboard();
     } catch (error) {
@@ -1571,7 +1596,11 @@ window.deleteBusinessCompletely = async (id, name) => {
             throw new Error(result.error || 'No se pudo eliminar completamente el negocio.');
         }
 
-        toast('Negocio y toda su información eliminados definitivamente.');
+        const deletedRows = Number(result.deleted_rows || 0);
+        const deletedFiles = Number(result.deleted_files || 0);
+        toast(
+            `Eliminación completa: ${deletedRows} registros y ${deletedFiles} archivos eliminados.`
+        );
         await Promise.all([
             loadBusinesses(),
             loadDashboard(),
