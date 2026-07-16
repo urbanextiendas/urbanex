@@ -49,7 +49,7 @@
 </select>
 <div class="help">Esta selección adapta automáticamente la sección donde registrará sus productos o servicios.</div>
 </div>
-<div class="field"><div class="field-label"><label for="category">Categoría</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><select id="category" required disabled><option value="">Cargando categorías...</option></select></div>
+<div class="field"><div class="field-label"><label for="category">Categoría</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><select id="category" required disabled><option value="">Cargando categorías...</option></select><div class="help" id="categoryStatus">Consultando categorías activas...</div></div>
 <div class="field"><div class="field-label"><label for="subcategory">Subcategoría</label><span id="subcategoryMark"></span></div><select id="subcategory" disabled><option value="">Seleccione primero una categoría</option></select><div class="help" id="subcategoryHelp">Será obligatoria cuando la categoría tenga subcategorías.</div></div>
 <div class="field full"><div class="field-label"><label for="description">Descripción</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><textarea id="description" maxlength="1000" required placeholder="Describa los productos, servicios y características principales del negocio."></textarea></div>
 <label class="check-card field full" for="delivery_available"><input id="delivery_available" type="checkbox"><span><strong>Ofrece servicio a domicilio </strong><small>Permitirá que el negocio aparezca en el filtro “A domicilio”.</small></span></label>
@@ -105,8 +105,7 @@
 </main>
 <footer class="footer">© 2026 Urbanex. Desarrollado por NeoDat Consultores.</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script type="module">
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+<script>
 const SUPABASE_URL='https://mlkynawsjqmawgxeuvks.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 const EDGE_REGISTRATION_URL=`${SUPABASE_URL}/functions/v1/registrar-negocio`;
@@ -115,7 +114,6 @@ const ECUADOR_LOCATIONS={"Azuay": ["Cuenca", "Girón", "Gualaceo", "Nabón", "Pa
 const MAX_FILE_BYTES=5*1024*1024;
 const MAX_TOTAL_BYTES=30*1024*1024;
 const MAX_PRODUCTS=4;
-const supabase=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 const $=id=>document.getElementById(id);
 const form=$('businessForm');
 let currentStep=1,highestStep=1,categories=[],map,marker,isSubmitting=false,formDirty=false,productCount=0,activePasteTarget=null,turnstileWidgetId=null;
@@ -162,43 +160,46 @@ function renderLocations(){const p=$('province');p.innerHTML='<option value="">S
 function renderCities(){const prov=$('province').value,c=$('city');if(!prov){c.disabled=true;c.innerHTML='<option value="">Seleccione primero una provincia</option>';return}c.disabled=false;c.innerHTML='<option value="">Seleccione una ciudad / cantón</option>'+ECUADOR_LOCATIONS[prov].map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('')+'<option value="__OTHER__">Otra ciudad o localidad</option>'}
 function categoryLoadState(message, failed=false){
 const select=$('category');
-select.disabled=true;
+select.disabled=!failed;
 select.dataset.loadFailed=failed?'true':'false';
 select.innerHTML=`<option value="">${esc(message)}</option>`;
+const status=$('categoryStatus');
+if(status){
+status.textContent=failed
+?'No fue posible cargar las categorías. Abra el selector para reintentar.'
+:'Consultando categorías activas...';
+status.style.color=failed?'#ff8e8e':'';
+}
 renderSubcategories();
 }
-async function fetchCategoriesWithClient(){
-const timeout=new Promise((_,reject)=>setTimeout(()=>reject(new Error('La consulta de categorías tardó demasiado.')),12000));
-const request=supabase
-.from('categories')
-.select('*')
-.eq('is_active',true)
-.order('sort_order',{ascending:true})
-.order('name',{ascending:true});
-return await Promise.race([request,timeout]);
-}
-async function fetchCategoriesWithRest(){
+async function fetchCategoriesDirect(){
 const controller=new AbortController();
-const timeout=setTimeout(()=>controller.abort(),12000);
+const timeout=setTimeout(()=>controller.abort(),10000);
 try{
 const params=new URLSearchParams({
-select:'*',
-is_active:'eq.true',
+select:'id,name,icon,parent_id,sort_order,is_active',
 order:'sort_order.asc,name.asc'
 });
 const response=await fetch(`${SUPABASE_URL}/rest/v1/categories?${params.toString()}`,{
+method:'GET',
 headers:{
 apikey:SUPABASE_ANON_KEY,
 Authorization:`Bearer ${SUPABASE_ANON_KEY}`,
 Accept:'application/json'
 },
+cache:'no-store',
 signal:controller.signal
 });
+const body=await response.text();
 if(!response.ok){
-const body=await response.text().catch(()=> '');
-throw new Error(body||`Error ${response.status} al consultar categorías.`);
+let detail=body;
+try{
+const parsed=JSON.parse(body);
+detail=parsed.message||parsed.hint||parsed.details||body;
+}catch{}
+throw new Error(detail||`Error ${response.status} al consultar categorías.`);
 }
-return await response.json();
+return body?JSON.parse(body):[];
 }finally{
 clearTimeout(timeout);
 }
@@ -206,37 +207,41 @@ clearTimeout(timeout);
 async function loadCategories(){
 categoryLoadState('Cargando categorías...');
 clearMessage();
-let data=null;
-let firstError=null;
+let lastError=null;
+for(let attempt=1;attempt<=2;attempt++){
 try{
-const result=await fetchCategoriesWithClient();
-if(result?.error)throw result.error;
-data=result?.data||[];
-}catch(error){
-firstError=error;
-console.warn('Carga mediante cliente Supabase falló. Se utilizará REST:',error);
-try{
-data=await fetchCategoriesWithRest();
-}catch(restError){
-console.error('No se pudieron cargar las categorías:',firstError,restError);
-categoryLoadState('No se pudieron cargar. Haga clic para reintentar.',true);
-showMessage('error','No se pudieron cargar las categorías desde Supabase. Haga clic nuevamente en Categoría para reintentar.');
-return;
-}
-}
-categories=Array.isArray(data)?data:[];
-const roots=categories.filter(c=>c.parent_id===null||c.parent_id===undefined||c.parent_id==='');
+const data=await fetchCategoriesDirect();
+categories=(Array.isArray(data)?data:[])
+.filter(category=>category.is_active!==false);
+const roots=categories
+.filter(category=>category.parent_id===null||category.parent_id===undefined||category.parent_id==='')
+.sort((a,b)=>Number(a.sort_order||0)-Number(b.sort_order||0)||String(a.name||'').localeCompare(String(b.name||''),'es'));
 if(!roots.length){
-categoryLoadState('No existen categorías activas.',true);
-showMessage('error','No existen categorías principales activas en Supabase.');
-return;
+throw new Error('No existen categorías principales activas en Supabase.');
 }
 const select=$('category');
 select.innerHTML='<option value="">Seleccione una categoría</option>'+
-roots.map(c=>`<option value="${esc(c.id)}">${esc(c.icon||'')} ${esc(c.name)}</option>`).join('');
+roots.map(category=>`<option value="${esc(category.id)}">${esc(category.icon||'')} ${esc(category.name)}</option>`).join('');
 select.disabled=false;
 select.dataset.loadFailed='false';
+const status=$('categoryStatus');
+if(status){
+status.textContent=`${roots.length} categorías disponibles.`;
+status.style.color='';
+}
 renderSubcategories();
+return;
+}catch(error){
+lastError=error;
+console.error(`Intento ${attempt} de carga de categorías falló:`,error);
+if(attempt<2)await new Promise(resolve=>setTimeout(resolve,900));
+}
+}
+categoryLoadState('No se pudieron cargar. Abra para reintentar.',true);
+showMessage(
+'error',
+`No se pudieron cargar las categorías desde Supabase. ${lastError?.message||'Revise la conexión y los permisos de lectura de la tabla categories.'}`
+);
 }
 function renderSubcategories(){const root=$('category').value;const children=categories.filter(c=>String(c.parent_id)===String(root));const s=$('subcategory');if(!root){s.disabled=true;s.required=false;s.innerHTML='<option value="">Seleccione primero una categoría</option>'}else if(!children.length){s.disabled=true;s.required=false;s.innerHTML='<option value="">Esta categoría no tiene subcategorías</option>'}else{s.disabled=false;s.required=true;s.innerHTML='<option value="">Seleccione una subcategoría</option>'+children.map(c=>`<option value="${esc(c.id)}">${esc(c.icon||'')} ${esc(c.name)}</option>`).join('')}$('subcategoryMark').className=s.required?'required-star':'';$('subcategoryMark').textContent=s.required?'*':'';$('subcategoryMark').setAttribute('aria-label',s.required?'Campo obligatorio':'')}
 function initMap(){map=L.map('map').setView([-1.8312,-78.1834],7);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);map.on('click',e=>setMarker(e.latlng.lat,e.latlng.lng))}
@@ -470,9 +475,11 @@ async function submitForm(e){e.preventDefault();if(isSubmitting)return;clearMess
 function loadTurnstile(){if(!TURNSTILE_SITE_KEY)return;$('turnstileWrap').hidden=false;const s=document.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';s.async=true;s.onload=()=>{turnstileWidgetId=window.turnstile.render('#turnstileWidget',{sitekey:TURNSTILE_SITE_KEY,theme:'dark'})};document.head.appendChild(s)}
 $('nextBtn').onclick=()=>{try{validateStep(currentStep);setStep(currentStep+1)}catch(e){showMessage('error',e.message)}};$('prevBtn').onclick=()=>setStep(currentStep-1);document.querySelectorAll('.step-button').forEach(b=>b.onclick=()=>{const n=Number(b.dataset.step);if(n<=highestStep)setStep(n)});$('province').onchange=()=>{renderCities();$('otherCityField').hidden=true};$('city').onchange=()=>{$('otherCityField').hidden=$('city').value!=='__OTHER__'};$('business_type').onchange=renderOfferSection;
 $('category').onchange=renderSubcategories;
-$('category').addEventListener('pointerdown',()=>{
+const retryCategories=()=>{
 if($('category').dataset.loadFailed==='true')loadCategories();
-});$('searchAddressBtn').onclick=searchAddress;$('useMyLocationBtn').onclick=useMyLocation;$('addProductBtn').onclick=addProduct;form.onsubmit=submitForm;form.addEventListener('input',()=>formDirty=true);form.addEventListener('change',()=>formDirty=true);window.addEventListener('beforeunload',e=>{if(formDirty&&!isSubmitting){e.preventDefault();e.returnValue=''}});
+};
+$('category').addEventListener('pointerdown',retryCategories);
+$('category').addEventListener('focus',retryCategories);$('searchAddressBtn').onclick=searchAddress;$('useMyLocationBtn').onclick=useMyLocation;$('addProductBtn').onclick=addProduct;form.onsubmit=submitForm;form.addEventListener('input',()=>formDirty=true);form.addEventListener('change',()=>formDirty=true);window.addEventListener('beforeunload',e=>{if(formDirty&&!isSubmitting){e.preventDefault();e.returnValue=''}});
 renderLocations();
 renderCities();
 renderSchedule();
