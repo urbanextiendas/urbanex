@@ -1446,10 +1446,17 @@ async function loadDashboard() {
     const tbody = document.getElementById('analyticsTableBody');
 
     if (analyticsResult.error) {
+        const analyticsError =
+            analyticsResult.error.message ||
+            analyticsResult.error.details ||
+            analyticsResult.error.hint ||
+            'La función de analítica no está disponible.';
+
         tbody.innerHTML = `
             <tr>
                 <td colspan="10" style="text-align:center;color:var(--red);padding:24px;">
-                    No se pudo cargar la analítica. Ejecute el archivo SQL 004_analitica_interna.sql.
+                    No se pudo cargar la analítica:
+                    ${esc(analyticsError)}
                 </td>
             </tr>`;
         return;
