@@ -1487,7 +1487,16 @@ async function loadDashboard() {
             <td>${Number(row.website_clicks||0)}</td>
             <td>${Number(row.phone_clicks||0)}</td>
             <td>${Math.round(Number(row.average_duration_seconds||0))}s</td>
-            <td>${row.last_connection?new Date(row.last_connection).toLocaleString('es-EC'):'—'}</td>
+            <td>${row.last_connection?new Date(row.last_connection).toLocaleString('es-EC', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+        timeZone: 'America/Guayaquil'
+    }):'—'}</td>
         </tr>
     `).join('');
 
