@@ -313,9 +313,8 @@ async function loadBusinesses() {
   let query = supabase
     .from('businesses')
     .select(
-      'id,name,slug,is_active,owner_email,business_type,city,address,description,whatsapp,phone,website,cover_image,edit_count,edit_limit',
-    )
-    .eq('is_active', true);
+      'id,name,slug,is_active,subscription_suspended,owner_email,business_type,city,address,description,whatsapp,phone,website,cover_image,edit_count,edit_limit',
+    );
 
   if (linkedIds.length) {
     query = query.in('id', linkedIds);
@@ -414,13 +413,13 @@ function renderPlan() {
   ) {
     showMessage(
       'planMessage',
-      'Puede conservar y editar el contenido existente, pero debe activar un plan pagado para crear productos o cargar nuevas imágenes.',
-      'info',
+      'El negocio está retirado temporalmente del directorio público. Sus datos se conservan, pero no aparece en categorías, búsquedas, “Abierto ahora”, ubicación pública ni contactos. Active un plan pagado para restaurar la visibilidad.',
+      'error',
     );
   } else if (subscription.status === 'trialing') {
     showMessage(
       'planMessage',
-      `Prueba gratuita activa. Restan ${rights.days_remaining} día(s).`,
+      `Prueba gratuita de un mes activa. Restan ${rights.days_remaining} día(s).`,
       'ok',
     );
   } else {
