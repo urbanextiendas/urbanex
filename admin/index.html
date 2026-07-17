@@ -530,6 +530,13 @@ input,textarea,select { font-family:var(--sans); }
 .subscription-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .subscription-card{border:1px solid var(--border2);border-radius:10px;padding:12px;background:rgba(255,255,255,.02)}
 .subscription-card strong{display:block;color:var(--gold);margin-bottom:5px}
+.badge-blue{background:rgba(30,144,255,.14);color:#69b4ff;border:1px solid rgba(30,144,255,.35)}
+.badge-orange{background:rgba(255,159,67,.14);color:#ffb36b;border:1px solid rgba(255,159,67,.35)}
+.plan-signal{display:block;margin-top:6px}
+.analytics-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:4px 0 12px;flex-wrap:wrap}
+.analytics-toolbar h3{font-family:var(--serif);color:var(--gold);font-size:14px}
+.analytics-toolbar select{background:rgba(0,0,0,.55);border:1px solid var(--border2);border-radius:8px;padding:8px 12px;color:#fff}
+.analytics-note{font-size:10px;color:var(--dark);margin-top:10px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -620,6 +627,36 @@ input,textarea,select { font-family:var(--sans); }
                     <div class="stat-card skeleton" style="height:80px;"></div>
                     <div class="stat-card skeleton" style="height:80px;"></div>
                 </div>
+                <div class="analytics-toolbar">
+                    <h3>Analítica interna por negocio</h3>
+                    <select id="analyticsRange">
+                        <option value="7">Últimos 7 días</option>
+                        <option value="30" selected>Últimos 30 días</option>
+                        <option value="90">Últimos 90 días</option>
+                        <option value="365">Últimos 12 meses</option>
+                    </select>
+                </div>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Negocio</th>
+                                <th>Visitas</th>
+                                <th>Visitantes únicos</th>
+                                <th>WhatsApp negocio</th>
+                                <th>WhatsApp producto</th>
+                                <th>Cómo llegar</th>
+                                <th>Sitio web</th>
+                            </tr>
+                        </thead>
+                        <tbody id="analyticsTableBody">
+                            <tr><td colspan="7" style="text-align:center;color:var(--dark);padding:24px;">Cargando analítica...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="analytics-note">
+                    “WhatsApp” contabiliza clics realizados desde Urbanex. No confirma que el mensaje haya sido enviado o leído dentro de WhatsApp.
+                </p>
             </div>
 
             <!-- NEGOCIOS -->
@@ -639,6 +676,14 @@ input,textarea,select { font-family:var(--sans); }
                         <option value="true">Activos</option>
                         <option value="pending">Pendientes</option>
                         <option value="rejected">Rechazados</option>
+                    </select>
+                    <select id="bizPlanFilter">
+                        <option value="">Todos los planes</option>
+                        <option value="paid">Plan pagado</option>
+                        <option value="trial">Prueba activa</option>
+                        <option value="trial_expired">Prueba vencida</option>
+                        <option value="paid_expired">Plan vencido</option>
+                        <option value="none">Sin plan</option>
                     </select>
                 </div>
                 <div class="table-wrap">
@@ -1006,8 +1051,8 @@ input,textarea,select { font-family:var(--sans); }
     <div class="subscription-options" style="margin-top:14px;">
       <button class="btn btn-primary" type="button" onclick="runSubscriptionAction('activate_paid',1)">Activar pagado 1 mes</button>
       <button class="btn btn-primary" type="button" onclick="runSubscriptionAction('activate_paid',12)">Activar pagado 12 meses</button>
+      <button class="btn btn-ghost" type="button" onclick="runSubscriptionAction('start_trial',3)">Iniciar prueba 3 meses</button>
       <button class="btn btn-ghost" type="button" onclick="runSubscriptionAction('extend_trial',1)">Extender prueba 1 mes</button>
-      <button class="btn btn-danger" type="button" onclick="runSubscriptionAction('cancel',0)">Cancelar plan</button>
     </div>
   </div>
 </div>
@@ -1112,6 +1157,8 @@ const { data: { session } } = await supabase.auth.getSession();
 if (session) bootApp(session.user);
 
 // ── NAVEGACIÓN ────────────────────────────────────────────────
+document.getElementById('analyticsRange').addEventListener('change', loadDashboard);
+
 document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1290,22 +1337,86 @@ window.deleteCatSub = async id => {
 
 // ── DASHBOARD ────────────────────────────────────────────────
 async function loadDashboard() {
-    const [{ count: totalBiz }, { count: activeBiz }, { count: pendingRev }, { count: activePromos }] = await Promise.all([
+    const days = Number(document.getElementById('analyticsRange')?.value || 30);
+
+    const [
+        { count: totalBiz },
+        { count: activeBiz },
+        { count: pendingRev },
+        { count: activePromos },
+        analyticsResult,
+    ] = await Promise.all([
         supabase.from('businesses').select('*', { count:'exact', head:true }),
         supabase.from('businesses').select('*', { count:'exact', head:true }).eq('is_active', true),
         supabase.from('reviews').select('*', { count:'exact', head:true }).eq('is_approved', false),
         supabase.from('promotions').select('*', { count:'exact', head:true }).eq('is_active', true),
+        supabase.rpc('get_urbanex_analytics', { p_days: days }),
     ]);
 
     const badge = document.getElementById('reviewsBadge');
-    if (pendingRev > 0) { badge.textContent = pendingRev; badge.style.display = 'block'; }
+    if (pendingRev > 0) {
+        badge.textContent = pendingRev;
+        badge.style.display = 'block';
+    } else {
+        badge.style.display = 'none';
+    }
+
+    const analytics = analyticsResult.data || {};
+    const totals = analytics.totals || {};
+    const uniqueVisitors = Number(totals.unique_visitors || 0);
+    const whatsappClicks = Number(totals.whatsapp_clicks || 0);
+    const conversion = uniqueVisitors > 0
+        ? ((whatsappClicks / uniqueVisitors) * 100).toFixed(1)
+        : '0.0';
 
     document.getElementById('statsGrid').innerHTML = `
         <div class="stat-card"><div class="stat-label">Total Negocios</div><div class="stat-value">${totalBiz||0}</div><div class="stat-sub">registrados</div></div>
         <div class="stat-card"><div class="stat-label">Negocios Activos</div><div class="stat-value">${activeBiz||0}</div><div class="stat-sub">visibles al público</div></div>
+        <div class="stat-card"><div class="stat-label">Visitas</div><div class="stat-value">${Number(totals.visits||0)}</div><div class="stat-sub">páginas de negocios · ${days} días</div></div>
+        <div class="stat-card"><div class="stat-label">Visitantes únicos</div><div class="stat-value">${uniqueVisitors}</div><div class="stat-sub">navegadores identificados</div></div>
+        <div class="stat-card"><div class="stat-label">Clics a WhatsApp</div><div class="stat-value">${whatsappClicks}</div><div class="stat-sub">intenciones de contacto</div></div>
+        <div class="stat-card"><div class="stat-label">Conversión</div><div class="stat-value">${conversion}%</div><div class="stat-sub">WhatsApp / visitantes únicos</div></div>
         <div class="stat-card"><div class="stat-label">Reseñas Pendientes</div><div class="stat-value" style="color:${pendingRev>0?'var(--red)':'var(--gold)'}">${pendingRev||0}</div><div class="stat-sub">por moderar</div></div>
         <div class="stat-card"><div class="stat-label">Promociones Activas</div><div class="stat-value">${activePromos||0}</div><div class="stat-sub">vigentes</div></div>
     `;
+
+    const tbody = document.getElementById('analyticsTableBody');
+
+    if (analyticsResult.error) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" style="text-align:center;color:var(--red);padding:24px;">
+                    No se pudo cargar la analítica. Ejecute el archivo SQL 004_analitica_interna.sql.
+                </td>
+            </tr>`;
+        return;
+    }
+
+    const rows = Array.isArray(analytics.businesses)
+        ? analytics.businesses
+        : [];
+
+    if (!rows.length) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" style="text-align:center;color:var(--dark);padding:24px;">
+                    Todavía no existen eventos registrados en este período.
+                </td>
+            </tr>`;
+        return;
+    }
+
+    tbody.innerHTML = rows.map(row => `
+        <tr>
+            <td><strong style="color:#fff;">${esc(row.business_name)}</strong></td>
+            <td>${Number(row.visits||0)}</td>
+            <td>${Number(row.unique_visitors||0)}</td>
+            <td>${Number(row.whatsapp_business||0)}</td>
+            <td>${Number(row.whatsapp_product||0)}</td>
+            <td>${Number(row.map_clicks||0)}</td>
+            <td>${Number(row.website_clicks||0)}</td>
+        </tr>
+    `).join('');
 }
 
 // ── NEGOCIOS ─────────────────────────────────────────────────
@@ -1382,34 +1493,71 @@ async function loadSubscriptionSummaries() {
     }
 }
 
-function subscriptionLabel(businessId) {
+function subscriptionState(businessId) {
     const row = subscriptionByBusiness.get(String(businessId));
-    if (!row) return 'Sin plan registrado';
+    if (!row) return { code: 'none', label: 'Sin plan', row: null };
 
-    const labels = {
-        trialing: 'Prueba activa',
-        active: 'Pagado activo',
-        past_due: 'Pago pendiente',
-        expired: 'Prueba vencida',
-        cancelled: 'Cancelado',
-    };
+    const now = new Date();
+    const trialEnd = row.trial_end_at ? new Date(row.trial_end_at) : null;
+    const paidEnd = row.current_period_end ? new Date(row.current_period_end) : null;
 
-    const end = row.status === 'trialing'
-        ? row.trial_end_at
-        : row.current_period_end;
+    if (row.plan_code === 'paid') {
+        if (row.status === 'active' && (!paidEnd || paidEnd >= now)) {
+            return { code: 'paid', label: 'Plan pagado', row };
+        }
+        return { code: 'paid_expired', label: 'Plan vencido', row };
+    }
+
+    if (row.status === 'trialing' && (!trialEnd || trialEnd >= now)) {
+        const days = trialEnd
+            ? Math.max(0, Math.ceil((trialEnd - now) / 86400000))
+            : null;
+        return {
+            code: 'trial',
+            label: days === null ? 'Prueba activa' : `Prueba · ${days} días`,
+            row,
+        };
+    }
+
+    return { code: 'trial_expired', label: 'Prueba vencida', row };
+}
+
+function subscriptionLabel(businessId) {
+    const state = subscriptionState(businessId);
+    const row = state.row;
+
+    if (!row) return state.label;
+
+    const end = row.plan_code === 'paid'
+        ? row.current_period_end
+        : row.trial_end_at;
 
     const date = end
         ? new Date(end).toLocaleDateString('es-EC')
         : '';
 
-    return `${labels[row.status] || row.status}${date ? ` · ${date}` : ''}`;
+    return `${state.label}${date ? ` · ${date}` : ''}`;
+}
+
+function subscriptionBadge(businessId) {
+    const state = subscriptionState(businessId);
+    const classes = {
+        paid: 'badge-green',
+        trial: 'badge-gold',
+        trial_expired: 'badge-red',
+        paid_expired: 'badge-orange',
+        none: 'badge-gray',
+    };
+
+    return `<span class="badge ${classes[state.code] || 'badge-gray'}">${esc(state.label)}</span>`;
 }
 
 window.openSubscriptionModal = (businessId, businessName) => {
     document.getElementById('subscriptionBusinessId').value = businessId;
     document.getElementById('subscriptionCurrent').innerHTML = `
         <strong>${esc(businessName)}</strong>
-        <span>${esc(subscriptionLabel(businessId))}</span>
+        <span class="plan-signal">${subscriptionBadge(businessId)}</span>
+        <span style="display:block;margin-top:7px;color:var(--dark);">${esc(subscriptionLabel(businessId))}</span>
     `;
     openModal('subscriptionModal');
 };
@@ -1448,6 +1596,7 @@ function renderBizTable() {
     const search = document.getElementById('bizSearch').value.toLowerCase();
     const cat    = document.getElementById('bizCatFilter').value;
     const status = document.getElementById('bizStatusFilter').value;
+    const planFilter = document.getElementById('bizPlanFilter').value;
 
     let list = allBusinesses.filter(b => {
         if (search && !b.name.toLowerCase().includes(search)) return false;
@@ -1461,6 +1610,7 @@ function renderBizTable() {
         if (status === 'true' && !b.is_active) return false;
         if (status === 'pending' && (b.is_active || b.approval_status === 'rejected')) return false;
         if (status === 'rejected' && b.approval_status !== 'rejected') return false;
+        if (planFilter && subscriptionState(b.id).code !== planFilter) return false;
         return true;
     });
 
@@ -1494,7 +1644,11 @@ function renderBizTable() {
         return `
         <tr>
             <td><strong style="color:#fff;">${esc(b.name)}</strong><br><span style="font-size:10px;color:var(--dark);">${esc(b.slug || '')}</span>${b.owner_email ? `<br><span style="font-size:10px;color:var(--dark);">${esc(b.owner_email)}</span>` : ''}</td>
-            <td><span class="badge badge-gold">${businessTypeLabel(b.business_type)}</span><span class="subscription-summary">${esc(subscriptionLabel(b.id))}</span></td>
+            <td>
+                <span class="badge badge-blue">${businessTypeLabel(b.business_type)}</span>
+                <span class="plan-signal">${subscriptionBadge(b.id)}</span>
+                <span class="subscription-summary">${esc(subscriptionLabel(b.id))}</span>
+            </td>
             <td style="font-size:11.5px;">${catLabel}</td>
             <td>${[b.province, b.city].filter(Boolean).map(esc).join(' · ') || '—'}</td>
             <td>${statusHtml}</td>
@@ -1512,7 +1666,7 @@ function renderBizTable() {
     }).join('');
 }
 
-['bizSearch','bizCatFilter','bizStatusFilter'].forEach(id =>
+['bizSearch','bizCatFilter','bizStatusFilter','bizPlanFilter'].forEach(id =>
     document.getElementById(id).addEventListener('input', renderBizTable)
 );
 
