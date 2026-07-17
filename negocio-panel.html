@@ -47,7 +47,7 @@
 <div class="toolbar" style="margin-top:14px;"><button id="savePasswordBtn" class="btn" type="button">Guardar contraseña e ingresar</button></div>
 </div>
 </section>
-<section id="loginPanel" class="panel"><div class="panel-head"><h2>Acceso del propietario</h2></div><div class="panel-body"><div id="loginMessage" class="notice"></div><div class="grid"><div class="field"><label for="loginEmail">Correo registrado del propietario</label><input id="loginEmail" type="email" placeholder="propietario@correo.com" autocomplete="email"></div><div class="field"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" placeholder="Contraseña temporal" autocomplete="current-password"></div><div class="field full" style="justify-content:end;"><button id="sendLoginBtn" class="btn" type="button">Ingresar al panel</button></div></div><p class="help" style="margin-top:10px;">Use el correo aprobado por el administrador y la contraseña temporal enviada al propietario. No use el panel de administrador para entrar como propietario.</p></div></section>
+<section id="loginPanel" class="panel"><div class="panel-head"><h2>Acceso del propietario</h2></div><div class="panel-body"><div id="loginMessage" class="notice"></div><div class="grid"><div class="field"><label for="loginEmail">Correo registrado del propietario</label><input id="loginEmail" type="email" placeholder="propietario@correo.com" autocomplete="email"></div><div class="field"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" placeholder="Contraseña temporal" autocomplete="current-password"></div><div class="field full" style="justify-content:end;"><button id="sendLoginBtn" class="btn" type="button">Ingresar al panel</button></div></div><p class="help" style="margin-top:10px;">Use como usuario el correo aprobado y la contraseña temporal enviada por Urbanex.</p></div></section>
 <section id="managerPanel" class="hidden">
 <section class="panel"><div class="panel-head"><h2>Plan y período de prueba</h2><a id="upgradePlanBtn" class="btn secondary" href="mailto:urbanextiendas@gmail.com?subject=Activar%20plan%20pagado%20Urbanex">Mejorar plan</a></div>
 <div class="panel-body"><div id="planMessage" class="notice"></div><div class="plan-grid">
@@ -107,6 +107,7 @@ const state = {
   rights: null,
   editing: null,
   removeImages: new Set(),
+  accessLinkError: '',
 };
 
 function esc(value) {
@@ -154,13 +155,48 @@ function requestHeaders() {
   };
 }
 
+async function consumeAccessLink() {
+  const params = new URLSearchParams(location.search);
+  const tokenHash = params.get('token_hash');
+  const type = params.get('type') || 'recovery';
+
+  if (!tokenHash) return;
+
+  const { data, error } = await supabase.auth.verifyOtp({
+    token_hash: tokenHash,
+    type,
+  });
+
+  if (error || !data.session) {
+    state.accessLinkError =
+      error?.message ||
+      'El enlace de acceso no es válido o ya fue utilizado.';
+    return;
+  }
+
+  state.session = data.session;
+  state.user = data.user;
+
+  const cleanUrl = new URL(location.href);
+  cleanUrl.searchParams.delete('token_hash');
+  cleanUrl.searchParams.delete('type');
+  history.replaceState(
+    {},
+    '',
+    cleanUrl.pathname + cleanUrl.search,
+  );
+}
+
 async function initAuth() {
   const email = requestedOwnerEmail();
   if (email) $('loginEmail').value = email;
 
+  await consumeAccessLink();
+
   const { data } = await supabase.auth.getSession();
-  state.session = data.session;
-  state.user = data.session?.user ?? null;
+
+  state.session = data.session ?? state.session;
+  state.user = data.session?.user ?? state.user;
 
   supabase.auth.onAuthStateChange((_event, session) => {
     state.session = session;
@@ -173,6 +209,22 @@ async function initAuth() {
 
 async function renderAuthState() {
   const passwordMode = isPasswordMode();
+
+  if (passwordMode && state.accessLinkError) {
+    $('passwordPanel').classList.remove('hidden');
+    $('loginPanel').classList.add('hidden');
+    $('managerPanel').classList.add('hidden');
+    $('logoutBtn').classList.add('hidden');
+    $('ownerLabel').textContent = 'Enlace no válido';
+
+    showMessage(
+      'passwordMessage',
+      state.accessLinkError,
+      'error',
+    );
+
+    return;
+  }
 
   if (passwordMode && state.user) {
     $('passwordPanel').classList.remove('hidden');
@@ -275,7 +327,7 @@ async function sendLogin() {
   if (error) {
     return showMessage(
       'loginMessage',
-      'Correo o contraseña incorrectos. Use el enlace recibido para crear o restablecer la contraseña.',
+      'Correo o contraseña temporal incorrectos. Copie exactamente las credenciales recibidas por correo.',
       'error',
     );
   }
