@@ -40,6 +40,83 @@ const SUPABASE_ANON_KEY='sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 const supabase=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 const $=id=>document.getElementById(id);let business=null,hours=[],products=[],promotions=[],reviews=[],selectedRating=0,extraImages=[];
 function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function safeStorageId(storage, key) {
+  try {
+    let value = storage.getItem(key);
+    if (!value) {
+      value = crypto.randomUUID();
+      storage.setItem(key, value);
+    }
+    return value;
+  } catch {
+    return crypto.randomUUID();
+  }
+}
+
+const analyticsVisitorId = safeStorageId(
+  localStorage,
+  'urbanex_visitor_id',
+);
+
+const analyticsSessionId = safeStorageId(
+  sessionStorage,
+  'urbanex_session_id',
+);
+
+function analyticsDevice() {
+  if (window.innerWidth <= 700) return 'mobile';
+  if (window.innerWidth <= 1100) return 'tablet';
+  return 'desktop';
+}
+
+async function trackUrbanexEvent(
+  eventType,
+  productId = null,
+) {
+  if (!business?.id) return;
+
+  const params =
+    new URLSearchParams(location.search);
+
+  const payload = {
+    business_id: String(business.id),
+    product_id:
+      productId ? String(productId) : null,
+    event_type: eventType,
+    visitor_id: analyticsVisitorId,
+    session_id: analyticsSessionId,
+    device_type: analyticsDevice(),
+    referrer:
+      document.referrer
+        ? document.referrer.slice(0, 500)
+        : null,
+    page_path:
+      `${location.pathname}${location.search}`
+        .slice(0, 500),
+    utm_source:
+      params.get('utm_source'),
+    utm_medium:
+      params.get('utm_medium'),
+    utm_campaign:
+      params.get('utm_campaign'),
+  };
+
+  const { error } = await supabase
+    .from('business_analytics_events')
+    .insert(payload);
+
+  if (
+    error &&
+    error.code !== '23505'
+  ) {
+    console.warn(
+      'Urbanex analytics:',
+      error.message,
+    );
+  }
+}
+
 function first(...values){return values.find(v=>v!==null&&v!==undefined&&String(v).trim()!=='')||'';}
 function money(value){const n=Number(value||0);return n>0?'$'+n.toFixed(2):'Consultar';}
 function phoneOf(b){return first(b.whatsapp,b.phone,b.contact_phone);}
@@ -71,11 +148,11 @@ $('productBadge').textContent=`${products.length} ${serviceOnly?'servicio':'prod
 if(!products.length){$('productsList').innerHTML=`<div class="empty">Este negocio todavía no tiene ${serviceOnly?'servicios':'productos o servicios'} publicados.</div>`;return;}
 $('productsList').innerHTML=products.map(product=>{
 const imgs=productImagesFor(product);
-const imageHtml=imgs.length?imgs.map(url=>`<img class="zoomable-image" src="${esc(url)}" alt="${esc(product.name)}" loading="lazy">`).join(''):'<div class="product-empty">🏪</div>';
+const imageHtml=imgs.length?imgs.map(url=>`<img class="zoomable-image" data-product-image="${esc(product.id)}" src="${esc(url)}" alt="${esc(product.name)}" loading="lazy">`).join(''):'<div class="product-empty">🏪</div>';
 const isOffer=product.is_on_sale===true||product.is_on_sale==='true';
 const priceHtml=isOffer?`<div class="price-wrap"><span class="offer-badge">${esc(product.offer_label||'Oferta Urbanex')}</span>${Number(product.price)>0?`<span class="old-price">Antes ${money(product.price)}</span>`:''}<span class="sale-price">Ahora ${money(product.sale_price)}</span></div>`:`<div class="price">${money(product.price)}</div>`;
 const itemType=product.item_type==='service'?'Servicio':'Producto';
-return `<article class="product-card"><div class="product-images">${imageHtml}</div><div class="product-body"><span class="offer-badge">${itemType}</span><h3>${esc(product.name)}</h3>${priceHtml}<p class="desc">${esc(product.description||'Sin descripción registrada.')}</p><div class="product-actions"><a class="btn whatsapp" href="${esc(whatsappUrl(productMessage(product)))}" target="_blank" rel="noopener">Consultar por WhatsApp</a></div></div></article>`;
+return `<article class="product-card"><div class="product-images">${imageHtml}</div><div class="product-body"><span class="offer-badge">${itemType}</span><h3>${esc(product.name)}</h3>${priceHtml}<p class="desc">${esc(product.description||'Sin descripción registrada.')}</p><div class="product-actions"><a class="btn whatsapp" data-whatsapp-product="${esc(product.id)}" href="${esc(whatsappUrl(productMessage(product)))}" target="_blank" rel="noopener">Consultar por WhatsApp</a></div></div></article>`;
 }).join('');
 }
 function renderReviews(){$('reviewBadge').textContent=`${reviews.length} reseña${reviews.length===1?'':'s'}`;if(!reviews.length){$('reviewsList').innerHTML='<div class="empty">Aún no hay reseñas aprobadas. Sea el primero en opinar.</div>';return;}$('reviewsList').innerHTML=reviews.map(r=>`<article class="review-card"><div class="review-top"><span class="review-name">${esc(first(r.author_name,r.user_name,r.name,'Cliente Urbanex'))}</span><span class="stars">${'★'.repeat(Number(r.rating||0))}${'☆'.repeat(5-Number(r.rating||0))}</span></div><p>${esc(first(r.comment,r.review,''))}</p></article>`).join('');}
@@ -108,6 +185,7 @@ renderBusiness();
 renderProducts();
 renderPromotions();
 renderReviews();
+trackUrbanexEvent('page_view');
 }
 function showNotFound(){$('loading').classList.add('hidden');$('notFound').classList.remove('hidden');}
 function showReviewMessage(type,text){const box=$('reviewMessage');box.className='notice '+type;box.textContent=text;}
@@ -115,7 +193,33 @@ $('ratingBox').addEventListener('click',e=>{const value=Number(e.target.getAttri
 $('reviewForm').addEventListener('submit',async e=>{e.preventDefault();if(!business)return;if(!selectedRating)return showReviewMessage('error','Seleccione una calificación.');const comment=$('reviewComment').value.trim();if(!comment)return showReviewMessage('error','Ingrese el comentario de la reseña.');$('reviewSubmit').disabled=true;$('reviewSubmit').textContent='Enviando...';try{const reviewName=$('reviewName').value.trim()||'Cliente Urbanex';const payload={business_id:String(business.id),rating:selectedRating,author_name:reviewName,user_name:reviewName,comment:comment,is_approved:false};const {error}=await supabase.from('reviews').insert(payload);if(error)throw error;$('reviewForm').reset();selectedRating=0;document.querySelectorAll('#ratingBox button').forEach(btn=>btn.classList.remove('active'));showReviewMessage('ok','Reseña enviada correctamente. Quedará visible cuando el administrador la apruebe.');}catch(error){showReviewMessage('error',error.message||'No se pudo enviar la reseña.');}finally{$('reviewSubmit').disabled=false;$('reviewSubmit').textContent='Enviar reseña para aprobación';}});
 function openLightbox(url){$('lightboxImage').src=url;$('imageLightbox').classList.add('open');$('imageLightbox').setAttribute('aria-hidden','false');}
 function closeLightbox(){$('imageLightbox').classList.remove('open');$('imageLightbox').setAttribute('aria-hidden','true');$('lightboxImage').src='';}
-document.addEventListener('click',event=>{if(event.target.matches('img.zoomable-image'))openLightbox(event.target.src);});
+document.addEventListener('click',event=>{
+const target=event.target;
+if(target.matches('img.zoomable-image')){
+openLightbox(target.src);
+trackUrbanexEvent(
+'image_open',
+target.getAttribute('data-product-image')
+);
+return;
+}
+const productId=target.getAttribute('data-whatsapp-product');
+if(productId){
+trackUrbanexEvent('whatsapp_product',productId);
+}
+});
+$('whatsappBusinessBtn').addEventListener(
+'click',
+()=>trackUrbanexEvent('whatsapp_business')
+);
+$('mapBtn').addEventListener(
+'click',
+()=>trackUrbanexEvent('map_click')
+);
+$('businessWebsite').addEventListener(
+'click',
+()=>trackUrbanexEvent('website_click')
+);
 $('lightboxClose').addEventListener('click',closeLightbox);
 $('imageLightbox').addEventListener('click',event=>{if(event.target===$('imageLightbox'))closeLightbox();});
 document.addEventListener('keydown',event=>{if(event.key==='Escape')closeLightbox();});
