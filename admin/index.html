@@ -526,6 +526,10 @@ input,textarea,select { font-family:var(--sans); }
     .form-grid { grid-template-columns:1fr; }
     .hours-row-edit { grid-template-columns:80px 1fr 1fr 60px; }
 }
+.subscription-summary{display:block;margin-top:5px;font-size:9px;color:var(--muted);line-height:1.4}
+.subscription-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.subscription-card{border:1px solid var(--border2);border-radius:10px;padding:12px;background:rgba(255,255,255,.02)}
+.subscription-card strong{display:block;color:var(--gold);margin-bottom:5px}
 </style>
 </head>
 <body>
@@ -990,6 +994,24 @@ input,textarea,select { font-family:var(--sans); }
 </div>
 
 <!-- ══ MODAL CATEGORÍA ══ -->
+
+<div class="modal-backdrop" id="subscriptionModal">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-header">
+      <h3>Gestionar plan</h3>
+      <button class="modal-close" onclick="closeModal('subscriptionModal')">✕</button>
+    </div>
+    <input type="hidden" id="subscriptionBusinessId">
+    <div id="subscriptionCurrent" class="subscription-card"></div>
+    <div class="subscription-options" style="margin-top:14px;">
+      <button class="btn btn-primary" type="button" onclick="runSubscriptionAction('activate_paid',1)">Activar pagado 1 mes</button>
+      <button class="btn btn-primary" type="button" onclick="runSubscriptionAction('activate_paid',12)">Activar pagado 12 meses</button>
+      <button class="btn btn-ghost" type="button" onclick="runSubscriptionAction('extend_trial',1)">Extender prueba 1 mes</button>
+      <button class="btn btn-danger" type="button" onclick="runSubscriptionAction('cancel',0)">Cancelar plan</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="catModal">
     <div class="modal" style="max-width:420px;">
         <div class="modal-header">
@@ -1288,6 +1310,8 @@ async function loadDashboard() {
 
 // ── NEGOCIOS ─────────────────────────────────────────────────
 let allBusinesses = [];
+let subscriptionByBusiness = new Map();
+const SUBSCRIPTION_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/gestionar-suscripcion`;
 
 async function loadBusinesses() {
     const { data, error } = await supabase
@@ -1300,6 +1324,7 @@ async function loadBusinesses() {
         .order('name');
     if (error) console.error('loadBusinesses:', error.message);
     allBusinesses = data || [];
+    await loadSubscriptionSummaries();
     renderBizTable();
 
     const opts = allBusinesses.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
@@ -1322,6 +1347,96 @@ async function loadBusinesses() {
 
 
 
+
+
+async function subscriptionFetch(url, options = {}) {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if (!token) throw new Error('Debe iniciar sesión como administrador.');
+
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'apikey': SUPABASE_ANON_KEY,
+            ...(options.headers || {}),
+        },
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.success !== true) {
+        throw new Error(result.error || 'No se pudo gestionar el plan.');
+    }
+    return result;
+}
+
+async function loadSubscriptionSummaries() {
+    try {
+        const result = await subscriptionFetch(SUBSCRIPTION_FUNCTION_URL);
+        subscriptionByBusiness = new Map(
+            (result.subscriptions || []).map(row => [String(row.business_id), row])
+        );
+    } catch (error) {
+        console.warn('Suscripciones:', error);
+        subscriptionByBusiness = new Map();
+    }
+}
+
+function subscriptionLabel(businessId) {
+    const row = subscriptionByBusiness.get(String(businessId));
+    if (!row) return 'Sin plan registrado';
+
+    const labels = {
+        trialing: 'Prueba activa',
+        active: 'Pagado activo',
+        past_due: 'Pago pendiente',
+        expired: 'Prueba vencida',
+        cancelled: 'Cancelado',
+    };
+
+    const end = row.status === 'trialing'
+        ? row.trial_end_at
+        : row.current_period_end;
+
+    const date = end
+        ? new Date(end).toLocaleDateString('es-EC')
+        : '';
+
+    return `${labels[row.status] || row.status}${date ? ` · ${date}` : ''}`;
+}
+
+window.openSubscriptionModal = (businessId, businessName) => {
+    document.getElementById('subscriptionBusinessId').value = businessId;
+    document.getElementById('subscriptionCurrent').innerHTML = `
+        <strong>${esc(businessName)}</strong>
+        <span>${esc(subscriptionLabel(businessId))}</span>
+    `;
+    openModal('subscriptionModal');
+};
+
+window.runSubscriptionAction = async (action, months) => {
+    const businessId = document.getElementById('subscriptionBusinessId').value;
+    if (!businessId) return;
+
+    try {
+        const result = await subscriptionFetch(SUBSCRIPTION_FUNCTION_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action,
+                business_id: businessId,
+                months,
+                payment_provider: action === 'activate_paid' ? 'manual' : null,
+            }),
+        });
+
+        toast(result.message || 'Plan actualizado.');
+        closeModal('subscriptionModal');
+        await loadBusinesses();
+    } catch (error) {
+        toast(error.message, 'error');
+    }
+};
 
 function businessTypeLabel(value) {
     if (value === 'services') return 'Servicios';
@@ -1379,7 +1494,7 @@ function renderBizTable() {
         return `
         <tr>
             <td><strong style="color:#fff;">${esc(b.name)}</strong><br><span style="font-size:10px;color:var(--dark);">${esc(b.slug || '')}</span>${b.owner_email ? `<br><span style="font-size:10px;color:var(--dark);">${esc(b.owner_email)}</span>` : ''}</td>
-            <td><span class="badge badge-gold">${businessTypeLabel(b.business_type)}</span></td>
+            <td><span class="badge badge-gold">${businessTypeLabel(b.business_type)}</span><span class="subscription-summary">${esc(subscriptionLabel(b.id))}</span></td>
             <td style="font-size:11.5px;">${catLabel}</td>
             <td>${[b.province, b.city].filter(Boolean).map(esc).join(' · ') || '—'}</td>
             <td>${statusHtml}</td>
@@ -1389,6 +1504,7 @@ function renderBizTable() {
                     <button class="btn btn-ghost btn-sm" onclick="editBusiness('${b.id}')">Editar</button>
                     ${actionButtons}
                     <a href="../business/index.html?slug=${b.slug}" target="_blank" class="btn btn-ghost btn-sm">Ver</a>
+                    <button class="btn btn-ghost btn-sm" onclick="openSubscriptionModal('${b.id}', '${escAttr(b.name)}')">Plan</button>
                     <button class="btn btn-danger btn-sm btn-delete-wide" onclick="deleteBusinessCompletely('${b.id}', '${escAttr(b.name)}')">Eliminar definitivamente</button>
                 </div>
             </td>
