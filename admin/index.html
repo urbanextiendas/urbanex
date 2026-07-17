@@ -2520,15 +2520,25 @@ window.toggleBizActive = async (id, current) => {
                 'Authorization': `Bearer ${sessionData.session.access_token}`,
                 'apikey': SUPABASE_ANON_KEY,
             },
-            body: JSON.stringify({ business_id: id }),
+            body: JSON.stringify({ business_id: id, action: 'approve' }),
         });
 
-        const result = await response.json().catch(() => ({}));
+        const rawResponse = await response.text();
+        let result = {};
+
+        try {
+            result = rawResponse
+                ? JSON.parse(rawResponse)
+                : {};
+        } catch {
+            result = {};
+        }
 
         if (!response.ok || result.success !== true || result.email_sent !== true) {
             throw new Error(
                 result.error ||
                 result.email_error ||
+                rawResponse ||
                 'No se pudo aprobar el negocio y enviar el correo al propietario.'
             );
         }
@@ -2572,11 +2582,20 @@ window.resendOwnerAccess = async (id, name) => {
                     'Authorization': `Bearer ${token}`,
                     'apikey': SUPABASE_ANON_KEY,
                 },
-                body: JSON.stringify({ business_id: id }),
+                body: JSON.stringify({ business_id: id, action: 'resend' }),
             }
         );
 
-        const result = await response.json().catch(() => ({}));
+        const rawResponse = await response.text();
+        let result = {};
+
+        try {
+            result = rawResponse
+                ? JSON.parse(rawResponse)
+                : {};
+        } catch {
+            result = {};
+        }
 
         if (
             !response.ok ||
@@ -2585,6 +2604,7 @@ window.resendOwnerAccess = async (id, name) => {
         ) {
             throw new Error(
                 result.error ||
+                rawResponse ||
                 'No se pudieron reenviar las credenciales.'
             );
         }
