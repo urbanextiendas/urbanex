@@ -537,6 +537,14 @@ input,textarea,select { font-family:var(--sans); }
 .analytics-toolbar h3{font-family:var(--serif);color:var(--gold);font-size:14px}
 .analytics-toolbar select{background:rgba(0,0,0,.55);border:1px solid var(--border2);border-radius:8px;padding:8px 12px;color:#fff}
 .analytics-note{font-size:10px;color:var(--dark);margin-top:10px;line-height:1.5}
+.analytics-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.analytics-detail-card{border:1px solid var(--border2);border-radius:12px;background:rgba(255,255,255,.02);padding:14px;min-width:0}
+.analytics-detail-card h3{font-family:var(--serif);color:var(--gold);font-size:13px;margin-bottom:10px}
+.analytics-mini-table{width:100%;border-collapse:collapse;font-size:10px}
+.analytics-mini-table th,.analytics-mini-table td{padding:7px;border-bottom:1px solid var(--border);text-align:left}
+.analytics-mini-table th{color:var(--gold);font-size:9px;text-transform:uppercase;letter-spacing:.5px}
+.analytics-mini-table td{color:#ddd}
+@media(max-width:900px){.analytics-detail-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -647,15 +655,64 @@ input,textarea,select { font-family:var(--sans); }
                                 <th>WhatsApp producto</th>
                                 <th>Cómo llegar</th>
                                 <th>Sitio web</th>
+                                <th>Teléfono</th>
+                                <th>Duración media</th>
+                                <th>Última conexión</th>
                             </tr>
                         </thead>
                         <tbody id="analyticsTableBody">
-                            <tr><td colspan="7" style="text-align:center;color:var(--dark);padding:24px;">Cargando analítica...</td></tr>
+                            <tr><td colspan="10" style="text-align:center;color:var(--dark);padding:24px;">Cargando analítica...</td></tr>
                         </tbody>
                     </table>
                 </div>
+                <div class="analytics-detail-grid">
+                    <div class="analytics-detail-card">
+                        <h3>Horas de conexión</h3>
+                        <table class="analytics-mini-table">
+                            <thead><tr><th>Hora</th><th>Visitas</th><th>Contactos</th></tr></thead>
+                            <tbody id="analyticsHourlyBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="analytics-detail-card">
+                        <h3>Actividad diaria</h3>
+                        <table class="analytics-mini-table">
+                            <thead><tr><th>Fecha</th><th>Visitas</th><th>Únicos</th><th>Contactos</th></tr></thead>
+                            <tbody id="analyticsDailyBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="analytics-detail-card">
+                        <h3>Dispositivos</h3>
+                        <table class="analytics-mini-table">
+                            <thead><tr><th>Dispositivo</th><th>Visitas</th><th>Únicos</th></tr></thead>
+                            <tbody id="analyticsDevicesBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="analytics-detail-card">
+                        <h3>Fuentes de tráfico</h3>
+                        <table class="analytics-mini-table">
+                            <thead><tr><th>Fuente</th><th>Visitas</th></tr></thead>
+                            <tbody id="analyticsSourcesBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="analytics-detail-card" style="grid-column:1/-1;">
+                        <h3>Productos o servicios con mayor interacción</h3>
+                        <table class="analytics-mini-table">
+                            <thead><tr><th>Negocio</th><th>Producto / Servicio</th><th>WhatsApp</th><th>Imágenes abiertas</th></tr></thead>
+                            <tbody id="analyticsProductsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="analytics-detail-card" style="margin-top:14px;">
+                    <h3>Últimas conexiones e interacciones</h3>
+                    <div class="table-wrap">
+                        <table class="analytics-mini-table">
+                            <thead><tr><th>Fecha y hora</th><th>Negocio</th><th>Actividad</th><th>Dispositivo</th><th>Fuente</th></tr></thead>
+                            <tbody id="analyticsRecentBody"></tbody>
+                        </table>
+                    </div>
+                </div>
                 <p class="analytics-note">
-                    “WhatsApp” contabiliza clics realizados desde Urbanex. No confirma que el mensaje haya sido enviado o leído dentro de WhatsApp.
+                    La hora corresponde a Ecuador continental. “WhatsApp” contabiliza clics realizados desde Urbanex; no confirma que el mensaje haya sido enviado o leído dentro de WhatsApp.
                 </p>
             </div>
 
@@ -684,7 +741,7 @@ input,textarea,select { font-family:var(--sans); }
                         <option value="trial_expired">Prueba vencida</option>
                         <option value="paid_expired">Plan vencido</option>
                         <option value="cancelled">Plan cancelado</option>
-                        <option value="none">Sin plan</option>
+                        
                     </select>
                 </div>
                 <div class="table-wrap">
@@ -696,7 +753,7 @@ input,textarea,select { font-family:var(--sans); }
                             </tr>
                         </thead>
                         <tbody id="bizTableBody">
-                            <tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Cargando...</td></tr>
+                            <tr><td colspan="10" style="text-align:center;color:var(--dark);padding:30px;">Cargando...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -759,7 +816,7 @@ input,textarea,select { font-family:var(--sans); }
                                     </tr>
                                 </thead>
                                 <tbody id="prodTableBody">
-                                    <tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Seleccione un negocio para ver sus productos.</td></tr>
+                                    <tr><td colspan="10" style="text-align:center;color:var(--dark);padding:30px;">Seleccione un negocio para ver sus productos.</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -1052,8 +1109,7 @@ input,textarea,select { font-family:var(--sans); }
     <div class="subscription-options" style="margin-top:14px;">
       <button class="btn btn-primary" type="button" onclick="runSubscriptionAction('activate_paid',1)">Activar pagado 1 mes</button>
       <button class="btn btn-primary" type="button" onclick="runSubscriptionAction('activate_paid',12)">Activar pagado 12 meses</button>
-      <button class="btn btn-ghost" type="button" onclick="runSubscriptionAction('start_trial',3)">Iniciar prueba 3 meses</button>
-      <button class="btn btn-ghost" type="button" onclick="runSubscriptionAction('extend_trial',1)">Extender prueba 1 mes</button>
+      <button id="extendTrialBtn" class="btn btn-ghost" type="button" onclick="runSubscriptionAction('extend_trial',1)">Extender prueba 1 mes</button>
       <button class="btn btn-danger" type="button" onclick="runSubscriptionAction('cancel',0)">Cancelar plan</button>
     </div>
   </div>
@@ -1352,7 +1408,7 @@ async function loadDashboard() {
         supabase.from('businesses').select('*', { count:'exact', head:true }).eq('is_active', true),
         supabase.from('reviews').select('*', { count:'exact', head:true }).eq('is_approved', false),
         supabase.from('promotions').select('*', { count:'exact', head:true }).eq('is_active', true),
-        supabase.rpc('get_urbanex_analytics', { p_days: days }),
+        supabase.rpc('get_urbanex_analytics_v3', { p_days: days }),
     ]);
 
     const badge = document.getElementById('reviewsBadge');
@@ -1378,6 +1434,11 @@ async function loadDashboard() {
         <div class="stat-card"><div class="stat-label">Visitantes únicos</div><div class="stat-value">${uniqueVisitors}</div><div class="stat-sub">navegadores identificados</div></div>
         <div class="stat-card"><div class="stat-label">Clics a WhatsApp</div><div class="stat-value">${whatsappClicks}</div><div class="stat-sub">intenciones de contacto</div></div>
         <div class="stat-card"><div class="stat-label">Conversión</div><div class="stat-value">${conversion}%</div><div class="stat-sub">WhatsApp / visitantes únicos</div></div>
+        <div class="stat-card"><div class="stat-label">Duración media</div><div class="stat-value">${Math.round(Number(totals.average_duration_seconds||0))}s</div><div class="stat-sub">tiempo en la página</div></div>
+        <div class="stat-card"><div class="stat-label">Profundidad media</div><div class="stat-value">${Math.round(Number(totals.average_scroll_depth||0))}%</div><div class="stat-sub">desplazamiento de página</div></div>
+        <div class="stat-card"><div class="stat-label">Visitantes recurrentes</div><div class="stat-value">${Number(totals.returning_visitors||0)}</div><div class="stat-sub">más de una sesión</div></div>
+        <div class="stat-card"><div class="stat-label">Hora con más visitas</div><div class="stat-value">${analytics.peak_hour===null||analytics.peak_hour===undefined?'—':String(analytics.peak_hour).padStart(2,'0')+':00'}</div><div class="stat-sub">hora de Ecuador</div></div>
+        <div class="stat-card"><div class="stat-label">Última conexión</div><div class="stat-value" style="font-size:16px;">${totals.last_connection?new Date(totals.last_connection).toLocaleString('es-EC',{timeZone:'America/Guayaquil'}):'—'}</div><div class="stat-sub">actividad más reciente</div></div>
         <div class="stat-card"><div class="stat-label">Reseñas Pendientes</div><div class="stat-value" style="color:${pendingRev>0?'var(--red)':'var(--gold)'}">${pendingRev||0}</div><div class="stat-sub">por moderar</div></div>
         <div class="stat-card"><div class="stat-label">Promociones Activas</div><div class="stat-value">${activePromos||0}</div><div class="stat-sub">vigentes</div></div>
     `;
@@ -1387,7 +1448,7 @@ async function loadDashboard() {
     if (analyticsResult.error) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="7" style="text-align:center;color:var(--red);padding:24px;">
+                <td colspan="10" style="text-align:center;color:var(--red);padding:24px;">
                     No se pudo cargar la analítica. Ejecute el archivo SQL 004_analitica_interna.sql.
                 </td>
             </tr>`;
@@ -1401,7 +1462,7 @@ async function loadDashboard() {
     if (!rows.length) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="7" style="text-align:center;color:var(--dark);padding:24px;">
+                <td colspan="10" style="text-align:center;color:var(--dark);padding:24px;">
                     Todavía no existen eventos registrados en este período.
                 </td>
             </tr>`;
@@ -1417,8 +1478,57 @@ async function loadDashboard() {
             <td>${Number(row.whatsapp_product||0)}</td>
             <td>${Number(row.map_clicks||0)}</td>
             <td>${Number(row.website_clicks||0)}</td>
+            <td>${Number(row.phone_clicks||0)}</td>
+            <td>${Math.round(Number(row.average_duration_seconds||0))}s</td>
+            <td>${row.last_connection?new Date(row.last_connection).toLocaleString('es-EC'):'—'}</td>
         </tr>
     `).join('');
+
+    const hourly = Array.isArray(analytics.hourly) ? analytics.hourly : [];
+    document.getElementById('analyticsHourlyBody').innerHTML = hourly
+        .filter(row => Number(row.visits||0) > 0 || Number(row.contacts||0) > 0)
+        .map(row => `<tr><td>${String(row.hour).padStart(2,'0')}:00</td><td>${Number(row.visits||0)}</td><td>${Number(row.contacts||0)}</td></tr>`)
+        .join('') || '<tr><td colspan="3">Sin actividad</td></tr>';
+
+    const daily = Array.isArray(analytics.daily) ? analytics.daily : [];
+    document.getElementById('analyticsDailyBody').innerHTML = daily
+        .slice(0, 31)
+        .map(row => `<tr><td>${new Date(`${row.day}T12:00:00`).toLocaleDateString('es-EC')}</td><td>${Number(row.visits||0)}</td><td>${Number(row.unique_visitors||0)}</td><td>${Number(row.contacts||0)}</td></tr>`)
+        .join('') || '<tr><td colspan="4">Sin actividad</td></tr>';
+
+    const devices = Array.isArray(analytics.devices) ? analytics.devices : [];
+    document.getElementById('analyticsDevicesBody').innerHTML = devices
+        .map(row => `<tr><td>${esc(row.device)}</td><td>${Number(row.visits||0)}</td><td>${Number(row.unique_visitors||0)}</td></tr>`)
+        .join('') || '<tr><td colspan="3">Sin datos</td></tr>';
+
+    const sources = Array.isArray(analytics.sources) ? analytics.sources : [];
+    document.getElementById('analyticsSourcesBody').innerHTML = sources
+        .map(row => `<tr><td>${esc(row.source)}</td><td>${Number(row.visits||0)}</td></tr>`)
+        .join('') || '<tr><td colspan="2">Sin datos</td></tr>';
+
+    const products = Array.isArray(analytics.products) ? analytics.products : [];
+    document.getElementById('analyticsProductsBody').innerHTML = products
+        .slice(0, 30)
+        .map(row => `<tr><td>${esc(row.business_name)}</td><td>${esc(row.product_name)}</td><td>${Number(row.whatsapp_clicks||0)}</td><td>${Number(row.image_opens||0)}</td></tr>`)
+        .join('') || '<tr><td colspan="4">Sin interacciones</td></tr>';
+
+    const recent = Array.isArray(analytics.recent_events) ? analytics.recent_events : [];
+    const activityLabels = {
+        page_view: 'Visita',
+        page_engagement: 'Tiempo en página',
+        whatsapp_business: 'WhatsApp del negocio',
+        whatsapp_product: 'WhatsApp de producto/servicio',
+        map_click: 'Cómo llegar',
+        website_click: 'Sitio web',
+        phone_click: 'Teléfono',
+        image_open: 'Imagen ampliada',
+        offer_click: 'Oferta',
+        review_submit: 'Reseña enviada'
+    };
+    document.getElementById('analyticsRecentBody').innerHTML = recent
+        .slice(0, 100)
+        .map(row => `<tr><td>${row.connected_at?new Date(row.connected_at).toLocaleString('es-EC',{timeZone:'America/Guayaquil'}):'—'}</td><td>${esc(row.business_name)}</td><td>${esc(activityLabels[row.event_type]||row.event_type)}</td><td>${esc(row.device_type||'desconocido')}</td><td>${esc(row.source||'Directo')}</td></tr>`)
+        .join('') || '<tr><td colspan="5">Sin actividad</td></tr>';
 }
 
 // ── NEGOCIOS ─────────────────────────────────────────────────
@@ -1512,7 +1622,7 @@ async function loadSubscriptionSummaries() {
 
 function subscriptionState(businessId) {
     const row = subscriptionByBusiness.get(String(businessId));
-    if (!row) return { code: 'none', label: 'Sin plan', row: null };
+    if (!row) return { code: 'trial', label: 'Prueba', row: null };
 
     if (row.status === 'cancelled') {
         return { code: 'cancelled', label: 'Plan cancelado', row };
@@ -1547,7 +1657,7 @@ function subscriptionLabel(businessId) {
     const state = subscriptionState(businessId);
     const row = state.row;
 
-    if (!row) return state.label;
+    if (!row) return 'Prueba';
 
     const end = row.plan_code === 'paid'
         ? row.current_period_end
@@ -1575,12 +1685,27 @@ function subscriptionBadge(businessId) {
 }
 
 window.openSubscriptionModal = (businessId, businessName) => {
+    const row = subscriptionByBusiness.get(String(businessId));
     document.getElementById('subscriptionBusinessId').value = businessId;
     document.getElementById('subscriptionCurrent').innerHTML = `
         <strong>${esc(businessName)}</strong>
         <span class="plan-signal">${subscriptionBadge(businessId)}</span>
         <span style="display:block;margin-top:7px;color:var(--dark);">${esc(subscriptionLabel(businessId))}</span>
     `;
+
+    const extendButton = document.getElementById('extendTrialBtn');
+    const canExtend = Boolean(
+        row &&
+        row.plan_code === 'trial' &&
+        row.status === 'trialing' &&
+        row.trial_extension_used !== true
+    );
+
+    extendButton.disabled = !canExtend;
+    extendButton.textContent = canExtend
+        ? 'Extender prueba 1 mes'
+        : 'Extensión no disponible';
+
     openModal('subscriptionModal');
 };
 
@@ -1605,7 +1730,7 @@ window.runSubscriptionAction = async (action, months) => {
         // Así no depende de la respuesta de la Edge Function que estaba fallando.
         if (action === 'cancel') {
             const { data, error } = await supabase.rpc(
-                'admin_cancel_business_subscription',
+                'admin_cancel_business_plan_v2',
                 { p_business_id: String(businessId) }
             );
 
@@ -1642,8 +1767,15 @@ window.runSubscriptionAction = async (action, months) => {
         await loadBusinesses();
     } catch (error) {
         console.error('Gestión del plan:', error);
+
+        const detail =
+            error?.message ||
+            error?.details ||
+            error?.hint ||
+            String(error || '');
+
         toast(
-            error?.message || 'No se pudo gestionar la suscripción.',
+            detail || 'No se pudo gestionar la suscripción.',
             'error'
         );
     }
@@ -1679,7 +1811,7 @@ function renderBizTable() {
 
     const tbody = document.getElementById('bizTableBody');
     if (!list.length) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Sin resultados</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--dark);padding:30px;">Sin resultados</td></tr>';
         return;
     }
 
@@ -2015,7 +2147,7 @@ async function loadProducts() {
     if (!currentProdBizId) return;
 
     const tbody = document.getElementById('prodTableBody');
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Cargando productos...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--dark);padding:30px;">Cargando productos...</td></tr>';
 
     const { data, error } = await supabase
         .from('business_products')
@@ -2025,7 +2157,7 @@ async function loadProducts() {
         .order('created_at', { ascending: true });
 
     if (error) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--red);padding:30px;">Error: ${esc(error.message)}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--red);padding:30px;">Error: ${esc(error.message)}</td></tr>`;
         return;
     }
 
@@ -2094,7 +2226,7 @@ function renderProductsTable() {
     if (!currentProducts.length) {
         const mode = selectedBusinessType();
         const emptyLabel = mode === 'services' ? 'servicios' : mode === 'both' ? 'productos o servicios' : 'productos';
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--dark);padding:30px;">Este negocio todavía no tiene ${emptyLabel} registrados.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;color:var(--dark);padding:30px;">Este negocio todavía no tiene ${emptyLabel} registrados.</td></tr>`;
         return;
     }
 
