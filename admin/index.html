@@ -2251,7 +2251,7 @@ window.runSubscriptionAction = async (action, months) => {
         action === 'cancel' &&
         !confirm(
             '¿Cancelar inmediatamente el plan de este negocio? ' +
-            'El contenido existente se conservará, pero no podrá crear nuevos productos ni cargar nuevas imágenes.'
+            'El negocio será retirado del directorio público. Sus datos se conservarán.'
         )
     ) {
         return;
@@ -2259,42 +2259,22 @@ window.runSubscriptionAction = async (action, months) => {
 
     try {
         let message = 'Plan actualizado.';
-
-        // La cancelación usa una RPC directa y segura.
-        // Así no depende de la respuesta de la Edge Function que estaba fallando.
-        if (action === 'cancel') {
-            const { data, error } = await supabase.rpc(
-                'admin_cancel_business_plan_v2',
-                { p_business_id: String(businessId) }
-            );
-
-            if (error) {
-                throw new Error(error.message || 'No se pudo cancelar el plan.');
+        const result = await subscriptionFetch(
+            SUBSCRIPTION_FUNCTION_URL,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action,
+                    business_id: String(businessId),
+                    months,
+                    payment_provider:
+                        action === 'activate_paid' ? 'manual' : null,
+                }),
             }
+        );
 
-            if (!data || data.success !== true) {
-                throw new Error(data?.error || 'Supabase no confirmó la cancelación.');
-            }
-
-            message = data.message || 'Plan cancelado correctamente.';
-        } else {
-            const result = await subscriptionFetch(
-                SUBSCRIPTION_FUNCTION_URL,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action,
-                        business_id: businessId,
-                        months,
-                        payment_provider:
-                            action === 'activate_paid' ? 'manual' : null,
-                    }),
-                }
-            );
-
-            message = result.message || message;
-        }
+        message = result.message || message;
 
         toast(message);
         closeModal('subscriptionModal');
@@ -2364,7 +2344,8 @@ function renderBizTable() {
                 : '<span class="badge badge-red">Pendiente</span>';
 
         const actionButtons = b.is_active
-            ? `<button class="btn btn-danger btn-sm" onclick="toggleBizActive('${b.id}', true)">Desactivar</button>`
+            ? `<button class="btn btn-danger btn-sm" onclick="toggleBizActive('${b.id}', true)">Desactivar</button>
+               <button class="btn btn-ghost btn-sm" onclick="resendOwnerAccess('${b.id}', '${escAttr(b.name)}')">Reenviar acceso</button>`
             : isRejected
                 ? `<button class="btn btn-success btn-sm" onclick="toggleBizActive('${b.id}', false)">Aprobar</button>`
                 : `<button class="btn btn-success btn-sm" onclick="toggleBizActive('${b.id}', false)">Aprobar</button>
@@ -2558,6 +2539,67 @@ window.toggleBizActive = async (id, current) => {
     } catch (error) {
         console.error(error);
         toast('Error al aprobar: ' + (error.message || 'revise la función aprobar-negocio.'), 'error');
+    }
+};
+
+window.resendOwnerAccess = async (id, name) => {
+    if (!confirm(
+        `¿Generar una nueva contraseña temporal y reenviar el acceso de ${name}? La contraseña temporal anterior dejará de funcionar.`
+    )) return;
+
+    try {
+        const { data: sessionData, error: sessionError } =
+            await supabase.auth.getSession();
+
+        const token = sessionData?.session?.access_token;
+
+        if (sessionError || !token) {
+            toast(
+                'Debe iniciar sesión como administrador.',
+                'error'
+            );
+            return;
+        }
+
+        toast('Generando y enviando nuevas credenciales...');
+
+        const response = await fetch(
+            `${SUPABASE_URL}/functions/v1/aprobar-negocio`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                    'apikey': SUPABASE_ANON_KEY,
+                },
+                body: JSON.stringify({ business_id: id }),
+            }
+        );
+
+        const result = await response.json().catch(() => ({}));
+
+        if (
+            !response.ok ||
+            result.success !== true ||
+            result.email_sent !== true
+        ) {
+            throw new Error(
+                result.error ||
+                'No se pudieron reenviar las credenciales.'
+            );
+        }
+
+        toast(
+            result.message ||
+            'Nueva contraseña temporal enviada al propietario ✓'
+        );
+    } catch (error) {
+        console.error(error);
+        toast(
+            'Error al reenviar acceso: ' +
+            (error.message || 'revise aprobar-negocio.'),
+            'error'
+        );
     }
 };
 
