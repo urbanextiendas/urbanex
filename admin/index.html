@@ -683,6 +683,7 @@ input,textarea,select { font-family:var(--sans); }
                         <option value="trial">Prueba activa</option>
                         <option value="trial_expired">Prueba vencida</option>
                         <option value="paid_expired">Plan vencido</option>
+                        <option value="cancelled">Plan cancelado</option>
                         <option value="none">Sin plan</option>
                     </select>
                 </div>
@@ -1053,6 +1054,7 @@ input,textarea,select { font-family:var(--sans); }
       <button class="btn btn-primary" type="button" onclick="runSubscriptionAction('activate_paid',12)">Activar pagado 12 meses</button>
       <button class="btn btn-ghost" type="button" onclick="runSubscriptionAction('start_trial',3)">Iniciar prueba 3 meses</button>
       <button class="btn btn-ghost" type="button" onclick="runSubscriptionAction('extend_trial',1)">Extender prueba 1 mes</button>
+      <button class="btn btn-danger" type="button" onclick="runSubscriptionAction('cancel',0)">Cancelar plan</button>
     </div>
   </div>
 </div>
@@ -1497,6 +1499,10 @@ function subscriptionState(businessId) {
     const row = subscriptionByBusiness.get(String(businessId));
     if (!row) return { code: 'none', label: 'Sin plan', row: null };
 
+    if (row.status === 'cancelled') {
+        return { code: 'cancelled', label: 'Plan cancelado', row };
+    }
+
     const now = new Date();
     const trialEnd = row.trial_end_at ? new Date(row.trial_end_at) : null;
     const paidEnd = row.current_period_end ? new Date(row.current_period_end) : null;
@@ -1546,6 +1552,7 @@ function subscriptionBadge(businessId) {
         trial: 'badge-gold',
         trial_expired: 'badge-red',
         paid_expired: 'badge-orange',
+        cancelled: 'badge-red',
         none: 'badge-gray',
     };
 
@@ -1565,6 +1572,13 @@ window.openSubscriptionModal = (businessId, businessName) => {
 window.runSubscriptionAction = async (action, months) => {
     const businessId = document.getElementById('subscriptionBusinessId').value;
     if (!businessId) return;
+
+    if (
+        action === 'cancel' &&
+        !confirm('¿Cancelar inmediatamente el plan de este negocio? El contenido existente se conservará, pero no podrá crear nuevos productos ni cargar nuevas imágenes.')
+    ) {
+        return;
+    }
 
     try {
         const result = await subscriptionFetch(SUBSCRIPTION_FUNCTION_URL, {
