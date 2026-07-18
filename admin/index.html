@@ -1595,6 +1595,9 @@ async function loadDashboard() {
         document.getElementById('analyticsRange')?.value || 30
     );
 
+    // Misma fuente de datos que usa la sección Negocios.
+    await loadSubscriptionSummaries();
+
     const [
         analyticsResult,
         businessMetricsResult,
@@ -1875,14 +1878,6 @@ async function loadDashboard() {
         return;
     }
 
-    const planMap = new Map(
-        (
-            Array.isArray(businessMetrics.business_plans)
-                ? businessMetrics.business_plans
-                : []
-        ).map(row => [String(row.business_id), row])
-    );
-
     const rows = Array.isArray(analytics.businesses)
         ? analytics.businesses
         : [];
@@ -1911,11 +1906,18 @@ async function loadDashboard() {
                 ? (rowContacts / rowUnique) * 100
                 : 0;
 
-            const plan =
-                planMap.get(String(row.business_id)) || {
-                    code: 'pending',
-                    label: 'Pendiente',
-                };
+            const subscription =
+                subscriptionState(row.business_id);
+
+            const plan = {
+                code: (
+                    subscription.code === 'trial_expired' ||
+                    subscription.code === 'paid_expired'
+                )
+                    ? 'expired'
+                    : subscription.code,
+                label: subscription.label,
+            };
 
             return `
                 <tr>
