@@ -3,36 +3,1731 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050505">
 <title>Urbanex - Negocio</title>
+
 <link rel="icon" type="image/png" href="../imagenes/log.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
 <link rel="preconnect" href="https://esm.sh" crossorigin>
 <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-:root{--bg:#020202;--panel:rgba(8,8,8,.86);--card:rgba(15,15,15,.86);--gold:#e5c158;--gold2:#f3d775;--line:rgba(229,193,88,.24);--text:#fff;--muted:#d7d7d7;--soft:#9b9b9b;--green:#2ed573;--red:#ff5b68;--font-serif:'Cinzel',serif;--font-sans:'Montserrat',sans-serif;--blur:blur(16px)}
-*{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;background:linear-gradient(135deg,rgba(0,0,0,.88),rgba(0,0,0,.64)),url("../imagenes/Boulevard.png") center bottom/cover fixed no-repeat;color:var(--text);font-family:var(--font-sans);padding-bottom:28px}a{color:inherit;text-decoration:none}button,input,textarea{font-family:var(--font-sans)}
-.header{height:62px;display:flex;align-items:center;justify-content:space-between;padding:6px 18px;background:rgba(3,3,3,.84);border-bottom:1px solid var(--line);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);position:sticky;top:0;z-index:30}.logo img{height:54px;width:auto;display:block}.nav{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.nav a{border:1px solid var(--line);background:rgba(0,0,0,.46);border-radius:999px;padding:8px 13px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.6px}.nav a:hover{border-color:var(--gold);background:rgba(229,193,88,.12)}
-.wrap{width:min(1040px,calc(100% - 28px));margin:18px auto 44px}.loading,.notfound{border:1px solid var(--line);border-radius:20px;padding:24px;background:rgba(0,0,0,.72);text-align:center;color:var(--muted)}
-.hero{border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--panel);box-shadow:0 22px 62px rgba(0,0,0,.50);max-width:100%}.cover{height:265px;background:radial-gradient(circle at 22% 10%,rgba(229,193,88,.18),transparent 32%),rgba(0,0,0,.55);position:relative}.cover img{width:100%;height:265px;object-fit:cover;display:block;opacity:.90}.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.96),rgba(0,0,0,.18) 54%,rgba(0,0,0,.20))}.hero-info{position:relative;margin-top:-126px;padding:0 22px 22px;z-index:2;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end}.category-pill{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(229,193,88,.34);background:rgba(0,0,0,.56);color:var(--gold);border-radius:999px;padding:7px 11px;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.9px;margin-bottom:10px}.hero h1{font-family:var(--font-serif);font-size:clamp(30px,4.4vw,48px);line-height:1;text-transform:uppercase;letter-spacing:1.8px;text-shadow:0 4px 18px #000}.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;color:var(--muted);font-size:11px}.meta span{border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.45);border-radius:999px;padding:7px 10px}.status{color:var(--green)!important;border-color:rgba(46,213,115,.35)!important;background:rgba(46,213,115,.10)!important;font-weight:900}.status.closed{color:var(--red)!important;border-color:rgba(255,91,104,.35)!important;background:rgba(255,91,104,.10)!important}.cta-box{display:flex;gap:9px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;background:var(--gold);color:#000;border-radius:999px;padding:11px 15px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;cursor:pointer}.btn:hover{background:var(--gold2)}.btn.secondary{background:rgba(0,0,0,.52);color:#fff;border:1px solid var(--line)}.btn.whatsapp{background:#25d366;color:#061b0c}
-.grid{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:14px;margin-top:14px}.panel{border:1px solid rgba(229,193,88,.20);border-radius:20px;background:var(--panel);overflow:hidden;backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);margin-bottom:14px}.panel-head{padding:15px 18px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;gap:12px}.panel-head h2{font-family:var(--font-serif);color:var(--gold);font-size:16px;text-transform:uppercase;letter-spacing:1.3px}.panel-body{padding:16px 18px}.description{font-size:12.5px;line-height:1.7;color:var(--muted)}
-.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:12px}.product-card{border:1px solid rgba(255,255,255,.10);background:linear-gradient(145deg,rgba(18,18,18,.94),rgba(4,4,4,.90));border-radius:18px;overflow:hidden;display:flex;flex-direction:column;min-height:0;box-shadow:0 14px 34px rgba(0,0,0,.28)}.product-images{height:135px;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;background:radial-gradient(circle at 30% 20%,rgba(229,193,88,.18),transparent 36%),rgba(0,0,0,.62)}.product-images img{width:100%;min-width:100%;height:135px;object-fit:cover;scroll-snap-align:start}.product-empty{height:135px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:30px;width:100%}.product-body{padding:13px;display:flex;flex-direction:column;gap:8px;flex:1}.product-body h3{font-size:14px;line-height:1.25}.price{font-size:16px;color:var(--gold);font-weight:900}.desc{font-size:11px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.price-wrap{display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}.offer-badge{display:inline-flex;border:1px solid rgba(46,213,115,.34);background:rgba(46,213,115,.12);color:var(--green);border-radius:999px;padding:4px 7px;font-size:8px;font-weight:900;text-transform:uppercase}.old-price{font-size:10px;color:var(--soft);text-decoration:line-through}.sale-price{font-size:17px;color:var(--gold2);font-weight:900}.product-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}.product-actions .btn{flex:1;padding:9px 10px;font-size:9px}
-.info-list{display:flex;flex-direction:column;gap:9px}.info-item{border:1px solid rgba(255,255,255,.09);background:rgba(0,0,0,.34);border-radius:14px;padding:12px}.info-item strong{display:block;color:var(--gold);font-size:9px;text-transform:uppercase;letter-spacing:.9px;margin-bottom:6px}.info-item span,.info-item a{font-size:11.5px;color:#fff;word-break:break-word;line-height:1.55}.info-item#offerBox{border-color:rgba(46,213,115,.30);background:rgba(46,213,115,.06)}.info-item#offerBox strong{color:#2ed573}.info-item#offerBox a{display:inline-flex;align-items:center;gap:6px;color:#fff;font-weight:900}.offer-small{display:block;color:var(--soft);font-size:10px;margin-top:4px;line-height:1.35}.hours-row{display:grid;grid-template-columns:92px 1fr;gap:8px;font-size:11.5px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.08)}.hours-row:last-child{border-bottom:0}.hours-row b{color:var(--gold2)}
-.review-list{display:flex;flex-direction:column;gap:10px}.review-card{border:1px solid rgba(255,255,255,.10);border-radius:16px;background:rgba(0,0,0,.34);padding:13px}.review-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:6px}.review-name{font-size:12px;font-weight:900}.stars{color:var(--gold);letter-spacing:1px}.review-card p{color:var(--muted);font-size:12px;line-height:1.55}.review-form{border-top:1px solid rgba(255,255,255,.08);margin-top:16px;padding-top:16px;display:grid;gap:10px}.review-form input,.review-form textarea{width:100%;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.55);color:#fff;border-radius:13px;outline:none;font-size:12px;padding:12px}.review-form textarea{min-height:86px;resize:vertical}.rating-select{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.rating-select button{width:34px;height:34px;border-radius:50%;border:1px solid rgba(229,193,88,.25);background:rgba(0,0,0,.5);color:var(--gold);font-weight:900;cursor:pointer}.rating-select button.active{background:var(--gold);color:#000}.notice{display:none;border-radius:14px;padding:12px;font-size:12px;line-height:1.45}.notice.ok{display:block;color:#dfffe9;border:1px solid rgba(46,213,115,.34);background:rgba(46,213,115,.10)}.notice.error{display:block;color:#ffe1e4;border:1px solid rgba(255,91,104,.34);background:rgba(255,91,104,.10)}.promo{border:1px solid rgba(229,193,88,.28);background:rgba(229,193,88,.08);border-radius:16px;padding:12px;margin-bottom:10px}.promo h3{font-size:13px;color:var(--gold);margin-bottom:5px}.promo p{font-size:11px;color:var(--muted);line-height:1.45}.empty{border:1px dashed rgba(229,193,88,.28);border-radius:16px;padding:18px;text-align:center;color:var(--muted);font-size:12px;background:rgba(0,0,0,.28)}.footer{position:fixed;left:0;right:0;bottom:0;height:24px;background:#000;color:#8c8c8c;font-size:11px;display:flex;align-items:center;justify-content:center;border-top:1px solid #1a1a1a;font-family:Arial,Helvetica,sans-serif;z-index:50}.hidden{display:none!important}
-@media(max-width:900px){.header{height:auto;flex-direction:column;gap:8px}.nav{justify-content:center}.hero-info{grid-template-columns:1fr;margin-top:-112px}.cta-box{justify-content:flex-start}.grid{grid-template-columns:1fr}.cover,.cover img{height:285px}.products{grid-template-columns:1fr}.btn{width:100%}.hours-row{grid-template-columns:1fr}.wrap{width:min(100% - 20px,1040px)}}
-.zoomable-image{cursor:zoom-in}
-.lightbox{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.94)}
-.lightbox.open{display:flex}
-.lightbox img{max-width:min(1200px,94vw);max-height:90vh;object-fit:contain}
-.lightbox-close{position:absolute;right:22px;top:18px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#050505;color:#fff;font-size:24px;cursor:pointer}
+:root{
+  --bg:#030303;
+  --bg-soft:#080808;
+  --surface:rgba(12,12,12,.88);
+  --surface-strong:#0d0d0d;
+  --surface-light:#151515;
+  --gold:#e5c158;
+  --gold-bright:#f7dc82;
+  --gold-soft:rgba(229,193,88,.13);
+  --gold-line:rgba(229,193,88,.27);
+  --text:#ffffff;
+  --text-soft:#d7d3c9;
+  --muted:#929087;
+  --green:#31db79;
+  --red:#ff6171;
+  --line:rgba(255,255,255,.09);
+  --radius-xl:30px;
+  --radius-lg:22px;
+  --radius-md:16px;
+  --shadow-lg:0 32px 90px rgba(0,0,0,.64);
+  --shadow-md:0 18px 50px rgba(0,0,0,.42);
+  --serif:'Cinzel',serif;
+  --sans:'Montserrat',sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  min-height:100vh;
+  overflow-x:hidden;
+  color:var(--text);
+  font-family:var(--sans);
+  background:
+    radial-gradient(circle at 14% 7%,rgba(229,193,88,.11),transparent 22%),
+    radial-gradient(circle at 86% 10%,rgba(229,193,88,.065),transparent 18%),
+    linear-gradient(180deg,#060606 0%,#020202 50%,#050403 100%);
+  padding-bottom:34px;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:38px 38px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.85),transparent 92%);
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:-18%;
+  z-index:-3;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 22%,rgba(229,193,88,.08),transparent 20%),
+    radial-gradient(circle at 78% 18%,rgba(255,255,255,.035),transparent 17%),
+    radial-gradient(circle at 52% 84%,rgba(139,78,12,.10),transparent 25%);
+  filter:blur(18px);
+  animation:ambientMove 18s ease-in-out infinite alternate;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,
+input,
+textarea{
+  font:inherit;
+}
+
+button,
+a{
+  -webkit-tap-highlight-color:transparent;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* HEADER */
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 22px;
+  border-bottom:1px solid var(--gold-line);
+  background:rgba(3,3,3,.84);
+  backdrop-filter:blur(22px) saturate(1.15);
+  -webkit-backdrop-filter:blur(22px) saturate(1.15);
+}
+
+.site-header::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-1px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:.5;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+}
+
+.brand img{
+  display:block;
+  width:auto;
+  height:55px;
+  transition:transform .35s var(--ease),filter .35s ease;
+}
+
+.brand:hover img{
+  transform:translateY(-2px);
+  filter:drop-shadow(0 0 16px rgba(229,193,88,.2));
+}
+
+.site-nav{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.site-nav a{
+  position:relative;
+  overflow:hidden;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:36px;
+  padding:9px 14px;
+  border:1px solid var(--gold-line);
+  border-radius:999px;
+  background:rgba(7,7,7,.7);
+  color:#f4f1e8;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.75px;
+  text-transform:uppercase;
+  transition:
+    transform .28s var(--ease),
+    border-color .28s ease,
+    background .28s ease;
+}
+
+.site-nav a::before{
+  content:"";
+  position:absolute;
+  top:-90%;
+  left:-45%;
+  width:32%;
+  height:280%;
+  transform:rotate(24deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);
+  transition:left .65s var(--ease);
+}
+
+.site-nav a:hover{
+  transform:translateY(-2px);
+  border-color:rgba(229,193,88,.65);
+  background:rgba(229,193,88,.08);
+}
+
+.site-nav a:hover::before{
+  left:125%;
+}
+
+/* CONTENEDOR */
+
+.page-shell{
+  width:min(1240px,calc(100% - 28px));
+  margin:24px auto 58px;
+}
+
+.loading,
+.notfound{
+  min-height:180px;
+  display:grid;
+  place-items:center;
+  padding:28px;
+  border:1px solid var(--gold-line);
+  border-radius:var(--radius-lg);
+  background:rgba(4,4,4,.86);
+  color:var(--text-soft);
+  text-align:center;
+  box-shadow:var(--shadow-md);
+}
+
+.loading::before{
+  content:"";
+  width:32px;
+  height:32px;
+  margin-bottom:12px;
+  border:2px solid rgba(229,193,88,.16);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin .9s linear infinite;
+}
+
+/* HERO */
+
+.hero{
+  display:grid;
+  grid-template-columns:minmax(0,.92fr) minmax(420px,1.08fr);
+  gap:18px;
+  min-height:470px;
+  padding:18px;
+  overflow:hidden;
+  border:1px solid rgba(229,193,88,.31);
+  border-radius:var(--radius-xl);
+  background:
+    linear-gradient(145deg,rgba(13,13,13,.98),rgba(3,3,3,.96));
+  box-shadow:
+    var(--shadow-lg),
+    0 0 0 1px rgba(255,255,255,.025),
+    0 0 48px rgba(229,193,88,.045);
+}
+
+.hero-copy{
+  position:relative;
+  z-index:4;
+  min-width:0;
+  padding:38px 34px 30px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
+}
+
+.hero-copy::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:42px;
+  width:3px;
+  height:112px;
+  border-radius:999px;
+  background:linear-gradient(to bottom,transparent,var(--gold),transparent);
+  box-shadow:0 0 24px rgba(229,193,88,.34);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  color:#aaa69b;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.eyebrow::before{
+  content:"";
+  width:28px;
+  height:1px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+}
+
+.category-pill{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  margin-top:15px;
+  padding:8px 12px;
+  border:1px solid rgba(229,193,88,.34);
+  border-radius:999px;
+  background:rgba(229,193,88,.08);
+  color:var(--gold-bright);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  max-width:670px;
+  margin-top:18px;
+  font-family:var(--serif);
+  font-size:clamp(42px,5.3vw,74px);
+  line-height:.96;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+  color:#fffaf0;
+  text-shadow:0 14px 46px rgba(0,0,0,.82);
+}
+
+.hero-description{
+  max-width:600px;
+  margin-top:18px;
+  color:var(--text-soft);
+  font-size:13px;
+  line-height:1.8;
+}
+
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:20px;
+}
+
+.meta span{
+  min-height:32px;
+  display:inline-flex;
+  align-items:center;
+  padding:7px 11px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.035);
+  color:#e4e0d6;
+  font-size:10px;
+}
+
+.status{
+  color:#07130b!important;
+  border-color:rgba(49,219,121,.40)!important;
+  background:linear-gradient(135deg,#39eb82,#24ca67)!important;
+  font-weight:900;
+}
+
+.status.closed{
+  color:#ff7785!important;
+  border-color:rgba(255,97,113,.36)!important;
+  background:rgba(255,97,113,.10)!important;
+}
+
+.hero-actions{
+  width:100%;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:24px;
+}
+
+.btn{
+  position:relative;
+  overflow:hidden;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:44px;
+  padding:12px 17px;
+  border:1px solid transparent;
+  border-radius:14px;
+  cursor:pointer;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.65px;
+  text-transform:uppercase;
+  transition:
+    transform .3s var(--ease),
+    box-shadow .3s ease,
+    border-color .3s ease,
+    filter .3s ease;
+}
+
+.btn::before{
+  content:"";
+  position:absolute;
+  top:-90%;
+  left:-45%;
+  width:34%;
+  height:280%;
+  transform:rotate(24deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.40),transparent);
+  transition:left .68s var(--ease);
+}
+
+.btn:hover{
+  transform:translateY(-3px);
+}
+
+.btn:hover::before{
+  left:125%;
+}
+
+.btn-primary{
+  color:#050505;
+  background:linear-gradient(135deg,var(--gold-bright),var(--gold));
+  box-shadow:0 14px 32px rgba(229,193,88,.16);
+}
+
+.btn-primary:hover{
+  box-shadow:0 18px 42px rgba(229,193,88,.25);
+}
+
+.btn-whatsapp{
+  color:#05160a;
+  background:linear-gradient(135deg,#38ea81,#22c963);
+  box-shadow:0 14px 32px rgba(49,219,121,.18);
+}
+
+.btn-whatsapp:hover{
+  box-shadow:0 18px 40px rgba(49,219,121,.25);
+}
+
+.btn-secondary{
+  color:#fff;
+  border-color:rgba(229,193,88,.28);
+  background:rgba(6,6,6,.68);
+}
+
+.hero-stat-row{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin-top:28px;
+  padding-top:18px;
+  border-top:1px solid rgba(229,193,88,.13);
+}
+
+.hero-stat{
+  min-width:0;
+}
+
+.hero-stat strong{
+  display:block;
+  color:var(--gold-bright);
+  font-family:var(--serif);
+  font-size:18px;
+}
+
+.hero-stat span{
+  display:block;
+  margin-top:6px;
+  color:#858278;
+  font-size:8px;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+}
+
+.hero-media{
+  position:relative;
+  min-width:0;
+  min-height:434px;
+  overflow:hidden;
+  border:1px solid rgba(229,193,88,.22);
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 30% 20%,rgba(229,193,88,.16),transparent 28%),
+    #080808;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.04),
+    0 24px 68px rgba(0,0,0,.52);
+}
+
+.hero-media::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:5;
+  pointer-events:none;
+  background:
+    linear-gradient(to top,rgba(0,0,0,.88),transparent 48%),
+    linear-gradient(110deg,transparent 32%,rgba(255,255,255,.09) 46%,transparent 58%);
+  transform:translateX(-120%);
+  animation:heroSweep 7.5s ease-in-out infinite;
+}
+
+.hero-media::after{
+  content:"";
+  position:absolute;
+  inset:16px;
+  z-index:7;
+  pointer-events:none;
+  border:1px solid rgba(229,193,88,.14);
+  border-radius:16px;
+}
+
+.cover{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+
+.hero-media-blur{
+  position:absolute;
+  inset:-34px;
+  background-position:center;
+  background-size:cover;
+  filter:blur(28px) brightness(.36) saturate(1.18);
+  transform:scale(1.12);
+}
+
+.hero-media-image{
+  position:relative;
+  z-index:2;
+  width:100%;
+  height:100%;
+  padding:26px;
+  object-fit:contain;
+  object-position:center;
+  cursor:zoom-in;
+  filter:saturate(1.04) contrast(1.03);
+  transition:transform .7s var(--ease),filter .45s ease;
+}
+
+.hero-media:hover .hero-media-image{
+  transform:scale(1.025);
+  filter:saturate(1.10) contrast(1.05);
+}
+
+.hero-media-overlay{
+  position:absolute;
+  inset:0;
+  z-index:3;
+  pointer-events:none;
+  background:
+    linear-gradient(to top,rgba(0,0,0,.64),transparent 45%),
+    linear-gradient(90deg,rgba(0,0,0,.18),transparent 35%,rgba(0,0,0,.14));
+}
+
+.hero-media-placeholder{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  background:
+    radial-gradient(circle,rgba(229,193,88,.15),transparent 36%),
+    linear-gradient(145deg,#16110b,#040404 70%);
+}
+
+.hero-media-placeholder span{
+  display:block;
+  color:var(--gold);
+  font-size:10px;
+  letter-spacing:4px;
+}
+
+.hero-media-placeholder strong{
+  display:block;
+  margin-top:12px;
+  font-family:var(--serif);
+  font-size:28px;
+  color:#fff;
+}
+
+/* NAVEGACIÓN INTERNA */
+
+.section-nav{
+  position:sticky;
+  top:84px;
+  z-index:45;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:16px 0 22px;
+  padding:8px;
+  border:1px solid rgba(229,193,88,.18);
+  border-radius:16px;
+  background:rgba(5,5,5,.76);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  box-shadow:0 14px 36px rgba(0,0,0,.28);
+}
+
+.section-nav a{
+  padding:10px 14px;
+  border-radius:11px;
+  color:#bdb9af;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+  transition:background .25s ease,color .25s ease;
+}
+
+.section-nav a:hover{
+  color:#fff;
+  background:rgba(229,193,88,.09);
+}
+
+/* CONTENIDO */
+
+.content-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 340px;
+  gap:22px;
+  align-items:start;
+}
+
+.main-column{
+  min-width:0;
+}
+
+.panel{
+  --pointer-x:50%;
+  --pointer-y:50%;
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  margin-bottom:18px;
+  border:1px solid rgba(229,193,88,.19);
+  border-radius:var(--radius-lg);
+  background:
+    linear-gradient(145deg,rgba(12,12,12,.92),rgba(4,4,4,.90));
+  box-shadow:
+    var(--shadow-md),
+    inset 0 1px 0 rgba(255,255,255,.025);
+}
+
+.premium-surface::before,
+.product-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  opacity:0;
+  background:
+    radial-gradient(
+      420px circle at var(--pointer-x) var(--pointer-y),
+      rgba(229,193,88,.13),
+      transparent 44%
+    );
+  transition:opacity .35s ease;
+}
+
+.premium-surface:hover::before,
+.product-card:hover::before{
+  opacity:1;
+}
+
+.panel-head{
+  min-height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:18px 20px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  background:linear-gradient(90deg,rgba(229,193,88,.045),transparent 70%);
+}
+
+.panel-head-text{
+  min-width:0;
+}
+
+.panel-kicker{
+  display:block;
+  margin-bottom:6px;
+  color:#858177;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+}
+
+.panel-head h2{
+  color:var(--gold-bright);
+  font-family:var(--serif);
+  font-size:17px;
+  letter-spacing:1.1px;
+  text-transform:uppercase;
+}
+
+.panel-subtitle{
+  margin-top:7px;
+  color:#85827a;
+  font-size:10px;
+}
+
+.panel-body{
+  padding:20px;
+}
+
+/* PRODUCTOS */
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:18px;
+}
+
+.product-card{
+  --pointer-x:50%;
+  --pointer-y:50%;
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  border:1px solid rgba(229,193,88,.15);
+  border-radius:20px;
+  background:
+    linear-gradient(155deg,rgba(19,19,19,.98),rgba(4,4,4,.98));
+  box-shadow:
+    0 18px 46px rgba(0,0,0,.42),
+    inset 0 1px 0 rgba(255,255,255,.03);
+  opacity:0;
+  transform:translateY(22px);
+  transition:
+    opacity .58s ease var(--delay,0ms),
+    transform .58s var(--ease) var(--delay,0ms),
+    border-color .35s ease,
+    box-shadow .35s ease;
+}
+
+.product-card.is-visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.product-card:hover{
+  transform:translateY(-8px);
+  border-color:rgba(229,193,88,.48);
+  box-shadow:
+    0 30px 70px rgba(0,0,0,.58),
+    0 0 28px rgba(229,193,88,.07);
+}
+
+.product-gallery{
+  position:relative;
+  height:230px;
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(229,193,88,.46) rgba(0,0,0,.35);
+  background:
+    radial-gradient(circle at 30% 20%,rgba(229,193,88,.16),transparent 34%),
+    linear-gradient(145deg,#17120c,#030303 72%);
+}
+
+.product-gallery::-webkit-scrollbar{
+  height:5px;
+}
+
+.product-gallery::-webkit-scrollbar-thumb{
+  border-radius:999px;
+  background:linear-gradient(90deg,#9d7821,var(--gold-bright));
+}
+
+.product-gallery img{
+  width:100%;
+  min-width:100%;
+  height:230px;
+  object-fit:cover;
+  scroll-snap-align:start;
+  cursor:zoom-in;
+  transition:transform .65s var(--ease),filter .4s ease;
+}
+
+.product-card:hover .product-gallery img{
+  transform:scale(1.035);
+  filter:saturate(1.08) contrast(1.04);
+}
+
+.image-count{
+  position:absolute;
+  right:12px;
+  top:12px;
+  z-index:4;
+  padding:6px 9px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:999px;
+  background:rgba(0,0,0,.62);
+  color:#fff;
+  font-size:8px;
+  font-weight:800;
+  backdrop-filter:blur(10px);
+}
+
+.product-image-placeholder{
+  width:100%;
+  min-width:100%;
+  height:230px;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  color:var(--gold);
+  background:
+    radial-gradient(circle,rgba(229,193,88,.14),transparent 38%);
+}
+
+.product-image-placeholder span{
+  display:block;
+  font-size:34px;
+}
+
+.product-image-placeholder small{
+  display:block;
+  margin-top:7px;
+  color:#918d83;
+  font-size:9px;
+}
+
+.product-content{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:18px;
+}
+
+.product-meta-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.product-type,
+.product-offer{
+  display:inline-flex;
+  align-items:center;
+  min-height:26px;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+}
+
+.product-type{
+  color:var(--gold-bright);
+  border:1px solid rgba(229,193,88,.27);
+  background:rgba(229,193,88,.08);
+}
+
+.product-offer{
+  color:#b8ffd2;
+  border:1px solid rgba(49,219,121,.30);
+  background:rgba(49,219,121,.09);
+}
+
+.product-content h3{
+  margin-top:14px;
+  color:#fffaf0;
+  font-size:17px;
+  line-height:1.35;
+}
+
+.product-price{
+  margin-top:12px;
+}
+
+.product-price strong{
+  color:var(--gold-bright);
+  font-size:20px;
+}
+
+.product-price-sale{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.offer-chip{
+  padding:5px 8px;
+  border-radius:999px;
+  color:#b8ffd2;
+  border:1px solid rgba(49,219,121,.28);
+  background:rgba(49,219,121,.08);
+  font-size:8px;
+  font-weight:900;
+}
+
+.old-price{
+  color:#8d8980;
+  font-size:10px;
+  text-decoration:line-through;
+}
+
+.product-description{
+  flex:1;
+  margin-top:13px;
+  color:#aaa69d;
+  font-size:11.5px;
+  line-height:1.65;
+}
+
+.btn-product{
+  width:100%;
+  margin-top:16px;
+  justify-content:space-between;
+  color:#07130b;
+  background:linear-gradient(135deg,#3ce982,#22c965);
+  box-shadow:0 12px 28px rgba(49,219,121,.14);
+}
+
+.catalog-empty{
+  grid-column:1/-1;
+  min-height:280px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:11px;
+  padding:34px 24px;
+  text-align:center;
+  border:1px dashed rgba(229,193,88,.28);
+  border-radius:20px;
+  background:
+    radial-gradient(circle at 50% 32%,rgba(229,193,88,.13),transparent 30%),
+    linear-gradient(145deg,rgba(15,15,15,.92),rgba(3,3,3,.92));
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity .55s ease,transform .55s var(--ease);
+}
+
+.catalog-empty.is-visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.catalog-empty-icon{
+  width:68px;
+  height:68px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(229,193,88,.34);
+  border-radius:22px;
+  color:var(--gold-bright);
+  font-size:28px;
+  background:rgba(229,193,88,.08);
+  box-shadow:0 0 32px rgba(229,193,88,.10);
+  animation:floatIcon 3.2s ease-in-out infinite;
+}
+
+.catalog-empty h3{
+  font-family:var(--serif);
+  color:#fff8e6;
+  font-size:20px;
+}
+
+.catalog-empty p{
+  max-width:560px;
+  color:#aaa69d;
+  font-size:12px;
+  line-height:1.7;
+}
+
+/* PROMOCIONES */
+
+.promo{
+  padding:15px;
+  margin-bottom:10px;
+  border:1px solid rgba(229,193,88,.24);
+  border-radius:16px;
+  background:
+    linear-gradient(145deg,rgba(229,193,88,.08),rgba(0,0,0,.22));
+}
+
+.promo h3{
+  color:var(--gold-bright);
+  font-size:13px;
+}
+
+.promo p{
+  margin-top:6px;
+  color:var(--text-soft);
+  font-size:11px;
+  line-height:1.6;
+}
+
+/* RESEÑAS */
+
+.review-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.review-card{
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:rgba(0,0,0,.28);
+}
+
+.review-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:7px;
+}
+
+.review-name{
+  font-size:11px;
+  font-weight:900;
+}
+
+.stars{
+  color:var(--gold);
+  letter-spacing:1px;
+}
+
+.review-card p{
+  color:var(--text-soft);
+  font-size:11.5px;
+  line-height:1.6;
+}
+
+.review-form{
+  display:grid;
+  gap:10px;
+  margin-top:18px;
+  padding-top:18px;
+  border-top:1px solid var(--line);
+}
+
+.review-form input,
+.review-form textarea{
+  width:100%;
+  padding:12px 13px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:13px;
+  outline:none;
+  background:rgba(0,0,0,.42);
+  color:#fff;
+  font-size:11px;
+  transition:border-color .25s ease,box-shadow .25s ease;
+}
+
+.review-form input:focus,
+.review-form textarea:focus{
+  border-color:rgba(229,193,88,.50);
+  box-shadow:0 0 0 3px rgba(229,193,88,.07);
+}
+
+.review-form textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.rating-select{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.rating-select button{
+  width:36px;
+  height:36px;
+  border:1px solid rgba(229,193,88,.26);
+  border-radius:50%;
+  cursor:pointer;
+  color:var(--gold);
+  background:rgba(0,0,0,.45);
+  font-weight:900;
+  transition:transform .25s var(--ease),background .25s ease;
+}
+
+.rating-select button:hover{
+  transform:translateY(-2px);
+}
+
+.rating-select button.active{
+  color:#050505;
+  background:var(--gold);
+}
+
+.notice{
+  display:none;
+  padding:12px;
+  border-radius:13px;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.notice.ok{
+  display:block;
+  color:#e2ffec;
+  border:1px solid rgba(49,219,121,.32);
+  background:rgba(49,219,121,.09);
+}
+
+.notice.error{
+  display:block;
+  color:#ffe4e7;
+  border:1px solid rgba(255,97,113,.32);
+  background:rgba(255,97,113,.09);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  position:sticky;
+  top:146px;
+}
+
+.info-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.info-item{
+  position:relative;
+  overflow:hidden;
+  padding:14px 14px 14px 17px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:
+    linear-gradient(145deg,rgba(17,17,17,.78),rgba(4,4,4,.64));
+  transition:transform .28s var(--ease),border-color .28s ease;
+}
+
+.info-item::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:12px;
+  bottom:12px;
+  width:2px;
+  border-radius:999px;
+  background:linear-gradient(to bottom,transparent,var(--gold),transparent);
+  opacity:.58;
+}
+
+.info-item:hover{
+  transform:translateX(4px);
+  border-color:rgba(229,193,88,.28);
+}
+
+.info-item strong{
+  display:block;
+  margin-bottom:7px;
+  color:var(--gold-bright);
+  font-size:8px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.info-item span,
+.info-item a{
+  color:#f5f2e9;
+  font-size:11px;
+  line-height:1.6;
+  word-break:break-word;
+}
+
+.info-item#offerBox{
+  border-color:rgba(49,219,121,.22);
+  background:rgba(49,219,121,.045);
+}
+
+.info-item#offerBox strong{
+  color:#7ef2a9;
+}
+
+.offer-small{
+  display:block;
+  margin-top:4px;
+  color:#918d83;
+  font-size:9px;
+}
+
+.hours-row{
+  display:grid;
+  grid-template-columns:90px 1fr;
+  gap:8px;
+  padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  font-size:10.5px;
+  line-height:1.45;
+}
+
+.hours-row:last-child{
+  border-bottom:0;
+}
+
+.hours-row b{
+  color:var(--gold-bright);
+}
+
+/* VACÍOS */
+
+.empty{
+  padding:18px;
+  border:1px dashed rgba(229,193,88,.24);
+  border-radius:15px;
+  background:rgba(0,0,0,.24);
+  color:#aaa69d;
+  text-align:center;
+  font-size:11px;
+}
+
+/* LIGHTBOX */
+
+.zoomable-image{
+  cursor:zoom-in;
+}
+
+.lightbox{
+  position:fixed;
+  inset:0;
+  z-index:999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+  background:
+    radial-gradient(circle at center,rgba(229,193,88,.07),transparent 40%),
+    rgba(0,0,0,.94);
+  backdrop-filter:blur(16px);
+}
+
+.lightbox.open{
+  display:flex;
+  animation:fadeIn .25s ease;
+}
+
+.lightbox img{
+  max-width:min(94vw,1200px);
+  max-height:88vh;
+  border:1px solid rgba(229,193,88,.32);
+  border-radius:20px;
+  box-shadow:
+    0 34px 100px rgba(0,0,0,.78),
+    0 0 38px rgba(229,193,88,.08);
+  animation:zoomIn .35s var(--ease);
+}
+
+.lightbox-close{
+  position:absolute;
+  top:22px;
+  right:22px;
+  width:44px;
+  height:44px;
+  border:1px solid rgba(229,193,88,.30);
+  border-radius:50%;
+  cursor:pointer;
+  background:rgba(5,5,5,.76);
+  color:#fff;
+  font-size:25px;
+}
+
+/* FOOTER */
+
+.footer{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:80;
+  height:26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-top:1px solid rgba(229,193,88,.12);
+  background:rgba(0,0,0,.94);
+  color:#858585;
+  font:10px Arial,Helvetica,sans-serif;
+  backdrop-filter:blur(12px);
+}
+
+/* ANIMACIONES */
+
+@keyframes ambientMove{
+  from{transform:translate3d(-1%,0,0) scale(1)}
+  to{transform:translate3d(2%,-1%,0) scale(1.04)}
+}
+
+@keyframes heroSweep{
+  0%,65%{transform:translateX(-120%)}
+  84%,100%{transform:translateX(120%)}
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+@keyframes floatIcon{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-7px)}
+}
+
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+@keyframes zoomIn{
+  from{opacity:0;transform:scale(.93)}
+  to{opacity:1;transform:scale(1)}
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
+  .hero{
+    grid-template-columns:1fr;
+    min-height:auto;
+  }
+
+  .hero-media{
+    min-height:350px;
+    order:-1;
+  }
+
+  .content-grid{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar{
+    position:relative;
+    top:auto;
+  }
+}
+
+@media(max-width:700px){
+  .site-header{
+    height:auto;
+    min-height:70px;
+    flex-direction:column;
+    gap:8px;
+    padding:8px 12px 10px;
+  }
+
+  .site-nav{
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .site-nav a{
+    min-width:0;
+    padding:9px 6px;
+  }
+
+  .page-shell{
+    width:min(100% - 16px,1240px);
+    margin-top:12px;
+  }
+
+  .hero{
+    padding:10px;
+    border-radius:24px;
+  }
+
+  .hero-copy{
+    padding:26px 17px 20px;
+  }
+
+  .hero-copy::before{
+    display:none;
+  }
+
+  .hero h1{
+    font-size:clamp(38px,12vw,56px);
+  }
+
+  .hero-media{
+    min-height:270px;
+    border-radius:18px;
+  }
+
+  .hero-media-image{
+    padding:14px;
+  }
+
+  .section-nav{
+    top:126px;
+    overflow-x:auto;
+    justify-content:flex-start;
+  }
+
+  .section-nav a{
+    white-space:nowrap;
+  }
+
+  .hero-actions{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+
+  .hero-actions .btn{
+    width:100%;
+  }
+
+  .hero-stat-row{
+    grid-template-columns:1fr;
+  }
+
+  .products{
+    grid-template-columns:1fr;
+  }
+
+  .product-gallery,
+  .product-gallery img,
+  .product-image-placeholder{
+    height:245px;
+  }
+
+  .panel-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .panel-body{
+    padding:15px;
+  }
+
+  .hours-row{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,
+  *::before,
+  *::after{
+    scroll-behavior:auto!important;
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+}
 </style>
 </head>
+
 <body>
-<header class="header"><a id="backLogo" class="logo" href="../boulevard.html" title="Volver al menú anterior"><img src="../imagenes/logo.png" alt="Urbanex"></a><nav class="nav"><a id="backLink" href="../boulevard.html">Volver</a><a href="../boulevard.html">Boulevard</a><a href="../index.html">Inicio</a></nav></header>
-<main class="wrap"><div id="loading" class="loading">Cargando negocio...</div><div id="notFound" class="notfound hidden">No se encontró el negocio o todavía no está aprobado.</div><section id="businessPage" class="hidden"><section class="hero"><div id="coverBox" class="cover"></div><div class="hero-info"><div><div id="categoryPill" class="category-pill">Categoría</div><h1 id="businessName">Negocio</h1><div class="meta"><span id="businessCity">Loja</span><span id="businessCategory">Categoría</span><span id="openStatus" class="status">Estado</span></div></div><div class="cta-box"><a id="whatsappBusinessBtn" class="btn whatsapp" href="#" target="_blank" rel="noopener">WhatsApp</a><a id="mapBtn" class="btn secondary" href="#" target="_blank" rel="noopener">Cómo llegar</a></div></div></section><div class="grid"><div><section class="panel"><div class="panel-head"><h2>Acerca del negocio</h2></div><div class="panel-body"><p id="businessDescription" class="description"></p></div></section><section class="panel"><div class="panel-head"><h2>Productos</h2><span id="productBadge" class="category-pill" style="margin:0;">0 productos</span></div><div class="panel-body"><div id="productsList" class="products"></div></div></section><section class="panel hidden" id="promotionsPanel"><div class="panel-head"><h2>Promociones</h2></div><div class="panel-body"><div id="promotionsList"></div></div></section><section class="panel" id="reviewsPanel"><div class="panel-head"><h2>Reseñas</h2><span id="reviewBadge" class="category-pill" style="margin:0;">0 reseñas</span></div><div class="panel-body"><div id="reviewsList" class="review-list"></div><form id="reviewForm" class="review-form"><div id="reviewMessage" class="notice"></div><strong style="font-size:12px;">Deje su reseña</strong><div class="rating-select" id="ratingBox"><button type="button" data-rating="1">1</button><button type="button" data-rating="2">2</button><button type="button" data-rating="3">3</button><button type="button" data-rating="4">4</button><button type="button" data-rating="5">5</button></div><input id="reviewName" type="text" maxlength="80" placeholder="Su nombre (opcional)"><textarea id="reviewComment" maxlength="600" placeholder="Cuéntenos su experiencia..." required></textarea><button id="reviewSubmit" class="btn" type="submit">Enviar reseña para aprobación</button></form></div></section></div><aside><section class="panel"><div class="panel-head"><h2>Información</h2></div><div class="panel-body"><div class="info-list"><div class="info-item"><strong>Dirección</strong><span id="businessAddress">—</span></div><div class="info-item"><strong>Teléfono / WhatsApp</strong><span id="businessPhone">—</span></div><div class="info-item"><strong>Horario de atención</strong><div id="businessHours">—</div></div><div class="info-item" id="offerBox"><strong>Ofertas</strong><a id="businessOffers" href="../informativos/ofertas.html">0 productos en oferta</a></div><div class="info-item" id="websiteBox"><strong>Sitio web / red social</strong><a id="businessWebsite" href="#" target="_blank" rel="noopener">—</a></div></div></div></section></aside></div></section></main><div id="imageLightbox" class="lightbox" aria-hidden="true"><button id="lightboxClose" class="lightbox-close" type="button">×</button><img id="lightboxImage" alt="Imagen ampliada"></div>
-<footer class="footer">© 2026 Urbanex. Desarrollado por NeoDat Consultores.</footer>
+<header class="site-header">
+  <a id="backLogo" class="brand" href="../boulevard.html" aria-label="Volver">
+    <img src="../imagenes/log.png" alt="Urbanex">
+  </a>
+
+  <nav class="site-nav" aria-label="Navegación principal">
+    <a id="backLink" href="../boulevard.html">Volver</a>
+    <a href="../boulevard.html">Boulevard</a>
+    <a href="../index.html">Inicio</a>
+  </nav>
+</header>
+
+<main class="page-shell">
+  <div id="loading" class="loading">Cargando negocio...</div>
+
+  <div id="notFound" class="notfound hidden">
+    No se encontró el negocio o todavía no está aprobado.
+  </div>
+
+  <section id="businessPage" class="hidden">
+    <section class="hero premium-surface">
+      <div class="hero-copy">
+        <span class="eyebrow">Perfil comercial Urbanex</span>
+
+        <div id="categoryPill" class="category-pill">Categoría</div>
+
+        <h1 id="businessName">Negocio</h1>
+
+        <p id="businessDescription" class="hero-description"></p>
+
+        <div class="meta">
+          <span id="businessCity">Loja</span>
+          <span id="businessCategory">Categoría</span>
+          <span id="openStatus" class="status">Estado</span>
+        </div>
+
+        <div class="hero-actions">
+          <a
+            id="whatsappBusinessBtn"
+            class="btn btn-whatsapp"
+            href="#"
+            target="_blank"
+            rel="noopener"
+          >
+            WhatsApp
+          </a>
+
+          <a
+            id="mapBtn"
+            class="btn btn-secondary"
+            href="#"
+            target="_blank"
+            rel="noopener"
+          >
+            Cómo llegar
+          </a>
+
+          <a class="btn btn-primary" href="#catalogo">
+            Ver catálogo
+          </a>
+        </div>
+
+        <div class="hero-stat-row">
+          <div class="hero-stat">
+            <strong>Urbanex</strong>
+            <span>Perfil comercial</span>
+          </div>
+
+          <div class="hero-stat">
+            <strong>Contacto directo</strong>
+            <span>Sin intermediarios</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-media">
+        <div id="coverBox" class="cover"></div>
+      </div>
+    </section>
+
+    <nav class="section-nav" aria-label="Secciones del negocio">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#informacion">Información</a>
+      <a href="#promociones">Promociones</a>
+      <a href="#resenas">Reseñas</a>
+    </nav>
+
+    <div class="content-grid">
+      <div class="main-column">
+        <section id="catalogo" class="panel premium-surface">
+          <div class="panel-head">
+            <div class="panel-head-text">
+              <span class="panel-kicker">Catálogo comercial</span>
+              <h2>Productos y servicios</h2>
+              <p class="panel-subtitle">
+                Explore las novedades publicadas por este negocio.
+              </p>
+            </div>
+
+            <span
+              id="productBadge"
+              class="category-pill"
+              style="margin:0;"
+            >
+              0 productos
+            </span>
+          </div>
+
+          <div class="panel-body">
+            <div id="productsList" class="products"></div>
+          </div>
+        </section>
+
+        <section
+          id="promotionsPanel"
+          class="panel premium-surface hidden"
+        >
+          <div class="panel-head">
+            <div class="panel-head-text">
+              <span class="panel-kicker">Beneficios vigentes</span>
+              <h2>Promociones</h2>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <div id="promotionsList"></div>
+          </div>
+        </section>
+
+        <section id="resenas" class="panel premium-surface">
+          <div class="panel-head">
+            <div class="panel-head-text">
+              <span class="panel-kicker">Experiencias de clientes</span>
+              <h2>Reseñas</h2>
+            </div>
+
+            <span
+              id="reviewBadge"
+              class="category-pill"
+              style="margin:0;"
+            >
+              0 reseñas
+            </span>
+          </div>
+
+          <div class="panel-body">
+            <div id="reviewsList" class="review-list"></div>
+
+            <form id="reviewForm" class="review-form">
+              <div id="reviewMessage" class="notice"></div>
+
+              <strong style="font-size:12px;">
+                Comparta su experiencia
+              </strong>
+
+              <div class="rating-select" id="ratingBox">
+                <button type="button" data-rating="1">1</button>
+                <button type="button" data-rating="2">2</button>
+                <button type="button" data-rating="3">3</button>
+                <button type="button" data-rating="4">4</button>
+                <button type="button" data-rating="5">5</button>
+              </div>
+
+              <input
+                id="reviewName"
+                type="text"
+                maxlength="80"
+                placeholder="Su nombre (opcional)"
+              >
+
+              <textarea
+                id="reviewComment"
+                maxlength="600"
+                placeholder="Cuéntenos su experiencia..."
+                required
+              ></textarea>
+
+              <button
+                id="reviewSubmit"
+                class="btn btn-primary"
+                type="submit"
+              >
+                Enviar reseña para aprobación
+              </button>
+            </form>
+          </div>
+        </section>
+      </div>
+
+      <aside id="informacion" class="sidebar">
+        <section class="panel premium-surface">
+          <div class="panel-head">
+            <div class="panel-head-text">
+              <span class="panel-kicker">Datos del negocio</span>
+              <h2>Información</h2>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <div class="info-list">
+              <div class="info-item">
+                <strong>Dirección</strong>
+                <span id="businessAddress">—</span>
+              </div>
+
+              <div class="info-item">
+                <strong>Teléfono / WhatsApp</strong>
+                <span id="businessPhone">—</span>
+              </div>
+
+              <div class="info-item">
+                <strong>Horario de atención</strong>
+                <div id="businessHours">—</div>
+              </div>
+
+              <div class="info-item" id="offerBox">
+                <strong>Ofertas</strong>
+                <a
+                  id="businessOffers"
+                  href="../informativos/ofertas.html"
+                >
+                  0 productos en oferta
+                </a>
+              </div>
+
+              <div class="info-item" id="websiteBox">
+                <strong>Sitio web / red social</strong>
+                <a
+                  id="businessWebsite"
+                  href="#"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  —
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<div
+  id="imageLightbox"
+  class="lightbox"
+  aria-hidden="true"
+>
+  <button
+    id="lightboxClose"
+    class="lightbox-close"
+    type="button"
+    aria-label="Cerrar imagen"
+  >
+    ×
+  </button>
+
+  <img id="lightboxImage" alt="Imagen ampliada">
+</div>
+
+<footer class="footer">
+  © 2026 Urbanex. Desarrollado por NeoDat Consultores.
+</footer>
+
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const SUPABASE_URL='https://mlkynawsjqmawgxeuvks.supabase.co';
@@ -64,6 +1759,54 @@ const analyticsSessionId = safeStorageId(
   'urbanex_session_id',
 );
 
+const analyticsStartedAt = Date.now();
+let analyticsMaxScroll = 0;
+let analyticsEngagementSent = false;
+
+function updateAnalyticsScroll() {
+  const documentHeight =
+    Math.max(
+      document.documentElement.scrollHeight,
+      document.body.scrollHeight,
+    ) - window.innerHeight;
+
+  if (documentHeight <= 0) {
+    analyticsMaxScroll = 100;
+    return;
+  }
+
+  analyticsMaxScroll = Math.max(
+    analyticsMaxScroll,
+    Math.min(
+      100,
+      (window.scrollY / documentHeight) * 100,
+    ),
+  );
+}
+
+function sendAnalyticsEngagement() {
+  if (
+    analyticsEngagementSent ||
+    !business?.id
+  ) {
+    return;
+  }
+
+  analyticsEngagementSent = true;
+  updateAnalyticsScroll();
+
+  trackUrbanexEvent(
+    'page_engagement',
+    null,
+    {
+      duration_seconds:
+        (Date.now() - analyticsStartedAt) / 1000,
+      scroll_depth:
+        analyticsMaxScroll,
+    },
+  );
+}
+
 function analyticsDevice() {
   if (window.innerWidth <= 700) return 'mobile';
   if (window.innerWidth <= 1100) return 'tablet';
@@ -73,6 +1816,7 @@ function analyticsDevice() {
 async function trackUrbanexEvent(
   eventType,
   productId = null,
+  details = {},
 ) {
   if (!business?.id) return;
 
@@ -100,6 +1844,14 @@ async function trackUrbanexEvent(
       params.get('utm_medium'),
     utm_campaign:
       params.get('utm_campaign'),
+    duration_seconds:
+      Number.isFinite(details.duration_seconds)
+        ? Math.max(0, Math.min(86400, Math.round(details.duration_seconds)))
+        : null,
+    scroll_depth:
+      Number.isFinite(details.scroll_depth)
+        ? Math.max(0, Math.min(100, Math.round(details.scroll_depth)))
+        : null,
   };
 
   const { error } = await supabase
@@ -118,7 +1870,18 @@ async function trackUrbanexEvent(
 }
 
 function first(...values){return values.find(v=>v!==null&&v!==undefined&&String(v).trim()!=='')||'';}
-function money(value){const n=Number(value||0);return n>0?'$'+n.toFixed(2):'Consultar';}
+function money(value){
+const n=Number(value||0);
+return n>0
+?new Intl.NumberFormat('es-EC',{style:'currency',currency:'USD',minimumFractionDigits:2}).format(n)
+:'Consultar';
+}
+function normalizeExternalUrl(value){
+const url=String(value||'').trim();
+if(!url)return '#';
+if(/^https?:\/\//i.test(url))return url;
+return `https://${url.replace(/^\/+/, '')}`;
+}
 function phoneOf(b){return first(b.whatsapp,b.phone,b.contact_phone);}
 function onlyDigits(v){return String(v||'').replace(/\D/g,'');}
 function categoryNameOf(b){return first(b.subcategories?.name,b.categories?.name,b.category_name,'Categoría');}
@@ -132,7 +1895,82 @@ function setupBackLinks(){const back=resolveBackUrl();$('backLogo').href=back;$(
 function isOpenNow(){if(!hours.length)return false;const now=new Date();const today=now.getDay();const current=now.getHours()*60+now.getMinutes();const rows=hours.filter(h=>Number(h.day_of_week)===today&&!h.is_closed);return rows.some(row=>{if(!row.open_time||!row.close_time)return false;const [oh,om]=String(row.open_time).split(':').map(Number);const [ch,cm]=String(row.close_time).split(':').map(Number);const open=oh*60+(om||0);const close=ch*60+(cm||0);if(close<open)return current>=open||current<=close;return current>=open&&current<=close;});}
 function timeLabel(t){if(!t)return '';const [h,m]=String(t).split(':');return `${h}h${m||'00'}`;}
 function renderHours(){if(!hours.length){$('businessHours').textContent='Horario no registrado';return;}const days=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];const grouped={};hours.forEach(h=>{const day=Number(h.day_of_week);(grouped[day] ||= []).push(h);});$('businessHours').innerHTML=Object.keys(grouped).map(day=>{const list=grouped[day].sort((a,b)=>(a.session_number||1)-(b.session_number||1)).map(h=>h.is_closed?'Cerrado':`${timeLabel(h.open_time)} - ${timeLabel(h.close_time)}`).join('<br>');return `<div class="hours-row"><b>${days[day]||'Día'}</b><span>${list}</span></div>`;}).join('');}
-function renderBusiness(){document.title=`Urbanex - ${business.name}`;$('businessName').textContent=business.name;$('businessCity').textContent=first(business.city,'Loja');$('businessCategory').textContent=categoryNameOf(business);$('categoryPill').textContent=`${categoryIconOf(business)} ${categoryNameOf(business)}`;$('businessDescription').textContent=first(business.description,'Información no registrada.');$('businessAddress').textContent=first(business.address,'Dirección no registrada');$('businessPhone').textContent=phoneOf(business)||'No registrado';const cover=first(business.cover_image,business.image_url,business.logo_url);$('coverBox').innerHTML=cover?`<img class="zoomable-image" src="${esc(cover)}" alt="${esc(business.name)}" loading="eager">`:'';const open=isOpenNow();$('openStatus').textContent=open?'Abierto ahora':'Cerrado';$('openStatus').classList.toggle('closed',!open);$('whatsappBusinessBtn').href=phoneOf(business)?whatsappUrl(businessMessage()):'#';const lat=first(business.latitude,business.lat),lng=first(business.longitude,business.lng);const query=(lat&&lng)?`${lat},${lng}`:first(business.address,business.city,'Loja Ecuador');$('mapBtn').href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;const website=first(business.website,business.web,business.instagram);if(website){$('businessWebsite').href=website;$('businessWebsite').textContent=website;}else{$('websiteBox').classList.add('hidden');}renderHours();}
+function renderBusiness(){
+document.title=`Urbanex - ${business.name}`;
+$('businessName').textContent=business.name;
+$('businessCity').textContent=first(business.city,'Loja');
+$('businessCategory').textContent=categoryNameOf(business);
+$('categoryPill').textContent=`${categoryIconOf(business)} ${categoryNameOf(business)}`;
+$('businessDescription').textContent=first(
+business.description,
+'Conozca este negocio, sus productos, servicios y formas de contacto.'
+);
+$('businessAddress').textContent=first(
+business.address,
+'Dirección no registrada'
+);
+
+const businessPhoneValue=phoneOf(business);
+$('businessPhone').innerHTML=businessPhoneValue
+?`<a id="businessPhoneLink" href="tel:${esc(onlyDigits(businessPhoneValue))}">${esc(businessPhoneValue)}</a>`
+:'No registrado';
+
+const cover=first(
+business.cover_image,
+business.image_url,
+business.logo_url
+);
+
+$('coverBox').innerHTML=cover
+?`
+<div class="hero-media-blur" style="background-image:url('${esc(cover)}')"></div>
+<img
+class="zoomable-image hero-media-image"
+src="${esc(cover)}"
+alt="${esc(business.name)}"
+loading="eager"
+>
+<div class="hero-media-overlay"></div>
+`
+:`
+<div class="hero-media-placeholder">
+<span>URBANEX</span>
+<strong>${esc(business.name)}</strong>
+</div>
+`;
+
+const open=isOpenNow();
+$('openStatus').textContent=open?'Abierto ahora':'Cerrado';
+$('openStatus').classList.toggle('closed',!open);
+
+$('whatsappBusinessBtn').href=phoneOf(business)
+?whatsappUrl(businessMessage())
+:'#';
+
+const lat=first(business.latitude,business.lat);
+const lng=first(business.longitude,business.lng);
+const query=(lat&&lng)
+?`${lat},${lng}`
+:first(business.address,business.city,'Loja Ecuador');
+
+$('mapBtn').href=
+`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+
+const website=first(
+business.website,
+business.web,
+business.instagram
+);
+
+if(website){
+$('businessWebsite').href=normalizeExternalUrl(website);
+$('businessWebsite').textContent=website;
+}else{
+$('websiteBox').classList.add('hidden');
+}
+
+renderHours();
+}
 function offerProducts(){return products.filter(p=>p.is_on_sale===true||p.is_on_sale==='true');}
 function renderOfferSummary(){const offerItems=offerProducts();const box=$('offerBox');const link=$('businessOffers');if(!box||!link)return;const count=offerItems.length;link.href='../informativos/ofertas.html';if(count===0){link.innerHTML='0 productos en oferta';return;}const firstOffer=offerItems[0]?.name?`<span class="offer-small">${esc(offerItems[0].name)}${count>1?' y más':''}</span>`:'';link.innerHTML=`${count} producto${count===1?'':'s'} en oferta${firstOffer}`;}
 function productImagesFor(product){
@@ -143,20 +1981,168 @@ return urls;
 }
 function renderProducts(){
 renderOfferSummary();
+
 const serviceOnly=business.business_type==='services';
-$('productBadge').textContent=`${products.length} ${serviceOnly?'servicio':'producto'}${products.length===1?'':'s'}`;
-if(!products.length){$('productsList').innerHTML=`<div class="empty">Este negocio todavía no tiene ${serviceOnly?'servicios':'productos o servicios'} publicados.</div>`;return;}
-$('productsList').innerHTML=products.map(product=>{
+const unit=serviceOnly?'servicio':'producto';
+
+$('productBadge').textContent=
+`${products.length} ${unit}${products.length===1?'':'s'}`;
+
+if(!products.length){
+$('productsList').innerHTML=`
+<div class="catalog-empty reveal-item">
+<div class="catalog-empty-icon">✦</div>
+<span class="eyebrow">Catálogo en preparación</span>
+<h3>Muy pronto encontrará novedades aquí</h3>
+<p>
+Este negocio todavía no ha publicado ${serviceOnly?'servicios':'productos o servicios'}.
+Puede consultarle directamente por WhatsApp.
+</p>
+<a
+class="btn btn-primary"
+href="${esc(whatsappUrl(businessMessage()))}"
+target="_blank"
+rel="noopener"
+>
+Consultar al negocio
+</a>
+</div>`;
+initPremiumInteractions();
+return;
+}
+
+$('productsList').innerHTML=products.map((product,index)=>{
 const imgs=productImagesFor(product);
-const imageHtml=imgs.length?imgs.map(url=>`<img class="zoomable-image" data-product-image="${esc(product.id)}" src="${esc(url)}" alt="${esc(product.name)}" loading="lazy">`).join(''):'<div class="product-empty">🏪</div>';
-const isOffer=product.is_on_sale===true||product.is_on_sale==='true';
-const priceHtml=isOffer?`<div class="price-wrap"><span class="offer-badge">${esc(product.offer_label||'Oferta Urbanex')}</span>${Number(product.price)>0?`<span class="old-price">Antes ${money(product.price)}</span>`:''}<span class="sale-price">Ahora ${money(product.sale_price)}</span></div>`:`<div class="price">${money(product.price)}</div>`;
-const itemType=product.item_type==='service'?'Servicio':'Producto';
-return `<article class="product-card"><div class="product-images">${imageHtml}</div><div class="product-body"><span class="offer-badge">${itemType}</span><h3>${esc(product.name)}</h3>${priceHtml}<p class="desc">${esc(product.description||'Sin descripción registrada.')}</p><div class="product-actions"><a class="btn whatsapp" data-whatsapp-product="${esc(product.id)}" href="${esc(whatsappUrl(productMessage(product)))}" target="_blank" rel="noopener">Consultar por WhatsApp</a></div></div></article>`;
+
+const imageHtml=imgs.length
+?imgs.map((url,imageIndex)=>`
+<img
+class="zoomable-image"
+data-product-image="${esc(product.id)}"
+src="${esc(url)}"
+alt="${esc(product.name)} - imagen ${imageIndex+1}"
+loading="lazy"
+>
+`).join('')
+:`
+<div class="product-image-placeholder">
+<span>✦</span>
+<small>Sin fotografía</small>
+</div>
+`;
+
+const isOffer=
+product.is_on_sale===true||
+product.is_on_sale==='true';
+
+const priceHtml=isOffer
+?`
+<div class="product-price product-price-sale">
+<span class="offer-chip">
+${esc(product.offer_label||'Oferta Urbanex')}
+</span>
+${Number(product.price)>0
+?`<span class="old-price">${money(product.price)}</span>`
+:''}
+<strong>${money(product.sale_price)}</strong>
+</div>
+`
+:`
+<div class="product-price">
+<strong>${money(product.price)}</strong>
+</div>
+`;
+
+const itemType=
+product.item_type==='service'
+?'Servicio'
+:'Producto';
+
+return `
+<article
+class="product-card reveal-item"
+style="--delay:${Math.min(index*70,420)}ms"
+>
+<div class="product-gallery">
+${imageHtml}
+${imgs.length>1
+?`<span class="image-count">${imgs.length} fotos</span>`
+:''}
+</div>
+
+<div class="product-content">
+<div class="product-meta-row">
+<span class="product-type">${itemType}</span>
+${isOffer?'<span class="product-offer">En oferta</span>':''}
+</div>
+
+<h3>${esc(product.name)}</h3>
+
+${priceHtml}
+
+<p class="product-description">
+${esc(product.description||'Consulte directamente con el negocio para conocer más detalles.')}
+</p>
+
+<a
+class="btn btn-product"
+data-whatsapp-product="${esc(product.id)}"
+href="${esc(whatsappUrl(productMessage(product)))}"
+target="_blank"
+rel="noopener"
+>
+<span>Consultar por WhatsApp</span>
+<span aria-hidden="true">↗</span>
+</a>
+</div>
+</article>
+`;
 }).join('');
+
+initPremiumInteractions();
 }
 function renderReviews(){$('reviewBadge').textContent=`${reviews.length} reseña${reviews.length===1?'':'s'}`;if(!reviews.length){$('reviewsList').innerHTML='<div class="empty">Aún no hay reseñas aprobadas. Sea el primero en opinar.</div>';return;}$('reviewsList').innerHTML=reviews.map(r=>`<article class="review-card"><div class="review-top"><span class="review-name">${esc(first(r.author_name,r.user_name,r.name,'Cliente Urbanex'))}</span><span class="stars">${'★'.repeat(Number(r.rating||0))}${'☆'.repeat(5-Number(r.rating||0))}</span></div><p>${esc(first(r.comment,r.review,''))}</p></article>`).join('');}
 function renderPromotions(){if(!promotions.length){$('promotionsPanel').classList.add('hidden');return;}$('promotionsPanel').classList.remove('hidden');$('promotionsList').innerHTML=promotions.map(p=>`<div class="promo"><h3>${esc(first(p.title,p.name,'Promoción'))}</h3><p>${esc(first(p.description,p.detalle,'Promoción activa en Urbanex.'))}</p></div>`).join('');}
+
+function initPremiumInteractions(){
+const revealItems=document.querySelectorAll('.reveal-item');
+
+if('IntersectionObserver' in window){
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add('is-visible');
+observer.unobserve(entry.target);
+}
+});
+},{
+threshold:.12,
+rootMargin:'0px 0px -35px 0px'
+});
+
+revealItems.forEach(item=>{
+if(!item.classList.contains('is-visible')){
+observer.observe(item);
+}
+});
+}else{
+revealItems.forEach(item=>item.classList.add('is-visible'));
+}
+
+document.querySelectorAll('.premium-surface,.product-card').forEach(surface=>{
+if(surface.dataset.pointerReady==='1')return;
+surface.dataset.pointerReady='1';
+
+surface.addEventListener('pointermove',event=>{
+const rect=surface.getBoundingClientRect();
+const x=((event.clientX-rect.left)/Math.max(rect.width,1))*100;
+const y=((event.clientY-rect.top)/Math.max(rect.height,1))*100;
+surface.style.setProperty('--pointer-x',`${x}%`);
+surface.style.setProperty('--pointer-y',`${y}%`);
+});
+});
+}
+
 async function loadPage(){
 setupBackLinks();
 const params=new URLSearchParams(window.location.search);
@@ -185,6 +2171,7 @@ renderBusiness();
 renderProducts();
 renderPromotions();
 renderReviews();
+initPremiumInteractions();
 trackUrbanexEvent('page_view');
 }
 function showNotFound(){$('loading').classList.add('hidden');$('notFound').classList.remove('hidden');}
@@ -220,9 +2207,29 @@ $('businessWebsite').addEventListener(
 'click',
 ()=>trackUrbanexEvent('website_click')
 );
+
+document.addEventListener('click',event=>{
+const target=event.target.closest('a,button');
+if(!target)return;
+
+if(target.id==='businessPhoneLink'){
+trackUrbanexEvent('phone_click');
+}
+
+if(target.matches('[data-analytics-offer]')){
+trackUrbanexEvent('offer_click');
+}
+});
 $('lightboxClose').addEventListener('click',closeLightbox);
 $('imageLightbox').addEventListener('click',event=>{if(event.target===$('imageLightbox'))closeLightbox();});
 document.addEventListener('keydown',event=>{if(event.key==='Escape')closeLightbox();});
+window.addEventListener('scroll',updateAnalyticsScroll,{passive:true});
+window.addEventListener('pagehide',sendAnalyticsEngagement);
+document.addEventListener('visibilitychange',()=>{
+if(document.visibilityState==='hidden'){
+sendAnalyticsEngagement();
+}
+});
 loadPage();
 </script>
 </body>
