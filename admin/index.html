@@ -1591,480 +1591,1476 @@ function planPerformanceBadge(code, label) {
 
 // ── DASHBOARD ────────────────────────────────────────────────
 async function loadDashboard() {
-    const days = Number(
-        document.getElementById('analyticsRange')?.value || 30
-    );
-
-    // Misma fuente de datos que usa la sección Negocios.
-    await loadSubscriptionSummaries();
-
-    const [
-        analyticsResult,
-        businessMetricsResult,
-        { count: pendingReviews },
-        { count: activePromotions },
-    ] = await Promise.all([
-        supabase.rpc('get_urbanex_analytics_v3', {
-            p_days: days,
-        }),
-        supabase.rpc('get_urbanex_business_metrics_v1', {
-            p_days: days,
-        }),
-        supabase
-            .from('reviews')
-            .select('*', { count: 'exact', head: true })
-            .eq('is_approved', false),
-        supabase
-            .from('promotions')
-            .select('*', { count: 'exact', head: true })
-            .eq('is_active', true),
-    ]);
-
-    const reviewsBadge = document.getElementById('reviewsBadge');
-    if (Number(pendingReviews || 0) > 0) {
-        reviewsBadge.textContent = pendingReviews;
-        reviewsBadge.style.display = 'block';
-    } else {
-        reviewsBadge.style.display = 'none';
-    }
-
-    const analytics = analyticsResult.data || {};
-    const totals = analytics.totals || {};
-    const businessMetrics = businessMetricsResult.data || {};
-    const subscriptions = businessMetrics.subscriptions || {};
-    const alerts = businessMetrics.alerts || {};
-
-    const uniqueVisitors = Number(totals.unique_visitors || 0);
-    const whatsappClicks = Number(totals.whatsapp_clicks || 0);
-    const mapClicks = Number(totals.map_clicks || 0);
-    const websiteClicks = Number(totals.website_clicks || 0);
-    const phoneClicks = Number(totals.phone_clicks || 0);
-
-    const totalContacts =
-        whatsappClicks +
-        mapClicks +
-        websiteClicks +
-        phoneClicks;
-
-    const contactConversion = uniqueVisitors > 0
-        ? (totalContacts / uniqueVisitors) * 100
-        : 0;
-
-    const activeBusinesses =
-        Number(businessMetrics.active_businesses || 0);
-
-    const averageContacts = activeBusinesses > 0
-        ? totalContacts / activeBusinesses
-        : 0;
-
-    const paidPrice =
-        Number(subscriptions.paid_monthly_price || 0);
-
-    const revenueDetail = paidPrice > 0
-        ? `${Number(subscriptions.paid_active || 0)} planes activos`
-        : 'Configure monthly_price en subscription_plans';
-
-    document.getElementById('businessStatsGrid').innerHTML = [
-        metricCard(
-            'Planes pagados',
-            Number(subscriptions.paid_active || 0),
-            'negocios con pago vigente',
-            'success',
-        ),
-        metricCard(
-            'Pruebas activas',
-            Number(subscriptions.trial_active || 0),
-            'prueba gratuita de 1 mes',
-            'info',
-        ),
-        metricCard(
-            'Pruebas por vencer',
-            Number(subscriptions.trial_expiring_7 || 0),
-            'vencen durante los próximos 7 días',
-            Number(subscriptions.trial_expiring_7 || 0) > 0
-                ? 'warning'
-                : 'success',
-        ),
-        metricCard(
-            'Pruebas vencidas',
-            Number(subscriptions.trial_expired || 0),
-            'requieren pago o extensión',
-            Number(subscriptions.trial_expired || 0) > 0
-                ? 'danger'
-                : 'success',
-        ),
-        metricCard(
-            'Conversión a pago',
-            `${Number(subscriptions.trial_to_paid_conversion || 0).toFixed(1)}%`,
-            `${Number(subscriptions.converted_to_paid || 0)} conversiones registradas`,
-            'info',
-        ),
-        metricCard(
-            'Ingreso mensual',
-            formatMoney(subscriptions.monthly_revenue || 0),
-            revenueDetail,
-            'success',
-            'money',
-        ),
-        metricCard(
-            'Planes cancelados',
-            Number(subscriptions.cancelled || 0),
-            'cancelaciones registradas',
-            Number(subscriptions.cancelled || 0) > 0
-                ? 'warning'
-                : 'success',
-        ),
-    ].join('');
-
-    document.getElementById('valueStatsGrid').innerHTML = [
-        metricCard(
-            'Visitantes únicos',
-            uniqueVisitors,
-            `últimos ${days} días`,
-            'info',
-        ),
-        metricCard(
-            'Contactos generados',
-            totalContacts,
-            'acciones comerciales desde Urbanex',
-            'success',
-        ),
-        metricCard(
-            'Conversión a contacto',
-            `${contactConversion.toFixed(1)}%`,
-            'contactos / visitantes únicos',
-            'success',
-        ),
-        metricCard(
-            'Clics a WhatsApp',
-            whatsappClicks,
-            'negocio + productos o servicios',
-        ),
-        metricCard(
-            'Clics en Cómo llegar',
-            mapClicks,
-            'intención de visitar el negocio',
-        ),
-        metricCard(
-            'Negocios sin contactos',
-            Number(businessMetrics.businesses_without_contacts || 0),
-            `sin acciones comerciales en ${days} días`,
-            Number(businessMetrics.businesses_without_contacts || 0) > 0
-                ? 'warning'
-                : 'success',
-        ),
-        metricCard(
-            'Promedio por negocio',
-            averageContacts.toFixed(1),
-            'contactos por negocio activo',
-            'info',
-        ),
-    ].join('');
-
-    const alertItems = [
-        {
-            label: 'Correos fallidos',
-            value: alerts.failed_emails,
-            detail: 'revise aprobación y SMTP',
-            level: Number(alerts.failed_emails || 0) > 0
-                ? 'danger'
-                : 'ok',
-        },
-        {
-            label: 'Negocios pendientes',
-            value: alerts.pending_businesses,
-            detail: 'solicitudes pendientes de aprobación',
-            level: Number(alerts.pending_businesses || 0) > 0
-                ? 'warning'
-                : 'ok',
-        },
-        {
-            label: 'Vencidos aún visibles',
-            value: alerts.expired_still_visible,
-            detail: 'deben retirarse del directorio',
-            level: Number(alerts.expired_still_visible || 0) > 0
-                ? 'danger'
-                : 'ok',
-        },
-        {
-            label: 'Sin horario',
-            value: alerts.businesses_without_schedule,
-            detail: 'negocios activos sin horario registrado',
-            level: Number(alerts.businesses_without_schedule || 0) > 0
-                ? 'warning'
-                : 'ok',
-        },
-        {
-            label: 'Sin ubicación',
-            value: alerts.businesses_without_location,
-            detail: 'negocios activos sin coordenadas',
-            level: Number(alerts.businesses_without_location || 0) > 0
-                ? 'warning'
-                : 'ok',
-        },
-        {
-            label: 'Sin productos/servicios',
-            value: alerts.businesses_without_products,
-            detail: 'negocios activos sin contenido comercial',
-            level: Number(alerts.businesses_without_products || 0) > 0
-                ? 'warning'
-                : 'ok',
-        },
-        {
-            label: 'Reseñas pendientes',
-            value: pendingReviews,
-            detail: 'requieren moderación',
-            level: Number(pendingReviews || 0) > 0
-                ? 'warning'
-                : 'ok',
-        },
-        {
-            label: 'Promociones activas',
-            value: activePromotions,
-            detail: 'campañas actualmente vigentes',
-            level: 'ok',
-        },
-    ];
-
-    document.getElementById('alertsGrid').innerHTML =
-        alertItems
-            .map(item => alertCard(
-                item.label,
-                item.value,
-                item.detail,
-                item.level,
-            ))
-            .join('');
-
+    const businessStatsGrid =
+        document.getElementById('businessStatsGrid');
+    const valueStatsGrid =
+        document.getElementById('valueStatsGrid');
+    const alertsGrid =
+        document.getElementById('alertsGrid');
     const analyticsBody =
         document.getElementById('analyticsTableBody');
 
-    if (businessMetricsResult.error) {
-        document.getElementById('businessStatsGrid').innerHTML =
-            metricCard(
-                'Error de métricas',
+    const setDashboardError = (message) => {
+        const safeMessage = esc(
+            message ||
+            'No se pudo cargar el Dashboard.'
+        );
+
+        if (businessStatsGrid) {
+            businessStatsGrid.innerHTML = metricCard(
+                'Dashboard',
                 '—',
-                esc(
-                    businessMetricsResult.error.message ||
-                    'Ejecute 010_dashboard_decisiones.sql'
-                ),
+                safeMessage,
                 'danger',
             );
+        }
 
-        document.getElementById('alertsGrid').innerHTML =
-            alertCard(
-                'Configuración pendiente',
+        if (valueStatsGrid) {
+            valueStatsGrid.innerHTML = metricCard(
+                'Analítica',
+                '—',
+                'Revise la conexión con Supabase.',
+                'danger',
+            );
+        }
+
+        if (alertsGrid) {
+            alertsGrid.innerHTML = alertCard(
+                'Error de carga',
                 1,
-                'Ejecute el archivo SQL 010_dashboard_decisiones.sql',
+                safeMessage,
                 'danger',
             );
-    }
+        }
 
-    if (analyticsResult.error) {
-        const analyticsError =
-            analyticsResult.error.message ||
-            analyticsResult.error.details ||
-            analyticsResult.error.hint ||
-            'La función de analítica no está disponible.';
-
-        analyticsBody.innerHTML = `
-            <tr>
-                <td colspan="6"
-                    style="text-align:center;color:var(--red);padding:24px;">
-                    No se pudo cargar la analítica:
-                    ${esc(analyticsError)}
-                </td>
-            </tr>`;
-        return;
-    }
-
-    const rows = Array.isArray(analytics.businesses)
-        ? analytics.businesses
-        : [];
-
-    if (!rows.length) {
-        analyticsBody.innerHTML = `
-            <tr>
-                <td colspan="6"
-                    style="text-align:center;color:var(--dark);padding:24px;">
-                    Todavía no existen eventos registrados en este período.
-                </td>
-            </tr>`;
-    } else {
-        analyticsBody.innerHTML = rows.map(row => {
-            const rowContacts =
-                Number(row.whatsapp_business || 0) +
-                Number(row.whatsapp_product || 0) +
-                Number(row.map_clicks || 0) +
-                Number(row.website_clicks || 0) +
-                Number(row.phone_clicks || 0);
-
-            const rowUnique =
-                Number(row.unique_visitors || 0);
-
-            const rowConversion = rowUnique > 0
-                ? (rowContacts / rowUnique) * 100
-                : 0;
-
-            const subscription =
-                subscriptionState(row.business_id);
-
-            const plan = {
-                code: (
-                    subscription.code === 'trial_expired' ||
-                    subscription.code === 'paid_expired'
-                )
-                    ? 'expired'
-                    : subscription.code,
-                label: subscription.label,
-            };
-
-            return `
+        if (analyticsBody) {
+            analyticsBody.innerHTML = `
                 <tr>
-                    <td>
-                        <strong style="color:#fff;">
-                            ${esc(row.business_name)}
-                        </strong>
+                    <td colspan="6"
+                        style="text-align:center;color:var(--red);padding:24px;">
+                        ${safeMessage}
                     </td>
-                    <td>
-                        ${planPerformanceBadge(
-                            plan.code,
-                            plan.label
-                        )}
-                    </td>
-                    <td>${Number(row.visits || 0)}</td>
-                    <td>
-                        <strong style="color:var(--gold);">
-                            ${rowContacts}
-                        </strong>
-                    </td>
-                    <td>${rowConversion.toFixed(1)}%</td>
-                    <td>${formatDateTime24(row.last_connection)}</td>
                 </tr>`;
-        }).join('');
-    }
-
-    const hourly = Array.isArray(analytics.hourly)
-        ? analytics.hourly
-        : [];
-
-    document.getElementById('analyticsHourlyBody').innerHTML =
-        hourly
-            .filter(row =>
-                Number(row.visits || 0) > 0 ||
-                Number(row.contacts || 0) > 0
-            )
-            .map(row => `
-                <tr>
-                    <td>${String(row.hour).padStart(2, '0')}:00</td>
-                    <td>${Number(row.visits || 0)}</td>
-                    <td>${Number(row.contacts || 0)}</td>
-                </tr>`)
-            .join('') ||
-        '<tr><td colspan="3">Sin actividad</td></tr>';
-
-    const daily = Array.isArray(analytics.daily)
-        ? analytics.daily
-        : [];
-
-    document.getElementById('analyticsDailyBody').innerHTML =
-        daily
-            .slice(0, 31)
-            .map(row => `
-                <tr>
-                    <td>
-                        ${new Date(
-                            `${row.day}T12:00:00`
-                        ).toLocaleDateString('es-EC')}
-                    </td>
-                    <td>${Number(row.visits || 0)}</td>
-                    <td>${Number(row.unique_visitors || 0)}</td>
-                    <td>${Number(row.contacts || 0)}</td>
-                </tr>`)
-            .join('') ||
-        '<tr><td colspan="4">Sin actividad</td></tr>';
-
-    const devices = Array.isArray(analytics.devices)
-        ? analytics.devices
-        : [];
-
-    document.getElementById('analyticsDevicesBody').innerHTML =
-        devices
-            .map(row => `
-                <tr>
-                    <td>${esc(row.device)}</td>
-                    <td>${Number(row.visits || 0)}</td>
-                    <td>${Number(row.unique_visitors || 0)}</td>
-                </tr>`)
-            .join('') ||
-        '<tr><td colspan="3">Sin datos</td></tr>';
-
-    const sources = Array.isArray(analytics.sources)
-        ? analytics.sources
-        : [];
-
-    document.getElementById('analyticsSourcesBody').innerHTML =
-        sources
-            .map(row => `
-                <tr>
-                    <td>${esc(row.source)}</td>
-                    <td>${Number(row.visits || 0)}</td>
-                </tr>`)
-            .join('') ||
-        '<tr><td colspan="2">Sin datos</td></tr>';
-
-    const products = Array.isArray(analytics.products)
-        ? analytics.products
-        : [];
-
-    document.getElementById('analyticsProductsBody').innerHTML =
-        products
-            .slice(0, 30)
-            .map(row => `
-                <tr>
-                    <td>${esc(row.business_name)}</td>
-                    <td>${esc(row.product_name)}</td>
-                    <td>${Number(row.whatsapp_clicks || 0)}</td>
-                    <td>${Number(row.image_opens || 0)}</td>
-                </tr>`)
-            .join('') ||
-        '<tr><td colspan="4">Sin interacciones</td></tr>';
-
-    const recent = Array.isArray(analytics.recent_events)
-        ? analytics.recent_events
-        : [];
-
-    const activityLabels = {
-        page_view: 'Visita',
-        page_engagement: 'Tiempo en página',
-        whatsapp_business: 'WhatsApp del negocio',
-        whatsapp_product: 'WhatsApp de producto/servicio',
-        map_click: 'Cómo llegar',
-        website_click: 'Sitio web',
-        phone_click: 'Teléfono',
-        image_open: 'Imagen ampliada',
-        offer_click: 'Oferta',
-        review_submit: 'Reseña enviada',
+        }
     };
 
-    document.getElementById('analyticsRecentBody').innerHTML =
-        recent
-            .slice(0, 100)
-            .map(row => `
-                <tr>
-                    <td>${formatDateTime24(row.connected_at)}</td>
-                    <td>${esc(row.business_name)}</td>
-                    <td>
-                        ${esc(
-                            activityLabels[row.event_type] ||
-                            row.event_type
-                        )}
-                    </td>
-                    <td>${esc(row.device_type || 'desconocido')}</td>
-                    <td>${esc(row.source || 'Directo')}</td>
-                </tr>`)
-            .join('') ||
-        '<tr><td colspan="5">Sin actividad</td></tr>';
+    try {
+        const days = Number(
+            document.getElementById('analyticsRange')?.value || 30
+        );
+
+        const since = new Date(
+            Date.now() - days * 24 * 60 * 60 * 1000
+        ).toISOString();
+
+        const safeQuery = async (
+            label,
+            operation,
+            fallback = [],
+        ) => {
+            try {
+                const result = await operation();
+
+                if (result?.error) {
+                    console.error(
+                        `Dashboard · ${label}:`,
+                        result.error,
+                    );
+
+                    return {
+                        data: fallback,
+                        error: result.error,
+                    };
+                }
+
+                return {
+                    data: result?.data ?? fallback,
+                    error: null,
+                };
+            } catch (error) {
+                console.error(
+                    `Dashboard · ${label}:`,
+                    error,
+                );
+
+                return {
+                    data: fallback,
+                    error,
+                };
+            }
+        };
+
+        /*
+         * El Dashboard consulta directamente las tablas.
+         * No depende de las RPC que anteriormente dejaban
+         * las tarjetas bloqueadas en estado de carga.
+         */
+        const [
+            businessesResult,
+            subscriptionsResult,
+            plansResult,
+            eventsResult,
+            hoursResult,
+            productsResult,
+            reviewsResult,
+            promotionsResult,
+            emailsResult,
+        ] = await Promise.all([
+            safeQuery(
+                'businesses',
+                () => supabase
+                    .from('businesses')
+                    .select('*'),
+            ),
+            safeQuery(
+                'business_subscriptions',
+                () => supabase
+                    .from('business_subscriptions')
+                    .select('*'),
+            ),
+            safeQuery(
+                'subscription_plans',
+                () => supabase
+                    .from('subscription_plans')
+                    .select('*'),
+            ),
+            safeQuery(
+                'business_analytics_events',
+                () => supabase
+                    .from('business_analytics_events')
+                    .select('*')
+                    .gte('created_at', since)
+                    .order('created_at', {
+                        ascending: false,
+                    })
+                    .limit(5000),
+            ),
+            safeQuery(
+                'business_hours',
+                () => supabase
+                    .from('business_hours')
+                    .select('*'),
+            ),
+            safeQuery(
+                'business_products',
+                () => supabase
+                    .from('business_products')
+                    .select('*'),
+            ),
+            safeQuery(
+                'reviews',
+                () => supabase
+                    .from('reviews')
+                    .select('*'),
+            ),
+            safeQuery(
+                'promotions',
+                () => supabase
+                    .from('promotions')
+                    .select('*'),
+            ),
+            safeQuery(
+                'approval_email_queue',
+                () => supabase
+                    .from('approval_email_queue')
+                    .select('*'),
+            ),
+        ]);
+
+        const businesses =
+            Array.isArray(businessesResult.data)
+                ? businessesResult.data
+                : [];
+
+        const subscriptions =
+            Array.isArray(subscriptionsResult.data)
+                ? subscriptionsResult.data
+                : [];
+
+        const plans =
+            Array.isArray(plansResult.data)
+                ? plansResult.data
+                : [];
+
+        const events =
+            Array.isArray(eventsResult.data)
+                ? eventsResult.data
+                : [];
+
+        const hours =
+            Array.isArray(hoursResult.data)
+                ? hoursResult.data
+                : [];
+
+        const products =
+            Array.isArray(productsResult.data)
+                ? productsResult.data
+                : [];
+
+        const reviews =
+            Array.isArray(reviewsResult.data)
+                ? reviewsResult.data
+                : [];
+
+        const promotions =
+            Array.isArray(promotionsResult.data)
+                ? promotionsResult.data
+                : [];
+
+        const approvalEmails =
+            Array.isArray(emailsResult.data)
+                ? emailsResult.data
+                : [];
+
+        const now = new Date();
+        const sevenDaysLater = new Date(
+            now.getTime() +
+            7 * 24 * 60 * 60 * 1000
+        );
+
+        const idOf = (value) =>
+            String(value ?? '').trim();
+
+        const businessMap = new Map(
+            businesses.map((business) => [
+                idOf(business.id),
+                business,
+            ]),
+        );
+
+        const subscriptionMap = new Map(
+            subscriptions.map((subscription) => [
+                idOf(subscription.business_id),
+                subscription,
+            ]),
+        );
+
+        const planMap = new Map(
+            plans.map((plan) => [
+                String(plan.code ?? ''),
+                plan,
+            ]),
+        );
+
+        const dateValue = (value) => {
+            if (!value) return null;
+
+            const date = new Date(value);
+
+            return Number.isNaN(date.getTime())
+                ? null
+                : date;
+        };
+
+        const isCurrentPaid = (subscription) => {
+            if (
+                !subscription ||
+                subscription.plan_code !== 'paid' ||
+                subscription.status !== 'active'
+            ) {
+                return false;
+            }
+
+            const end = dateValue(
+                subscription.current_period_end
+            );
+
+            return !end || end >= now;
+        };
+
+        const isCurrentTrial = (subscription) => {
+            if (
+                !subscription ||
+                subscription.plan_code !== 'trial' ||
+                subscription.status !== 'trialing'
+            ) {
+                return false;
+            }
+
+            const end = dateValue(
+                subscription.trial_end_at
+            );
+
+            return Boolean(end && end >= now);
+        };
+
+        const isExpired = (subscription) => {
+            if (!subscription) return false;
+
+            if (
+                ['expired', 'past_due', 'cancelled']
+                    .includes(subscription.status)
+            ) {
+                return true;
+            }
+
+            if (subscription.plan_code === 'trial') {
+                const end = dateValue(
+                    subscription.trial_end_at
+                );
+
+                return Boolean(end && end < now);
+            }
+
+            if (subscription.plan_code === 'paid') {
+                const end = dateValue(
+                    subscription.current_period_end
+                );
+
+                return Boolean(end && end < now);
+            }
+
+            return false;
+        };
+
+        const planState = (businessId) => {
+            const id = idOf(businessId);
+            const business = businessMap.get(id);
+            const subscription =
+                subscriptionMap.get(id);
+
+            if (!subscription) {
+                /*
+                 * Todo negocio aprobado recibe prueba automática.
+                 * Este valor evita mostrar “Pendiente” mientras
+                 * Supabase refresca el registro recién creado.
+                 */
+                if (business?.is_active === true) {
+                    return {
+                        code: 'trial',
+                        label: 'Prueba',
+                    };
+                }
+
+                return {
+                    code: 'pending',
+                    label: 'Pendiente',
+                };
+            }
+
+            if (
+                subscription.status === 'cancelled'
+            ) {
+                return {
+                    code: 'cancelled',
+                    label: 'Cancelado',
+                };
+            }
+
+            if (isCurrentPaid(subscription)) {
+                return {
+                    code: 'paid',
+                    label: 'Pagado',
+                };
+            }
+
+            if (isCurrentTrial(subscription)) {
+                return {
+                    code: 'trial',
+                    label: 'Prueba',
+                };
+            }
+
+            return {
+                code: 'expired',
+                label: 'Vencido',
+            };
+        };
+
+        const activeBusinesses =
+            businesses.filter(
+                (business) =>
+                    business.is_active === true
+            );
+
+        const paidSubscriptions =
+            subscriptions.filter(
+                isCurrentPaid
+            );
+
+        const activeTrials =
+            subscriptions.filter(
+                isCurrentTrial
+            );
+
+        const expiringTrials =
+            activeTrials.filter((subscription) => {
+                const end = dateValue(
+                    subscription.trial_end_at
+                );
+
+                return Boolean(
+                    end &&
+                    end <= sevenDaysLater
+                );
+            });
+
+        const expiredTrials =
+            subscriptions.filter(
+                (subscription) =>
+                    subscription.plan_code === 'trial' &&
+                    isExpired(subscription) &&
+                    subscription.status !== 'cancelled'
+            );
+
+        const cancelledSubscriptions =
+            subscriptions.filter(
+                (subscription) =>
+                    subscription.status === 'cancelled'
+            );
+
+        const convertedToPaid =
+            subscriptions.filter(
+                (subscription) =>
+                    subscription.plan_code === 'paid' &&
+                    Boolean(
+                        subscription.trial_start_at
+                    )
+            );
+
+        const concludedTrials =
+            subscriptions.filter(
+                (subscription) =>
+                    Boolean(
+                        subscription.trial_start_at
+                    ) &&
+                    (
+                        subscription.plan_code === 'paid' ||
+                        isExpired(subscription)
+                    )
+            );
+
+        const paidPlan =
+            planMap.get('paid') || {};
+
+        const paidMonthlyPrice = Number(
+            paidPlan.monthly_price || 0
+        );
+
+        const monthlyRevenue =
+            paidSubscriptions.reduce(
+                (total) =>
+                    total + paidMonthlyPrice,
+                0,
+            );
+
+        const trialToPaidConversion =
+            concludedTrials.length > 0
+                ? (
+                    convertedToPaid.length /
+                    concludedTrials.length
+                ) * 100
+                : 0;
+
+        const pageViews =
+            events.filter(
+                (event) =>
+                    event.event_type === 'page_view'
+            );
+
+        const contactEvents =
+            events.filter(
+                (event) =>
+                    [
+                        'whatsapp_business',
+                        'whatsapp_product',
+                        'map_click',
+                        'website_click',
+                        'phone_click',
+                    ].includes(event.event_type)
+            );
+
+        const uniqueVisitors = new Set(
+            pageViews
+                .map((event) => event.visitor_id)
+                .filter(Boolean)
+        ).size;
+
+        const whatsappClicks =
+            events.filter(
+                (event) =>
+                    [
+                        'whatsapp_business',
+                        'whatsapp_product',
+                    ].includes(event.event_type)
+            ).length;
+
+        const mapClicks =
+            events.filter(
+                (event) =>
+                    event.event_type === 'map_click'
+            ).length;
+
+        const websiteClicks =
+            events.filter(
+                (event) =>
+                    event.event_type === 'website_click'
+            ).length;
+
+        const phoneClicks =
+            events.filter(
+                (event) =>
+                    event.event_type === 'phone_click'
+            ).length;
+
+        const totalContacts =
+            contactEvents.length;
+
+        const contactConversion =
+            uniqueVisitors > 0
+                ? (
+                    totalContacts /
+                    uniqueVisitors
+                ) * 100
+                : 0;
+
+        const averageContacts =
+            activeBusinesses.length > 0
+                ? (
+                    totalContacts /
+                    activeBusinesses.length
+                )
+                : 0;
+
+        const businessIdsWithContacts =
+            new Set(
+                contactEvents.map(
+                    (event) =>
+                        idOf(event.business_id)
+                )
+            );
+
+        const businessesWithoutContacts =
+            activeBusinesses.filter(
+                (business) =>
+                    !businessIdsWithContacts.has(
+                        idOf(business.id)
+                    )
+            ).length;
+
+        if (businessStatsGrid) {
+            businessStatsGrid.innerHTML = [
+                metricCard(
+                    'Planes pagados',
+                    paidSubscriptions.length,
+                    'negocios con pago vigente',
+                    'success',
+                ),
+                metricCard(
+                    'Pruebas activas',
+                    activeTrials.length,
+                    'prueba gratuita de 1 mes',
+                    'info',
+                ),
+                metricCard(
+                    'Pruebas por vencer',
+                    expiringTrials.length,
+                    'vencen durante los próximos 7 días',
+                    expiringTrials.length > 0
+                        ? 'warning'
+                        : 'success',
+                ),
+                metricCard(
+                    'Pruebas vencidas',
+                    expiredTrials.length,
+                    'requieren pago o extensión',
+                    expiredTrials.length > 0
+                        ? 'danger'
+                        : 'success',
+                ),
+                metricCard(
+                    'Conversión a pago',
+                    `${trialToPaidConversion.toFixed(1)}%`,
+                    `${convertedToPaid.length} conversiones registradas`,
+                    'info',
+                ),
+                metricCard(
+                    'Ingreso mensual',
+                    formatMoney(monthlyRevenue),
+                    paidMonthlyPrice > 0
+                        ? `${paidSubscriptions.length} planes activos`
+                        : 'Configure monthly_price en subscription_plans',
+                    'success',
+                    'money',
+                ),
+                metricCard(
+                    'Planes cancelados',
+                    cancelledSubscriptions.length,
+                    'cancelaciones registradas',
+                    cancelledSubscriptions.length > 0
+                        ? 'warning'
+                        : 'success',
+                ),
+            ].join('');
+        }
+
+        if (valueStatsGrid) {
+            valueStatsGrid.innerHTML = [
+                metricCard(
+                    'Visitantes únicos',
+                    uniqueVisitors,
+                    `últimos ${days} días`,
+                    'info',
+                ),
+                metricCard(
+                    'Contactos generados',
+                    totalContacts,
+                    'acciones comerciales desde Urbanex',
+                    'success',
+                ),
+                metricCard(
+                    'Conversión a contacto',
+                    `${contactConversion.toFixed(1)}%`,
+                    'contactos / visitantes únicos',
+                    'success',
+                ),
+                metricCard(
+                    'Clics a WhatsApp',
+                    whatsappClicks,
+                    'negocio + productos o servicios',
+                ),
+                metricCard(
+                    'Clics en Cómo llegar',
+                    mapClicks,
+                    'intención de visitar el negocio',
+                ),
+                metricCard(
+                    'Negocios sin contactos',
+                    businessesWithoutContacts,
+                    `sin acciones comerciales en ${days} días`,
+                    businessesWithoutContacts > 0
+                        ? 'warning'
+                        : 'success',
+                ),
+                metricCard(
+                    'Promedio por negocio',
+                    averageContacts.toFixed(1),
+                    'contactos por negocio activo',
+                    'info',
+                ),
+            ].join('');
+        }
+
+        const activeBusinessIds =
+            new Set(
+                activeBusinesses.map(
+                    (business) =>
+                        idOf(business.id)
+                )
+            );
+
+        const scheduledBusinessIds =
+            new Set(
+                hours.map(
+                    (row) =>
+                        idOf(row.business_id)
+                )
+            );
+
+        const productBusinessIds =
+            new Set(
+                products.map(
+                    (row) =>
+                        idOf(row.business_id)
+                )
+            );
+
+        const failedEmails =
+            approvalEmails.filter(
+                (row) =>
+                    String(row.status ?? '')
+                        .toLowerCase() === 'failed'
+            ).length;
+
+        const pendingBusinesses =
+            businesses.filter((business) => {
+                if (business.is_active === true) {
+                    return false;
+                }
+
+                const approvalStatus =
+                    String(
+                        business.approval_status ??
+                        business.status ??
+                        ''
+                    ).toLowerCase();
+
+                return (
+                    approvalStatus === 'pending' ||
+                    !subscriptionMap.has(
+                        idOf(business.id)
+                    )
+                );
+            }).length;
+
+        const expiredStillVisible =
+            activeBusinesses.filter(
+                (business) =>
+                    isExpired(
+                        subscriptionMap.get(
+                            idOf(business.id)
+                        )
+                    )
+            ).length;
+
+        const withoutSchedule =
+            [...activeBusinessIds].filter(
+                (businessId) =>
+                    !scheduledBusinessIds.has(
+                        businessId
+                    )
+            ).length;
+
+        const withoutLocation =
+            activeBusinesses.filter(
+                (business) =>
+                    business.latitude == null ||
+                    business.longitude == null ||
+                    business.latitude === '' ||
+                    business.longitude === ''
+            ).length;
+
+        const withoutProducts =
+            [...activeBusinessIds].filter(
+                (businessId) =>
+                    !productBusinessIds.has(
+                        businessId
+                    )
+            ).length;
+
+        const pendingReviews =
+            reviews.filter(
+                (review) =>
+                    review.is_approved !== true
+            ).length;
+
+        const activePromotions =
+            promotions.filter(
+                (promotion) =>
+                    promotion.is_active === true
+            ).length;
+
+        const reviewsBadge =
+            document.getElementById('reviewsBadge');
+
+        if (reviewsBadge) {
+            if (pendingReviews > 0) {
+                reviewsBadge.textContent =
+                    String(pendingReviews);
+
+                reviewsBadge.style.display =
+                    'block';
+            } else {
+                reviewsBadge.style.display =
+                    'none';
+            }
+        }
+
+        if (alertsGrid) {
+            const alerts = [
+                {
+                    label: 'Correos fallidos',
+                    value: failedEmails,
+                    detail: 'revise aprobación y SMTP',
+                    level:
+                        failedEmails > 0
+                            ? 'danger'
+                            : 'ok',
+                },
+                {
+                    label: 'Negocios pendientes',
+                    value: pendingBusinesses,
+                    detail: 'solicitudes pendientes de aprobación',
+                    level:
+                        pendingBusinesses > 0
+                            ? 'warning'
+                            : 'ok',
+                },
+                {
+                    label: 'Vencidos aún visibles',
+                    value: expiredStillVisible,
+                    detail: 'deben retirarse del directorio',
+                    level:
+                        expiredStillVisible > 0
+                            ? 'danger'
+                            : 'ok',
+                },
+                {
+                    label: 'Sin horario',
+                    value: withoutSchedule,
+                    detail: 'negocios activos sin horario registrado',
+                    level:
+                        withoutSchedule > 0
+                            ? 'warning'
+                            : 'ok',
+                },
+                {
+                    label: 'Sin ubicación',
+                    value: withoutLocation,
+                    detail: 'negocios activos sin coordenadas',
+                    level:
+                        withoutLocation > 0
+                            ? 'warning'
+                            : 'ok',
+                },
+                {
+                    label: 'Sin productos/servicios',
+                    value: withoutProducts,
+                    detail: 'negocios activos sin contenido comercial',
+                    level:
+                        withoutProducts > 0
+                            ? 'warning'
+                            : 'ok',
+                },
+                {
+                    label: 'Reseñas pendientes',
+                    value: pendingReviews,
+                    detail: 'requieren moderación',
+                    level:
+                        pendingReviews > 0
+                            ? 'warning'
+                            : 'ok',
+                },
+                {
+                    label: 'Promociones activas',
+                    value: activePromotions,
+                    detail: 'campañas actualmente vigentes',
+                    level: 'ok',
+                },
+            ];
+
+            alertsGrid.innerHTML =
+                alerts
+                    .map((item) =>
+                        alertCard(
+                            item.label,
+                            item.value,
+                            item.detail,
+                            item.level,
+                        )
+                    )
+                    .join('');
+        }
+
+        /*
+         * Rendimiento comercial por negocio.
+         */
+        const analyticsByBusiness = new Map();
+
+        const ensureBusinessAnalytics = (
+            businessId
+        ) => {
+            const id = idOf(businessId);
+
+            if (!analyticsByBusiness.has(id)) {
+                analyticsByBusiness.set(id, {
+                    business_id: id,
+                    business_name:
+                        businessMap.get(id)?.name ||
+                        'Negocio eliminado',
+                    visits: 0,
+                    visitors: new Set(),
+                    contacts: 0,
+                    last_connection: null,
+                });
+            }
+
+            return analyticsByBusiness.get(id);
+        };
+
+        for (const event of events) {
+            const row =
+                ensureBusinessAnalytics(
+                    event.business_id
+                );
+
+            if (event.event_type === 'page_view') {
+                row.visits += 1;
+
+                if (event.visitor_id) {
+                    row.visitors.add(
+                        event.visitor_id
+                    );
+                }
+
+                const createdAt =
+                    dateValue(event.created_at);
+
+                if (
+                    createdAt &&
+                    (
+                        !row.last_connection ||
+                        createdAt >
+                            row.last_connection
+                    )
+                ) {
+                    row.last_connection =
+                        createdAt;
+                }
+            }
+
+            if (
+                [
+                    'whatsapp_business',
+                    'whatsapp_product',
+                    'map_click',
+                    'website_click',
+                    'phone_click',
+                ].includes(event.event_type)
+            ) {
+                row.contacts += 1;
+            }
+        }
+
+        const analyticsRows =
+            [...analyticsByBusiness.values()]
+                .filter(
+                    (row) =>
+                        row.visits > 0 ||
+                        row.contacts > 0
+                )
+                .sort(
+                    (a, b) =>
+                        b.contacts - a.contacts ||
+                        b.visits - a.visits
+                );
+
+        if (analyticsBody) {
+            if (!analyticsRows.length) {
+                analyticsBody.innerHTML = `
+                    <tr>
+                        <td colspan="6"
+                            style="text-align:center;color:var(--dark);padding:24px;">
+                            Todavía no existen eventos registrados en este período.
+                        </td>
+                    </tr>`;
+            } else {
+                analyticsBody.innerHTML =
+                    analyticsRows
+                        .map((row) => {
+                            const unique =
+                                row.visitors.size;
+
+                            const conversion =
+                                unique > 0
+                                    ? (
+                                        row.contacts /
+                                        unique
+                                    ) * 100
+                                    : 0;
+
+                            const plan =
+                                planState(
+                                    row.business_id
+                                );
+
+                            return `
+                                <tr>
+                                    <td>
+                                        <strong style="color:#fff;">
+                                            ${esc(row.business_name)}
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        ${planPerformanceBadge(
+                                            plan.code,
+                                            plan.label,
+                                        )}
+                                    </td>
+                                    <td>${row.visits}</td>
+                                    <td>
+                                        <strong style="color:var(--gold);">
+                                            ${row.contacts}
+                                        </strong>
+                                    </td>
+                                    <td>${conversion.toFixed(1)}%</td>
+                                    <td>
+                                        ${formatDateTime24(
+                                            row.last_connection
+                                        )}
+                                    </td>
+                                </tr>`;
+                        })
+                        .join('');
+            }
+        }
+
+        /*
+         * Horas de conexión en Ecuador.
+         */
+        const hourFormatter =
+            new Intl.DateTimeFormat(
+                'en-GB',
+                {
+                    hour: '2-digit',
+                    hourCycle: 'h23',
+                    timeZone:
+                        'America/Guayaquil',
+                },
+            );
+
+        const hourly = Array.from(
+            { length: 24 },
+            (_, hour) => ({
+                hour,
+                visits: 0,
+                contacts: 0,
+            }),
+        );
+
+        for (const event of events) {
+            const createdAt =
+                dateValue(event.created_at);
+
+            if (!createdAt) continue;
+
+            const hour = Number(
+                hourFormatter.format(createdAt)
+            );
+
+            if (
+                !Number.isInteger(hour) ||
+                !hourly[hour]
+            ) {
+                continue;
+            }
+
+            if (event.event_type === 'page_view') {
+                hourly[hour].visits += 1;
+            }
+
+            if (
+                [
+                    'whatsapp_business',
+                    'whatsapp_product',
+                    'map_click',
+                    'website_click',
+                    'phone_click',
+                ].includes(event.event_type)
+            ) {
+                hourly[hour].contacts += 1;
+            }
+        }
+
+        const hourlyBody =
+            document.getElementById(
+                'analyticsHourlyBody'
+            );
+
+        if (hourlyBody) {
+            hourlyBody.innerHTML =
+                hourly
+                    .filter(
+                        (row) =>
+                            row.visits > 0 ||
+                            row.contacts > 0
+                    )
+                    .map(
+                        (row) => `
+                            <tr>
+                                <td>
+                                    ${String(row.hour)
+                                        .padStart(2, '0')}:00
+                                </td>
+                                <td>${row.visits}</td>
+                                <td>${row.contacts}</td>
+                            </tr>`
+                    )
+                    .join('') ||
+                '<tr><td colspan="3">Sin actividad</td></tr>';
+        }
+
+        /*
+         * Actividad diaria.
+         */
+        const dayFormatter =
+            new Intl.DateTimeFormat(
+                'en-CA',
+                {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    timeZone:
+                        'America/Guayaquil',
+                },
+            );
+
+        const dailyMap = new Map();
+
+        for (const event of events) {
+            const createdAt =
+                dateValue(event.created_at);
+
+            if (!createdAt) continue;
+
+            const day =
+                dayFormatter.format(createdAt);
+
+            if (!dailyMap.has(day)) {
+                dailyMap.set(day, {
+                    day,
+                    visits: 0,
+                    visitors: new Set(),
+                    contacts: 0,
+                });
+            }
+
+            const row =
+                dailyMap.get(day);
+
+            if (event.event_type === 'page_view') {
+                row.visits += 1;
+
+                if (event.visitor_id) {
+                    row.visitors.add(
+                        event.visitor_id
+                    );
+                }
+            }
+
+            if (
+                [
+                    'whatsapp_business',
+                    'whatsapp_product',
+                    'map_click',
+                    'website_click',
+                    'phone_click',
+                ].includes(event.event_type)
+            ) {
+                row.contacts += 1;
+            }
+        }
+
+        const dailyBody =
+            document.getElementById(
+                'analyticsDailyBody'
+            );
+
+        if (dailyBody) {
+            dailyBody.innerHTML =
+                [...dailyMap.values()]
+                    .sort(
+                        (a, b) =>
+                            b.day.localeCompare(a.day)
+                    )
+                    .slice(0, 31)
+                    .map(
+                        (row) => `
+                            <tr>
+                                <td>
+                                    ${new Date(
+                                        `${row.day}T12:00:00`
+                                    ).toLocaleDateString(
+                                        'es-EC'
+                                    )}
+                                </td>
+                                <td>${row.visits}</td>
+                                <td>${row.visitors.size}</td>
+                                <td>${row.contacts}</td>
+                            </tr>`
+                    )
+                    .join('') ||
+                '<tr><td colspan="4">Sin actividad</td></tr>';
+        }
+
+        /*
+         * Dispositivos.
+         */
+        const deviceMap = new Map();
+
+        for (const event of pageViews) {
+            const device =
+                String(
+                    event.device_type ||
+                    'desconocido'
+                );
+
+            if (!deviceMap.has(device)) {
+                deviceMap.set(device, {
+                    device,
+                    visits: 0,
+                    visitors: new Set(),
+                });
+            }
+
+            const row =
+                deviceMap.get(device);
+
+            row.visits += 1;
+
+            if (event.visitor_id) {
+                row.visitors.add(
+                    event.visitor_id
+                );
+            }
+        }
+
+        const devicesBody =
+            document.getElementById(
+                'analyticsDevicesBody'
+            );
+
+        if (devicesBody) {
+            devicesBody.innerHTML =
+                [...deviceMap.values()]
+                    .sort(
+                        (a, b) =>
+                            b.visits - a.visits
+                    )
+                    .map(
+                        (row) => `
+                            <tr>
+                                <td>${esc(row.device)}</td>
+                                <td>${row.visits}</td>
+                                <td>${row.visitors.size}</td>
+                            </tr>`
+                    )
+                    .join('') ||
+                '<tr><td colspan="3">Sin datos</td></tr>';
+        }
+
+        /*
+         * Fuentes de tráfico.
+         */
+        const sourceMap = new Map();
+
+        for (const event of pageViews) {
+            const source =
+                String(
+                    event.utm_source ||
+                    event.referrer ||
+                    'Directo'
+                );
+
+            sourceMap.set(
+                source,
+                (
+                    sourceMap.get(source) ||
+                    0
+                ) + 1,
+            );
+        }
+
+        const sourcesBody =
+            document.getElementById(
+                'analyticsSourcesBody'
+            );
+
+        if (sourcesBody) {
+            sourcesBody.innerHTML =
+                [...sourceMap.entries()]
+                    .sort(
+                        (a, b) =>
+                            b[1] - a[1]
+                    )
+                    .slice(0, 20)
+                    .map(
+                        ([source, visits]) => `
+                            <tr>
+                                <td>${esc(source)}</td>
+                                <td>${visits}</td>
+                            </tr>`
+                    )
+                    .join('') ||
+                '<tr><td colspan="2">Sin datos</td></tr>';
+        }
+
+        /*
+         * Productos y servicios con mayor interacción.
+         */
+        const productMap = new Map(
+            products.map((product) => [
+                idOf(product.id),
+                product,
+            ]),
+        );
+
+        const productAnalytics = new Map();
+
+        for (const event of events) {
+            if (!event.product_id) continue;
+
+            if (
+                ![
+                    'whatsapp_product',
+                    'image_open',
+                ].includes(event.event_type)
+            ) {
+                continue;
+            }
+
+            const productId =
+                idOf(event.product_id);
+
+            if (!productAnalytics.has(productId)) {
+                productAnalytics.set(
+                    productId,
+                    {
+                        product_id: productId,
+                        business_id:
+                            idOf(event.business_id),
+                        whatsapp_clicks: 0,
+                        image_opens: 0,
+                    },
+                );
+            }
+
+            const row =
+                productAnalytics.get(productId);
+
+            if (
+                event.event_type ===
+                'whatsapp_product'
+            ) {
+                row.whatsapp_clicks += 1;
+            }
+
+            if (
+                event.event_type ===
+                'image_open'
+            ) {
+                row.image_opens += 1;
+            }
+        }
+
+        const productsBody =
+            document.getElementById(
+                'analyticsProductsBody'
+            );
+
+        if (productsBody) {
+            productsBody.innerHTML =
+                [...productAnalytics.values()]
+                    .sort(
+                        (a, b) =>
+                            b.whatsapp_clicks -
+                                a.whatsapp_clicks ||
+                            b.image_opens -
+                                a.image_opens
+                    )
+                    .slice(0, 30)
+                    .map((row) => {
+                        const product =
+                            productMap.get(
+                                row.product_id
+                            );
+
+                        const business =
+                            businessMap.get(
+                                row.business_id
+                            );
+
+                        return `
+                            <tr>
+                                <td>
+                                    ${esc(
+                                        business?.name ||
+                                        'Negocio eliminado'
+                                    )}
+                                </td>
+                                <td>
+                                    ${esc(
+                                        product?.name ||
+                                        'Producto eliminado'
+                                    )}
+                                </td>
+                                <td>
+                                    ${row.whatsapp_clicks}
+                                </td>
+                                <td>
+                                    ${row.image_opens}
+                                </td>
+                            </tr>`;
+                    })
+                    .join('') ||
+                '<tr><td colspan="4">Sin interacciones</td></tr>';
+        }
+
+        /*
+         * Últimas conexiones e interacciones.
+         */
+        const activityLabels = {
+            page_view: 'Visita',
+            page_engagement:
+                'Tiempo en página',
+            whatsapp_business:
+                'WhatsApp del negocio',
+            whatsapp_product:
+                'WhatsApp de producto/servicio',
+            map_click: 'Cómo llegar',
+            website_click: 'Sitio web',
+            phone_click: 'Teléfono',
+            image_open: 'Imagen ampliada',
+            offer_click: 'Oferta',
+            review_submit: 'Reseña enviada',
+        };
+
+        const recentBody =
+            document.getElementById(
+                'analyticsRecentBody'
+            );
+
+        if (recentBody) {
+            recentBody.innerHTML =
+                events
+                    .slice(0, 100)
+                    .map((event) => {
+                        const business =
+                            businessMap.get(
+                                idOf(event.business_id)
+                            );
+
+                        return `
+                            <tr>
+                                <td>
+                                    ${formatDateTime24(
+                                        event.created_at
+                                    )}
+                                </td>
+                                <td>
+                                    ${esc(
+                                        business?.name ||
+                                        'Negocio eliminado'
+                                    )}
+                                </td>
+                                <td>
+                                    ${esc(
+                                        activityLabels[
+                                            event.event_type
+                                        ] ||
+                                        event.event_type ||
+                                        'Actividad'
+                                    )}
+                                </td>
+                                <td>
+                                    ${esc(
+                                        event.device_type ||
+                                        'desconocido'
+                                    )}
+                                </td>
+                                <td>
+                                    ${esc(
+                                        event.utm_source ||
+                                        event.referrer ||
+                                        'Directo'
+                                    )}
+                                </td>
+                            </tr>`;
+                    })
+                    .join('') ||
+                '<tr><td colspan="5">Sin actividad</td></tr>';
+        }
+    } catch (error) {
+        console.error(
+            'Error completo del Dashboard:',
+            error,
+        );
+
+        setDashboardError(
+            error?.message ||
+            'No se pudo cargar el Dashboard.'
+        );
+    }
 }
 
 // ── NEGOCIOS ─────────────────────────────────────────────────
