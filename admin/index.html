@@ -1714,9 +1714,18 @@ async function loadDashboard() {
             ),
             safeQuery(
                 'business_subscriptions',
-                () => supabase
-                    .from('business_subscriptions')
-                    .select('*'),
+                async () => {
+                    const result = await subscriptionFetch(
+                        `${SUPABASE_URL}/functions/v1/gestionar-suscripcion`
+                    );
+
+                    return {
+                        data: Array.isArray(result.subscriptions)
+                            ? result.subscriptions
+                            : [],
+                        error: null,
+                    };
+                },
             ),
             safeQuery(
                 'subscription_plans',
