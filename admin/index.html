@@ -655,161 +655,6 @@ input,textarea,select { font-family:var(--sans); }
     .decision-grid,.alert-grid{grid-template-columns:1fr}
 }
 
-/* ── DATOS SIMULADOS DEL DASHBOARD ─────────────────────────── */
-.demo-analytics-panel{
-    display:grid;
-    grid-template-columns:minmax(0,1fr) auto;
-    align-items:center;
-    gap:18px;
-    margin:0 0 22px;
-    padding:16px 18px;
-    border:1px solid rgba(229,193,88,.28);
-    border-radius:14px;
-    background:
-        linear-gradient(135deg,rgba(229,193,88,.065),rgba(255,255,255,.018)),
-        rgba(7,7,7,.88);
-    box-shadow:0 16px 42px rgba(0,0,0,.28);
-}
-.demo-analytics-copy{
-    min-width:0;
-}
-.demo-analytics-title-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-}
-.demo-analytics-copy h3{
-    color:var(--gold);
-    font-family:var(--serif);
-    font-size:14px;
-    letter-spacing:.4px;
-    text-transform:uppercase;
-}
-.demo-analytics-copy p{
-    max-width:720px;
-    margin-top:7px;
-    color:var(--dark);
-    font-size:10px;
-    line-height:1.55;
-}
-.demo-status{
-    display:inline-flex;
-    align-items:center;
-    min-height:24px;
-    padding:4px 9px;
-    border-radius:999px;
-    font-size:8px;
-    font-weight:800;
-    letter-spacing:.45px;
-    text-transform:uppercase;
-}
-.demo-status-empty{
-    color:#aaa;
-    border:1px solid rgba(255,255,255,.14);
-    background:rgba(255,255,255,.045);
-}
-.demo-status-active{
-    color:#ffe38a;
-    border:1px solid rgba(229,193,88,.36);
-    background:rgba(229,193,88,.11);
-}
-.demo-analytics-controls{
-    display:flex;
-    align-items:end;
-    justify-content:flex-end;
-    gap:9px;
-    flex-wrap:wrap;
-}
-.demo-analytics-controls label{
-    display:flex;
-    flex-direction:column;
-    gap:5px;
-}
-.demo-analytics-controls label > span{
-    color:var(--dark);
-    font-size:8px;
-    font-weight:700;
-    letter-spacing:.55px;
-    text-transform:uppercase;
-}
-.demo-analytics-controls input,
-.demo-analytics-controls select{
-    height:36px;
-    min-width:92px;
-    padding:7px 10px;
-    border:1px solid var(--border2);
-    border-radius:8px;
-    outline:none;
-    color:#fff;
-    background:#080808;
-    font-size:10px;
-}
-.demo-analytics-controls input:focus,
-.demo-analytics-controls select:focus{
-    border-color:rgba(229,193,88,.55);
-    box-shadow:0 0 0 3px rgba(229,193,88,.07);
-}
-.demo-analytics-controls .btn{
-    min-height:36px;
-    white-space:nowrap;
-}
-.demo-analytics-toggle{
-    grid-column:1/-1;
-    display:inline-flex;
-    align-items:center;
-    width:max-content;
-    gap:8px;
-    color:#c5c2ba;
-    font-size:10px;
-    cursor:pointer;
-}
-.demo-analytics-toggle input{
-    width:15px;
-    height:15px;
-    accent-color:var(--gold);
-}
-.demo-data-notice{
-    display:none;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin:0 0 12px;
-    padding:9px 12px;
-    border:1px solid rgba(229,193,88,.26);
-    border-radius:10px;
-    color:#e9d886;
-    background:rgba(229,193,88,.07);
-    font-size:9px;
-}
-.demo-data-notice.visible{
-    display:flex;
-}
-@media(max-width:980px){
-    .demo-analytics-panel{
-        grid-template-columns:1fr;
-    }
-    .demo-analytics-controls{
-        justify-content:flex-start;
-    }
-}
-@media(max-width:620px){
-    .demo-analytics-controls{
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        width:100%;
-    }
-    .demo-analytics-controls .btn{
-        grid-column:1/-1;
-        width:100%;
-    }
-    .demo-analytics-controls input,
-    .demo-analytics-controls select{
-        width:100%;
-    }
-}
-
-
 /* ── CARGADOR DE 3 IMÁGENES DEL PRODUCTO ───────────────────── */
 .product-image-uploader{
     border:1px solid rgba(229,193,88,.30);
@@ -1067,66 +912,6 @@ input,textarea,select { font-family:var(--sans); }
                         Ver sitio
                     </a>
                 </div>
-
-                <section class="demo-analytics-panel" aria-labelledby="demoAnalyticsTitle">
-                    <div class="demo-analytics-copy">
-                        <div class="demo-analytics-title-row">
-                            <h3 id="demoAnalyticsTitle">Datos simulados para pruebas</h3>
-                            <span id="demoAnalyticsStatus" class="demo-status demo-status-empty">
-                                Sin datos simulados
-                            </span>
-                        </div>
-                        <p>
-                            Genera visitas de prueba para comprobar el Dashboard.
-                            Se identifican como simuladas y pueden eliminarse sin afectar las visitas reales.
-                        </p>
-                    </div>
-
-                    <div class="demo-analytics-controls">
-                        <label>
-                            <span>Visitas</span>
-                            <input
-                                id="demoVisitCount"
-                                type="number"
-                                min="10"
-                                max="2000"
-                                step="10"
-                                value="150"
-                            >
-                        </label>
-
-                        <label>
-                            <span>Periodo</span>
-                            <select id="demoVisitDays">
-                                <option value="7">7 días</option>
-                                <option value="30" selected>30 días</option>
-                                <option value="90">90 días</option>
-                            </select>
-                        </label>
-
-                        <button
-                            id="btnGenerateDemoVisits"
-                            class="btn btn-primary"
-                            type="button"
-                        >
-                            Generar visitas de prueba
-                        </button>
-
-                        <button
-                            id="btnDeleteDemoVisits"
-                            class="btn btn-danger"
-                            type="button"
-                        >
-                            Eliminar simulación
-                        </button>
-                    </div>
-
-                    <label class="demo-analytics-toggle">
-                        <input id="includeDemoAnalytics" type="checkbox">
-                        <span>Incluir datos simulados en las métricas</span>
-                    </label>
-                </section>
-                
 <div class="dashboard-block-title">
     <span>Resultados del negocio</span>
     <small>Planes, conversión e ingresos recurrentes</small>
@@ -1172,11 +957,7 @@ input,textarea,select { font-family:var(--sans); }
                         <option value="365">Últimos 12 meses</option>
                     </select>
                 </div>
-                <div id="demoDataNotice" class="demo-data-notice">
-                    <strong>Vista de prueba activa</strong>
-                    <span>Las métricas incluyen eventos simulados creados desde el administrador.</span>
-                </div>
-                <p class="business-performance-note">
+<p class="business-performance-note">
                     Contactos = WhatsApp del negocio + WhatsApp de producto/servicio + teléfono + sitio web + Cómo llegar.
                 </p>
                 <div class="table-wrap">
@@ -1839,17 +1620,6 @@ if (session) bootApp(session.user);
 // ── NAVEGACIÓN ────────────────────────────────────────────────
 document.getElementById('analyticsRange').addEventListener('change', loadDashboard);
 
-document
-    .getElementById('includeDemoAnalytics')
-    .addEventListener('change', loadDashboard);
-
-document
-    .getElementById('btnGenerateDemoVisits')
-    .addEventListener('click', generateDemoVisits);
-
-document
-    .getElementById('btnDeleteDemoVisits')
-    .addEventListener('click', deleteDemoVisits);
 
 document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
@@ -2085,171 +1855,6 @@ function planPerformanceBadge(code, label) {
 }
 
 
-const DEMO_SOURCE = 'urbanex_demo';
-const DEMO_MEDIUM = 'admin_simulation';
-
-function updateDemoAnalyticsStatus(pageViews, included) {
-    const status = document.getElementById('demoAnalyticsStatus');
-    const notice = document.getElementById('demoDataNotice');
-
-    if (status) {
-        if (Number(pageViews || 0) > 0) {
-            status.textContent =
-                `${Number(pageViews)} visitas simuladas`;
-
-            status.className =
-                'demo-status demo-status-active';
-        } else {
-            status.textContent =
-                'Sin datos simulados';
-
-            status.className =
-                'demo-status demo-status-empty';
-        }
-    }
-
-    if (notice) {
-        notice.classList.toggle(
-            'visible',
-            Boolean(included && Number(pageViews || 0) > 0)
-        );
-    }
-}
-
-async function generateDemoVisits() {
-    const button =
-        document.getElementById('btnGenerateDemoVisits');
-
-    const visitCount = Math.max(
-        10,
-        Math.min(
-            2000,
-            Number(
-                document.getElementById('demoVisitCount')?.value || 150
-            )
-        )
-    );
-
-    const days = Math.max(
-        1,
-        Math.min(
-            90,
-            Number(
-                document.getElementById('demoVisitDays')?.value || 30
-            )
-        )
-    );
-
-    if (!confirm(
-        `¿Generar ${visitCount} visitas simuladas distribuidas durante ${days} días?`
-    )) {
-        return;
-    }
-
-    try {
-        if (button) {
-            button.disabled = true;
-            button.textContent = 'Generando...';
-        }
-
-        const { data, error } = await supabase.rpc(
-            'admin_generate_urbanex_demo_visits',
-            {
-                p_visit_count: visitCount,
-                p_days: days,
-            }
-        );
-
-        if (error) {
-            throw error;
-        }
-
-        document.getElementById('includeDemoAnalytics').checked = true;
-
-        const generatedVisits =
-            Number(data?.page_views || visitCount);
-
-        const generatedContacts =
-            Number(data?.contact_events || 0);
-
-        toast(
-            `Simulación creada: ${generatedVisits} visitas y ${generatedContacts} contactos de prueba.`
-        );
-
-        await loadDashboard();
-    } catch (error) {
-        console.error('Generar visitas simuladas:', error);
-
-        toast(
-            'No se pudieron generar las visitas de prueba: ' +
-            (
-                error?.message ||
-                error?.details ||
-                error?.hint ||
-                'ejecute el SQL 014_visitas_simuladas_admin.sql'
-            ),
-            'error'
-        );
-    } finally {
-        if (button) {
-            button.disabled = false;
-            button.textContent = 'Generar visitas de prueba';
-        }
-    }
-}
-
-async function deleteDemoVisits() {
-    if (!confirm(
-        '¿Eliminar todos los eventos simulados? Las visitas reales no serán modificadas.'
-    )) {
-        return;
-    }
-
-    const button =
-        document.getElementById('btnDeleteDemoVisits');
-
-    try {
-        if (button) {
-            button.disabled = true;
-            button.textContent = 'Eliminando...';
-        }
-
-        const { data, error } = await supabase.rpc(
-            'admin_delete_urbanex_demo_visits'
-        );
-
-        if (error) {
-            throw error;
-        }
-
-        document.getElementById('includeDemoAnalytics').checked = false;
-
-        toast(
-            `${Number(data?.deleted_events || 0)} eventos simulados eliminados.`
-        );
-
-        await loadDashboard();
-    } catch (error) {
-        console.error('Eliminar visitas simuladas:', error);
-
-        toast(
-            'No se pudieron eliminar los datos simulados: ' +
-            (
-                error?.message ||
-                error?.details ||
-                error?.hint ||
-                'revise la función SQL'
-            ),
-            'error'
-        );
-    } finally {
-        if (button) {
-            button.disabled = false;
-            button.textContent = 'Eliminar simulación';
-        }
-    }
-}
-
 // ── DASHBOARD ────────────────────────────────────────────────
 async function loadDashboard() {
     const businessStatsGrid =
@@ -2309,9 +1914,6 @@ async function loadDashboard() {
         const days = Number(
             document.getElementById('analyticsRange')?.value || 30
         );
-
-        const includeDemoAnalytics =
-            document.getElementById('includeDemoAnalytics')?.checked === true;
 
         const since = new Date(
             Date.now() - days * 24 * 60 * 60 * 1000
@@ -2460,20 +2062,14 @@ async function loadDashboard() {
                 ? eventsResult.data
                 : [];
 
-        const isDemoAnalyticsEvent = (event) =>
+        /*
+         * Los eventos de prueba antiguos se excluyen siempre.
+         * No afectan las métricas reales del Dashboard.
+         */
+        const events = rawEvents.filter(event => !(
             String(event?.utm_source || '').toLowerCase() === 'urbanex_demo' &&
-            String(event?.utm_medium || '').toLowerCase() === 'admin_simulation';
-
-        const demoEvents = rawEvents.filter(isDemoAnalyticsEvent);
-
-        const events = includeDemoAnalytics
-            ? rawEvents
-            : rawEvents.filter(event => !isDemoAnalyticsEvent(event));
-
-        updateDemoAnalyticsStatus(
-            demoEvents.filter(event => event.event_type === 'page_view').length,
-            includeDemoAnalytics
-        );
+            String(event?.utm_medium || '').toLowerCase() === 'admin_simulation'
+        ));
 
         const hours =
             Array.isArray(hoursResult.data)
