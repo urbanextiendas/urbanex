@@ -654,6 +654,335 @@ input,textarea,select { font-family:var(--sans); }
 @media(max-width:460px){
     .decision-grid,.alert-grid{grid-template-columns:1fr}
 }
+
+/* ── DATOS SIMULADOS DEL DASHBOARD ─────────────────────────── */
+.demo-analytics-panel{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    gap:18px;
+    margin:0 0 22px;
+    padding:16px 18px;
+    border:1px solid rgba(229,193,88,.28);
+    border-radius:14px;
+    background:
+        linear-gradient(135deg,rgba(229,193,88,.065),rgba(255,255,255,.018)),
+        rgba(7,7,7,.88);
+    box-shadow:0 16px 42px rgba(0,0,0,.28);
+}
+.demo-analytics-copy{
+    min-width:0;
+}
+.demo-analytics-title-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+.demo-analytics-copy h3{
+    color:var(--gold);
+    font-family:var(--serif);
+    font-size:14px;
+    letter-spacing:.4px;
+    text-transform:uppercase;
+}
+.demo-analytics-copy p{
+    max-width:720px;
+    margin-top:7px;
+    color:var(--dark);
+    font-size:10px;
+    line-height:1.55;
+}
+.demo-status{
+    display:inline-flex;
+    align-items:center;
+    min-height:24px;
+    padding:4px 9px;
+    border-radius:999px;
+    font-size:8px;
+    font-weight:800;
+    letter-spacing:.45px;
+    text-transform:uppercase;
+}
+.demo-status-empty{
+    color:#aaa;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.045);
+}
+.demo-status-active{
+    color:#ffe38a;
+    border:1px solid rgba(229,193,88,.36);
+    background:rgba(229,193,88,.11);
+}
+.demo-analytics-controls{
+    display:flex;
+    align-items:end;
+    justify-content:flex-end;
+    gap:9px;
+    flex-wrap:wrap;
+}
+.demo-analytics-controls label{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+.demo-analytics-controls label > span{
+    color:var(--dark);
+    font-size:8px;
+    font-weight:700;
+    letter-spacing:.55px;
+    text-transform:uppercase;
+}
+.demo-analytics-controls input,
+.demo-analytics-controls select{
+    height:36px;
+    min-width:92px;
+    padding:7px 10px;
+    border:1px solid var(--border2);
+    border-radius:8px;
+    outline:none;
+    color:#fff;
+    background:#080808;
+    font-size:10px;
+}
+.demo-analytics-controls input:focus,
+.demo-analytics-controls select:focus{
+    border-color:rgba(229,193,88,.55);
+    box-shadow:0 0 0 3px rgba(229,193,88,.07);
+}
+.demo-analytics-controls .btn{
+    min-height:36px;
+    white-space:nowrap;
+}
+.demo-analytics-toggle{
+    grid-column:1/-1;
+    display:inline-flex;
+    align-items:center;
+    width:max-content;
+    gap:8px;
+    color:#c5c2ba;
+    font-size:10px;
+    cursor:pointer;
+}
+.demo-analytics-toggle input{
+    width:15px;
+    height:15px;
+    accent-color:var(--gold);
+}
+.demo-data-notice{
+    display:none;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin:0 0 12px;
+    padding:9px 12px;
+    border:1px solid rgba(229,193,88,.26);
+    border-radius:10px;
+    color:#e9d886;
+    background:rgba(229,193,88,.07);
+    font-size:9px;
+}
+.demo-data-notice.visible{
+    display:flex;
+}
+@media(max-width:980px){
+    .demo-analytics-panel{
+        grid-template-columns:1fr;
+    }
+    .demo-analytics-controls{
+        justify-content:flex-start;
+    }
+}
+@media(max-width:620px){
+    .demo-analytics-controls{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        width:100%;
+    }
+    .demo-analytics-controls .btn{
+        grid-column:1/-1;
+        width:100%;
+    }
+    .demo-analytics-controls input,
+    .demo-analytics-controls select{
+        width:100%;
+    }
+}
+
+
+/* ── CARGADOR DE 3 IMÁGENES DEL PRODUCTO ───────────────────── */
+.product-image-uploader{
+    border:1px solid rgba(229,193,88,.30);
+    border-radius:14px;
+    padding:14px;
+    background:
+        linear-gradient(145deg,rgba(229,193,88,.045),transparent 45%),
+        rgba(5,5,5,.72);
+    transition:border-color .25s ease,box-shadow .25s ease,background .25s ease;
+}
+.product-image-uploader.dragover{
+    border-color:rgba(229,193,88,.78);
+    background:rgba(229,193,88,.085);
+    box-shadow:0 0 0 3px rgba(229,193,88,.08);
+}
+.product-image-toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:11px;
+}
+.product-image-toolbar > div:first-child{
+    min-width:0;
+}
+.product-image-toolbar strong{
+    display:block;
+    color:#fff;
+    font-size:12px;
+}
+.product-image-toolbar span{
+    display:block;
+    margin-top:5px;
+    color:var(--dark);
+    font-size:9.5px;
+    line-height:1.45;
+}
+.product-image-toolbar-actions{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:8px;
+    flex-wrap:wrap;
+}
+.product-image-drop-message{
+    padding:10px 12px;
+    margin-bottom:12px;
+    border:1px dashed rgba(229,193,88,.24);
+    border-radius:10px;
+    color:#aaa;
+    background:rgba(0,0,0,.24);
+    font-size:9.5px;
+    line-height:1.5;
+    text-align:center;
+}
+.product-image-drop-message strong{
+    display:inline;
+    color:var(--gold);
+}
+.product-image-slots{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
+}
+.product-image-slot{
+    position:relative;
+    min-width:0;
+    overflow:hidden;
+    border:1px solid var(--border2);
+    border-radius:12px;
+    background:#080808;
+}
+.product-image-slot.has-image{
+    border-color:rgba(22,196,102,.42);
+}
+.product-image-slot-label{
+    padding:9px 10px;
+    border-bottom:1px solid var(--border2);
+    background:rgba(255,255,255,.018);
+}
+.product-image-slot-label strong{
+    display:block;
+    color:#fff;
+    font-size:9.5px;
+}
+.product-image-slot-label span{
+    display:block;
+    margin-top:3px;
+    color:var(--dark);
+    font-size:8px;
+}
+.product-image-preview-box{
+    position:relative;
+    height:160px;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at center,rgba(229,193,88,.08),transparent 48%),
+        #050505;
+}
+.product-image-preview-box img{
+    display:none;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.product-image-slot.has-image .product-image-preview-box img{
+    display:block;
+}
+.product-image-placeholder{
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-items:center;
+    align-content:center;
+    gap:6px;
+    color:var(--gold);
+}
+.product-image-placeholder span{
+    font-size:26px;
+}
+.product-image-placeholder small{
+    color:var(--dark);
+    font-size:8px;
+}
+.product-image-slot.has-image .product-image-placeholder{
+    display:none;
+}
+.product-image-remove{
+    position:absolute;
+    right:8px;
+    bottom:8px;
+    z-index:4;
+    min-height:28px;
+    padding:6px 9px;
+    border:1px solid rgba(255,56,83,.62);
+    border-radius:8px;
+    cursor:pointer;
+    color:#ff6d7f;
+    background:rgba(5,5,5,.82);
+    font-size:8px;
+    font-weight:800;
+    text-transform:uppercase;
+    backdrop-filter:blur(8px);
+}
+.product-image-remove:hover{
+    color:#fff;
+    background:rgba(255,56,83,.26);
+}
+.product-image-uploader .img-upload-progress{
+    margin-top:12px;
+}
+.product-image-uploader .img-upload-status{
+    min-height:18px;
+    margin-top:7px;
+    font-size:9.5px;
+}
+@media(max-width:760px){
+    .product-image-toolbar{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+    .product-image-toolbar-actions{
+        width:100%;
+        justify-content:flex-start;
+    }
+    .product-image-slots{
+        grid-template-columns:1fr;
+    }
+    .product-image-preview-box{
+        height:210px;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -738,6 +1067,65 @@ input,textarea,select { font-family:var(--sans); }
                         Ver sitio
                     </a>
                 </div>
+
+                <section class="demo-analytics-panel" aria-labelledby="demoAnalyticsTitle">
+                    <div class="demo-analytics-copy">
+                        <div class="demo-analytics-title-row">
+                            <h3 id="demoAnalyticsTitle">Datos simulados para pruebas</h3>
+                            <span id="demoAnalyticsStatus" class="demo-status demo-status-empty">
+                                Sin datos simulados
+                            </span>
+                        </div>
+                        <p>
+                            Genera visitas de prueba para comprobar el Dashboard.
+                            Se identifican como simuladas y pueden eliminarse sin afectar las visitas reales.
+                        </p>
+                    </div>
+
+                    <div class="demo-analytics-controls">
+                        <label>
+                            <span>Visitas</span>
+                            <input
+                                id="demoVisitCount"
+                                type="number"
+                                min="10"
+                                max="2000"
+                                step="10"
+                                value="150"
+                            >
+                        </label>
+
+                        <label>
+                            <span>Periodo</span>
+                            <select id="demoVisitDays">
+                                <option value="7">7 días</option>
+                                <option value="30" selected>30 días</option>
+                                <option value="90">90 días</option>
+                            </select>
+                        </label>
+
+                        <button
+                            id="btnGenerateDemoVisits"
+                            class="btn btn-primary"
+                            type="button"
+                        >
+                            Generar visitas de prueba
+                        </button>
+
+                        <button
+                            id="btnDeleteDemoVisits"
+                            class="btn btn-danger"
+                            type="button"
+                        >
+                            Eliminar simulación
+                        </button>
+                    </div>
+
+                    <label class="demo-analytics-toggle">
+                        <input id="includeDemoAnalytics" type="checkbox">
+                        <span>Incluir datos simulados en las métricas</span>
+                    </label>
+                </section>
                 
 <div class="dashboard-block-title">
     <span>Resultados del negocio</span>
@@ -783,6 +1171,10 @@ input,textarea,select { font-family:var(--sans); }
                         <option value="90">Últimos 90 días</option>
                         <option value="365">Últimos 12 meses</option>
                     </select>
+                </div>
+                <div id="demoDataNotice" class="demo-data-notice">
+                    <strong>Vista de prueba activa</strong>
+                    <span>Las métricas incluyen eventos simulados creados desde el administrador.</span>
                 </div>
                 <p class="business-performance-note">
                     Contactos = WhatsApp del negocio + WhatsApp de producto/servicio + teléfono + sitio web + Cómo llegar.
@@ -1178,42 +1570,133 @@ input,textarea,select { font-family:var(--sans); }
             </div>
 
             <div class="form-group full">
-                <label id="productImageLabel">Imagen principal del producto</label>
+                <label id="productImageLabel">Imágenes del producto</label>
 
-                <div class="img-upload-tabs">
-                    <button class="img-upload-tab active" type="button" data-tab="url" onclick="switchImgTab('url')">🔗 URL</button>
-                    <button class="img-upload-tab" type="button" data-tab="file" onclick="switchImgTab('file')">📁 Subir archivo</button>
-                </div>
+                <div class="product-image-uploader" id="productImagesDropzone">
+                    <input
+                        type="file"
+                        id="productImagesFile"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                        hidden
+                    >
 
-                <div class="img-upload-panel active" id="imgPanelUrl">
-                    <input type="text" id="productImage" placeholder="https://..." style="width:100%;background:rgba(0,0,0,.5);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:#fff;font-size:12.5px;outline:none;">
-                </div>
+                    <input type="hidden" id="productImage">
+                    <input type="hidden" id="productImage2">
+                    <input type="hidden" id="productImage3">
 
-                <div class="img-upload-panel" id="imgPanelFile">
-                    <div class="img-dropzone" id="imgDropzone">
-                        <input type="file" id="productImageFile" accept="image/jpeg,image/png,image/webp,image/gif">
-                        <div class="img-dropzone-icon">🖼️</div>
-                        <div class="img-dropzone-text">
-                            <strong>Haz clic o arrastra</strong> una imagen aquí<br>
-                            JPG, PNG, WebP — máx. 5 MB
+                    <div class="product-image-toolbar">
+                        <div>
+                            <strong>Galería del producto</strong>
+                            <span>
+                                Cargue hasta 3 imágenes. JPG, PNG o WebP, máximo 5 MB cada una.
+                            </span>
+                        </div>
+
+                        <div class="product-image-toolbar-actions">
+                            <button
+                                class="btn btn-ghost btn-sm"
+                                id="btnSelectProductImages"
+                                type="button"
+                            >
+                                Seleccionar imágenes
+                            </button>
+
+                            <button
+                                class="btn btn-ghost btn-sm"
+                                id="btnPasteProductImage"
+                                type="button"
+                            >
+                                Pegar imagen
+                            </button>
                         </div>
                     </div>
+
+                    <div class="product-image-drop-message">
+                        Arrastre una o varias imágenes aquí, selecciónelas desde su equipo
+                        o copie una imagen y presione <strong>Ctrl + V</strong>.
+                    </div>
+
+                    <div class="product-image-slots">
+                        <article class="product-image-slot" data-image-slot="0">
+                            <div class="product-image-slot-label">
+                                <strong>Imagen principal</strong>
+                                <span>Se mostrará primero</span>
+                            </div>
+
+                            <div class="product-image-preview-box">
+                                <img id="productImagePreview1" alt="Imagen principal">
+                                <div class="product-image-placeholder">
+                                    <span>🖼️</span>
+                                    <small>Sin imagen</small>
+                                </div>
+                            </div>
+
+                            <button
+                                class="product-image-remove"
+                                type="button"
+                                data-remove-image="0"
+                                hidden
+                            >
+                                Eliminar
+                            </button>
+                        </article>
+
+                        <article class="product-image-slot" data-image-slot="1">
+                            <div class="product-image-slot-label">
+                                <strong>Imagen adicional 2</strong>
+                                <span>Vista secundaria</span>
+                            </div>
+
+                            <div class="product-image-preview-box">
+                                <img id="productImagePreview2" alt="Imagen adicional 2">
+                                <div class="product-image-placeholder">
+                                    <span>🖼️</span>
+                                    <small>Sin imagen</small>
+                                </div>
+                            </div>
+
+                            <button
+                                class="product-image-remove"
+                                type="button"
+                                data-remove-image="1"
+                                hidden
+                            >
+                                Eliminar
+                            </button>
+                        </article>
+
+                        <article class="product-image-slot" data-image-slot="2">
+                            <div class="product-image-slot-label">
+                                <strong>Imagen adicional 3</strong>
+                                <span>Vista secundaria</span>
+                            </div>
+
+                            <div class="product-image-preview-box">
+                                <img id="productImagePreview3" alt="Imagen adicional 3">
+                                <div class="product-image-placeholder">
+                                    <span>🖼️</span>
+                                    <small>Sin imagen</small>
+                                </div>
+                            </div>
+
+                            <button
+                                class="product-image-remove"
+                                type="button"
+                                data-remove-image="2"
+                                hidden
+                            >
+                                Eliminar
+                            </button>
+                        </article>
+                    </div>
+
                     <div class="img-upload-progress" id="imgUploadProgress">
                         <div class="img-upload-progress-bar" id="imgUploadBar"></div>
                     </div>
+
                     <div class="img-upload-status" id="imgUploadStatus"></div>
                 </div>
-
-                <img id="productImagePreview" class="img-preview" alt="Vista previa">
-            </div>
-
-            <div class="form-group">
-                <label>Imagen adicional 2</label>
-                <input type="text" id="productImage2" placeholder="https://...">
-            </div>
-            <div class="form-group">
-                <label>Imagen adicional 3</label>
-                <input type="text" id="productImage3" placeholder="https://...">
             </div>
 
             <div class="form-group">
@@ -1355,6 +1838,18 @@ if (session) bootApp(session.user);
 
 // ── NAVEGACIÓN ────────────────────────────────────────────────
 document.getElementById('analyticsRange').addEventListener('change', loadDashboard);
+
+document
+    .getElementById('includeDemoAnalytics')
+    .addEventListener('change', loadDashboard);
+
+document
+    .getElementById('btnGenerateDemoVisits')
+    .addEventListener('click', generateDemoVisits);
+
+document
+    .getElementById('btnDeleteDemoVisits')
+    .addEventListener('click', deleteDemoVisits);
 
 document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
@@ -1589,6 +2084,172 @@ function planPerformanceBadge(code, label) {
     return `<span class="plan-kpi-badge ${cssClass}">${esc(label || 'Pendiente')}</span>`;
 }
 
+
+const DEMO_SOURCE = 'urbanex_demo';
+const DEMO_MEDIUM = 'admin_simulation';
+
+function updateDemoAnalyticsStatus(pageViews, included) {
+    const status = document.getElementById('demoAnalyticsStatus');
+    const notice = document.getElementById('demoDataNotice');
+
+    if (status) {
+        if (Number(pageViews || 0) > 0) {
+            status.textContent =
+                `${Number(pageViews)} visitas simuladas`;
+
+            status.className =
+                'demo-status demo-status-active';
+        } else {
+            status.textContent =
+                'Sin datos simulados';
+
+            status.className =
+                'demo-status demo-status-empty';
+        }
+    }
+
+    if (notice) {
+        notice.classList.toggle(
+            'visible',
+            Boolean(included && Number(pageViews || 0) > 0)
+        );
+    }
+}
+
+async function generateDemoVisits() {
+    const button =
+        document.getElementById('btnGenerateDemoVisits');
+
+    const visitCount = Math.max(
+        10,
+        Math.min(
+            2000,
+            Number(
+                document.getElementById('demoVisitCount')?.value || 150
+            )
+        )
+    );
+
+    const days = Math.max(
+        1,
+        Math.min(
+            90,
+            Number(
+                document.getElementById('demoVisitDays')?.value || 30
+            )
+        )
+    );
+
+    if (!confirm(
+        `¿Generar ${visitCount} visitas simuladas distribuidas durante ${days} días?`
+    )) {
+        return;
+    }
+
+    try {
+        if (button) {
+            button.disabled = true;
+            button.textContent = 'Generando...';
+        }
+
+        const { data, error } = await supabase.rpc(
+            'admin_generate_urbanex_demo_visits',
+            {
+                p_visit_count: visitCount,
+                p_days: days,
+            }
+        );
+
+        if (error) {
+            throw error;
+        }
+
+        document.getElementById('includeDemoAnalytics').checked = true;
+
+        const generatedVisits =
+            Number(data?.page_views || visitCount);
+
+        const generatedContacts =
+            Number(data?.contact_events || 0);
+
+        toast(
+            `Simulación creada: ${generatedVisits} visitas y ${generatedContacts} contactos de prueba.`
+        );
+
+        await loadDashboard();
+    } catch (error) {
+        console.error('Generar visitas simuladas:', error);
+
+        toast(
+            'No se pudieron generar las visitas de prueba: ' +
+            (
+                error?.message ||
+                error?.details ||
+                error?.hint ||
+                'ejecute el SQL 014_visitas_simuladas_admin.sql'
+            ),
+            'error'
+        );
+    } finally {
+        if (button) {
+            button.disabled = false;
+            button.textContent = 'Generar visitas de prueba';
+        }
+    }
+}
+
+async function deleteDemoVisits() {
+    if (!confirm(
+        '¿Eliminar todos los eventos simulados? Las visitas reales no serán modificadas.'
+    )) {
+        return;
+    }
+
+    const button =
+        document.getElementById('btnDeleteDemoVisits');
+
+    try {
+        if (button) {
+            button.disabled = true;
+            button.textContent = 'Eliminando...';
+        }
+
+        const { data, error } = await supabase.rpc(
+            'admin_delete_urbanex_demo_visits'
+        );
+
+        if (error) {
+            throw error;
+        }
+
+        document.getElementById('includeDemoAnalytics').checked = false;
+
+        toast(
+            `${Number(data?.deleted_events || 0)} eventos simulados eliminados.`
+        );
+
+        await loadDashboard();
+    } catch (error) {
+        console.error('Eliminar visitas simuladas:', error);
+
+        toast(
+            'No se pudieron eliminar los datos simulados: ' +
+            (
+                error?.message ||
+                error?.details ||
+                error?.hint ||
+                'revise la función SQL'
+            ),
+            'error'
+        );
+    } finally {
+        if (button) {
+            button.disabled = false;
+            button.textContent = 'Eliminar simulación';
+        }
+    }
+}
+
 // ── DASHBOARD ────────────────────────────────────────────────
 async function loadDashboard() {
     const businessStatsGrid =
@@ -1648,6 +2309,9 @@ async function loadDashboard() {
         const days = Number(
             document.getElementById('analyticsRange')?.value || 30
         );
+
+        const includeDemoAnalytics =
+            document.getElementById('includeDemoAnalytics')?.checked === true;
 
         const since = new Date(
             Date.now() - days * 24 * 60 * 60 * 1000
@@ -1791,10 +2455,25 @@ async function loadDashboard() {
                 ? plansResult.data
                 : [];
 
-        const events =
+        const rawEvents =
             Array.isArray(eventsResult.data)
                 ? eventsResult.data
                 : [];
+
+        const isDemoAnalyticsEvent = (event) =>
+            String(event?.utm_source || '').toLowerCase() === 'urbanex_demo' &&
+            String(event?.utm_medium || '').toLowerCase() === 'admin_simulation';
+
+        const demoEvents = rawEvents.filter(isDemoAnalyticsEvent);
+
+        const events = includeDemoAnalytics
+            ? rawEvents
+            : rawEvents.filter(event => !isDemoAnalyticsEvent(event));
+
+        updateDemoAnalyticsStatus(
+            demoEvents.filter(event => event.event_type === 'page_view').length,
+            includeDemoAnalytics
+        );
 
         const hours =
             Array.isArray(hoursResult.data)
@@ -3796,7 +4475,7 @@ function syncProductModalType() {
     document.getElementById('productDescLabel').textContent = isService ? 'Descripción del servicio' : 'Descripción';
     document.getElementById('productPriceLabel').textContent = isService ? 'Precio o tarifa (USD)' : 'Precio normal (USD)';
     document.getElementById('productOfferText').textContent = isService ? 'Servicio en oferta' : 'Producto en oferta';
-    document.getElementById('productImageLabel').textContent = isService ? 'Imagen principal del servicio' : 'Imagen principal del producto';
+    document.getElementById('productImageLabel').textContent = isService ? 'Imágenes del servicio' : 'Imágenes del producto';
     document.getElementById('saveProductText').textContent = isService ? 'Guardar servicio' : 'Guardar producto';
 }
 
@@ -3897,21 +4576,10 @@ document.getElementById('btnNewProduct').addEventListener('click', () => {
     document.getElementById('productOrder').value = String(currentProducts.length);
     document.getElementById('productAvailable').checked = true;
     document.getElementById('productOnSale').checked = false;
-    document.getElementById('productImagePreview').classList.remove('visible');
-    document.getElementById('productImagePreview').src = '';
     resetImgUploader();
     syncProductModalType();
     openModal('productModal');
 });
-
-function resetImgUploader() {
-    switchImgTab('url');
-    const fi = document.getElementById('productImageFile');
-    if (fi) fi.value = '';
-    document.getElementById('imgUploadProgress').classList.remove('visible');
-    document.getElementById('imgUploadBar').style.width = '0%';
-    document.getElementById('imgUploadStatus').textContent = '';
-}
 
 // ── Imagen portada de negocio ─────────────────────────────────
 const BIZ_BUCKET = 'business-images';
@@ -4000,100 +4668,616 @@ function resetBizImgUploader() {
 }
 
 // ══════════════════════════════════════════════════════════════
-// IMAGEN PRODUCTO — tabs URL / Subir archivo
+// IMÁGENES DEL PRODUCTO — hasta 3 archivos, arrastrar o pegar
 // ══════════════════════════════════════════════════════════════
 const BUCKET = 'product-images';
+const PRODUCT_IMAGE_LIMIT = 3;
+const PRODUCT_IMAGE_MAX_BYTES = 5 * 1024 * 1024;
+const PRODUCT_IMAGE_TYPES = new Set([
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+]);
 
-window.switchImgTab = (tab) => {
-    document.querySelectorAll('#productModal .img-upload-tab').forEach(t =>
-        t.classList.toggle('active', t.dataset.tab === tab)
-    );
-    document.getElementById('imgPanelUrl').classList.toggle('active', tab === 'url');
-    document.getElementById('imgPanelFile').classList.toggle('active', tab === 'file');
-};
+let productImageUrls = ['', '', ''];
 
-// Preview desde URL imagen 1
-document.getElementById('productImage').addEventListener('input', () => {
-    const url = document.getElementById('productImage').value.trim();
-    const preview = document.getElementById('productImagePreview');
-    if (url) {
-        preview.src = url;
-        preview.classList.add('visible');
-        preview.onerror = () => preview.classList.remove('visible');
-    } else {
-        preview.classList.remove('visible');
-        preview.src = '';
+function productImageInputIds() {
+    return [
+        'productImage',
+        'productImage2',
+        'productImage3',
+    ];
+}
+
+function syncProductImageHiddenInputs() {
+    productImageInputIds().forEach((id, index) => {
+        const input = document.getElementById(id);
+
+        if (input) {
+            input.value =
+                productImageUrls[index] || '';
+        }
+    });
+}
+
+function renderProductImageSlots() {
+    productImageUrls.forEach((url, index) => {
+        const slot = document.querySelector(
+            `[data-image-slot="${index}"]`
+        );
+
+        const preview =
+            document.getElementById(
+                `productImagePreview${index + 1}`
+            );
+
+        const removeButton =
+            document.querySelector(
+                `[data-remove-image="${index}"]`
+            );
+
+        const hasImage =
+            Boolean(String(url || '').trim());
+
+        slot?.classList.toggle(
+            'has-image',
+            hasImage
+        );
+
+        if (preview) {
+            if (hasImage) {
+                preview.src = url;
+
+                preview.onerror = () => {
+                    preview.removeAttribute('src');
+                    slot?.classList.remove('has-image');
+
+                    if (removeButton) {
+                        removeButton.hidden = true;
+                    }
+                };
+            } else {
+                preview.removeAttribute('src');
+            }
+        }
+
+        if (removeButton) {
+            removeButton.hidden = !hasImage;
+        }
+    });
+
+    syncProductImageHiddenInputs();
+}
+
+function resetImgUploader(urls = ['', '', '']) {
+    productImageUrls = [
+        String(urls[0] || '').trim(),
+        String(urls[1] || '').trim(),
+        String(urls[2] || '').trim(),
+    ];
+
+    const fileInput =
+        document.getElementById(
+            'productImagesFile'
+        );
+
+    if (fileInput) {
+        fileInput.value = '';
     }
-});
 
-// Drag & drop visual
-const dropzone = document.getElementById('imgDropzone');
-dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
-dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-dropzone.addEventListener('drop', e => { e.preventDefault(); dropzone.classList.remove('dragover'); });
+    const progress =
+        document.getElementById(
+            'imgUploadProgress'
+        );
 
-// Subida al seleccionar archivo
-document.getElementById('productImageFile').addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const bar =
+        document.getElementById(
+            'imgUploadBar'
+        );
 
-    if (file.size > 5 * 1024 * 1024) {
-        toast('La imagen no puede superar 5 MB.', 'error'); return;
-    }
-    if (!file.type.startsWith('image/')) {
-        toast('Solo se permiten archivos de imagen.', 'error'); return;
-    }
+    const status =
+        document.getElementById(
+            'imgUploadStatus'
+        );
 
-    const progress  = document.getElementById('imgUploadProgress');
-    const bar       = document.getElementById('imgUploadBar');
-    const status    = document.getElementById('imgUploadStatus');
-    const preview   = document.getElementById('productImagePreview');
+    progress?.classList.remove('visible');
 
-    progress.classList.add('visible');
-    bar.style.width = '20%';
-    status.textContent = 'Subiendo imagen...';
-    status.style.color = 'var(--dark)';
-
-    const ext  = file.name.split('.').pop().toLowerCase();
-    const safe = file.name.replace(/[^a-z0-9]/gi, '-').toLowerCase().slice(0, 40);
-    const path = `${currentProdBizId || 'admin'}/${Date.now()}-${safe}.${ext}`;
-
-    bar.style.width = '50%';
-
-    const { data: uploaded, error: uploadErr } = await supabase.storage
-        .from(BUCKET)
-        .upload(path, file, { upsert: false, contentType: file.type });
-
-    if (uploadErr) {
+    if (bar) {
         bar.style.width = '0%';
-        progress.classList.remove('visible');
-        status.textContent = '✗ Error: ' + uploadErr.message;
-        status.style.color = 'var(--red)';
-        toast('Error al subir imagen: ' + uploadErr.message, 'error');
+    }
+
+    if (status) {
+        status.textContent = '';
+        status.style.color = '';
+    }
+
+    renderProductImageSlots();
+}
+
+function productImageExtension(file) {
+    const extensions = {
+        'image/jpeg': 'jpg',
+        'image/png': 'png',
+        'image/webp': 'webp',
+    };
+
+    return extensions[file.type] || 'jpg';
+}
+
+function validateProductImageFile(file) {
+    if (!PRODUCT_IMAGE_TYPES.has(file.type)) {
+        throw new Error(
+            `${file.name || 'La imagen'} no es JPG, PNG o WebP.`
+        );
+    }
+
+    if (file.size > PRODUCT_IMAGE_MAX_BYTES) {
+        throw new Error(
+            `${file.name || 'La imagen'} supera el máximo de 5 MB.`
+        );
+    }
+}
+
+function availableProductImageSlots() {
+    return productImageUrls
+        .map((url, index) => ({
+            url,
+            index,
+        }))
+        .filter(item => !item.url)
+        .map(item => item.index);
+}
+
+async function uploadProductImageFile(
+    file,
+    slotIndex
+) {
+    validateProductImageFile(file);
+
+    const extension =
+        productImageExtension(file);
+
+    const businessFolder =
+        String(currentProdBizId || 'admin')
+            .replace(
+                /[^a-zA-Z0-9_-]/g,
+                '-'
+            );
+
+    const path =
+        `${businessFolder}/${crypto.randomUUID()}.${extension}`;
+
+    const {
+        data: uploaded,
+        error: uploadError,
+    } = await supabase.storage
+        .from(BUCKET)
+        .upload(path, file, {
+            upsert: false,
+            contentType: file.type,
+            cacheControl: '3600',
+        });
+
+    if (uploadError) {
+        throw new Error(
+            `No se pudo subir ${file.name}: ${uploadError.message}`
+        );
+    }
+
+    const { data: publicData } =
+        supabase.storage
+            .from(BUCKET)
+            .getPublicUrl(uploaded.path);
+
+    const publicUrl =
+        String(
+            publicData?.publicUrl || ''
+        ).trim();
+
+    if (!publicUrl) {
+        throw new Error(
+            `Supabase no devolvió la URL pública de ${file.name}.`
+        );
+    }
+
+    productImageUrls[slotIndex] =
+        publicUrl;
+
+    renderProductImageSlots();
+
+    return publicUrl;
+}
+
+async function handleProductImageFiles(
+    fileList
+) {
+    const files =
+        Array.from(fileList || []);
+
+    if (!files.length) {
         return;
     }
 
-    bar.style.width = '100%';
+    if (!currentProdBizId) {
+        toast(
+            'Seleccione primero el negocio al que pertenece el producto.',
+            'error'
+        );
 
-    const { data: { publicUrl } } = supabase
-        .storage
-        .from(BUCKET)
-        .getPublicUrl(uploaded.path);
+        return;
+    }
 
-    document.getElementById('productImage').value = publicUrl;
-    preview.src = publicUrl;
-    preview.classList.add('visible');
+    const availableSlots =
+        availableProductImageSlots();
 
-    status.textContent = '✓ Imagen subida correctamente';
-    status.style.color = 'var(--green)';
+    if (!availableSlots.length) {
+        toast(
+            'Ya se cargaron las 3 imágenes permitidas. Elimine una para reemplazarla.',
+            'error'
+        );
 
-    setTimeout(() => {
-        progress.classList.remove('visible');
-        bar.style.width = '0%';
-    }, 2000);
+        return;
+    }
 
-    toast('Imagen subida ✓', 'success');
-});
+    const selectedFiles =
+        files.slice(
+            0,
+            availableSlots.length
+        );
+
+    if (
+        files.length >
+        availableSlots.length
+    ) {
+        toast(
+            `Solo se cargarán ${availableSlots.length} imágenes porque el límite es 3.`,
+            'error'
+        );
+    }
+
+    const progress =
+        document.getElementById(
+            'imgUploadProgress'
+        );
+
+    const bar =
+        document.getElementById(
+            'imgUploadBar'
+        );
+
+    const status =
+        document.getElementById(
+            'imgUploadStatus'
+        );
+
+    progress?.classList.add('visible');
+
+    if (status) {
+        status.style.color =
+            'var(--dark)';
+    }
+
+    let uploadedCount = 0;
+
+    try {
+        for (
+            let fileIndex = 0;
+            fileIndex <
+                selectedFiles.length;
+            fileIndex += 1
+        ) {
+            const file =
+                selectedFiles[fileIndex];
+
+            const slotIndex =
+                availableSlots[fileIndex];
+
+            if (status) {
+                status.textContent =
+                    `Subiendo ${fileIndex + 1} de ${selectedFiles.length}: ${file.name}`;
+            }
+
+            if (bar) {
+                bar.style.width =
+                    `${Math.round(
+                        (
+                            fileIndex /
+                            selectedFiles.length
+                        ) * 100
+                    )}%`;
+            }
+
+            await uploadProductImageFile(
+                file,
+                slotIndex
+            );
+
+            uploadedCount += 1;
+
+            if (bar) {
+                bar.style.width =
+                    `${Math.round(
+                        (
+                            (fileIndex + 1) /
+                            selectedFiles.length
+                        ) * 100
+                    )}%`;
+            }
+        }
+
+        if (status) {
+            status.textContent =
+                `✓ ${uploadedCount} imagen${uploadedCount === 1 ? '' : 'es'} cargada${uploadedCount === 1 ? '' : 's'} correctamente`;
+
+            status.style.color =
+                'var(--green)';
+        }
+
+        toast(
+            `${uploadedCount} imagen${uploadedCount === 1 ? '' : 'es'} cargada${uploadedCount === 1 ? '' : 's'} ✓`,
+            'success'
+        );
+    } catch (error) {
+        console.error(
+            'Cargar imágenes del producto:',
+            error
+        );
+
+        if (status) {
+            status.textContent =
+                '✗ ' +
+                (
+                    error?.message ||
+                    'No se pudieron cargar las imágenes.'
+                );
+
+            status.style.color =
+                'var(--red)';
+        }
+
+        toast(
+            error?.message ||
+            'No se pudieron cargar las imágenes.',
+            'error'
+        );
+    } finally {
+        const fileInput =
+            document.getElementById(
+                'productImagesFile'
+            );
+
+        if (fileInput) {
+            fileInput.value = '';
+        }
+
+        setTimeout(() => {
+            progress?.classList.remove(
+                'visible'
+            );
+
+            if (bar) {
+                bar.style.width =
+                    '0%';
+            }
+        }, 1800);
+    }
+}
+
+async function pasteProductImageFromClipboard() {
+    try {
+        if (!navigator.clipboard?.read) {
+            throw new Error(
+                'Este navegador no permite leer imágenes del portapapeles. Use Ctrl + V dentro del formulario.'
+            );
+        }
+
+        const clipboardItems =
+            await navigator.clipboard.read();
+
+        const files = [];
+
+        for (
+            const item of clipboardItems
+        ) {
+            const imageType =
+                item.types.find(type =>
+                    PRODUCT_IMAGE_TYPES.has(
+                        type
+                    )
+                );
+
+            if (!imageType) {
+                continue;
+            }
+
+            const blob =
+                await item.getType(
+                    imageType
+                );
+
+            const extension =
+                imageType === 'image/png'
+                    ? 'png'
+                    : imageType === 'image/webp'
+                        ? 'webp'
+                        : 'jpg';
+
+            files.push(
+                new File(
+                    [blob],
+                    `imagen-portapapeles-${Date.now()}.${extension}`,
+                    { type: imageType }
+                )
+            );
+        }
+
+        if (!files.length) {
+            throw new Error(
+                'No se encontró una imagen válida en el portapapeles.'
+            );
+        }
+
+        await handleProductImageFiles(
+            files
+        );
+    } catch (error) {
+        toast(
+            error?.message ||
+            'No se pudo pegar la imagen.',
+            'error'
+        );
+    }
+}
+
+const productImagesDropzone =
+    document.getElementById(
+        'productImagesDropzone'
+    );
+
+const productImagesFile =
+    document.getElementById(
+        'productImagesFile'
+    );
+
+document
+    .getElementById(
+        'btnSelectProductImages'
+    )
+    .addEventListener('click', () => {
+        productImagesFile.click();
+    });
+
+document
+    .getElementById(
+        'btnPasteProductImage'
+    )
+    .addEventListener(
+        'click',
+        pasteProductImageFromClipboard
+    );
+
+productImagesFile.addEventListener(
+    'change',
+    event => {
+        handleProductImageFiles(
+            event.target.files
+        );
+    }
+);
+
+productImagesDropzone.addEventListener(
+    'dragover',
+    event => {
+        event.preventDefault();
+
+        productImagesDropzone.classList.add(
+            'dragover'
+        );
+    }
+);
+
+productImagesDropzone.addEventListener(
+    'dragleave',
+    event => {
+        if (
+            !productImagesDropzone.contains(
+                event.relatedTarget
+            )
+        ) {
+            productImagesDropzone.classList.remove(
+                'dragover'
+            );
+        }
+    }
+);
+
+productImagesDropzone.addEventListener(
+    'drop',
+    event => {
+        event.preventDefault();
+
+        productImagesDropzone.classList.remove(
+            'dragover'
+        );
+
+        handleProductImageFiles(
+            event.dataTransfer?.files
+        );
+    }
+);
+
+document
+    .getElementById('productModal')
+    .addEventListener(
+        'paste',
+        event => {
+            const files = Array.from(
+                event.clipboardData?.items ||
+                []
+            )
+                .filter(item =>
+                    item.kind === 'file' &&
+                    PRODUCT_IMAGE_TYPES.has(
+                        item.type
+                    )
+                )
+                .map(item =>
+                    item.getAsFile()
+                )
+                .filter(Boolean);
+
+            if (!files.length) {
+                return;
+            }
+
+            event.preventDefault();
+
+            handleProductImageFiles(
+                files
+            );
+        }
+    );
+
+document
+    .querySelectorAll(
+        '[data-remove-image]'
+    )
+    .forEach(button => {
+        button.addEventListener(
+            'click',
+            () => {
+                const index =
+                    Number(
+                        button.dataset
+                            .removeImage
+                    );
+
+                if (
+                    !Number.isInteger(index) ||
+                    index < 0 ||
+                    index >=
+                        PRODUCT_IMAGE_LIMIT
+                ) {
+                    return;
+                }
+
+                productImageUrls[index] = '';
+
+                productImageUrls =
+                    productImageUrls
+                        .filter(Boolean)
+                        .concat(
+                            ['', '', '']
+                        )
+                        .slice(
+                            0,
+                            PRODUCT_IMAGE_LIMIT
+                        );
+
+                renderProductImageSlots();
+            }
+        );
+    });
 
 // ── Editar producto ──────────────────────────────────────────
 window.editProduct = async id => {
@@ -4115,27 +5299,18 @@ window.editProduct = async id => {
     document.getElementById('productDesc').value = p.description || '';
     document.getElementById('productPrice').value = p.price ?? '';
     document.getElementById('productSalePrice').value = p.sale_price ?? '';
-    document.getElementById('productImage').value = p.image_1_url || p.image_url || '';
-    document.getElementById('productImage2').value = p.image_2_url || '';
-    document.getElementById('productImage3').value = p.image_3_url || '';
     document.getElementById('productOrder').value = p.sort_order ?? 0;
     document.getElementById('productAvailable').checked = productIsActive(p);
     document.getElementById('productOnSale').checked = productIsOnSale(p);
     document.getElementById('productOfferLabel').value = p.offer_label || '';
 
-    resetImgUploader();
+    resetImgUploader([
+        p.image_1_url || p.image_url || '',
+        p.image_2_url || '',
+        p.image_3_url || '',
+    ]);
+
     syncProductModalType();
-
-    const preview = document.getElementById('productImagePreview');
-    const img = firstProductImage(p);
-    if (img) {
-        preview.src = img;
-        preview.classList.add('visible');
-    } else {
-        preview.classList.remove('visible');
-        preview.src = '';
-    }
-
     openModal('productModal');
 };
 
