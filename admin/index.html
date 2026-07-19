@@ -1014,6 +1014,267 @@ input,textarea,select { font-family:var(--sans); }
     }
 }
 
+
+/* ── MENÚ LATERAL FIJO DEFINITIVO ───────────────────────────── */
+.admin-body{
+    display:block!important;
+    position:relative!important;
+    height:calc(100vh - 56px)!important;
+    overflow:hidden!important;
+}
+
+.admin-nav{
+    position:fixed!important;
+    top:56px!important;
+    left:0!important;
+    bottom:0!important;
+    z-index:70!important;
+    width:210px!important;
+    min-width:210px!important;
+    height:auto!important;
+    padding:16px 10px!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    background:#050505!important;
+    border-right:1px solid var(--border)!important;
+    box-shadow:12px 0 32px rgba(0,0,0,.30)!important;
+}
+
+.admin-main{
+    display:block!important;
+    width:calc(100vw - 210px)!important;
+    min-width:0!important;
+    height:calc(100vh - 56px)!important;
+    margin-left:210px!important;
+    padding:24px!important;
+    overflow:auto!important;
+    overscroll-behavior:contain;
+}
+
+.nav-item span{
+    display:inline!important;
+}
+
+.nav-badge{
+    display:inline-flex!important;
+}
+
+.dashboard-action-card{
+    position:relative;
+    cursor:pointer;
+    transition:
+        transform .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease,
+        background .22s ease;
+}
+
+.dashboard-action-card::after{
+    content:"Ver detalle →";
+    display:block;
+    margin-top:9px;
+    color:var(--gold);
+    font-size:8px;
+    font-weight:800;
+    letter-spacing:.45px;
+    text-transform:uppercase;
+}
+
+.dashboard-action-card:hover,
+.dashboard-action-card:focus-visible{
+    transform:translateY(-3px);
+    border-color:rgba(229,193,88,.72)!important;
+    background:
+        linear-gradient(145deg,rgba(229,193,88,.075),transparent 55%),
+        var(--bg3);
+    box-shadow:0 18px 42px rgba(0,0,0,.32);
+    outline:none;
+}
+
+.no-contacts-modal{
+    max-width:920px;
+}
+
+.no-contacts-summary{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:14px;
+    padding:12px 14px;
+    border:1px solid rgba(229,193,88,.20);
+    border-radius:12px;
+    background:rgba(229,193,88,.045);
+}
+
+.no-contacts-summary strong{
+    display:block;
+    color:var(--gold);
+    font-family:var(--serif);
+    font-size:18px;
+}
+
+.no-contacts-summary span{
+    display:block;
+    margin-top:4px;
+    color:var(--dark);
+    font-size:10px;
+}
+
+.no-contacts-search{
+    width:min(330px,100%);
+    height:38px;
+    padding:8px 12px;
+    border:1px solid var(--border2);
+    border-radius:9px;
+    outline:none;
+    color:#fff;
+    background:#080808;
+    font-size:11px;
+}
+
+.no-contacts-search:focus{
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(229,193,88,.07);
+}
+
+.no-contacts-list{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+    max-height:58vh;
+    overflow-y:auto;
+    padding-right:3px;
+}
+
+.no-contact-business{
+    display:grid;
+    grid-template-columns:minmax(190px,1.4fr) minmax(100px,.7fr) minmax(100px,.65fr) minmax(120px,.85fr) auto;
+    align-items:center;
+    gap:12px;
+    padding:12px 13px;
+    border:1px solid var(--border2);
+    border-radius:11px;
+    background:rgba(255,255,255,.018);
+}
+
+.no-contact-business:hover{
+    border-color:rgba(229,193,88,.30);
+    background:rgba(229,193,88,.035);
+}
+
+.no-contact-business-name{
+    min-width:0;
+}
+
+.no-contact-business-name strong{
+    display:block;
+    color:#fff;
+    font-size:12px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.no-contact-business-name span{
+    display:block;
+    margin-top:4px;
+    color:var(--dark);
+    font-size:9px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.no-contact-data{
+    min-width:0;
+}
+
+.no-contact-data small{
+    display:block;
+    color:#777;
+    font-size:8px;
+    font-weight:700;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+}
+
+.no-contact-data strong{
+    display:block;
+    margin-top:5px;
+    color:#ddd;
+    font-size:10px;
+    font-weight:600;
+}
+
+.no-contact-empty{
+    padding:30px 18px;
+    border:1px dashed rgba(229,193,88,.24);
+    border-radius:12px;
+    color:#aaa;
+    background:rgba(0,0,0,.20);
+    text-align:center;
+    font-size:11px;
+}
+
+@media(max-width:768px){
+    .admin-nav{
+        width:185px!important;
+        min-width:185px!important;
+    }
+
+    .admin-main{
+        width:calc(100vw - 185px)!important;
+        margin-left:185px!important;
+        min-width:0!important;
+        padding:16px!important;
+    }
+
+    .nav-item{
+        padding:10px 9px!important;
+        gap:8px!important;
+        font-size:11px!important;
+    }
+
+    .no-contacts-summary{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .no-contacts-search{
+        width:100%;
+    }
+
+    .no-contact-business{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .no-contact-business-name{
+        grid-column:1/-1;
+    }
+}
+
+@media(max-width:520px){
+    .admin-nav{
+        width:170px!important;
+        min-width:170px!important;
+    }
+
+    .admin-main{
+        width:calc(100vw - 170px)!important;
+        margin-left:170px!important;
+        padding:12px!important;
+    }
+
+    .no-contact-business{
+        grid-template-columns:1fr;
+    }
+
+    .no-contact-business-name{
+        grid-column:auto;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -1398,6 +1659,52 @@ input,textarea,select { font-family:var(--sans); }
             </div>
 
         </main>
+    </div>
+</div>
+
+
+<!-- ══ MODAL NEGOCIOS SIN CONTACTOS ══ -->
+<div class="modal-backdrop" id="noContactsModal">
+    <div class="modal no-contacts-modal">
+        <div class="modal-header">
+            <h3>Negocios sin contactos</h3>
+            <button
+                class="modal-close"
+                type="button"
+                onclick="closeModal('noContactsModal')"
+            >
+                ✕
+            </button>
+        </div>
+
+        <div class="no-contacts-summary">
+            <div>
+                <strong id="noContactsModalCount">0 negocios</strong>
+                <span id="noContactsModalPeriod">
+                    Sin acciones comerciales durante el periodo seleccionado.
+                </span>
+            </div>
+
+            <input
+                id="noContactsSearch"
+                class="no-contacts-search"
+                type="search"
+                placeholder="Buscar negocio, correo o ciudad..."
+                autocomplete="off"
+            >
+        </div>
+
+        <div id="noContactsList" class="no-contacts-list"></div>
+
+        <div class="modal-footer">
+            <button
+                class="btn btn-ghost"
+                type="button"
+                onclick="closeModal('noContactsModal')"
+            >
+                Cerrar
+            </button>
+        </div>
     </div>
 </div>
 
@@ -2027,18 +2334,53 @@ function formatMoney(value) {
     }).format(Number(value || 0));
 }
 
-function metricCard(label, value, detail, tone = '', valueClass = '') {
+function metricCard(
+    label,
+    value,
+    detail,
+    tone = '',
+    valueClass = '',
+    action = ''
+) {
+    const actionAttributes = action
+        ? ` role="button" tabindex="0" data-dashboard-action="${esc(action)}"`
+        : '';
+
+    const actionClass = action
+        ? ' dashboard-action-card'
+        : '';
+
     return `
-        <div class="stat-card ${tone ? `stat-${tone}` : ''}">
+        <div
+            class="stat-card ${tone ? `stat-${tone}` : ''}${actionClass}"
+            ${actionAttributes}
+        >
             <div class="stat-label">${esc(label)}</div>
             <div class="stat-value ${valueClass}">${value}</div>
             <div class="stat-sub">${detail}</div>
         </div>`;
 }
 
-function alertCard(label, value, detail, level = 'ok') {
+function alertCard(
+    label,
+    value,
+    detail,
+    level = 'ok',
+    action = ''
+) {
+    const actionAttributes = action
+        ? ` role="button" tabindex="0" data-dashboard-action="${esc(action)}"`
+        : '';
+
+    const actionClass = action
+        ? ' dashboard-action-card'
+        : '';
+
     return `
-        <div class="alert-card alert-${level}">
+        <div
+            class="alert-card alert-${level}${actionClass}"
+            ${actionAttributes}
+        >
             <div class="alert-label">${esc(label)}</div>
             <div class="alert-value">${Number(value || 0)}</div>
             <div class="alert-detail">${detail}</div>
@@ -2138,6 +2480,157 @@ function formatDurationSeconds(value) {
 
     return `${hours}h ${String(remainingMinutes).padStart(2, '0')}m`;
 }
+
+
+let dashboardBusinessesWithoutContacts = [];
+let dashboardNoContactsDays = 30;
+
+function renderBusinessesWithoutContacts(filterText = '') {
+    const container =
+        document.getElementById('noContactsList');
+
+    const normalizedFilter =
+        String(filterText || '')
+            .trim()
+            .toLowerCase();
+
+    const filtered =
+        dashboardBusinessesWithoutContacts.filter(item => {
+            if (!normalizedFilter) {
+                return true;
+            }
+
+            return [
+                item.name,
+                item.slug,
+                item.email,
+                item.city,
+                item.planLabel,
+            ]
+                .join(' ')
+                .toLowerCase()
+                .includes(normalizedFilter);
+        });
+
+    if (!filtered.length) {
+        container.innerHTML = `
+            <div class="no-contact-empty">
+                ${
+                    dashboardBusinessesWithoutContacts.length
+                        ? 'No existen coincidencias con la búsqueda.'
+                        : 'Todos los negocios activos registraron al menos un contacto durante este periodo.'
+                }
+            </div>`;
+
+        return;
+    }
+
+    container.innerHTML = filtered
+        .map(item => `
+            <article class="no-contact-business">
+                <div class="no-contact-business-name">
+                    <strong>${esc(item.name)}</strong>
+                    <span>${esc(item.email || item.slug || 'Sin correo registrado')}</span>
+                </div>
+
+                <div class="no-contact-data">
+                    <small>Ubicación</small>
+                    <strong>${esc(item.city || 'No registrada')}</strong>
+                </div>
+
+                <div class="no-contact-data">
+                    <small>Plan</small>
+                    <strong>
+                        ${planPerformanceBadge(
+                            item.planCode,
+                            item.planLabel
+                        )}
+                    </strong>
+                </div>
+
+                <div class="no-contact-data">
+                    <small>Actividad</small>
+                    <strong>
+                        ${item.visits} visitas · ${item.visitors} visitantes
+                    </strong>
+                </div>
+
+                <a
+                    class="btn btn-ghost btn-sm"
+                    href="../business/?slug=${encodeURIComponent(item.slug || item.id)}"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    Ver negocio
+                </a>
+            </article>
+        `)
+        .join('');
+}
+
+function openBusinessesWithoutContactsModal() {
+    const count =
+        dashboardBusinessesWithoutContacts.length;
+
+    document.getElementById(
+        'noContactsModalCount'
+    ).textContent =
+        `${count} negocio${count === 1 ? '' : 's'}`;
+
+    document.getElementById(
+        'noContactsModalPeriod'
+    ).textContent =
+        `Sin WhatsApp, teléfono, sitio web ni Cómo llegar durante los últimos ${dashboardNoContactsDays} días.`;
+
+    const search =
+        document.getElementById('noContactsSearch');
+
+    search.value = '';
+
+    renderBusinessesWithoutContacts();
+
+    openModal('noContactsModal');
+
+    setTimeout(() => search.focus(), 80);
+}
+
+document
+    .getElementById('noContactsSearch')
+    .addEventListener('input', event => {
+        renderBusinessesWithoutContacts(
+            event.target.value
+        );
+    });
+
+document.addEventListener('click', event => {
+    const actionCard =
+        event.target.closest(
+            '[data-dashboard-action="show-no-contacts"]'
+        );
+
+    if (!actionCard) {
+        return;
+    }
+
+    openBusinessesWithoutContactsModal();
+});
+
+document.addEventListener('keydown', event => {
+    const actionCard =
+        event.target.closest(
+            '[data-dashboard-action="show-no-contacts"]'
+        );
+
+    if (
+        !actionCard ||
+        !['Enter', ' '].includes(event.key)
+    ) {
+        return;
+    }
+
+    event.preventDefault();
+    openBusinessesWithoutContactsModal();
+});
 
 
 // ── DASHBOARD ────────────────────────────────────────────────
@@ -3053,9 +3546,133 @@ async function loadDashboard() {
                 )
                 .length;
 
+        const trafficByBusiness =
+            new Map();
+
+        const ensureTrafficSummary =
+            businessId => {
+                const id = idOf(businessId);
+
+                if (!trafficByBusiness.has(id)) {
+                    trafficByBusiness.set(
+                        id,
+                        {
+                            visits: 0,
+                            visitors: new Set(),
+                            lastActivity: null,
+                        }
+                    );
+                }
+
+                return trafficByBusiness.get(id);
+            };
+
+        currentEvents.forEach(event => {
+            const businessId =
+                idOf(event.business_id);
+
+            if (!businessId) {
+                return;
+            }
+
+            const summary =
+                ensureTrafficSummary(businessId);
+
+            const createdAt =
+                eventDate(event);
+
+            if (
+                createdAt &&
+                (
+                    !summary.lastActivity ||
+                    createdAt > summary.lastActivity
+                )
+            ) {
+                summary.lastActivity =
+                    createdAt;
+            }
+
+            if (isPageView(event)) {
+                summary.visits += 1;
+
+                const key =
+                    visitorKey(event);
+
+                if (key) {
+                    summary.visitors.add(key);
+                }
+            }
+        });
+
+        const businessesWithoutContactsList =
+            activeBusinesses.filter(
+                business =>
+                    !currentBusinessContactIds.has(
+                        idOf(business.id)
+                    )
+            );
+
         const businessesWithoutContacts =
-            activeBusinesses.length -
-            businessesWithContacts;
+            businessesWithoutContactsList.length;
+
+        dashboardNoContactsDays = days;
+
+        dashboardBusinessesWithoutContacts =
+            businessesWithoutContactsList
+                .map(business => {
+                    const businessId =
+                        idOf(business.id);
+
+                    const traffic =
+                        trafficByBusiness.get(
+                            businessId
+                        ) || {
+                            visits: 0,
+                            visitors: new Set(),
+                            lastActivity: null,
+                        };
+
+                    const plan =
+                        subscriptionState(
+                            businessId
+                        );
+
+                    return {
+                        id: businessId,
+                        name:
+                            business.name ||
+                            'Negocio sin nombre',
+                        slug:
+                            business.slug ||
+                            businessId,
+                        email:
+                            business.owner_email ||
+                            business.email ||
+                            '',
+                        city:
+                            [
+                                business.city,
+                                business.province,
+                            ]
+                                .filter(Boolean)
+                                .join(' · ') ||
+                            'No registrada',
+                        planCode: plan.code,
+                        planLabel: plan.label,
+                        visits: traffic.visits,
+                        visitors:
+                            traffic.visitors.size,
+                        lastActivity:
+                            traffic.lastActivity,
+                    };
+                })
+                .sort((a, b) =>
+                    b.visits - a.visits ||
+                    a.name.localeCompare(
+                        b.name,
+                        'es'
+                    )
+                );
 
         const whatsappClicks =
             currentEvents.filter(event =>
@@ -3288,7 +3905,9 @@ async function loadDashboard() {
                 `,
                 businessesWithoutContacts > 0
                     ? 'warning'
-                    : 'success'
+                    : 'success',
+                '',
+                'show-no-contacts'
             ),
 
             metricCard(
@@ -3672,7 +4291,8 @@ async function loadDashboard() {
                 `sin ninguna acción comercial en ${days} días`,
                 businessesWithoutContacts > 0
                     ? 'warning'
-                    : 'ok'
+                    : 'ok',
+                'show-no-contacts'
             ),
 
             alertCard(
