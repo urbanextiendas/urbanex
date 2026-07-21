@@ -2337,11 +2337,24 @@ body{
 }
 .hero-company-info-grid strong.is-open{color:#5ee494!important;}
 .hero-company-info-grid strong.is-closed{color:#ffbc4d!important;}
+.hero-company-hours{
+  margin-top:14px!important;padding:15px!important;border:1px solid rgba(255,165,0,.25)!important;
+  border-radius:14px!important;background:rgba(0,0,0,.16)!important;
+}
+.hero-company-hours-title{display:flex!important;align-items:center!important;justify-content:space-between!important;margin-bottom:9px!important;}
+.hero-company-hours-title span{color:#fff!important;font-size:9px!important;font-weight:900!important;letter-spacing:1px!important;text-transform:uppercase!important;}
+.hero-company-hours-title small{color:#ffbd46!important;font-size:8px!important;font-weight:800!important;}
+.hero-company-hours-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:18px!important;}
+.hero-company-hour-row{display:flex!important;justify-content:space-between!important;gap:10px!important;padding:6px 0!important;border-bottom:1px solid rgba(255,255,255,.07)!important;font-size:9px!important;}
+.hero-company-hour-row b{color:#aeb9c9!important;font-weight:700!important;}
+.hero-company-hour-row span{color:#fff!important;text-align:right!important;}
+.hero-company-hour-row.is-today b{color:#ffa500!important;}
 @media(max-width:700px){
   .hero-company-card{padding:18px!important;border-radius:16px!important;}
   .hero-company-logo-shell{width:68px!important;height:68px!important;}
   .hero-company-info-grid{gap:8px!important;}
   .hero-company-info-grid>div{padding:9px!important;}
+  .hero-company-hours-grid{grid-template-columns:1fr!important;}
 }
 </style>
 </head>
@@ -2800,6 +2813,17 @@ $('businessPhone').innerHTML=businessPhoneValue
 :'No registrado';
 
 const open=isOpenNow();
+const weekDays=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const hoursByDay={};
+hours.forEach(row=>{const day=Number(row.day_of_week);(hoursByDay[day] ||= []).push(row);});
+const todayNumber=new Date().getDay();
+const weeklyHoursHtml=weekDays.map((day,index)=>{
+  const rows=(hoursByDay[index]||[]).sort((a,b)=>(a.session_number||1)-(b.session_number||1));
+  const label=rows.length
+    ? rows.map(row=>row.is_closed?'Cerrado':`${timeLabel(row.open_time)} – ${timeLabel(row.close_time)}`).join(' / ')
+    : 'No registrado';
+  return `<div class="hero-company-hour-row${index===todayNumber?' is-today':''}"><b>${day}</b><span>${esc(label)}</span></div>`;
+}).join('');
 
 const cover=first(
 business.cover_image,
@@ -2840,6 +2864,13 @@ $('coverBox').innerHTML=`
       <span>Catálogo</span>
       <strong>${products.length} publicación${products.length===1?'':'es'}</strong>
     </div>
+  </div>
+  <div class="hero-company-hours">
+    <div class="hero-company-hours-title">
+      <span>Horario de atención</span>
+      <small>${open?'Abierto ahora':'Cerrado ahora'}</small>
+    </div>
+    <div class="hero-company-hours-grid">${weeklyHoursHtml}</div>
   </div>
 </div>
 `;
