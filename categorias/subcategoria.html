@@ -1368,6 +1368,55 @@ body{
   .ux-card{padding:14px!important;}
 }
 </style>
+<style id="urbanex-professional-business-cards-v10">
+.ux-grid{
+  grid-template-columns:repeat(auto-fill,minmax(350px,430px))!important;
+  gap:18px!important;
+}
+.ux-card{
+  min-height:216px!important;
+  padding:0!important;
+  border:1px solid #dfe4eb!important;
+  border-top:0!important;
+  border-radius:18px!important;
+  background:#fff!important;
+  box-shadow:0 10px 30px rgba(22,43,78,.08)!important;
+}
+.ux-card::before{
+  content:""!important;display:block!important;height:5px!important;
+  background:linear-gradient(90deg,#ffa500 0 32%,#162b4e 32% 100%)!important;
+}
+.ux-card::after{display:none!important;}
+.ux-card:hover{transform:translateY(-5px)!important;box-shadow:0 18px 40px rgba(22,43,78,.15)!important;}
+.ux-company-head{padding:18px 20px 12px!important;gap:14px!important;align-items:center!important;}
+.ux-company-logo{
+  width:64px!important;height:64px!important;flex:0 0 64px!important;padding:7px!important;
+  border:1px solid #dce2ea!important;border-radius:14px!important;background:#f7f9fc!important;
+}
+.ux-company-logo-img{object-fit:contain!important;}
+.ux-company-category{margin:0 0 5px!important;color:#a76400!important;font-size:8.5px!important;letter-spacing:1.1px!important;}
+.ux-company-title h3{margin:0!important;color:#162b4e!important;font-size:16px!important;line-height:1.2!important;letter-spacing:-.15px!important;}
+.ux-card .ux-card-body{padding:0 20px 17px!important;}
+.ux-company-description{
+  min-height:38px!important;margin:0!important;color:#4f5968!important;font-size:10.5px!important;
+  line-height:1.55!important;-webkit-line-clamp:2!important;
+}
+.ux-company-location{min-height:28px!important;margin:9px 0 0!important;color:#667084!important;font-size:9.5px!important;line-height:1.35!important;}
+.ux-company-location>span:first-child{color:#ffa500!important;font-size:8px!important;}
+.ux-card .ux-card-bottom{min-height:44px!important;margin-top:10px!important;padding-top:12px!important;border-top:1px solid #e9edf2!important;}
+.ux-badge{display:inline-flex!important;align-items:center!important;gap:6px!important;padding:0!important;border:0!important;background:transparent!important;color:#3c3c3c!important;font-size:9px!important;}
+.ux-badge i{width:7px!important;height:7px!important;border-radius:50%!important;background:#29b765!important;box-shadow:0 0 0 3px rgba(41,183,101,.12)!important;}
+.ux-card-cta{padding:0!important;color:#162b4e!important;background:transparent!important;box-shadow:none!important;font-size:9.5px!important;letter-spacing:0!important;}
+.ux-card-cta b{display:inline-grid!important;place-items:center!important;width:24px!important;height:24px!important;margin-left:6px!important;border-radius:50%!important;background:#162b4e!important;color:#fff!important;}
+.ux-card:hover .ux-card-cta{color:#a76400!important;background:transparent!important;}
+.ux-card:hover .ux-card-cta b{background:#ffa500!important;color:#20201f!important;}
+@media(max-width:760px){
+  .ux-grid{grid-template-columns:1fr!important;}
+  .ux-card{min-height:0!important;}
+  .ux-company-head{padding:16px 16px 11px!important;}
+  .ux-card .ux-card-body{padding:0 16px 15px!important;}
+}
+</style>
 </head>
 <body>
 <header class="header-top">
@@ -1407,7 +1456,7 @@ body{
   <aside class="ux-right"><div class="ux-right-head"><h2>Destacados</h2><p id="featuredCount">Cargando...</p></div><div class="ux-sort"><select><option>Ordenar por: Destacados</option></select></div><div id="featuredList" class="ux-featured-list"><div class="ux-note">Cargando destacados...</div></div><a id="backLink" class="ux-back" href="index.html">Volver</a></aside>
 </div>
 <footer class="pie-pagina"><p>© 2026 Urbanex. Desarrollado por NeoDat Consultores.</p></footer>
-<script type="module" src="subcategoria.js?v=20260721-9"></script>
+<script type="module" src="subcategoria.js?v=20260721-10"></script>
 
 <script>
 /* === URBANEX PATCH MINIMO: PWA SIN TUTEO Y LOGO URBA4 === */
