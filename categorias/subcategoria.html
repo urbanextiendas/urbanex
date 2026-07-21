@@ -1038,6 +1038,99 @@ body{
   .search-input{height:40px!important;font-size:11px!important;}
 }
 </style>
+<style id="urbanex-subcategory-professional-v7">
+.ux-main-inner{
+  width:min(1320px,100%)!important;
+  padding:22px clamp(16px,2.5vw,34px) 42px!important;
+}
+.ux-hero{
+  min-height:160px!important;
+  margin-bottom:22px!important;
+  border-radius:20px!important;
+}
+.ux-hero h1{
+  font-size:clamp(36px,5.4vw,66px)!important;
+  letter-spacing:clamp(3px,.75vw,8px)!important;
+}
+.ux-hero::after{bottom:20px!important;}
+.ux-panel-head{
+  min-height:74px!important;
+  padding:0 0 16px!important;
+}
+.ux-panel-head h2{
+  font-size:clamp(24px,2.8vw,32px)!important;
+  line-height:1.12!important;
+}
+.ux-panel-actions input,.ux-panel-actions select{
+  height:44px!important;
+  border-radius:11px!important;
+}
+.ux-grid{
+  grid-template-columns:repeat(auto-fill,minmax(210px,260px))!important;
+  gap:16px!important;
+  padding-top:18px!important;
+}
+.ux-grid>.ux-card,.ux-card{
+  min-height:286px!important;
+  border-radius:15px!important;
+}
+.ux-card-media,.ux-grid>.ux-card>.ux-logo{
+  height:136px!important;
+  min-height:136px!important;
+  flex-basis:136px!important;
+}
+.ux-card-primary-logo,.ux-grid>.ux-card>.ux-logo img{
+  max-width:68%!important;
+  max-height:98px!important;
+}
+.ux-card-body,.ux-grid>.ux-card>.ux-card-body{
+  min-height:146px!important;
+  padding:15px!important;
+}
+.ux-card-body h3,.ux-grid>.ux-card>.ux-card-body h3{
+  font-size:14px!important;
+  letter-spacing:.1px!important;
+}
+.ux-card-bottom{font-size:9px!important;}
+@media(max-width:900px){
+  .ux-main-inner{padding:18px 16px 36px!important;}
+  .ux-hero{min-height:145px!important;}
+  .ux-panel-head{
+    display:flex!important;
+    align-items:flex-end!important;
+    flex-direction:row!important;
+  }
+  .ux-panel-actions{
+    width:auto!important;
+    display:flex!important;
+    grid-template-columns:none!important;
+  }
+  .ux-panel-actions input{width:190px!important;}
+  .ux-panel-actions select{width:175px!important;}
+}
+@media(max-width:680px){
+  .ux-hero{min-height:132px!important;}
+  .ux-hero h1{font-size:clamp(30px,10vw,44px)!important;}
+  .ux-panel-head{
+    display:block!important;
+    min-height:0!important;
+  }
+  .ux-panel-actions{
+    width:100%!important;
+    margin-top:14px!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+  }
+  .ux-panel-actions input,.ux-panel-actions select{width:100%!important;}
+  .ux-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:12px!important;
+  }
+}
+@media(max-width:460px){
+  .ux-grid{grid-template-columns:1fr!important;}
+}
+</style>
 </head>
 <body>
 <header class="header-top">
@@ -1077,7 +1170,7 @@ body{
   <aside class="ux-right"><div class="ux-right-head"><h2>Destacados</h2><p id="featuredCount">Cargando...</p></div><div class="ux-sort"><select><option>Ordenar por: Destacados</option></select></div><div id="featuredList" class="ux-featured-list"><div class="ux-note">Cargando destacados...</div></div><a id="backLink" class="ux-back" href="index.html">Volver</a></aside>
 </div>
 <footer class="pie-pagina"><p>© 2026 Urbanex. Desarrollado por NeoDat Consultores.</p></footer>
-<script type="module" src="subcategoria.js?v=20260721-2"></script>
+<script type="module" src="subcategoria.js?v=20260721-7"></script>
 
 <script>
 /* === URBANEX PATCH MINIMO: PWA SIN TUTEO Y LOGO URBA4 === */
