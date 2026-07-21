@@ -787,6 +787,99 @@ body{padding:0!important;}
 }
 </style>
 
+<style id="urbanex-marketplace-proportions-v3">
+/* Tarjetas compactas y logotipos proporcionales. */
+.ux-grid{
+  grid-template-columns:repeat(auto-fill,minmax(220px,280px))!important;
+  justify-content:start!important;
+  gap:18px!important;
+}
+.ux-grid>.ux-card,
+.ux-card{
+  min-height:300px!important;
+  max-height:none!important;
+  border-radius:16px!important;
+}
+.ux-card-media{
+  height:148px!important;
+  min-height:148px!important;
+  aspect-ratio:auto!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:14px!important;
+  background:
+    radial-gradient(circle at 50% 35%,rgba(229,193,88,.14),transparent 42%),
+    #f8f8f8!important;
+}
+.ux-card-primary-logo{
+  display:block!important;
+  width:auto!important;
+  height:auto!important;
+  max-width:74%!important;
+  max-height:112px!important;
+  object-fit:contain!important;
+  object-position:center!important;
+}
+.ux-card-primary-placeholder{
+  width:70px!important;
+  height:70px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:18px!important;
+  background:#111!important;
+  color:#e5c158!important;
+  font-size:30px!important;
+}
+.ux-card-logo{display:none!important;}
+.ux-card-body{
+  min-height:150px!important;
+  padding:16px!important;
+}
+.ux-card-body h3{
+  font-size:15px!important;
+  line-height:1.25!important;
+}
+.ux-card-bottom{padding-top:10px!important;}
+/* Compatibilidad si el navegador conserva el marcado anterior. */
+.ux-grid>.ux-card>.ux-logo{
+  height:148px!important;
+  flex:0 0 148px!important;
+  padding:14px!important;
+  background:#f8f8f8!important;
+}
+.ux-grid>.ux-card>.ux-logo img{
+  width:auto!important;
+  height:auto!important;
+  max-width:74%!important;
+  max-height:112px!important;
+  padding:0!important;
+  object-fit:contain!important;
+  background:transparent!important;
+}
+.ux-grid>.ux-card>.ux-card-body{
+  min-height:150px!important;
+  padding:16px!important;
+}
+@media(max-width:760px){
+  .ux-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:12px!important;
+  }
+  .ux-grid>.ux-card,.ux-card{min-height:280px!important;}
+  .ux-card-media,.ux-grid>.ux-card>.ux-logo{
+    height:132px!important;
+    min-height:132px!important;
+    flex-basis:132px!important;
+  }
+  .ux-card-primary-logo,.ux-grid>.ux-card>.ux-logo img{
+    max-width:70%!important;
+    max-height:96px!important;
+  }
+}
+@media(max-width:460px){
+  .ux-grid{grid-template-columns:1fr!important;}
+}
+</style>
 </head>
 <body>
 <header class="header-top">
