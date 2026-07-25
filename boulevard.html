@@ -2322,6 +2322,354 @@ body {
 }
 </style>
 
+
+<style id="urbanex-boulevard-clean-fix-v9">
+/* Ajuste final: header superior más limpio + destacados realmente prolijos */
+@media (min-width:1025px){
+  .dashboard-container{
+    grid-template-columns:220px minmax(0,1fr) 340px!important;
+  }
+}
+
+.header-top{
+  padding:0 18px!important;
+}
+.user-tools{
+  gap:10px!important;
+}
+.location-indicator{
+  padding:8px 12px!important;
+  border:1px solid rgba(229,193,88,.18)!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.05)!important;
+  color:#fff!important;
+  font-size:11px!important;
+  font-weight:600!important;
+  line-height:1!important;
+  box-shadow:0 8px 18px rgba(0,0,0,.18)!important;
+}
+.location-indicator svg{
+  width:13px!important;
+  height:13px!important;
+}
+.tool-icon.icon-corazon,
+.profile-avatar{
+  display:none!important;
+}
+
+.aside-showcase-list{
+  background:linear-gradient(180deg,rgba(9,29,51,.98),rgba(5,18,32,.98))!important;
+  border-left:1px solid rgba(229,193,88,.14)!important;
+  padding-bottom:14px!important;
+}
+.showcase-kicker,
+.showcase-auto-badge,
+.showcase-stats,
+.sort-box,
+.featured-progress{
+  display:none!important;
+}
+.showcase-header{
+  padding:20px 18px 14px!important;
+}
+.showcase-heading-row{
+  display:block!important;
+}
+.showcase-header h2{
+  margin:0!important;
+  font-family:var(--font-sans)!important;
+  font-size:17px!important;
+  letter-spacing:.2px!important;
+  line-height:1.15!important;
+  font-weight:800!important;
+  color:#f2d26d!important;
+}
+.shops-scroll-area{
+  padding:0 18px 10px!important;
+  overflow:hidden!important;
+}
+.featured-carousel-track{
+  display:flex!important;
+  width:100%!important;
+  overflow:hidden!important;
+}
+.featured-slide{
+  width:100%!important;
+  min-width:100%!important;
+  padding:0!important;
+}
+.featured-slide[aria-hidden="true"]{
+  display:block!important;
+}
+.featured-business-card{
+  display:flex!important;
+  flex-direction:column!important;
+  min-height:auto!important;
+  height:auto!important;
+  overflow:hidden!important;
+  border-radius:22px!important;
+  border:1px solid rgba(229,193,88,.22)!important;
+  background:linear-gradient(180deg,#0d2745 0%,#08192d 100%)!important;
+  box-shadow:0 18px 34px rgba(0,0,0,.26)!important;
+  text-decoration:none!important;
+}
+.featured-business-card:hover{
+  transform:translateY(-2px)!important;
+}
+.featured-business-media{
+  position:relative!important;
+  height:158px!important;
+  padding:18px 18px 10px!important;
+  background:transparent!important;
+}
+.featured-business-backdrop,
+.featured-business-shade{
+  display:none!important;
+}
+.featured-business-visual-shell,
+.featured-business-visual-shell.is-logo,
+.featured-business-visual-shell.is-cover{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  height:100%!important;
+  padding:14px!important;
+  border-radius:16px!important;
+  background:#ffffff!important;
+  border:1px solid rgba(17,24,39,.08)!important;
+  overflow:hidden!important;
+}
+.featured-business-image,
+.featured-business-image.is-logo,
+.featured-business-image.is-cover{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  background:transparent!important;
+  transform:none!important;
+}
+.featured-business-placeholder{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  height:100%!important;
+  border-radius:16px!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.03))!important;
+  font-size:52px!important;
+}
+.featured-label,
+.featured-status{
+  top:10px!important;
+  padding:7px 12px!important;
+  border-radius:999px!important;
+  font-size:10px!important;
+  font-weight:800!important;
+  letter-spacing:.45px!important;
+  text-transform:uppercase!important;
+}
+.featured-label{left:10px!important;}
+.featured-status{right:10px!important;}
+.featured-business-content{
+  padding:12px 18px 16px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+}
+.featured-category{
+  font-size:10px!important;
+  font-weight:800!important;
+  letter-spacing:1px!important;
+  text-transform:uppercase!important;
+  color:#e5c158!important;
+}
+.featured-business-content h3{
+  margin:0!important;
+  font-size:16px!important;
+  line-height:1.18!important;
+  font-weight:800!important;
+  color:#fff!important;
+}
+.featured-location{
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  font-size:12px!important;
+  color:#d8dfec!important;
+}
+.featured-business-meta{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  padding-top:10px!important;
+  margin-top:4px!important;
+  border-top:1px solid rgba(255,255,255,.10)!important;
+}
+.featured-rating{
+  display:flex!important;
+  align-items:center!important;
+  gap:5px!important;
+  font-size:10px!important;
+  color:#97a8bc!important;
+  min-width:0!important;
+}
+.featured-rating strong{
+  color:#fff!important;
+  font-size:11px!important;
+}
+.featured-card-cta{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:9px!important;
+  height:38px!important;
+  padding:0 0 0 13px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(229,193,88,.28)!important;
+  background:rgba(255,255,255,.03)!important;
+  color:#fff!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  white-space:nowrap!important;
+}
+.featured-card-cta b{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:28px!important;
+  height:28px!important;
+  border-radius:999px!important;
+  background:#e5c158!important;
+  color:#111!important;
+}
+.featured-carousel-controls{
+  padding:10px 18px 8px!important;
+  gap:12px!important;
+  align-items:center!important;
+}
+.featured-control-btn{
+  width:34px!important;
+  height:34px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  background:rgba(255,255,255,.04)!important;
+  color:#fff!important;
+}
+.featured-dots{gap:6px!important;}
+.featured-dot{
+  width:7px!important;
+  height:7px!important;
+  opacity:.45!important;
+}
+.featured-dot.active{
+  width:22px!important;
+  border-radius:999px!important;
+  opacity:1!important;
+}
+.featured-counter{
+  margin-left:auto!important;
+  font-size:11px!important;
+  color:#d3dceb!important;
+}
+.action-footer-box{
+  padding:0 18px 18px!important;
+  border-top:none!important;
+}
+.btn-view-all-shops{
+  height:50px!important;
+  border-radius:999px!important;
+  font-size:14px!important;
+  font-weight:700!important;
+  box-shadow:0 14px 28px rgba(229,193,88,.16)!important;
+}
+
+@media (max-width:1024px){
+  .aside-showcase-list{
+    border-left:none!important;
+    border-top:1px solid rgba(229,193,88,.14)!important;
+  }
+}
+@media (max-width:760px){
+  .header-top{
+    padding:10px 12px!important;
+  }
+  .location-indicator{
+    padding:7px 10px!important;
+    font-size:10px!important;
+  }
+  .aside-showcase-list{
+    padding-bottom:12px!important;
+  }
+  .showcase-header{
+    padding:16px 14px 12px!important;
+  }
+  .showcase-header h2{
+    font-size:15px!important;
+  }
+  .shops-scroll-area{
+    padding:0 14px 8px!important;
+  }
+  .featured-business-card{
+    border-radius:20px!important;
+  }
+  .featured-business-media{
+    height:132px!important;
+    padding:14px 14px 9px!important;
+  }
+  .featured-business-visual-shell,
+  .featured-business-visual-shell.is-logo,
+  .featured-business-visual-shell.is-cover{
+    padding:10px!important;
+    border-radius:14px!important;
+  }
+  .featured-business-content{
+    padding:11px 14px 14px!important;
+    gap:8px!important;
+  }
+  .featured-business-content h3{
+    font-size:14px!important;
+  }
+  .featured-category{
+    font-size:9px!important;
+  }
+  .featured-location,
+  .featured-rating,
+  .featured-counter{
+    font-size:10px!important;
+  }
+  .featured-business-meta{
+    gap:10px!important;
+  }
+  .featured-card-cta{
+    height:34px!important;
+    padding-left:11px!important;
+    font-size:10px!important;
+  }
+  .featured-card-cta b{
+    width:24px!important;
+    height:24px!important;
+  }
+  .featured-carousel-controls{
+    padding:8px 14px 8px!important;
+  }
+  .featured-control-btn{
+    width:32px!important;
+    height:32px!important;
+  }
+  .action-footer-box{
+    padding:0 14px 14px!important;
+  }
+  .btn-view-all-shops{
+    height:46px!important;
+    font-size:13px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -2344,7 +2692,7 @@ body {
         <div class="user-tools">
             <div class="location-indicator">
                 <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                <span>Loja, Ecuador</span>
+                <span>Loja</span>
             </div>
             <div class="tool-icon icon-corazon">
                 <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
