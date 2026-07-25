@@ -3426,8 +3426,8 @@ input,textarea,select { font-family:var(--sans); }
                             <label>
                                 <span>Filas</span>
                                 <select id="recentActivityPageSize">
-                                    <option value="10" selected>10</option>
-                                    <option value="20">20</option>
+                                    <option value="5" selected>5</option>
+                                    <option value="25">25</option>
                                     <option value="50">50</option>
                                 </select>
                             </label>
@@ -4029,6 +4029,113 @@ const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+
+
+// ── ACTIVIDAD RECIENTE: inicialización temprana y segura ──────
+const dashboardRecentState = {
+    rows: [], page: 1, pageSize: 5, query: '', type: ''
+};
+
+function setRecentActivityData(rows) {
+    dashboardRecentState.rows = Array.isArray(rows) ? rows : [];
+    dashboardRecentState.page = 1;
+
+    const typeSelect = document.getElementById('recentActivityType');
+    if (typeSelect) {
+        const current = typeSelect.value;
+        const types = [...new Set(dashboardRecentState.rows.map(row => row.activity))].sort((a, b) => a.localeCompare(b, 'es'));
+        typeSelect.innerHTML = '<option value="">Todas</option>' + types.map(type => `<option value="${esc(type)}">${esc(type)}</option>`).join('');
+        if (types.includes(current)) typeSelect.value = current;
+    }
+
+    bindRecentActivityControls();
+    renderRecentActivityTable();
+}
+
+function bindRecentActivityControls() {
+    const search = document.getElementById('recentActivitySearch');
+    const type = document.getElementById('recentActivityType');
+    const size = document.getElementById('recentActivityPageSize');
+    if (!search || search.dataset.bound === '1') return;
+    search.dataset.bound = '1';
+
+    search.addEventListener('input', () => {
+        dashboardRecentState.query = search.value.trim().toLowerCase();
+        dashboardRecentState.page = 1;
+        renderRecentActivityTable();
+    });
+    type.addEventListener('change', () => {
+        dashboardRecentState.type = type.value;
+        dashboardRecentState.page = 1;
+        renderRecentActivityTable();
+    });
+    size.addEventListener('change', () => {
+        dashboardRecentState.pageSize = Number(size.value || 5);
+        dashboardRecentState.page = 1;
+        renderRecentActivityTable();
+    });
+}
+
+function renderPagination(container, page, pages, onChange) {
+    if (!container) return;
+    if (pages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+
+    const buttons = [];
+    buttons.push(`<button type="button" data-page="${page - 1}" ${page <= 1 ? 'disabled' : ''}>Anterior</button>`);
+    const start = Math.max(1, page - 2);
+    const end = Math.min(pages, page + 2);
+    for (let number = start; number <= end; number += 1) {
+        buttons.push(`<button type="button" data-page="${number}" class="${number === page ? 'active' : ''}">${number}</button>`);
+    }
+    buttons.push(`<button type="button" data-page="${page + 1}" ${page >= pages ? 'disabled' : ''}>Siguiente</button>`);
+    container.innerHTML = buttons.join('');
+    container.querySelectorAll('button:not(:disabled)').forEach(button => {
+        button.addEventListener('click', () => onChange(Number(button.dataset.page)));
+    });
+}
+
+function renderRecentActivityTable() {
+    const tbody = document.getElementById('analyticsRecentBody');
+    const summary = document.getElementById('recentActivitySummary');
+    const pagination = document.getElementById('recentActivityPagination');
+    if (!tbody) return;
+
+    const query = dashboardRecentState.query;
+    const filtered = dashboardRecentState.rows.filter(row => {
+        const matchesQuery = !query || row.searchText.includes(query);
+        const matchesType = !dashboardRecentState.type || row.activity === dashboardRecentState.type;
+        return matchesQuery && matchesType;
+    });
+
+    const pages = Math.max(1, Math.ceil(filtered.length / dashboardRecentState.pageSize));
+    dashboardRecentState.page = Math.min(dashboardRecentState.page, pages);
+    const start = (dashboardRecentState.page - 1) * dashboardRecentState.pageSize;
+    const visible = filtered.slice(start, start + dashboardRecentState.pageSize);
+
+    tbody.innerHTML = visible.map(row => `
+        <tr>
+            <td>${esc(row.date)}</td>
+            <td><strong>${esc(row.business)}</strong></td>
+            <td><span class="activity-chip">${esc(row.activity)}</span></td>
+            <td>${esc(row.device)}</td>
+            <td class="source-cell">${esc(row.source)}</td>
+        </tr>`).join('') || '<tr><td colspan="5" class="dashboard-empty-cell">No existen registros que coincidan con los filtros.</td></tr>';
+
+    if (summary) {
+        const from = filtered.length ? start + 1 : 0;
+        const to = Math.min(start + dashboardRecentState.pageSize, filtered.length);
+        summary.textContent = `Mostrando ${from}–${to} de ${filtered.length} interacciones`;
+    }
+
+    renderPagination(pagination, dashboardRecentState.page, pages, nextPage => {
+        dashboardRecentState.page = nextPage;
+        renderRecentActivityTable();
+    });
+}
+
 
 // ── TOAST ──────────────────────────────────────────────────────
 function toast(msg, type = 'success') {
@@ -5020,112 +5127,8 @@ function renderDashboardStatisticalView(data) {
     renderBusinessTrafficChart(data.businessChartRows);
 }
 
-const dashboardRecentState = {
-    rows: [], page: 1, pageSize: 10, query: '', type: ''
-};
-
-function setRecentActivityData(rows) {
-    dashboardRecentState.rows = Array.isArray(rows) ? rows : [];
-    dashboardRecentState.page = 1;
-
-    const typeSelect = document.getElementById('recentActivityType');
-    if (typeSelect) {
-        const current = typeSelect.value;
-        const types = [...new Set(dashboardRecentState.rows.map(row => row.activity))].sort((a, b) => a.localeCompare(b, 'es'));
-        typeSelect.innerHTML = '<option value="">Todas</option>' + types.map(type => `<option value="${esc(type)}">${esc(type)}</option>`).join('');
-        if (types.includes(current)) typeSelect.value = current;
-    }
-
-    bindRecentActivityControls();
-    renderRecentActivityTable();
-}
-
-function bindRecentActivityControls() {
-    const search = document.getElementById('recentActivitySearch');
-    const type = document.getElementById('recentActivityType');
-    const size = document.getElementById('recentActivityPageSize');
-    if (!search || search.dataset.bound === '1') return;
-    search.dataset.bound = '1';
-
-    search.addEventListener('input', () => {
-        dashboardRecentState.query = search.value.trim().toLowerCase();
-        dashboardRecentState.page = 1;
-        renderRecentActivityTable();
-    });
-    type.addEventListener('change', () => {
-        dashboardRecentState.type = type.value;
-        dashboardRecentState.page = 1;
-        renderRecentActivityTable();
-    });
-    size.addEventListener('change', () => {
-        dashboardRecentState.pageSize = Number(size.value || 10);
-        dashboardRecentState.page = 1;
-        renderRecentActivityTable();
-    });
-}
-
-function renderPagination(container, page, pages, onChange) {
-    if (!container) return;
-    if (pages <= 1) {
-        container.innerHTML = '';
-        return;
-    }
-
-    const buttons = [];
-    buttons.push(`<button type="button" data-page="${page - 1}" ${page <= 1 ? 'disabled' : ''}>Anterior</button>`);
-    const start = Math.max(1, page - 2);
-    const end = Math.min(pages, page + 2);
-    for (let number = start; number <= end; number += 1) {
-        buttons.push(`<button type="button" data-page="${number}" class="${number === page ? 'active' : ''}">${number}</button>`);
-    }
-    buttons.push(`<button type="button" data-page="${page + 1}" ${page >= pages ? 'disabled' : ''}>Siguiente</button>`);
-    container.innerHTML = buttons.join('');
-    container.querySelectorAll('button:not(:disabled)').forEach(button => {
-        button.addEventListener('click', () => onChange(Number(button.dataset.page)));
-    });
-}
-
-function renderRecentActivityTable() {
-    const tbody = document.getElementById('analyticsRecentBody');
-    const summary = document.getElementById('recentActivitySummary');
-    const pagination = document.getElementById('recentActivityPagination');
-    if (!tbody) return;
-
-    const query = dashboardRecentState.query;
-    const filtered = dashboardRecentState.rows.filter(row => {
-        const matchesQuery = !query || row.searchText.includes(query);
-        const matchesType = !dashboardRecentState.type || row.activity === dashboardRecentState.type;
-        return matchesQuery && matchesType;
-    });
-
-    const pages = Math.max(1, Math.ceil(filtered.length / dashboardRecentState.pageSize));
-    dashboardRecentState.page = Math.min(dashboardRecentState.page, pages);
-    const start = (dashboardRecentState.page - 1) * dashboardRecentState.pageSize;
-    const visible = filtered.slice(start, start + dashboardRecentState.pageSize);
-
-    tbody.innerHTML = visible.map(row => `
-        <tr>
-            <td>${esc(row.date)}</td>
-            <td><strong>${esc(row.business)}</strong></td>
-            <td><span class="activity-chip">${esc(row.activity)}</span></td>
-            <td>${esc(row.device)}</td>
-            <td class="source-cell">${esc(row.source)}</td>
-        </tr>`).join('') || '<tr><td colspan="5" class="dashboard-empty-cell">No existen registros que coincidan con los filtros.</td></tr>';
-
-    if (summary) {
-        const from = filtered.length ? start + 1 : 0;
-        const to = Math.min(start + dashboardRecentState.pageSize, filtered.length);
-        summary.textContent = `Mostrando ${from}–${to} de ${filtered.length} interacciones`;
-    }
-
-    renderPagination(pagination, dashboardRecentState.page, pages, nextPage => {
-        dashboardRecentState.page = nextPage;
-        renderRecentActivityTable();
-    });
-}
-
 const dashboardPerformanceState = {
-    rows: [], page: 1, pageSize: 10, query: ''
+    rows: [], page: 1, pageSize: 5, query: ''
 };
 
 function captureBusinessPerformanceRows() {
@@ -5151,7 +5154,7 @@ function bindBusinessPerformanceControls() {
         renderBusinessPerformanceRows();
     });
     size.addEventListener('change', () => {
-        dashboardPerformanceState.pageSize = Number(size.value || 10);
+        dashboardPerformanceState.pageSize = Number(size.value || 5);
         dashboardPerformanceState.page = 1;
         renderBusinessPerformanceRows();
     });
@@ -8123,7 +8126,8 @@ async function loadDashboard() {
             review_submit: 'Reseña enviada',
         };
 
-        setRecentActivityData(
+        try {
+            setRecentActivityData(
             currentEvents
                 .slice(0, 500)
                 .map(event => {
@@ -8142,6 +8146,15 @@ async function loadDashboard() {
                     return row;
                 })
         );
+        } catch (recentActivityError) {
+            console.warn('Urbanex: no se pudo actualizar la actividad reciente.', recentActivityError);
+            const recentBody = document.getElementById('analyticsRecentBody');
+            const recentSummary = document.getElementById('recentActivitySummary');
+            if (recentBody) {
+                recentBody.innerHTML = '<tr><td colspan="5" class="dashboard-empty-cell">La actividad reciente no pudo cargarse. Los demás indicadores siguen disponibles.</td></tr>';
+            }
+            if (recentSummary) recentSummary.textContent = 'Actividad reciente temporalmente no disponible';
+        }
 
         const dailyRowsForCharts = Array.from({ length: days }, (_, index) => {
             const date = new Date(
