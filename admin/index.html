@@ -2168,6 +2168,98 @@ input,textarea,select { font-family:var(--sans); }
 }
 </style>
 
+
+<style id="urbanex-dashboard-kpi-decision-v3">
+/* KPI ejecutivos: jerarquía, lectura y comparación sin alterar lógica ni datos. */
+#sec-dashboard .dashboard-title-traffic span::before{
+    background:linear-gradient(180deg,#2878d0,#132c4f)!important;
+}
+#sec-dashboard .dashboard-title-conversion span::before{
+    background:linear-gradient(180deg,#18a861,#0f7d49)!important;
+}
+#sec-dashboard .dashboard-kpi-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:14px!important;
+}
+#sec-dashboard .dashboard-kpi-note{
+    margin:-10px 0 22px!important;
+    padding:12px 16px!important;
+    border:1px solid #dce5ef!important;
+    border-left:4px solid #2878d0!important;
+    border-radius:12px!important;
+    color:#5c687a!important;
+    background:#f7faff!important;
+    box-shadow:0 5px 15px rgba(15,39,71,.045)!important;
+    font-size:9.5px!important;
+    font-weight:550!important;
+    line-height:1.55!important;
+}
+#sec-dashboard .dashboard-kpi-note strong{
+    color:#132c4f!important;
+    font-weight:850!important;
+}
+#sec-dashboard #valueStatsGrid .stat-card:nth-child(2){
+    border-color:rgba(245,158,11,.46)!important;
+    background:linear-gradient(145deg,#fffaf0,#fff)!important;
+    box-shadow:0 12px 28px rgba(245,158,11,.10)!important;
+}
+#sec-dashboard #valueStatsGrid .stat-card:nth-child(2)::before{
+    background:var(--admin-orange)!important;
+}
+#sec-dashboard #valueStatsGrid .stat-card:nth-child(2) .stat-value{
+    color:#a96400!important;
+}
+#sec-dashboard #conversionStatsGrid .stat-card{
+    background:linear-gradient(150deg,#fff,#f8fcfa)!important;
+}
+#sec-dashboard #conversionStatsGrid .stat-card::after{
+    background:rgba(24,168,97,.045)!important;
+}
+#sec-dashboard .stat-card .stat-value.compact{
+    max-width:100%!important;
+    overflow:hidden!important;
+    font-size:21px!important;
+    line-height:1.12!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+}
+#sec-dashboard .stat-card .stat-sub{
+    min-height:45px!important;
+}
+#sec-dashboard .stat-card .metric-definition{
+    display:block!important;
+    margin-top:6px!important;
+    color:#7b8798!important;
+    font-size:7.7px!important;
+    line-height:1.42!important;
+}
+#sec-dashboard .analytics-toolbar{
+    margin-top:28px!important;
+}
+#sec-dashboard .business-performance-note{
+    line-height:1.65!important;
+}
+
+@media(max-width:1180px){
+    #sec-dashboard .dashboard-kpi-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    }
+}
+@media(max-width:620px){
+    #sec-dashboard .dashboard-kpi-grid{
+        grid-template-columns:1fr!important;
+    }
+    #sec-dashboard .dashboard-kpi-note{
+        margin-top:-8px!important;
+        padding:11px 13px!important;
+        font-size:9px!important;
+    }
+    #sec-dashboard .stat-card .stat-sub{
+        min-height:0!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -2264,11 +2356,33 @@ input,textarea,select { font-family:var(--sans); }
     <div class="stat-card skeleton" style="height:90px;"></div>
 </div>
 
-<div class="dashboard-block-title">
-    <span>Valor entregado a los negocios</span>
-    <small>Clientes potenciales generados desde Urbanex</small>
+<div class="dashboard-block-title dashboard-title-traffic">
+    <span>Audiencia y comportamiento</span>
+    <small>Personas identificadas, ingresos, sesiones y recurrencia</small>
 </div>
-<div class="stats-grid decision-grid" id="valueStatsGrid">
+<div class="stats-grid decision-grid dashboard-kpi-grid" id="valueStatsGrid">
+    <div class="stat-card skeleton" style="height:90px;"></div>
+    <div class="stat-card skeleton" style="height:90px;"></div>
+    <div class="stat-card skeleton" style="height:90px;"></div>
+    <div class="stat-card skeleton" style="height:90px;"></div>
+    <div class="stat-card skeleton" style="height:90px;"></div>
+    <div class="stat-card skeleton" style="height:90px;"></div>
+    <div class="stat-card skeleton" style="height:90px;"></div>
+    <div class="stat-card skeleton" style="height:90px;"></div>
+    <div class="stat-card skeleton" style="height:90px;"></div>
+</div>
+<p class="dashboard-kpi-note">
+    <strong>Lectura correcta:</strong> visitante único identifica a una persona o dispositivo distinto; ingreso total contabiliza cada entrada a un perfil de negocio, por lo que una misma persona puede generar varios ingresos.
+</p>
+
+<div class="dashboard-block-title dashboard-title-conversion">
+    <span>Conversión y valor generado</span>
+    <small>Contactos, intención comercial y cobertura de negocios</small>
+</div>
+<div class="stats-grid decision-grid dashboard-kpi-grid" id="conversionStatsGrid">
+    <div class="stat-card skeleton" style="height:90px;"></div>
+    <div class="stat-card skeleton" style="height:90px;"></div>
+    <div class="stat-card skeleton" style="height:90px;"></div>
     <div class="stat-card skeleton" style="height:90px;"></div>
     <div class="stat-card skeleton" style="height:90px;"></div>
     <div class="stat-card skeleton" style="height:90px;"></div>
@@ -2310,8 +2424,7 @@ input,textarea,select { font-family:var(--sans); }
                     </select>
                 </div>
 <p class="business-performance-note">
-                    Conversión = visitantes únicos que realizaron al menos un contacto ÷ visitantes únicos.
-                    Acciones = clics totales en WhatsApp, teléfono, sitio web y Cómo llegar.
+                    Visitantes únicos = personas o dispositivos distintos identificados. Ingresos totales = todas las entradas registradas, incluidas las repetidas. Conversión = visitantes únicos que realizaron al menos un contacto ÷ visitantes únicos. Acciones = clics totales en WhatsApp, teléfono, sitio web y Cómo llegar.
                 </p>
                 <div class="table-wrap">
                     <table class="data-table">
@@ -2319,8 +2432,8 @@ input,textarea,select { font-family:var(--sans); }
                             <tr>
                                 <th>Negocio</th>
                                 <th>Plan</th>
-                                <th>Visitantes</th>
-                                <th>Visitas</th>
+                                <th>Visitantes únicos</th>
+                                <th>Ingresos totales</th>
                                 <th>Tiempo medio</th>
                                 <th>Contactos únicos</th>
                                 <th>Acciones</th>
@@ -3533,6 +3646,9 @@ async function loadDashboard() {
     const valueStatsGrid =
         document.getElementById('valueStatsGrid');
 
+    const conversionStatsGrid =
+        document.getElementById('conversionStatsGrid');
+
     const funnelGrid =
         document.getElementById('funnelGrid');
 
@@ -3559,6 +3675,13 @@ async function loadDashboard() {
             'Analítica',
             '—',
             'Revise la conexión con Supabase.',
+            'danger'
+        );
+
+        conversionStatsGrid.innerHTML = metricCard(
+            'Conversión',
+            '—',
+            'No fue posible calcular los indicadores comerciales.',
             'danger'
         );
 
@@ -4586,6 +4709,200 @@ async function loadDashboard() {
         const previousPageViews =
             previousEvents.filter(isPageView).length;
 
+        /*
+         * Tráfico para toma de decisiones.
+         * - Visitante único: visitor_id distinto.
+         * - Ingreso total: cada evento page_view, incluso repetido.
+         * - Sesión: session_id distinto; si falta, se usa el visitante disponible.
+         * - Recurrente: visitante presente en más de una sesión del periodo.
+         */
+        const pageSessionKey = event =>
+            String(
+                event?.session_id ||
+                visitorKey(event) ||
+                ''
+            ).trim();
+
+        const collectPageSessions = eventList =>
+            new Set(
+                eventList
+                    .filter(isPageView)
+                    .map(pageSessionKey)
+                    .filter(Boolean)
+            );
+
+        const collectVisitorSessions = eventList => {
+            const result = new Map();
+
+            eventList
+                .filter(isPageView)
+                .forEach(event => {
+                    const visitor = visitorKey(event);
+                    const session = pageSessionKey(event);
+
+                    if (!visitor || !session) return;
+
+                    if (!result.has(visitor)) {
+                        result.set(visitor, new Set());
+                    }
+
+                    result.get(visitor).add(session);
+                });
+
+            return result;
+        };
+
+        const collectEngagedSessions = eventList =>
+            new Set(
+                eventList
+                    .filter(event =>
+                        event?.event_type === 'page_engagement'
+                    )
+                    .map(pageSessionKey)
+                    .filter(Boolean)
+            );
+
+        const currentSessionsSet =
+            collectPageSessions(currentEvents);
+
+        const previousSessionsSet =
+            collectPageSessions(previousEvents);
+
+        const currentVisitorSessions =
+            collectVisitorSessions(currentEvents);
+
+        const previousVisitorSessions =
+            collectVisitorSessions(previousEvents);
+
+        const currentSessions =
+            currentSessionsSet.size;
+
+        const previousSessions =
+            previousSessionsSet.size;
+
+        const currentReturningVisitors =
+            [...currentVisitorSessions.values()]
+                .filter(sessions => sessions.size > 1)
+                .length;
+
+        const previousReturningVisitors =
+            [...previousVisitorSessions.values()]
+                .filter(sessions => sessions.size > 1)
+                .length;
+
+        const currentReturnRate =
+            currentUniqueVisitors > 0
+                ? currentReturningVisitors /
+                    currentUniqueVisitors * 100
+                : 0;
+
+        const previousReturnRate =
+            previousUniqueVisitors > 0
+                ? previousReturningVisitors /
+                    previousUniqueVisitors * 100
+                : 0;
+
+        const currentEntriesPerVisitor =
+            currentUniqueVisitors > 0
+                ? currentPageViews /
+                    currentUniqueVisitors
+                : 0;
+
+        const previousEntriesPerVisitor =
+            previousUniqueVisitors > 0
+                ? previousPageViews /
+                    previousUniqueVisitors
+                : 0;
+
+        const currentEntriesPerSession =
+            currentSessions > 0
+                ? currentPageViews / currentSessions
+                : 0;
+
+        const previousEntriesPerSession =
+            previousSessions > 0
+                ? previousPageViews / previousSessions
+                : 0;
+
+        const currentEngagedSessions =
+            collectEngagedSessions(currentEvents).size;
+
+        const previousEngagedSessions =
+            collectEngagedSessions(previousEvents).size;
+
+        const currentEngagementRate =
+            currentSessions > 0
+                ? currentEngagedSessions /
+                    currentSessions * 100
+                : 0;
+
+        const previousEngagementRate =
+            previousSessions > 0
+                ? previousEngagedSessions /
+                    previousSessions * 100
+                : 0;
+
+        const phoneClicks =
+            currentEvents.filter(
+                event =>
+                    event.event_type === 'phone_click'
+            ).length;
+
+        const websiteClicks =
+            currentEvents.filter(
+                event =>
+                    event.event_type === 'website_click'
+            ).length;
+
+        const contactChannels = [
+            { label: 'WhatsApp', value: whatsappClicks },
+            { label: 'Cómo llegar', value: mapClicks },
+            { label: 'Teléfono', value: phoneClicks },
+            { label: 'Sitio web', value: websiteClicks },
+        ].sort((a, b) => b.value - a.value);
+
+        const primaryContactChannel =
+            contactChannels[0] || {
+                label: 'Sin actividad',
+                value: 0,
+            };
+
+        const currentActionsPerContactedVisitor =
+            currentUniqueContacts > 0
+                ? currentContactActions.length /
+                    currentUniqueContacts
+                : 0;
+
+        const previousActionsPerContactedVisitor =
+            previousUniqueContacts > 0
+                ? previousContactActions.length /
+                    previousUniqueContacts
+                : 0;
+
+        const currentActionsPer100Entries =
+            currentPageViews > 0
+                ? currentContactActions.length /
+                    currentPageViews * 100
+                : 0;
+
+        const previousActionsPer100Entries =
+            previousPageViews > 0
+                ? previousContactActions.length /
+                    previousPageViews * 100
+                : 0;
+
+        const currentBusinessContactCoverage =
+            activeBusinesses.length > 0
+                ? businessesWithContacts /
+                    activeBusinesses.length * 100
+                : 0;
+
+        const previousBusinessContactCoverage =
+            activeBusinesses.length > 0
+                ? previousBusinessesWithContacts /
+                    activeBusinesses.length * 100
+                : 0;
+
         businessStatsGrid.innerHTML = [
             metricCard(
                 'MRR estimado',
@@ -4682,7 +4999,7 @@ async function loadDashboard() {
                 'Visitantes únicos',
                 currentUniqueVisitors,
                 `
-                    últimos ${days} días
+                    personas o dispositivos distintos en ${days} días
                     ${metricTrend(
                         currentUniqueVisitors,
                         previousUniqueVisitors
@@ -4692,54 +5009,102 @@ async function loadDashboard() {
             ),
 
             metricCard(
-                'Visitantes que contactaron',
-                currentUniqueContacts,
+                'Ingresos totales',
+                currentPageViews,
                 `
-                    personas distintas con al menos una acción
+                    todas las entradas a perfiles, incluidas las repetidas
                     ${metricTrend(
-                        currentUniqueContacts,
-                        previousUniqueContacts
-                    )}
-                `,
-                'success'
-            ),
-
-            metricCard(
-                'Conversión real a contacto',
-                `${currentContactConversion.toFixed(1)}%`,
-                `
-                    contactos únicos ÷ visitantes únicos
-                    ${metricTrend(
-                        currentContactConversion,
-                        previousContactConversion
-                    )}
-                `,
-                'success'
-            ),
-
-            metricCard(
-                'Acciones de contacto',
-                currentContactActions.length,
-                `
-                    WhatsApp, teléfono, web y ubicación
-                    ${metricTrend(
-                        currentContactActions.length,
-                        previousContactActions.length
-                    )}
-                `
-            ),
-
-            metricCard(
-                'Acciones por visitante',
-                currentActionsPerVisitor.toFixed(2),
-                `
-                    intensidad de interacción comercial
-                    ${metricTrend(
-                        currentActionsPerVisitor,
-                        previousActionsPerVisitor
+                        currentPageViews,
+                        previousPageViews
                     )}
                 `,
                 'info'
+            ),
+
+            metricCard(
+                'Sesiones identificadas',
+                currentSessions,
+                `
+                    periodos de navegación diferenciados
+                    ${metricTrend(
+                        currentSessions,
+                        previousSessions
+                    )}
+                `,
+                'info'
+            ),
+
+            metricCard(
+                'Visitantes recurrentes',
+                currentReturningVisitors,
+                `
+                    regresaron en más de una sesión
+                    ${metricTrend(
+                        currentReturningVisitors,
+                        previousReturningVisitors
+                    )}
+                `,
+                currentReturningVisitors > 0
+                    ? 'success'
+                    : 'warning'
+            ),
+
+            metricCard(
+                'Tasa de recurrencia',
+                `${currentReturnRate.toFixed(1)}%`,
+                `
+                    recurrentes ÷ visitantes únicos
+                    ${metricTrend(
+                        currentReturnRate,
+                        previousReturnRate
+                    )}
+                `,
+                currentReturnRate >= 20
+                    ? 'success'
+                    : currentReturnRate > 0
+                        ? 'warning'
+                        : 'info'
+            ),
+
+            metricCard(
+                'Ingresos por visitante',
+                currentEntriesPerVisitor.toFixed(2),
+                `
+                    frecuencia media de entrada por persona identificada
+                    ${metricTrend(
+                        currentEntriesPerVisitor,
+                        previousEntriesPerVisitor
+                    )}
+                `
+            ),
+
+            metricCard(
+                'Ingresos por sesión',
+                currentEntriesPerSession.toFixed(2),
+                `
+                    perfiles consultados dentro de cada sesión
+                    ${metricTrend(
+                        currentEntriesPerSession,
+                        previousEntriesPerSession
+                    )}
+                `
+            ),
+
+            metricCard(
+                'Sesiones con interacción',
+                `${currentEngagementRate.toFixed(1)}%`,
+                `
+                    ${currentEngagedSessions} sesiones con permanencia registrada
+                    ${metricTrend(
+                        currentEngagementRate,
+                        previousEngagementRate
+                    )}
+                `,
+                currentEngagementRate >= 60
+                    ? 'success'
+                    : currentEngagementRate > 0
+                        ? 'warning'
+                        : 'info'
             ),
 
             metricCard(
@@ -4757,6 +5122,110 @@ async function loadDashboard() {
                     : averageTimeOnPage > 0
                         ? 'warning'
                         : 'info'
+            ),
+        ].join('');
+
+        conversionStatsGrid.innerHTML = [
+            metricCard(
+                'Visitantes que contactaron',
+                currentUniqueContacts,
+                `
+                    personas distintas con al menos una acción comercial
+                    ${metricTrend(
+                        currentUniqueContacts,
+                        previousUniqueContacts
+                    )}
+                `,
+                'success'
+            ),
+
+            metricCard(
+                'Conversión a contacto',
+                `${currentContactConversion.toFixed(1)}%`,
+                `
+                    visitantes con contacto ÷ visitantes únicos
+                    ${metricTrend(
+                        currentContactConversion,
+                        previousContactConversion
+                    )}
+                `,
+                currentContactConversion >= 10
+                    ? 'success'
+                    : currentContactConversion > 0
+                        ? 'warning'
+                        : 'danger'
+            ),
+
+            metricCard(
+                'Acciones de contacto',
+                currentContactActions.length,
+                `
+                    WhatsApp, teléfono, sitio web y Cómo llegar
+                    ${metricTrend(
+                        currentContactActions.length,
+                        previousContactActions.length
+                    )}
+                `
+            ),
+
+            metricCard(
+                'Acciones por persona contactada',
+                currentActionsPerContactedVisitor.toFixed(2),
+                `
+                    profundidad de intención comercial
+                    ${metricTrend(
+                        currentActionsPerContactedVisitor,
+                        previousActionsPerContactedVisitor
+                    )}
+                `,
+                'info'
+            ),
+
+            metricCard(
+                'Acciones por cada 100 ingresos',
+                currentActionsPer100Entries.toFixed(1),
+                `
+                    respuesta comercial respecto del tráfico total
+                    ${metricTrend(
+                        currentActionsPer100Entries,
+                        previousActionsPer100Entries
+                    )}
+                `,
+                currentActionsPer100Entries >= 10
+                    ? 'success'
+                    : currentActionsPer100Entries > 0
+                        ? 'warning'
+                        : 'danger'
+            ),
+
+            metricCard(
+                'Canal principal de contacto',
+                esc(primaryContactChannel.label),
+                `
+                    ${primaryContactChannel.value} acciones registradas
+                    <span class="metric-definition">
+                        WhatsApp: ${whatsappClicks} · Ubicación: ${mapClicks} · Teléfono: ${phoneClicks} · Web: ${websiteClicks}
+                    </span>
+                `,
+                'info',
+                'compact'
+            ),
+
+            metricCard(
+                'Cobertura comercial',
+                `${currentBusinessContactCoverage.toFixed(1)}%`,
+                `
+                    negocios activos que generaron contactos
+                    ${metricTrend(
+                        currentBusinessContactCoverage,
+                        previousBusinessContactCoverage
+                    )}
+                `,
+                currentBusinessContactCoverage >= 50
+                    ? 'success'
+                    : currentBusinessContactCoverage > 0
+                        ? 'warning'
+                        : 'danger'
             ),
 
             metricCard(
@@ -4792,7 +5261,7 @@ async function loadDashboard() {
                         ).toFixed(1)
                         : '0.0'}% de los negocios activos
                     <span class="metric-definition">
-                        Sin WhatsApp, teléfono, sitio web ni Cómo llegar en ${days} días.
+                        Sin acciones comerciales durante los últimos ${days} días.
                     </span>
                 `,
                 businessesWithoutContacts > 0
@@ -4800,12 +5269,6 @@ async function loadDashboard() {
                     : 'success',
                 '',
                 'show-no-contacts'
-            ),
-
-            metricCard(
-                'Clics a WhatsApp',
-                whatsappClicks,
-                `${mapClicks} clics adicionales en Cómo llegar`
             ),
         ].join('');
 
