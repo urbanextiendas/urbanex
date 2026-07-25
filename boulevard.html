@@ -2670,6 +2670,156 @@ body {
 }
 </style>
 
+
+<style id="urbanex-featured-compact-final-v10">
+/* Ajuste solicitado: destacados más compactos y con mejor proporción */
+@media (min-width:1025px){
+  .dashboard-container{
+    grid-template-columns:220px minmax(0,1fr) 308px!important;
+  }
+  .aside-showcase-list{
+    width:308px!important;
+    min-width:308px!important;
+  }
+}
+
+.showcase-header h2{
+  font-size:15px!important;
+  letter-spacing:.6px!important;
+}
+.shops-scroll-area,
+.featured-carousel-controls,
+.action-footer-box{
+  max-width:292px!important;
+  width:100%!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.shops-scroll-area{
+  padding:0 12px 8px!important;
+}
+.featured-business-card{
+  max-width:292px!important;
+  margin:0 auto!important;
+  border-radius:20px!important;
+}
+.featured-business-media{
+  height:130px!important;
+  padding:14px 14px 8px!important;
+}
+.featured-business-visual-shell,
+.featured-business-visual-shell.is-logo,
+.featured-business-visual-shell.is-cover{
+  border-radius:14px!important;
+  padding:10px!important;
+}
+.featured-business-content{
+  padding:10px 14px 14px!important;
+  gap:8px!important;
+}
+.featured-business-content h3{
+  font-size:13px!important;
+  line-height:1.18!important;
+}
+.featured-category{
+  font-size:9px!important;
+}
+.featured-location{
+  font-size:11px!important;
+}
+.featured-business-meta{
+  padding-top:8px!important;
+  gap:8px!important;
+}
+.featured-rating{
+  font-size:9px!important;
+}
+.featured-rating strong{
+  font-size:10px!important;
+}
+.featured-card-cta{
+  height:33px!important;
+  padding-left:10px!important;
+  gap:7px!important;
+  font-size:9.5px!important;
+}
+.featured-card-cta b{
+  width:22px!important;
+  height:22px!important;
+}
+.featured-carousel-controls{
+  padding:8px 12px 8px!important;
+}
+.featured-control-btn{
+  width:32px!important;
+  height:32px!important;
+}
+.featured-counter{
+  font-size:10px!important;
+}
+.action-footer-box{
+  padding:0 12px 12px!important;
+}
+.btn-view-all-shops{
+  height:48px!important;
+  font-size:13px!important;
+}
+
+@media (max-width:1024px){
+  .showcase-header{
+    padding:16px 14px 10px!important;
+  }
+  .showcase-header h2{
+    text-align:left!important;
+  }
+  .shops-scroll-area,
+  .featured-carousel-controls,
+  .action-footer-box{
+    max-width:320px!important;
+  }
+}
+
+@media (max-width:760px){
+  .aside-showcase-list{
+    width:100%!important;
+  }
+  .showcase-header{
+    padding:14px 14px 10px!important;
+  }
+  .showcase-header h2{
+    font-size:14px!important;
+  }
+  .shops-scroll-area,
+  .featured-carousel-controls,
+  .action-footer-box{
+    max-width:312px!important;
+  }
+  .featured-business-card{
+    max-width:312px!important;
+    border-radius:18px!important;
+  }
+  .featured-business-media{
+    height:118px!important;
+    padding:12px 12px 8px!important;
+  }
+  .featured-business-content{
+    padding:10px 12px 12px!important;
+  }
+  .featured-business-content h3{
+    font-size:12px!important;
+  }
+  .featured-location,
+  .featured-rating,
+  .featured-counter{
+    font-size:9.5px!important;
+  }
+  .btn-view-all-shops{
+    height:46px!important;
+    font-size:12.5px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -2768,7 +2918,7 @@ body {
             <div class="showcase-heading-row">
                 <div>
                     <span class="showcase-kicker">Selección Urbanex</span>
-                    <h2>NEGOCIOS DESTACADOS</h2>
+                    <h2>DESTACADOS</h2>
                 </div>
                 <span class="showcase-auto-badge" title="Cambio automático cada 2 segundos">
                     <span class="showcase-live-dot" aria-hidden="true"></span>
@@ -3428,7 +3578,7 @@ function featuredBusinessCardHtml(business, index) {
 
 function stopFeaturedCarousel() {
     if (featuredTimer) {
-        window.clearInterval(featuredTimer);
+        window.clearTimeout(featuredTimer);
         featuredTimer = null;
     }
 }
@@ -3447,6 +3597,24 @@ function restartFeaturedProgress() {
     ) {
         bar.classList.add('is-running');
     }
+}
+
+function scheduleFeaturedCarouselStep() {
+    stopFeaturedCarousel();
+
+    if (
+        featuredBusinesses.length <= 1 ||
+        featuredPaused ||
+        document.hidden ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+        return;
+    }
+
+    featuredTimer = window.setTimeout(() => {
+        goToFeatured(featuredIndex + 1, true);
+        scheduleFeaturedCarouselStep();
+    }, FEATURED_ROTATION_MS);
 }
 
 function updateFeaturedCarousel(animate = true) {
@@ -3502,9 +3670,7 @@ function startFeaturedCarousel() {
     }
 
     restartFeaturedProgress();
-    featuredTimer = window.setInterval(() => {
-        goToFeatured(featuredIndex + 1, true);
-    }, FEATURED_ROTATION_MS);
+    scheduleFeaturedCarouselStep();
 }
 
 function bindFeaturedCarousel() {
