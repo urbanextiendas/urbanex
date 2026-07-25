@@ -2396,7 +2396,7 @@ input,textarea,select { font-family:var(--sans); }
 
 #sec-dashboard .executive-kpi-grid{
     display:grid!important;
-    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    grid-template-columns:repeat(auto-fit,minmax(175px,1fr))!important;
     gap:13px!important;
 }
 #sec-dashboard .executive-kpi-card{
@@ -4610,6 +4610,607 @@ document.addEventListener('keydown', event => {
         action === 'show-no-contacts' ? 'show-alert-no-contacts' : action
     );
 });
+
+// ── DASHBOARD VISUAL Y ESTADÍSTICO ───────────────────────────
+const DASHBOARD_SERIES_COLORS = [
+    '#2878d0', '#f59e0b', '#15945a', '#7357c7', '#d74655', '#3b8f9d'
+];
+
+function dashboardNumber(value, digits = 0) {
+    return new Intl.NumberFormat('es-EC', {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits,
+    }).format(Number(value || 0));
+}
+
+function dashboardCompact(value) {
+    return new Intl.NumberFormat('es-EC', {
+        notation: Number(value || 0) >= 10000 ? 'compact' : 'standard',
+        maximumFractionDigits: 1,
+    }).format(Number(value || 0));
+}
+
+function dashboardTrend(current, previous, inverse = false) {
+    const currentValue = Number(current || 0);
+    const previousValue = Number(previous || 0);
+
+    if (previousValue === 0) {
+        if (currentValue === 0) {
+            return '<span class="executive-kpi-trend trend-flat">Sin variación</span>';
+        }
+        return '<span class="executive-kpi-trend trend-up">Nuevo en el periodo</span>';
+    }
+
+    const variation = ((currentValue - previousValue) / Math.abs(previousValue)) * 100;
+    const favorable = inverse ? variation < 0 : variation > 0;
+    const unfavorable = inverse ? variation > 0 : variation < 0;
+    const className = favorable ? 'trend-up' : unfavorable ? 'trend-down' : 'trend-flat';
+    const arrow = variation > 0 ? '▲' : variation < 0 ? '▼' : '•';
+
+    return `<span class="executive-kpi-trend ${className}">${arrow} ${Math.abs(variation).toFixed(1)}% vs. periodo anterior</span>`;
+}
+
+function executiveKpi(label, value, detail, trendHtml = '', accent = '#2878d0') {
+    return `
+        <article class="executive-kpi-card" style="--kpi-accent:${accent}">
+            <div class="executive-kpi-label">${esc(label)}</div>
+            <div class="executive-kpi-value">${value}</div>
+            <div class="executive-kpi-detail">${detail}</div>
+            ${trendHtml}
+        </article>`;
+}
+
+function statisticalCard(label, value, detail) {
+    return `
+        <article class="statistical-card">
+            <div class="statistical-label">${esc(label)}</div>
+            <div class="statistical-value">${value}</div>
+            <div class="statistical-detail">${detail}</div>
+        </article>`;
+}
+
+function dashboardMean(values) {
+    return values.length
+        ? values.reduce((sum, value) => sum + Number(value || 0), 0) / values.length
+        : 0;
+}
+
+function dashboardMedian(values) {
+    if (!values.length) return 0;
+    const sorted = [...values].map(Number).sort((a, b) => a - b);
+    const middle = Math.floor(sorted.length / 2);
+    return sorted.length % 2
+        ? sorted[middle]
+        : (sorted[middle - 1] + sorted[middle]) / 2;
+}
+
+function dashboardStandardDeviation(values) {
+    if (values.length < 2) return 0;
+    const mean = dashboardMean(values);
+    const variance = values.reduce(
+        (sum, value) => sum + Math.pow(Number(value || 0) - mean, 2),
+        0
+    ) / values.length;
+    return Math.sqrt(variance);
+}
+
+function chartEmpty(containerId, message) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = `<div class="chart-empty">${esc(message)}</div>`;
+}
+
+function chartLegend(items) {
+    return `
+        <div class="chart-legend">
+            ${items.map(item => `
+                <span class="chart-legend-item">
+                    <i class="chart-legend-dot" style="--legend-color:${item.color}"></i>
+                    ${esc(item.label)}
+                </span>
+            `).join('')}
+        </div>`;
+}
+
+function renderDailyTrendChart(rows) {
+    const container = document.getElementById('dailyTrendChart');
+    if (!container) return;
+    if (!rows.length) {
+        chartEmpty('dailyTrendChart', 'No existen datos suficientes para representar la tendencia diaria.');
+        return;
+    }
+
+    const width = 920;
+    const height = 320;
+    const margin = { top: 24, right: 24, bottom: 52, left: 52 };
+    const plotWidth = width - margin.left - margin.right;
+    const plotHeight = height - margin.top - margin.bottom;
+    const maxValue = Math.max(1, ...rows.flatMap(row => [row.visits, row.visitors, row.contacts]));
+    const x = index => margin.left + (rows.length === 1 ? plotWidth / 2 : index * plotWidth / (rows.length - 1));
+    const y = value => margin.top + plotHeight - (Number(value || 0) / maxValue) * plotHeight;
+    const series = [
+        { key: 'visits', label: 'Ingresos totales', color: DASHBOARD_SERIES_COLORS[0] },
+        { key: 'visitors', label: 'Visitantes únicos', color: DASHBOARD_SERIES_COLORS[1] },
+        { key: 'contacts', label: 'Contactos únicos', color: DASHBOARD_SERIES_COLORS[2] },
+    ];
+
+    const grid = Array.from({ length: 5 }, (_, index) => {
+        const value = maxValue * (4 - index) / 4;
+        const lineY = margin.top + plotHeight * index / 4;
+        return `
+            <line x1="${margin.left}" y1="${lineY}" x2="${width - margin.right}" y2="${lineY}" stroke="#dbe4ed" stroke-width="1" />
+            <text x="${margin.left - 10}" y="${lineY + 4}" text-anchor="end" fill="#718096" font-size="11">${dashboardCompact(value)}</text>`;
+    }).join('');
+
+    const labelEvery = Math.max(1, Math.ceil(rows.length / 7));
+    const xLabels = rows.map((row, index) => {
+        if (index % labelEvery !== 0 && index !== rows.length - 1) return '';
+        return `<text x="${x(index)}" y="${height - 17}" text-anchor="middle" fill="#718096" font-size="11">${esc(row.label)}</text>`;
+    }).join('');
+
+    const paths = series.map(item => {
+        const points = rows.map((row, index) => `${x(index)},${y(row[item.key])}`).join(' ');
+        const pointEvery = Math.max(1, Math.ceil(rows.length / 48));
+        const circles = rows.map((row, index) => {
+            if (index % pointEvery !== 0 && index !== rows.length - 1) return '';
+            return `
+                <circle cx="${x(index)}" cy="${y(row[item.key])}" r="3.5" fill="#fff" stroke="${item.color}" stroke-width="2">
+                    <title>${item.label}: ${row[item.key]} · ${row.fullLabel}</title>
+                </circle>`;
+        }).join('');
+        return `
+            <polyline points="${points}" fill="none" stroke="${item.color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            ${circles}`;
+    }).join('');
+
+    container.innerHTML = `
+        <div style="width:100%">
+            <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Tendencia diaria de ingresos, visitantes únicos y contactos únicos">
+                ${grid}
+                ${paths}
+                ${xLabels}
+            </svg>
+            ${chartLegend(series)}
+        </div>`;
+}
+
+function renderDonutChart(containerId, rows, centerLabel) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const cleanRows = rows.filter(row => Number(row.value || 0) > 0);
+    const total = cleanRows.reduce((sum, row) => sum + Number(row.value || 0), 0);
+    if (!cleanRows.length || total <= 0) {
+        chartEmpty(containerId, 'No existen datos para este gráfico.');
+        return;
+    }
+
+    const radius = 78;
+    const circumference = 2 * Math.PI * radius;
+    let offset = 0;
+    const segments = cleanRows.map((row, index) => {
+        const value = Number(row.value || 0);
+        const length = circumference * value / total;
+        const color = DASHBOARD_SERIES_COLORS[index % DASHBOARD_SERIES_COLORS.length];
+        const segment = `
+            <circle cx="120" cy="120" r="${radius}" fill="none" stroke="${color}" stroke-width="24"
+                stroke-dasharray="${length} ${circumference - length}"
+                stroke-dashoffset="${-offset}" transform="rotate(-90 120 120)">
+                <title>${row.label}: ${value} (${(value / total * 100).toFixed(1)}%)</title>
+            </circle>`;
+        offset += length;
+        return { segment, color, label: `${row.label} · ${(value / total * 100).toFixed(1)}%` };
+    });
+
+    container.innerHTML = `
+        <div style="width:100%">
+            <svg viewBox="0 0 240 240" role="img" aria-label="${esc(centerLabel)}">
+                <circle cx="120" cy="120" r="${radius}" fill="none" stroke="#e8edf3" stroke-width="24" />
+                ${segments.map(item => item.segment).join('')}
+                <text x="120" y="112" text-anchor="middle" fill="#132c4f" font-size="28" font-weight="800">${dashboardCompact(total)}</text>
+                <text x="120" y="136" text-anchor="middle" fill="#718096" font-size="12">${esc(centerLabel)}</text>
+            </svg>
+            ${chartLegend(segments.map(item => ({ color: item.color, label: item.label })))}
+        </div>`;
+}
+
+function renderBusinessTrafficChart(rows) {
+    const container = document.getElementById('businessTrafficChart');
+    if (!container) return;
+    const data = [...rows]
+        .filter(row => row.visits > 0 || row.validContacts > 0)
+        .sort((a, b) => b.visits - a.visits)
+        .slice(0, 8);
+
+    if (!data.length) {
+        chartEmpty('businessTrafficChart', 'No existen ingresos registrados por negocio en este periodo.');
+        return;
+    }
+
+    const width = 920;
+    const rowHeight = 48;
+    const height = 50 + data.length * rowHeight;
+    const labelWidth = 220;
+    const right = 70;
+    const plotWidth = width - labelWidth - right;
+    const maxValue = Math.max(1, ...data.map(row => row.visits));
+
+    const rowsSvg = data.map((row, index) => {
+        const y = 24 + index * rowHeight;
+        const visitWidth = plotWidth * row.visits / maxValue;
+        const contactWidth = plotWidth * row.validContacts / maxValue;
+        const name = row.business_name.length > 28 ? row.business_name.slice(0, 27) + '…' : row.business_name;
+        return `
+            <text x="0" y="${y + 16}" fill="#33445d" font-size="12" font-weight="700">${esc(name)}</text>
+            <rect x="${labelWidth}" y="${y}" width="${plotWidth}" height="14" rx="7" fill="#e8edf3" />
+            <rect x="${labelWidth}" y="${y}" width="${visitWidth}" height="14" rx="7" fill="${DASHBOARD_SERIES_COLORS[0]}">
+                <title>${row.business_name}: ${row.visits} ingresos</title>
+            </rect>
+            <rect x="${labelWidth}" y="${y + 20}" width="${plotWidth}" height="8" rx="4" fill="#edf1f5" />
+            <rect x="${labelWidth}" y="${y + 20}" width="${contactWidth}" height="8" rx="4" fill="${DASHBOARD_SERIES_COLORS[2]}">
+                <title>${row.business_name}: ${row.validContacts} contactos únicos</title>
+            </rect>
+            <text x="${width - 2}" y="${y + 16}" text-anchor="end" fill="#526176" font-size="11">${row.visits} · ${row.conversion.toFixed(1)}%</text>`;
+    }).join('');
+
+    container.innerHTML = `
+        <div style="width:100%">
+            <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Negocios con mayor tráfico e intención comercial">
+                ${rowsSvg}
+            </svg>
+            ${chartLegend([
+                { label: 'Ingresos totales', color: DASHBOARD_SERIES_COLORS[0] },
+                { label: 'Contactos únicos', color: DASHBOARD_SERIES_COLORS[2] },
+            ])}
+        </div>`;
+}
+
+function renderDashboardStatisticalView(data) {
+    const executiveGrid = document.getElementById('executiveSummaryGrid');
+    const statisticalGrid = document.getElementById('statisticalSummaryGrid');
+    const insights = document.getElementById('decisionInsights');
+
+    if (executiveGrid) {
+        executiveGrid.innerHTML = [
+            executiveKpi(
+                'Negocios registrados',
+                dashboardNumber(data.totalBusinesses),
+                `${data.activeBusinessCount} activos · ${data.pendingBusinessCount} pendientes`,
+                '',
+                '#f59e0b'
+            ),
+            executiveKpi(
+                'Ingresos totales',
+                dashboardNumber(data.currentPageViews),
+                `Todas las entradas registradas en ${data.days} días`,
+                dashboardTrend(data.currentPageViews, data.previousPageViews),
+                DASHBOARD_SERIES_COLORS[0]
+            ),
+            executiveKpi(
+                'Visitantes únicos',
+                dashboardNumber(data.currentUniqueVisitors),
+                'Personas o dispositivos distintos identificados',
+                dashboardTrend(data.currentUniqueVisitors, data.previousUniqueVisitors),
+                DASHBOARD_SERIES_COLORS[1]
+            ),
+            executiveKpi(
+                'Sesiones',
+                dashboardNumber(data.currentSessions),
+                `${data.currentEntriesPerSession.toFixed(2)} ingresos por sesión`,
+                dashboardTrend(data.currentSessions, data.previousSessions),
+                DASHBOARD_SERIES_COLORS[3]
+            ),
+            executiveKpi(
+                'Contactos únicos',
+                dashboardNumber(data.currentUniqueContacts),
+                'Visitantes distintos que realizaron una acción comercial',
+                dashboardTrend(data.currentUniqueContacts, data.previousUniqueContacts),
+                DASHBOARD_SERIES_COLORS[2]
+            ),
+            executiveKpi(
+                'Conversión a contacto',
+                `${data.currentContactConversion.toFixed(1)}%`,
+                'Contactos únicos ÷ visitantes únicos',
+                dashboardTrend(data.currentContactConversion, data.previousContactConversion),
+                DASHBOARD_SERIES_COLORS[2]
+            ),
+            executiveKpi(
+                'MRR estimado',
+                formatMoney(data.estimatedMrr),
+                `${data.activePaidSubscriptions} planes pagados activos`,
+                '',
+                DASHBOARD_SERIES_COLORS[4]
+            ),
+        ].join('');
+    }
+
+    const dailyValues = data.dailyRows.map(row => row.visits);
+    const mean = dashboardMean(dailyValues);
+    const median = dashboardMedian(dailyValues);
+    const deviation = dashboardStandardDeviation(dailyValues);
+    const coefficient = mean > 0 ? deviation / mean * 100 : 0;
+    const peak = data.dailyRows.reduce(
+        (best, row) => !best || row.visits > best.visits ? row : best,
+        null
+    );
+
+    if (statisticalGrid) {
+        statisticalGrid.innerHTML = [
+            statisticalCard(
+                'Promedio diario',
+                dashboardNumber(mean, 1),
+                'Ingresos promedio por día con actividad registrada.'
+            ),
+            statisticalCard(
+                'Mediana diaria',
+                dashboardNumber(median, 1),
+                'Valor central; reduce el efecto de días atípicos.'
+            ),
+            statisticalCard(
+                'Desviación estándar',
+                dashboardNumber(deviation, 1),
+                'Dispersión de los ingresos diarios alrededor del promedio.'
+            ),
+            statisticalCard(
+                'Coeficiente de variación',
+                `${coefficient.toFixed(1)}%`,
+                coefficient < 30
+                    ? 'Tráfico relativamente estable.'
+                    : coefficient < 60
+                        ? 'Tráfico con variabilidad moderada.'
+                        : 'Tráfico altamente variable; revise campañas y días pico.'
+            ),
+            statisticalCard(
+                'Día de mayor tráfico',
+                peak ? dashboardNumber(peak.visits) : '0',
+                peak ? `${peak.fullLabel} registró el máximo del periodo.` : 'Sin datos diarios.'
+            ),
+            statisticalCard(
+                'Tasa de recurrencia',
+                `${data.currentReturnRate.toFixed(1)}%`,
+                `${data.currentReturningVisitors} visitantes ingresaron en más de una sesión.`
+            ),
+            statisticalCard(
+                'Acciones por 100 ingresos',
+                data.currentActionsPer100Entries.toFixed(1),
+                'Intensidad de intención comercial respecto al tráfico total.'
+            ),
+            statisticalCard(
+                'Tiempo medio',
+                formatDurationSeconds(data.averageTimeOnPage),
+                'Duración promedio de sesiones con interacción registrada.'
+            ),
+        ].join('');
+    }
+
+    const trafficChange = data.previousPageViews > 0
+        ? (data.currentPageViews - data.previousPageViews) / data.previousPageViews * 100
+        : null;
+    const businessRowsByTraffic = [...data.businessChartRows]
+        .sort((a, b) => b.visits - a.visits);
+    const topBusiness = businessRowsByTraffic[0] || null;
+    const totalBusinessVisits = businessRowsByTraffic.reduce((sum, row) => sum + row.visits, 0);
+    const concentration = topBusiness && totalBusinessVisits > 0
+        ? topBusiness.visits / totalBusinessVisits * 100
+        : 0;
+
+    if (insights) {
+        insights.innerHTML = [
+            `<article class="decision-insight" style="--insight-color:${trafficChange !== null && trafficChange < 0 ? '#d74655' : '#2878d0'}">
+                <strong>Evolución del tráfico</strong>
+                <span>${trafficChange === null
+                    ? 'No existe un periodo anterior comparable.'
+                    : `Los ingresos ${trafficChange >= 0 ? 'aumentaron' : 'disminuyeron'} ${Math.abs(trafficChange).toFixed(1)}% frente al periodo anterior.`}</span>
+            </article>`,
+            `<article class="decision-insight" style="--insight-color:${data.currentContactConversion >= 10 ? '#15945a' : '#f59e0b'}">
+                <strong>Eficiencia comercial</strong>
+                <span>La conversión a contacto es ${data.currentContactConversion.toFixed(1)}%. ${data.currentContactConversion >= 10 ? 'El nivel es favorable; identifique los negocios que explican el resultado.' : 'Conviene mejorar fichas, ofertas y llamados a la acción.'}</span>
+            </article>`,
+            `<article class="decision-insight" style="--insight-color:${concentration > 45 ? '#d74655' : '#7357c7'}">
+                <strong>Concentración del tráfico</strong>
+                <span>${topBusiness
+                    ? `${esc(topBusiness.business_name)} concentra ${concentration.toFixed(1)}% de los ingresos de los negocios activos. ${concentration > 45 ? 'Existe alta dependencia de un solo negocio.' : 'La distribución no muestra una concentración crítica.'}`
+                    : 'No existen datos suficientes para medir concentración.'}</span>
+            </article>`,
+        ].join('');
+    }
+
+    renderDailyTrendChart(data.dailyRows);
+    renderDonutChart('contactChannelChart', data.contactChannels, 'acciones');
+    renderDonutChart('deviceChart', data.deviceRows, 'ingresos');
+    renderBusinessTrafficChart(data.businessChartRows);
+}
+
+const dashboardRecentState = {
+    rows: [], page: 1, pageSize: 10, query: '', type: ''
+};
+
+function setRecentActivityData(rows) {
+    dashboardRecentState.rows = Array.isArray(rows) ? rows : [];
+    dashboardRecentState.page = 1;
+
+    const typeSelect = document.getElementById('recentActivityType');
+    if (typeSelect) {
+        const current = typeSelect.value;
+        const types = [...new Set(dashboardRecentState.rows.map(row => row.activity))].sort((a, b) => a.localeCompare(b, 'es'));
+        typeSelect.innerHTML = '<option value="">Todas</option>' + types.map(type => `<option value="${esc(type)}">${esc(type)}</option>`).join('');
+        if (types.includes(current)) typeSelect.value = current;
+    }
+
+    bindRecentActivityControls();
+    renderRecentActivityTable();
+}
+
+function bindRecentActivityControls() {
+    const search = document.getElementById('recentActivitySearch');
+    const type = document.getElementById('recentActivityType');
+    const size = document.getElementById('recentActivityPageSize');
+    if (!search || search.dataset.bound === '1') return;
+    search.dataset.bound = '1';
+
+    search.addEventListener('input', () => {
+        dashboardRecentState.query = search.value.trim().toLowerCase();
+        dashboardRecentState.page = 1;
+        renderRecentActivityTable();
+    });
+    type.addEventListener('change', () => {
+        dashboardRecentState.type = type.value;
+        dashboardRecentState.page = 1;
+        renderRecentActivityTable();
+    });
+    size.addEventListener('change', () => {
+        dashboardRecentState.pageSize = Number(size.value || 10);
+        dashboardRecentState.page = 1;
+        renderRecentActivityTable();
+    });
+}
+
+function renderPagination(container, page, pages, onChange) {
+    if (!container) return;
+    if (pages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+
+    const buttons = [];
+    buttons.push(`<button type="button" data-page="${page - 1}" ${page <= 1 ? 'disabled' : ''}>Anterior</button>`);
+    const start = Math.max(1, page - 2);
+    const end = Math.min(pages, page + 2);
+    for (let number = start; number <= end; number += 1) {
+        buttons.push(`<button type="button" data-page="${number}" class="${number === page ? 'active' : ''}">${number}</button>`);
+    }
+    buttons.push(`<button type="button" data-page="${page + 1}" ${page >= pages ? 'disabled' : ''}>Siguiente</button>`);
+    container.innerHTML = buttons.join('');
+    container.querySelectorAll('button:not(:disabled)').forEach(button => {
+        button.addEventListener('click', () => onChange(Number(button.dataset.page)));
+    });
+}
+
+function renderRecentActivityTable() {
+    const tbody = document.getElementById('analyticsRecentBody');
+    const summary = document.getElementById('recentActivitySummary');
+    const pagination = document.getElementById('recentActivityPagination');
+    if (!tbody) return;
+
+    const query = dashboardRecentState.query;
+    const filtered = dashboardRecentState.rows.filter(row => {
+        const matchesQuery = !query || row.searchText.includes(query);
+        const matchesType = !dashboardRecentState.type || row.activity === dashboardRecentState.type;
+        return matchesQuery && matchesType;
+    });
+
+    const pages = Math.max(1, Math.ceil(filtered.length / dashboardRecentState.pageSize));
+    dashboardRecentState.page = Math.min(dashboardRecentState.page, pages);
+    const start = (dashboardRecentState.page - 1) * dashboardRecentState.pageSize;
+    const visible = filtered.slice(start, start + dashboardRecentState.pageSize);
+
+    tbody.innerHTML = visible.map(row => `
+        <tr>
+            <td>${esc(row.date)}</td>
+            <td><strong>${esc(row.business)}</strong></td>
+            <td><span class="activity-chip">${esc(row.activity)}</span></td>
+            <td>${esc(row.device)}</td>
+            <td class="source-cell">${esc(row.source)}</td>
+        </tr>`).join('') || '<tr><td colspan="5" class="dashboard-empty-cell">No existen registros que coincidan con los filtros.</td></tr>';
+
+    if (summary) {
+        const from = filtered.length ? start + 1 : 0;
+        const to = Math.min(start + dashboardRecentState.pageSize, filtered.length);
+        summary.textContent = `Mostrando ${from}–${to} de ${filtered.length} interacciones`;
+    }
+
+    renderPagination(pagination, dashboardRecentState.page, pages, nextPage => {
+        dashboardRecentState.page = nextPage;
+        renderRecentActivityTable();
+    });
+}
+
+const dashboardPerformanceState = {
+    rows: [], page: 1, pageSize: 10, query: ''
+};
+
+function captureBusinessPerformanceRows() {
+    const tbody = document.getElementById('analyticsTableBody');
+    if (!tbody) return;
+    dashboardPerformanceState.rows = [...tbody.querySelectorAll('tr')].map(row => ({
+        html: row.outerHTML,
+        text: row.textContent.toLowerCase(),
+    }));
+    dashboardPerformanceState.page = 1;
+    bindBusinessPerformanceControls();
+    renderBusinessPerformanceRows();
+}
+
+function bindBusinessPerformanceControls() {
+    const search = document.getElementById('performanceSearch');
+    const size = document.getElementById('performancePageSize');
+    if (!search || search.dataset.bound === '1') return;
+    search.dataset.bound = '1';
+    search.addEventListener('input', () => {
+        dashboardPerformanceState.query = search.value.trim().toLowerCase();
+        dashboardPerformanceState.page = 1;
+        renderBusinessPerformanceRows();
+    });
+    size.addEventListener('change', () => {
+        dashboardPerformanceState.pageSize = Number(size.value || 10);
+        dashboardPerformanceState.page = 1;
+        renderBusinessPerformanceRows();
+    });
+}
+
+function renderBusinessPerformanceRows() {
+    const tbody = document.getElementById('analyticsTableBody');
+    const summary = document.getElementById('performanceSummary');
+    const pagination = document.getElementById('performancePagination');
+    if (!tbody) return;
+
+    const filtered = dashboardPerformanceState.rows.filter(row =>
+        !dashboardPerformanceState.query || row.text.includes(dashboardPerformanceState.query)
+    );
+    const pages = Math.max(1, Math.ceil(filtered.length / dashboardPerformanceState.pageSize));
+    dashboardPerformanceState.page = Math.min(dashboardPerformanceState.page, pages);
+    const start = (dashboardPerformanceState.page - 1) * dashboardPerformanceState.pageSize;
+    const visible = filtered.slice(start, start + dashboardPerformanceState.pageSize);
+
+    tbody.innerHTML = visible.map(row => row.html).join('') || '<tr><td colspan="9" class="dashboard-empty-cell">No existen negocios que coincidan con la búsqueda.</td></tr>';
+    if (summary) {
+        const from = filtered.length ? start + 1 : 0;
+        const to = Math.min(start + dashboardPerformanceState.pageSize, filtered.length);
+        summary.textContent = `Mostrando ${from}–${to} de ${filtered.length} negocios`;
+    }
+    renderPagination(pagination, dashboardPerformanceState.page, pages, nextPage => {
+        dashboardPerformanceState.page = nextPage;
+        renderBusinessPerformanceRows();
+    });
+}
+
+function applyDashboardAlertLimit() {
+    const grid = document.getElementById('alertsGrid');
+    const button = document.getElementById('toggleAlertsBtn');
+    if (!grid || !button) return;
+
+    const priority = card => card.classList.contains('alert-danger')
+        ? 0
+        : card.classList.contains('alert-warning')
+            ? 1
+            : 2;
+    const cards = [...grid.querySelectorAll('.alert-card')]
+        .sort((a, b) => priority(a) - priority(b));
+    cards.forEach(card => grid.appendChild(card));
+
+    grid.classList.remove('show-all');
+    const count = cards.length;
+    const hidden = Math.max(0, count - 6);
+    button.textContent = hidden > 0 ? `Mostrar ${hidden} más` : 'Mostrar todas';
+    button.style.display = count > 6 ? 'inline-flex' : 'none';
+    if (button.dataset.bound !== '1') {
+        button.dataset.bound = '1';
+        button.addEventListener('click', () => {
+            const expanded = grid.classList.toggle('show-all');
+            button.textContent = expanded ? 'Mostrar menos' : `Mostrar ${Math.max(0, grid.querySelectorAll('.alert-card').length - 6)} más`;
+        });
+    }
+}
+
 
 async function loadDashboard() {
     const businessStatsGrid =
@@ -7582,6 +8183,9 @@ async function loadDashboard() {
 
         renderDashboardStatisticalView({
             days,
+            totalBusinesses: businesses.length,
+            activeBusinessCount: activeBusinesses.length,
+            pendingBusinessCount: pendingBusinesses,
             currentPageViews,
             previousPageViews,
             currentUniqueVisitors,
@@ -7729,12 +8333,9 @@ function subscriptionState(businessId) {
     }
 
     if (row.status === 'trialing' && (!trialEnd || trialEnd >= now)) {
-        const days = trialEnd
-            ? Math.max(0, Math.ceil((trialEnd - now) / 86400000))
-            : null;
         return {
             code: 'trial',
-            label: days === null ? 'Prueba activa' : `Prueba · ${days} días`,
+            label: 'Prueba activa',
             row,
         };
     }
@@ -7746,17 +8347,16 @@ function subscriptionLabel(businessId) {
     const state = subscriptionState(businessId);
     const row = state.row;
 
-    if (!row) return 'Prueba';
+    if (!row || state.code === 'trial' || state.code === 'trial_expired') {
+        return '';
+    }
 
-    const end = row.plan_code === 'paid'
-        ? row.current_period_end
-        : row.trial_end_at;
-
+    const end = row.current_period_end;
     const date = end
         ? new Date(end).toLocaleDateString('es-EC')
         : '';
 
-    return `${state.label}${date ? ` · ${date}` : ''}`;
+    return date ? `${state.label} · ${date}` : state.label;
 }
 
 function subscriptionBadge(businessId) {
@@ -7926,7 +8526,7 @@ function renderBizTable() {
             <td>
                 <span class="badge badge-blue">${businessTypeLabel(b.business_type)}</span>
                 <span class="plan-signal">${subscriptionBadge(b.id)}</span>
-                <span class="subscription-summary">${esc(subscriptionLabel(b.id))}</span>
+                ${subscriptionLabel(b.id) ? `<span class="subscription-summary">${esc(subscriptionLabel(b.id))}</span>` : ''}
             </td>
             <td style="font-size:11.5px;">${catLabel}</td>
             <td>${[b.province, b.city].filter(Boolean).map(esc).join(' · ') || '—'}</td>
