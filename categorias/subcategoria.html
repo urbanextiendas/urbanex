@@ -2357,157 +2357,111 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{
 </style>
 
 
-<style id="urbanex-eight-businesses-row-v13">
-/* Ocho negocios por fila en escritorio, sin alterar la carga dinámica ni Supabase. */
-@media (min-width: 1181px) {
-  .ux-main-inner{
-    width:min(1800px,100%)!important;
-    padding-right:clamp(16px,1.7vw,28px)!important;
-    padding-left:clamp(16px,1.7vw,28px)!important;
-  }
-
+<style id="urbanex-grid-count-v13">
+/* Seis negocios por fila en computador y dos por fila en celular. */
+@media (min-width: 1024px){
   .ux-grid{
-    grid-template-columns:repeat(8,minmax(0,1fr))!important;
-    gap:12px!important;
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    gap:14px!important;
   }
-
-  .ux-grid>.ux-card,
-  .ux-card{
-    min-height:248px!important;
-    border-radius:16px!important;
-  }
-
   .ux-company-head{
-    padding:16px 10px 10px!important;
-    flex-direction:column!important;
-    align-items:center!important;
-    gap:8px!important;
-    text-align:center!important;
+    padding:18px 14px 11px!important;
+    gap:10px!important;
   }
-
   .ux-company-logo{
-    width:58px!important;
-    height:58px!important;
-    flex-basis:58px!important;
-    padding:6px!important;
-    border-radius:14px!important;
+    width:54px!important;
+    height:54px!important;
+    flex-basis:54px!important;
   }
-
-  .ux-company-title{
-    width:100%!important;
+  .ux-company-title h3{font-size:14px!important;}
+  .ux-card .ux-card-body,.ux-grid>.ux-card>.ux-card-body{
+    padding:0 14px 15px!important;
   }
+  .ux-company-meta{
+    grid-template-columns:1fr!important;
+    gap:7px!important;
+  }
+  .ux-company-location,.ux-company-city{min-height:48px!important;}
+}
 
+@media (max-width: 620px){
+  .ux-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+  .ux-grid>.ux-card,.ux-card{
+    min-width:0!important;
+    border-radius:15px!important;
+  }
+  .ux-company-head{
+    padding:14px 10px 10px!important;
+    gap:8px!important;
+    align-items:flex-start!important;
+  }
+  .ux-company-logo{
+    width:44px!important;
+    height:44px!important;
+    flex:0 0 44px!important;
+    padding:5px!important;
+    border-radius:11px!important;
+  }
   .ux-company-category{
-    margin-bottom:4px!important;
+    margin-bottom:3px!important;
     font-size:6.5px!important;
-    letter-spacing:.65px!important;
+    letter-spacing:.55px!important;
   }
-
   .ux-company-title h3{
-    min-height:30px!important;
     font-size:12px!important;
-    line-height:1.25!important;
-    white-space:normal!important;
-    display:-webkit-box!important;
-    -webkit-line-clamp:2!important;
-    -webkit-box-orient:vertical!important;
+    line-height:1.2!important;
+    overflow-wrap:anywhere!important;
   }
-
   .ux-company-featured{
     margin-top:5px!important;
     padding:3px 6px!important;
     font-size:6px!important;
   }
-
-  .ux-card .ux-card-body,
-  .ux-grid>.ux-card>.ux-card-body{
+  .ux-card .ux-card-body,.ux-grid>.ux-card>.ux-card-body{
     padding:0 10px 12px!important;
   }
-
   .ux-company-description{
-    min-height:29px!important;
-    font-size:8px!important;
-    line-height:1.45!important;
+    min-height:31px!important;
+    font-size:8.5px!important;
+    line-height:1.4!important;
   }
-
   .ux-company-meta{
-    margin-top:8px!important;
+    margin-top:9px!important;
     grid-template-columns:1fr!important;
-    gap:5px!important;
-  }
-
-  .ux-company-location,
-  .ux-company-city{
-    min-height:37px!important;
-    padding:7px 8px!important;
-    gap:5px!important;
-    border-radius:9px!important;
-    font-size:7px!important;
-    line-height:1.3!important;
-  }
-
-  .ux-company-meta small{
-    margin-bottom:2px!important;
-    font-size:5.5px!important;
-    letter-spacing:.45px!important;
-  }
-
-  .ux-meta-icon{
-    font-size:10px!important;
-  }
-
-  .ux-card .ux-card-bottom{
-    min-height:34px!important;
-    padding-top:9px!important;
     gap:6px!important;
   }
-
-  .ux-badge{
+  .ux-company-location,.ux-company-city{
+    min-height:0!important;
+    padding:8px!important;
     gap:5px!important;
-    font-size:6.5px!important;
+    font-size:7.5px!important;
   }
-
-  .ux-badge i{
-    width:5px!important;
-    height:5px!important;
-    flex-basis:5px!important;
-    box-shadow:0 0 0 3px rgba(34,168,97,.11)!important;
+  .ux-company-meta small{font-size:6px!important;}
+  .ux-meta-icon{font-size:10px!important;}
+  .ux-card .ux-card-bottom{
+    min-height:38px!important;
+    padding-top:10px!important;
+    gap:6px!important;
   }
+  .ux-badge{font-size:7px!important;}
+  .ux-card-cta{font-size:7.5px!important;gap:4px!important;}
+  .ux-card-cta b{width:23px!important;height:23px!important;}
 
-  .ux-card-cta{
-    gap:4px!important;
-    font-size:6.5px!important;
-  }
-
-  .ux-card-cta b{
-    width:22px!important;
-    height:22px!important;
-  }
-
-  /* Compatibilidad con el marcado anterior de tarjetas. */
+  /* Compatibilidad con tarjetas del marcado anterior. */
   .ux-grid>.ux-card>.ux-logo{
     height:105px!important;
     min-height:105px!important;
     flex-basis:105px!important;
     padding:12px!important;
   }
-
   .ux-grid>.ux-card>.ux-logo img{
     max-width:100px!important;
     max-height:78px!important;
   }
-
-  .ux-grid>.ux-card>.ux-card-body h3{
-    font-size:12px!important;
-  }
-
-  .ux-grid>.ux-card>.ux-card-body .tag{
-    font-size:7px!important;
-  }
-
-  .ux-grid>.ux-card>.ux-card-body .addr{
-    font-size:8px!important;
-  }
+  .ux-grid>.ux-card>.ux-card-body h3{font-size:12px!important;}
 }
 </style>
 
