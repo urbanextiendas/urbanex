@@ -2921,6 +2921,130 @@ body {
 }
 </style>
 
+
+<style id="urbanex-featured-urbanex-bg-final-v12">
+/* Destacados: fondo Urbanex, tarjeta oscura y rotación robusta. */
+.aside-showcase-list{
+  position:relative!important;
+  isolation:isolate!important;
+  background:
+    linear-gradient(180deg,rgba(2,2,2,.78),rgba(2,2,2,.92)),
+    url("imagenes/Boulevard.png") center/cover no-repeat!important;
+  border-left:1px solid rgba(229,193,88,.22)!important;
+  box-shadow:inset 18px 0 40px rgba(0,0,0,.28)!important;
+}
+.aside-showcase-list::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(229,193,88,.10),transparent 32%),
+    linear-gradient(90deg,rgba(0,0,0,.10),rgba(0,0,0,.28));
+}
+.showcase-header{
+  background:rgba(0,0,0,.24)!important;
+  border-bottom:1px solid rgba(229,193,88,.10)!important;
+}
+.showcase-header h2{
+  color:#f2d26d!important;
+  text-shadow:0 2px 12px rgba(0,0,0,.65)!important;
+}
+
+/* Una sola tarjeta visible. El cambio no depende del ancho del track. */
+.featured-carousel-track{
+  display:block!important;
+  width:100%!important;
+  transform:none!important;
+  transition:none!important;
+  overflow:visible!important;
+}
+.featured-slide{
+  display:none!important;
+  width:100%!important;
+  min-width:0!important;
+  opacity:0!important;
+}
+.featured-slide[aria-hidden="false"]{
+  display:block!important;
+  opacity:1!important;
+  animation:urbanexFeaturedEnter .42s ease both!important;
+}
+@keyframes urbanexFeaturedEnter{
+  from{opacity:0;transform:translateY(8px) scale(.985)}
+  to{opacity:1;transform:none}
+}
+
+.featured-business-card{
+  color:#fff!important;
+  border:1px solid rgba(229,193,88,.28)!important;
+  background:rgba(5,5,5,.88)!important;
+  box-shadow:0 20px 38px rgba(0,0,0,.38)!important;
+  backdrop-filter:blur(14px)!important;
+  -webkit-backdrop-filter:blur(14px)!important;
+}
+.featured-business-media{
+  background:linear-gradient(180deg,rgba(255,255,255,.035),transparent)!important;
+}
+.featured-business-content{
+  background:linear-gradient(180deg,rgba(8,8,8,.52),rgba(3,3,3,.80))!important;
+}
+.featured-business-content h3{
+  color:#fff!important;
+}
+.featured-location{
+  color:#d4d4d4!important;
+}
+.featured-business-meta{
+  border-top-color:rgba(229,193,88,.14)!important;
+}
+.featured-card-cta{
+  border-color:rgba(229,193,88,.42)!important;
+  background:rgba(229,193,88,.08)!important;
+}
+.featured-control-btn{
+  border-color:rgba(229,193,88,.22)!important;
+  background:rgba(0,0,0,.58)!important;
+}
+.featured-control-btn:hover,
+.featured-control-btn:focus-visible{
+  color:#111!important;
+  background:#e5c158!important;
+}
+.btn-view-all-shops{
+  background:linear-gradient(135deg,#f2d26d,#e5c158)!important;
+  color:#111!important;
+}
+
+@media(max-width:1024px){
+  .aside-showcase-list{
+    background:
+      linear-gradient(180deg,rgba(2,2,2,.82),rgba(2,2,2,.94)),
+      url("imagenes/Boulevard.png") center/cover no-repeat!important;
+    border-left:none!important;
+    border-top:1px solid rgba(229,193,88,.22)!important;
+  }
+}
+
+@media(max-width:760px){
+  .aside-showcase-list{
+    background:
+      linear-gradient(180deg,rgba(2,2,2,.86),rgba(2,2,2,.96)),
+      url("imagenes/Boulevard.png") center/cover no-repeat!important;
+  }
+  .featured-business-card{
+    background:rgba(4,4,4,.91)!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .featured-slide[aria-hidden="false"]{
+    animation:none!important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -3289,7 +3413,6 @@ async function boot() {
             .eq('is_active', true)
             .eq('is_featured', true)
             .order('name', { ascending: true })
-            .limit(20)
     ]);
 
     if (catsRes.error) console.error('categories error:', catsRes.error.message);
@@ -3695,7 +3818,7 @@ const FEATURED_ROTATION_MS = 2000;
 let featuredBusinesses = [];
 let featuredIndex = 0;
 let featuredTimer = null;
-let featuredPaused = false;
+let featuredPaused = false; // La rotación permanece activa en todos los dispositivos.
 
 function featuredCategoryLabel(business) {
     if (business.subcategories?.name) {
@@ -3880,29 +4003,6 @@ function bindFeaturedCarousel() {
         startFeaturedCarousel();
     });
 
-    showcase.addEventListener('mouseenter', () => {
-        featuredPaused = true;
-        stopFeaturedCarousel();
-        restartFeaturedProgress();
-    });
-
-    showcase.addEventListener('mouseleave', () => {
-        featuredPaused = false;
-        startFeaturedCarousel();
-    });
-
-    showcase.addEventListener('focusin', () => {
-        featuredPaused = true;
-        stopFeaturedCarousel();
-        restartFeaturedProgress();
-    });
-
-    showcase.addEventListener('focusout', event => {
-        if (showcase.contains(event.relatedTarget)) return;
-        featuredPaused = false;
-        startFeaturedCarousel();
-    });
-
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             stopFeaturedCarousel();
@@ -3931,7 +4031,7 @@ window.renderShowcase = () => {
         );
     }
 
-    featuredBusinesses = list.slice(0, 20);
+    featuredBusinesses = list;
     featuredIndex = Math.min(featuredIndex, Math.max(featuredBusinesses.length - 1, 0));
 
     const area = document.getElementById('shopsScrollArea');
