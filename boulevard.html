@@ -2820,6 +2820,107 @@ body {
 }
 </style>
 
+
+<style id="urbanex-location-selector-v11">
+.location-selector-wrap{
+    display:flex!important;
+    align-items:center!important;
+    gap:7px!important;
+    min-height:38px!important;
+    padding:0 11px!important;
+    border:1px solid rgba(229,193,88,.25)!important;
+    border-radius:999px!important;
+    background:rgba(255,255,255,.055)!important;
+    box-shadow:0 8px 20px rgba(0,0,0,.18)!important;
+}
+.location-selector-wrap svg{
+    width:14px!important;
+    height:14px!important;
+    flex:0 0 14px!important;
+    fill:var(--gold)!important;
+}
+.location-select-label{
+    position:absolute!important;
+    width:1px!important;
+    height:1px!important;
+    padding:0!important;
+    margin:-1px!important;
+    overflow:hidden!important;
+    clip:rect(0,0,0,0)!important;
+    white-space:nowrap!important;
+    border:0!important;
+}
+.location-select{
+    min-width:108px!important;
+    max-width:170px!important;
+    height:36px!important;
+    padding:0 24px 0 0!important;
+    border:0!important;
+    outline:none!important;
+    color:#fff!important;
+    background-color:transparent!important;
+    font-family:var(--font-sans)!important;
+    font-size:11px!important;
+    font-weight:700!important;
+    cursor:pointer!important;
+}
+.location-select option,
+.location-select optgroup{
+    color:#111827!important;
+    background:#fff!important;
+}
+.location-selector-wrap:focus-within{
+    border-color:var(--gold)!important;
+    box-shadow:0 0 0 3px rgba(229,193,88,.12),0 8px 20px rgba(0,0,0,.18)!important;
+}
+
+@media(max-width:760px){
+    .header-top{
+        grid-template-columns:1fr auto!important;
+        grid-template-rows:58px 38px!important;
+        grid-template-areas:"brand location" "search search"!important;
+    }
+    .brand-box{grid-area:brand!important;}
+    .search-wrapper{grid-area:search!important;}
+    .user-tools{
+        grid-area:location!important;
+        display:flex!important;
+        width:auto!important;
+        justify-self:end!important;
+        align-self:center!important;
+        gap:0!important;
+    }
+    .location-selector-wrap{
+        display:flex!important;
+        min-height:34px!important;
+        padding:0 8px!important;
+    }
+    .location-select{
+        min-width:92px!important;
+        max-width:125px!important;
+        height:32px!important;
+        font-size:10px!important;
+    }
+    .tool-icon.icon-corazon,
+    .profile-avatar{
+        display:none!important;
+    }
+}
+
+@media(max-width:420px){
+    .location-selector-wrap svg{
+        width:12px!important;
+        height:12px!important;
+        flex-basis:12px!important;
+    }
+    .location-select{
+        min-width:82px!important;
+        max-width:108px!important;
+        font-size:9.5px!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -2840,9 +2941,13 @@ body {
         </div>
 
         <div class="user-tools">
-            <div class="location-indicator">
-                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                <span>Loja</span>
+            <div class="location-indicator location-selector-wrap">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <label class="location-select-label" for="locationSelect">Buscar en</label>
+                <select id="locationSelect" class="location-select" aria-label="Seleccionar ubicación de búsqueda">
+                    <option value="Loja" selected>Loja, Loja</option>
+                    <option value="__all__">Todo Ecuador</option>
+                </select>
             </div>
             <div class="tool-icon icon-corazon">
                 <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
@@ -3013,6 +3118,7 @@ let activeCatId    = null; // NUMBER o null
 let activeSubId    = null; // NUMBER o null
 let activeQuick    = 'all';
 let searchQuery    = '';
+let activeLocation = 'Loja'; // Loja por defecto; __all__ = Todo Ecuador
 let fullDirectoryLoaded = false;
 let fullDirectoryLoadPromise = null;
 let offerProductCountByBusiness = new Map();
@@ -3052,6 +3158,69 @@ function toNum(v) { const n = Number(v); return isNaN(n) ? null : n; }
 function businessKey(v) { return String(v ?? '').trim(); }
 function businessOfferProductCount(business) { return offerProductCountByBusiness.get(businessKey(business?.id)) || 0; }
 function businessHasOfferProduct(business) { return businessOfferProductCount(business) > 0; }
+
+
+function normalizeLocationValue(value) {
+    return String(value || '')
+        .trim()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+}
+
+function locationMatches(business) {
+    if (activeLocation === '__all__') return true;
+
+    const selected = normalizeLocationValue(activeLocation);
+    const city = normalizeLocationValue(business?.city);
+    const address = normalizeLocationValue(business?.address);
+
+    if (city) return city === selected;
+    return Boolean(selected && address.includes(selected));
+}
+
+function locationDisplayLabel(city) {
+    return normalizeLocationValue(city) === 'loja'
+        ? 'Loja, Loja'
+        : String(city || '').trim();
+}
+
+function populateLocationOptions() {
+    const select = document.getElementById('locationSelect');
+    if (!select) return;
+
+    const current = activeLocation || 'Loja';
+    const cities = [...new Set(
+        allBusinesses
+            .map(business => String(business.city || '').trim())
+            .filter(Boolean)
+    )].sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+
+    const lojaExists = cities.some(city => normalizeLocationValue(city) === 'loja');
+    const otherCities = cities.filter(city => normalizeLocationValue(city) !== 'loja');
+
+    select.innerHTML = `
+        <option value="Loja">Loja, Loja</option>
+        <option value="__all__">Todo Ecuador</option>
+        ${otherCities.map(city => `<option value="${esc(city)}">${esc(locationDisplayLabel(city))}</option>`).join('')}
+    `;
+
+    const availableValues = [...select.options].map(option => option.value);
+    activeLocation = availableValues.includes(current)
+        ? current
+        : (lojaExists || availableValues.includes('Loja') ? 'Loja' : '__all__');
+
+    select.value = activeLocation;
+}
+
+function refreshLocationViews() {
+    renderCatTree();
+    renderShowcase();
+    updateMetrics();
+
+    const modal = document.getElementById('directorioModal');
+    if (modal && modal.style.display !== 'none') renderDir();
+}
 
 // ── Helpers ───────────────────────────────────────────────────
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -3138,6 +3307,7 @@ async function boot() {
 
     // Carga inicial liviana: solo destacados. Esto hace visible la página mucho más rápido.
     allBusinesses = normalizeBusinessRows(featuredRes.data || []);
+    populateLocationOptions();
 
     renderCatTree();
     renderShowcase();
@@ -3176,6 +3346,7 @@ async function ensureAllBusinessesLoaded(renderAfterLoad = true) {
 
         allBusinesses = normalizeBusinessRows(data || []);
         fullDirectoryLoaded = true;
+        populateLocationOptions();
 
         if (renderAfterLoad) {
             renderCatTree();
@@ -3327,7 +3498,7 @@ function renderCatTree() {
 
     // Contar por raíz
     const countByRoot = {};
-    allBusinesses.forEach(b=>{
+    allBusinesses.filter(locationMatches).forEach(b=>{
         const bSub = toNum(b.subcategory_id);
         const bCat = toNum(b.category_id);
         const allSubs = Object.values(subMap).flat();
@@ -3336,7 +3507,7 @@ function renderCatTree() {
         if(rootId !== null) countByRoot[rootId]=(countByRoot[rootId]||0)+1;
     });
 
-    document.getElementById('totalCount').textContent = allBusinesses.length + ' locales';
+    document.getElementById('totalCount').textContent = allBusinesses.filter(locationMatches).length + ' locales';
 
     rootCategories.forEach(root=>{
         const total = countByRoot[root.id]||0;
@@ -3420,6 +3591,13 @@ window.setQuickFilter = (filter, btn) => {
     if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
 };
 
+// ── Selector de ubicación ─────────────────────────────────────
+document.getElementById('locationSelect')?.addEventListener('change', event => {
+    activeLocation = event.target.value || 'Loja';
+    featuredIndex = 0;
+    refreshLocationViews();
+});
+
 // ── Búsqueda ──────────────────────────────────────────────────
 document.getElementById('siteSearch').addEventListener('input', e=>{
     searchQuery = e.target.value.toLowerCase().trim();
@@ -3430,6 +3608,7 @@ document.getElementById('siteSearch').addEventListener('input', e=>{
 // ── Filtrar lista ─────────────────────────────────────────────
 function filtered() {
     return allBusinesses.filter(b=>{
+        if (!locationMatches(b)) return false;
         const bCat = toNum(b.category_id);
         const bSub = toNum(b.subcategory_id);
         if (activeSubId !== null) {
@@ -3465,6 +3644,7 @@ function updateMetrics() {
 // Solo filtro de categoría (sin quick filter) para las métricas
 function allCatFiltered() {
     return allBusinesses.filter(b=>{
+        if (!locationMatches(b)) return false;
         const bCat = toNum(b.category_id);
         const bSub = toNum(b.subcategory_id);
         if (activeSubId !== null) {
@@ -3737,7 +3917,7 @@ window.renderShowcase = () => {
     const sort = document.getElementById('showcaseSort')?.value || 'rating';
 
     let list = allBusinesses
-        .filter(business => business.is_featured === true)
+        .filter(business => business.is_featured === true && locationMatches(business))
         .slice();
 
     if (sort === 'name') {
@@ -3902,7 +4082,7 @@ async function runSearch(q) {
 
     // 1. Negocios por nombre/dirección (local)
     const bizResults = allBusinesses
-        .filter(b => `${b.name} ${b.address||''} ${b.categories?.name||''} ${b.subcategories?.name||''}`.toLowerCase().includes(qLow))
+        .filter(b => locationMatches(b) && `${b.name} ${b.address||''} ${b.categories?.name||''} ${b.subcategories?.name||''}`.toLowerCase().includes(qLow))
         .slice(0, 4);
 
     // 2. Productos: buscar en Supabase
@@ -3910,7 +4090,7 @@ async function runSearch(q) {
         .from('products')
         .select(`
             name,
-            businesses!business_id(id, name, slug,
+            businesses!business_id(id, name, slug, city, address,
                 categories!category_id(name, icon),
                 subcategories:categories!subcategory_id(name, icon)
             )
@@ -3930,7 +4110,7 @@ async function runSearch(q) {
 
     // Excluir negocios que ya aparecen en resultados directos
     const bizIds = new Set(bizResults.map(b => b.id));
-    const prodResults = [...prodByBiz.values()].filter(r => !bizIds.has(r.biz.id));
+    const prodResults = [...prodByBiz.values()].filter(r => !bizIds.has(r.biz.id) && locationMatches(r.biz));
 
     if (!bizResults.length && !prodResults.length) {
         showResults(`<div class="search-results-status">Sin resultados para "${esc(q)}".</div>`);
