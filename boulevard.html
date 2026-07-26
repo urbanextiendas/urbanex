@@ -4811,6 +4811,19 @@ body {
 }
 </style>
 
+
+<style id="urbanex-bottom-filter-gap-only">
+/* ÚNICO CAMBIO EN TABLET Y COMPUTADOR:
+   reducir el espacio entre la barra inferior y el pie,
+   sin mover ni redimensionar la imagen del Boulevard.
+*/
+@media (min-width:721px){
+    .bottom-filter-bar{
+        bottom:4px!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -5019,7 +5032,8 @@ body {
     </section>
 </div>
 
-<footer class="pie-pagina"><p>&copy; <span id="anio-actual"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
+<footer class="pie-pagina"><p>&copy; 2026 Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
+
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
