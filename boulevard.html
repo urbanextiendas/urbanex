@@ -2383,6 +2383,68 @@ body {
 }
 </style>
 
+
+<style id="urbanex-featured-single-only">
+/* ÚNICOS CAMBIOS:
+   - Ocultar la barra horizontal visible.
+   - Mostrar un destacado por vez.
+   - Aumentar ligeramente su tamaño.
+*/
+.aside-categories,
+.categories-list{
+    scrollbar-width:none!important;
+}
+
+.aside-categories::-webkit-scrollbar,
+.categories-list::-webkit-scrollbar{
+    display:none!important;
+    width:0!important;
+    height:0!important;
+}
+
+.shops-scroll-area{
+    display:flex!important;
+    flex-direction:column!important;
+    grid-template-columns:none!important;
+    overflow:hidden!important;
+}
+
+.shop-card{
+    width:100%!important;
+    height:84px!important;
+    flex:0 0 84px!important;
+}
+
+.shop-thumb-wrapper{
+    width:74px!important;
+    height:74px!important;
+    flex:0 0 74px!important;
+    margin-left:5px!important;
+}
+
+.shop-title{
+    font-size:12.5px!important;
+}
+
+@media (max-width:640px){
+    .shops-scroll-area{
+        min-height:104px!important;
+        max-height:104px!important;
+    }
+
+    .shop-card{
+        height:84px!important;
+        flex-basis:84px!important;
+    }
+
+    .shop-thumb-wrapper{
+        width:74px!important;
+        height:74px!important;
+        flex-basis:74px!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -3198,9 +3260,7 @@ function applySelectedLocation() {
 }
 
 function featuredVisibleCount() {
-    if (window.matchMedia('(max-width: 640px)').matches) return 1;
-    if (window.matchMedia('(max-width: 1024px)').matches) return 2;
-    return 3;
+    return 1;
 }
 
 function stopFeaturedRotation() {
