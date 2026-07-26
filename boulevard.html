@@ -2352,21 +2352,33 @@ body {
 </style>
 
 
-<style id="urbanex-directory-logo-fit-only">
-/* ÚNICO CAMBIO: ajustar los logotipos dentro de sus rectángulos sin recortarlos. */
-.uxd-card-media img{
-    width:100%!important;
-    height:100%!important;
-    max-width:100%!important;
-    max-height:100%!important;
+<style id="urbanex-logo-fit-real-only">
+/* ÚNICO CAMBIO: mostrar cada logotipo completo, centrado y sin recortes. */
+.uxd-card-media{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
     padding:8px!important;
+    overflow:hidden!important;
+    background:#ffffff!important;
+}
+
+.uxd-card-media > img.uxd-business-logo-fit{
+    width:auto!important;
+    height:auto!important;
+    max-width:92%!important;
+    max-height:92%!important;
     object-fit:contain!important;
     object-position:center!important;
-    background:#ffffff!important;
+    flex:0 0 auto!important;
+    margin:auto!important;
+    padding:0!important;
+    border-radius:6px!important;
+    background:transparent!important;
     transform:none!important;
 }
 
-.uxd-card:hover .uxd-card-media img{
+.uxd-card:hover .uxd-card-media > img.uxd-business-logo-fit{
     transform:none!important;
 }
 </style>
@@ -3742,10 +3754,12 @@ function dirCardHtml(b) {
     const media = b.cover_image
         ? `
             <img
+                class="uxd-business-logo-fit"
                 src="${esc(b.cover_image)}"
                 alt="${esc(b.name)}"
                 loading="lazy"
                 decoding="async"
+                style="width:auto!important;height:auto!important;max-width:92%!important;max-height:92%!important;object-fit:contain!important;object-position:center!important;display:block!important;margin:auto!important;transform:none!important;"
             >
         `
         : `
