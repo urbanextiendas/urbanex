@@ -4690,6 +4690,127 @@ body {
 }
 </style>
 
+
+<style id="urbanex-featured-large-professional-navigation-only">
+/* SOLO TABLET Y COMPUTADOR:
+   - elimina flechas sobre las publicidades
+   - navegación por segmentos debajo de los anuncios
+   - permite cambiar deslizando con mouse o pantalla táctil
+*/
+.featured-large-rail{
+    display:none;
+}
+
+@media (min-width:721px){
+    .featured-card-nav{
+        display:none!important;
+    }
+
+    .shop-card-profile{
+        padding-left:10px!important;
+        padding-right:10px!important;
+    }
+
+    .shop-card-footer{
+        padding-left:10px!important;
+        padding-right:10px!important;
+    }
+
+    .shops-scroll-area{
+        cursor:grab!important;
+        user-select:none!important;
+        touch-action:pan-y!important;
+    }
+
+    .shops-scroll-area.is-dragging{
+        cursor:grabbing!important;
+    }
+
+    .featured-large-rail{
+        flex:0 0 auto!important;
+        min-height:30px!important;
+        display:flex!important;
+        align-items:center!important;
+        justify-content:center!important;
+        gap:5px!important;
+        padding:8px 12px 10px!important;
+        overflow-x:auto!important;
+        overflow-y:hidden!important;
+        border-top:1px solid rgba(151,172,194,.10)!important;
+        background:rgba(3,5,8,.30)!important;
+        scrollbar-width:none!important;
+        -webkit-overflow-scrolling:touch!important;
+    }
+
+    .featured-large-rail[hidden]{
+        display:none!important;
+    }
+
+    .featured-large-rail::-webkit-scrollbar{
+        display:none!important;
+        width:0!important;
+        height:0!important;
+    }
+
+    .featured-large-rail-item{
+        flex:0 0 18px!important;
+        width:18px!important;
+        height:12px!important;
+        display:grid!important;
+        place-items:center!important;
+        padding:0!important;
+        border:0!important;
+        background:transparent!important;
+        cursor:pointer!important;
+    }
+
+    .featured-large-rail-item span{
+        display:block!important;
+        width:14px!important;
+        height:3px!important;
+        border-radius:999px!important;
+        background:rgba(197,208,218,.28)!important;
+        transition:
+            width .20s ease,
+            background .20s ease,
+            box-shadow .20s ease!important;
+    }
+
+    .featured-large-rail-item:hover span{
+        background:rgba(229,193,88,.56)!important;
+    }
+
+    .featured-large-rail-item.is-active{
+        flex-basis:30px!important;
+        width:30px!important;
+    }
+
+    .featured-large-rail-item.is-active span{
+        width:28px!important;
+        background:var(--gold)!important;
+        box-shadow:0 0 10px rgba(229,193,88,.22)!important;
+    }
+
+    .featured-large-rail-item:focus-visible{
+        outline:1px solid var(--gold)!important;
+        outline-offset:1px!important;
+        border-radius:999px!important;
+    }
+}
+
+@media (max-width:720px){
+    .featured-large-rail{
+        display:none!important;
+    }
+}
+
+@media (prefers-reduced-motion:reduce) and (min-width:721px){
+    .featured-large-rail-item span{
+        transition:none!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -4815,6 +4936,12 @@ body {
             <div class="skeleton" style="height:64px;border-radius:8px;"></div>
             <div class="skeleton" style="height:64px;border-radius:8px;"></div>
         </div>
+
+        <nav
+            class="featured-large-rail"
+            id="featuredLargeRail"
+            aria-label="Navegación de negocios destacados"
+        ></nav>
     </aside>
 
 </div>
@@ -5661,6 +5788,122 @@ window.featuredNextLarge = () => {
 };
 
 
+window.featuredGoToLarge = (index) => {
+    if (window.innerWidth <= 720) return;
+
+    const list = getFeaturedBusinessesForNavigation();
+    if (!list.length) return;
+
+    const safeIndex = Math.max(
+        0,
+        Math.min(Number(index) || 0, list.length - 1)
+    );
+
+    featuredCarouselOffset = safeIndex;
+    featuredSlotIndices = [];
+    renderShowcase();
+};
+
+function renderLargeFeaturedRail(list) {
+    const rail = document.getElementById('featuredLargeRail');
+    if (!rail) return;
+
+    if (
+        window.innerWidth <= 720 ||
+        !Array.isArray(list) ||
+        list.length <= 1
+    ) {
+        rail.innerHTML = '';
+        rail.hidden = true;
+        return;
+    }
+
+    rail.hidden = false;
+
+    const activeIndex =
+        ((featuredCarouselOffset % list.length) + list.length) % list.length;
+
+    rail.innerHTML = list.map((business, index) => `
+        <button
+            type="button"
+            class="featured-large-rail-item${index === activeIndex ? ' is-active' : ''}"
+            onclick="featuredGoToLarge(${index})"
+            aria-label="Mostrar destacado ${index + 1} de ${list.length}: ${esc(business.name)}"
+            aria-current="${index === activeIndex ? 'true' : 'false'}"
+            title="${esc(business.name)}"
+        >
+            <span></span>
+        </button>
+    `).join('');
+}
+
+function ensureLargeFeaturedGesture() {
+    const area = document.getElementById('shopsScrollArea');
+
+    if (
+        !area ||
+        area.dataset.largeGestureReady === 'true'
+    ) {
+        return;
+    }
+
+    area.dataset.largeGestureReady = 'true';
+
+    let startX = 0;
+    let startY = 0;
+    let pointerId = null;
+
+    area.addEventListener('pointerdown', event => {
+        if (window.innerWidth <= 720 || event.button !== 0) return;
+
+        pointerId = event.pointerId;
+        startX = event.clientX;
+        startY = event.clientY;
+        area.classList.add('is-dragging');
+
+        try {
+            area.setPointerCapture(pointerId);
+        } catch (error) {
+            // El navegador puede no admitir captura para este evento.
+        }
+    });
+
+    area.addEventListener('pointerup', event => {
+        if (
+            window.innerWidth <= 720 ||
+            pointerId === null ||
+            event.pointerId !== pointerId
+        ) {
+            return;
+        }
+
+        const deltaX = event.clientX - startX;
+        const deltaY = event.clientY - startY;
+
+        area.classList.remove('is-dragging');
+        pointerId = null;
+
+        if (
+            Math.abs(deltaX) < 44 ||
+            Math.abs(deltaX) <= Math.abs(deltaY) * 1.2
+        ) {
+            return;
+        }
+
+        if (deltaX < 0) {
+            featuredNextLarge();
+        } else {
+            featuredPreviousLarge();
+        }
+    });
+
+    area.addEventListener('pointercancel', () => {
+        pointerId = null;
+        area.classList.remove('is-dragging');
+    });
+}
+
+
 window.featuredPreviousMobile = () => {
     if (window.innerWidth > 720) return;
 
@@ -6328,20 +6571,6 @@ function shopCardHtml(b) {
 
     return `
         <article class="shop-card shop-card-ad">
-            <button
-                type="button"
-                class="featured-card-nav featured-card-nav-left"
-                onclick="event.preventDefault(); event.stopPropagation(); featuredPreviousLarge();"
-                aria-label="Ver destacado anterior"
-            >‹</button>
-
-            <button
-                type="button"
-                class="featured-card-nav featured-card-nav-right"
-                onclick="event.preventDefault(); event.stopPropagation(); featuredNextLarge();"
-                aria-label="Ver destacado siguiente"
-            >›</button>
-
             <a
                 class="shop-card-profile"
                 href="${NEGOCIO_URL(b.slug)}"
@@ -6433,6 +6662,7 @@ window.renderShowcase = () => {
                 No hay negocios destacados en esta ubicación.
             </div>
         `;
+        renderLargeFeaturedRail([]);
         return;
     }
 
@@ -6458,6 +6688,8 @@ window.renderShowcase = () => {
     area.innerHTML = visibleBusinesses.map(shopCardHtml).join('');
     area.classList.add('featured-changing');
 
+    renderLargeFeaturedRail(list);
+    ensureLargeFeaturedGesture();
     ensureMobileFeaturedSwipe();
     scheduleFeaturedRotation(list.length);
     scheduleFeaturedSlotRotations(list);
