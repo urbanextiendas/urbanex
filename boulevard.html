@@ -2447,12 +2447,24 @@ body {
 
 
 <style id="urbanex-side-panels-translucent-only">
-/* ÚNICO CAMBIO: paneles laterales traslúcidos. */
-.aside-categories,
-.aside-showcase-list{
-    background:rgba(6,6,6,.58)!important;
-    backdrop-filter:blur(18px)!important;
-    -webkit-backdrop-filter:blur(18px)!important;
+/* ÚNICO CAMBIO: paneles laterales traslúcidos en computador.
+   No modifica estructura, funciones, tamaños ni vista móvil. */
+@media (min-width:1025px){
+    .aside-categories{
+        background:
+            linear-gradient(rgba(3,3,3,.58), rgba(3,3,3,.58)),
+            url("imagenes/Boulevard.png") left center / cover no-repeat!important;
+        backdrop-filter:blur(10px)!important;
+        -webkit-backdrop-filter:blur(10px)!important;
+    }
+
+    .aside-showcase-list{
+        background:
+            linear-gradient(rgba(3,3,3,.58), rgba(3,3,3,.58)),
+            url("imagenes/Boulevard.png") right center / cover no-repeat!important;
+        backdrop-filter:blur(10px)!important;
+        -webkit-backdrop-filter:blur(10px)!important;
+    }
 }
 </style>
 
