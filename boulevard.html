@@ -1225,6 +1225,176 @@ body {
 }
 </style>
 
+
+<style id="urbanex-location-mobile-final-v2">
+/* Ajuste puntual: ubicación visible, compacta y responsive. */
+.tool-icon.icon-corazon,
+.profile-avatar{
+    display:none!important;
+}
+
+.user-tools{
+    gap:0!important;
+}
+.location-picker{
+    max-width:220px;
+}
+.location-picker-button{
+    width:auto!important;
+    min-width:150px!important;
+    max-width:220px!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:7px!important;
+    padding:0 12px!important;
+}
+#locationPickerLabel{
+    display:block!important;
+    flex:1 1 auto!important;
+    min-width:0!important;
+    max-width:170px!important;
+    color:#fff!important;
+    font-family:var(--font-sans)!important;
+    font-size:11px!important;
+    font-weight:600!important;
+    line-height:1!important;
+    text-align:left!important;
+}
+.location-picker-panel{
+    max-height:min(520px,calc(100vh - 86px))!important;
+    overflow-y:auto!important;
+    overscroll-behavior:contain!important;
+}
+
+@media (max-width:720px){
+    body{
+        padding-top:186px!important;
+    }
+    .header-top{
+        height:104px!important;
+        min-height:104px!important;
+        display:grid!important;
+        grid-template-columns:minmax(0,1fr) auto!important;
+        grid-template-rows:52px 38px!important;
+        grid-template-areas:
+            "brand tools"
+            "search search"!important;
+        gap:6px 10px!important;
+        padding:7px 12px!important;
+    }
+    .brand-box{
+        grid-area:brand!important;
+        width:auto!important;
+        min-width:0!important;
+        justify-content:flex-start!important;
+        margin:0!important;
+    }
+    .brand-box img{
+        width:auto!important;
+        max-width:158px!important;
+        height:48px!important;
+        margin:0!important;
+        object-fit:contain!important;
+    }
+    .search-wrapper{
+        grid-area:search!important;
+        width:100%!important;
+        max-width:none!important;
+        margin:0!important;
+    }
+    .search-input{
+        height:38px!important;
+    }
+    .user-tools{
+        grid-area:tools!important;
+        display:flex!important;
+        position:static!important;
+        width:auto!important;
+        min-width:0!important;
+        margin:0!important;
+        justify-self:end!important;
+        align-self:center!important;
+    }
+    .location-picker{
+        width:auto!important;
+        max-width:148px!important;
+    }
+    .location-picker-button{
+        width:148px!important;
+        min-width:0!important;
+        max-width:148px!important;
+        height:36px!important;
+        padding:0 10px!important;
+        gap:6px!important;
+    }
+    .location-picker-button svg{
+        width:13px!important;
+        height:13px!important;
+    }
+    #locationPickerLabel{
+        display:block!important;
+        max-width:none!important;
+        font-size:10px!important;
+        text-overflow:ellipsis!important;
+        overflow:hidden!important;
+        white-space:nowrap!important;
+    }
+    .location-picker-chevron{
+        display:block!important;
+        margin-left:auto!important;
+        flex:0 0 auto!important;
+    }
+    .location-picker-panel{
+        position:fixed!important;
+        top:108px!important;
+        left:10px!important;
+        right:10px!important;
+        bottom:auto!important;
+        width:auto!important;
+        max-height:calc(100svh - 132px)!important;
+        padding:14px!important;
+        overflow-y:auto!important;
+        border-radius:14px!important;
+    }
+    .location-picker-title{
+        margin-bottom:10px!important;
+        font-size:12px!important;
+    }
+    .location-picker-field{
+        margin-bottom:10px!important;
+    }
+    .location-picker-field select{
+        height:38px!important;
+    }
+    .location-picker-actions button{
+        height:36px!important;
+    }
+    .aside-categories{
+        top:104px!important;
+    }
+}
+
+@media (max-width:390px){
+    .header-top{
+        grid-template-columns:minmax(0,1fr) 126px!important;
+        padding-left:10px!important;
+        padding-right:10px!important;
+    }
+    .brand-box img{
+        max-width:142px!important;
+        height:44px!important;
+    }
+    .location-picker,
+    .location-picker-button{
+        width:126px!important;
+        max-width:126px!important;
+    }
+    #locationPickerLabel{
+        font-size:9.5px!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -1254,7 +1424,7 @@ body {
                     aria-controls="locationPickerPanel"
                 >
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                    <span id="locationPickerLabel">Loja, Loja</span>
+                    <span id="locationPickerLabel">Todo Ecuador</span>
                     <span class="location-picker-chevron" aria-hidden="true">⌄</span>
                 </button>
 
@@ -1276,12 +1446,6 @@ body {
                         <button type="button" class="location-picker-apply" id="locationPickerApply">Buscar aquí</button>
                     </div>
                 </div>
-            </div>
-            <div class="tool-icon icon-corazon">
-                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            </div>
-            <div class="profile-avatar">
-                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
             </div>
         </div>
     </header>
@@ -1428,8 +1592,8 @@ let fullDirectoryLoaded = false;
 let fullDirectoryLoadPromise = null;
 let offerProductCountByBusiness = new Map();
 let offerMetricsLoaded = false;
-let activeProvince = 'Loja';
-let activeLocation = 'Loja';
+let activeProvince = '__all__';
+let activeLocation = '__all__';
 let featuredCarouselOffset = 0;
 let featuredCarouselTimer = null;
 let featuredCarouselSignature = '';
@@ -1930,7 +2094,7 @@ function applySelectedLocation() {
     const citySelect = document.getElementById('citySelect');
     if (!provinceSelect || !citySelect) return;
 
-    const province = provinceSelect.value || 'Loja';
+    const province = provinceSelect.value || '__all__';
 
     if (province === '__all__') {
         activeProvince = '__all__';
@@ -2523,7 +2687,7 @@ locationPickerButton?.addEventListener('click', event => {
 });
 
 provinceSelect?.addEventListener('change', event => {
-    const province = event.target.value || 'Loja';
+    const province = event.target.value || '__all__';
     populateCityOptions(province, province === activeProvince ? activeLocation : '__province__');
 });
 
