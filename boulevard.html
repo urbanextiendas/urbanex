@@ -1077,6 +1077,154 @@ body {
 }
 </style>
 
+
+<style id="urbanex-province-city-picker-v1">
+/* ÚNICO CAMBIO: selector de provincia y ciudad/cantón. */
+.location-picker{
+    position:relative;
+    flex:0 0 auto;
+    font-family:var(--font-sans);
+}
+.location-picker-button{
+    min-width:150px;
+    height:36px;
+    padding:0 11px;
+    border:1px solid rgba(229,193,88,.32);
+    border-radius:20px;
+    background:rgba(0,0,0,.42);
+    font-family:var(--font-sans);
+    color:#fff;
+    cursor:pointer;
+    transition:var(--transition-smooth);
+}
+.location-picker-button:hover,
+.location-picker-button[aria-expanded="true"]{
+    border-color:var(--gold);
+    background:rgba(229,193,88,.08);
+}
+.location-picker-button svg{
+    width:14px;
+    height:14px;
+    fill:var(--gold);
+    flex:0 0 auto;
+}
+#locationPickerLabel{
+    min-width:0;
+    max-width:150px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.location-picker-chevron{
+    margin-left:auto;
+    color:var(--gold);
+    font-size:13px;
+    line-height:1;
+}
+.location-picker-panel{
+    position:absolute;
+    top:calc(100% + 10px);
+    right:0;
+    z-index:100000;
+    width:min(310px,calc(100vw - 24px));
+    padding:16px;
+    border:1px solid rgba(229,193,88,.34);
+    border-radius:14px;
+    background:rgba(5,5,5,.98);
+    box-shadow:0 22px 60px rgba(0,0,0,.72);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+}
+.location-picker-panel[hidden]{display:none!important;}
+.location-picker-title{
+    margin-bottom:13px;
+    color:var(--gold);
+    font-family:var(--font-serif);
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.4px;
+}
+.location-picker-field{
+    display:block;
+    margin-bottom:12px;
+}
+.location-picker-field>span{
+    display:block;
+    margin-bottom:6px;
+    color:#fff;
+    font-size:10px;
+    font-weight:600;
+}
+.location-picker-field select{
+    width:100%;
+    height:40px;
+    padding:0 11px;
+    border:1px solid rgba(255,255,255,.13);
+    border-radius:9px;
+    outline:none;
+    background:#0b0b0b;
+    color:#fff;
+    font-family:var(--font-sans);
+    font-size:11px;
+    cursor:pointer;
+}
+.location-picker-field select:focus{
+    border-color:var(--gold);
+}
+.location-picker-field select:disabled{
+    opacity:.7;
+    cursor:not-allowed;
+}
+.location-picker-field option{
+    background:#fff;
+    color:#111;
+}
+.location-picker-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:4px;
+}
+.location-picker-actions button{
+    height:38px;
+    border-radius:9px;
+    font-family:var(--font-sans);
+    font-size:10.5px;
+    font-weight:600;
+    cursor:pointer;
+}
+.location-picker-cancel{
+    border:1px solid rgba(255,255,255,.15);
+    background:transparent;
+    color:#ddd;
+}
+.location-picker-apply{
+    border:1px solid var(--gold);
+    background:var(--gold);
+    color:#090909;
+}
+.location-picker-cancel:hover{border-color:rgba(255,255,255,.32);color:#fff;}
+.location-picker-apply:hover{background:#f1cd6b;}
+
+@media(max-width:640px){
+    .location-picker-button{
+        min-width:106px;
+        max-width:122px;
+        height:34px;
+        padding:0 9px;
+        font-size:10px;
+    }
+    #locationPickerLabel{max-width:78px;}
+    .location-picker-panel{
+        position:fixed;
+        top:64px;
+        left:12px;
+        right:12px;
+        width:auto;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -1097,13 +1245,38 @@ body {
         </div>
 
         <div class="user-tools">
-            <label class="location-indicator location-selector" for="locationSelect">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                <select id="locationSelect" class="location-select" aria-label="Seleccionar ubicación">
-                    <option value="Loja" selected>Loja, Loja</option>
-                    <option value="__all__">Todo Ecuador</option>
-                </select>
-            </label>
+            <div class="location-picker" id="locationPicker">
+                <button
+                    class="location-indicator location-picker-button"
+                    id="locationPickerButton"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="locationPickerPanel"
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    <span id="locationPickerLabel">Loja, Loja</span>
+                    <span class="location-picker-chevron" aria-hidden="true">⌄</span>
+                </button>
+
+                <div class="location-picker-panel" id="locationPickerPanel" hidden>
+                    <div class="location-picker-title">¿Dónde desea buscar?</div>
+
+                    <label class="location-picker-field" for="provinceSelect">
+                        <span>Provincia</span>
+                        <select id="provinceSelect" aria-label="Seleccionar provincia"></select>
+                    </label>
+
+                    <label class="location-picker-field" for="citySelect">
+                        <span>Ciudad / cantón</span>
+                        <select id="citySelect" aria-label="Seleccionar ciudad o cantón"></select>
+                    </label>
+
+                    <div class="location-picker-actions">
+                        <button type="button" class="location-picker-cancel" id="locationPickerCancel">Cancelar</button>
+                        <button type="button" class="location-picker-apply" id="locationPickerApply">Buscar aquí</button>
+                    </div>
+                </div>
+            </div>
             <div class="tool-icon icon-corazon">
                 <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             </div>
@@ -1255,6 +1428,7 @@ let fullDirectoryLoaded = false;
 let fullDirectoryLoadPromise = null;
 let offerProductCountByBusiness = new Map();
 let offerMetricsLoaded = false;
+let activeProvince = 'Loja';
 let activeLocation = 'Loja';
 let featuredCarouselOffset = 0;
 let featuredCarouselTimer = null;
@@ -1348,6 +1522,288 @@ function hasPromo(promos) {
 
 
 // ── Ubicación y destacados responsive ─────────────────────────
+const ECUADOR_PROVINCE_CANTONS = {
+    "Azuay": [
+        "Cuenca",
+        "Camilo Ponce Enríquez",
+        "Chordeleg",
+        "El Pan",
+        "Girón",
+        "Guachapala",
+        "Gualaceo",
+        "Nabón",
+        "Oña",
+        "Paute",
+        "Pucará",
+        "San Fernando",
+        "Santa Isabel",
+        "Sevilla de Oro",
+        "Sígsig"
+    ],
+    "Bolívar": [
+        "Guaranda",
+        "Caluma",
+        "Chillanes",
+        "Chimbo",
+        "Echeandía",
+        "Las Naves",
+        "San Miguel"
+    ],
+    "Cañar": [
+        "Azogues",
+        "Biblián",
+        "Cañar",
+        "Déleg",
+        "El Tambo",
+        "La Troncal",
+        "Suscal"
+    ],
+    "Carchi": [
+        "Tulcán",
+        "Bolívar",
+        "Espejo",
+        "Mira",
+        "Montúfar",
+        "San Pedro de Huaca"
+    ],
+    "Chimborazo": [
+        "Riobamba",
+        "Alausí",
+        "Chambo",
+        "Chunchi",
+        "Colta",
+        "Cumandá",
+        "Guamote",
+        "Guano",
+        "Pallatanga",
+        "Penipe"
+    ],
+    "Cotopaxi": [
+        "Latacunga",
+        "La Maná",
+        "Pangua",
+        "Pujilí",
+        "Salcedo",
+        "Saquisilí",
+        "Sigchos"
+    ],
+    "El Oro": [
+        "Machala",
+        "Arenillas",
+        "Atahualpa",
+        "Balsas",
+        "Chilla",
+        "El Guabo",
+        "Huaquillas",
+        "Las Lajas",
+        "Marcabelí",
+        "Pasaje",
+        "Piñas",
+        "Portovelo",
+        "Santa Rosa",
+        "Zaruma"
+    ],
+    "Esmeraldas": [
+        "Esmeraldas",
+        "Atacames",
+        "Eloy Alfaro",
+        "Muisne",
+        "Quinindé",
+        "Rioverde",
+        "San Lorenzo"
+    ],
+    "Galápagos": [
+        "San Cristóbal",
+        "Isabela",
+        "Santa Cruz"
+    ],
+    "Guayas": [
+        "Guayaquil",
+        "Alfredo Baquerizo Moreno",
+        "Balao",
+        "Balzar",
+        "Colimes",
+        "Coronel Marcelino Maridueña",
+        "Daule",
+        "Durán",
+        "El Empalme",
+        "El Triunfo",
+        "General Antonio Elizalde",
+        "Isidro Ayora",
+        "Lomas de Sargentillo",
+        "Milagro",
+        "Naranjal",
+        "Naranjito",
+        "Nobol",
+        "Palestina",
+        "Pedro Carbo",
+        "Playas",
+        "Salitre",
+        "Samborondón",
+        "Santa Lucía",
+        "Simón Bolívar",
+        "Yaguachi"
+    ],
+    "Imbabura": [
+        "Ibarra",
+        "Antonio Ante",
+        "Cotacachi",
+        "Otavalo",
+        "Pimampiro",
+        "San Miguel de Urcuquí"
+    ],
+    "Loja": [
+        "Loja",
+        "Calvas",
+        "Catamayo",
+        "Celica",
+        "Chaguarpamba",
+        "Espíndola",
+        "Gonzanamá",
+        "Macará",
+        "Olmedo",
+        "Paltas",
+        "Pindal",
+        "Puyango",
+        "Quilanga",
+        "Saraguro",
+        "Sozoranga",
+        "Zapotillo"
+    ],
+    "Los Ríos": [
+        "Babahoyo",
+        "Baba",
+        "Buena Fe",
+        "Mocache",
+        "Montalvo",
+        "Palenque",
+        "Pueblo Viejo",
+        "Quevedo",
+        "Quinsaloma",
+        "Urdaneta",
+        "Valencia",
+        "Ventanas",
+        "Vinces"
+    ],
+    "Manabí": [
+        "Portoviejo",
+        "24 de Mayo",
+        "Bolívar",
+        "Chone",
+        "El Carmen",
+        "Flavio Alfaro",
+        "Jama",
+        "Jaramijó",
+        "Jipijapa",
+        "Junín",
+        "Manta",
+        "Montecristi",
+        "Olmedo",
+        "Paján",
+        "Pedernales",
+        "Pichincha",
+        "Puerto López",
+        "Rocafuerte",
+        "San Vicente",
+        "Santa Ana",
+        "Sucre",
+        "Tosagua"
+    ],
+    "Morona Santiago": [
+        "Morona",
+        "Gualaquiza",
+        "Huamboya",
+        "Limón Indanza",
+        "Logroño",
+        "Pablo Sexto",
+        "Palora",
+        "San Juan Bosco",
+        "Santiago",
+        "Sucúa",
+        "Taisha",
+        "Tiwintza"
+    ],
+    "Napo": [
+        "Tena",
+        "Archidona",
+        "Carlos Julio Arosemena Tola",
+        "El Chaco",
+        "Quijos"
+    ],
+    "Orellana": [
+        "Francisco de Orellana",
+        "Aguarico",
+        "La Joya de los Sachas",
+        "Loreto"
+    ],
+    "Pastaza": [
+        "Pastaza",
+        "Arajuno",
+        "Mera",
+        "Santa Clara"
+    ],
+    "Pichincha": [
+        "Quito",
+        "Cayambe",
+        "Mejía",
+        "Pedro Moncayo",
+        "Pedro Vicente Maldonado",
+        "Puerto Quito",
+        "Rumiñahui",
+        "San Miguel de los Bancos"
+    ],
+    "Santa Elena": [
+        "Santa Elena",
+        "La Libertad",
+        "Salinas"
+    ],
+    "Santo Domingo de los Tsáchilas": [
+        "Santo Domingo",
+        "La Concordia"
+    ],
+    "Sucumbíos": [
+        "Lago Agrio",
+        "Cascales",
+        "Cuyabeno",
+        "Gonzalo Pizarro",
+        "Putumayo",
+        "Shushufindi",
+        "Sucumbíos"
+    ],
+    "Tungurahua": [
+        "Ambato",
+        "Baños de Agua Santa",
+        "Cevallos",
+        "Mocha",
+        "Patate",
+        "Quero",
+        "San Pedro de Pelileo",
+        "Santiago de Píllaro",
+        "Tisaleo"
+    ],
+    "Zamora Chinchipe": [
+        "Zamora",
+        "Centinela del Cóndor",
+        "Chinchipe",
+        "El Pangui",
+        "Nangaritza",
+        "Palanda",
+        "Paquisha",
+        "Yacuambi",
+        "Yantzaza"
+    ]
+};
+
+const ECUADOR_CITY_ALIASES = {
+    "macas": "Morona Santiago",
+    "nueva loja": "Sucumbíos",
+    "coca": "Orellana",
+    "puerto francisco de orellana": "Orellana",
+    "puyo": "Pastaza",
+    "quito distrito metropolitano": "Pichincha",
+    "santo domingo de los colorados": "Santo Domingo de los Tsáchilas"
+};
+
 function normalizeLocationName(value) {
     const text = String(value || '').trim().replace(/\s+/g, ' ');
     if (!text) return '';
@@ -1360,53 +1816,140 @@ function normalizeLocationName(value) {
 }
 
 function locationKey(value) {
-    return normalizeLocationName(value).toLocaleLowerCase('es-EC');
+    return normalizeLocationName(value)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLocaleLowerCase('es-EC');
 }
+
+const ECUADOR_CITY_PROVINCE = (() => {
+    const map = new Map();
+
+    Object.entries(ECUADOR_PROVINCE_CANTONS).forEach(([province, cantons]) => {
+        cantons.forEach(canton => map.set(locationKey(canton), province));
+    });
+
+    Object.entries(ECUADOR_CITY_ALIASES).forEach(([city, province]) => {
+        map.set(locationKey(city), province);
+    });
+
+    return map;
+})();
 
 function businessCity(business) {
     return normalizeLocationName(business?.city || 'Loja') || 'Loja';
 }
 
+function provinceForCity(city) {
+    return ECUADOR_CITY_PROVINCE.get(locationKey(city)) || '';
+}
+
 function businessMatchesLocation(business) {
-    if (activeLocation === '__all__') return true;
-    return locationKey(businessCity(business)) === locationKey(activeLocation);
+    if (activeProvince === '__all__') return true;
+
+    const city = businessCity(business);
+
+    if (activeLocation && activeLocation !== '__province__') {
+        return locationKey(city) === locationKey(activeLocation);
+    }
+
+    return provinceForCity(city) === activeProvince;
 }
 
 function locationFilteredBusinesses() {
     return allBusinesses.filter(businessMatchesLocation);
 }
 
-function populateLocationOptions() {
-    const select = document.getElementById('locationSelect');
+function populateProvinceOptions() {
+    const select = document.getElementById('provinceSelect');
     if (!select) return;
 
-    const cityMap = new Map();
-    allBusinesses.forEach(business => {
-        const city = businessCity(business);
-        const key = locationKey(city);
-        if (key && !cityMap.has(key)) cityMap.set(key, city);
-    });
-
-    if (!cityMap.has(locationKey('Loja'))) {
-        cityMap.set(locationKey('Loja'), 'Loja');
-    }
-
-    const cities = [...cityMap.values()].sort((a, b) =>
+    const provinces = Object.keys(ECUADOR_PROVINCE_CANTONS).sort((a, b) =>
         a.localeCompare(b, 'es', { sensitivity: 'base' })
     );
 
-    const selectedValue = activeLocation;
     select.innerHTML = [
-        '<option value="Loja">Loja, Loja</option>',
         '<option value="__all__">Todo Ecuador</option>',
-        ...cities
-            .filter(city => locationKey(city) !== locationKey('Loja'))
-            .map(city => `<option value="${esc(city)}">${esc(city)}</option>`)
+        ...provinces.map(province => `<option value="${esc(province)}">${esc(province)}</option>`)
     ].join('');
 
-    const hasSelected = [...select.options].some(option => option.value === selectedValue);
-    select.value = hasSelected ? selectedValue : 'Loja';
-    activeLocation = select.value;
+    select.value = activeProvince === '__all__' ? '__all__' : activeProvince;
+}
+
+function populateCityOptions(province, preferredCity = '__province__') {
+    const select = document.getElementById('citySelect');
+    if (!select) return;
+
+    if (province === '__all__') {
+        select.innerHTML = '<option value="__all__">Todo Ecuador</option>';
+        select.value = '__all__';
+        select.disabled = true;
+        return;
+    }
+
+    select.disabled = false;
+    const cantons = ECUADOR_PROVINCE_CANTONS[province] || [];
+
+    select.innerHTML = [
+        `<option value="__province__">Toda la provincia de ${esc(province)}</option>`,
+        ...cantons.map(canton => `<option value="${esc(canton)}">${esc(canton)}</option>`)
+    ].join('');
+
+    const hasPreferred = [...select.options].some(option => option.value === preferredCity);
+    select.value = hasPreferred ? preferredCity : '__province__';
+}
+
+function currentLocationLabel() {
+    if (activeProvince === '__all__') return 'Todo Ecuador';
+    if (activeLocation === '__province__') return activeProvince;
+    return `${activeLocation}, ${activeProvince}`;
+}
+
+function updateLocationPickerLabel() {
+    const label = document.getElementById('locationPickerLabel');
+    if (label) label.textContent = currentLocationLabel();
+}
+
+function populateLocationOptions() {
+    populateProvinceOptions();
+    populateCityOptions(activeProvince, activeLocation);
+    updateLocationPickerLabel();
+}
+
+function setLocationPickerOpen(open) {
+    const panel = document.getElementById('locationPickerPanel');
+    const button = document.getElementById('locationPickerButton');
+    if (!panel || !button) return;
+
+    panel.hidden = !open;
+    button.setAttribute('aria-expanded', String(open));
+}
+
+function applySelectedLocation() {
+    const provinceSelect = document.getElementById('provinceSelect');
+    const citySelect = document.getElementById('citySelect');
+    if (!provinceSelect || !citySelect) return;
+
+    const province = provinceSelect.value || 'Loja';
+
+    if (province === '__all__') {
+        activeProvince = '__all__';
+        activeLocation = '__all__';
+    } else {
+        activeProvince = province;
+        activeLocation = citySelect.value || '__province__';
+    }
+
+    featuredCarouselOffset = 0;
+    featuredCarouselSignature = '';
+    updateLocationPickerLabel();
+    setLocationPickerOpen(false);
+    renderCatTree();
+    renderShowcase();
+    updateMetrics();
+
+    const modal = document.getElementById('directorioModal');
+    if (modal && modal.style.display !== 'none') renderDir();
 }
 
 function featuredVisibleCount() {
@@ -1965,17 +2508,33 @@ function renderDir() {
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDirectorio(); });
 
 
-const locationSelect = document.getElementById('locationSelect');
-locationSelect?.addEventListener('change', event => {
-    activeLocation = event.target.value || 'Loja';
-    featuredCarouselOffset = 0;
-    featuredCarouselSignature = '';
-    renderCatTree();
-    renderShowcase();
-    updateMetrics();
+const locationPickerButton = document.getElementById('locationPickerButton');
+const locationPickerPanel = document.getElementById('locationPickerPanel');
+const provinceSelect = document.getElementById('provinceSelect');
+const locationPickerApply = document.getElementById('locationPickerApply');
+const locationPickerCancel = document.getElementById('locationPickerCancel');
 
-    const modal = document.getElementById('directorioModal');
-    if (modal && modal.style.display !== 'none') renderDir();
+locationPickerButton?.addEventListener('click', event => {
+    event.stopPropagation();
+    const willOpen = locationPickerPanel?.hidden !== false;
+    populateProvinceOptions();
+    populateCityOptions(activeProvince, activeLocation);
+    setLocationPickerOpen(willOpen);
+});
+
+provinceSelect?.addEventListener('change', event => {
+    const province = event.target.value || 'Loja';
+    populateCityOptions(province, province === activeProvince ? activeLocation : '__province__');
+});
+
+locationPickerApply?.addEventListener('click', applySelectedLocation);
+locationPickerCancel?.addEventListener('click', () => setLocationPickerOpen(false));
+
+locationPickerPanel?.addEventListener('click', event => event.stopPropagation());
+
+document.addEventListener('click', () => setLocationPickerOpen(false));
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') setLocationPickerOpen(false);
 });
 
 let featuredResizeTimer = null;
@@ -2056,7 +2615,7 @@ async function runSearch(q) {
     const bizIds = new Set(bizResults.map(b => b.id));
     const prodResults = [...prodByBiz.values()].filter(r =>
         !bizIds.has(r.biz.id) &&
-        (activeLocation === '__all__' || locationKey(r.biz.city || 'Loja') === locationKey(activeLocation))
+        businessMatchesLocation(r.biz)
     );
 
     if (!bizResults.length && !prodResults.length) {
