@@ -3964,6 +3964,105 @@ body {
 }
 </style>
 
+
+<style id="urbanex-featured-spacing-scroll-only">
+/* ÚNICOS CAMBIOS:
+   1) usar mejor el espacio en Destacados, reduciendo márgenes
+   2) mostrar la barra solo en Categorías, no en otros paneles
+*/
+@media (min-width:721px){
+    .shops-scroll-area{
+        padding:8px!important;
+        gap:8px!important;
+        overflow:hidden!important;
+        scrollbar-width:none!important;
+    }
+
+    .shops-scroll-area::-webkit-scrollbar,
+    .aside-showcase-list::-webkit-scrollbar{
+        display:none!important;
+        width:0!important;
+        height:0!important;
+    }
+
+    .aside-showcase-list{
+        overflow:hidden!important;
+        scrollbar-width:none!important;
+    }
+
+    .shop-card.shop-card-ad{
+        min-height:154px!important;
+    }
+
+    .shop-card-profile{
+        gap:10px!important;
+        padding:12px 14px 8px 14px!important;
+    }
+
+    .shop-card-footer{
+        grid-template-columns:repeat(2,minmax(0,1fr))!important;
+        gap:6px!important;
+        padding:8px 14px 10px 14px!important;
+    }
+
+    .shop-contact,
+    .shop-profile-button{
+        width:100%!important;
+        min-width:0!important;
+        min-height:34px!important;
+    }
+
+    .shop-contact{
+        padding:6px 8px!important;
+        gap:6px!important;
+    }
+
+    .shop-contact-copy strong{
+        font-size:7.2px!important;
+    }
+
+    .shop-profile-button{
+        padding:0 8px!important;
+        font-size:7.6px!important;
+    }
+
+    .featured-card-nav-left{
+        left:6px!important;
+    }
+
+    .featured-card-nav-right{
+        right:6px!important;
+    }
+
+    .aside-categories{
+        overflow-y:auto!important;
+        overflow-x:hidden!important;
+        scrollbar-width:thin!important;
+        scrollbar-color:rgba(210,210,210,.9) rgba(255,255,255,.08)!important;
+    }
+
+    .aside-categories::-webkit-scrollbar{
+        width:8px!important;
+    }
+
+    .aside-categories::-webkit-scrollbar-track{
+        background:rgba(255,255,255,.06)!important;
+        border-radius:999px!important;
+    }
+
+    .aside-categories::-webkit-scrollbar-thumb{
+        background:rgba(214,214,214,.82)!important;
+        border-radius:999px!important;
+        border:1px solid rgba(0,0,0,.18)!important;
+    }
+
+    html,
+    body{
+        overflow:hidden!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
