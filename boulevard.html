@@ -2314,6 +2314,43 @@ body {
 }
 </style>
 
+
+<style id="urbanex-category-bar-like-index">
+/* ============================================================
+   SOLO BARRA DE CATEGORÍAS
+   Replica la estructura de desplazamiento usada en index.html.
+   ============================================================ */
+@media (max-width:1024px){
+    .aside-categories{
+        overflow-x:auto!important;
+        overflow-y:hidden!important;
+        scroll-behavior:auto!important;
+        scrollbar-width:thin!important;
+        -webkit-overflow-scrolling:touch!important;
+        overscroll-behavior-x:contain!important;
+    }
+
+    .categories-list{
+        width:max-content!important;
+        min-width:max-content!important;
+        overflow:visible!important;
+        padding-right:18px!important;
+    }
+}
+
+@media (max-width:720px){
+    .aside-categories{
+        box-sizing:border-box!important;
+    }
+
+    .categories-list{
+        height:58px!important;
+        min-height:58px!important;
+        align-items:stretch!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -4182,6 +4219,218 @@ function goBackMenu() {
 }
 </script>
 
+
+
+<script id="urbanex-category-bar-autoscroll">
+(function () {
+    const RESPONSIVE_QUERY = window.matchMedia('(max-width: 1024px)');
+    const SPEED_PX_PER_SECOND = 22;
+    const RESUME_DELAY = 4500;
+
+    let bar = null;
+    let list = null;
+    let loopWidth = 0;
+    let frameId = null;
+    let lastTime = 0;
+    let interacting = false;
+    let resumeTimer = null;
+    let rebuildTimer = null;
+    let observer = null;
+    let rebuilding = false;
+
+    function removeCloneIds(element) {
+        element.removeAttribute('id');
+
+        element.querySelectorAll('[id]').forEach(function (child) {
+            child.removeAttribute('id');
+        });
+
+        element.dataset.urbanexCategoryClone = 'true';
+        element.setAttribute('aria-hidden', 'true');
+    }
+
+    function removeClones() {
+        if (!list) return;
+
+        list
+            .querySelectorAll('[data-urbanex-category-clone="true"]')
+            .forEach(function (clone) {
+                clone.remove();
+            });
+    }
+
+    function rebuildLoop() {
+        if (rebuilding || !bar || !list) return;
+
+        rebuilding = true;
+
+        if (observer) observer.disconnect();
+
+        removeClones();
+
+        if (!RESPONSIVE_QUERY.matches) {
+            loopWidth = 0;
+            bar.scrollLeft = 0;
+
+            if (observer) {
+                observer.observe(list, { childList: true });
+            }
+
+            rebuilding = false;
+            return;
+        }
+
+        const originals = Array.from(list.children);
+
+        if (!originals.length) {
+            loopWidth = 0;
+
+            if (observer) {
+                observer.observe(list, { childList: true });
+            }
+
+            rebuilding = false;
+            return;
+        }
+
+        const firstOriginal = originals[0];
+
+        /* Dos copias evitan espacios vacíos en pantallas anchas. */
+        for (let copy = 0; copy < 2; copy += 1) {
+            originals.forEach(function (item) {
+                const clone = item.cloneNode(true);
+                removeCloneIds(clone);
+                list.appendChild(clone);
+            });
+        }
+
+        window.requestAnimationFrame(function () {
+            const firstClone = list.querySelector(
+                '[data-urbanex-category-clone="true"]'
+            );
+
+            loopWidth = firstClone
+                ? firstClone.offsetLeft - firstOriginal.offsetLeft
+                : 0;
+
+            if (loopWidth > 0 && bar.scrollLeft >= loopWidth) {
+                bar.scrollLeft %= loopWidth;
+            }
+
+            if (observer) {
+                observer.observe(list, { childList: true });
+            }
+
+            rebuilding = false;
+        });
+    }
+
+    function scheduleRebuild() {
+        window.clearTimeout(rebuildTimer);
+
+        rebuildTimer = window.setTimeout(function () {
+            rebuildLoop();
+        }, 100);
+    }
+
+    function pauseTemporarily() {
+        interacting = true;
+        window.clearTimeout(resumeTimer);
+    }
+
+    function resumeLater() {
+        window.clearTimeout(resumeTimer);
+
+        resumeTimer = window.setTimeout(function () {
+            interacting = false;
+            lastTime = 0;
+        }, RESUME_DELAY);
+    }
+
+    function animate(time) {
+        if (!lastTime) lastTime = time;
+
+        const delta = Math.min(40, time - lastTime) / 1000;
+        lastTime = time;
+
+        if (
+            bar &&
+            loopWidth > 0 &&
+            RESPONSIVE_QUERY.matches &&
+            !interacting &&
+            document.visibilityState === 'visible'
+        ) {
+            bar.scrollLeft += SPEED_PX_PER_SECOND * delta;
+
+            if (bar.scrollLeft >= loopWidth) {
+                bar.scrollLeft -= loopWidth;
+            }
+        }
+
+        frameId = window.requestAnimationFrame(animate);
+    }
+
+    function initialize() {
+        bar = document.querySelector('.aside-categories');
+        list = document.getElementById('categoriesList');
+
+        if (!bar || !list) return;
+
+        observer = new MutationObserver(function () {
+            if (!rebuilding) scheduleRebuild();
+        });
+
+        observer.observe(list, { childList: true });
+
+        bar.addEventListener('pointerdown', pauseTemporarily, {
+            passive: true
+        });
+
+        bar.addEventListener('pointerup', resumeLater, {
+            passive: true
+        });
+
+        bar.addEventListener('pointercancel', resumeLater, {
+            passive: true
+        });
+
+        bar.addEventListener('touchstart', pauseTemporarily, {
+            passive: true
+        });
+
+        bar.addEventListener('touchend', resumeLater, {
+            passive: true
+        });
+
+        bar.addEventListener('wheel', function () {
+            pauseTemporarily();
+            resumeLater();
+        }, {
+            passive: true
+        });
+
+        window.addEventListener('resize', scheduleRebuild, {
+            passive: true
+        });
+
+        document.addEventListener('visibilitychange', function () {
+            lastTime = 0;
+        });
+
+        scheduleRebuild();
+
+        if (!frameId) {
+            frameId = window.requestAnimationFrame(animate);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialize);
+    } else {
+        initialize();
+    }
+})();
+</script>
 
 </body>
 </html>
