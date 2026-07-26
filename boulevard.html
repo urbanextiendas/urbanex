@@ -4824,6 +4824,134 @@ body {
 }
 </style>
 
+
+<style id="urbanex-featured-large-space-optimized-only">
+/* SOLO TABLET Y COMPUTADOR:
+   aprovechar todo el espacio vertical disponible en Destacados.
+   La vista celular no se modifica.
+*/
+@media (min-width:721px){
+    .aside-showcase-list{
+        min-height:0!important;
+        display:grid!important;
+        grid-template-rows:auto minmax(0,1fr) auto!important;
+        overflow:hidden!important;
+    }
+
+    .shops-scroll-area{
+        min-height:0!important;
+        max-height:none!important;
+        height:100%!important;
+        display:grid!important;
+        align-content:stretch!important;
+        align-items:stretch!important;
+        justify-content:stretch!important;
+        gap:10px!important;
+        padding:10px!important;
+        overflow:hidden!important;
+    }
+
+    .shops-scroll-area[data-visible-count="2"]{
+        grid-template-columns:1fr!important;
+        grid-template-rows:repeat(2,minmax(0,1fr))!important;
+    }
+
+    .shops-scroll-area[data-visible-count="3"]{
+        grid-template-columns:1fr!important;
+        grid-template-rows:repeat(3,minmax(0,1fr))!important;
+    }
+
+    .shop-card.shop-card-ad{
+        width:100%!important;
+        height:100%!important;
+        min-height:0!important;
+        max-height:none!important;
+        align-self:stretch!important;
+        grid-template-rows:minmax(0,1fr) auto!important;
+        margin:0!important;
+    }
+
+    .shop-card-profile{
+        min-height:0!important;
+        height:100%!important;
+        grid-template-columns:88px minmax(0,1fr)!important;
+        align-items:center!important;
+        gap:11px!important;
+        padding:11px!important;
+    }
+
+    .shop-card-ad .shop-thumb-wrapper{
+        width:88px!important;
+        height:88px!important;
+        min-width:88px!important;
+        min-height:88px!important;
+        align-self:center!important;
+    }
+
+    .shop-card-ad .shop-details{
+        min-height:0!important;
+        justify-content:center!important;
+        gap:4px!important;
+    }
+
+    .shop-card-ad .shop-title{
+        font-size:12.5px!important;
+        line-height:1.22!important;
+    }
+
+    .shop-card-ad .shop-segment{
+        font-size:8.2px!important;
+    }
+
+    .shop-card-ad .shop-address{
+        font-size:8.2px!important;
+        line-height:1.3!important;
+    }
+
+    .shop-card-footer{
+        min-height:42px!important;
+        grid-template-columns:minmax(0,1fr) minmax(82px,.82fr)!important;
+        gap:7px!important;
+        padding:7px 10px 9px!important;
+    }
+
+    .shop-contact,
+    .shop-profile-button{
+        min-height:32px!important;
+    }
+
+    .featured-large-rail{
+        min-height:27px!important;
+        padding:6px 10px 8px!important;
+    }
+}
+
+@media (min-width:721px) and (max-width:1024px){
+    .shops-scroll-area[data-visible-count="2"]{
+        grid-template-columns:repeat(2,minmax(0,1fr))!important;
+        grid-template-rows:1fr!important;
+    }
+
+    .shops-scroll-area[data-visible-count="3"]{
+        grid-template-columns:repeat(3,minmax(0,1fr))!important;
+        grid-template-rows:1fr!important;
+    }
+
+    .shop-card-profile{
+        grid-template-columns:76px minmax(0,1fr)!important;
+        gap:9px!important;
+        padding:9px!important;
+    }
+
+    .shop-card-ad .shop-thumb-wrapper{
+        width:76px!important;
+        height:76px!important;
+        min-width:76px!important;
+        min-height:76px!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
