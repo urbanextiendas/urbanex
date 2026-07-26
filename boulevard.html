@@ -1395,6 +1395,184 @@ body {
 }
 </style>
 
+
+<style id="urbanex-featured-desktop-tablet-only-v1">
+/* Ajustes exclusivos para computador y tablet. La vista móvil (<=640px) no se modifica. */
+@media (min-width:641px){
+    .showcase-header{
+        padding:20px 14px 13px!important;
+        border-bottom:1px solid rgba(229,193,88,.12)!important;
+    }
+
+    .showcase-header h2{
+        margin:0!important;
+        color:var(--gold)!important;
+        font-family:var(--font-sans)!important;
+        font-size:10px!important;
+        line-height:1.2!important;
+        font-weight:700!important;
+        letter-spacing:2px!important;
+        text-transform:uppercase!important;
+    }
+
+    .showcase-stats,
+    .sort-box{
+        display:none!important;
+    }
+
+    .shops-scroll-area{
+        gap:10px!important;
+        padding:12px 14px 14px!important;
+        background:transparent!important;
+    }
+
+    .shop-card{
+        min-width:0!important;
+        height:72px!important;
+        flex:0 0 72px!important;
+        align-items:center!important;
+        overflow:hidden!important;
+        border:1px solid rgba(229,193,88,.14)!important;
+        border-radius:12px!important;
+        background:linear-gradient(135deg,rgba(18,18,18,.94),rgba(8,8,8,.88))!important;
+        box-shadow:0 7px 18px rgba(0,0,0,.22)!important;
+        transition:border-color .22s ease,background .22s ease,box-shadow .22s ease!important;
+    }
+
+    .shop-card:hover{
+        border-color:rgba(229,193,88,.48)!important;
+        background:linear-gradient(135deg,rgba(229,193,88,.10),rgba(12,12,12,.94))!important;
+        box-shadow:0 10px 24px rgba(0,0,0,.32)!important;
+    }
+
+    .shop-thumb-wrapper{
+        width:62px!important;
+        height:62px!important;
+        margin-left:5px!important;
+        flex:0 0 62px!important;
+        overflow:hidden!important;
+        border:1px solid rgba(229,193,88,.16)!important;
+        border-radius:9px!important;
+        background:#fff!important;
+    }
+
+    .shop-thumb{
+        width:100%!important;
+        height:100%!important;
+        padding:4px!important;
+        object-fit:contain!important;
+        object-position:center!important;
+        background:#fff!important;
+    }
+
+    .shop-details{
+        min-width:0!important;
+        padding:8px 9px!important;
+        gap:2px!important;
+    }
+
+    .shop-title{
+        color:#fff!important;
+        font-size:11.5px!important;
+        line-height:1.2!important;
+        font-weight:600!important;
+        letter-spacing:0!important;
+    }
+
+    .shop-segment{
+        overflow:hidden!important;
+        color:var(--gold)!important;
+        font-size:9px!important;
+        line-height:1.25!important;
+        text-overflow:ellipsis!important;
+        white-space:nowrap!important;
+    }
+
+    .shop-rating-row{
+        min-width:0!important;
+        margin-top:3px!important;
+        gap:4px!important;
+    }
+
+    .rating-count,
+    .rating-value{
+        font-size:9px!important;
+    }
+
+    .status-open,
+    .status-closed{
+        flex:0 0 auto!important;
+        margin-left:auto!important;
+        padding:3px 6px!important;
+        border-radius:999px!important;
+        font-size:8.5px!important;
+        line-height:1!important;
+        font-weight:600!important;
+    }
+
+    .status-open{
+        border:1px solid rgba(46,213,115,.24)!important;
+        background:rgba(46,213,115,.10)!important;
+    }
+
+    .status-closed{
+        border:1px solid rgba(255,71,87,.24)!important;
+        background:rgba(255,71,87,.10)!important;
+    }
+
+    .action-footer-box{
+        padding:10px 14px 14px!important;
+    }
+
+    .btn-view-all-shops{
+        min-height:38px!important;
+        border-radius:10px!important;
+        font-size:11px!important;
+        box-shadow:0 8px 18px rgba(229,193,88,.12)!important;
+    }
+}
+
+@media (min-width:1025px){
+    .shops-scroll-area{
+        min-height:260px!important;
+        max-height:260px!important;
+    }
+}
+
+@media (min-width:641px) and (max-width:1024px){
+    .aside-showcase-list{
+        min-height:auto!important;
+        height:auto!important;
+        overflow:visible!important;
+    }
+
+    .shops-scroll-area{
+        display:grid!important;
+        grid-template-columns:repeat(2,minmax(0,1fr))!important;
+        min-height:96px!important;
+        max-height:none!important;
+        overflow:visible!important;
+        gap:10px!important;
+    }
+
+    .shop-card{
+        width:100%!important;
+        height:78px!important;
+        flex-basis:78px!important;
+    }
+
+    .shop-thumb-wrapper{
+        width:66px!important;
+        height:66px!important;
+        flex-basis:66px!important;
+    }
+
+    .shop-title{
+        font-size:12px!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
