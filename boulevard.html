@@ -5983,6 +5983,178 @@ body {
 }
 </style>
 
+
+<style id="urbanex-featured-tablet-compact-distribution-only">
+/* ÚNICOS CAMBIOS EN TABLET:
+   - reducir la altura inútil de las tarjetas
+   - mejorar la distribución vertical
+   - aumentar ligeramente la legibilidad
+   - impedir que el estado se corte
+   La forma y estructura visual se conservan.
+*/
+@media (min-width:721px) and (max-width:1024px){
+    .aside-showcase-list .shops-scroll-area{
+        align-content:start!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area[data-visible-count="1"]{
+        grid-template-rows:174px!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area[data-visible-count="2"]{
+        grid-template-rows:repeat(2,174px)!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area[data-visible-count="3"]{
+        grid-template-rows:repeat(3,minmax(146px,1fr))!important;
+    }
+
+    .aside-showcase-list .ux-featured-card{
+        min-height:0!important;
+        max-height:180px!important;
+    }
+
+    .aside-showcase-list .ux-featured-link{
+        grid-template-rows:auto auto auto!important;
+        align-content:start!important;
+        gap:5px!important;
+        padding:8px!important;
+        overflow:hidden!important;
+    }
+
+    .aside-showcase-list .ux-featured-primary{
+        grid-template-columns:82px minmax(0,1fr)!important;
+        gap:9px!important;
+    }
+
+    .aside-showcase-list .ux-featured-logo-box{
+        width:82px!important;
+        height:82px!important;
+        min-width:82px!important;
+        min-height:82px!important;
+    }
+
+    .aside-showcase-list .ux-featured-content{
+        min-height:82px!important;
+        gap:5px!important;
+    }
+
+    .aside-showcase-list .ux-featured-category{
+        font-size:8px!important;
+    }
+
+    .aside-showcase-list .ux-featured-name{
+        font-size:12.8px!important;
+        line-height:1.16!important;
+    }
+
+    .aside-showcase-list .ux-featured-address{
+        font-size:7.8px!important;
+        line-height:1.25!important;
+    }
+
+    .aside-showcase-list .ux-featured-address > span:last-child{
+        -webkit-line-clamp:2!important;
+    }
+
+    .aside-showcase-list .ux-featured-data{
+        gap:8px!important;
+        padding-top:5px!important;
+    }
+
+    .aside-showcase-list .ux-featured-data-item span{
+        font-size:6.2px!important;
+    }
+
+    .aside-showcase-list .ux-featured-data-item strong{
+        font-size:7.5px!important;
+    }
+
+    .aside-showcase-list .ux-featured-bottom{
+        min-height:24px!important;
+        align-items:center!important;
+        margin-top:0!important;
+        padding-top:5px!important;
+        padding-bottom:1px!important;
+        overflow:visible!important;
+    }
+
+    .aside-showcase-list .ux-featured-rating .rating-count,
+    .aside-showcase-list .ux-featured-rating .rating-value{
+        font-size:7.8px!important;
+    }
+
+    .aside-showcase-list .ux-featured-status{
+        display:flex!important;
+        align-items:center!important;
+        align-self:center!important;
+        padding-right:1px!important;
+        overflow:visible!important;
+    }
+
+    .aside-showcase-list .ux-featured-status .status-open,
+    .aside-showcase-list .ux-featured-status .status-closed{
+        display:inline-flex!important;
+        align-items:center!important;
+        min-height:21px!important;
+        padding:4px 8px!important;
+        font-size:7.1px!important;
+        line-height:1.1!important;
+        white-space:nowrap!important;
+        overflow:visible!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-link{
+        gap:4px!important;
+        padding:7px!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-primary{
+        grid-template-columns:70px minmax(0,1fr)!important;
+        gap:8px!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-logo-box{
+        width:70px!important;
+        height:70px!important;
+        min-width:70px!important;
+        min-height:70px!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-content{
+        min-height:70px!important;
+        gap:3px!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-category{
+        font-size:7.1px!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-name{
+        font-size:11.2px!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-address{
+        font-size:6.9px!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-data-item span{
+        font-size:5.8px!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-data-item strong{
+        font-size:6.8px!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-status .status-open,
+    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-status .status-closed{
+        min-height:20px!important;
+        padding:3px 8px!important;
+        font-size:6.7px!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
