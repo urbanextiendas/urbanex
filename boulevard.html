@@ -1573,6 +1573,142 @@ body {
 }
 </style>
 
+
+<style id="urbanex-desktop-tablet-location-select-v1">
+/* Ajuste solicitado: en computador y tablet, los selectores de ubicación
+   usan una lista compacta y oscura, similar a la experiencia del celular. */
+.desktop-location-select {
+    display: none;
+}
+
+@media (min-width: 641px) {
+    .location-picker-panel {
+        overflow: visible !important;
+    }
+
+    .location-picker-field {
+        position: relative;
+    }
+
+    .location-picker-field > select {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        overflow: hidden !important;
+    }
+
+    .desktop-location-select {
+        position: relative;
+        display: block;
+        width: 100%;
+    }
+
+    .desktop-location-select-button {
+        width: 100%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 0 11px;
+        border: 1px solid rgba(255,255,255,.13);
+        border-radius: 9px;
+        background: #0b0b0b;
+        color: #fff;
+        font-family: var(--font-sans);
+        font-size: 11px;
+        text-align: left;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+    }
+
+    .desktop-location-select-button:hover,
+    .desktop-location-select-button[aria-expanded="true"] {
+        border-color: var(--gold);
+        background: rgba(229,193,88,.06);
+    }
+
+    .desktop-location-select-button:disabled {
+        opacity: .7;
+        cursor: not-allowed;
+    }
+
+    .desktop-location-select-value {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .desktop-location-select-chevron {
+        flex: 0 0 auto;
+        color: var(--gold);
+        font-size: 13px;
+        transition: transform .2s ease;
+    }
+
+    .desktop-location-select-button[aria-expanded="true"] .desktop-location-select-chevron {
+        transform: rotate(180deg);
+    }
+
+    .desktop-location-select-list {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        right: 0;
+        z-index: 100003;
+        display: none;
+        max-height: 238px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: 6px;
+        border: 1px solid rgba(229,193,88,.34);
+        border-radius: 10px;
+        background: rgba(7,7,7,.99);
+        box-shadow: 0 18px 45px rgba(0,0,0,.72);
+        scrollbar-width: thin;
+    }
+
+    .desktop-location-select-list.open {
+        display: block;
+    }
+
+    .desktop-location-select-option {
+        width: 100%;
+        min-height: 34px;
+        display: flex;
+        align-items: center;
+        padding: 7px 9px;
+        border: 1px solid transparent;
+        border-radius: 7px;
+        background: transparent;
+        color: #e9e9e9;
+        font-family: var(--font-sans);
+        font-size: 10.5px;
+        text-align: left;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+    }
+
+    .desktop-location-select-option:hover {
+        border-color: rgba(229,193,88,.20);
+        background: rgba(229,193,88,.08);
+        color: #fff;
+    }
+
+    .desktop-location-select-option.selected {
+        border-color: rgba(229,193,88,.42);
+        background: rgba(229,193,88,.13);
+        color: var(--gold);
+        font-weight: 600;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -2202,6 +2338,92 @@ function locationFilteredBusinesses() {
     return allBusinesses.filter(businessMatchesLocation);
 }
 
+
+// ── Selector de ubicación personalizado para computador y tablet ───────────
+const desktopLocationSelectInstances = new Map();
+
+function closeDesktopLocationLists(exceptSelect = null) {
+    desktopLocationSelectInstances.forEach((instance, select) => {
+        if (select === exceptSelect) return;
+        instance.list.classList.remove('open');
+        instance.button.setAttribute('aria-expanded', 'false');
+    });
+}
+
+function syncDesktopLocationSelect(select) {
+    const instance = desktopLocationSelectInstances.get(select);
+    if (!instance) return;
+
+    const selectedOption = select.options[select.selectedIndex] || select.options[0];
+    instance.value.textContent = selectedOption?.textContent || '';
+    instance.button.disabled = select.disabled;
+
+    instance.list.innerHTML = Array.from(select.options).map(option => {
+        const selectedClass = option.value === select.value ? ' selected' : '';
+        return `<button type="button" class="desktop-location-select-option${selectedClass}" data-value="${esc(option.value)}">${esc(option.textContent)}</button>`;
+    }).join('');
+
+    instance.list.querySelectorAll('.desktop-location-select-option').forEach(optionButton => {
+        optionButton.addEventListener('click', event => {
+            event.stopPropagation();
+            select.value = optionButton.dataset.value;
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+            syncDesktopLocationSelect(select);
+            closeDesktopLocationLists();
+        });
+    });
+}
+
+function initDesktopLocationSelect(select) {
+    if (!select || desktopLocationSelectInstances.has(select)) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'desktop-location-select';
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'desktop-location-select-button';
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-haspopup', 'listbox');
+    button.setAttribute('aria-label', select.getAttribute('aria-label') || 'Seleccionar ubicación');
+
+    const value = document.createElement('span');
+    value.className = 'desktop-location-select-value';
+
+    const chevron = document.createElement('span');
+    chevron.className = 'desktop-location-select-chevron';
+    chevron.setAttribute('aria-hidden', 'true');
+    chevron.textContent = '⌄';
+
+    const list = document.createElement('div');
+    list.className = 'desktop-location-select-list';
+    list.setAttribute('role', 'listbox');
+
+    button.append(value, chevron);
+    wrapper.append(button, list);
+    select.insertAdjacentElement('afterend', wrapper);
+
+    desktopLocationSelectInstances.set(select, { wrapper, button, value, list });
+
+    button.addEventListener('click', event => {
+        event.stopPropagation();
+        if (button.disabled) return;
+
+        const willOpen = !list.classList.contains('open');
+        closeDesktopLocationLists(select);
+        list.classList.toggle('open', willOpen);
+        button.setAttribute('aria-expanded', String(willOpen));
+    });
+
+    wrapper.addEventListener('click', event => event.stopPropagation());
+    syncDesktopLocationSelect(select);
+}
+
+function initDesktopLocationSelects() {
+    initDesktopLocationSelect(document.getElementById('provinceSelect'));
+    initDesktopLocationSelect(document.getElementById('citySelect'));
+}
+
 function populateProvinceOptions() {
     const select = document.getElementById('provinceSelect');
     if (!select) return;
@@ -2216,6 +2438,7 @@ function populateProvinceOptions() {
     ].join('');
 
     select.value = activeProvince === '__all__' ? '__all__' : activeProvince;
+    syncDesktopLocationSelect(select);
 }
 
 function populateCityOptions(province, preferredCity = '__province__') {
@@ -2226,6 +2449,7 @@ function populateCityOptions(province, preferredCity = '__province__') {
         select.innerHTML = '<option value="__all__">Todo Ecuador</option>';
         select.value = '__all__';
         select.disabled = true;
+        syncDesktopLocationSelect(select);
         return;
     }
 
@@ -2239,6 +2463,7 @@ function populateCityOptions(province, preferredCity = '__province__') {
 
     const hasPreferred = [...select.options].some(option => option.value === preferredCity);
     select.value = hasPreferred ? preferredCity : '__province__';
+    syncDesktopLocationSelect(select);
 }
 
 function currentLocationLabel() {
@@ -2874,7 +3099,7 @@ locationPickerCancel?.addEventListener('click', () => setLocationPickerOpen(fals
 
 locationPickerPanel?.addEventListener('click', event => event.stopPropagation());
 
-document.addEventListener('click', () => setLocationPickerOpen(false));
+document.addEventListener('click', () => { closeDesktopLocationLists(); setLocationPickerOpen(false); });
 document.addEventListener('keydown', event => {
     if (event.key === 'Escape') setLocationPickerOpen(false);
 });
@@ -2896,6 +3121,7 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
+initDesktopLocationSelects();
 boot();
 
 // ── Búsqueda (negocios + productos en tiempo real) ───────────
