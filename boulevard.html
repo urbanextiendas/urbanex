@@ -5191,6 +5191,106 @@ body {
 }
 </style>
 
+
+<style id="urbanex-tablet-native-scroll-fix-only">
+/* ÚNICO AJUSTE PARA TABLET:
+   recupera el desplazamiento vertical y la actualización por gesto,
+   sin alterar el diseño ni la altura visual del Boulevard.
+*/
+@media (min-width:721px) and (max-width:1366px) and (pointer:coarse){
+
+    html,
+    body{
+        height:auto!important;
+        min-height:calc(100svh + 1px)!important;
+        overflow-x:hidden!important;
+        overflow-y:auto!important;
+        overscroll-behavior-y:auto!important;
+        -webkit-overflow-scrolling:touch!important;
+    }
+
+    .dashboard-container{
+        height:calc(100svh - 84px)!important;
+        min-height:calc(100svh - 84px)!important;
+        max-height:none!important;
+        overflow:visible!important;
+    }
+
+    .aside-categories,
+    .main-boulevard,
+    .aside-showcase-list{
+        height:100%!important;
+        min-height:0!important;
+        max-height:100%!important;
+    }
+
+    .aside-categories{
+        overflow-x:hidden!important;
+        overflow-y:auto!important;
+        overscroll-behavior-y:auto!important;
+        -webkit-overflow-scrolling:touch!important;
+    }
+
+    .shops-scroll-area{
+        touch-action:pan-y pinch-zoom!important;
+        cursor:default!important;
+    }
+
+    .shops-scroll-area.is-dragging{
+        cursor:default!important;
+    }
+
+}
+
+/* Respaldo para iPadOS/Safari cuando el dispositivo no informa correctamente pointer: coarse. */
+@supports (-webkit-touch-callout:none){
+    @media (min-width:721px) and (max-width:1366px){
+
+    html,
+    body{
+        height:auto!important;
+        min-height:calc(100svh + 1px)!important;
+        overflow-x:hidden!important;
+        overflow-y:auto!important;
+        overscroll-behavior-y:auto!important;
+        -webkit-overflow-scrolling:touch!important;
+    }
+
+    .dashboard-container{
+        height:calc(100svh - 84px)!important;
+        min-height:calc(100svh - 84px)!important;
+        max-height:none!important;
+        overflow:visible!important;
+    }
+
+    .aside-categories,
+    .main-boulevard,
+    .aside-showcase-list{
+        height:100%!important;
+        min-height:0!important;
+        max-height:100%!important;
+    }
+
+    .aside-categories{
+        overflow-x:hidden!important;
+        overflow-y:auto!important;
+        overscroll-behavior-y:auto!important;
+        -webkit-overflow-scrolling:touch!important;
+    }
+
+    .shops-scroll-area{
+        touch-action:pan-y pinch-zoom!important;
+        cursor:default!important;
+    }
+
+    .shops-scroll-area.is-dragging{
+        cursor:default!important;
+    }
+
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -6234,7 +6334,13 @@ function ensureLargeFeaturedGesture() {
     let pointerId = null;
 
     area.addEventListener('pointerdown', event => {
-        if (window.innerWidth <= 720 || event.button !== 0) return;
+        if (
+            window.innerWidth <= 720 ||
+            event.button !== 0 ||
+            event.pointerType === 'touch' ||
+            event.pointerType === 'pen' ||
+            window.matchMedia('(pointer: coarse)').matches
+        ) return;
 
         pointerId = event.pointerId;
         startX = event.clientX;
