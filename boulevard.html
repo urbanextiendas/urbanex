@@ -4319,6 +4319,7 @@ function goBackMenu() {
     let loopWidth = 0;
     let frameId = null;
     let lastTime = 0;
+    let carouselPosition = 0;
     let interacting = false;
     let resumeTimer = null;
     let rebuildTimer = null;
@@ -4400,8 +4401,11 @@ function goBackMenu() {
                 ? firstClone.offsetLeft - firstOriginal.offsetLeft
                 : 0;
 
-            if (loopWidth > 0 && bar.scrollLeft >= loopWidth) {
-                bar.scrollLeft %= loopWidth;
+            carouselPosition = Number(bar.scrollLeft) || 0;
+
+            if (loopWidth > 0 && carouselPosition >= loopWidth) {
+                carouselPosition %= loopWidth;
+                bar.scrollLeft = carouselPosition;
             }
 
             if (observer) {
@@ -4447,11 +4451,15 @@ function goBackMenu() {
             !interacting &&
             document.visibilityState === 'visible'
         ) {
-            bar.scrollLeft += SPEED_PX_PER_SECOND * delta;
+            carouselPosition += SPEED_PX_PER_SECOND * delta;
 
-            if (bar.scrollLeft >= loopWidth) {
-                bar.scrollLeft -= loopWidth;
+            if (carouselPosition >= loopWidth) {
+                carouselPosition -= loopWidth;
             }
+
+            bar.scrollLeft = Math.floor(carouselPosition);
+        } else if (bar && interacting) {
+            carouselPosition = Number(bar.scrollLeft) || carouselPosition;
         }
 
         frameId = window.requestAnimationFrame(animate);
