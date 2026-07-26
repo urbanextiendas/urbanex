@@ -1036,6 +1036,275 @@ body{
 }
 </style>
 
+
+<style id="urbanex-index-header-featured-correction-only">
+/* ============================================================
+   ÚNICOS AJUSTES:
+   1. Ocultar los iconos Casa y Persona, porque no forman parte
+      del formato del Boulevard.
+   2. Centrar realmente el buscador en el encabezado.
+   3. Mejorar la presentación visual de Destacados sin alterar
+      contenido, datos, enlaces, ordenamiento ni funciones.
+   ============================================================ */
+
+/* Casa y perfil no forman parte del encabezado del Boulevard. */
+.header-top .tool-icon,
+.header-top .profile-avatar{
+    display:none!important;
+}
+
+/* Buscador centrado de manera independiente al ancho de los extremos. */
+@media (min-width:721px){
+    .header-top{
+        position:fixed!important;
+        display:grid!important;
+        grid-template-columns:minmax(180px,1fr) minmax(320px,430px) minmax(180px,1fr)!important;
+        align-items:center!important;
+        gap:18px!important;
+    }
+
+    .brand-box{
+        grid-column:1!important;
+        justify-self:start!important;
+        min-width:0!important;
+    }
+
+    .search-wrapper{
+        grid-column:2!important;
+        justify-self:center!important;
+        width:100%!important;
+        max-width:430px!important;
+        margin:0!important;
+    }
+
+    .user-tools{
+        grid-column:3!important;
+        justify-self:end!important;
+        width:auto!important;
+        min-width:0!important;
+    }
+}
+
+/* Destacados: composición compacta y coherente con Boulevard. */
+@media (min-width:721px){
+    .aside-showcase-list{
+        background:
+            linear-gradient(rgba(4,6,9,.78),rgba(4,6,9,.78)),
+            var(--category-background,url("../imagenes/Boulevard.png"))
+            right center / cover no-repeat!important;
+        backdrop-filter:blur(12px) saturate(.92)!important;
+        -webkit-backdrop-filter:blur(12px) saturate(.92)!important;
+    }
+
+    .showcase-header{
+        min-height:47px!important;
+        padding:13px 12px 10px!important;
+        border-bottom:1px solid rgba(229,193,88,.16)!important;
+        background:rgba(7,10,14,.56)!important;
+    }
+
+    .showcase-header h2{
+        padding-left:4px!important;
+        color:var(--gold)!important;
+        font-size:10px!important;
+        font-weight:700!important;
+        letter-spacing:2px!important;
+    }
+
+    .showcase-stats{
+        padding-left:4px!important;
+        color:#9ca9b4!important;
+        font-size:7px!important;
+    }
+
+    .sort-box{
+        padding:7px 9px 8px!important;
+        background:rgba(3,5,8,.36)!important;
+    }
+
+    .sort-select{
+        height:31px!important;
+        border-color:rgba(151,172,194,.20)!important;
+        border-radius:9px!important;
+        background:rgba(0,0,0,.42)!important;
+        font-size:8px!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area{
+        grid-auto-rows:124px!important;
+        gap:8px!important;
+        padding:8px!important;
+        overflow-y:auto!important;
+    }
+
+    .aside-showcase-list .shop-card{
+        height:124px!important;
+        min-height:124px!important;
+        max-height:124px!important;
+        grid-template-columns:88px minmax(0,1fr)!important;
+        grid-template-rows:auto auto minmax(0,1fr) 29px!important;
+        gap:0 10px!important;
+        padding:9px!important;
+        border:1px solid rgba(151,172,194,.24)!important;
+        border-radius:16px!important;
+        background:
+            radial-gradient(circle at 100% 0,rgba(86,113,139,.13),transparent 36%),
+            rgba(7,10,14,.80)!important;
+        box-shadow:
+            0 14px 28px rgba(0,0,0,.25),
+            inset 0 1px 0 rgba(255,255,255,.035)!important;
+        backdrop-filter:blur(13px) saturate(.92)!important;
+        -webkit-backdrop-filter:blur(13px) saturate(.92)!important;
+    }
+
+    .aside-showcase-list .shop-card:hover{
+        border-color:rgba(193,209,223,.42)!important;
+        background:
+            radial-gradient(circle at 100% 0,rgba(102,132,160,.16),transparent 36%),
+            rgba(8,12,16,.87)!important;
+    }
+
+    .aside-showcase-list .shop-thumb-wrapper{
+        grid-column:1!important;
+        grid-row:1 / 4!important;
+        width:88px!important;
+        height:88px!important;
+        min-width:88px!important;
+        min-height:88px!important;
+        align-self:start!important;
+        border:1px solid rgba(255,255,255,.18)!important;
+        border-radius:14px!important;
+        background:#fff!important;
+        box-shadow:0 8px 18px rgba(0,0,0,.20)!important;
+    }
+
+    .aside-showcase-list .shop-thumb{
+        width:100%!important;
+        height:100%!important;
+        padding:0!important;
+        object-fit:cover!important;
+        object-position:center!important;
+        border-radius:13px!important;
+        background:#fff!important;
+        transform:none!important;
+    }
+
+    .aside-showcase-list .shop-segment{
+        grid-column:2!important;
+        grid-row:1!important;
+        align-self:start!important;
+        color:#bdc9d3!important;
+        font-size:8.2px!important;
+        font-weight:700!important;
+        line-height:1.2!important;
+    }
+
+    .aside-showcase-list .shop-title{
+        grid-column:2!important;
+        grid-row:2!important;
+        align-self:start!important;
+        margin-top:5px!important;
+        color:#fff!important;
+        font-size:13.2px!important;
+        font-weight:800!important;
+        line-height:1.18!important;
+        white-space:normal!important;
+        display:-webkit-box!important;
+        -webkit-box-orient:vertical!important;
+        -webkit-line-clamp:2!important;
+    }
+
+    .aside-showcase-list .shop-rating-row{
+        grid-column:1 / -1!important;
+        grid-row:4!important;
+        width:100%!important;
+        height:29px!important;
+        min-height:29px!important;
+        display:flex!important;
+        align-items:center!important;
+        gap:4px!important;
+        margin:0!important;
+        padding:5px 0 0!important;
+        border-top:1px solid rgba(151,172,194,.12)!important;
+        overflow:visible!important;
+    }
+
+    .aside-showcase-list .star-icon{
+        color:var(--gold)!important;
+        font-size:9px!important;
+    }
+
+    .aside-showcase-list .rating-value,
+    .aside-showcase-list .rating-count{
+        color:#aeb7bf!important;
+        font-size:8px!important;
+    }
+
+    .aside-showcase-list .status-indicator{
+        min-height:21px!important;
+        display:inline-flex!important;
+        align-items:center!important;
+        justify-content:center!important;
+        margin-left:auto!important;
+        padding:4px 9px!important;
+        border-radius:999px!important;
+        border:1px solid rgba(64,223,137,.25)!important;
+        background:rgba(64,223,137,.10)!important;
+        color:#40df89!important;
+        font-size:7.2px!important;
+        line-height:1!important;
+        white-space:nowrap!important;
+    }
+
+    .aside-showcase-list .status-indicator.closed{
+        border-color:rgba(255,108,122,.25)!important;
+        background:rgba(255,108,122,.10)!important;
+        color:#ff6c7a!important;
+    }
+
+    .action-footer-box{
+        padding:8px 9px 10px!important;
+        background:rgba(3,5,8,.42)!important;
+    }
+
+    .btn-view-all-shops{
+        min-height:38px!important;
+        border-radius:10px!important;
+        font-size:9px!important;
+    }
+}
+
+/* Tablet: conserva la misma forma compacta. */
+@media (min-width:721px) and (max-width:1024px){
+    .header-top{
+        grid-template-columns:minmax(150px,1fr) minmax(280px,390px) minmax(150px,1fr)!important;
+        gap:12px!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area{
+        grid-auto-rows:124px!important;
+    }
+
+    .aside-showcase-list .shop-card{
+        height:124px!important;
+        min-height:124px!important;
+        max-height:124px!important;
+        grid-template-columns:82px minmax(0,1fr)!important;
+    }
+
+    .aside-showcase-list .shop-thumb-wrapper{
+        width:82px!important;
+        height:82px!important;
+        min-width:82px!important;
+        min-height:82px!important;
+    }
+
+    .aside-showcase-list .shop-title{
+        font-size:12.4px!important;
+    }
+}
+</style>
+
 </head>
 <body>
 <div class="dashboard-container">
