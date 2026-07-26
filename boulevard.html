@@ -4493,9 +4493,9 @@ body {
 
 <style id="urbanex-mobile-featured-actions-under-address-only">
 /* ÚNICOS CAMBIOS EN CELULAR:
-   - contacto y página web debajo de la dirección
-   - eliminar espacio sobrante
-   - agregar un pequeño margen superior
+   - Teléfono, web real y correo debajo de la dirección
+   - cada dato aparece debajo de su etiqueta
+   - sin recuadros ni elementos desplazados al extremo
 */
 @media (max-width:720px){
     .aside-showcase-list{
@@ -4504,15 +4504,15 @@ body {
     }
 
     .shops-scroll-area{
-        min-height:118px!important;
-        max-height:118px!important;
+        min-height:142px!important;
+        max-height:142px!important;
         padding:6px 7px 3px!important;
     }
 
     .shop-card.shop-card-mobile-rich{
-        height:109px!important;
-        min-height:109px!important;
-        flex:0 0 109px!important;
+        height:133px!important;
+        min-height:133px!important;
+        flex:0 0 133px!important;
         grid-template-rows:minmax(0,1fr)!important;
     }
 
@@ -4552,18 +4552,19 @@ body {
     .mobile-featured-extra-info{
         min-width:0!important;
         display:flex!important;
-        align-items:center!important;
-        gap:8px!important;
-        margin-top:1px!important;
-        overflow:hidden!important;
-        white-space:nowrap!important;
+        flex-direction:column!important;
+        align-items:flex-start!important;
+        gap:2px!important;
+        margin-top:3px!important;
     }
 
-    .mobile-featured-contact-link,
-    .mobile-featured-website-link{
+    .mobile-featured-info-item{
+        width:100%!important;
         min-width:0!important;
-        display:inline-flex!important;
-        align-items:center!important;
+        display:flex!important;
+        flex-direction:row!important;
+        align-items:baseline!important;
+        justify-content:flex-start!important;
         gap:4px!important;
         padding:0!important;
         border:0!important;
@@ -4572,35 +4573,23 @@ body {
         text-decoration:none!important;
     }
 
-    .mobile-featured-contact-link{
-        flex:1 1 auto!important;
-        overflow:hidden!important;
-    }
-
-    .mobile-featured-contact-link span{
+    .mobile-featured-info-item span{
         flex:0 0 auto!important;
         color:#8fa6ba!important;
-        font-size:6px!important;
-        font-weight:800!important;
-        letter-spacing:.2px!important;
-        text-transform:uppercase!important;
+        font-size:6.2px!important;
+        font-weight:700!important;
+        letter-spacing:0!important;
+        text-transform:none!important;
     }
 
-    .mobile-featured-contact-link strong{
+    .mobile-featured-info-item strong{
         min-width:0!important;
         overflow:hidden!important;
-        color:#e7edf2!important;
+        color:#e8edf1!important;
         font-size:6.8px!important;
         font-weight:700!important;
         text-overflow:ellipsis!important;
         white-space:nowrap!important;
-    }
-
-    .mobile-featured-website-link{
-        flex:0 0 auto!important;
-        color:var(--gold)!important;
-        font-size:6.8px!important;
-        font-weight:800!important;
     }
 
     .mobile-featured-actions,
@@ -4608,7 +4597,9 @@ body {
     .mobile-featured-phone,
     .mobile-featured-view,
     .mobile-featured-whatsapp,
-    .mobile-featured-whatsapp-icon{
+    .mobile-featured-whatsapp-icon,
+    .mobile-featured-contact-link,
+    .mobile-featured-website-link{
         display:none!important;
     }
 
@@ -6093,11 +6084,11 @@ function shopCardHtml(b) {
 
     /* En celular se muestra una tarjeta un poco más alta y con información completa. */
     if (window.innerWidth <= 720) {
-        const mobileContactValue = String(
+        const mobilePhoneValue = String(
             b.phone || b.contact_phone || b.whatsapp || ''
         ).trim();
 
-        const mobileContactDigits = mobileContactValue.replace(/\D/g, '');
+        const mobilePhoneDigits = mobilePhoneValue.replace(/\D/g, '');
 
         const mobileWebsiteValue = String(
             b.website || b.website_url || b.web || b.url || ''
@@ -6109,34 +6100,44 @@ function shopCardHtml(b) {
                 : `https://${mobileWebsiteValue}`)
             : '';
 
+        const mobileWebsiteDisplay = mobileWebsiteValue
+            .replace(/^https?:\/\//i, '')
+            .replace(/^www\./i, '')
+            .replace(/\/$/, '');
+
+        const mobileEmailValue = String(
+            b.email || b.contact_email || b.business_email || b.mail || ''
+        ).trim();
+
         const mobileExtraInfoHtml = (
-            mobileContactValue || mobileWebsiteValue
+            mobilePhoneValue || mobileWebsiteValue || mobileEmailValue
         )
             ? `
                 <div class="mobile-featured-extra-info">
-                    ${mobileContactValue
+                    ${mobilePhoneValue
                         ? `
                             <a
-                                class="mobile-featured-contact-link"
-                                href="tel:${mobileContactDigits}"
+                                class="mobile-featured-info-item"
+                                href="tel:${mobilePhoneDigits}"
                                 aria-label="Llamar a ${esc(b.name)}"
                             >
-                                <span>Contacto</span>
-                                <strong>${esc(mobileContactValue)}</strong>
+                                <span>Teléfono:</span>
+                                <strong>${esc(mobilePhoneValue)}</strong>
                             </a>
                         `
                         : ''
                     }
 
-                    ${mobileWebsiteValue
+                    ${mobileEmailValue
                         ? `
                             <a
-                                class="mobile-featured-website-link"
-                                href="${esc(mobileWebsiteHref)}"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="Abrir página web de ${esc(b.name)}"
-                            >Página web</a>
+                                class="mobile-featured-info-item"
+                                href="mailto:${esc(mobileEmailValue)}"
+                                aria-label="Enviar correo a ${esc(b.name)}"
+                            >
+                                <span>Correo:</span>
+                                <strong>${esc(mobileEmailValue)}</strong>
+                            </a>
                         `
                         : ''
                     }
