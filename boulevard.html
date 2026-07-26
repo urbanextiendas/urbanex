@@ -4952,6 +4952,231 @@ body {
 }
 </style>
 
+
+<style id="urbanex-fixed-large-layout-and-featured-details-only">
+/* SOLO COMPUTADOR:
+   - Boulevard, Categorías y Destacados conservan una altura fija.
+   - Las categorías adicionales se desplazan dentro de su propio panel.
+   - El fondo central no sube ni baja por la cantidad de categorías.
+   - Destacados aprovecha mejor el espacio y muestra más información.
+*/
+@media (min-width:1025px){
+    html,
+    body{
+        height:100%!important;
+        min-height:100%!important;
+        overflow:hidden!important;
+    }
+
+    body{
+        padding-top:60px!important;
+        padding-bottom:24px!important;
+    }
+
+    .dashboard-container{
+        width:100%!important;
+        height:calc(100svh - 84px)!important;
+        min-height:calc(100svh - 84px)!important;
+        max-height:calc(100svh - 84px)!important;
+        grid-template-rows:minmax(0,1fr)!important;
+        align-items:stretch!important;
+        overflow:hidden!important;
+    }
+
+    .aside-categories,
+    .main-boulevard,
+    .aside-showcase-list{
+        height:100%!important;
+        min-height:0!important;
+        max-height:100%!important;
+        align-self:stretch!important;
+    }
+
+    .aside-categories{
+        overflow-x:hidden!important;
+        overflow-y:auto!important;
+        overscroll-behavior:contain!important;
+    }
+
+    .main-boulevard{
+        overflow:hidden!important;
+        background-position:center bottom!important;
+        background-size:cover!important;
+    }
+
+    .aside-showcase-list{
+        display:grid!important;
+        grid-template-rows:auto minmax(0,1fr) auto!important;
+        overflow:hidden!important;
+    }
+
+    .shops-scroll-area{
+        height:100%!important;
+        min-height:0!important;
+        max-height:none!important;
+        align-content:stretch!important;
+        gap:8px!important;
+        padding:8px!important;
+        overflow:hidden!important;
+    }
+
+    .shops-scroll-area[data-visible-count="2"]{
+        grid-template-columns:1fr!important;
+        grid-template-rows:repeat(2,minmax(0,1fr))!important;
+    }
+
+    .shops-scroll-area[data-visible-count="3"]{
+        grid-template-columns:1fr!important;
+        grid-template-rows:repeat(3,minmax(0,1fr))!important;
+    }
+
+    .shop-card.shop-card-ad{
+        min-height:0!important;
+        height:100%!important;
+        grid-template-rows:minmax(0,1fr) auto!important;
+    }
+
+    .shop-card-profile{
+        height:100%!important;
+        min-height:0!important;
+        grid-template-columns:94px minmax(0,1fr)!important;
+        align-items:start!important;
+        gap:10px!important;
+        padding:10px!important;
+    }
+
+    .shop-card-ad .shop-thumb-wrapper{
+        width:94px!important;
+        height:94px!important;
+        min-width:94px!important;
+        min-height:94px!important;
+        align-self:start!important;
+    }
+
+    .shop-card-ad .shop-details{
+        min-height:0!important;
+        justify-content:flex-start!important;
+        gap:4px!important;
+        padding-top:1px!important;
+    }
+
+    .shop-card-ad .shop-title{
+        font-size:12.5px!important;
+        line-height:1.2!important;
+    }
+
+    .shop-card-ad .shop-segment{
+        font-size:8px!important;
+    }
+
+    .shop-card-ad .shop-address{
+        font-size:7.8px!important;
+        line-height:1.28!important;
+    }
+
+    .shop-extra-info{
+        min-width:0!important;
+        display:grid!important;
+        grid-template-columns:repeat(2,minmax(0,1fr))!important;
+        gap:4px 8px!important;
+        margin-top:2px!important;
+        padding-top:5px!important;
+        border-top:1px solid rgba(151,172,194,.10)!important;
+    }
+
+    .shop-extra-line{
+        min-width:0!important;
+        display:flex!important;
+        flex-direction:column!important;
+        gap:1px!important;
+    }
+
+    .shop-extra-line-wide{
+        grid-column:1 / -1!important;
+    }
+
+    .shop-extra-line span{
+        color:#81909d!important;
+        font-size:6.2px!important;
+        font-weight:800!important;
+        line-height:1.1!important;
+        letter-spacing:.25px!important;
+        text-transform:uppercase!important;
+    }
+
+    .shop-extra-line strong{
+        min-width:0!important;
+        overflow:hidden!important;
+        color:#e3e8ec!important;
+        font-size:7px!important;
+        font-weight:650!important;
+        line-height:1.2!important;
+        text-overflow:ellipsis!important;
+        white-space:nowrap!important;
+    }
+
+    .shop-card-ad .shop-rating-row{
+        margin-top:auto!important;
+        padding-top:3px!important;
+    }
+
+    .shop-card-footer{
+        min-height:40px!important;
+        grid-template-columns:minmax(0,1fr) minmax(82px,.78fr)!important;
+        gap:6px!important;
+        padding:6px 9px 8px!important;
+    }
+
+    .shop-contact,
+    .shop-profile-button{
+        min-height:31px!important;
+    }
+
+    .featured-large-rail{
+        min-height:25px!important;
+        padding:5px 9px 7px!important;
+    }
+}
+
+/* TABLET:
+   Solo se mejora la densidad de la publicidad.
+   No se altera la estructura responsive existente.
+*/
+@media (min-width:721px) and (max-width:1024px){
+    .shop-extra-info{
+        min-width:0!important;
+        display:flex!important;
+        flex-direction:column!important;
+        gap:2px!important;
+        margin-top:2px!important;
+    }
+
+    .shop-extra-line{
+        min-width:0!important;
+        display:flex!important;
+        align-items:baseline!important;
+        gap:4px!important;
+    }
+
+    .shop-extra-line span{
+        flex:0 0 auto!important;
+        color:#81909d!important;
+        font-size:5.8px!important;
+        font-weight:800!important;
+        text-transform:uppercase!important;
+    }
+
+    .shop-extra-line strong{
+        min-width:0!important;
+        overflow:hidden!important;
+        color:#e3e8ec!important;
+        font-size:6.4px!important;
+        text-overflow:ellipsis!important;
+        white-space:nowrap!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -6683,6 +6908,39 @@ function shopCardHtml(b) {
                 <span class="shop-thumb-fallback">${b.subcategories?.icon||b.categories?.icon||'🏪'}</span>
            </div>`;
 
+    const desktopPhoneValue = String(
+        b.phone || b.contact_phone || b.whatsapp || ''
+    ).trim();
+
+    const desktopEmailValue = String(
+        b.email || b.contact_email || b.business_email || b.mail || ''
+    ).trim();
+
+    const desktopWebsiteValue = String(
+        b.website || b.website_url || b.web || b.url || ''
+    ).trim();
+
+    const desktopWebsiteDisplay = desktopWebsiteValue
+        .replace(/^https?:\/\//i, '')
+        .replace(/^www\./i, '')
+        .replace(/\/$/, '');
+
+    const desktopMoreInfoHtml = [
+        b.city
+            ? `<div class="shop-extra-line"><span>Ciudad</span><strong>${esc(b.city)}</strong></div>`
+            : '',
+        desktopPhoneValue
+            ? `<div class="shop-extra-line"><span>Teléfono</span><strong>${esc(desktopPhoneValue)}</strong></div>`
+            : '',
+        desktopEmailValue
+            ? `<div class="shop-extra-line shop-extra-line-wide"><span>Correo</span><strong>${esc(desktopEmailValue)}</strong></div>`
+            : '',
+        desktopWebsiteValue
+            ? `<div class="shop-extra-line shop-extra-line-wide"><span>Web</span><strong>${esc(desktopWebsiteDisplay)}</strong></div>`
+            : ''
+    ].filter(Boolean).join('');
+
+
     const whatsappBlock = whatsappValue
         ? `
             <a
@@ -6731,6 +6989,11 @@ function shopCardHtml(b) {
                         <span class="shop-address-icon" aria-hidden="true">⌖</span>
                         <span>${esc(addressLabel)}</span>
                     </div>
+
+                    ${desktopMoreInfoHtml
+                        ? `<div class="shop-extra-info">${desktopMoreInfoHtml}</div>`
+                        : ''
+                    }
 
                     <div class="shop-rating-row">${ratingHtml}</div>
                 </div>
