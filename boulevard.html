@@ -2450,7 +2450,7 @@ body {
 /* ÚNICO CAMBIO: paneles laterales menos transparentes en computador, tablet y celular. */
 .aside-categories{
     background:
-        linear-gradient(rgba(3,3,3,.82), rgba(3,3,3,.82)),
+        linear-gradient(rgba(3,3,3,.88), rgba(3,3,3,.88)),
         url("imagenes/Boulevard.png") left center / cover no-repeat!important;
     backdrop-filter:blur(8px)!important;
     -webkit-backdrop-filter:blur(8px)!important;
@@ -2458,10 +2458,46 @@ body {
 
 .aside-showcase-list{
     background:
-        linear-gradient(rgba(3,3,3,.82), rgba(3,3,3,.82)),
+        linear-gradient(rgba(3,3,3,.88), rgba(3,3,3,.88)),
         url("imagenes/Boulevard.png") right center / cover no-repeat!important;
     backdrop-filter:blur(8px)!important;
     -webkit-backdrop-filter:blur(8px)!important;
+}
+</style>
+
+
+<style id="urbanex-mobile-category-spacing-only">
+/* ÚNICO CAMBIO: aumentar la separación entre la barra de categorías y el Boulevard en celular. */
+@media (max-width:720px){
+    body{
+        padding-top:200px!important;
+    }
+}
+</style>
+
+
+<style id="urbanex-mobile-header-category-gap-only">
+/* ÚNICO CAMBIO: separar las dos líneas en celular. */
+@media (max-width:720px){
+    .aside-categories{
+        top:112px!important;
+    }
+
+    body{
+        padding-top:208px!important;
+    }
+}
+</style>
+
+
+<style id="urbanex-footer-link-style-only">
+/* ÚNICO CAMBIO: enlace del pie con el mismo color del texto y sin subrayado. */
+.pie-pagina a,
+.pie-pagina a:visited,
+.pie-pagina a:hover,
+.pie-pagina a:focus{
+    color:inherit!important;
+    text-decoration:none!important;
 }
 </style>
 
