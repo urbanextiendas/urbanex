@@ -4370,6 +4370,103 @@ body {
 }
 </style>
 
+
+<style id="urbanex-mobile-featured-professional-navigation-only">
+/* ÚNICO CAMBIO:
+   sustituir las flechas móviles por navegación mediante:
+   - segmentos táctiles
+   - deslizamiento horizontal
+*/
+@media (max-width:720px){
+    .mobile-featured-nav{
+        display:none!important;
+    }
+
+    .mobile-featured-progress{
+        position:absolute!important;
+        left:14px!important;
+        right:14px!important;
+        bottom:41px!important;
+        z-index:14!important;
+        min-width:0!important;
+        height:15px!important;
+        display:flex!important;
+        align-items:center!important;
+        justify-content:center!important;
+        gap:4px!important;
+        padding:0 6px!important;
+        overflow-x:auto!important;
+        overflow-y:hidden!important;
+        scrollbar-width:none!important;
+        -webkit-overflow-scrolling:touch!important;
+        pointer-events:auto!important;
+    }
+
+    .mobile-featured-progress::-webkit-scrollbar{
+        display:none!important;
+        width:0!important;
+        height:0!important;
+    }
+
+    .mobile-featured-progress::before{
+        content:""!important;
+        position:absolute!important;
+        left:0!important;
+        right:0!important;
+        top:50%!important;
+        height:1px!important;
+        background:rgba(151,172,194,.14)!important;
+        transform:translateY(-50%)!important;
+        pointer-events:none!important;
+    }
+
+    .mobile-featured-progress-item{
+        position:relative!important;
+        z-index:1!important;
+        flex:0 0 24px!important;
+        width:24px!important;
+        height:15px!important;
+        display:grid!important;
+        place-items:center!important;
+        padding:0!important;
+        border:0!important;
+        background:transparent!important;
+        cursor:pointer!important;
+    }
+
+    .mobile-featured-progress-item span{
+        display:block!important;
+        width:16px!important;
+        height:3px!important;
+        border-radius:999px!important;
+        background:rgba(210,219,227,.34)!important;
+        box-shadow:0 0 0 3px rgba(7,10,14,.72)!important;
+        transition:
+            width .22s ease,
+            background .22s ease,
+            box-shadow .22s ease!important;
+    }
+
+    .mobile-featured-progress-item.is-active span{
+        width:23px!important;
+        background:var(--gold)!important;
+        box-shadow:
+            0 0 0 3px rgba(7,10,14,.78),
+            0 0 10px rgba(229,193,88,.26)!important;
+    }
+
+    .mobile-featured-progress-item:focus-visible{
+        outline:1px solid var(--gold)!important;
+        outline-offset:1px!important;
+        border-radius:999px!important;
+    }
+
+    .shop-card.shop-card-mobile-rich{
+        touch-action:pan-y!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -5367,6 +5464,67 @@ window.featuredNextMobile = () => {
     renderShowcase();
 };
 
+
+window.featuredGoToMobile = (index) => {
+    if (window.innerWidth > 720) return;
+
+    const list = getFeaturedBusinessesForNavigation();
+    if (!list.length) return;
+
+    const safeIndex = Math.max(0, Math.min(Number(index) || 0, list.length - 1));
+    featuredCarouselOffset = safeIndex;
+    featuredSlotIndices = [];
+    renderShowcase();
+};
+
+function ensureMobileFeaturedSwipe() {
+    const area = document.getElementById('shopsScrollArea');
+
+    if (
+        !area ||
+        area.dataset.mobileSwipeReady === 'true'
+    ) {
+        return;
+    }
+
+    area.dataset.mobileSwipeReady = 'true';
+
+    let startX = 0;
+    let startY = 0;
+
+    area.addEventListener('touchstart', event => {
+        if (window.innerWidth > 720 || event.touches.length !== 1) return;
+
+        startX = event.touches[0].clientX;
+        startY = event.touches[0].clientY;
+    }, { passive: true });
+
+    area.addEventListener('touchend', event => {
+        if (
+            window.innerWidth > 720 ||
+            !event.changedTouches.length
+        ) {
+            return;
+        }
+
+        const deltaX = event.changedTouches[0].clientX - startX;
+        const deltaY = event.changedTouches[0].clientY - startY;
+        const isHorizontalSwipe =
+            Math.abs(deltaX) >= 42 &&
+            Math.abs(deltaX) > Math.abs(deltaY) * 1.25;
+
+        if (!isHorizontalSwipe) return;
+
+        event.preventDefault();
+
+        if (deltaX < 0) {
+            featuredNextMobile();
+        } else {
+            featuredPreviousMobile();
+        }
+    }, { passive: false });
+}
+
 // ── Carga datos ───────────────────────────────────────────────
 async function boot() {
     const [catsRes, featuredRes] = await Promise.all([
@@ -5811,21 +5969,36 @@ function shopCardHtml(b) {
                 </div>
             `;
 
+        const mobileFeaturedList = getFeaturedBusinessesForNavigation();
+        const mobileCurrentIndex = Math.max(
+            0,
+            mobileFeaturedList.findIndex(item => String(item.id) === String(b.id))
+        );
+
+        const mobileProgressHtml = mobileFeaturedList.length > 1
+            ? `
+                <nav
+                    class="mobile-featured-progress"
+                    aria-label="Cambiar negocio destacado"
+                >
+                    ${mobileFeaturedList.map((item, index) => `
+                        <button
+                            type="button"
+                            class="mobile-featured-progress-item${index === mobileCurrentIndex ? ' is-active' : ''}"
+                            onclick="event.preventDefault(); event.stopPropagation(); featuredGoToMobile(${index});"
+                            aria-label="Ver destacado ${index + 1} de ${mobileFeaturedList.length}"
+                            aria-current="${index === mobileCurrentIndex ? 'true' : 'false'}"
+                        >
+                            <span></span>
+                        </button>
+                    `).join('')}
+                </nav>
+            `
+            : '';
+
         return `
             <article class="shop-card shop-card-mobile-rich">
-                <button
-                    type="button"
-                    class="mobile-featured-nav mobile-featured-nav-left"
-                    onclick="event.preventDefault(); event.stopPropagation(); featuredPreviousMobile();"
-                    aria-label="Ver destacado anterior"
-                >‹</button>
-
-                <button
-                    type="button"
-                    class="mobile-featured-nav mobile-featured-nav-right"
-                    onclick="event.preventDefault(); event.stopPropagation(); featuredNextMobile();"
-                    aria-label="Ver destacado siguiente"
-                >›</button>
+                ${mobileProgressHtml}
 
                 <a
                     class="mobile-featured-profile"
@@ -6034,6 +6207,7 @@ window.renderShowcase = () => {
     area.innerHTML = visibleBusinesses.map(shopCardHtml).join('');
     area.classList.add('featured-changing');
 
+    ensureMobileFeaturedSwipe();
     scheduleFeaturedRotation(list.length);
     scheduleFeaturedSlotRotations(list);
 };
