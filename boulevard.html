@@ -6243,6 +6243,40 @@ body {
 }
 </style>
 
+
+<style id="urbanex-featured-bottom-centered-only">
+/* ÚNICO CAMBIO:
+   centrar verticalmente la calificación y el estado
+   dentro del espacio inferior de las tarjetas de Destacados.
+*/
+@media (min-width:721px){
+    .aside-showcase-list .ux-featured-link{
+        grid-template-rows:auto auto minmax(0,1fr)!important;
+    }
+
+    .aside-showcase-list .ux-featured-bottom{
+        width:100%!important;
+        height:100%!important;
+        min-height:0!important;
+        align-self:stretch!important;
+        align-items:center!important;
+        align-content:center!important;
+        margin:0!important;
+        padding-top:0!important;
+        padding-bottom:0!important;
+        overflow:visible!important;
+    }
+
+    .aside-showcase-list .ux-featured-rating,
+    .aside-showcase-list .ux-featured-status,
+    .aside-showcase-list .ux-featured-rating .shop-rating-row{
+        display:flex!important;
+        align-items:center!important;
+        align-self:center!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
