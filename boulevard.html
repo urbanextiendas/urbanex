@@ -3851,6 +3851,86 @@ body {
 }
 </style>
 
+
+<style id="urbanex-featured-inline-arrows-only">
+/* ÚNICOS CAMBIOS:
+   - sin flechas/contador en el encabezado
+   - flechas colocadas sobre el anuncio, no sobre el logo
+*/
+.featured-large-controls,
+.featured-large-position{
+    display:none!important;
+}
+
+@media (min-width:721px){
+    .shop-thumb-wrapper-featured{
+        position:relative!important;
+        overflow:hidden!important;
+    }
+
+    .shop-thumb-fallback{
+        display:grid!important;
+        place-items:center!important;
+        width:100%!important;
+        height:100%!important;
+        font-size:28px!important;
+    }
+
+    .shop-card.shop-card-ad{
+        position:relative!important;
+        overflow:hidden!important;
+    }
+
+    .featured-card-nav{
+        position:absolute!important;
+        top:50%!important;
+        transform:translateY(-50%)!important;
+        z-index:8!important;
+        width:30px!important;
+        height:30px!important;
+        display:grid!important;
+        place-items:center!important;
+        border:1px solid rgba(255,255,255,.14)!important;
+        border-radius:999px!important;
+        background:rgba(8,12,18,.72)!important;
+        backdrop-filter:blur(10px)!important;
+        -webkit-backdrop-filter:blur(10px)!important;
+        color:#ffffff!important;
+        font-size:18px!important;
+        line-height:1!important;
+        box-shadow:0 8px 20px rgba(0,0,0,.30)!important;
+        transition:background .2s ease, transform .2s ease, border-color .2s ease, opacity .2s ease!important;
+        cursor:pointer!important;
+        opacity:.92!important;
+    }
+
+    .featured-card-nav:hover{
+        transform:translateY(-50%) scale(1.06)!important;
+        background:rgba(18,26,38,.88)!important;
+        border-color:rgba(229,193,88,.30)!important;
+        opacity:1!important;
+    }
+
+    .featured-card-nav-left{
+        left:10px!important;
+    }
+
+    .featured-card-nav-right{
+        right:10px!important;
+    }
+
+    .shop-card-profile{
+        padding-left:24px!important;
+        padding-right:24px!important;
+    }
+
+    .shop-card-footer{
+        padding-left:24px!important;
+        padding-right:24px!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -3970,23 +4050,6 @@ body {
         <div class="showcase-header">
             <h2>DESTACADOS</h2>
 
-            <div class="featured-large-controls" aria-label="Controles de anuncios destacados">
-                <button
-                    type="button"
-                    class="featured-large-arrow"
-                    onclick="featuredPreviousLarge()"
-                    aria-label="Anuncio anterior"
-                >‹</button>
-
-                <span class="featured-large-position" id="featuredLargePosition" aria-live="polite"></span>
-
-                <button
-                    type="button"
-                    class="featured-large-arrow"
-                    onclick="featuredNextLarge()"
-                    aria-label="Anuncio siguiente"
-                >›</button>
-            </div>
         </div>
         <div class="shops-scroll-area" id="shopsScrollArea">
             <div class="skeleton" style="height:64px;border-radius:8px;"></div>
@@ -5219,10 +5282,6 @@ function allCatFiltered() {
 
 // ── Tarjeta de negocio (panel derecho) ───────────────────────
 function shopCardHtml(b) {
-    const imgEl = b.cover_image
-        ? `<div class="shop-thumb-wrapper"><img class="shop-thumb" src="${esc(b.cover_image)}" alt="${esc(b.name)}" loading="lazy"></div>`
-        : `<div class="shop-thumb-wrapper">${b.subcategories?.icon||b.categories?.icon||'🏪'}</div>`;
-
     const catLabel = b.subcategories?.name
         ? `${b.categories?.icon||''} ${b.subcategories.name}`
         : `${b.categories?.icon||''} ${b.categories?.name||'Sin categoría'}`;
@@ -5237,10 +5296,14 @@ function shopCardHtml(b) {
         ? `<span class="status-open">Abierto</span>`
         : `<span class="status-closed">Cerrado</span>`;
 
+    const basicImgEl = b.cover_image
+        ? `<div class="shop-thumb-wrapper"><img class="shop-thumb" src="${esc(b.cover_image)}" alt="${esc(b.name)}" loading="lazy"></div>`
+        : `<div class="shop-thumb-wrapper">${b.subcategories?.icon||b.categories?.icon||'🏪'}</div>`;
+
     /* El celular conserva exactamente la tarjeta anterior. */
     if (window.innerWidth <= 720) {
         return `<a class="shop-card" href="${NEGOCIO_URL(b.slug)}">
-            ${imgEl}
+            ${basicImgEl}
             <div class="shop-details">
                 <div class="shop-title">${esc(b.name)}</div>
                 <div class="shop-segment">${catLabel}</div>
@@ -5248,6 +5311,14 @@ function shopCardHtml(b) {
             </div>
         </a>`;
     }
+
+    const desktopImgEl = b.cover_image
+        ? `<div class="shop-thumb-wrapper shop-thumb-wrapper-featured">
+                <img class="shop-thumb" src="${esc(b.cover_image)}" alt="${esc(b.name)}" loading="lazy">
+           </div>`
+        : `<div class="shop-thumb-wrapper shop-thumb-wrapper-featured">
+                <span class="shop-thumb-fallback">${b.subcategories?.icon||b.categories?.icon||'🏪'}</span>
+           </div>`;
 
     const addressLabel = String(
         b.address || b.city || 'Dirección no registrada'
@@ -5294,12 +5365,26 @@ function shopCardHtml(b) {
 
     return `
         <article class="shop-card shop-card-ad">
+            <button
+                type="button"
+                class="featured-card-nav featured-card-nav-left"
+                onclick="event.preventDefault(); event.stopPropagation(); featuredPreviousLarge();"
+                aria-label="Ver destacado anterior"
+            >‹</button>
+
+            <button
+                type="button"
+                class="featured-card-nav featured-card-nav-right"
+                onclick="event.preventDefault(); event.stopPropagation(); featuredNextLarge();"
+                aria-label="Ver destacado siguiente"
+            >›</button>
+
             <a
                 class="shop-card-profile"
                 href="${NEGOCIO_URL(b.slug)}"
                 aria-label="Ver perfil de ${esc(b.name)}"
             >
-                ${imgEl}
+                ${desktopImgEl}
 
                 <div class="shop-details">
                     <div class="shop-card-topline">
