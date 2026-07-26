@@ -1574,519 +1574,623 @@ body {
 </style>
 
 
-<style id="urbanex-directory-index-format-v1">
-/* Directorio "Todos": formato profesional coherente con index.html */
-.directory-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 2147483000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: rgba(7, 11, 18, 0.78);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+<style id="urbanex-directory-premium-v2">
+/* =========================================================
+   URBANEX · DIRECTORIO PREMIUM V2
+   Diseño compacto, comercial y coherente con index.html.
+   6 columnas en computador/tablet y 2 columnas en celular.
+   ========================================================= */
+:root{
+    --uxd-navy:#142b4d;
+    --uxd-navy-2:#0d213d;
+    --uxd-orange:#ff9f0a;
+    --uxd-orange-soft:#fff3df;
+    --uxd-bg:#eef2f6;
+    --uxd-card:#ffffff;
+    --uxd-text:#172033;
+    --uxd-muted:#667286;
+    --uxd-line:#dce3eb;
+    --uxd-green:#15915a;
+    --uxd-shadow:0 10px 26px rgba(20,43,77,.09);
 }
 
-.directory-shell {
-    width: min(1580px, 100%);
-    max-height: calc(100svh - 40px);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid rgba(20, 43, 77, 0.16);
-    border-radius: 22px;
-    background: #f3f6fa;
-    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
+.uxd-modal{
+    position:fixed;
+    inset:0;
+    z-index:2147483000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    background:rgba(5,9,16,.78);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
 }
 
-.directory-header {
-    flex: 0 0 auto;
-    min-height: 92px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    padding: 18px 22px;
-    border-bottom: 1px solid #dfe5ec;
+.uxd-shell{
+    width:min(1580px,100%);
+    height:min(900px,calc(100svh - 32px));
+    min-height:0;
+    display:grid;
+    grid-template-rows:auto auto minmax(0,1fr);
+    overflow:hidden;
+    border:1px solid rgba(255,159,10,.32);
+    border-radius:22px;
+    background:var(--uxd-bg);
+    box-shadow:0 34px 110px rgba(0,0,0,.50);
+}
+
+.uxd-header{
+    min-height:82px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:22px;
+    padding:14px 18px 14px 22px;
+    border-bottom:2px solid var(--uxd-orange);
     background:
-        radial-gradient(circle at 8% 0%, rgba(255, 159, 10, 0.12), transparent 32%),
-        #ffffff;
+        radial-gradient(circle at 14% -45%,rgba(255,159,10,.24),transparent 34%),
+        linear-gradient(100deg,var(--uxd-navy-2),var(--uxd-navy));
+    color:#fff;
 }
 
-.directory-heading {
-    min-width: 0;
+.uxd-heading{
+    min-width:0;
+    flex:1 1 auto;
 }
 
-.directory-eyebrow {
-    display: block;
-    margin-bottom: 5px;
-    color: #a66300;
-    font-size: 8px;
-    font-weight: 900;
-    letter-spacing: 1.3px;
-    text-transform: uppercase;
+.uxd-eyebrow{
+    display:block;
+    margin-bottom:4px;
+    color:#ffc76f;
+    font-size:8px;
+    font-weight:900;
+    line-height:1.2;
+    letter-spacing:1.45px;
+    text-transform:uppercase;
 }
 
-.directory-header h2 {
-    margin: 0;
-    color: #142b4d;
-    font-family: var(--font-sans);
-    font-size: clamp(21px, 2.2vw, 30px);
-    font-weight: 800;
-    line-height: 1.08;
-    letter-spacing: -0.7px;
+.uxd-header h2{
+    margin:0;
+    color:#fff;
+    font-family:var(--font-sans);
+    font-size:clamp(22px,2.2vw,31px);
+    font-weight:800;
+    line-height:1.08;
+    letter-spacing:-.8px;
 }
 
-.directory-meta {
-    margin-top: 6px;
-    color: #6d788a;
-    font-size: 10px;
-    font-weight: 500;
+.uxd-meta{
+    margin:5px 0 0;
+    color:#cbd5e2;
+    font-size:9.5px;
+    font-weight:500;
 }
 
-.directory-close {
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
-    display: grid;
-    place-items: center;
-    border: 1px solid #d5dde7;
-    border-radius: 12px;
-    background: #f7f9fb;
-    color: #142b4d;
-    cursor: pointer;
-    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+.uxd-tools{
+    flex:0 1 650px;
+    display:grid;
+    grid-template-columns:minmax(210px,1fr) 180px 42px;
+    align-items:center;
+    gap:9px;
 }
 
-.directory-close:hover {
-    transform: translateY(-2px);
-    border-color: #ff9f0a;
-    background: #fff2dc;
+.uxd-search,
+.uxd-sort{
+    position:relative;
+    min-width:0;
 }
 
-.directory-close:focus-visible,
-.directory-card:focus-visible {
-    outline: 3px solid #ff9f0a;
-    outline-offset: 3px;
+.uxd-search svg{
+    position:absolute;
+    left:13px;
+    top:50%;
+    width:15px;
+    height:15px;
+    transform:translateY(-50%);
+    fill:#ffb43b;
+    pointer-events:none;
 }
 
-.directory-close svg {
-    width: 18px;
-    height: 18px;
-    fill: currentColor;
+.uxd-search input,
+.uxd-sort select{
+    width:100%;
+    height:42px;
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:11px;
+    outline:none;
+    background:rgba(255,255,255,.10);
+    color:#fff;
+    font-family:var(--font-sans);
+    font-size:10px;
+    font-weight:600;
+    transition:border-color .2s ease,background .2s ease,box-shadow .2s ease;
 }
 
-.directory-grid {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    align-content: start;
-    gap: 14px;
-    padding: 18px;
+.uxd-search input{
+    padding:0 13px 0 38px;
 }
 
-.directory-card {
-    position: relative;
-    min-width: 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #dfe5ec;
-    border-radius: 15px;
-    background: #ffffff;
-    color: #172033;
-    text-decoration: none;
-    box-shadow: 0 6px 18px rgba(20, 43, 77, 0.07);
-    transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+.uxd-search input::placeholder{
+    color:#bdc7d5;
 }
 
-.directory-card::before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto;
-    z-index: 3;
-    height: 4px;
-    background: linear-gradient(90deg, #ff9f0a, #142b4d);
+.uxd-sort select{
+    padding:0 30px 0 11px;
+    cursor:pointer;
 }
 
-.directory-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(255, 159, 10, 0.72);
-    box-shadow: 0 16px 34px rgba(20, 43, 77, 0.14);
+.uxd-sort select option{
+    background:#fff;
+    color:#172033;
 }
 
-.directory-card-media {
-    position: relative;
-    width: 100%;
-    height: 126px;
-    flex: 0 0 126px;
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    padding: 10px;
-    border-bottom: 1px solid #e5eaf0;
+.uxd-search input:focus,
+.uxd-sort select:focus{
+    border-color:var(--uxd-orange);
+    background:rgba(255,255,255,.15);
+    box-shadow:0 0 0 3px rgba(255,159,10,.18);
+}
+
+.uxd-close{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border:1px solid rgba(255,255,255,.24);
+    border-radius:11px;
+    background:rgba(255,255,255,.10);
+    color:#fff;
+    cursor:pointer;
+    transition:transform .2s ease,background .2s ease,border-color .2s ease;
+}
+
+.uxd-close:hover{
+    transform:translateY(-2px);
+    border-color:var(--uxd-orange);
+    background:var(--uxd-orange);
+    color:#171918;
+}
+
+.uxd-close svg{
+    width:18px;
+    height:18px;
+    fill:currentColor;
+}
+
+.uxd-close:focus-visible,
+.uxd-card:focus-visible{
+    outline:3px solid var(--uxd-orange);
+    outline-offset:3px;
+}
+
+.uxd-summary{
+    min-height:43px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:8px 18px;
+    border-bottom:1px solid var(--uxd-line);
+    background:#fff;
+    color:var(--uxd-muted);
+    font-size:9px;
+}
+
+.uxd-summary strong{
+    color:var(--uxd-navy);
+    font-weight:800;
+}
+
+.uxd-summary-count{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    flex:0 0 auto;
+    color:var(--uxd-navy);
+    font-weight:800;
+}
+
+.uxd-summary-count::before{
+    content:"";
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--uxd-orange);
+    box-shadow:0 0 0 4px rgba(255,159,10,.13);
+}
+
+.uxd-grid{
+    min-height:0;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    align-content:start;
+    gap:12px;
+    padding:16px;
+    scrollbar-gutter:stable;
+}
+
+.uxd-card{
+    position:relative;
+    min-width:0;
+    min-height:226px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    border:1px solid var(--uxd-line);
+    border-radius:15px;
+    background:var(--uxd-card);
+    color:var(--uxd-text);
+    text-decoration:none;
+    box-shadow:var(--uxd-shadow);
+    transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+}
+
+.uxd-card::before{
+    content:"";
+    position:absolute;
+    inset:0 0 auto;
+    z-index:5;
+    height:4px;
+    background:linear-gradient(90deg,var(--uxd-orange) 0 34%,var(--uxd-navy) 34% 100%);
+}
+
+.uxd-card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(255,159,10,.66);
+    box-shadow:0 18px 38px rgba(20,43,77,.16);
+}
+
+.uxd-card-media{
+    position:relative;
+    width:100%;
+    height:112px;
+    flex:0 0 112px;
+    display:grid;
+    place-items:center;
+    overflow:hidden;
+    padding:11px;
+    border-bottom:1px solid #e8edf2;
     background:
-        radial-gradient(circle at 50% 25%, rgba(255, 159, 10, 0.10), transparent 38%),
-        #f5f7fa;
+        radial-gradient(circle at 50% 28%,rgba(255,159,10,.12),transparent 38%),
+        #f7f9fb;
 }
 
-.directory-card-media img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: contain;
-    object-position: center;
-    border-radius: 8px;
-    background: #ffffff;
-    transition: transform .32s ease;
+.uxd-card-media img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:contain;
+    object-position:center;
+    border-radius:8px;
+    background:#fff;
+    transition:transform .3s ease;
 }
 
-.directory-card:hover .directory-card-media img {
-    transform: scale(1.035);
+.uxd-card:hover .uxd-card-media img{
+    transform:scale(1.035);
 }
 
-.directory-card-placeholder {
-    width: 58px;
-    height: 58px;
-    display: grid;
-    place-items: center;
-    border: 1px solid rgba(255, 159, 10, 0.42);
-    border-radius: 16px;
-    background: #142b4d;
-    color: #ffffff;
+.uxd-featured{
+    position:absolute;
+    top:9px;
+    right:9px;
+    z-index:3;
+    display:inline-flex;
+    align-items:center;
+    min-height:20px;
+    padding:0 7px;
+    border:1px solid rgba(255,159,10,.55);
+    border-radius:999px;
+    background:rgba(20,43,77,.94);
+    color:#ffd998;
+    font-size:6px;
+    font-weight:900;
+    letter-spacing:.45px;
+    text-transform:uppercase;
 }
 
-.directory-card-placeholder svg {
-    width: 27px;
-    height: 27px;
-    fill: currentColor;
+.uxd-placeholder{
+    width:58px;
+    height:58px;
+    display:grid;
+    place-items:center;
+    border:1px solid rgba(255,159,10,.48);
+    border-radius:16px;
+    background:var(--uxd-navy);
+    color:#fff;
 }
 
-.directory-card-body {
-    min-width: 0;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 12px;
+.uxd-placeholder svg{
+    width:28px;
+    height:28px;
+    fill:currentColor;
 }
 
-.directory-card-category {
-    min-width: 0;
-    overflow: hidden;
-    color: #a66300;
-    font-size: 7.5px;
-    font-weight: 800;
-    line-height: 1.25;
-    letter-spacing: .55px;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    white-space: nowrap;
+.uxd-card-body{
+    min-width:0;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    padding:11px 11px 10px;
 }
 
-.directory-card h3 {
-    min-height: 31px;
-    margin: 7px 0 0;
-    overflow: hidden;
-    color: #142b4d;
-    font-size: 12px;
-    font-weight: 800;
-    line-height: 1.28;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+.uxd-category{
+    min-width:0;
+    overflow:hidden;
+    color:#a25f00;
+    font-size:6.7px;
+    font-weight:900;
+    line-height:1.25;
+    letter-spacing:.55px;
+    text-overflow:ellipsis;
+    text-transform:uppercase;
+    white-space:nowrap;
 }
 
-.directory-card-location {
-    min-width: 0;
-    min-height: 29px;
-    display: flex;
-    align-items: flex-start;
-    gap: 5px;
-    margin: 7px 0 0;
-    overflow: hidden;
-    color: #6d788a;
-    font-size: 8px;
-    line-height: 1.42;
+.uxd-card h3{
+    min-height:31px;
+    margin:6px 0 0;
+    overflow:hidden;
+    color:var(--uxd-navy);
+    font-size:11.5px;
+    font-weight:800;
+    line-height:1.28;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
 }
 
-.directory-card-location svg {
-    width: 11px;
-    height: 11px;
-    flex: 0 0 11px;
-    margin-top: 1px;
-    fill: #ff9f0a;
+.uxd-location{
+    min-width:0;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    margin-top:6px;
+    color:var(--uxd-muted);
+    font-size:7.5px;
+    line-height:1.35;
 }
 
-.directory-card-location span {
-    min-width: 0;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+.uxd-location svg{
+    width:10px;
+    height:10px;
+    flex:0 0 10px;
+    fill:var(--uxd-orange);
 }
 
-.directory-card-footer {
-    min-width: 0;
-    min-height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6px;
-    margin-top: auto;
-    padding-top: 9px;
-    border-top: 1px solid #edf0f4;
+.uxd-location span{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
-.directory-status {
-    min-width: 0;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    color: #8f5600;
-    font-size: 7.5px;
-    font-weight: 800;
-    white-space: nowrap;
+.uxd-card-footer{
+    min-width:0;
+    min-height:29px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:7px;
+    margin-top:auto;
+    padding-top:8px;
+    border-top:1px solid #edf1f4;
 }
 
-.directory-status::before {
-    content: "";
-    width: 7px;
-    height: 7px;
-    flex: 0 0 7px;
-    border-radius: 50%;
-    background: #ff9f0a;
-    box-shadow: 0 0 0 3px rgba(255, 159, 10, 0.12);
+.uxd-status{
+    min-width:0;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    color:#945900;
+    font-size:7px;
+    font-weight:800;
+    white-space:nowrap;
 }
 
-.directory-status.is-open {
-    color: #087441;
+.uxd-status::before{
+    content:"";
+    width:6px;
+    height:6px;
+    flex:0 0 6px;
+    border-radius:50%;
+    background:var(--uxd-orange);
+    box-shadow:0 0 0 3px rgba(255,159,10,.12);
 }
 
-.directory-status.is-open::before {
-    background: #16a05d;
-    box-shadow: 0 0 0 3px rgba(22, 160, 93, 0.12);
+.uxd-status.is-open{
+    color:#087443;
 }
 
-.directory-rating {
-    flex: 0 0 auto;
-    color: #142b4d;
-    font-size: 7.5px;
-    font-weight: 800;
-    white-space: nowrap;
+.uxd-status.is-open::before{
+    background:var(--uxd-green);
+    box-shadow:0 0 0 3px rgba(21,145,90,.12);
 }
 
-.directory-rating b {
-    color: #ff9f0a;
-    font-weight: 900;
+.uxd-card-action{
+    flex:0 0 auto;
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    color:var(--uxd-navy);
+    font-size:7px;
+    font-weight:900;
+    white-space:nowrap;
 }
 
-.directory-empty {
-    grid-column: 1 / -1;
-    min-height: 180px;
-    display: grid;
-    place-items: center;
-    padding: 28px;
-    border: 1px dashed #ccd5df;
-    border-radius: 16px;
-    background: #ffffff;
-    color: #687487;
-    text-align: center;
-    font-size: 12px;
-    line-height: 1.5;
+.uxd-card-action svg{
+    width:12px;
+    height:12px;
+    fill:currentColor;
 }
 
-.directory-skeleton {
-    min-height: 245px;
-    border-radius: 15px;
+.uxd-card:hover .uxd-card-action{
+    color:#a25f00;
+}
+
+.uxd-empty{
+    grid-column:1/-1;
+    min-height:210px;
+    display:grid;
+    place-items:center;
+    padding:30px;
+    border:1px dashed #c7d1dc;
+    border-radius:17px;
+    background:#fff;
+    color:#657185;
+    text-align:center;
+    font-size:12px;
+    line-height:1.55;
+}
+
+.uxd-skeleton{
+    min-height:226px;
+    border-radius:15px;
     background:
-        linear-gradient(90deg, transparent, rgba(255,255,255,.65), transparent),
-        #e5eaf0;
-    background-size: 220% 100%;
-    animation: directorySkeleton 1.25s linear infinite;
+        linear-gradient(90deg,transparent,rgba(255,255,255,.72),transparent),
+        #dfe6ed;
+    background-size:220% 100%;
+    animation:uxdSkeleton 1.25s linear infinite;
 }
 
-@keyframes directorySkeleton {
-    to { background-position: -220% 0; }
+@keyframes uxdSkeleton{
+    to{background-position:-220% 0;}
 }
 
-@media (min-width: 641px) and (max-width: 1024px) {
-    .directory-modal {
-        padding: 10px;
+/* Tablet: se mantienen 6 columnas, con densidad controlada. */
+@media (min-width:641px) and (max-width:1024px){
+    .uxd-modal{padding:8px;}
+    .uxd-shell{
+        width:100%;
+        height:calc(100svh - 16px);
+        border-radius:16px;
     }
-
-    .directory-shell {
-        max-height: calc(100svh - 20px);
-        border-radius: 16px;
+    .uxd-header{
+        min-height:72px;
+        gap:12px;
+        padding:10px 11px 10px 14px;
     }
-
-    .directory-header {
-        min-height: 76px;
-        padding: 13px 14px;
+    .uxd-header h2{font-size:20px;}
+    .uxd-meta{font-size:8px;}
+    .uxd-tools{
+        flex-basis:470px;
+        grid-template-columns:minmax(150px,1fr) 142px 38px;
+        gap:6px;
     }
-
-    .directory-grid {
-        grid-template-columns: repeat(6, minmax(0, 1fr));
-        gap: 7px;
-        padding: 9px;
+    .uxd-search input,
+    .uxd-sort select{height:38px;font-size:8px;border-radius:9px;}
+    .uxd-close{width:38px;height:38px;border-radius:9px;}
+    .uxd-summary{min-height:36px;padding:6px 10px;font-size:7.5px;}
+    .uxd-grid{
+        grid-template-columns:repeat(6,minmax(0,1fr));
+        gap:7px;
+        padding:8px;
     }
-
-    .directory-card {
-        border-radius: 10px;
+    .uxd-card{
+        min-height:174px;
+        border-radius:11px;
     }
-
-    .directory-card-media {
-        height: 82px;
-        flex-basis: 82px;
-        padding: 6px;
+    .uxd-card-media{
+        height:82px;
+        flex-basis:82px;
+        padding:6px;
     }
-
-    .directory-card-body {
-        padding: 7px;
-    }
-
-    .directory-card-category {
-        font-size: 6px;
-        letter-spacing: .25px;
-    }
-
-    .directory-card h3 {
-        min-height: 27px;
-        margin-top: 5px;
-        font-size: 9px;
-        line-height: 1.28;
-    }
-
-    .directory-card-location {
-        min-height: 24px;
-        margin-top: 5px;
-        gap: 3px;
-        font-size: 6.5px;
-        line-height: 1.35;
-    }
-
-    .directory-card-location svg {
-        width: 8px;
-        height: 8px;
-        flex-basis: 8px;
-    }
-
-    .directory-card-footer {
-        min-height: 22px;
-        gap: 3px;
-        padding-top: 6px;
-    }
-
-    .directory-status,
-    .directory-rating {
-        font-size: 6px;
-    }
-
-    .directory-status {
-        gap: 3px;
-    }
-
-    .directory-status::before {
-        width: 5px;
-        height: 5px;
-        flex-basis: 5px;
-        box-shadow: none;
-    }
-
-    .directory-skeleton {
-        min-height: 170px;
-    }
+    .uxd-featured{top:6px;right:6px;min-height:17px;padding:0 5px;font-size:5px;}
+    .uxd-card-body{padding:7px 7px 6px;}
+    .uxd-category{font-size:5.2px;letter-spacing:.25px;}
+    .uxd-card h3{min-height:25px;margin-top:4px;font-size:8.6px;line-height:1.25;}
+    .uxd-location{margin-top:4px;gap:3px;font-size:5.8px;}
+    .uxd-location svg{width:7px;height:7px;flex-basis:7px;}
+    .uxd-card-footer{min-height:22px;gap:3px;padding-top:5px;}
+    .uxd-status,.uxd-card-action{font-size:5.5px;}
+    .uxd-status{gap:3px;}
+    .uxd-status::before{width:5px;height:5px;flex-basis:5px;box-shadow:none;}
+    .uxd-card-action svg{width:9px;height:9px;}
+    .uxd-skeleton{min-height:174px;}
 }
 
-@media (max-width: 640px) {
-    .directory-modal {
-        align-items: stretch;
-        padding: 8px;
+/* Celular: 2 columnas, información legible y táctil. */
+@media (max-width:640px){
+    .uxd-modal{
+        align-items:stretch;
+        padding:0;
+        background:#eef2f6;
     }
-
-    .directory-shell {
-        width: 100%;
-        max-height: calc(100svh - 16px);
-        border-radius: 16px;
+    .uxd-shell{
+        width:100%;
+        height:100svh;
+        max-height:none;
+        border:0;
+        border-radius:0;
     }
-
-    .directory-header {
-        min-height: 76px;
-        padding: 13px 14px;
+    .uxd-header{
+        min-height:126px;
+        display:grid;
+        grid-template-columns:minmax(0,1fr) 42px;
+        grid-template-rows:auto 42px;
+        gap:10px;
+        padding:13px 12px 12px;
     }
-
-    .directory-eyebrow {
-        font-size: 7px;
+    .uxd-heading{grid-column:1;grid-row:1;}
+    .uxd-eyebrow{font-size:7px;}
+    .uxd-header h2{font-size:21px;}
+    .uxd-meta{font-size:8px;}
+    .uxd-tools{
+        grid-column:1/-1;
+        grid-row:2;
+        width:100%;
+        display:grid;
+        grid-template-columns:minmax(0,1fr) 132px;
+        gap:7px;
     }
-
-    .directory-header h2 {
-        font-size: 20px;
+    .uxd-close{
+        position:absolute;
+        top:14px;
+        right:12px;
+        width:40px;
+        height:40px;
     }
-
-    .directory-meta {
-        font-size: 9px;
+    .uxd-search input,
+    .uxd-sort select{height:42px;font-size:9px;}
+    .uxd-summary{min-height:39px;padding:7px 10px;font-size:8px;}
+    .uxd-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:10px;
+        padding:10px;
     }
-
-    .directory-close {
-        width: 38px;
-        height: 38px;
-        flex-basis: 38px;
+    .uxd-card{
+        min-height:218px;
+        border-radius:14px;
     }
-
-    .directory-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-        padding: 10px;
+    .uxd-card-media{
+        height:108px;
+        flex-basis:108px;
+        padding:8px;
     }
-
-    .directory-card-media {
-        height: 116px;
-        flex-basis: 116px;
-        padding: 8px;
-    }
-
-    .directory-card-body {
-        padding: 10px;
-    }
-
-    .directory-card-category {
-        font-size: 7px;
-    }
-
-    .directory-card h3 {
-        min-height: 30px;
-        font-size: 11px;
-    }
-
-    .directory-card-location {
-        min-height: 27px;
-        font-size: 7.5px;
-    }
-
-    .directory-status,
-    .directory-rating {
-        font-size: 7px;
-    }
-
-    .directory-skeleton {
-        min-height: 224px;
-    }
+    .uxd-card-body{padding:9px 9px 8px;}
+    .uxd-category{font-size:6.3px;}
+    .uxd-card h3{min-height:29px;font-size:10.5px;}
+    .uxd-location{font-size:7px;}
+    .uxd-status,.uxd-card-action{font-size:6.5px;}
+    .uxd-card-footer{min-height:27px;}
+    .uxd-skeleton{min-height:218px;}
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .directory-card,
-    .directory-card-media img,
-    .directory-close {
-        transition: none !important;
-    }
+@media (max-width:370px){
+    .uxd-tools{grid-template-columns:minmax(0,1fr) 112px;}
+    .uxd-grid{gap:8px;padding:8px;}
+    .uxd-card-media{height:98px;flex-basis:98px;}
+    .uxd-card h3{font-size:9.7px;}
+}
 
-    .directory-skeleton {
-        animation: none !important;
-    }
+@media (prefers-reduced-motion:reduce){
+    .uxd-card,
+    .uxd-card-media img,
+    .uxd-close{transition:none!important;}
+    .uxd-skeleton{animation:none!important;}
 }
 </style>
 
@@ -2231,42 +2335,70 @@ body {
 <!-- MODAL DIRECTORIO -->
 <div
     id="directorioModal"
-    class="directory-modal"
+    class="uxd-modal"
     aria-hidden="true"
 >
     <section
-        class="directory-shell"
+        class="uxd-shell"
         role="dialog"
         aria-modal="true"
         aria-labelledby="directoryTitle"
     >
-        <header class="directory-header">
-            <div class="directory-heading">
-                <span class="directory-eyebrow">Urbanex · Directorio comercial</span>
+        <header class="uxd-header">
+            <div class="uxd-heading">
+                <span class="uxd-eyebrow">Urbanex · Directorio comercial</span>
                 <h2 id="directoryTitle">Todos los negocios</h2>
-                <p class="directory-meta" id="directoryMeta">Cargando negocios...</p>
+                <p class="uxd-meta" id="directoryMeta">Cargando negocios...</p>
             </div>
 
-            <button
-                class="directory-close"
-                id="directoryCloseButton"
-                type="button"
-                onclick="closeDirectorio()"
-                aria-label="Cerrar directorio"
-            >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L10.59 13.41 4.29 19.71 2.88 18.3 9.17 12 2.88 5.7 4.29 4.29 10.59 10.59 16.89 4.29z"/>
-                </svg>
-            </button>
+            <div class="uxd-tools">
+                <label class="uxd-search" for="directorySearch">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M9.5 3a6.5 6.5 0 1 0 3.98 11.64L19.85 21 21 19.85l-6.36-6.37A6.5 6.5 0 0 0 9.5 3Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z"/>
+                    </svg>
+                    <input
+                        id="directorySearch"
+                        type="search"
+                        placeholder="Buscar negocio"
+                        autocomplete="off"
+                        aria-label="Buscar negocio en el directorio"
+                    >
+                </label>
+
+                <label class="uxd-sort" for="directorySort">
+                    <select id="directorySort" aria-label="Ordenar negocios">
+                        <option value="featured">Destacados primero</option>
+                        <option value="name">Nombre A-Z</option>
+                        <option value="rating">Mejor calificación</option>
+                    </select>
+                </label>
+
+                <button
+                    class="uxd-close"
+                    id="directoryCloseButton"
+                    type="button"
+                    onclick="closeDirectorio()"
+                    aria-label="Cerrar directorio"
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L10.59 13.41 4.29 19.71 2.88 18.3 9.17 12 2.88 5.7 4.29 4.29 10.59 10.59 16.89 4.29z"/>
+                    </svg>
+                </button>
+            </div>
         </header>
 
-        <div id="dirGrid" class="directory-grid">
-            <div class="directory-skeleton"></div>
-            <div class="directory-skeleton"></div>
-            <div class="directory-skeleton"></div>
-            <div class="directory-skeleton"></div>
-            <div class="directory-skeleton"></div>
-            <div class="directory-skeleton"></div>
+        <div class="uxd-summary">
+            <span>Mostrando negocios en <strong id="directoryLocationLabel">Todo Ecuador</strong></span>
+            <span class="uxd-summary-count" id="directoryVisibleCount">0 resultados</span>
+        </div>
+
+        <div id="dirGrid" class="uxd-grid" aria-live="polite">
+            <div class="uxd-skeleton"></div>
+            <div class="uxd-skeleton"></div>
+            <div class="uxd-skeleton"></div>
+            <div class="uxd-skeleton"></div>
+            <div class="uxd-skeleton"></div>
+            <div class="uxd-skeleton"></div>
         </div>
     </section>
 </div>
@@ -3375,6 +3507,16 @@ window.renderShowcase = () => {
 
 // ── Modal Directorio ──────────────────────────────────────────
 let directoryPreviousFocus = null;
+let directoryQuery = '';
+let directorySortMode = 'featured';
+
+function normalizeDirectoryText(value) {
+    return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+}
 
 window.openDirectorio = async () => {
     const modal = document.getElementById('directorioModal');
@@ -3388,8 +3530,8 @@ window.openDirectorio = async () => {
 
     if (!fullDirectoryLoaded && grid) {
         grid.innerHTML = Array.from(
-            { length: 6 },
-            () => '<div class="directory-skeleton"></div>'
+            { length: 12 },
+            () => '<div class="uxd-skeleton"></div>'
         ).join('');
     }
 
@@ -3424,7 +3566,7 @@ function dirCardHtml(b) {
             >
         `
         : `
-            <div class="directory-card-placeholder" aria-hidden="true">
+            <div class="uxd-placeholder" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
                     <path d="M4 4h16l1 5v2a3 3 0 0 1-1 2.24V20h-7v-5h-2v5H4v-6.76A3 3 0 0 1 3 11V9l1-5Zm2 2-.6 3h13.2L18 6H6Zm-.9 5a1 1 0 0 0 2 0h-2Zm4 0a1 1 0 0 0 2 0h-2Zm4 0a1 1 0 0 0 2 0h-2Zm4 0a1 1 0 0 0 2 0h-2Z"/>
                 </svg>
@@ -3437,35 +3579,39 @@ function dirCardHtml(b) {
         ? `${categoryName} · ${subcategoryName}`
         : categoryName;
 
-    const locationText = b.address || businessCity(b) || 'Ubicación no registrada';
-
-    const statusClass = b._open ? 'directory-status is-open' : 'directory-status';
+    const cityLabel = businessCity(b) || b.address || 'Ubicación no registrada';
+    const statusClass = b._open ? 'uxd-status is-open' : 'uxd-status';
     const statusText = b._open ? 'Abierto' : 'Cerrado';
-
-    const rating = b._rating
-        ? `<span class="directory-rating"><b>★</b> ${b._rating.toFixed(1)}</span>`
-        : `<span class="directory-rating">Sin reseñas</span>`;
+    const featuredBadge = b.is_featured === true
+        ? '<span class="uxd-featured">Destacado</span>'
+        : '';
 
     return `
-        <a class="directory-card" href="${NEGOCIO_URL(b.slug)}">
-            <div class="directory-card-media">
+        <a class="uxd-card" href="${NEGOCIO_URL(b.slug)}" aria-label="Ver perfil de ${esc(b.name)}">
+            <div class="uxd-card-media">
+                ${featuredBadge}
                 ${media}
             </div>
 
-            <div class="directory-card-body">
-                <span class="directory-card-category">${esc(categoryLabel)}</span>
+            <div class="uxd-card-body">
+                <span class="uxd-category">${esc(categoryLabel)}</span>
                 <h3>${esc(b.name)}</h3>
 
-                <p class="directory-card-location">
+                <p class="uxd-location">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z"/>
                     </svg>
-                    <span>${esc(locationText)}</span>
+                    <span>${esc(cityLabel)}</span>
                 </p>
 
-                <div class="directory-card-footer">
+                <div class="uxd-card-footer">
                     <span class="${statusClass}">${statusText}</span>
-                    ${rating}
+                    <span class="uxd-card-action">
+                        Ver perfil
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="m13.17 5.17 1.42-1.42L22.83 12l-8.24 8.25-1.42-1.42L19 13H2v-2h17l-5.83-5.83Z"/>
+                        </svg>
+                    </span>
                 </div>
             </div>
         </a>
@@ -3473,26 +3619,73 @@ function dirCardHtml(b) {
 }
 
 function renderDir() {
-    const list = filtered().sort((a, b) =>
-        String(a.name || '').localeCompare(String(b.name || ''), 'es')
-    );
+    const baseList = filtered();
+    const query = normalizeDirectoryText(directoryQuery);
+
+    let list = baseList.filter(business => {
+        if (!query) return true;
+
+        const searchable = normalizeDirectoryText([
+            business.name,
+            business.categories?.name,
+            business.subcategories?.name,
+            businessCity(business),
+            business.address,
+        ].filter(Boolean).join(' '));
+
+        return searchable.includes(query);
+    });
+
+    list.sort((a, b) => {
+        if (directorySortMode === 'rating') {
+            const ratingDifference = Number(b._rating || 0) - Number(a._rating || 0);
+            if (ratingDifference !== 0) return ratingDifference;
+        }
+
+        if (directorySortMode === 'featured') {
+            const featuredDifference = Number(b.is_featured === true) - Number(a.is_featured === true);
+            if (featuredDifference !== 0) return featuredDifference;
+        }
+
+        return String(a.name || '').localeCompare(String(b.name || ''), 'es');
+    });
 
     const grid = document.getElementById('dirGrid');
     const meta = document.getElementById('directoryMeta');
+    const locationLabel = document.getElementById('directoryLocationLabel');
+    const visibleCount = document.getElementById('directoryVisibleCount');
+    const location = currentLocationLabel();
 
     if (meta) {
-        const location = currentLocationLabel();
-        meta.textContent = `${list.length} negocio${list.length === 1 ? '' : 's'} · ${location}`;
+        meta.textContent = `${baseList.length} negocio${baseList.length === 1 ? '' : 's'} disponibles`;
+    }
+
+    if (locationLabel) {
+        locationLabel.textContent = location;
+    }
+
+    if (visibleCount) {
+        visibleCount.textContent = `${list.length} resultado${list.length === 1 ? '' : 's'}`;
     }
 
     grid.innerHTML = list.length
         ? list.map(dirCardHtml).join('')
         : `
-            <div class="directory-empty">
-                No hay negocios disponibles con la ubicación y los filtros seleccionados.
+            <div class="uxd-empty">
+                No hay negocios que coincidan con la búsqueda, la ubicación y los filtros seleccionados.
             </div>
         `;
 }
+
+document.getElementById('directorySearch')?.addEventListener('input', event => {
+    directoryQuery = event.target.value || '';
+    renderDir();
+});
+
+document.getElementById('directorySort')?.addEventListener('change', event => {
+    directorySortMode = event.target.value || 'featured';
+    renderDir();
+});
 
 document.getElementById('directorioModal')?.addEventListener('click', event => {
     if (event.target.id === 'directorioModal') {
@@ -3501,8 +3694,14 @@ document.getElementById('directorioModal')?.addEventListener('click', event => {
 });
 
 // Cerrar modal con Escape
-document.addEventListener('keydown', e=>{ if(e.key==='Escape' && document.getElementById('directorioModal')?.style.display==='flex') closeDirectorio(); });
-
+document.addEventListener('keydown', event => {
+    if (
+        event.key === 'Escape' &&
+        document.getElementById('directorioModal')?.style.display === 'flex'
+    ) {
+        closeDirectorio();
+    }
+});
 
 const locationPickerButton = document.getElementById('locationPickerButton');
 const locationPickerPanel = document.getElementById('locationPickerPanel');
