@@ -2521,6 +2521,284 @@ body {
 }
 </style>
 
+
+<style id="urbanex-featured-professional-large-screens-only">
+/* ============================================================
+   ÚNICO CAMBIO: presentación de DESTACADOS en tablet y computador.
+   La vista celular (hasta 640px) queda completamente intacta.
+   ============================================================ */
+
+@media (min-width:641px){
+    .aside-showcase-list{
+        position:relative!important;
+    }
+
+    .showcase-header{
+        position:relative!important;
+        padding:22px 18px 15px!important;
+        border-bottom:1px solid rgba(229,193,88,.18)!important;
+        background:
+            linear-gradient(90deg,rgba(229,193,88,.08),transparent 72%)!important;
+    }
+
+    .showcase-header::after{
+        content:""!important;
+        position:absolute!important;
+        left:18px!important;
+        bottom:-1px!important;
+        width:54px!important;
+        height:2px!important;
+        border-radius:999px!important;
+        background:linear-gradient(90deg,var(--gold),rgba(229,193,88,.12))!important;
+        box-shadow:0 0 14px rgba(229,193,88,.38)!important;
+    }
+
+    .showcase-header h2{
+        font-family:var(--font-sans)!important;
+        font-size:11px!important;
+        font-weight:800!important;
+        letter-spacing:2.4px!important;
+        color:var(--gold)!important;
+        text-shadow:0 0 16px rgba(229,193,88,.18)!important;
+    }
+
+    .shops-scroll-area{
+        display:flex!important;
+        flex-direction:column!important;
+        align-items:center!important;
+        justify-content:flex-start!important;
+        gap:0!important;
+        padding:18px!important;
+        overflow:hidden!important;
+    }
+
+    .shop-card{
+        position:relative!important;
+        width:100%!important;
+        max-width:100%!important;
+        overflow:hidden!important;
+        border:1px solid rgba(229,193,88,.42)!important;
+        border-radius:16px!important;
+        background:
+            radial-gradient(circle at 12% 12%,rgba(229,193,88,.16),transparent 34%),
+            linear-gradient(145deg,rgba(24,24,24,.96),rgba(6,6,6,.94))!important;
+        box-shadow:
+            0 18px 38px rgba(0,0,0,.42),
+            inset 0 1px 0 rgba(255,255,255,.04)!important;
+        transform:none!important;
+        transition:
+            border-color .25s ease,
+            box-shadow .25s ease,
+            transform .25s ease!important;
+    }
+
+    .shop-card::before{
+        content:"PUBLICIDAD DESTACADA"!important;
+        position:absolute!important;
+        top:12px!important;
+        right:12px!important;
+        z-index:5!important;
+        min-height:20px!important;
+        display:inline-flex!important;
+        align-items:center!important;
+        padding:0 8px!important;
+        border:1px solid rgba(229,193,88,.45)!important;
+        border-radius:999px!important;
+        background:rgba(4,4,4,.82)!important;
+        color:var(--gold)!important;
+        font-size:6.5px!important;
+        font-weight:800!important;
+        letter-spacing:.85px!important;
+        white-space:nowrap!important;
+        backdrop-filter:blur(8px)!important;
+        -webkit-backdrop-filter:blur(8px)!important;
+    }
+
+    .shop-card::after{
+        content:""!important;
+        position:absolute!important;
+        inset:0!important;
+        z-index:0!important;
+        pointer-events:none!important;
+        background:
+            linear-gradient(115deg,transparent 0 42%,rgba(255,255,255,.045) 50%,transparent 58%)!important;
+        transform:translateX(-120%)!important;
+        transition:transform .75s ease!important;
+    }
+
+    .shop-card:hover{
+        transform:translateY(-4px)!important;
+        border-color:rgba(229,193,88,.78)!important;
+        box-shadow:
+            0 24px 52px rgba(0,0,0,.52),
+            0 0 0 1px rgba(229,193,88,.08),
+            0 0 28px rgba(229,193,88,.10)!important;
+    }
+
+    .shop-card:hover::after{
+        transform:translateX(120%)!important;
+    }
+
+    .shop-thumb-wrapper,
+    .shop-details{
+        position:relative!important;
+        z-index:1!important;
+    }
+
+    .shop-thumb-wrapper{
+        overflow:hidden!important;
+        border:1px solid rgba(229,193,88,.30)!important;
+        border-radius:13px!important;
+        background:#fff!important;
+        box-shadow:
+            0 10px 26px rgba(0,0,0,.32),
+            inset 0 0 0 1px rgba(255,255,255,.55)!important;
+    }
+
+    .shop-thumb{
+        width:100%!important;
+        height:100%!important;
+        padding:7px!important;
+        object-fit:contain!important;
+        object-position:center!important;
+        background:#fff!important;
+    }
+
+    .shop-details{
+        justify-content:center!important;
+        gap:4px!important;
+    }
+
+    .shop-title{
+        color:#fff!important;
+        font-size:14px!important;
+        font-weight:800!important;
+        line-height:1.2!important;
+        letter-spacing:-.15px!important;
+        text-shadow:0 2px 12px rgba(0,0,0,.40)!important;
+    }
+
+    .shop-segment{
+        color:var(--gold)!important;
+        font-size:9.5px!important;
+        font-weight:700!important;
+        line-height:1.3!important;
+    }
+
+    .shop-rating-row{
+        margin-top:5px!important;
+        min-width:0!important;
+    }
+
+    .rating-count,
+    .rating-value{
+        font-size:9.5px!important;
+    }
+
+    .status-open,
+    .status-closed{
+        padding:4px 8px!important;
+        border-radius:999px!important;
+        font-size:8.5px!important;
+        font-weight:700!important;
+    }
+
+    .action-footer-box{
+        padding:14px 18px 18px!important;
+        border-top:1px solid rgba(229,193,88,.12)!important;
+    }
+
+    .btn-view-all-shops{
+        min-height:42px!important;
+        border-radius:11px!important;
+        font-size:11px!important;
+        font-weight:800!important;
+        box-shadow:0 12px 28px rgba(229,193,88,.18)!important;
+    }
+}
+
+/* Computador: tarjeta vertical tipo anuncio premium. */
+@media (min-width:1025px){
+    .shops-scroll-area{
+        min-height:292px!important;
+        max-height:292px!important;
+    }
+
+    .shop-card{
+        height:222px!important;
+        flex:0 0 222px!important;
+        flex-direction:column!important;
+        align-items:stretch!important;
+    }
+
+    .shop-thumb-wrapper{
+        width:100%!important;
+        height:112px!important;
+        flex:0 0 112px!important;
+        margin:0!important;
+        border-width:0 0 1px 0!important;
+        border-radius:15px 15px 0 0!important;
+    }
+
+    .shop-thumb{
+        padding:12px!important;
+    }
+
+    .shop-details{
+        flex:1 1 auto!important;
+        padding:14px 15px 13px!important;
+    }
+
+    .shop-title{
+        padding-right:4px!important;
+    }
+}
+
+/* Tablet: anuncio horizontal amplio y centrado. */
+@media (min-width:641px) and (max-width:1024px){
+    .aside-showcase-list{
+        min-height:228px!important;
+        overflow:hidden!important;
+    }
+
+    .shops-scroll-area{
+        min-height:130px!important;
+        max-height:130px!important;
+        padding:14px 18px!important;
+    }
+
+    .shop-card{
+        width:min(760px,100%)!important;
+        height:102px!important;
+        flex:0 0 102px!important;
+        flex-direction:row!important;
+        align-items:center!important;
+    }
+
+    .shop-thumb-wrapper{
+        width:90px!important;
+        height:90px!important;
+        flex:0 0 90px!important;
+        margin-left:6px!important;
+    }
+
+    .shop-details{
+        padding:12px 18px!important;
+    }
+
+    .shop-title{
+        font-size:15px!important;
+    }
+}
+
+@media (prefers-reduced-motion:reduce) and (min-width:641px){
+    .shop-card,
+    .shop-card::after{
+        transition:none!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
