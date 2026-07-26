@@ -2456,6 +2456,55 @@ body {
 }
 </style>
 
+
+<style id="urbanex-side-panels-translucent-real">
+/* ÚNICO CAMBIO: translucidez real de los paneles laterales.
+   La imagen del Boulevard se extiende detrás de las tres columnas. */
+.dashboard-container{
+    isolation:isolate!important;
+    background:#020202!important;
+}
+
+.dashboard-container::before{
+    content:""!important;
+    position:absolute!important;
+    inset:0!important;
+    z-index:0!important;
+    pointer-events:none!important;
+    background-image:url("imagenes/Boulevard.png")!important;
+    background-size:cover!important;
+    background-position:center bottom!important;
+    background-repeat:no-repeat!important;
+}
+
+.aside-categories,
+.main-boulevard,
+.aside-showcase-list{
+    position:relative!important;
+    z-index:1!important;
+}
+
+.main-boulevard{
+    background-image:none!important;
+    background-color:transparent!important;
+}
+
+.aside-categories,
+.aside-showcase-list{
+    background:rgba(3,3,3,.46)!important;
+    backdrop-filter:blur(12px) saturate(.92)!important;
+    -webkit-backdrop-filter:blur(12px) saturate(.92)!important;
+}
+
+.aside-categories{
+    box-shadow:inset -1px 0 rgba(229,193,88,.10)!important;
+}
+
+.aside-showcase-list{
+    box-shadow:inset 1px 0 rgba(229,193,88,.10)!important;
+}
+</style>
+
 </head>
 <body>
 
