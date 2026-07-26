@@ -2194,6 +2194,126 @@ body {
 }
 </style>
 
+
+<style id="urbanex-directory-category-groups-v3">
+/* Distinción visual por categoría dentro de Todos los negocios. */
+.uxd-grid{
+    display:block!important;
+    padding:14px!important;
+}
+
+.uxd-category-section{
+    margin:0 0 15px;
+    overflow:hidden;
+    border:1px solid #d8e1ea;
+    border-radius:16px;
+    background:#f8fafc;
+    box-shadow:0 8px 22px rgba(20,43,77,.055);
+}
+
+.uxd-category-section:last-child{
+    margin-bottom:0;
+}
+
+.uxd-category-head{
+    min-height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:9px 12px 9px 14px;
+    border-bottom:1px solid #dfe6ee;
+    background:
+        linear-gradient(90deg,rgba(255,159,10,.13),transparent 38%),
+        #ffffff;
+}
+
+.uxd-category-heading{
+    min-width:0;
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.uxd-category-marker{
+    width:4px;
+    height:24px;
+    flex:0 0 4px;
+    border-radius:999px;
+    background:linear-gradient(180deg,var(--uxd-orange),#c96f00);
+    box-shadow:0 0 0 4px rgba(255,159,10,.10);
+}
+
+.uxd-category-title{
+    min-width:0;
+    margin:0;
+    overflow:hidden;
+    color:var(--uxd-navy);
+    font-family:var(--font-sans);
+    font-size:12px;
+    font-weight:900;
+    line-height:1.2;
+    letter-spacing:.55px;
+    text-overflow:ellipsis;
+    text-transform:uppercase;
+    white-space:nowrap;
+}
+
+.uxd-category-total{
+    flex:0 0 auto;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:26px;
+    padding:0 10px;
+    border:1px solid rgba(20,43,77,.14);
+    border-radius:999px;
+    background:var(--uxd-navy);
+    color:#fff;
+    font-size:7px;
+    font-weight:900;
+    letter-spacing:.35px;
+    white-space:nowrap;
+}
+
+.uxd-category-cards,
+.uxd-loading-grid{
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    align-items:stretch;
+    gap:12px;
+    padding:12px;
+}
+
+.uxd-loading-grid{
+    padding:0;
+}
+
+@media (min-width:641px) and (max-width:1024px){
+    .uxd-grid{padding:8px!important;}
+    .uxd-category-section{margin-bottom:9px;border-radius:12px;}
+    .uxd-category-head{min-height:34px;padding:6px 7px 6px 9px;}
+    .uxd-category-marker{width:3px;height:18px;flex-basis:3px;box-shadow:none;}
+    .uxd-category-title{font-size:8px;letter-spacing:.35px;}
+    .uxd-category-total{min-height:20px;padding:0 7px;font-size:5.5px;}
+    .uxd-category-cards,
+    .uxd-loading-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;padding:7px;}
+    .uxd-loading-grid{padding:0;}
+}
+
+@media (max-width:640px){
+    .uxd-grid{padding:9px!important;}
+    .uxd-category-section{margin-bottom:11px;border-radius:14px;}
+    .uxd-category-head{min-height:39px;padding:7px 9px 7px 11px;}
+    .uxd-category-marker{height:20px;}
+    .uxd-category-title{font-size:9px;letter-spacing:.38px;}
+    .uxd-category-total{min-height:23px;padding:0 8px;font-size:6px;}
+    .uxd-category-cards,
+    .uxd-loading-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:9px;}
+    .uxd-loading-grid{padding:0;}
+}
+</style>
+
 </head>
 <body>
 
@@ -2393,12 +2513,14 @@ body {
         </div>
 
         <div id="dirGrid" class="uxd-grid" aria-live="polite">
-            <div class="uxd-skeleton"></div>
-            <div class="uxd-skeleton"></div>
-            <div class="uxd-skeleton"></div>
-            <div class="uxd-skeleton"></div>
-            <div class="uxd-skeleton"></div>
-            <div class="uxd-skeleton"></div>
+            <div class="uxd-loading-grid">
+                <div class="uxd-skeleton"></div>
+                <div class="uxd-skeleton"></div>
+                <div class="uxd-skeleton"></div>
+                <div class="uxd-skeleton"></div>
+                <div class="uxd-skeleton"></div>
+                <div class="uxd-skeleton"></div>
+            </div>
         </div>
     </section>
 </div>
@@ -3529,10 +3651,14 @@ window.openDirectorio = async () => {
     document.body.style.overflow = 'hidden';
 
     if (!fullDirectoryLoaded && grid) {
-        grid.innerHTML = Array.from(
-            { length: 12 },
-            () => '<div class="uxd-skeleton"></div>'
-        ).join('');
+        grid.innerHTML = `
+            <div class="uxd-loading-grid">
+                ${Array.from(
+                    { length: 12 },
+                    () => '<div class="uxd-skeleton"></div>'
+                ).join('')}
+            </div>
+        `;
     }
 
     window.setTimeout(() => closeButton?.focus(), 0);
@@ -3668,13 +3794,54 @@ function renderDir() {
         visibleCount.textContent = `${list.length} resultado${list.length === 1 ? '' : 's'}`;
     }
 
-    grid.innerHTML = list.length
-        ? list.map(dirCardHtml).join('')
-        : `
+    if (!list.length) {
+        grid.innerHTML = `
             <div class="uxd-empty">
                 No hay negocios que coincidan con la búsqueda, la ubicación y los filtros seleccionados.
             </div>
         `;
+        return;
+    }
+
+    const categoryGroups = new Map();
+
+    list.forEach(business => {
+        const categoryName = String(
+            business.categories?.name || 'Sin categoría'
+        ).trim() || 'Sin categoría';
+
+        if (!categoryGroups.has(categoryName)) {
+            categoryGroups.set(categoryName, []);
+        }
+
+        categoryGroups.get(categoryName).push(business);
+    });
+
+    const orderedGroups = Array.from(categoryGroups.entries()).sort(
+        ([categoryA], [categoryB]) =>
+            categoryA.localeCompare(categoryB, 'es', { sensitivity: 'base' })
+    );
+
+    grid.innerHTML = orderedGroups.map(([categoryName, businesses]) => `
+        <section class="uxd-category-section" aria-labelledby="uxd-category-${esc(normalizeDirectoryText(categoryName).replace(/[^a-z0-9]+/g, '-'))}">
+            <header class="uxd-category-head">
+                <div class="uxd-category-heading">
+                    <span class="uxd-category-marker" aria-hidden="true"></span>
+                    <h3
+                        class="uxd-category-title"
+                        id="uxd-category-${esc(normalizeDirectoryText(categoryName).replace(/[^a-z0-9]+/g, '-'))}"
+                    >${esc(categoryName)}</h3>
+                </div>
+                <span class="uxd-category-total">
+                    ${businesses.length} negocio${businesses.length === 1 ? '' : 's'}
+                </span>
+            </header>
+
+            <div class="uxd-category-cards">
+                ${businesses.map(dirCardHtml).join('')}
+            </div>
+        </section>
+    `).join('');
 }
 
 document.getElementById('directorySearch')?.addEventListener('input', event => {
