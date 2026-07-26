@@ -1,0 +1,406 @@
+/* Urbanex: selector global de provincia y ciudad/cantón */
+.urbanex-global-location {
+    position: relative;
+    flex: 0 0 auto;
+    z-index: 100200;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+
+.urbanex-location-trigger {
+    width: auto;
+    min-width: 150px;
+    max-width: 220px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 12px;
+    border: 1px solid rgba(229, 193, 88, .42);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, .48);
+    color: #fff;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color .22s ease, background .22s ease;
+}
+
+.urbanex-location-trigger:hover,
+.urbanex-location-trigger[aria-expanded="true"] {
+    border-color: #e5c158;
+    background: rgba(229, 193, 88, .08);
+}
+
+.urbanex-location-trigger svg {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+    fill: #e5c158;
+}
+
+.urbanex-location-value {
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+}
+
+.urbanex-location-chevron {
+    flex: 0 0 auto;
+    margin-left: auto;
+    color: #e5c158;
+    font-size: 13px;
+    line-height: 1;
+    transition: transform .2s ease;
+}
+
+.urbanex-location-trigger[aria-expanded="true"] .urbanex-location-chevron {
+    transform: rotate(180deg);
+}
+
+.urbanex-location-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: 100210;
+    width: min(310px, calc(100vw - 24px));
+    padding: 16px;
+    border: 1px solid rgba(229, 193, 88, .34);
+    border-radius: 14px;
+    background: rgba(5, 5, 5, .985);
+    box-shadow: 0 22px 60px rgba(0, 0, 0, .72);
+    color: #fff;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.urbanex-location-panel[hidden] {
+    display: none !important;
+}
+
+.urbanex-location-title {
+    margin: 0 0 13px;
+    color: #e5c158;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+}
+
+.urbanex-location-field {
+    position: relative;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.urbanex-location-field > span {
+    display: block;
+    margin-bottom: 6px;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.urbanex-location-field select {
+    width: 100%;
+    height: 40px;
+    padding: 0 11px;
+    border: 1px solid rgba(255, 255, 255, .13);
+    border-radius: 9px;
+    outline: none;
+    background: #0b0b0b;
+    color: #fff;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.urbanex-location-field select:focus {
+    border-color: #e5c158;
+}
+
+.urbanex-location-field select:disabled {
+    opacity: .7;
+    cursor: not-allowed;
+}
+
+.urbanex-location-field option {
+    background: #fff;
+    color: #111;
+}
+
+.urbanex-location-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.urbanex-location-actions button {
+    height: 38px;
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 10.5px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.urbanex-location-cancel {
+    border: 1px solid rgba(255, 255, 255, .15);
+    background: transparent;
+    color: #ddd;
+}
+
+.urbanex-location-apply {
+    border: 1px solid #e5c158;
+    background: #e5c158;
+    color: #090909;
+}
+
+.urbanex-location-cancel:hover {
+    border-color: rgba(255, 255, 255, .32);
+    color: #fff;
+}
+
+.urbanex-location-apply:hover {
+    background: #f1cd6b;
+}
+
+.urbanex-desktop-select {
+    display: none;
+}
+
+@media (min-width: 641px) {
+    .urbanex-location-panel {
+        overflow: visible;
+    }
+
+    .urbanex-location-field > select {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        overflow: hidden !important;
+    }
+
+    .urbanex-desktop-select {
+        position: relative;
+        display: block;
+        width: 100%;
+    }
+
+    .urbanex-desktop-select-button {
+        width: 100%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 0 11px;
+        border: 1px solid rgba(255, 255, 255, .13);
+        border-radius: 9px;
+        background: #0b0b0b;
+        color: #fff;
+        font-family: inherit;
+        font-size: 11px;
+        text-align: left;
+        cursor: pointer;
+        transition: border-color .22s ease, background .22s ease;
+    }
+
+    .urbanex-desktop-select-button:hover,
+    .urbanex-desktop-select-button[aria-expanded="true"] {
+        border-color: #e5c158;
+        background: rgba(229, 193, 88, .06);
+    }
+
+    .urbanex-desktop-select-button:disabled {
+        opacity: .7;
+        cursor: not-allowed;
+    }
+
+    .urbanex-desktop-select-value {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .urbanex-desktop-select-chevron {
+        flex: 0 0 auto;
+        color: #e5c158;
+        font-size: 13px;
+        transition: transform .2s ease;
+    }
+
+    .urbanex-desktop-select-button[aria-expanded="true"] .urbanex-desktop-select-chevron {
+        transform: rotate(180deg);
+    }
+
+    .urbanex-desktop-select-list {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        right: 0;
+        z-index: 100220;
+        display: none;
+        max-height: 238px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: 6px;
+        border: 1px solid rgba(229, 193, 88, .34);
+        border-radius: 10px;
+        background: rgba(7, 7, 7, .99);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, .72);
+        scrollbar-width: thin;
+    }
+
+    .urbanex-desktop-select-list.open {
+        display: block;
+    }
+
+    .urbanex-desktop-select-option {
+        width: 100%;
+        min-height: 34px;
+        display: flex;
+        align-items: center;
+        padding: 7px 9px;
+        border: 1px solid transparent;
+        border-radius: 7px;
+        background: transparent;
+        color: #e9e9e9;
+        font-family: inherit;
+        font-size: 10.5px;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .urbanex-desktop-select-option:hover {
+        border-color: rgba(229, 193, 88, .20);
+        background: rgba(229, 193, 88, .08);
+        color: #fff;
+    }
+
+    .urbanex-desktop-select-option.selected {
+        border-color: rgba(229, 193, 88, .42);
+        background: rgba(229, 193, 88, .13);
+        color: #e5c158;
+        font-weight: 600;
+    }
+}
+
+/* Integración con los encabezados existentes */
+.user-tools.urbanex-location-tools {
+    display: flex;
+    align-items: center;
+}
+
+.header-top > .urbanex-location-tools,
+.site-header > .urbanex-location-tools,
+.ux-home-header > .urbanex-location-tools,
+.header > .urbanex-location-tools {
+    margin-left: auto;
+}
+
+@media (max-width: 720px) {
+    .urbanex-location-trigger {
+        width: 136px;
+        min-width: 0;
+        max-width: 136px;
+        height: 36px;
+        padding: 0 10px;
+        gap: 6px;
+        font-size: 10px;
+    }
+
+    .urbanex-location-panel {
+        position: fixed;
+        top: 66px;
+        left: 10px;
+        right: 10px;
+        width: auto;
+        max-height: calc(100svh - 90px);
+        overflow-y: auto;
+        padding: 14px;
+    }
+
+    .user-tools.urbanex-location-tools {
+        display: flex !important;
+        position: absolute !important;
+        top: 12px !important;
+        right: 10px !important;
+        width: auto !important;
+        margin: 0 !important;
+        justify-content: flex-end !important;
+        z-index: 100205 !important;
+    }
+
+    .user-tools.urbanex-location-tools > :not(.urbanex-global-location) {
+        display: none !important;
+    }
+
+    .header-top > .urbanex-location-tools,
+    .site-header > .urbanex-location-tools,
+    .ux-home-header > .urbanex-location-tools,
+    .header > .urbanex-location-tools {
+        margin-left: auto !important;
+    }
+}
+
+@media (max-width: 390px) {
+    .urbanex-location-trigger {
+        width: 124px;
+        max-width: 124px;
+        font-size: 9.5px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .urbanex-location-trigger,
+    .urbanex-location-chevron,
+    .urbanex-desktop-select-button,
+    .urbanex-desktop-select-chevron {
+        transition: none;
+    }
+}
+
+
+/* Integración definitiva con categorías y subcategorías */
+@media (max-width: 720px) {
+    .header-top {
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        grid-template-rows: 58px 38px !important;
+        grid-template-areas: "brand tools" "search search" !important;
+    }
+
+    .header-top .brand-box {
+        grid-area: brand !important;
+        width: auto !important;
+        min-width: 0 !important;
+        justify-content: flex-start !important;
+    }
+
+    .header-top .search-wrapper {
+        grid-area: search !important;
+    }
+
+    .header-top .user-tools.urbanex-location-tools {
+        grid-area: tools !important;
+        position: static !important;
+        top: auto !important;
+        right: auto !important;
+        align-self: center !important;
+        justify-self: end !important;
+    }
+
+    .header-top .urbanex-location-panel {
+        top: 68px !important;
+    }
+}
