@@ -5291,6 +5291,108 @@ body {
 }
 </style>
 
+
+<style id="urbanex-tablet-footer-gap-fix-only">
+/* ÚNICO CAMBIO PARA TABLET:
+   eliminar el espacio entre el contenido y el pie,
+   manteniendo el desplazamiento vertical y la actualización por gesto.
+*/
+@media (min-width:721px) and (max-width:1366px) and (pointer:coarse){
+    html,
+    body{
+        height:auto!important;
+        min-height:calc(100dvh + 1px)!important;
+        overflow-x:hidden!important;
+        overflow-y:auto!important;
+        overscroll-behavior-y:auto!important;
+        -webkit-overflow-scrolling:touch!important;
+    }
+
+    body{
+        padding-top:60px!important;
+        padding-bottom:24px!important;
+    }
+
+    .dashboard-container{
+        width:100%!important;
+        height:calc(100dvh - 84px)!important;
+        min-height:calc(100dvh - 84px)!important;
+        max-height:calc(100dvh - 84px)!important;
+        overflow:hidden!important;
+        margin:0!important;
+        padding-bottom:0!important;
+    }
+
+    .aside-categories,
+    .main-boulevard,
+    .aside-showcase-list{
+        height:100%!important;
+        min-height:0!important;
+        max-height:100%!important;
+        margin-bottom:0!important;
+    }
+
+    .main-boulevard{
+        background-size:cover!important;
+        background-position:center bottom!important;
+    }
+
+    .pie-pagina{
+        bottom:0!important;
+        margin:0!important;
+    }
+}
+
+/* Respaldo específico para iPadOS/Safari. */
+@supports (-webkit-touch-callout:none){
+    @media (min-width:721px) and (max-width:1366px){
+        html,
+        body{
+            height:auto!important;
+            min-height:calc(100dvh + 1px)!important;
+            overflow-x:hidden!important;
+            overflow-y:auto!important;
+            overscroll-behavior-y:auto!important;
+            -webkit-overflow-scrolling:touch!important;
+        }
+
+        body{
+            padding-top:60px!important;
+            padding-bottom:24px!important;
+        }
+
+        .dashboard-container{
+            width:100%!important;
+            height:calc(100dvh - 84px)!important;
+            min-height:calc(100dvh - 84px)!important;
+            max-height:calc(100dvh - 84px)!important;
+            overflow:hidden!important;
+            margin:0!important;
+            padding-bottom:0!important;
+        }
+
+        .aside-categories,
+        .main-boulevard,
+        .aside-showcase-list{
+            height:100%!important;
+            min-height:0!important;
+            max-height:100%!important;
+            margin-bottom:0!important;
+        }
+
+        .main-boulevard{
+            background-size:cover!important;
+            background-position:center bottom!important;
+        }
+
+        .pie-pagina{
+            bottom:0!important;
+            margin:0!important;
+        }
+    }
+}
+</style>
+
 </head>
 <body>
 
