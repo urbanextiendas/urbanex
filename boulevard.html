@@ -4084,6 +4084,292 @@ body {
 }
 </style>
 
+
+<style id="urbanex-mobile-featured-rich-card-only">
+/* ÚNICO CAMBIO: Destacados del celular con más información y un poco más alto. */
+@media (max-width:720px){
+    .aside-showcase-list{
+        min-height:218px!important;
+        height:auto!important;
+    }
+
+    .shops-scroll-area{
+        display:flex!important;
+        flex-direction:column!important;
+        min-height:166px!important;
+        max-height:166px!important;
+        padding:7px 10px 9px!important;
+        gap:0!important;
+        overflow:hidden!important;
+    }
+
+    .shop-card.shop-card-mobile-rich{
+        position:relative!important;
+        width:100%!important;
+        height:150px!important;
+        min-height:150px!important;
+        flex:0 0 150px!important;
+        display:grid!important;
+        grid-template-rows:minmax(0,1fr) 42px!important;
+        overflow:visible!important;
+        border:1px solid rgba(151,172,194,.22)!important;
+        border-radius:15px!important;
+        background:
+            radial-gradient(circle at 96% 0,rgba(91,122,151,.11),transparent 34%),
+            rgba(10,13,17,.78)!important;
+        box-shadow:
+            0 13px 28px rgba(0,0,0,.32),
+            inset 0 1px 0 rgba(255,255,255,.035)!important;
+        backdrop-filter:blur(12px) saturate(.92)!important;
+        -webkit-backdrop-filter:blur(12px) saturate(.92)!important;
+        transform:none!important;
+        text-decoration:none!important;
+    }
+
+    .shop-card-mobile-rich:hover{
+        transform:none!important;
+    }
+
+    .mobile-featured-profile{
+        min-width:0!important;
+        display:grid!important;
+        grid-template-columns:78px minmax(0,1fr)!important;
+        align-items:center!important;
+        gap:10px!important;
+        padding:8px 11px 7px!important;
+        color:inherit!important;
+        text-decoration:none!important;
+    }
+
+    .shop-card-mobile-rich .shop-thumb-wrapper{
+        width:78px!important;
+        height:78px!important;
+        min-width:78px!important;
+        min-height:78px!important;
+        flex:0 0 78px!important;
+        margin:0!important;
+        padding:0!important;
+        overflow:hidden!important;
+        border:1px solid rgba(151,172,194,.18)!important;
+        border-radius:13px!important;
+        background:#fff!important;
+        box-shadow:0 7px 16px rgba(0,0,0,.20)!important;
+    }
+
+    .shop-card-mobile-rich .shop-thumb{
+        width:100%!important;
+        height:100%!important;
+        max-width:100%!important;
+        max-height:100%!important;
+        padding:0!important;
+        object-fit:contain!important;
+        object-position:center!important;
+        border-radius:12px!important;
+        background:#fff!important;
+        transform:none!important;
+    }
+
+    .shop-card-mobile-rich .shop-details{
+        min-width:0!important;
+        display:flex!important;
+        flex-direction:column!important;
+        justify-content:center!important;
+        gap:3px!important;
+        padding:0!important;
+    }
+
+    .mobile-featured-topline{
+        min-width:0!important;
+        display:flex!important;
+        align-items:center!important;
+        gap:6px!important;
+    }
+
+    .shop-card-mobile-rich .shop-segment{
+        min-width:0!important;
+        flex:1 1 auto!important;
+        overflow:hidden!important;
+        color:#b8c4cf!important;
+        font-size:7.6px!important;
+        font-weight:700!important;
+        line-height:1.2!important;
+        text-overflow:ellipsis!important;
+        white-space:nowrap!important;
+    }
+
+    .shop-card-mobile-rich .status-open,
+    .shop-card-mobile-rich .status-closed{
+        flex:0 0 auto!important;
+        margin-left:auto!important;
+        padding:3px 6px!important;
+        border-radius:999px!important;
+        font-size:7px!important;
+        font-weight:700!important;
+        line-height:1!important;
+    }
+
+    .shop-card-mobile-rich .shop-title{
+        min-width:0!important;
+        overflow:hidden!important;
+        color:#fff!important;
+        font-size:12px!important;
+        font-weight:800!important;
+        line-height:1.2!important;
+        text-overflow:ellipsis!important;
+        white-space:nowrap!important;
+    }
+
+    .mobile-featured-address{
+        min-width:0!important;
+        display:flex!important;
+        align-items:flex-start!important;
+        gap:5px!important;
+        color:#d0d6dc!important;
+        font-size:7.6px!important;
+        line-height:1.28!important;
+    }
+
+    .mobile-featured-address > span:first-child{
+        flex:0 0 auto!important;
+        color:#8fa6ba!important;
+        font-size:9px!important;
+        line-height:1.1!important;
+    }
+
+    .mobile-featured-address > span:last-child{
+        min-width:0!important;
+        overflow:hidden!important;
+        display:-webkit-box!important;
+        -webkit-box-orient:vertical!important;
+        -webkit-line-clamp:2!important;
+    }
+
+    .shop-card-mobile-rich .shop-rating-row{
+        min-width:0!important;
+        display:flex!important;
+        align-items:center!important;
+        gap:4px!important;
+        margin-top:1px!important;
+    }
+
+    .shop-card-mobile-rich .rating-count,
+    .shop-card-mobile-rich .rating-value{
+        color:#aeb7bf!important;
+        font-size:7.5px!important;
+    }
+
+    .mobile-featured-footer{
+        min-width:0!important;
+        display:grid!important;
+        grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+        align-items:center!important;
+        gap:7px!important;
+        padding:5px 11px 7px!important;
+        border-top:1px solid rgba(151,172,194,.14)!important;
+        background:rgba(4,6,9,.38)!important;
+        border-radius:0 0 14px 14px!important;
+    }
+
+    .mobile-featured-whatsapp,
+    .mobile-featured-view{
+        min-width:0!important;
+        min-height:30px!important;
+        display:flex!important;
+        align-items:center!important;
+        justify-content:center!important;
+        gap:6px!important;
+        padding:4px 7px!important;
+        border:1px solid rgba(151,172,194,.18)!important;
+        border-radius:9px!important;
+        color:#eef3f6!important;
+        background:rgba(255,255,255,.028)!important;
+        text-decoration:none!important;
+    }
+
+    .mobile-featured-whatsapp{
+        justify-content:flex-start!important;
+        border-color:rgba(45,211,102,.23)!important;
+        background:rgba(45,211,102,.07)!important;
+    }
+
+    .mobile-featured-whatsapp-unavailable{
+        opacity:.68!important;
+    }
+
+    .mobile-featured-whatsapp-icon{
+        width:21px!important;
+        height:21px!important;
+        flex:0 0 21px!important;
+        display:grid!important;
+        place-items:center!important;
+        border-radius:7px!important;
+        color:#48df82!important;
+        background:rgba(45,211,102,.13)!important;
+        font-size:11px!important;
+        font-weight:800!important;
+    }
+
+    .mobile-featured-contact-copy{
+        min-width:0!important;
+        display:flex!important;
+        flex-direction:column!important;
+        gap:1px!important;
+    }
+
+    .mobile-featured-contact-copy small{
+        color:#8f9ca7!important;
+        font-size:6px!important;
+        font-weight:700!important;
+        line-height:1!important;
+        letter-spacing:.28px!important;
+        text-transform:uppercase!important;
+    }
+
+    .mobile-featured-contact-copy strong{
+        min-width:0!important;
+        overflow:hidden!important;
+        color:#f0f4f7!important;
+        font-size:7px!important;
+        font-weight:700!important;
+        line-height:1.15!important;
+        text-overflow:ellipsis!important;
+        white-space:nowrap!important;
+    }
+
+    .mobile-featured-view{
+        font-size:7.5px!important;
+        font-weight:800!important;
+        white-space:nowrap!important;
+    }
+
+    .mobile-featured-nav{
+        position:absolute!important;
+        bottom:41px!important;
+        z-index:10!important;
+        width:auto!important;
+        height:auto!important;
+        padding:0!important;
+        border:0!important;
+        border-radius:0!important;
+        background:transparent!important;
+        color:#eef3f6!important;
+        font-size:19px!important;
+        line-height:1!important;
+        text-shadow:0 2px 8px rgba(0,0,0,.60)!important;
+        transform:translateY(50%)!important;
+        cursor:pointer!important;
+    }
+
+    .mobile-featured-nav-left{
+        left:-2px!important;
+    }
+
+    .mobile-featured-nav-right{
+        right:-2px!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -5054,6 +5340,33 @@ window.featuredNextLarge = () => {
     renderShowcase();
 };
 
+
+window.featuredPreviousMobile = () => {
+    if (window.innerWidth > 720) return;
+
+    const list = getFeaturedBusinessesForNavigation();
+    if (!list.length) return;
+
+    featuredCarouselOffset =
+        (featuredCarouselOffset - 1 + list.length) % list.length;
+
+    featuredSlotIndices = [];
+    renderShowcase();
+};
+
+window.featuredNextMobile = () => {
+    if (window.innerWidth > 720) return;
+
+    const list = getFeaturedBusinessesForNavigation();
+    if (!list.length) return;
+
+    featuredCarouselOffset =
+        (featuredCarouselOffset + 1) % list.length;
+
+    featuredSlotIndices = [];
+    renderShowcase();
+};
+
 // ── Carga datos ───────────────────────────────────────────────
 async function boot() {
     const [catsRes, featuredRes] = await Promise.all([
@@ -5453,26 +5766,6 @@ function shopCardHtml(b) {
         ? `<div class="shop-thumb-wrapper"><img class="shop-thumb" src="${esc(b.cover_image)}" alt="${esc(b.name)}" loading="lazy"></div>`
         : `<div class="shop-thumb-wrapper">${b.subcategories?.icon||b.categories?.icon||'🏪'}</div>`;
 
-    /* El celular conserva exactamente la tarjeta anterior. */
-    if (window.innerWidth <= 720) {
-        return `<a class="shop-card" href="${NEGOCIO_URL(b.slug)}">
-            ${basicImgEl}
-            <div class="shop-details">
-                <div class="shop-title">${esc(b.name)}</div>
-                <div class="shop-segment">${catLabel}</div>
-                <div class="shop-rating-row">${ratingHtml}${statusHtml}</div>
-            </div>
-        </a>`;
-    }
-
-    const desktopImgEl = b.cover_image
-        ? `<div class="shop-thumb-wrapper shop-thumb-wrapper-featured">
-                <img class="shop-thumb" src="${esc(b.cover_image)}" alt="${esc(b.name)}" loading="lazy">
-           </div>`
-        : `<div class="shop-thumb-wrapper shop-thumb-wrapper-featured">
-                <span class="shop-thumb-fallback">${b.subcategories?.icon||b.categories?.icon||'🏪'}</span>
-           </div>`;
-
     const addressLabel = String(
         b.address || b.city || 'Dirección no registrada'
     ).trim();
@@ -5488,6 +5781,99 @@ function shopCardHtml(b) {
             `Hola, le contacto desde Urbanex. Deseo información de ${b.name}.`
         )}`
         : '';
+
+    /* En celular se muestra una tarjeta un poco más alta y con información completa. */
+    if (window.innerWidth <= 720) {
+        const mobileWhatsappBlock = whatsappValue
+            ? `
+                <a
+                    class="mobile-featured-whatsapp"
+                    href="${whatsappUrl}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onclick="event.stopPropagation()"
+                    aria-label="Contactar a ${esc(b.name)} por WhatsApp"
+                >
+                    <span class="mobile-featured-whatsapp-icon" aria-hidden="true">✆</span>
+                    <span class="mobile-featured-contact-copy">
+                        <small>WhatsApp</small>
+                        <strong>${esc(whatsappValue)}</strong>
+                    </span>
+                </a>
+            `
+            : `
+                <div class="mobile-featured-whatsapp mobile-featured-whatsapp-unavailable">
+                    <span class="mobile-featured-whatsapp-icon" aria-hidden="true">✆</span>
+                    <span class="mobile-featured-contact-copy">
+                        <small>WhatsApp</small>
+                        <strong>No registrado</strong>
+                    </span>
+                </div>
+            `;
+
+        return `
+            <article class="shop-card shop-card-mobile-rich">
+                <button
+                    type="button"
+                    class="mobile-featured-nav mobile-featured-nav-left"
+                    onclick="event.preventDefault(); event.stopPropagation(); featuredPreviousMobile();"
+                    aria-label="Ver destacado anterior"
+                >‹</button>
+
+                <button
+                    type="button"
+                    class="mobile-featured-nav mobile-featured-nav-right"
+                    onclick="event.preventDefault(); event.stopPropagation(); featuredNextMobile();"
+                    aria-label="Ver destacado siguiente"
+                >›</button>
+
+                <a
+                    class="mobile-featured-profile"
+                    href="${NEGOCIO_URL(b.slug)}"
+                    aria-label="Ver perfil de ${esc(b.name)}"
+                >
+                    ${basicImgEl}
+
+                    <div class="shop-details">
+                        <div class="mobile-featured-topline">
+                            <div class="shop-segment">${catLabel}</div>
+                            ${statusHtml}
+                        </div>
+
+                        <div class="shop-title">${esc(b.name)}</div>
+
+                        <div class="mobile-featured-address" title="${esc(addressLabel)}">
+                            <span aria-hidden="true">⌖</span>
+                            <span>${esc(addressLabel)}</span>
+                        </div>
+
+                        <div class="shop-rating-row">${ratingHtml}</div>
+                    </div>
+                </a>
+
+                <div class="mobile-featured-footer">
+                    ${mobileWhatsappBlock}
+
+                    <a
+                        class="mobile-featured-view"
+                        href="${NEGOCIO_URL(b.slug)}"
+                        aria-label="Ver negocio ${esc(b.name)}"
+                    >
+                        <span>Ver negocio</span>
+                        <span aria-hidden="true">→</span>
+                    </a>
+                </div>
+            </article>
+        `;
+    }
+
+    const desktopImgEl = b.cover_image
+        ? `<div class="shop-thumb-wrapper shop-thumb-wrapper-featured">
+                <img class="shop-thumb" src="${esc(b.cover_image)}" alt="${esc(b.name)}" loading="lazy">
+           </div>`
+        : `<div class="shop-thumb-wrapper shop-thumb-wrapper-featured">
+                <span class="shop-thumb-fallback">${b.subcategories?.icon||b.categories?.icon||'🏪'}</span>
+           </div>`;
 
     const whatsappBlock = whatsappValue
         ? `
