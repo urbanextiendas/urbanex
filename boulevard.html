@@ -4490,6 +4490,122 @@ body {
 }
 </style>
 
+
+<style id="urbanex-mobile-featured-actions-under-address-only">
+/* ÚNICO CAMBIO EN CELULAR:
+   WhatsApp y Ver negocio como acciones de texto,
+   sin recuadros y justo debajo de la dirección.
+*/
+@media (max-width:720px){
+    .shop-card.shop-card-mobile-rich{
+        grid-template-rows:minmax(0,1fr)!important;
+    }
+
+    .mobile-featured-profile{
+        padding-bottom:17px!important;
+    }
+
+    .mobile-featured-logo-link{
+        display:block!important;
+        align-self:center!important;
+        color:inherit!important;
+        text-decoration:none!important;
+    }
+
+    .mobile-featured-title-link{
+        display:block!important;
+        color:#fff!important;
+        text-decoration:none!important;
+    }
+
+    .mobile-featured-actions{
+        min-width:0!important;
+        display:flex!important;
+        align-items:center!important;
+        gap:9px!important;
+        margin-top:4px!important;
+        white-space:nowrap!important;
+    }
+
+    .mobile-featured-actions .mobile-featured-whatsapp,
+    .mobile-featured-actions .mobile-featured-view{
+        min-width:0!important;
+        min-height:0!important;
+        display:inline-flex!important;
+        align-items:center!important;
+        gap:4px!important;
+        padding:0!important;
+        border:0!important;
+        border-radius:0!important;
+        background:transparent!important;
+        line-height:1.2!important;
+        text-decoration:none!important;
+        overflow:hidden!important;
+    }
+
+    .mobile-featured-actions .mobile-featured-whatsapp{
+        flex:1 1 auto!important;
+        justify-content:flex-start!important;
+        color:#68d994!important;
+    }
+
+    .mobile-featured-actions .mobile-featured-whatsapp > span{
+        flex:0 0 auto!important;
+        color:#68d994!important;
+        font-size:6.2px!important;
+        font-weight:800!important;
+        letter-spacing:.25px!important;
+        text-transform:uppercase!important;
+    }
+
+    .mobile-featured-actions .mobile-featured-whatsapp > strong{
+        min-width:0!important;
+        overflow:hidden!important;
+        color:#dff7e8!important;
+        font-size:7px!important;
+        font-weight:700!important;
+        text-overflow:ellipsis!important;
+        white-space:nowrap!important;
+    }
+
+    .mobile-featured-actions .mobile-featured-view{
+        flex:0 0 auto!important;
+        position:relative!important;
+        padding-left:10px!important;
+        color:var(--gold)!important;
+        font-size:7px!important;
+        font-weight:800!important;
+    }
+
+    .mobile-featured-actions .mobile-featured-view::before{
+        content:""!important;
+        position:absolute!important;
+        left:0!important;
+        top:50%!important;
+        width:1px!important;
+        height:10px!important;
+        background:rgba(151,172,194,.26)!important;
+        transform:translateY(-50%)!important;
+    }
+
+    .mobile-featured-whatsapp-unavailable{
+        opacity:.65!important;
+    }
+
+    .mobile-featured-footer{
+        display:none!important;
+    }
+
+    .mobile-featured-whatsapp-icon{
+        display:none!important;
+    }
+
+    .mobile-featured-progress{
+        bottom:2px!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -5972,24 +6088,17 @@ function shopCardHtml(b) {
                     href="${whatsappUrl}"
                     target="_blank"
                     rel="noopener noreferrer"
-                    onclick="event.stopPropagation()"
                     aria-label="Contactar a ${esc(b.name)} por WhatsApp"
                 >
-                    <span class="mobile-featured-whatsapp-icon" aria-hidden="true">✆</span>
-                    <span class="mobile-featured-contact-copy">
-                        <small>WhatsApp</small>
-                        <strong>${esc(whatsappValue)}</strong>
-                    </span>
+                    <span>WhatsApp</span>
+                    <strong>${esc(whatsappValue)}</strong>
                 </a>
             `
             : `
-                <div class="mobile-featured-whatsapp mobile-featured-whatsapp-unavailable">
-                    <span class="mobile-featured-whatsapp-icon" aria-hidden="true">✆</span>
-                    <span class="mobile-featured-contact-copy">
-                        <small>WhatsApp</small>
-                        <strong>No registrado</strong>
-                    </span>
-                </div>
+                <span class="mobile-featured-whatsapp mobile-featured-whatsapp-unavailable">
+                    <span>WhatsApp</span>
+                    <strong>No registrado</strong>
+                </span>
             `;
 
         const mobileFeaturedList = getFeaturedBusinessesForNavigation();
@@ -6023,12 +6132,14 @@ function shopCardHtml(b) {
             <article class="shop-card shop-card-mobile-rich">
                 ${mobileProgressHtml}
 
-                <a
-                    class="mobile-featured-profile"
-                    href="${NEGOCIO_URL(b.slug)}"
-                    aria-label="Ver perfil de ${esc(b.name)}"
-                >
-                    ${basicImgEl}
+                <div class="mobile-featured-profile">
+                    <a
+                        class="mobile-featured-logo-link"
+                        href="${NEGOCIO_URL(b.slug)}"
+                        aria-label="Ver perfil de ${esc(b.name)}"
+                    >
+                        ${basicImgEl}
+                    </a>
 
                     <div class="shop-details">
                         <div class="mobile-featured-topline">
@@ -6036,28 +6147,28 @@ function shopCardHtml(b) {
                             ${statusHtml}
                         </div>
 
-                        <div class="shop-title">${esc(b.name)}</div>
+                        <a
+                            class="shop-title mobile-featured-title-link"
+                            href="${NEGOCIO_URL(b.slug)}"
+                        >${esc(b.name)}</a>
 
                         <div class="mobile-featured-address" title="${esc(addressLabel)}">
                             <span aria-hidden="true">⌖</span>
                             <span>${esc(addressLabel)}</span>
                         </div>
 
+                        <div class="mobile-featured-actions">
+                            ${mobileWhatsappBlock}
+
+                            <a
+                                class="mobile-featured-view"
+                                href="${NEGOCIO_URL(b.slug)}"
+                                aria-label="Ver negocio ${esc(b.name)}"
+                            >Ver negocio</a>
+                        </div>
+
                         <div class="shop-rating-row">${ratingHtml}</div>
                     </div>
-                </a>
-
-                <div class="mobile-featured-footer">
-                    ${mobileWhatsappBlock}
-
-                    <a
-                        class="mobile-featured-view"
-                        href="${NEGOCIO_URL(b.slug)}"
-                        aria-label="Ver negocio ${esc(b.name)}"
-                    >
-                        <span>Ver negocio</span>
-                        <span aria-hidden="true">→</span>
-                    </a>
                 </div>
             </article>
         `;
