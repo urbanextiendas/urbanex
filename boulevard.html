@@ -1573,6 +1573,523 @@ body {
 }
 </style>
 
+
+<style id="urbanex-directory-index-format-v1">
+/* Directorio "Todos": formato profesional coherente con index.html */
+.directory-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(7, 11, 18, 0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.directory-shell {
+    width: min(1580px, 100%);
+    max-height: calc(100svh - 40px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(20, 43, 77, 0.16);
+    border-radius: 22px;
+    background: #f3f6fa;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
+}
+
+.directory-header {
+    flex: 0 0 auto;
+    min-height: 92px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px 22px;
+    border-bottom: 1px solid #dfe5ec;
+    background:
+        radial-gradient(circle at 8% 0%, rgba(255, 159, 10, 0.12), transparent 32%),
+        #ffffff;
+}
+
+.directory-heading {
+    min-width: 0;
+}
+
+.directory-eyebrow {
+    display: block;
+    margin-bottom: 5px;
+    color: #a66300;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+}
+
+.directory-header h2 {
+    margin: 0;
+    color: #142b4d;
+    font-family: var(--font-sans);
+    font-size: clamp(21px, 2.2vw, 30px);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.7px;
+}
+
+.directory-meta {
+    margin-top: 6px;
+    color: #6d788a;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.directory-close {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #d5dde7;
+    border-radius: 12px;
+    background: #f7f9fb;
+    color: #142b4d;
+    cursor: pointer;
+    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}
+
+.directory-close:hover {
+    transform: translateY(-2px);
+    border-color: #ff9f0a;
+    background: #fff2dc;
+}
+
+.directory-close:focus-visible,
+.directory-card:focus-visible {
+    outline: 3px solid #ff9f0a;
+    outline-offset: 3px;
+}
+
+.directory-close svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.directory-grid {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-content: start;
+    gap: 14px;
+    padding: 18px;
+}
+
+.directory-card {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #dfe5ec;
+    border-radius: 15px;
+    background: #ffffff;
+    color: #172033;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(20, 43, 77, 0.07);
+    transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+
+.directory-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 3;
+    height: 4px;
+    background: linear-gradient(90deg, #ff9f0a, #142b4d);
+}
+
+.directory-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 159, 10, 0.72);
+    box-shadow: 0 16px 34px rgba(20, 43, 77, 0.14);
+}
+
+.directory-card-media {
+    position: relative;
+    width: 100%;
+    height: 126px;
+    flex: 0 0 126px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    padding: 10px;
+    border-bottom: 1px solid #e5eaf0;
+    background:
+        radial-gradient(circle at 50% 25%, rgba(255, 159, 10, 0.10), transparent 38%),
+        #f5f7fa;
+}
+
+.directory-card-media img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 8px;
+    background: #ffffff;
+    transition: transform .32s ease;
+}
+
+.directory-card:hover .directory-card-media img {
+    transform: scale(1.035);
+}
+
+.directory-card-placeholder {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 159, 10, 0.42);
+    border-radius: 16px;
+    background: #142b4d;
+    color: #ffffff;
+}
+
+.directory-card-placeholder svg {
+    width: 27px;
+    height: 27px;
+    fill: currentColor;
+}
+
+.directory-card-body {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+}
+
+.directory-card-category {
+    min-width: 0;
+    overflow: hidden;
+    color: #a66300;
+    font-size: 7.5px;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: .55px;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.directory-card h3 {
+    min-height: 31px;
+    margin: 7px 0 0;
+    overflow: hidden;
+    color: #142b4d;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.28;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.directory-card-location {
+    min-width: 0;
+    min-height: 29px;
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    margin: 7px 0 0;
+    overflow: hidden;
+    color: #6d788a;
+    font-size: 8px;
+    line-height: 1.42;
+}
+
+.directory-card-location svg {
+    width: 11px;
+    height: 11px;
+    flex: 0 0 11px;
+    margin-top: 1px;
+    fill: #ff9f0a;
+}
+
+.directory-card-location span {
+    min-width: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.directory-card-footer {
+    min-width: 0;
+    min-height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 9px;
+    border-top: 1px solid #edf0f4;
+}
+
+.directory-status {
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #8f5600;
+    font-size: 7.5px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.directory-status::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: 50%;
+    background: #ff9f0a;
+    box-shadow: 0 0 0 3px rgba(255, 159, 10, 0.12);
+}
+
+.directory-status.is-open {
+    color: #087441;
+}
+
+.directory-status.is-open::before {
+    background: #16a05d;
+    box-shadow: 0 0 0 3px rgba(22, 160, 93, 0.12);
+}
+
+.directory-rating {
+    flex: 0 0 auto;
+    color: #142b4d;
+    font-size: 7.5px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.directory-rating b {
+    color: #ff9f0a;
+    font-weight: 900;
+}
+
+.directory-empty {
+    grid-column: 1 / -1;
+    min-height: 180px;
+    display: grid;
+    place-items: center;
+    padding: 28px;
+    border: 1px dashed #ccd5df;
+    border-radius: 16px;
+    background: #ffffff;
+    color: #687487;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.directory-skeleton {
+    min-height: 245px;
+    border-radius: 15px;
+    background:
+        linear-gradient(90deg, transparent, rgba(255,255,255,.65), transparent),
+        #e5eaf0;
+    background-size: 220% 100%;
+    animation: directorySkeleton 1.25s linear infinite;
+}
+
+@keyframes directorySkeleton {
+    to { background-position: -220% 0; }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .directory-modal {
+        padding: 10px;
+    }
+
+    .directory-shell {
+        max-height: calc(100svh - 20px);
+        border-radius: 16px;
+    }
+
+    .directory-header {
+        min-height: 76px;
+        padding: 13px 14px;
+    }
+
+    .directory-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 7px;
+        padding: 9px;
+    }
+
+    .directory-card {
+        border-radius: 10px;
+    }
+
+    .directory-card-media {
+        height: 82px;
+        flex-basis: 82px;
+        padding: 6px;
+    }
+
+    .directory-card-body {
+        padding: 7px;
+    }
+
+    .directory-card-category {
+        font-size: 6px;
+        letter-spacing: .25px;
+    }
+
+    .directory-card h3 {
+        min-height: 27px;
+        margin-top: 5px;
+        font-size: 9px;
+        line-height: 1.28;
+    }
+
+    .directory-card-location {
+        min-height: 24px;
+        margin-top: 5px;
+        gap: 3px;
+        font-size: 6.5px;
+        line-height: 1.35;
+    }
+
+    .directory-card-location svg {
+        width: 8px;
+        height: 8px;
+        flex-basis: 8px;
+    }
+
+    .directory-card-footer {
+        min-height: 22px;
+        gap: 3px;
+        padding-top: 6px;
+    }
+
+    .directory-status,
+    .directory-rating {
+        font-size: 6px;
+    }
+
+    .directory-status {
+        gap: 3px;
+    }
+
+    .directory-status::before {
+        width: 5px;
+        height: 5px;
+        flex-basis: 5px;
+        box-shadow: none;
+    }
+
+    .directory-skeleton {
+        min-height: 170px;
+    }
+}
+
+@media (max-width: 640px) {
+    .directory-modal {
+        align-items: stretch;
+        padding: 8px;
+    }
+
+    .directory-shell {
+        width: 100%;
+        max-height: calc(100svh - 16px);
+        border-radius: 16px;
+    }
+
+    .directory-header {
+        min-height: 76px;
+        padding: 13px 14px;
+    }
+
+    .directory-eyebrow {
+        font-size: 7px;
+    }
+
+    .directory-header h2 {
+        font-size: 20px;
+    }
+
+    .directory-meta {
+        font-size: 9px;
+    }
+
+    .directory-close {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+    }
+
+    .directory-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .directory-card-media {
+        height: 116px;
+        flex-basis: 116px;
+        padding: 8px;
+    }
+
+    .directory-card-body {
+        padding: 10px;
+    }
+
+    .directory-card-category {
+        font-size: 7px;
+    }
+
+    .directory-card h3 {
+        min-height: 30px;
+        font-size: 11px;
+    }
+
+    .directory-card-location {
+        min-height: 27px;
+        font-size: 7.5px;
+    }
+
+    .directory-status,
+    .directory-rating {
+        font-size: 7px;
+    }
+
+    .directory-skeleton {
+        min-height: 224px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .directory-card,
+    .directory-card-media img,
+    .directory-close {
+        transition: none !important;
+    }
+
+    .directory-skeleton {
+        animation: none !important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -1712,18 +2229,46 @@ body {
 </div>
 
 <!-- MODAL DIRECTORIO -->
-<div id="directorioModal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);overflow-y:auto;padding:20px;">
-    <div style="max-width:1100px;margin:0 auto;background:#0a0a0a;border:1px solid var(--border-color);border-radius:16px;padding:24px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-            <h2 style="font-family:var(--font-serif);color:var(--gold);font-size:18px;letter-spacing:1px;">Directorio Completo</h2>
-            <button onclick="closeDirectorio()" style="background:none;border:none;color:#888;font-size:22px;cursor:pointer;">✕</button>
+<div
+    id="directorioModal"
+    class="directory-modal"
+    aria-hidden="true"
+>
+    <section
+        class="directory-shell"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="directoryTitle"
+    >
+        <header class="directory-header">
+            <div class="directory-heading">
+                <span class="directory-eyebrow">Urbanex · Directorio comercial</span>
+                <h2 id="directoryTitle">Todos los negocios</h2>
+                <p class="directory-meta" id="directoryMeta">Cargando negocios...</p>
+            </div>
+
+            <button
+                class="directory-close"
+                id="directoryCloseButton"
+                type="button"
+                onclick="closeDirectorio()"
+                aria-label="Cerrar directorio"
+            >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L10.59 13.41 4.29 19.71 2.88 18.3 9.17 12 2.88 5.7 4.29 4.29 10.59 10.59 16.89 4.29z"/>
+                </svg>
+            </button>
+        </header>
+
+        <div id="dirGrid" class="directory-grid">
+            <div class="directory-skeleton"></div>
+            <div class="directory-skeleton"></div>
+            <div class="directory-skeleton"></div>
+            <div class="directory-skeleton"></div>
+            <div class="directory-skeleton"></div>
+            <div class="directory-skeleton"></div>
         </div>
-        <div id="dirGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;">
-            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
-            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
-            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
-        </div>
-    </div>
+    </section>
 </div>
 
 <footer class="pie-pagina"><p>&copy; 2026 Urbanex. Desarrollado por NeoDat Consultores.</p></footer>
@@ -2829,67 +3374,134 @@ window.renderShowcase = () => {
 };
 
 // ── Modal Directorio ──────────────────────────────────────────
+let directoryPreviousFocus = null;
+
 window.openDirectorio = async () => {
     const modal = document.getElementById('directorioModal');
     const grid = document.getElementById('dirGrid');
+    const closeButton = document.getElementById('directoryCloseButton');
 
-    modal.style.display = 'block';
+    directoryPreviousFocus = document.activeElement;
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
 
     if (!fullDirectoryLoaded && grid) {
-        grid.innerHTML = `
-            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
-            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
-            <div class="skeleton" style="height:180px;border-radius:12px;"></div>
-        `;
+        grid.innerHTML = Array.from(
+            { length: 6 },
+            () => '<div class="directory-skeleton"></div>'
+        ).join('');
     }
+
+    window.setTimeout(() => closeButton?.focus(), 0);
 
     await ensureAllBusinessesLoaded(true);
     renderDir();
 };
+
 window.closeDirectorio = () => {
-    document.getElementById('directorioModal').style.display='none';
-    document.body.style.overflow='';
+    const modal = document.getElementById('directorioModal');
+
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+
+    if (directoryPreviousFocus instanceof HTMLElement) {
+        directoryPreviousFocus.focus();
+    }
+
+    directoryPreviousFocus = null;
 };
 
 function dirCardHtml(b) {
-    const imgEl = b.cover_image
-        ? `<img style="width:100%;height:130px;object-fit:cover;display:block;background:#111;" src="${esc(b.cover_image)}" alt="${esc(b.name)}" loading="lazy">`
-        : `<div style="width:100%;height:130px;background:linear-gradient(135deg,#0f0f0f,#1a1a1a);display:flex;align-items:center;justify-content:center;font-size:40px;">${b.subcategories?.icon||b.categories?.icon||'🏪'}</div>`;
+    const media = b.cover_image
+        ? `
+            <img
+                src="${esc(b.cover_image)}"
+                alt="${esc(b.name)}"
+                loading="lazy"
+                decoding="async"
+            >
+        `
+        : `
+            <div class="directory-card-placeholder" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 4h16l1 5v2a3 3 0 0 1-1 2.24V20h-7v-5h-2v5H4v-6.76A3 3 0 0 1 3 11V9l1-5Zm2 2-.6 3h13.2L18 6H6Zm-.9 5a1 1 0 0 0 2 0h-2Zm4 0a1 1 0 0 0 2 0h-2Zm4 0a1 1 0 0 0 2 0h-2Zm4 0a1 1 0 0 0 2 0h-2Z"/>
+                </svg>
+            </div>
+        `;
 
-    const catLabel = b.subcategories?.name
-        ? `${b.categories?.icon||''} ${b.categories?.name||''} › ${b.subcategories.icon||''} ${b.subcategories.name}`
-        : `${b.categories?.icon||''} ${b.categories?.name||''}`;
+    const categoryName = b.categories?.name || 'Sin categoría';
+    const subcategoryName = b.subcategories?.name || '';
+    const categoryLabel = subcategoryName
+        ? `${categoryName} · ${subcategoryName}`
+        : categoryName;
 
-    const openBadge = b._open
-        ? `<span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;background:rgba(46,213,115,.12);color:#2ed573;border:1px solid rgba(46,213,115,.3);">Abierto</span>`
-        : `<span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;background:rgba(255,71,87,.08);color:#ff4757;border:1px solid rgba(255,71,87,.2);">Cerrado</span>`;
+    const locationText = b.address || businessCity(b) || 'Ubicación no registrada';
+
+    const statusClass = b._open ? 'directory-status is-open' : 'directory-status';
+    const statusText = b._open ? 'Abierto' : 'Cerrado';
 
     const rating = b._rating
-        ? `<span style="font-size:11px;font-weight:700;color:#fff;">★ ${b._rating.toFixed(1)}</span><span style="font-size:10px;color:#888;">(${b._reviews})</span>`
-        : '';
+        ? `<span class="directory-rating"><b>★</b> ${b._rating.toFixed(1)}</span>`
+        : `<span class="directory-rating">Sin reseñas</span>`;
 
-    return `<a href="${NEGOCIO_URL(b.slug)}" style="background:rgba(20,20,20,.6);border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;transition:all .2s ease;" onmouseover="this.style.borderColor='rgba(229,193,88,.4)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
-        ${imgEl}
-        <div style="padding:12px;display:flex;flex-direction:column;gap:5px;">
-            <div style="font-size:9.5px;color:var(--gold);font-weight:700;letter-spacing:.5px;opacity:.8;">${catLabel}</div>
-            <div style="font-size:13px;font-weight:700;color:#fff;">${esc(b.name)}</div>
-            ${b.address?`<div style="font-size:10.5px;color:#888;">📍 ${esc(b.address)}</div>`:''}
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">${rating}${openBadge}</div>
-        </div>
-    </a>`;
+    return `
+        <a class="directory-card" href="${NEGOCIO_URL(b.slug)}">
+            <div class="directory-card-media">
+                ${media}
+            </div>
+
+            <div class="directory-card-body">
+                <span class="directory-card-category">${esc(categoryLabel)}</span>
+                <h3>${esc(b.name)}</h3>
+
+                <p class="directory-card-location">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z"/>
+                    </svg>
+                    <span>${esc(locationText)}</span>
+                </p>
+
+                <div class="directory-card-footer">
+                    <span class="${statusClass}">${statusText}</span>
+                    ${rating}
+                </div>
+            </div>
+        </a>
+    `;
 }
 
 function renderDir() {
-    const list = filtered().sort((a,b)=>a.name.localeCompare(b.name,'es'));
+    const list = filtered().sort((a, b) =>
+        String(a.name || '').localeCompare(String(b.name || ''), 'es')
+    );
+
     const grid = document.getElementById('dirGrid');
+    const meta = document.getElementById('directoryMeta');
+
+    if (meta) {
+        const location = currentLocationLabel();
+        meta.textContent = `${list.length} negocio${list.length === 1 ? '' : 's'} · ${location}`;
+    }
+
     grid.innerHTML = list.length
         ? list.map(dirCardHtml).join('')
-        : `<p style="grid-column:1/-1;text-align:center;padding:40px;color:#666;">No hay negocios con estos filtros.</p>`;
+        : `
+            <div class="directory-empty">
+                No hay negocios disponibles con la ubicación y los filtros seleccionados.
+            </div>
+        `;
 }
 
+document.getElementById('directorioModal')?.addEventListener('click', event => {
+    if (event.target.id === 'directorioModal') {
+        closeDirectorio();
+    }
+});
+
 // Cerrar modal con Escape
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDirectorio(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && document.getElementById('directorioModal')?.style.display==='flex') closeDirectorio(); });
 
 
 const locationPickerButton = document.getElementById('locationPickerButton');
