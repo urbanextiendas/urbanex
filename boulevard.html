@@ -2450,7 +2450,7 @@ body {
 /* ÚNICO CAMBIO: paneles laterales menos transparentes en computador, tablet y celular. */
 .aside-categories{
     background:
-        linear-gradient(rgba(3,3,3,.88), rgba(3,3,3,.88)),
+        linear-gradient(rgba(3,3,3,.94), rgba(3,3,3,.94)),
         url("imagenes/Boulevard.png") left center / cover no-repeat!important;
     backdrop-filter:blur(8px)!important;
     -webkit-backdrop-filter:blur(8px)!important;
@@ -2458,7 +2458,7 @@ body {
 
 .aside-showcase-list{
     background:
-        linear-gradient(rgba(3,3,3,.88), rgba(3,3,3,.88)),
+        linear-gradient(rgba(3,3,3,.94), rgba(3,3,3,.94)),
         url("imagenes/Boulevard.png") right center / cover no-repeat!important;
     backdrop-filter:blur(8px)!important;
     -webkit-backdrop-filter:blur(8px)!important;
@@ -2477,14 +2477,14 @@ body {
 
 
 <style id="urbanex-mobile-header-category-gap-only">
-/* ÚNICO CAMBIO: separar las dos líneas en celular. */
+/* ÚNICO CAMBIO: aumentar la separación entre las dos líneas en celular. */
 @media (max-width:720px){
     .aside-categories{
-        top:112px!important;
+        top:124px!important;
     }
 
     body{
-        padding-top:208px!important;
+        padding-top:214px!important;
     }
 }
 </style>
@@ -2498,6 +2498,26 @@ body {
 .pie-pagina a:focus{
     color:inherit!important;
     text-decoration:none!important;
+}
+</style>
+
+
+<style id="urbanex-mobile-lines-spacing-final">
+/* ÚNICO CAMBIO: separar las líneas del encabezado sin alterar
+   el espacio interno ni la posición de los nombres de categorías. */
+@media (max-width:720px){
+    .header-top{
+        height:116px!important;
+        min-height:116px!important;
+    }
+
+    .aside-categories{
+        top:116px!important;
+    }
+
+    body{
+        padding-top:198px!important;
+    }
 }
 </style>
 
