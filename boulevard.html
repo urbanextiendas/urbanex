@@ -4612,15 +4612,15 @@ body {
 
 <style id="urbanex-mobile-featured-proportion-adjust-only">
 /* ÚNICOS CAMBIOS EN CELULAR:
-   - tipografía ligeramente mayor
-   - logotipo un poco más grande
-   - contenido mejor distribuido dentro del anuncio
+   - pequeño margen superior
+   - texto alineado con la parte superior del logotipo
+   - mantener el aumento leve de tamaño sin desproporción
 */
 @media (max-width:720px){
     .shops-scroll-area{
         min-height:136px!important;
         max-height:136px!important;
-        padding:5px 7px 3px!important;
+        padding:7px 7px 3px!important;
     }
 
     .shop-card.shop-card-mobile-rich{
@@ -4631,9 +4631,9 @@ body {
 
     .mobile-featured-profile{
         grid-template-columns:82px minmax(0,1fr)!important;
-        align-items:center!important;
+        align-items:start!important;
         gap:10px!important;
-        padding:5px 8px 14px!important;
+        padding:7px 8px 14px!important;
     }
 
     .shop-card-mobile-rich .shop-thumb-wrapper{
@@ -4642,11 +4642,14 @@ body {
         min-width:82px!important;
         min-height:82px!important;
         flex-basis:82px!important;
+        align-self:start!important;
     }
 
     .shop-card-mobile-rich .shop-details{
-        justify-content:center!important;
+        align-self:start!important;
+        justify-content:flex-start!important;
         gap:3px!important;
+        padding-top:0!important;
     }
 
     .shop-card-mobile-rich .shop-segment{
