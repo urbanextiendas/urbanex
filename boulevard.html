@@ -3728,6 +3728,29 @@ body {
 }
 </style>
 
+
+<style id="urbanex-featured-logo-fit-only">
+/* ÚNICO CAMBIO: ajustar el logo al recuadro de Destacados en pantallas grandes. */
+@media (min-width:721px){
+    .shop-card-ad .shop-thumb-wrapper{
+        padding:0!important;
+    }
+
+    .shop-card-ad .shop-thumb{
+        width:100%!important;
+        height:100%!important;
+        max-width:100%!important;
+        max-height:100%!important;
+        padding:0!important;
+        object-fit:contain!important;
+        object-position:center!important;
+        border-radius:14px!important;
+        background:#ffffff!important;
+        transform:none!important;
+    }
+}
+</style>
+
 </head>
 <body>
 
