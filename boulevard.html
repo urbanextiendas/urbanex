@@ -3800,14 +3800,10 @@ body {
 
 
 <style id="urbanex-featured-header-width-adjust-only">
-/* ÚNICOS CAMBIOS:
-   1) Encabezado DESTACADOS con el mismo estilo visual que CATEGORÍAS.
-   2) Panel derecho más angosto en pantallas grandes.
-   Celular intacto.
-*/
+/* Ajuste leve exclusivo para tablet y computador. Celular intacto. */
 @media (min-width:721px){
     .dashboard-container{
-        grid-template-columns:240px 1fr 258px!important;
+        grid-template-columns:240px 1fr 250px!important;
     }
 
     .aside-showcase-list{
@@ -3816,14 +3812,14 @@ body {
 
     .showcase-header{
         min-height:auto!important;
-        padding:14px 12px 12px 12px!important;
+        padding:12px 10px 10px!important;
         background:rgba(9,12,16,.50)!important;
         border-bottom:1px solid rgba(229,193,88,.16)!important;
     }
 
     .showcase-header h2{
         margin:0!important;
-        padding-left:6px!important;
+        padding-left:4px!important;
         font-family:var(--font-sans)!important;
         font-size:10px!important;
         font-weight:700!important;
@@ -3834,23 +3830,23 @@ body {
     }
 
     .featured-large-controls{
-        gap:6px!important;
+        gap:5px!important;
     }
 
     .featured-large-arrow{
-        width:32px!important;
-        height:32px!important;
+        width:30px!important;
+        height:30px!important;
     }
 
     .featured-large-position{
-        min-width:34px!important;
-        font-size:8px!important;
+        min-width:30px!important;
+        font-size:7.5px!important;
     }
 }
 
 @media (min-width:721px) and (max-width:1024px){
     .dashboard-container{
-        grid-template-columns:220px 1fr 232px!important;
+        grid-template-columns:220px 1fr 226px!important;
     }
 }
 </style>
