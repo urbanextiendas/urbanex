@@ -6969,15 +6969,21 @@ function applySelectedLocation() {
 function featuredVisibleCount() {
     if (window.innerWidth <= 720) return 1;
 
+    /*
+     * Tablet: siempre se muestran como máximo dos tarjetas.
+     * Si existen tres o más negocios, continúan rotando,
+     * pero conservan exactamente el tamaño y distribución
+     * usados cuando solamente aparecen dos.
+     */
+    if (window.innerWidth <= 1024) return 2;
+
     const area = document.getElementById('shopsScrollArea');
     const availableHeight = Math.max(
         0,
         area?.clientHeight || (window.innerHeight - 150)
     );
 
-    const cardMinimumHeight =
-        window.innerWidth >= 1025 ? 148 : 170;
-
+    const cardMinimumHeight = 148;
     const gap = 9;
     const calculated = Math.floor(
         (availableHeight + gap) / (cardMinimumHeight + gap)
