@@ -4481,6 +4481,241 @@ body{
 }
 </style>
 
+
+<style id="urbanex-business-footer-polish-final">
+/* ÚNICO CAMBIO: metadatos y pie inferior de las tarjetas de negocios. */
+
+/* Ubicación y ciudad: lectura clara, sin iconos sueltos. */
+.ux-company-meta{
+  width:100%!important;
+  min-width:0!important;
+  margin:9px 0 0!important;
+  padding:10px 0!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:0!important;
+  border-top:1px solid rgba(255,255,255,.11)!important;
+  border-bottom:1px solid rgba(255,255,255,.11)!important;
+  background:transparent!important;
+}
+
+.ux-company-location,
+.ux-company-city{
+  min-width:0!important;
+  min-height:36px!important;
+  margin:0!important;
+  padding:0 9px!important;
+  display:block!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:0!important;
+  color:#f2f4f7!important;
+  background:transparent!important;
+  font-size:7.4px!important;
+  font-weight:400!important;
+  line-height:1.35!important;
+}
+
+.ux-company-location{
+  padding-left:0!important;
+}
+
+.ux-company-city{
+  padding-right:0!important;
+  border-left:1px solid rgba(255,255,255,.10)!important;
+}
+
+.ux-meta-icon{
+  display:none!important;
+}
+
+.ux-company-location>span:last-child,
+.ux-company-city>span:last-child{
+  min-width:0!important;
+  width:100%!important;
+  display:block!important;
+  overflow:hidden!important;
+  color:#f2f4f7!important;
+  font-weight:400!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.ux-company-meta small{
+  display:block!important;
+  margin:0 0 4px!important;
+  overflow:hidden!important;
+  color:#e6c55d!important;
+  font-size:5.8px!important;
+  font-weight:400!important;
+  line-height:1!important;
+  letter-spacing:.45px!important;
+  text-transform:uppercase!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+/* Pie de tarjeta: estado a la izquierda y acción a la derecha. */
+.ux-card .ux-card-bottom{
+  width:100%!important;
+  min-width:0!important;
+  min-height:42px!important;
+  margin:0!important;
+  padding:10px 0 0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:8px!important;
+  overflow:hidden!important;
+  border-top:0!important;
+}
+
+/* Evita que aparezca “Disponible” antes de calcular el horario. */
+.ux-card-bottom>.ux-badge,
+.ux-card-bottom>.status-indicator,
+.ux-card-bottom>.status-open,
+.ux-card-bottom>.status-closed{
+  display:none!important;
+}
+
+/* Estado real según el horario cargado. */
+.ux-opening-status{
+  position:static!important;
+  width:max-content!important;
+  max-width:46%!important;
+  min-width:0!important;
+  height:24px!important;
+  margin:0!important;
+  padding:0 9px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  overflow:hidden!important;
+  border:1px solid transparent!important;
+  border-radius:999px!important;
+  font-size:6.8px!important;
+  font-weight:400!important;
+  line-height:1!important;
+  text-transform:none!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.ux-opening-status i{
+  width:6px!important;
+  height:6px!important;
+  flex:0 0 6px!important;
+  display:block!important;
+  border-radius:50%!important;
+  background:currentColor!important;
+  box-shadow:none!important;
+}
+
+.ux-opening-status.is-open{
+  color:#43d98d!important;
+  border-color:rgba(67,217,141,.40)!important;
+  background:rgba(67,217,141,.10)!important;
+}
+
+.ux-opening-status.is-closed{
+  color:#ff8792!important;
+  border-color:rgba(255,135,146,.40)!important;
+  background:rgba(255,135,146,.10)!important;
+}
+
+/* Botón “Conocer empresa”. */
+.ux-card-cta{
+  min-width:0!important;
+  max-width:54%!important;
+  margin:0 0 0 auto!important;
+  padding:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:6px!important;
+  overflow:hidden!important;
+  color:#e8c760!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  font-size:7.2px!important;
+  font-weight:400!important;
+  line-height:1!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.ux-card-cta b{
+  width:23px!important;
+  height:23px!important;
+  flex:0 0 23px!important;
+  margin:0!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:50%!important;
+  color:#111820!important;
+  background:#e8c760!important;
+  font-weight:400!important;
+}
+
+@media(max-width:620px){
+  .ux-company-meta{
+    margin-top:7px!important;
+    padding:8px 0!important;
+  }
+
+  .ux-company-location,
+  .ux-company-city{
+    min-height:32px!important;
+    padding-right:6px!important;
+    padding-left:6px!important;
+    font-size:6.5px!important;
+  }
+
+  .ux-company-location{
+    padding-left:0!important;
+  }
+
+  .ux-company-city{
+    padding-right:0!important;
+  }
+
+  .ux-company-meta small{
+    margin-bottom:3px!important;
+    font-size:5.1px!important;
+  }
+
+  .ux-card .ux-card-bottom{
+    min-height:38px!important;
+    padding-top:8px!important;
+    gap:5px!important;
+  }
+
+  .ux-opening-status{
+    height:21px!important;
+    padding:0 6px!important;
+    font-size:5.8px!important;
+  }
+
+  .ux-opening-status i{
+    width:5px!important;
+    height:5px!important;
+    flex-basis:5px!important;
+  }
+
+  .ux-card-cta{
+    gap:4px!important;
+    font-size:6.2px!important;
+  }
+
+  .ux-card-cta b{
+    width:21px!important;
+    height:21px!important;
+    flex-basis:21px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="header-top">
@@ -4735,13 +4970,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const parseTime = function (value) {
     if (value === null || value === undefined) return null;
 
-    let text = normalize(value);
+    const text = normalize(value);
     if (!text) return null;
 
-    const isPM = /\b(pm|p\.m\.)\b/.test(text);
-    const isAM = /\b(am|a\.m\.)\b/.test(text);
     const match = text.match(/(\d{1,2})\s*:\s*(\d{2})/);
-
     if (!match) return null;
 
     let hour = Number(match[1]);
@@ -4758,10 +4990,23 @@ document.addEventListener("DOMContentLoaded", function () {
       return null;
     }
 
-    if (isPM && hour < 12) hour += 12;
-    if (isAM && hour === 12) hour = 0;
+    if (/\b(pm|p\.m\.)\b/.test(text) && hour < 12) hour += 12;
+    if (/\b(am|a\.m\.)\b/.test(text) && hour === 12) hour = 0;
 
     return (hour * 60) + minute;
+  };
+
+  const dayMatches = function (value, dayIndex) {
+    const text = normalize(value);
+
+    if (/^\d+$/.test(text)) {
+      const number = Number(text);
+      return number === dayIndex || number === dayIndex + 1;
+    }
+
+    return dayAliases[dayIndex].some(function (alias) {
+      return text === alias || text.includes(alias);
+    });
   };
 
   const extractIntervals = function (value) {
@@ -4809,8 +5054,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       for (const key of nestedKeys) {
         if (value[key] !== undefined) {
-          const nested = extractIntervals(value[key]);
-          if (nested.length) return nested;
+          const intervals = extractIntervals(value[key]);
+          if (intervals.length) return intervals;
         }
       }
 
@@ -4860,28 +5105,14 @@ document.addEventListener("DOMContentLoaded", function () {
         ""
       );
 
-      return /cerrado|closed|inactivo/.test(state);
+      return /\b(cerrado|closed|inactivo)\b/.test(state);
     }
 
     if (typeof entry === "string") {
-      const text = normalize(entry);
-      return /cerrado|closed/.test(text);
+      return /\b(cerrado|closed)\b/.test(normalize(entry));
     }
 
     return false;
-  };
-
-  const dayMatches = function (value, dayIndex) {
-    const text = normalize(value);
-
-    if (/^\d+$/.test(text)) {
-      const number = Number(text);
-      return number === dayIndex || number === dayIndex + 1;
-    }
-
-    return dayAliases[dayIndex].some(function (alias) {
-      return text === alias || text.includes(alias);
-    });
   };
 
   const findTodayEntry = function (schedule, dayIndex) {
@@ -4896,11 +5127,11 @@ document.addEventListener("DOMContentLoaded", function () {
         return findTodayEntry(JSON.parse(trimmed), dayIndex);
       } catch (error) {
         const text = normalize(trimmed);
-        const hasAnyDay = dayAliases.flat().some(function (alias) {
+        const hasDayName = dayAliases.flat().some(function (alias) {
           return text.includes(alias);
         });
 
-        if (!hasAnyDay) {
+        if (!hasDayName) {
           return extractIntervals(trimmed).length ? trimmed : undefined;
         }
 
@@ -4965,8 +5196,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       for (const key of nestedKeys) {
         if (schedule[key] !== undefined) {
-          const result = findTodayEntry(schedule[key], dayIndex);
-          if (result !== undefined) return result;
+          const entry = findTodayEntry(schedule[key], dayIndex);
+          if (entry !== undefined) return entry;
         }
       }
 
@@ -4978,54 +5209,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const collectScheduleSources = function (card) {
     const sources = [];
-    const attributeNames = [
-      "data-horario",
-      "data-horarios",
-      "data-schedule",
-      "data-hours",
-      "data-opening-hours",
-      "data-openinghours",
-      "data-business-hours",
-      "data-businesshours",
-      "data-horario-semanal",
-      "data-horarios-json"
-    ];
-
     const nodes = [card].concat(Array.from(card.querySelectorAll("*")));
 
     nodes.forEach(function (node) {
-      if (!node.getAttribute) return;
-
-      attributeNames.forEach(function (attribute) {
-        const value = node.getAttribute(attribute);
-        if (value) sources.push(value);
-      });
-
       Array.from(node.attributes || []).forEach(function (attribute) {
         const name = normalize(attribute.name);
 
         if (
           name.startsWith("data-") &&
-          /(horario|horarios|schedule|opening-hours|business-hours|hours)/.test(name) &&
+          /(horario|horarios|schedule|opening|business-hours|hours|apertura|cierre)/.test(name) &&
           attribute.value
         ) {
           sources.push(attribute.value);
         }
       });
-    });
 
-    const visibleSelectors = [
-      ".horario",
-      ".horarios",
-      ".business-hours",
-      ".opening-hours",
-      ".ux-company-hours",
-      "[data-role='horario']"
-    ];
-
-    card.querySelectorAll(visibleSelectors.join(",")).forEach(function (node) {
-      const value = node.textContent?.trim();
-      if (value) sources.push(value);
+      if (
+        node.matches?.(
+          ".horario,.horarios,.business-hours,.opening-hours,.ux-company-hours,[data-role='horario']"
+        )
+      ) {
+        const text = node.textContent?.trim();
+        if (text) sources.push(text);
+      }
     });
 
     return sources;
@@ -5087,8 +5293,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const resolveStatus = function (card) {
     const now = getEcuadorNow();
 
-    const directIntervals = collectDirectIntervals(card);
-    const directStatus = evaluateIntervals(directIntervals, now.minutes);
+    const directStatus = evaluateIntervals(
+      collectDirectIntervals(card),
+      now.minutes
+    );
 
     if (directStatus) return directStatus;
 
@@ -5100,8 +5308,10 @@ document.addEventListener("DOMContentLoaded", function () {
       if (todayEntry === undefined) continue;
       if (isClosedEntry(todayEntry)) return "closed";
 
-      const intervals = extractIntervals(todayEntry);
-      const status = evaluateIntervals(intervals, now.minutes);
+      const status = evaluateIntervals(
+        extractIntervals(todayEntry),
+        now.minutes
+      );
 
       if (status) return status;
     }
@@ -5109,62 +5319,29 @@ document.addEventListener("DOMContentLoaded", function () {
     return null;
   };
 
-  const prepareLogo = function (card) {
-    const image = card.querySelector(
-      ".ux-company-logo-img, .ux-company-logo img, .ux-logo img, .ux-card-media img, .ux-card-primary-logo"
-    );
-
-    if (!image || image.dataset.urbanexLogoReady === "true") return;
-
-    image.dataset.urbanexLogoReady = "true";
-    image.loading = "lazy";
-    image.decoding = "async";
-  };
-
-  const arrangeCard = function (card) {
-    const titleHost = card.querySelector(".ux-company-title");
-    const description = card.querySelector(".ux-company-description");
-
-    if (titleHost && description && description.parentElement !== titleHost) {
-      titleHost.appendChild(description);
-    }
-  };
-
   const installStatus = function (card) {
-    const oldStatus = card.querySelector(
-      ".ux-opening-status, .status-open, .status-closed, .status-indicator"
-    );
+    let footer = card.querySelector(".ux-card-bottom");
+    if (!footer) return;
 
-    const generatedBadge = card.querySelector(".ux-badge");
-    const oldText = normalize(generatedBadge?.textContent);
-
-    if (
-      generatedBadge &&
-      /(abierto|cerrado|open|closed|proximo|pronto)/.test(oldText)
-    ) {
-      generatedBadge.remove();
-    }
+    /* Retira definitivamente el distintivo genérico “Disponible”. */
+    footer.querySelectorAll(
+      ".ux-badge,.status-indicator,.status-open,.status-closed"
+    ).forEach(function (badge) {
+      badge.remove();
+    });
 
     const statusValue = resolveStatus(card);
+    let status = footer.querySelector(".ux-opening-status");
 
     if (!statusValue) {
-      oldStatus?.remove();
+      status?.remove();
       return;
     }
 
-    let footer = card.querySelector(".ux-card-bottom");
-
-    if (!footer) {
-      footer = document.createElement("div");
-      footer.className = "ux-card-bottom";
-      (card.querySelector(".ux-card-body") || card).appendChild(footer);
-    }
-
-    let status = card.querySelector(".ux-opening-status");
-
     if (!status) {
       status = document.createElement("span");
-      footer.appendChild(status);
+      status.className = "ux-opening-status";
+      footer.insertBefore(status, footer.firstChild);
     }
 
     const isOpen = statusValue === "open";
@@ -5178,16 +5355,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     status.setAttribute("aria-label", "Estado del negocio: " + label);
     status.dataset.urbanexStatus = statusValue;
-    status.hidden = false;
   };
 
   const prepareCard = function (card) {
     if (!(card instanceof Element)) return;
 
-    arrangeCard(card);
-    prepareLogo(card);
+    const image = card.querySelector(
+      ".ux-company-logo-img,.ux-company-logo img,.ux-logo img,.ux-card-media img,.ux-card-primary-logo"
+    );
+
+    if (image) {
+      image.loading = "lazy";
+      image.decoding = "async";
+    }
+
     installStatus(card);
-    card.dataset.urbanexCardReady = "true";
   };
 
   const prepareCards = function () {
@@ -5196,21 +5378,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   prepareCards();
 
-  /* Solo observa reemplazos directos del listado; no observa el interior. */
+  /* Detecta únicamente nuevas tarjetas directas, sin observar cada cambio interno. */
   const observer = new MutationObserver(function (mutations) {
-    let hasNewCards = false;
+    let changed = false;
 
     mutations.forEach(function (mutation) {
       mutation.addedNodes.forEach(function (node) {
-        if (!(node instanceof Element)) return;
-
-        if (node.matches(".ux-card") || node.querySelector(".ux-card")) {
-          hasNewCards = true;
+        if (
+          node instanceof Element &&
+          (node.matches(".ux-card") || node.querySelector(".ux-card"))
+        ) {
+          changed = true;
         }
       });
     });
 
-    if (hasNewCards) {
+    if (changed) {
       window.requestAnimationFrame(prepareCards);
     }
   });
@@ -5220,15 +5403,44 @@ document.addEventListener("DOMContentLoaded", function () {
     subtree: false
   });
 
-  /* El estado cambia con el reloj sin reconstruir las tarjetas. */
-  const refreshStatus = function () {
+  /* Reintentos limitados para horarios que terminen de cargarse después. */
+  [300, 800, 1600, 3000, 5000].forEach(function (delay) {
+    window.setTimeout(prepareCards, delay);
+  });
+
+  /* Actualiza al cambiar el minuto, sin reconstruir las tarjetas. */
+  const refreshByClock = function () {
     if (!document.hidden) prepareCards();
 
     const delay = 60000 - (Date.now() % 60000) + 150;
-    window.setTimeout(refreshStatus, delay);
+    window.setTimeout(refreshByClock, delay);
   };
 
-  window.setTimeout(refreshStatus, 60000);
+  window.setTimeout(refreshByClock, 60000);
+
+  document.getElementById("panelSearch")?.addEventListener(
+    "input",
+    function () {
+      window.setTimeout(prepareCards, 200);
+    },
+    { passive: true }
+  );
+
+  document.getElementById("sortBusiness")?.addEventListener(
+    "change",
+    function () {
+      window.setTimeout(prepareCards, 200);
+    },
+    { passive: true }
+  );
+
+  document.getElementById("locationPickerApply")?.addEventListener(
+    "click",
+    function () {
+      window.setTimeout(prepareCards, 650);
+    },
+    { passive: true }
+  );
 })();
 </script>
 
