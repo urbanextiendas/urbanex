@@ -3469,53 +3469,93 @@ body{
 
 <style id="urbanex-auto-logo-status-final">
 /* ============================================================
-   LOGOTIPOS Y ESTADO COMERCIAL AUTOMÁTICOS
-   - Recuadro de logotipo amplio.
-   - Imagen centrada y escalada sin deformación.
-   - Estado ubicado debajo del nombre, sin superposiciones.
+   TARJETA COMERCIAL COMPACTA
+   Referencia visual: tarjeta oscura, logotipo lateral,
+   información contenida y estado dentro del pie.
    ============================================================ */
 
-.ux-company-head{
-  padding-top:18px!important;
-  padding-bottom:16px!important;
+.ux-grid{
+  align-items:stretch!important;
 }
 
+/* Tarjeta */
+.ux-grid>.ux-card,
+.ux-card{
+  min-width:0!important;
+  width:100%!important;
+  min-height:184px!important;
+  height:100%!important;
+  padding:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  overflow:hidden!important;
+  border:1px solid #344052!important;
+  border-radius:17px!important;
+  color:#fff!important;
+  background:
+    radial-gradient(circle at 8% 4%,rgba(229,193,88,.08),transparent 32%),
+    linear-gradient(145deg,#0d1117,#07090d)!important;
+  box-shadow:0 10px 26px rgba(7,12,20,.20)!important;
+}
+
+.ux-card::before{
+  display:none!important;
+  content:none!important;
+}
+
+.ux-card::after{
+  display:none!important;
+  content:none!important;
+}
+
+.ux-card:hover{
+  transform:translateY(-4px)!important;
+  border-color:rgba(229,193,88,.65)!important;
+  box-shadow:0 18px 36px rgba(7,12,20,.30)!important;
+}
+
+/* Cabecera horizontal: logo + información */
+.ux-company-head{
+  width:100%!important;
+  min-width:0!important;
+  min-height:112px!important;
+  padding:10px 10px 8px!important;
+  display:grid!important;
+  grid-template-columns:88px minmax(0,1fr)!important;
+  align-items:start!important;
+  gap:10px!important;
+  text-align:left!important;
+  background:transparent!important;
+}
+
+/* Logotipo */
 .ux-company-logo,
 .ux-grid>.ux-card>.ux-logo,
 .ux-card-media{
   position:relative!important;
   isolation:isolate!important;
-  overflow:hidden!important;
-  display:grid!important;
-  place-items:center!important;
-  flex-shrink:0!important;
-  border:1px solid #d7dee8!important;
-  background:#fff!important;
-  box-shadow:
-    0 9px 22px rgba(19,44,79,.12),
-    inset 0 0 0 1px rgba(255,255,255,.9)!important;
-}
-
-.ux-company-logo{
   width:88px!important;
   height:88px!important;
-  flex-basis:88px!important;
-  padding:4px!important;
-  border-radius:18px!important;
+  min-width:88px!important;
+  min-height:88px!important;
+  max-width:88px!important;
+  max-height:88px!important;
+  margin:0!important;
+  padding:5px!important;
+  display:grid!important;
+  place-items:center!important;
+  overflow:hidden!important;
+  border:2px solid rgba(255,255,255,.88)!important;
+  border-radius:15px!important;
+  background:#fff!important;
+  box-shadow:0 7px 18px rgba(0,0,0,.30)!important;
 }
 
 .ux-company-logo::before,
 .ux-grid>.ux-card>.ux-logo::before,
 .ux-card-media::before{
-  content:""!important;
-  position:absolute!important;
-  inset:5px!important;
-  z-index:-1!important;
-  border-radius:13px!important;
-  background:
-    radial-gradient(circle at 50% 28%,rgba(229,193,88,.10),transparent 50%),
-    #fff!important;
-  pointer-events:none!important;
+  display:none!important;
+  content:none!important;
 }
 
 .ux-company-logo-img,
@@ -3532,169 +3572,447 @@ body{
   padding:0!important;
   object-fit:contain!important;
   object-position:center!important;
-  border-radius:12px!important;
-  background:transparent!important;
+  overflow:hidden!important;
+  border-radius:10px!important;
+  background:#fff!important;
   transform:scale(var(--urbanex-logo-scale,1))!important;
   transform-origin:center!important;
-  transition:transform .28s ease!important;
-  image-rendering:auto!important;
+  transition:transform .25s ease!important;
 }
 
-.ux-auto-logo-wide{padding:2px!important;}
-.ux-auto-logo-square{padding:3px!important;}
+.ux-auto-logo-wide{padding:3px!important;}
+.ux-auto-logo-square{padding:4px!important;}
 .ux-auto-logo-tall{padding:5px!important;}
 
-/* El estado ocupa una línea propia dentro del bloque del nombre. */
+/* Información superior */
 .ux-company-title{
   min-width:0!important;
+  width:100%!important;
+  padding:1px 0 0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  overflow:hidden!important;
+  text-align:left!important;
 }
 
-.ux-opening-status{
-  position:static!important;
-  left:auto!important;
-  right:auto!important;
-  top:auto!important;
-  bottom:auto!important;
-  z-index:auto!important;
+.ux-company-category{
+  width:100%!important;
+  margin:0 0 5px!important;
+  overflow:hidden!important;
+  color:#e5c158!important;
+  font-size:8px!important;
+  font-weight:800!important;
+  line-height:1.2!important;
+  letter-spacing:.25px!important;
+  text-transform:none!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.ux-company-title h3{
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+  color:#fff!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:14px!important;
+  font-weight:850!important;
+  line-height:1.18!important;
+  letter-spacing:-.2px!important;
+  text-align:left!important;
+  text-overflow:ellipsis!important;
+  overflow-wrap:anywhere!important;
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:2!important;
+}
+
+.ux-company-featured{
   width:max-content!important;
   max-width:100%!important;
+  margin:6px 0 0!important;
+  padding:3px 7px!important;
+  overflow:hidden!important;
+  border:1px solid rgba(229,193,88,.42)!important;
+  border-radius:999px!important;
+  color:#f3cd67!important;
+  background:rgba(229,193,88,.08)!important;
+  font-size:6px!important;
+  font-weight:850!important;
+  line-height:1!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+/* Descripción dentro del bloque derecho */
+.ux-company-title .ux-company-description{
+  width:100%!important;
+  min-height:0!important;
+  margin:7px 0 0!important;
+  overflow:hidden!important;
+  color:#d1d5db!important;
+  font-size:8.5px!important;
+  font-weight:500!important;
+  line-height:1.38!important;
+  text-align:left!important;
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:2!important;
+}
+
+/* Cuerpo inferior */
+.ux-card .ux-card-body,
+.ux-grid>.ux-card>.ux-card-body{
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  flex:1 1 auto!important;
+  padding:0 10px 9px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  color:#fff!important;
+}
+
+/* Metadatos en dos columnas */
+.ux-company-meta{
+  width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:8px 0!important;
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+  border-top:1px solid rgba(255,255,255,.10)!important;
+  border-bottom:1px solid rgba(255,255,255,.10)!important;
+}
+
+.ux-company-location,
+.ux-company-city{
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:flex-start!important;
+  gap:5px!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:0!important;
+  color:#fff!important;
+  background:transparent!important;
+  font-size:8px!important;
+  font-weight:650!important;
+  line-height:1.35!important;
+}
+
+.ux-company-location>span:last-child,
+.ux-company-city>span:last-child{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  overflow-wrap:anywhere!important;
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:2!important;
+}
+
+.ux-company-meta small{
+  display:block!important;
+  margin:0 0 3px!important;
+  color:#8d96a5!important;
+  font-size:6px!important;
+  font-weight:850!important;
+  line-height:1!important;
+  letter-spacing:.45px!important;
+  text-transform:uppercase!important;
+}
+
+.ux-meta-icon{
+  flex:0 0 auto!important;
+  color:#e5c158!important;
+  font-size:9px!important;
+  line-height:1!important;
+  transform:translateY(2px)!important;
+}
+
+/* Pie: acción izquierda, estado derecha */
+.ux-card .ux-card-bottom{
+  width:100%!important;
+  min-width:0!important;
+  min-height:38px!important;
+  margin:0!important;
+  padding:8px 0 0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:8px!important;
+  border-top:0!important;
+}
+
+.ux-card-cta{
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:5px!important;
+  overflow:hidden!important;
+  color:#e5c158!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  font-size:7.5px!important;
+  font-weight:800!important;
+  line-height:1!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.ux-card-cta b{
+  width:20px!important;
+  height:20px!important;
+  flex:0 0 20px!important;
+  margin:0!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:50%!important;
+  color:#0b0d11!important;
+  background:#e5c158!important;
+}
+
+/* Estado siempre dentro del pie */
+.ux-opening-status{
+  position:static!important;
+  inset:auto!important;
+  z-index:auto!important;
+  width:max-content!important;
+  max-width:52%!important;
   min-width:0!important;
   height:23px!important;
-  margin:8px 0 0!important;
+  margin:0 0 0 auto!important;
   padding:0 9px!important;
   display:inline-flex!important;
   align-items:center!important;
   justify-content:center!important;
-  gap:6px!important;
+  gap:5px!important;
+  overflow:hidden!important;
   transform:none!important;
   border:1px solid transparent!important;
   border-radius:999px!important;
-  color:#fff!important;
-  background:#132c4f!important;
   box-shadow:none!important;
   font-family:Montserrat,Arial,sans-serif!important;
-  font-size:7px!important;
+  font-size:6.5px!important;
   font-weight:850!important;
   line-height:1!important;
-  letter-spacing:.25px!important;
-  text-transform:uppercase!important;
+  letter-spacing:.1px!important;
+  text-transform:none!important;
+  text-overflow:ellipsis!important;
   white-space:nowrap!important;
   pointer-events:none!important;
-  vertical-align:middle!important;
 }
 
 .ux-opening-status i{
-  width:6px!important;
-  height:6px!important;
-  flex:0 0 6px!important;
+  width:5px!important;
+  height:5px!important;
+  flex:0 0 5px!important;
   display:block!important;
   border-radius:50%!important;
   background:currentColor!important;
-  box-shadow:0 0 0 3px color-mix(in srgb,currentColor 18%,transparent)!important;
-  opacity:.95!important;
+  box-shadow:none!important;
 }
 
 .ux-opening-status.is-open{
-  color:#087443!important;
-  border-color:rgba(34,168,97,.34)!important;
-  background:#e8f8ef!important;
+  color:#15915a!important;
+  border-color:rgba(46,213,115,.38)!important;
+  background:rgba(46,213,115,.10)!important;
 }
 
 .ux-opening-status.is-closed{
-  color:#b4232f!important;
-  border-color:rgba(220,53,69,.30)!important;
-  background:#fff0f2!important;
+  color:#ff7c88!important;
+  border-color:rgba(255,71,87,.38)!important;
+  background:rgba(255,71,87,.10)!important;
 }
 
 .ux-opening-status.is-upcoming{
-  color:#8a5600!important;
-  border-color:rgba(245,158,11,.38)!important;
-  background:#fff5df!important;
+  color:#f3c45d!important;
+  border-color:rgba(229,193,88,.40)!important;
+  background:rgba(229,193,88,.10)!important;
 }
 
-/* En tarjetas centradas, el estado se centra debajo del nombre. */
+/* Marcado antiguo */
+.ux-grid>.ux-card>.ux-logo{
+  width:88px!important;
+  height:88px!important;
+  min-height:88px!important;
+  flex:0 0 88px!important;
+  border:2px solid rgba(255,255,255,.88)!important;
+  border-radius:15px!important;
+}
+
+.ux-grid>.ux-card>.ux-card-body>h3{
+  color:#fff!important;
+}
+
+/* Computador: seis tarjetas por fila, sin desbordes */
 @media(min-width:1024px){
-  .ux-company-head{
-    min-height:178px!important;
-    padding:18px 10px 15px!important;
+  .ux-grid{
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    gap:13px!important;
   }
 
-  .ux-company-logo{
+  .ux-grid>.ux-card,
+  .ux-card{
+    min-height:206px!important;
+  }
+
+  .ux-company-head{
+    min-height:112px!important;
+    grid-template-columns:82px minmax(0,1fr)!important;
+    padding:9px!important;
+    gap:9px!important;
+  }
+
+  .ux-company-logo,
+  .ux-grid>.ux-card>.ux-logo,
+  .ux-card-media{
     width:82px!important;
     height:82px!important;
-    flex-basis:82px!important;
-    border-radius:17px!important;
+    min-width:82px!important;
+    min-height:82px!important;
+    max-width:82px!important;
+    max-height:82px!important;
   }
 
-  .ux-company-title{
-    width:100%!important;
-    text-align:center!important;
+  .ux-company-title h3{
+    font-size:12.5px!important;
   }
 
-  .ux-opening-status{
-    margin:8px auto 0!important;
+  .ux-company-title .ux-company-description{
+    font-size:7.8px!important;
   }
 }
 
+/* Tablet */
 @media(max-width:1023px) and (min-width:621px){
-  .ux-company-logo{
-    width:78px!important;
-    height:78px!important;
-    flex-basis:78px!important;
-  }
-
-  .ux-opening-status{
-    margin-top:7px!important;
+  .ux-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:13px!important;
   }
 }
 
+/* Celular: dos tarjetas por fila, versión compacta */
 @media(max-width:620px){
-  .ux-company-head{
-    min-height:148px!important;
-    padding:14px 8px 13px!important;
+  .ux-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:9px!important;
   }
 
-  .ux-company-logo{
+  .ux-grid>.ux-card,
+  .ux-card{
+    min-height:220px!important;
+    border-radius:14px!important;
+  }
+
+  .ux-company-head{
+    min-height:103px!important;
+    padding:8px!important;
+    grid-template-columns:68px minmax(0,1fr)!important;
+    gap:8px!important;
+  }
+
+  .ux-company-logo,
+  .ux-grid>.ux-card>.ux-logo,
+  .ux-card-media{
     width:68px!important;
     height:68px!important;
-    flex-basis:68px!important;
-    padding:3px!important;
-    border-radius:15px!important;
+    min-width:68px!important;
+    min-height:68px!important;
+    max-width:68px!important;
+    max-height:68px!important;
+    padding:4px!important;
+    border-radius:13px!important;
   }
 
-  .ux-company-title{
-    width:100%!important;
-    text-align:center!important;
+  .ux-company-category{
+    margin-bottom:4px!important;
+    font-size:6.2px!important;
+  }
+
+  .ux-company-title h3{
+    font-size:10.5px!important;
+    line-height:1.2!important;
+  }
+
+  .ux-company-featured{
+    margin-top:4px!important;
+    padding:3px 5px!important;
+    font-size:5px!important;
+  }
+
+  .ux-company-title .ux-company-description{
+    margin-top:5px!important;
+    font-size:6.8px!important;
+    -webkit-line-clamp:2!important;
+  }
+
+  .ux-card .ux-card-body,
+  .ux-grid>.ux-card>.ux-card-body{
+    padding:0 8px 8px!important;
+  }
+
+  .ux-company-meta{
+    grid-template-columns:1fr!important;
+    gap:5px!important;
+    padding:7px 0!important;
+  }
+
+  .ux-company-location,
+  .ux-company-city{
+    font-size:6.7px!important;
+  }
+
+  .ux-card .ux-card-bottom{
+    min-height:33px!important;
+    padding-top:7px!important;
+  }
+
+  .ux-card-cta{
+    max-width:46%!important;
+    font-size:6px!important;
+  }
+
+  .ux-card-cta b{
+    width:18px!important;
+    height:18px!important;
+    flex-basis:18px!important;
   }
 
   .ux-opening-status{
+    max-width:54%!important;
     height:20px!important;
-    margin:7px auto 0!important;
-    padding:0 7px!important;
-    gap:5px!important;
-    font-size:5.8px!important;
-  }
-
-  .ux-opening-status i{
-    width:5px!important;
-    height:5px!important;
-    flex-basis:5px!important;
+    padding:0 6px!important;
+    font-size:5.5px!important;
   }
 }
 
-/* Compatibilidad con tarjetas antiguas. */
-.ux-grid>.ux-card>.ux-logo{
-  width:100%!important;
-  height:154px!important;
-  min-height:154px!important;
-  flex:0 0 154px!important;
-  padding:7px!important;
-  border-width:0 0 1px!important;
-  border-radius:0!important;
-}
+@media(max-width:390px){
+  .ux-company-head{
+    grid-template-columns:62px minmax(0,1fr)!important;
+    gap:6px!important;
+  }
 
-.ux-grid>.ux-card>.ux-card-body>.ux-opening-status{
-  margin:8px 0 10px!important;
+  .ux-company-logo,
+  .ux-grid>.ux-card>.ux-logo,
+  .ux-card-media{
+    width:62px!important;
+    height:62px!important;
+    min-width:62px!important;
+    min-height:62px!important;
+    max-width:62px!important;
+    max-height:62px!important;
+  }
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -3779,7 +4097,7 @@ body{
       </section>
       <section class="ux-business-panel">
         <div class="ux-panel-head"><div><h2 id="panelTitle">Negocios</h2><p id="businessCount" role="status" aria-live="polite">Cargando negocios...</p></div><div class="ux-panel-actions"><input id="panelSearch" type="search" placeholder="Buscar negocio" aria-label="Buscar negocio en esta subcategoría"><select id="sortBusiness" aria-label="Ordenar negocios"><option value="featured">Destacados primero</option><option value="name">Nombre A–Z</option></select></div></div>
-        <div id="businessGrid" class="ux-grid"><div class="ux-empty">Cargando información desde Supabase...</div></div>
+        <div id="businessGrid" class="ux-grid"><div class="ux-empty">Cargando</div></div>
       </section>
     </div>
   </main>
@@ -4135,20 +4453,20 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   const installStatus = function (card) {
-    const statusHost =
-      card.querySelector(".ux-company-title") ||
-      card.querySelector(".ux-card-body") ||
-      card;
+    let footer = card.querySelector(".ux-card-bottom");
+
+    if (!footer) {
+      const body = card.querySelector(".ux-card-body") || card;
+      footer = document.createElement("div");
+      footer.className = "ux-card-bottom";
+      body.appendChild(footer);
+    }
 
     let badge = card.querySelector(".ux-opening-status");
 
     if (!badge) {
       const oldBadge = card.querySelector(".ux-badge");
-      if (oldBadge) {
-        badge = oldBadge;
-      } else {
-        badge = document.createElement("span");
-      }
+      badge = oldBadge || document.createElement("span");
     }
 
     badge.className = "ux-opening-status";
@@ -4160,9 +4478,23 @@ document.addEventListener("DOMContentLoaded", function () {
     badge.innerHTML = "<i aria-hidden=\"true\"></i><span>" + config.label + "</span>";
     badge.setAttribute("aria-label", "Estado del negocio: " + config.label);
 
-    if (badge.parentElement !== statusHost) {
-      statusHost.appendChild(badge);
+    if (badge.parentElement !== footer) {
+      footer.appendChild(badge);
     }
+  };
+
+  const arrangeCardContent = function (card) {
+    const titleHost = card.querySelector(".ux-company-title");
+    const description = card.querySelector(".ux-company-description");
+
+    if (titleHost && description && description.parentElement !== titleHost) {
+      titleHost.appendChild(description);
+    }
+
+    card.querySelectorAll(".ux-company-title h3, .ux-company-category, .ux-company-description")
+      .forEach(function (element) {
+        element.removeAttribute("style");
+      });
   };
 
   const backgroundDistance = function (pixel, background) {
@@ -4262,7 +4594,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const dominantCoverage = Math.max(contentWidthRatio, contentHeightRatio);
 
         if (dominantCoverage > 0 && dominantCoverage < 0.82) {
-          scale = Math.min(1.72, Math.max(1, 0.88 / dominantCoverage));
+          scale = Math.min(1.28, Math.max(1, 0.86 / dominantCoverage));
         }
       }
     } catch (error) {
@@ -4293,8 +4625,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const prepareCard = function (card) {
     if (!(card instanceof Element)) return;
+    arrangeCardContent(card);
     installLogoBehavior(card);
     installStatus(card);
+  };
+
+
+  const simplifyLoadingText = function () {
+    const grid = document.querySelector(GRID_SELECTOR);
+    if (!grid) return;
+
+    grid.querySelectorAll(".ux-empty").forEach(function (element) {
+      const text = normalize(element.textContent);
+      if (text.includes("cargando") && text.includes("supabase")) {
+        element.textContent = "Cargando";
+      }
+    });
   };
 
   const prepareAllCards = function () {
@@ -4307,6 +4653,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const grid = document.querySelector(GRID_SELECTOR);
     if (!grid) return;
 
+    simplifyLoadingText();
     prepareAllCards();
 
     const observer = new MutationObserver(function (mutations) {
@@ -4322,6 +4669,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       });
 
+      simplifyLoadingText();
       prepareAllCards();
     });
 
