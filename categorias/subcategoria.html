@@ -4380,6 +4380,77 @@ body{
 }
 </style>
 
+
+<style id="urbanex-panel-overlap-fix">
+/* ÚNICO AJUSTE: evitar que el título y los filtros se superpongan. */
+.ux-panel-head{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:14px 18px!important;
+  overflow:visible!important;
+}
+
+.ux-panel-head>div:first-child{
+  position:static!important;
+  min-width:0!important;
+  width:auto!important;
+  margin:0!important;
+  padding:0!important;
+  display:block!important;
+  transform:none!important;
+}
+
+.ux-panel-head h2{
+  position:static!important;
+  display:block!important;
+  width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  line-height:1.25!important;
+  transform:none!important;
+}
+
+.ux-panel-actions{
+  position:static!important;
+  width:auto!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  transform:none!important;
+}
+
+.ux-panel-actions input,
+.ux-panel-actions select{
+  position:static!important;
+  margin:0!important;
+  transform:none!important;
+}
+
+@media(max-width:820px){
+  .ux-panel-head{
+    grid-template-columns:1fr!important;
+    align-items:stretch!important;
+    gap:13px!important;
+  }
+
+  .ux-panel-actions{
+    width:100%!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:10px!important;
+  }
+
+  .ux-panel-actions input,
+  .ux-panel-actions select{
+    width:100%!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="header-top">
