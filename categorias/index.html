@@ -7265,6 +7265,24 @@ body {
 }
 </style>
 
+
+<style id="urbanex-index-mobile-exact-boulevard-final">
+@media (max-width:720px){
+    .aside-showcase-list .shops-scroll-area > .ux-featured-card{
+        display:none!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area > .shop-card-mobile-rich{
+        display:grid!important;
+    }
+
+    .aside-showcase-list .sort-box,
+    .aside-showcase-list .action-footer-box{
+        display:none!important;
+    }
+}
+</style>
+
 </head>
 <body>
 <div class="dashboard-container">
@@ -7864,26 +7882,172 @@ function featuredBusinessCard(business) {
         currentRoot?.icon ||
         '🏪';
 
+    const categoryLabel = `${categoryIcon} ${categoryName}`;
+
     const addressLabel = String(
         business.address ||
         business.city ||
         'Dirección no registrada'
     ).trim();
 
-    const cityLabel = String(
-        business.city || 'No registrada'
-    ).trim();
-
     const phoneLabel = String(
         business.phone ||
         business.contact_phone ||
         business.whatsapp ||
-        'No registrado'
+        ''
+    ).trim();
+
+    const phoneDigits = phoneLabel.replace(/\D/g, '');
+
+    const emailLabel = String(
+        business.email ||
+        business.contact_email ||
+        business.business_email ||
+        business.mail ||
+        ''
     ).trim();
 
     const statusHtml = business._openNow
         ? `<span class="status-open">Abierto</span>`
         : `<span class="status-closed">Cerrado</span>`;
+
+    const ratingHtml = business._rating
+        ? `
+            <span class="star-icon">★</span>
+            <span class="rating-value">${ratingText}</span>
+            <span class="rating-count">${esc(reviewText)}</span>
+        `
+        : `<span class="rating-count">Sin reseñas</span>`;
+
+    const basicLogoHtml = business.cover_image
+        ? `
+            <div class="shop-thumb-wrapper">
+                <img
+                    class="shop-thumb"
+                    src="${esc(business.cover_image)}"
+                    alt="${esc(business.name)}"
+                    loading="lazy"
+                >
+            </div>
+        `
+        : `
+            <div class="shop-thumb-wrapper">
+                <span>${esc(categoryIcon)}</span>
+            </div>
+        `;
+
+    if (window.innerWidth <= 720) {
+        const mobileExtraInfoHtml = (
+            phoneLabel || emailLabel
+        )
+            ? `
+                <div class="mobile-featured-extra-info">
+                    ${phoneLabel
+                        ? `
+                            <a
+                                class="mobile-featured-info-item"
+                                href="tel:${phoneDigits}"
+                                aria-label="Llamar a ${esc(business.name)}"
+                            >
+                                <span>Teléfono:</span>
+                                <strong>${esc(phoneLabel)}</strong>
+                            </a>
+                        `
+                        : ''
+                    }
+
+                    ${emailLabel
+                        ? `
+                            <a
+                                class="mobile-featured-info-item"
+                                href="mailto:${esc(emailLabel)}"
+                                aria-label="Enviar correo a ${esc(business.name)}"
+                            >
+                                <span>Correo:</span>
+                                <strong>${esc(emailLabel)}</strong>
+                            </a>
+                        `
+                        : ''
+                    }
+                </div>
+            `
+            : '';
+
+        const mobileFeaturedList = featuredBusinesses();
+        const mobileCurrentIndex = Math.max(
+            0,
+            mobileFeaturedList.findIndex(
+                item => String(item.id) === String(business.id)
+            )
+        );
+
+        const mobileProgressHtml = mobileFeaturedList.length > 1
+            ? `
+                <nav
+                    class="mobile-featured-progress"
+                    aria-label="Cambiar negocio destacado"
+                >
+                    ${mobileFeaturedList.map((item, index) => `
+                        <button
+                            type="button"
+                            class="mobile-featured-progress-item${index === mobileCurrentIndex ? ' is-active' : ''}"
+                            onclick="event.preventDefault(); event.stopPropagation(); featuredGoToMobile(${index});"
+                            aria-label="Ver destacado ${index + 1} de ${mobileFeaturedList.length}"
+                            aria-current="${index === mobileCurrentIndex ? 'true' : 'false'}"
+                        >
+                            <span></span>
+                        </button>
+                    `).join('')}
+                </nav>
+            `
+            : '';
+
+        return `
+            <article class="shop-card shop-card-mobile-rich">
+                ${mobileProgressHtml}
+
+                <div class="mobile-featured-profile">
+                    <a
+                        class="mobile-featured-logo-link"
+                        href="${businessUrl(business)}"
+                        aria-label="Ver perfil de ${esc(business.name)}"
+                    >
+                        ${basicLogoHtml}
+                    </a>
+
+                    <div class="shop-details">
+                        <div class="mobile-featured-topline">
+                            <div class="shop-segment">${esc(categoryLabel)}</div>
+                            ${statusHtml}
+                        </div>
+
+                        <a
+                            class="shop-title mobile-featured-title-link"
+                            href="${businessUrl(business)}"
+                        >${esc(business.name)}</a>
+
+                        <div
+                            class="mobile-featured-address"
+                            title="${esc(addressLabel)}"
+                        >
+                            <span aria-hidden="true">⌖</span>
+                            <span>${esc(addressLabel)}</span>
+                        </div>
+
+                        ${mobileExtraInfoHtml}
+
+                        <div class="shop-rating-row">${ratingHtml}</div>
+                    </div>
+                </div>
+            </article>
+        `;
+    }
+
+    const cityLabel = String(
+        business.city || 'No registrada'
+    ).trim();
+
+    const desktopPhoneLabel = phoneLabel || 'No registrado';
 
     const logoHtml = business.cover_image
         ? `
@@ -7940,16 +8104,14 @@ function featuredBusinessCard(business) {
 
                     <div class="ux-featured-data-item">
                         <span>Teléfono</span>
-                        <strong>${esc(phoneLabel)}</strong>
+                        <strong>${esc(desktopPhoneLabel)}</strong>
                     </div>
                 </div>
 
                 <div class="ux-featured-bottom">
                     <div class="ux-featured-rating">
                         <div class="shop-rating-row">
-                            <span class="star-icon">★</span>
-                            <span class="rating-value">${ratingText}</span>
-                            <span class="rating-count">${esc(reviewText)}</span>
+                            ${ratingHtml}
                         </div>
                     </div>
 
@@ -8149,6 +8311,107 @@ async function boot() {
     }
 }
 
+
+window.featuredGoToMobile = index => {
+    if (window.innerWidth > 720) return;
+
+    const list = featuredBusinesses();
+    if (!list.length) return;
+
+    const safeIndex = Math.max(
+        0,
+        Math.min(Number(index) || 0, list.length - 1)
+    );
+
+    featuredSlotIndices = [safeIndex];
+    renderFeatured();
+};
+
+window.featuredPreviousMobile = () => {
+    if (window.innerWidth > 720) return;
+
+    const list = featuredBusinesses();
+    if (!list.length) return;
+
+    const current = featuredSlotIndices[0] || 0;
+    featuredSlotIndices = [
+        (current - 1 + list.length) % list.length
+    ];
+
+    renderFeatured();
+};
+
+window.featuredNextMobile = () => {
+    if (window.innerWidth > 720) return;
+
+    const list = featuredBusinesses();
+    if (!list.length) return;
+
+    const current = featuredSlotIndices[0] || 0;
+    featuredSlotIndices = [
+        (current + 1) % list.length
+    ];
+
+    renderFeatured();
+};
+
+function ensureMobileFeaturedSwipe() {
+    const area = document.getElementById('shopsList');
+
+    if (
+        !area ||
+        area.dataset.mobileSwipeReady === 'true'
+    ) {
+        return;
+    }
+
+    area.dataset.mobileSwipeReady = 'true';
+
+    let startX = 0;
+    let startY = 0;
+
+    area.addEventListener('touchstart', event => {
+        if (
+            window.innerWidth > 720 ||
+            event.touches.length !== 1
+        ) {
+            return;
+        }
+
+        startX = event.touches[0].clientX;
+        startY = event.touches[0].clientY;
+    }, { passive: true });
+
+    area.addEventListener('touchend', event => {
+        if (
+            window.innerWidth > 720 ||
+            !event.changedTouches.length
+        ) {
+            return;
+        }
+
+        const deltaX =
+            event.changedTouches[0].clientX - startX;
+
+        const deltaY =
+            event.changedTouches[0].clientY - startY;
+
+        const isHorizontalSwipe =
+            Math.abs(deltaX) >= 42 &&
+            Math.abs(deltaX) > Math.abs(deltaY) * 1.25;
+
+        if (!isHorizontalSwipe) return;
+
+        event.preventDefault();
+
+        if (deltaX < 0) {
+            featuredNextMobile();
+        } else {
+            featuredPreviousMobile();
+        }
+    }, { passive: false });
+}
+
 function renderFeatured() {
     const list = featuredBusinesses();
     const container = document.getElementById('shopsList');
@@ -8203,6 +8466,7 @@ function renderFeatured() {
         visibleBusinesses.map(featuredBusinessCard).join('');
     container.classList.add('featured-changing');
 
+    ensureMobileFeaturedSwipe();
     scheduleFeaturedSlotRotations(list);
 }
 
