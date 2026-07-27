@@ -7283,6 +7283,16 @@ body {
 }
 </style>
 
+
+<style id="urbanex-category-carousel-gap-only">
+/* ÚNICO CAMBIO: reducir la separación entre categorías del carrusel. */
+@media (max-width:1024px){
+    .categories-list{
+        gap:4px!important;
+    }
+}
+</style>
+
 </head>
 <body>
 <div class="dashboard-container">
@@ -7667,7 +7677,10 @@ function selectedCategoryBusinesses() {
 
 function featuredBusinesses() {
     const sort = document.getElementById('sortSelect')?.value || 'rating';
-    const list = selectedCategoryBusinesses().slice();
+
+    const list = selectedCategoryBusinesses()
+        .filter(isFeatured)
+        .slice();
 
     if (sort === 'name') {
         list.sort((a, b) =>
@@ -7675,7 +7688,6 @@ function featuredBusinesses() {
         );
     } else {
         list.sort((a, b) =>
-            Number(isFeatured(b)) - Number(isFeatured(a)) ||
             (b._rating || 0) - (a._rating || 0) ||
             String(a.name || '').localeCompare(String(b.name || ''), 'es')
         );
