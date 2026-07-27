@@ -3646,6 +3646,111 @@ body{
 }
 </style>
 
+
+<style id="urbanex-business-logo-autofit-v2">
+/* ÚNICO AJUSTE:
+   - Recuadro de logotipo más grande.
+   - Recorte automático del espacio blanco interno de cada imagen.
+*/
+
+.hero-company-card{
+  max-width:310px!important;
+}
+
+.hero-company-logo-shell{
+  position:relative!important;
+
+  width:176px!important;
+  height:176px!important;
+  min-width:176px!important;
+  min-height:176px!important;
+  max-width:176px!important;
+  max-height:176px!important;
+  flex:0 0 176px!important;
+
+  margin:0 auto!important;
+  padding:0!important;
+
+  display:block!important;
+  overflow:hidden!important;
+
+  border:1px solid #d7dfe8!important;
+  border-radius:28px!important;
+  background:#fff!important;
+  box-shadow:0 14px 32px rgba(20,43,77,.15)!important;
+}
+
+.hero-company-logo-image{
+  position:absolute!important;
+  top:0;
+  left:0;
+
+  width:100%;
+  height:100%;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:none!important;
+  max-height:none!important;
+
+  margin:0!important;
+  padding:0!important;
+
+  display:block!important;
+
+  object-fit:cover!important;
+  object-position:center!important;
+
+  border-radius:27px!important;
+  background:#fff!important;
+
+  transform:none!important;
+  transform-origin:center!important;
+}
+
+.hero-company-logo-image[data-urbanex-logo-fit="fallback"]{
+  top:50%!important;
+  left:50%!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  transform:translate(-50%,-50%) scale(1.65)!important;
+}
+
+.hero-company-logo-fallback{
+  width:100%!important;
+  height:100%!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:27px!important;
+}
+
+@media(max-width:760px){
+  .hero-company-card{
+    max-width:340px!important;
+  }
+
+  .hero-company-card-top{
+    grid-template-columns:124px minmax(0,1fr)!important;
+  }
+
+  .hero-company-logo-shell{
+    width:124px!important;
+    height:124px!important;
+    min-width:124px!important;
+    min-height:124px!important;
+    max-width:124px!important;
+    max-height:124px!important;
+    flex-basis:124px!important;
+    border-radius:22px!important;
+  }
+
+  .hero-company-logo-image,
+  .hero-company-logo-fallback{
+    border-radius:21px!important;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -4165,18 +4270,23 @@ return `https://${url.replace(/^\/+/, '')}`;
 function phoneOf(b){return first(b.whatsapp,b.phone,b.contact_phone);}
 function onlyDigits(v){return String(v||'').replace(/\D/g,'');}
 function categoryNameOf(b){return first(b.subcategories?.name,b.categories?.name,b.category_name,'Categoría');}
-function categoryIconOf(b){return first(b.subcategories?.icon,b.categories?.icon,'🏪');}
+function categoryIconOf(b){return first(b.subcategories?.icon,b.categories?.icon,'🏪');}function subcategoryUrlOf(b){const categoryId=first(b?.category_id);const subcategoryId=first(b?.subcategory_id);if(!subcategoryId)return '../boulevard.html';const params=new URLSearchParams();if(categoryId)params.set('categoria',String(categoryId));params.set('subcategoria',String(subcategoryId));return `../categorias/subcategoria.html?${params.toString()}`;}
 function businessMessage(){return `Hola, le contacto desde Urbanex. Me interesa recibir información de ${business.name}. ¿Me puede ayudar?`;}
 function productMessage(product){const isOffer=product.is_on_sale===true||product.is_on_sale==='true';const offer=isOffer?' en oferta':'';const price=isOffer&&Number(product.sale_price)>0?` Precio de oferta: ${money(product.sale_price)}.`:'';return `Hola, le contacto desde Urbanex. Me interesa el producto${offer} "${product.name}" de ${business.name}.${price} ¿Me puede dar más información?`;}
 function whatsappUrl(message){const phone=onlyDigits(phoneOf(business));if(!phone)return '#';return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;}
 function resolveBackUrl(){const params=new URLSearchParams(location.search);const requested=params.get('return');if(requested){try{const url=new URL(requested,location.href);if(url.origin===location.origin)return url.href;}catch(_){}}try{if(document.referrer){const ref=new URL(document.referrer);if(ref.origin===location.origin)return ref.href;}}catch(_){}return '../boulevard.html';}
 function navigateBack(event){if(event)event.preventDefault();const back=resolveBackUrl();try{if(document.referrer){const ref=new URL(document.referrer);if(ref.origin===location.origin&&ref.href!==location.href){history.back();return;}}}catch(_){}window.location.href=back;}
-function setupBackLinks(){const back=resolveBackUrl();$('backLogo').href=back;$('backLink').href=back;$('backLink').textContent='Volver';$('backLogo').onclick=navigateBack;$('backLink').onclick=navigateBack;}
+function setupBackLinks(){const back=resolveBackUrl();$('backLink').href=back;$('backLink').textContent='Volver';$('backLink').onclick=navigateBack;$('backLogo').href='../boulevard.html';$('backLogo').onclick=null;}
 function isOpenNow(){if(!hours.length)return false;const now=new Date();const today=now.getDay();const current=now.getHours()*60+now.getMinutes();const rows=hours.filter(h=>Number(h.day_of_week)===today&&!h.is_closed);return rows.some(row=>{if(!row.open_time||!row.close_time)return false;const [oh,om]=String(row.open_time).split(':').map(Number);const [ch,cm]=String(row.close_time).split(':').map(Number);const open=oh*60+(om||0);const close=ch*60+(cm||0);if(close<open)return current>=open||current<=close;return current>=open&&current<=close;});}
 function timeLabel(t){if(!t)return '';const [h,m]=String(t).split(':');return `${h}h${m||'00'}`;}
 function renderHours(){if(!hours.length){$('businessHours').textContent='Horario no registrado';return;}const days=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];const grouped={};hours.forEach(h=>{const day=Number(h.day_of_week);(grouped[day] ||= []).push(h);});$('businessHours').innerHTML=Object.keys(grouped).map(day=>{const list=grouped[day].sort((a,b)=>(a.session_number||1)-(b.session_number||1)).map(h=>h.is_closed?'Cerrado':`${timeLabel(h.open_time)} - ${timeLabel(h.close_time)}`).join('<br>');return `<div class="hours-row"><b>${days[day]||'Día'}</b><span>${list}</span></div>`;}).join('');}
 function renderBusiness(){
 document.title=`Urbanex - ${business.name}`;
+const logoLink=$('backLogo');
+if(logoLink){
+logoLink.href=subcategoryUrlOf(business);
+logoLink.onclick=null;
+}
 $('businessName').textContent=business.name;
 $('businessCity').textContent=first(business.city,'Loja');
 $('businessCategory').textContent=categoryNameOf(business);
@@ -4812,6 +4922,235 @@ loadPage();
 (function () {
   const year = document.getElementById("currentYear");
   if (year) year.textContent = new Date().getFullYear();
+})();
+</script>
+
+
+<script id="urbanex-business-logo-autofit-script-v2">
+(function () {
+  "use strict";
+
+  const IMAGE_SELECTOR = ".hero-company-logo-image";
+  const SHELL_SELECTOR = ".hero-company-logo-shell";
+
+  function applyFallback(image) {
+    image.dataset.urbanexLogoFit = "fallback";
+  }
+
+  function detectVisibleBounds(sourceImage) {
+    const naturalWidth = sourceImage.naturalWidth;
+    const naturalHeight = sourceImage.naturalHeight;
+
+    if (!naturalWidth || !naturalHeight) return null;
+
+    const maxAnalysisSize = 700;
+    const reduction = Math.min(
+      1,
+      maxAnalysisSize / Math.max(naturalWidth, naturalHeight)
+    );
+
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(naturalWidth * reduction));
+    canvas.height = Math.max(1, Math.round(naturalHeight * reduction));
+
+    const context = canvas.getContext("2d", {
+      willReadFrequently: true
+    });
+
+    if (!context) return null;
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(sourceImage, 0, 0, canvas.width, canvas.height);
+
+    const pixels = context.getImageData(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    ).data;
+
+    let minX = canvas.width;
+    let minY = canvas.height;
+    let maxX = -1;
+    let maxY = -1;
+
+    for (let y = 0; y < canvas.height; y += 1) {
+      for (let x = 0; x < canvas.width; x += 1) {
+        const index = (y * canvas.width + x) * 4;
+        const red = pixels[index];
+        const green = pixels[index + 1];
+        const blue = pixels[index + 2];
+        const alpha = pixels[index + 3];
+
+        if (alpha < 18) continue;
+
+        const distanceFromWhite =
+          (255 - red) +
+          (255 - green) +
+          (255 - blue);
+
+        const channelDifference =
+          Math.max(red, green, blue) -
+          Math.min(red, green, blue);
+
+        const isVisibleContent =
+          distanceFromWhite > 45 ||
+          channelDifference > 24;
+
+        if (!isVisibleContent) continue;
+
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      }
+    }
+
+    if (maxX < minX || maxY < minY) return null;
+
+    const inverseReduction = 1 / reduction;
+
+    return {
+      x: minX * inverseReduction,
+      y: minY * inverseReduction,
+      width: (maxX - minX + 1) * inverseReduction,
+      height: (maxY - minY + 1) * inverseReduction
+    };
+  }
+
+  function positionImage(image, bounds) {
+    const shell = image.closest(SHELL_SELECTOR);
+    if (!shell || !bounds) {
+      applyFallback(image);
+      return;
+    }
+
+    const shellWidth = shell.clientWidth;
+    const shellHeight = shell.clientHeight;
+    const naturalWidth = image.naturalWidth;
+    const naturalHeight = image.naturalHeight;
+
+    if (
+      !shellWidth ||
+      !shellHeight ||
+      !naturalWidth ||
+      !naturalHeight ||
+      !bounds.width ||
+      !bounds.height
+    ) {
+      applyFallback(image);
+      return;
+    }
+
+    const innerRatio = 0.88;
+
+    const scale = Math.min(
+      (shellWidth * innerRatio) / bounds.width,
+      (shellHeight * innerRatio) / bounds.height
+    );
+
+    const renderedWidth = naturalWidth * scale;
+    const renderedHeight = naturalHeight * scale;
+
+    const left =
+      ((shellWidth - bounds.width * scale) / 2) -
+      bounds.x * scale;
+
+    const top =
+      ((shellHeight - bounds.height * scale) / 2) -
+      bounds.y * scale;
+
+    image.dataset.urbanexLogoFit = "ready";
+
+    image.style.setProperty("position", "absolute", "important");
+    image.style.setProperty("width", renderedWidth + "px", "important");
+    image.style.setProperty("height", renderedHeight + "px", "important");
+    image.style.setProperty("top", top + "px", "important");
+    image.style.setProperty("left", left + "px", "important");
+    image.style.setProperty("max-width", "none", "important");
+    image.style.setProperty("max-height", "none", "important");
+    image.style.setProperty("object-fit", "fill", "important");
+    image.style.setProperty("transform", "none", "important");
+  }
+
+  function fitLogo(image) {
+    if (!(image instanceof HTMLImageElement)) return;
+
+    const source = image.currentSrc || image.src;
+    if (!source) return;
+
+    const probe = new Image();
+    probe.crossOrigin = "anonymous";
+    probe.decoding = "async";
+
+    probe.onload = function () {
+      try {
+        const bounds = detectVisibleBounds(probe);
+
+        if (!bounds) {
+          applyFallback(image);
+          return;
+        }
+
+        positionImage(image, bounds);
+      } catch (error) {
+        applyFallback(image);
+      }
+    };
+
+    probe.onerror = function () {
+      applyFallback(image);
+    };
+
+    probe.src = source;
+  }
+
+  function fitAllLogos() {
+    document.querySelectorAll(IMAGE_SELECTOR).forEach(fitLogo);
+  }
+
+  const observer = new MutationObserver(function (mutations) {
+    let logoAdded = false;
+
+    mutations.forEach(function (mutation) {
+      mutation.addedNodes.forEach(function (node) {
+        if (!(node instanceof Element)) return;
+
+        if (
+          node.matches?.(IMAGE_SELECTOR) ||
+          node.querySelector?.(IMAGE_SELECTOR)
+        ) {
+          logoAdded = true;
+        }
+      });
+    });
+
+    if (logoAdded) {
+      window.requestAnimationFrame(fitAllLogos);
+    }
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+  window.addEventListener("load", fitAllLogos);
+
+  let resizeTimer = 0;
+
+  window.addEventListener(
+    "resize",
+    function () {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(fitAllLogos, 120);
+    },
+    { passive: true }
+  );
+
+  [250, 700, 1400, 2600].forEach(function (delay) {
+    window.setTimeout(fitAllLogos, delay);
+  });
 })();
 </script>
 
