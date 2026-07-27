@@ -5383,6 +5383,103 @@ body{
 }
 </style>
 
+
+<style id="urbanex-description-status-final-v19">
+/* ÚNICOS AJUSTES:
+   1. Descripción centrada horizontalmente, iniciando desde arriba.
+   2. Estado visible como Abierto o Cerrado según business_hours.
+*/
+
+/* El párrafo ya no se centra verticalmente desde la mitad. */
+.ux-company-description,
+.ux-card-body .addr{
+  width:100%!important;
+  min-height:46px!important;
+  max-height:46px!important;
+  margin:0!important;
+  padding:4px 5px 0!important;
+  display:-webkit-box!important;
+  align-items:initial!important;
+  justify-content:initial!important;
+  overflow:hidden!important;
+  color:#e2e7ee!important;
+  font-size:8.4px!important;
+  font-weight:400!important;
+  line-height:1.45!important;
+  text-align:center!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:3!important;
+}
+
+/* Se vuelve a mostrar el estado real generado por subcategoria.js. */
+.ux-card-bottom>.ux-badge{
+  position:static!important;
+  width:max-content!important;
+  max-width:48%!important;
+  min-width:0!important;
+  height:23px!important;
+  margin:0!important;
+  padding:0 9px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  overflow:hidden!important;
+  border:1px solid transparent!important;
+  border-radius:999px!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:6.4px!important;
+  font-weight:400!important;
+  line-height:1!important;
+  text-transform:none!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+}
+
+.ux-card-bottom>.ux-badge i{
+  width:5px!important;
+  height:5px!important;
+  flex:0 0 5px!important;
+  display:block!important;
+  border-radius:50%!important;
+  background:currentColor!important;
+}
+
+.ux-card-bottom>.ux-badge.is-open{
+  color:#48d790!important;
+  border-color:rgba(72,215,144,.40)!important;
+  background:rgba(72,215,144,.10)!important;
+}
+
+.ux-card-bottom>.ux-badge.is-closed{
+  color:#ff8792!important;
+  border-color:rgba(255,135,146,.40)!important;
+  background:rgba(255,135,146,.10)!important;
+}
+
+.ux-card-bottom>.ux-badge[hidden]{
+  display:none!important;
+}
+
+@media(max-width:720px){
+  .ux-company-description,
+  .ux-card-body .addr{
+    min-height:42px!important;
+    max-height:42px!important;
+    padding:3px 3px 0!important;
+    font-size:6.9px!important;
+    line-height:1.4!important;
+  }
+
+  .ux-card-bottom>.ux-badge{
+    height:20px!important;
+    padding:0 6px!important;
+    font-size:5.4px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="header-top">
@@ -5460,133 +5557,6 @@ body{
   <aside class="ux-right"><div class="ux-right-head"><h2>Destacados</h2><p id="featuredCount">Cargando...</p></div><div class="ux-sort"><select><option>Ordenar por: Destacados</option></select></div><div id="featuredList" class="ux-featured-list"><div class="ux-note">Cargando destacados...</div></div><a id="backLink" class="ux-back" href="index.html">Volver</a></aside>
 </div>
 <footer class="pie-pagina"><p>&copy; <span id="currentYear"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
-
-<script id="urbanex-supabase-schedule-capture">
-(function () {
-  "use strict";
-
-  if (window.__urbanexCaptureInstalled) return;
-  window.__urbanexCaptureInstalled = true;
-  window.__urbanexCapturedRecords = window.__urbanexCapturedRecords || [];
-
-  const normalizeKey = function (value) {
-    return String(value || "")
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]/g, "");
-  };
-
-  const relevantKey = function (key) {
-    const normalized = normalizeKey(key);
-
-    return /^(id|uuid|nombre|name|titulo|title|razonsocial|nombrecomercial|nombrenegocio|negocioid|businessid|empresaid|comercioid|localid|horario|horarios|horarioatencion|horariosatencion|schedule|openinghours|businesshours|hours|diasemana|day|weekday|horaapertura|horacierre|open|close|abre|cierra|cerrado|closed|activo|active)$/.test(normalized);
-  };
-
-  const seen = new Set();
-
-  const recordSignature = function (record) {
-    try {
-      const compact = {};
-
-      Object.keys(record).forEach(function (key) {
-        if (relevantKey(key)) compact[key] = record[key];
-      });
-
-      return JSON.stringify(compact);
-    } catch (error) {
-      return "";
-    }
-  };
-
-  const collect = function (value, depth) {
-    if (depth > 8 || value === null || value === undefined) return;
-
-    if (Array.isArray(value)) {
-      value.forEach(function (item) {
-        collect(item, depth + 1);
-      });
-      return;
-    }
-
-    if (typeof value !== "object") return;
-
-    const keys = Object.keys(value);
-
-    if (keys.some(relevantKey)) {
-      const signature = recordSignature(value);
-
-      if (signature && !seen.has(signature)) {
-        seen.add(signature);
-        window.__urbanexCapturedRecords.push(value);
-      }
-    }
-
-    keys.forEach(function (key) {
-      const nested = value[key];
-
-      if (nested && typeof nested === "object") {
-        collect(nested, depth + 1);
-      }
-    });
-  };
-
-  const publish = function (data) {
-    const before = window.__urbanexCapturedRecords.length;
-    collect(data, 0);
-
-    if (window.__urbanexCapturedRecords.length !== before) {
-      window.dispatchEvent(new CustomEvent("urbanex:schedule-data-ready"));
-    }
-  };
-
-  const originalFetch = window.fetch;
-
-  if (typeof originalFetch === "function") {
-    window.fetch = function () {
-      return originalFetch.apply(this, arguments).then(function (response) {
-        try {
-          const clone = response.clone();
-          const contentType = clone.headers.get("content-type") || "";
-
-          if (contentType.includes("json")) {
-            clone.json().then(publish).catch(function () {});
-          }
-        } catch (error) {}
-
-        return response;
-      });
-    };
-  }
-
-  const OriginalXHR = window.XMLHttpRequest;
-
-  if (typeof OriginalXHR === "function") {
-    const originalOpen = OriginalXHR.prototype.open;
-    const originalSend = OriginalXHR.prototype.send;
-
-    OriginalXHR.prototype.open = function () {
-      this.__urbanexUrl = arguments[1];
-      return originalOpen.apply(this, arguments);
-    };
-
-    OriginalXHR.prototype.send = function () {
-      this.addEventListener("load", function () {
-        try {
-          const contentType = this.getResponseHeader("content-type") || "";
-
-          if (contentType.includes("json") && typeof this.responseText === "string") {
-            publish(JSON.parse(this.responseText));
-          }
-        } catch (error) {}
-      }, { once: true });
-
-      return originalSend.apply(this, arguments);
-    };
-  }
-})();
-</script>
-
 <script type="module" src="subcategoria.js?v=20260726-1"></script>
 
 <script>
@@ -5709,654 +5679,64 @@ document.addEventListener("DOMContentLoaded", function () {
   if (!grid) return;
 
   const normalize = function (value) {
-    return String(value ?? "")
+    return String(value || "")
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .trim()
       .toLowerCase();
   };
 
-  const normalizeKey = function (value) {
-    return normalize(value).replace(/[^a-z0-9]/g, "");
-  };
+  const updateBadge = function (card) {
+    if (!(card instanceof Element)) return;
 
-  const dayAliases = [
-    ["domingo", "dom", "sunday", "sun"],
-    ["lunes", "lun", "monday", "mon"],
-    ["martes", "mar", "tuesday", "tue"],
-    ["miercoles", "mie", "wednesday", "wed"],
-    ["jueves", "jue", "thursday", "thu"],
-    ["viernes", "vie", "friday", "fri"],
-    ["sabado", "sab", "saturday", "sat"]
-  ];
-
-  const nameKeys = [
-    "nombre",
-    "name",
-    "titulo",
-    "title",
-    "razon_social",
-    "razonSocial",
-    "nombre_comercial",
-    "nombreComercial",
-    "nombre_negocio",
-    "nombreNegocio"
-  ];
-
-  const idKeys = [
-    "id",
-    "uuid",
-    "negocio_id",
-    "negocioId",
-    "business_id",
-    "businessId",
-    "empresa_id",
-    "empresaId",
-    "comercio_id",
-    "comercioId",
-    "local_id",
-    "localId"
-  ];
-
-  const foreignIdKeys = [
-    "negocio_id",
-    "negocioId",
-    "business_id",
-    "businessId",
-    "empresa_id",
-    "empresaId",
-    "comercio_id",
-    "comercioId",
-    "local_id",
-    "localId"
-  ];
-
-  const scheduleKeys = [
-    "horario",
-    "horarios",
-    "horario_atencion",
-    "horarios_atencion",
-    "horarioAtencion",
-    "horariosAtencion",
-    "schedule",
-    "opening_hours",
-    "openingHours",
-    "business_hours",
-    "businessHours",
-    "hours",
-    "semana",
-    "dias"
-  ];
-
-  const getFirst = function (object, keys) {
-    if (!object || typeof object !== "object") return undefined;
-
-    for (const key of keys) {
-      if (object[key] !== undefined && object[key] !== null) {
-        return object[key];
-      }
-    }
-
-    const normalizedLookup = {};
-
-    Object.keys(object).forEach(function (key) {
-      normalizedLookup[normalizeKey(key)] = object[key];
+    /* Elimina únicamente el distintivo adicional creado por versiones anteriores. */
+    card.querySelectorAll(".ux-opening-status").forEach(function (element) {
+      element.remove();
     });
 
-    for (const key of keys) {
-      const value = normalizedLookup[normalizeKey(key)];
-      if (value !== undefined && value !== null) return value;
-    }
+    const badge = card.querySelector(".ux-card-bottom > .ux-badge");
+    if (!badge) return;
 
-    return undefined;
-  };
+    const originalText = normalize(badge.textContent);
 
-  const getEcuadorNow = function () {
-    try {
-      const parts = new Intl.DateTimeFormat("es-EC", {
-        timeZone: "America/Guayaquil",
-        weekday: "long",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false
-      }).formatToParts(new Date());
+    badge.classList.remove("is-open", "is-closed");
+    badge.hidden = false;
 
-      const values = {};
-      parts.forEach(function (part) {
-        values[part.type] = part.value;
-      });
-
-      const weekday = normalize(values.weekday);
-      let dayIndex = dayAliases.findIndex(function (aliases) {
-        return aliases.includes(weekday);
-      });
-
-      if (dayIndex < 0) dayIndex = new Date().getDay();
-
-      return {
-        dayIndex: dayIndex,
-        minutes: (Number(values.hour) * 60) + Number(values.minute)
-      };
-    } catch (error) {
-      const now = new Date();
-
-      return {
-        dayIndex: now.getDay(),
-        minutes: (now.getHours() * 60) + now.getMinutes()
-      };
-    }
-  };
-
-  const parseTime = function (value) {
-    if (value === null || value === undefined) return null;
-
-    const text = normalize(value);
-    if (!text) return null;
-
-    const match = text.match(/(\d{1,2})\s*:\s*(\d{2})/);
-    if (!match) return null;
-
-    let hour = Number(match[1]);
-    const minute = Number(match[2]);
-
-    if (
-      !Number.isFinite(hour) ||
-      !Number.isFinite(minute) ||
-      hour < 0 ||
-      hour > 23 ||
-      minute < 0 ||
-      minute > 59
-    ) {
-      return null;
-    }
-
-    if (/\b(pm|p\.m\.)\b/.test(text) && hour < 12) hour += 12;
-    if (/\b(am|a\.m\.)\b/.test(text) && hour === 12) hour = 0;
-
-    return (hour * 60) + minute;
-  };
-
-  const dayMatches = function (value, dayIndex) {
-    const text = normalize(value);
-
-    if (/^\d+$/.test(text)) {
-      const number = Number(text);
-      return number === dayIndex || number === dayIndex + 1;
-    }
-
-    return dayAliases[dayIndex].some(function (alias) {
-      return text === alias || text.includes(alias);
-    });
-  };
-
-  const extractIntervals = function (value) {
-    if (value === null || value === undefined) return [];
-
-    if (Array.isArray(value)) {
-      return value.flatMap(extractIntervals);
-    }
-
-    if (typeof value === "object") {
-      const open = getFirst(value, [
-        "open",
-        "abre",
-        "apertura",
-        "hora_apertura",
-        "horaApertura",
-        "inicio",
-        "desde"
-      ]);
-
-      const close = getFirst(value, [
-        "close",
-        "cierra",
-        "cierre",
-        "hora_cierre",
-        "horaCierre",
-        "fin",
-        "hasta"
-      ]);
-
-      const openMinutes = parseTime(open);
-      const closeMinutes = parseTime(close);
-
-      if (openMinutes !== null && closeMinutes !== null) {
-        return [{ open: openMinutes, close: closeMinutes }];
-      }
-
-      for (const key of [
-        "intervalos",
-        "periodos",
-        "periods",
-        "turnos",
-        "ranges",
-        "hours",
-        "horas"
-      ]) {
-        const nested = getFirst(value, [key]);
-
-        if (nested !== undefined) {
-          const intervals = extractIntervals(nested);
-          if (intervals.length) return intervals;
-        }
-      }
-
-      return [];
-    }
-
-    const text = normalize(value);
-
-    if (/24\s*horas|24\/7/.test(text)) {
-      return [{ open: 0, close: 1440 }];
-    }
-
-    const ranges = text.match(
-      /\d{1,2}\s*:\s*\d{2}\s*(?:am|pm|a\.m\.|p\.m\.)?\s*(?:-|–|—|a|hasta)\s*\d{1,2}\s*:\s*\d{2}\s*(?:am|pm|a\.m\.|p\.m\.)?/g
-    ) || [];
-
-    return ranges.map(function (range) {
-      const times = range.match(
-        /\d{1,2}\s*:\s*\d{2}\s*(?:am|pm|a\.m\.|p\.m\.)?/g
-      ) || [];
-
-      const open = parseTime(times[0]);
-      const close = parseTime(times[1]);
-
-      if (open === null || close === null) return null;
-      return { open: open, close: close };
-    }).filter(Boolean);
-  };
-
-  const isClosedEntry = function (entry) {
-    if (entry === false || entry === null) return true;
-
-    if (typeof entry === "object" && entry) {
-      if (
-        getFirst(entry, ["cerrado", "closed"]) === true ||
-        getFirst(entry, ["activo", "active"]) === false
-      ) {
-        return true;
-      }
-
-      const state = normalize(
-        getFirst(entry, ["estado", "status", "state"]) || ""
-      );
-
-      return /\b(cerrado|closed|inactivo)\b/.test(state);
-    }
-
-    if (typeof entry === "string") {
-      return /\b(cerrado|closed)\b/.test(normalize(entry));
-    }
-
-    return false;
-  };
-
-  const findTodayEntry = function (schedule, dayIndex) {
-    if (schedule === undefined || schedule === null || schedule === "") {
-      return undefined;
-    }
-
-    if (typeof schedule === "string") {
-      const trimmed = schedule.trim();
-
-      try {
-        return findTodayEntry(JSON.parse(trimmed), dayIndex);
-      } catch (error) {
-        const text = normalize(trimmed);
-        const hasDay = dayAliases.flat().some(function (alias) {
-          return text.includes(alias);
-        });
-
-        if (!hasDay) {
-          return extractIntervals(trimmed).length ? trimmed : undefined;
-        }
-
-        for (const segment of trimmed.split(/\n|;|\|/)) {
-          if (dayMatches(segment, dayIndex)) return segment;
-        }
-
-        return undefined;
-      }
-    }
-
-    if (Array.isArray(schedule)) {
-      for (const item of schedule) {
-        if (!item || typeof item !== "object") continue;
-
-        const day = getFirst(item, [
-          "dia",
-          "day",
-          "dia_semana",
-          "diaSemana",
-          "weekday",
-          "nombre_dia",
-          "nombreDia"
-        ]);
-
-        if (day !== undefined && dayMatches(day, dayIndex)) {
-          return item;
-        }
-      }
-
-      for (const item of schedule) {
-        const entry = findTodayEntry(item, dayIndex);
-        if (entry !== undefined) return entry;
-      }
-
-      return undefined;
-    }
-
-    if (typeof schedule === "object") {
-      for (const key of Object.keys(schedule)) {
-        if (dayMatches(key, dayIndex)) {
-          return schedule[key];
-        }
-      }
-
-      const directDay = getFirst(schedule, [
-        "dia",
-        "day",
-        "dia_semana",
-        "diaSemana",
-        "weekday",
-        "nombre_dia",
-        "nombreDia"
-      ]);
-
-      if (directDay !== undefined && dayMatches(directDay, dayIndex)) {
-        return schedule;
-      }
-
-      for (const key of scheduleKeys) {
-        const nested = getFirst(schedule, [key]);
-
-        if (nested !== undefined && nested !== schedule) {
-          const entry = findTodayEntry(nested, dayIndex);
-          if (entry !== undefined) return entry;
-        }
-      }
-
-      if (extractIntervals(schedule).length) return schedule;
-    }
-
-    return undefined;
-  };
-
-  const evaluateIntervals = function (intervals, nowMinutes) {
-    if (!intervals.length) return null;
-
-    for (const interval of intervals) {
-      if (interval.open === 0 && interval.close === 1440) {
-        return "open";
-      }
-
-      if (interval.close > interval.open) {
-        if (nowMinutes >= interval.open && nowMinutes < interval.close) {
-          return "open";
-        }
-      } else if (
-        nowMinutes >= interval.open ||
-        nowMinutes < interval.close
-      ) {
-        return "open";
-      }
-    }
-
-    return "closed";
-  };
-
-  const extractCardIdentity = function (card) {
-    const name = normalize(
-      card.querySelector(".ux-company-title h3, .ux-card-body h3")?.textContent
-    );
-
-    const ids = new Set();
-
-    [
-      card.dataset.id,
-      card.dataset.negocioId,
-      card.dataset.businessId,
-      card.dataset.empresaId,
-      card.dataset.comercioId,
-      card.getAttribute("data-id")
-    ].forEach(function (value) {
-      if (value !== undefined && value !== null && value !== "") {
-        ids.add(String(value));
-      }
-    });
-
-    const href = card.getAttribute("href") || "";
-
-    try {
-      const url = new URL(href, location.href);
-
-      [
-        "id",
-        "negocio",
-        "negocio_id",
-        "business",
-        "business_id",
-        "empresa",
-        "empresa_id",
-        "comercio",
-        "comercio_id"
-      ].forEach(function (key) {
-        const value = url.searchParams.get(key);
-        if (value) ids.add(value);
-      });
-
-      const segments = url.pathname.split("/").filter(Boolean);
-      const last = segments[segments.length - 1];
-
-      if (last && /^[a-z0-9-]{4,}$/i.test(last)) ids.add(last);
-    } catch (error) {}
-
-    return {
-      name: name,
-      ids: ids
-    };
-  };
-
-  const recordName = function (record) {
-    return normalize(getFirst(record, nameKeys));
-  };
-
-  const recordIds = function (record) {
-    const ids = new Set();
-
-    idKeys.forEach(function (key) {
-      const value = getFirst(record, [key]);
-
-      if (value !== undefined && value !== null && value !== "") {
-        ids.add(String(value));
-      }
-    });
-
-    return ids;
-  };
-
-  const intersects = function (first, second) {
-    for (const value of first) {
-      if (second.has(value)) return true;
-    }
-
-    return false;
-  };
-
-  const getScheduleCandidates = function (card) {
-    const records = window.__urbanexCapturedRecords || [];
-    const identity = extractCardIdentity(card);
-    const matched = [];
-    const businessIds = new Set(identity.ids);
-
-    records.forEach(function (record) {
-      if (!record || typeof record !== "object") return;
-
-      const name = recordName(record);
-      const ids = recordIds(record);
-
-      const nameMatch =
-        identity.name &&
-        name &&
-        (
-          name === identity.name ||
-          name.includes(identity.name) ||
-          identity.name.includes(name)
-        );
-
-      const idMatch = intersects(identity.ids, ids);
-
-      if (nameMatch || idMatch) {
-        matched.push(record);
-        ids.forEach(function (id) {
-          businessIds.add(id);
-        });
-      }
-    });
-
-    records.forEach(function (record) {
-      if (!record || typeof record !== "object") return;
-
-      const foreignIds = new Set();
-
-      foreignIdKeys.forEach(function (key) {
-        const value = getFirst(record, [key]);
-
-        if (value !== undefined && value !== null && value !== "") {
-          foreignIds.add(String(value));
-        }
-      });
-
-      if (intersects(businessIds, foreignIds)) {
-        matched.push(record);
-      }
-    });
-
-    return Array.from(new Set(matched));
-  };
-
-  const collectCardSources = function (card) {
-    const sources = [];
-    const nodes = [card].concat(Array.from(card.querySelectorAll("*")));
-
-    nodes.forEach(function (node) {
-      Array.from(node.attributes || []).forEach(function (attribute) {
-        const key = normalizeKey(attribute.name);
-
-        if (
-          key.startsWith("data") &&
-          /(horario|schedule|opening|businesshours|hours|apertura|cierre)/.test(key) &&
-          attribute.value
-        ) {
-          sources.push(attribute.value);
-        }
-      });
-    });
-
-    return sources;
-  };
-
-  const resolveStatus = function (card) {
-    const now = getEcuadorNow();
-    const candidates = getScheduleCandidates(card);
-    const sources = collectCardSources(card);
-
-    candidates.forEach(function (record) {
-      sources.push(record);
-
-      scheduleKeys.forEach(function (key) {
-        const value = getFirst(record, [key]);
-        if (value !== undefined) sources.push(value);
-      });
-    });
-
-    for (const source of sources) {
-      const todayEntry = findTodayEntry(source, now.dayIndex);
-
-      if (todayEntry === undefined) continue;
-      if (isClosedEntry(todayEntry)) return "closed";
-
-      const result = evaluateIntervals(
-        extractIntervals(todayEntry),
-        now.minutes
-      );
-
-      if (result) return result;
-    }
-
-    return null;
-  };
-
-  const installStatus = function (card) {
-    const footer = card.querySelector(".ux-card-bottom");
-    if (!footer) return;
-
-    footer.querySelectorAll(
-      ".ux-badge,.status-indicator,.status-open,.status-closed"
-    ).forEach(function (badge) {
-      badge.remove();
-    });
-
-    const value = resolveStatus(card);
-    let status = footer.querySelector(".ux-opening-status");
-
-    if (!value) {
-      status?.remove();
+    if (originalText.includes("abierto")) {
+      badge.classList.add("is-open");
+      badge.innerHTML = '<i aria-hidden="true"></i><span>Abierto</span>';
+      badge.setAttribute("aria-label", "Estado del negocio: Abierto");
       return;
     }
 
-    if (!status) {
-      status = document.createElement("span");
-      footer.insertBefore(status, footer.firstChild);
+    if (originalText.includes("cerrado")) {
+      badge.classList.add("is-closed");
+      badge.innerHTML = '<i aria-hidden="true"></i><span>Cerrado</span>';
+      badge.setAttribute("aria-label", "Estado del negocio: Cerrado");
+      return;
     }
 
-    const isOpen = value === "open";
-    const label = isOpen ? "Abierto" : "Cerrado";
-
-    status.className =
-      "ux-opening-status " + (isOpen ? "is-open" : "is-closed");
-
-    status.innerHTML =
-      '<i aria-hidden="true"></i><span>' + label + "</span>";
-
-    status.setAttribute("aria-label", "Estado del negocio: " + label);
-    status.dataset.urbanexStatus = value;
+    /* Si no existe horario cargado, no se inventa un estado. */
+    badge.hidden = true;
   };
 
-  const prepareCards = function () {
-    grid.querySelectorAll(".ux-card").forEach(function (card) {
-      const image = card.querySelector(
-        ".ux-company-logo-img,.ux-company-logo img,.ux-logo img,.ux-card-media img,.ux-card-primary-logo"
-      );
-
-      if (image) {
-        image.loading = "lazy";
-        image.decoding = "async";
-      }
-
-      installStatus(card);
-    });
+  const updateCards = function () {
+    grid.querySelectorAll(".ux-card").forEach(updateBadge);
   };
 
-  prepareCards();
+  updateCards();
 
+  /* subcategoria.js reemplaza directamente las tarjetas al cargar o filtrar. */
   const observer = new MutationObserver(function (mutations) {
-    let hasCards = false;
-
-    mutations.forEach(function (mutation) {
-      mutation.addedNodes.forEach(function (node) {
-        if (
-          node instanceof Element &&
-          (node.matches(".ux-card") || node.querySelector(".ux-card"))
-        ) {
-          hasCards = true;
-        }
+    const changed = mutations.some(function (mutation) {
+      return Array.from(mutation.addedNodes).some(function (node) {
+        return node instanceof Element &&
+          (node.matches(".ux-card") || node.querySelector(".ux-card"));
       });
     });
 
-    if (hasCards) {
-      window.requestAnimationFrame(prepareCards);
+    if (changed) {
+      window.requestAnimationFrame(updateCards);
     }
   });
 
@@ -6365,25 +5745,9 @@ document.addEventListener("DOMContentLoaded", function () {
     subtree: false
   });
 
-  window.addEventListener(
-    "urbanex:schedule-data-ready",
-    function () {
-      window.requestAnimationFrame(prepareCards);
-    }
-  );
-
-  [250, 700, 1400, 2600, 4500].forEach(function (delay) {
-    window.setTimeout(prepareCards, delay);
+  [300, 800, 1600, 3000].forEach(function (delay) {
+    window.setTimeout(updateCards, delay);
   });
-
-  const refreshByClock = function () {
-    if (!document.hidden) prepareCards();
-
-    const delay = 60000 - (Date.now() % 60000) + 120;
-    window.setTimeout(refreshByClock, delay);
-  };
-
-  window.setTimeout(refreshByClock, 60000);
 })();
 </script>
 
