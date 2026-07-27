@@ -1,251 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="documentTitle">Urbanex - Categoría</title>
-<link rel="icon" type="image/png" href="../imagenes/log.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
-<link rel="preconnect" href="https://esm.sh" crossorigin>
-<link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-    --bg-main: #020202;
-    --bg-panel: rgba(6, 6, 6, 0.58);
-    --bg-card: rgba(20, 20, 20, 0.62);
-    --gold: #e5c158;
-    --border-color: rgba(229, 193, 88, 0.22);
-    --text-main: #ffffff;
-    --text-muted: #e0e0e0;
-    --text-dark: #aaaaaa;
-    --green: #2ed573;
-    --red: #ff5b68;
-    --font-serif: 'Cinzel', serif;
-    --font-sans: 'Montserrat', sans-serif;
-    --blur-effect: blur(18px);
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-a { color: inherit; text-decoration: none; }
-button, input, select { font-family: var(--font-sans); }
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(229, 193, 88, 0.24); border-radius: 10px; }
-body {
-    width: 100%;
-    min-height: 100vh;
-    background: var(--bg-main);
-    color: var(--text-main);
-    font-family: var(--font-sans);
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding-bottom: 24px;
-}
-.dashboard-container {
-    min-height: calc(100vh - 24px);
-    display: grid;
-    grid-template-rows: 60px minmax(0, 1fr);
-    grid-template-columns: 240px minmax(0, 1fr) 290px;
-    grid-template-areas:
-        "header header header"
-        "aside-left main aside-right";
-    background: #030303;
-    position: relative;
-    overflow: hidden;
-}
-.header-top {
-    grid-area: header;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    z-index: 9999;
-    background: rgba(6, 6, 6, 0.96);
-    border-bottom: 1px solid var(--border-color);
-    backdrop-filter: var(--blur-effect);
-    -webkit-backdrop-filter: var(--blur-effect);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-}
-.brand-box { display: flex; align-items: center; min-width: 170px; }
-.brand-box img { height: 60px; width: auto; display: block; filter: drop-shadow(0 8px 18px rgba(0,0,0,.72)); }
-.search-wrapper { flex: 1; max-width: 430px; margin: 0 20px; position: relative; }
-.search-input {
-    width: 100%;
-    height: 36px;
-    background: rgba(0, 0, 0, 0.48);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 20px;
-    padding: 8px 40px 8px 16px;
-    color: #fff;
-    font-size: 12px;
-    outline: none;
-    text-align: center;
-}
-.search-input:focus { border-color: var(--gold); background: rgba(0, 0, 0, 0.64); }
-.search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; fill: var(--gold); }
-.user-tools { display: flex; align-items: center; gap: 24px; }
-.location-indicator { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; white-space: nowrap; }
-.location-indicator svg, .tool-icon svg { width: 18px; height: 18px; fill: var(--gold); }
-.profile-avatar { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; }
-.profile-avatar svg { width: 13px; height: 13px; fill: var(--gold); }
-.aside-categories {
-    grid-area: aside-left;
-    position: relative;
-    z-index: 5;
-    background: var(--bg-panel);
-    backdrop-filter: var(--blur-effect);
-    -webkit-backdrop-filter: var(--blur-effect);
-    border-right: 1px solid var(--border-color);
-    padding: 20px 12px;
-    overflow-y: auto;
-}
-.section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 14px; padding-left: 6px; font-weight: 700; }
-.categories-list { display: flex; flex-direction: column; gap: 6px; list-style: none; }
-.category-item { list-style: none; }
-.category-item button {
-    width: 100%;
-    min-height: 50px;
-    background: rgba(10, 10, 10, 0.58);
-    border: 1px solid rgba(229, 193, 88, 0.28);
-    padding: 10px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    cursor: pointer;
-    text-align: left;
-    color: #fff;
-}
-.category-item button:hover, .category-item.active button, .category-item button.active { border-color: var(--gold); background: rgba(229, 193, 88, 0.10); }
-.icon-container { width: 28px; height: 28px; flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); font-size: 15px; }
-.category-text-info { display: flex; flex-direction: column; align-items: flex-start; flex: 1; min-width: 0; }
-.category-name { font-size: 11.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
-.category-count { color: var(--text-dark); font-size: 9px; }
-.main-boulevard {
-    grid-area: main;
-    position: relative;
-    z-index: 2;
-    overflow: hidden;
-    background-image: var(--category-background, url("../imagenes/Boulevard.png")), url("../imagenes/Boulevard.png");
-    background-size: cover;
-    background-position: center bottom;
-    background-repeat: no-repeat;
-}
-.boulevard-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.18), rgba(0,0,0,.02) 45%, rgba(0,0,0,.25)); pointer-events: none; }
-.welcome-billboard { position: absolute; top: 42px; left: 50%; transform: translateX(-50%); text-align: center; width: 90%; pointer-events: none; z-index: 2; }
-.welcome-billboard h2 { font-family: var(--font-serif); font-size: 24px; letter-spacing: 7px; text-transform: uppercase; text-shadow: 0 2px 12px rgba(0,0,0,.95); }
-.welcome-billboard p { margin-top: 6px; color: var(--gold); font-size: 10px; font-weight: 700; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,.95); }
-.aside-showcase-list {
-    grid-area: aside-right;
-    position: relative;
-    z-index: 5;
-    background: var(--bg-panel);
-    backdrop-filter: var(--blur-effect);
-    -webkit-backdrop-filter: var(--blur-effect);
-    border-left: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-.showcase-header { padding: 20px 14px 8px 14px; }
-.showcase-header h2 { font-family: var(--font-serif); color: var(--gold); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
-.showcase-stats { font-size: 10px; color: #fff; margin-top: 1px; }
-.sort-box { padding: 0 14px 10px 14px; border-bottom: 1px solid rgba(255,255,255,.08); }
-.sort-select { width: 100%; background: rgba(0,0,0,.42); border: 1px solid rgba(255,255,255,.12); border-radius: 6px; padding: 7px 10px; color: #fff; font-size: 11px; outline: none; }
-.shops-scroll-area { flex: 1; overflow-y: auto; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
-.shop-card { min-height: 64px; display: flex; overflow: hidden; border-radius: 8px; background: var(--bg-card); border: 1px solid rgba(255,255,255,.08); color: inherit; }
-.shop-card:hover { border-color: rgba(229,193,88,.45); background: rgba(229,193,88,.10); }
-.shop-thumb-wrapper { width: 64px; height: 64px; flex: 0 0 64px; background: radial-gradient(circle at 30% 25%, rgba(229,193,88,.22), transparent 38%), linear-gradient(135deg, rgba(229,193,88,.10), rgba(0,0,0,.78)); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 24px; }
-.shop-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
-.shop-details { flex: 1; min-width: 0; padding: 6px 10px; display: flex; flex-direction: column; justify-content: center; }
-.shop-title { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.shop-segment { color: var(--gold); font-size: 9.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.shop-rating-row { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
-.star-icon { color: var(--gold); font-size: 10px; }
-.rating-value { font-size: 10px; font-weight: 700; }
-.rating-count { font-size: 9.5px; color: var(--text-dark); }
-.status-indicator { margin-left: auto; font-size: 9.5px; font-weight: 700; color: var(--green); }
-.status-indicator.closed { color: var(--red); }
-.empty-state { min-height: 86px; border: 1px dashed rgba(229,193,88,.26); border-radius: 8px; padding: 18px 14px; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--text-muted); font-size: 11px; line-height: 1.5; background: rgba(0,0,0,.24); }
-.action-footer-box { padding: 10px 14px; border-top: 1px solid rgba(255,255,255,.08); }
-.btn-view-all-shops { width: 100%; background: var(--gold); border: none; border-radius: 6px; padding: 8px; color: #000; font-size: 11.5px; font-weight: 700; cursor: pointer; }
-.pie-pagina { position: fixed; left: 0; right: 0; bottom: 0; height: 24px; z-index: 9999; background: #000; color: #8c8c8c; font-size: 11px; display: flex; align-items: center; justify-content: center; border-top: 1px solid #1a1a1a; font-family: Arial, Helvetica, sans-serif; }
-.directory-modal { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(0,0,0,.76); backdrop-filter: blur(10px); }
-.directory-modal.open { display: flex; }
-.directory-box { width: min(980px, 96vw); max-height: min(760px, 88vh); display: flex; flex-direction: column; border: 1px solid rgba(229,193,88,.36); border-radius: 18px; background: rgba(8,8,8,.96); overflow: hidden; }
-.directory-head { padding: 18px; border-bottom: 1px solid rgba(255,255,255,.08); display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-.directory-head h2 { font-family: var(--font-serif); color: var(--gold); font-size: 18px; }
-.directory-head button { width: 34px; height: 34px; border: 1px solid rgba(229,193,88,.42); border-radius: 50%; background: transparent; color: var(--gold); cursor: pointer; font-size: 18px; }
-.directory-grid { padding: 16px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
-@media (min-width: 1025px) {
-    .aside-categories, .main-boulevard, .aside-showcase-list { height: calc(100vh - 84px); max-height: calc(100vh - 84px); }
-}
-@media (max-width: 1024px) {
-    .dashboard-container { grid-template-columns: 1fr; grid-template-rows: 60px auto minmax(410px, 48vh) auto; grid-template-areas: "header" "aside-left" "main" "aside-right"; overflow: visible; }
-    .aside-categories { border-right: none; border-bottom: 1px solid var(--border-color); padding: 12px; overflow-x: auto; overflow-y: hidden; }
-    .section-title { display: none; }
-    .categories-list { flex-direction: row; overflow-x: auto; gap: 8px; padding-bottom: 4px; }
-    .category-item { flex: 0 0 auto; }
-    .category-item button { width: auto; min-width: max-content; white-space: nowrap; padding: 8px 12px; }
-    .main-boulevard { min-height: 410px; height: 48vh; }
-    .aside-showcase-list { border-left: none; border-top: 1px solid var(--border-color); }
-    .shops-scroll-area { max-height: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
-}
-@media (max-width: 720px) {
-    body { padding-top: 198px; padding-bottom: 24px; }
-    .dashboard-container { display: grid; grid-template-columns: 1fr; grid-template-rows: minmax(420px, 52vh) auto; grid-template-areas: "main" "aside-right"; min-height: auto; overflow: visible; }
-    .header-top { height: 116px; min-height: 116px; display: grid; grid-template-columns: 1fr; grid-template-rows: 58px 38px; gap: 8px; padding: 8px 12px 10px 12px; }
-    .brand-box { width: 100%; min-width: 0; display: flex; justify-content: center; }
-    .brand-box img { height: 56px; margin: 0 auto; }
-    .search-wrapper { width: 100%; max-width: none; margin: 0; }
-    .search-input { height: 38px; font-size: 12px; }
-    .user-tools { display: none; }
-    .aside-categories { position: fixed; top: 116px; left: 0; right: 0; height: 82px; min-height: 82px; z-index: 9998; padding: 10px 18px 12px 18px; background: rgba(6,6,6,.96); border-right: none; border-bottom: 1px solid var(--border-color); overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
-    .categories-list { height: 58px; min-height: 58px; display: flex; flex-direction: row; align-items: stretch; gap: 8px; overflow-x: auto; overflow-y: hidden; padding: 0; }
-    .category-item button { height: 58px; min-height: 58px; padding: 9px 10px; }
-    .main-boulevard { width: 100%; height: 52vh; min-height: 420px; background-position: center bottom; }
-    .welcome-billboard { top: 48px; width: 92%; }
-    .welcome-billboard h2 { font-size: 20px; letter-spacing: 4px; }
-    .welcome-billboard p { font-size: 9px; letter-spacing: 1.4px; line-height: 1.35; }
-    .aside-showcase-list { width: 100%; height: auto; min-height: auto; max-height: none; overflow: visible; }
-    .shops-scroll-area { display: flex; flex-direction: column; overflow: visible; }
-    .pie-pagina { height: 24px; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="documentTitle">Urbanex - Categoría</title>
+    <link rel="icon" type="image/png" href="/imagenes/log.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+    <link rel="preconnect" href="https://esm.sh" crossorigin>
+    <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
+    <link rel="preload" as="image" href="../imagenes/Boulevard.png" fetchpriority="high">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-
-<style id="ux-subcategory-autoscroll-style">
-/* Movimiento automático lento para la barra de subcategorías */
-@media (max-width: 1024px) {
-    .aside-categories {
-        scroll-behavior: auto !important;
-        scrollbar-width: thin;
-    }
-
-    .categories-list {
-        width: max-content !important;
-        min-width: max-content !important;
-        padding-right: 18px !important;
-    }
-
-    .aside-categories.ux-auto-paused {
-        box-shadow: inset 0 -1px 0 rgba(229, 193, 88, 0.18);
-    }
-}
-</style>
-
-<link rel="stylesheet" href="../assets/css/urbanex-location-picker.css?v=20260726-1">
-<script src="../assets/js/urbanex-location-picker.js?v=20260726-1"></script>
-
-<!-- FORMATO COPIADO LITERALMENTE DESDE boulevard(107).html -->
-<div hidden aria-hidden="true" id="urbanex-format-source-marker"></div>
-<style>
+    <style>
         :root {
             --bg-main: #020202;
             --bg-panels-glass: rgba(6, 6, 6, 0.65);
@@ -598,6 +366,16 @@ html, body { height: 100% !important; overflow: hidden !important; }
 
 </style>
 
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#e5c158">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Urbanex">
+    <link rel="apple-touch-icon" href="/imagenes/logo.png">
+
 <style>
 /* === UX_BOULEVARD_ONLY_FIXED_BARS START === */
 html,
@@ -664,6 +442,7 @@ body {
 /* === UX_BOULEVARD_ONLY_FIXED_BARS END === */
 </style>
 
+
 <style id="ux-boulevard-bars-style">
   /* Solo fijar encabezado y pie. No congela todo el boulevard. */
   html,
@@ -698,6 +477,7 @@ body {
     padding-bottom: 24px !important;
   }
 </style>
+
 
 <style id="ux-final-pwa-style">
   .ux-final-pwa-install {
@@ -798,6 +578,7 @@ body {
     }
   }
 </style>
+
 
 <style id="ux-boulevard-final-requested">
 /* === CAMBIOS SOLICITADOS SOLO PARA BOULEVARD ===
@@ -1085,6 +866,7 @@ body {
 /* === FIN CAMBIOS SOLICITADOS SOLO PARA BOULEVARD === */
 </style>
 
+
 <style id="ux-boulevard-mobile-filters-visible">
 /* SOLO CAMBIO: mostrar la barra de filtros inferiores en celular */
 @media (max-width: 760px) {
@@ -1134,6 +916,7 @@ body {
 }
 </style>
 
+
 <style id="ux-performance-patch">
 /* SOLO OPTIMIZACIÓN: reduce trabajo de repintado sin cambiar diseño */
 .aside-categories,
@@ -1155,6 +938,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-original-focused-improvements">
 /* Mejoras limitadas sobre el original. No sustituye tipografías ni identidad. */
@@ -1292,6 +1076,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-province-city-picker-v1">
 /* ÚNICO CAMBIO: selector de provincia y ciudad/cantón. */
@@ -1439,6 +1224,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-location-mobile-final-v2">
 /* Ajuste puntual: ubicación visible, compacta y responsive. */
@@ -1608,6 +1394,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-featured-desktop-tablet-only-v1">
 /* Ajustes exclusivos para computador y tablet. La vista móvil (<=640px) no se modifica. */
@@ -1785,6 +1572,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-directory-premium-v2">
 /* =========================================================
@@ -2406,6 +2194,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-directory-category-groups-v3">
 /* Distinción visual por categoría dentro de Todos los negocios. */
 .uxd-grid{
@@ -2525,6 +2314,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-category-bar-like-index">
 /* ============================================================
    SOLO BARRA DE CATEGORÍAS
@@ -2561,6 +2351,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-logo-fit-real-only">
 /* ÚNICO CAMBIO: mostrar cada logotipo completo, centrado y sin recortes. */
 .uxd-card-media{
@@ -2591,6 +2382,7 @@ body {
     transform:none!important;
 }
 </style>
+
 
 <style id="urbanex-featured-single-only">
 /* ÚNICOS CAMBIOS:
@@ -2653,6 +2445,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-side-panels-translucent-only">
 /* ÚNICO CAMBIO: paneles laterales menos transparentes en computador, tablet y celular. */
 .aside-categories{
@@ -2672,6 +2465,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-mobile-category-spacing-only">
 /* ÚNICO CAMBIO: aumentar la separación entre la barra de categorías y el Boulevard en celular. */
 @media (max-width:720px){
@@ -2680,6 +2474,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-mobile-header-category-gap-only">
 /* ÚNICO CAMBIO: aumentar la separación entre las dos líneas en celular. */
@@ -2694,6 +2489,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-footer-link-style-only">
 /* ÚNICO CAMBIO: enlace del pie con el mismo color del texto y sin subrayado. */
 .pie-pagina a,
@@ -2704,6 +2500,7 @@ body {
     text-decoration:none!important;
 }
 </style>
+
 
 <style id="urbanex-mobile-lines-spacing-final">
 /* ÚNICO CAMBIO: separar las líneas del encabezado sin alterar
@@ -2723,6 +2520,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-featured-professional-large-screens-only">
 /* ============================================================
@@ -3000,6 +2798,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-featured-multiple-large-screens-only">
 /* ============================================================
    SOLO TABLET Y COMPUTADOR (641 px en adelante)
@@ -3203,6 +3002,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-featured-card-reference-large-only">
 /* ============================================================
@@ -3423,6 +3223,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-featured-different-times-large-only">
 /* Solo tablet y computador: cada publicidad cambia de forma independiente. */
 @media (min-width:721px){
@@ -3448,6 +3249,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-featured-luxury-large-only">
 /* ============================================================
@@ -3926,6 +3728,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-featured-logo-fit-only">
 /* ÚNICO CAMBIO: ajustar el logo al recuadro de Destacados en pantallas grandes. */
 @media (min-width:721px){
@@ -3947,6 +3750,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-featured-translucency-restored-only">
 /* ÚNICO CAMBIO: recuperar la translucidez de Destacados en tablet y computador. */
@@ -3993,6 +3797,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-featured-header-width-adjust-only">
 /* Ajuste leve exclusivo para tablet y computador. Celular intacto. */
@@ -4045,6 +3850,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-featured-inline-arrows-only">
 /* ÚNICOS CAMBIOS:
@@ -4158,6 +3964,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-only-requested-spacing-scroll">
 /* ÚNICOS CAMBIOS:
    - reducir márgenes internos en Destacados
@@ -4213,6 +4020,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-only-more-compact-margins-and-divider-arrows">
 /* ÚNICOS CAMBIOS:
@@ -4275,6 +4083,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-mobile-featured-rich-card-only">
 /* ÚNICO CAMBIO: Destacados del celular con más información y un poco más alto. */
@@ -4561,6 +4370,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-mobile-featured-professional-navigation-only">
 /* ÚNICO CAMBIO:
    sustituir las flechas móviles por navegación mediante:
@@ -4657,6 +4467,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-mobile-featured-margins-reduced-only">
 /* ÚNICO CAMBIO: reducir márgenes del destacado móvil
    y mantener una separación uniforme similar al espacio
@@ -4678,6 +4489,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-mobile-featured-actions-under-address-only">
 /* ÚNICOS CAMBIOS EN CELULAR:
@@ -4797,6 +4609,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-mobile-featured-proportion-adjust-only">
 /* ÚNICOS CAMBIOS EN CELULAR:
    - pequeño margen superior
@@ -4876,6 +4689,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-featured-large-professional-navigation-only">
 /* SOLO TABLET Y COMPUTADOR:
@@ -4997,6 +4811,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-bottom-filter-gap-only">
 /* ÚNICO CAMBIO EN TABLET Y COMPUTADOR:
    reducir el espacio entre la barra inferior y el pie,
@@ -5008,6 +4823,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-featured-large-space-optimized-only">
 /* SOLO TABLET Y COMPUTADOR:
@@ -5135,6 +4951,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-fixed-large-layout-and-featured-details-only">
 /* SOLO COMPUTADOR:
@@ -5360,6 +5177,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-bottom-filter-translucent-only">
 /* ÚNICO CAMBIO: barra inferior de filtros translúcida. */
 .bottom-filter-bar{
@@ -5372,6 +5190,7 @@ body {
         inset 0 1px 0 rgba(255,255,255,.035)!important;
 }
 </style>
+
 
 <style id="urbanex-tablet-native-scroll-fix-only">
 /* ÚNICO AJUSTE PARA TABLET:
@@ -5471,6 +5290,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-tablet-footer-gap-fix-only">
 /* ÚNICO CAMBIO PARA TABLET:
@@ -5572,6 +5392,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-featured-reference-exact-v92">
 /* =========================================================
@@ -5932,6 +5753,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-featured-final-small-adjustments-only">
 /* ÚNICOS CAMBIOS EN TABLET Y COMPUTADOR:
    - tipografía ligeramente más grande
@@ -5988,6 +5810,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-featured-desktop-compact-distribution-only">
 /* ÚNICOS CAMBIOS EN COMPUTADOR:
@@ -6160,6 +5983,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-featured-tablet-compact-distribution-only">
 /* ÚNICOS CAMBIOS EN TABLET:
    - reducir la altura inútil de las tarjetas
@@ -6331,6 +6155,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-featured-three-cards-font-match-only">
 /* ÚNICO CAMBIO:
    cuando aparecen tres tarjetas, la tipografía conserva
@@ -6405,6 +6230,7 @@ body {
 }
 </style>
 
+
 <style id="urbanex-featured-logo-slightly-larger-only">
 /* ÚNICO CAMBIO:
    ampliar ligeramente el logotipo dentro de su mismo recuadro.
@@ -6416,6 +6242,7 @@ body {
     }
 }
 </style>
+
 
 <style id="urbanex-featured-bottom-centered-only">
 /* ÚNICO CAMBIO:
@@ -6450,866 +6277,12 @@ body {
 }
 </style>
 
-
-<style id="urbanex-final-exact-boulevard-corrections">
-/* ÚNICOS AJUSTES FINALES:
-   - buscador centrado respecto a la ventana
-   - formato exacto de las tarjetas de Destacados del Boulevard
-   - enlace de NeoDat funcional
-*/
-
-/* El buscador queda realmente centrado, sin depender del ancho
-   del logotipo ni del selector de ubicación. */
-@media (min-width:721px){
-    .header-top{
-        display:flex!important;
-        align-items:center!important;
-        justify-content:space-between!important;
-        position:fixed!important;
-    }
-
-    .brand-box{
-        flex:0 0 auto!important;
-        margin:0!important;
-    }
-
-    .search-wrapper{
-        position:absolute!important;
-        left:50%!important;
-        top:50%!important;
-        width:min(400px,calc(100% - 520px))!important;
-        max-width:400px!important;
-        margin:0!important;
-        transform:translate(-50%,-50%)!important;
-        z-index:2!important;
-    }
-
-    .user-tools{
-        flex:0 0 auto!important;
-        margin-left:auto!important;
-    }
-}
-
-/* Formato exacto de Destacados usado por boulevard(107).html.
-   Se aplican clases exclusivas para evitar interferencias del
-   diseño anterior del index. */
-@media (min-width:721px){
-    .aside-showcase-list{
-        min-width:0!important;
-        min-height:0!important;
-        display:grid!important;
-        grid-template-rows:auto minmax(0,1fr) auto!important;
-        overflow:hidden!important;
-    }
-
-    .aside-showcase-list .sort-box{
-        display:none!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area{
-        min-width:0!important;
-        min-height:0!important;
-        width:100%!important;
-        height:100%!important;
-        max-height:none!important;
-        display:grid!important;
-        grid-template-columns:minmax(0,1fr)!important;
-        align-content:stretch!important;
-        align-items:stretch!important;
-        gap:9px!important;
-        padding:9px!important;
-        overflow:hidden!important;
-        cursor:default!important;
-        user-select:auto!important;
-        touch-action:pan-y pinch-zoom!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="1"]{
-        grid-template-rows:minmax(0,1fr)!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="2"]{
-        grid-template-rows:repeat(2,minmax(0,1fr))!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="3"]{
-        grid-template-rows:repeat(3,minmax(0,1fr))!important;
-        gap:7px!important;
-        padding:7px!important;
-    }
-
-    .aside-showcase-list .ux-featured-card{
-        width:100%!important;
-        height:100%!important;
-        min-width:0!important;
-        min-height:0!important;
-        max-width:none!important;
-        max-height:none!important;
-        margin:0!important;
-        display:block!important;
-        overflow:hidden!important;
-        border:1px solid rgba(151,172,194,.25)!important;
-        border-radius:15px!important;
-        background:
-            radial-gradient(circle at 100% 0,rgba(86,113,139,.12),transparent 34%),
-            rgba(7,10,14,.84)!important;
-        box-shadow:
-            0 13px 26px rgba(0,0,0,.24),
-            inset 0 1px 0 rgba(255,255,255,.035)!important;
-        transform:none!important;
-    }
-
-    .aside-showcase-list .ux-featured-link{
-        width:100%!important;
-        height:100%!important;
-        min-width:0!important;
-        min-height:0!important;
-        display:grid!important;
-        grid-template-rows:auto auto minmax(0,1fr)!important;
-        align-content:start!important;
-        gap:7px!important;
-        padding:9px!important;
-        overflow:hidden!important;
-        color:inherit!important;
-        text-decoration:none!important;
-    }
-
-    .aside-showcase-list .ux-featured-primary{
-        min-width:0!important;
-        display:grid!important;
-        grid-template-columns:92px minmax(0,1fr)!important;
-        align-items:start!important;
-        gap:10px!important;
-    }
-
-    .aside-showcase-list .ux-featured-logo-box{
-        width:92px!important;
-        height:92px!important;
-        min-width:92px!important;
-        min-height:92px!important;
-        display:flex!important;
-        align-items:center!important;
-        justify-content:center!important;
-        overflow:hidden!important;
-        border:1px solid rgba(255,255,255,.16)!important;
-        border-radius:13px!important;
-        background:#fff!important;
-        box-shadow:0 7px 16px rgba(0,0,0,.18)!important;
-    }
-
-    .aside-showcase-list .ux-featured-logo{
-        width:100%!important;
-        height:100%!important;
-        min-width:0!important;
-        min-height:0!important;
-        max-width:100%!important;
-        max-height:100%!important;
-        display:block!important;
-        padding:0!important;
-        object-fit:cover!important;
-        object-position:center!important;
-        border-radius:12px!important;
-        background:#fff!important;
-        transform:scale(1.06)!important;
-        transform-origin:center!important;
-    }
-
-    .aside-showcase-list .ux-featured-content{
-        min-width:0!important;
-        min-height:92px!important;
-        display:flex!important;
-        flex-direction:column!important;
-        justify-content:flex-start!important;
-        gap:6px!important;
-        padding-top:1px!important;
-        overflow:hidden!important;
-    }
-
-    .aside-showcase-list .ux-featured-category{
-        min-width:0!important;
-        overflow:hidden!important;
-        color:#c4ced7!important;
-        font-size:8.2px!important;
-        font-weight:700!important;
-        line-height:1.15!important;
-        text-overflow:ellipsis!important;
-        white-space:nowrap!important;
-    }
-
-    .aside-showcase-list .ux-featured-name{
-        min-width:0!important;
-        overflow:hidden!important;
-        color:#fff!important;
-        font-size:13.4px!important;
-        font-weight:800!important;
-        line-height:1.18!important;
-        letter-spacing:-.12px!important;
-        white-space:normal!important;
-        display:-webkit-box!important;
-        -webkit-box-orient:vertical!important;
-        -webkit-line-clamp:2!important;
-    }
-
-    .aside-showcase-list .ux-featured-address{
-        min-width:0!important;
-        display:flex!important;
-        align-items:flex-start!important;
-        gap:5px!important;
-        overflow:hidden!important;
-        color:#d4dce2!important;
-        font-size:8px!important;
-        line-height:1.28!important;
-    }
-
-    .aside-showcase-list .ux-featured-address > span:first-child{
-        flex:0 0 auto!important;
-        color:#8fa6ba!important;
-        font-size:9px!important;
-    }
-
-    .aside-showcase-list .ux-featured-address > span:last-child{
-        min-width:0!important;
-        overflow:hidden!important;
-        display:-webkit-box!important;
-        -webkit-box-orient:vertical!important;
-        -webkit-line-clamp:3!important;
-    }
-
-    .aside-showcase-list .ux-featured-data{
-        min-width:0!important;
-        display:grid!important;
-        grid-template-columns:repeat(2,minmax(0,1fr))!important;
-        gap:10px!important;
-        padding-top:7px!important;
-        border-top:1px solid rgba(151,172,194,.11)!important;
-    }
-
-    .aside-showcase-list .ux-featured-data-item{
-        min-width:0!important;
-        display:flex!important;
-        flex-direction:column!important;
-        gap:2px!important;
-        overflow:hidden!important;
-    }
-
-    .aside-showcase-list .ux-featured-data-item span{
-        color:#8294a3!important;
-        font-size:6.3px!important;
-        font-weight:800!important;
-        line-height:1!important;
-        letter-spacing:.38px!important;
-        text-transform:uppercase!important;
-    }
-
-    .aside-showcase-list .ux-featured-data-item strong{
-        min-width:0!important;
-        overflow:hidden!important;
-        color:#eef2f5!important;
-        font-size:7.5px!important;
-        font-weight:700!important;
-        line-height:1.15!important;
-        text-overflow:ellipsis!important;
-        white-space:nowrap!important;
-    }
-
-    .aside-showcase-list .ux-featured-bottom{
-        width:100%!important;
-        height:100%!important;
-        min-width:0!important;
-        min-height:0!important;
-        display:flex!important;
-        align-items:center!important;
-        align-content:center!important;
-        justify-content:space-between!important;
-        gap:8px!important;
-        margin:0!important;
-        padding:0!important;
-        overflow:visible!important;
-        border-top:1px solid rgba(151,172,194,.11)!important;
-    }
-
-    .aside-showcase-list .ux-featured-rating,
-    .aside-showcase-list .ux-featured-status,
-    .aside-showcase-list .ux-featured-rating .shop-rating-row{
-        display:flex!important;
-        align-items:center!important;
-        align-self:center!important;
-    }
-
-    .aside-showcase-list .ux-featured-rating .shop-rating-row{
-        min-width:0!important;
-        margin:0!important;
-        padding:0!important;
-        border:0!important;
-    }
-
-    .aside-showcase-list .ux-featured-rating .rating-count,
-    .aside-showcase-list .ux-featured-rating .rating-value{
-        font-size:7.8px!important;
-    }
-
-    .aside-showcase-list .ux-featured-status .status-open,
-    .aside-showcase-list .ux-featured-status .status-closed{
-        margin:0!important;
-        padding:5px 9px!important;
-        border-radius:999px!important;
-        font-size:7.2px!important;
-        font-weight:700!important;
-        line-height:1!important;
-        white-space:nowrap!important;
-    }
-
-    .action-footer-box{
-        display:none!important;
-    }
-}
-
-/* Tablet: conserva el mismo formato y muestra como máximo dos tarjetas. */
-@media (min-width:721px) and (max-width:1024px){
-    .aside-showcase-list .ux-featured-primary{
-        grid-template-columns:84px minmax(0,1fr)!important;
-        gap:9px!important;
-    }
-
-    .aside-showcase-list .ux-featured-logo-box{
-        width:84px!important;
-        height:84px!important;
-        min-width:84px!important;
-        min-height:84px!important;
-    }
-
-    .aside-showcase-list .ux-featured-content{
-        min-height:84px!important;
-    }
-
-    .aside-showcase-list .ux-featured-name{
-        font-size:12.3px!important;
-    }
-
-    .aside-showcase-list .ux-featured-category{
-        font-size:7.7px!important;
-    }
-
-    .aside-showcase-list .ux-featured-address{
-        font-size:7.5px!important;
-    }
-}
-
-/* El enlace del pie queda visible, sin subrayado y siempre clicable. */
-.pie-pagina{
-    pointer-events:auto!important;
-}
-
-.pie-pagina a,
-.pie-pagina a:visited,
-.pie-pagina a:hover,
-.pie-pagina a:focus{
-    position:relative!important;
-    z-index:2!important;
-    color:inherit!important;
-    text-decoration:none!important;
-    pointer-events:auto!important;
-    cursor:pointer!important;
-}
-</style>
-
-
-<style id="urbanex-index-exact-featured-match-final">
-/* Buscador centrado exactamente respecto a la pantalla. */
-@media (min-width:721px){
-    .header-top{
-        position:fixed!important;
-        display:flex!important;
-        align-items:center!important;
-        justify-content:space-between!important;
-    }
-
-    .search-wrapper{
-        position:absolute!important;
-        left:50%!important;
-        top:50%!important;
-        width:min(400px,calc(100% - 520px))!important;
-        max-width:400px!important;
-        margin:0!important;
-        transform:translate(-50%,-50%)!important;
-        z-index:3!important;
-    }
-
-    .user-tools{
-        margin-left:auto!important;
-    }
-}
-
-/* Destacados idénticos al formato final del Boulevard. */
-@media (min-width:721px){
-    .aside-showcase-list{
-        min-width:0!important;
-        min-height:0!important;
-        display:grid!important;
-        grid-template-rows:auto minmax(0,1fr) auto!important;
-        overflow:hidden!important;
-    }
-
-    .aside-showcase-list .sort-box,
-    .aside-showcase-list .action-footer-box{
-        display:none!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area{
-        min-width:0!important;
-        min-height:0!important;
-        width:100%!important;
-        height:100%!important;
-        max-height:none!important;
-        display:grid!important;
-        grid-template-columns:minmax(0,1fr)!important;
-        align-content:start!important;
-        align-items:stretch!important;
-        gap:9px!important;
-        padding:9px!important;
-        overflow:hidden!important;
-        cursor:default!important;
-        user-select:auto!important;
-        touch-action:pan-y pinch-zoom!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="1"]{
-        grid-template-rows:178px!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="2"]{
-        grid-template-rows:repeat(2,178px)!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="3"]{
-        grid-template-rows:repeat(3,minmax(148px,1fr))!important;
-        gap:7px!important;
-        padding:7px!important;
-    }
-
-    .aside-showcase-list .ux-featured-card{
-        width:100%!important;
-        height:100%!important;
-        min-width:0!important;
-        min-height:0!important;
-        max-width:none!important;
-        max-height:184px!important;
-        margin:0!important;
-        display:block!important;
-        overflow:hidden!important;
-        border:1px solid rgba(151,172,194,.25)!important;
-        border-radius:15px!important;
-        background:
-            radial-gradient(circle at 100% 0,rgba(86,113,139,.12),transparent 34%),
-            rgba(7,10,14,.84)!important;
-        box-shadow:
-            0 13px 26px rgba(0,0,0,.24),
-            inset 0 1px 0 rgba(255,255,255,.035)!important;
-        transform:none!important;
-    }
-
-    .aside-showcase-list .ux-featured-link{
-        width:100%!important;
-        height:100%!important;
-        min-width:0!important;
-        min-height:0!important;
-        display:grid!important;
-        grid-template-rows:auto auto minmax(0,1fr)!important;
-        align-content:start!important;
-        gap:5px!important;
-        padding:8px!important;
-        overflow:hidden!important;
-        color:inherit!important;
-        text-decoration:none!important;
-    }
-
-    .aside-showcase-list .ux-featured-primary{
-        min-width:0!important;
-        display:grid!important;
-        grid-template-columns:86px minmax(0,1fr)!important;
-        align-items:start!important;
-        gap:9px!important;
-    }
-
-    .aside-showcase-list .ux-featured-logo-box{
-        width:86px!important;
-        height:86px!important;
-        min-width:86px!important;
-        min-height:86px!important;
-        display:flex!important;
-        align-items:center!important;
-        justify-content:center!important;
-        overflow:hidden!important;
-        border:1px solid rgba(255,255,255,.16)!important;
-        border-radius:13px!important;
-        background:#fff!important;
-        box-shadow:0 7px 16px rgba(0,0,0,.18)!important;
-    }
-
-    .aside-showcase-list .ux-featured-logo{
-        width:100%!important;
-        height:100%!important;
-        min-width:0!important;
-        min-height:0!important;
-        max-width:100%!important;
-        max-height:100%!important;
-        display:block!important;
-        padding:0!important;
-        object-fit:cover!important;
-        object-position:center!important;
-        border-radius:12px!important;
-        background:#fff!important;
-        transform:scale(1.06)!important;
-        transform-origin:center!important;
-    }
-
-    .aside-showcase-list .ux-featured-logo-fallback{
-        color:#17202a!important;
-        font-size:30px!important;
-    }
-
-    .aside-showcase-list .ux-featured-content{
-        min-width:0!important;
-        min-height:86px!important;
-        display:flex!important;
-        flex-direction:column!important;
-        justify-content:flex-start!important;
-        gap:5px!important;
-        padding-top:1px!important;
-        overflow:hidden!important;
-    }
-
-    .aside-showcase-list .ux-featured-category{
-        min-width:0!important;
-        display:flex!important;
-        align-items:center!important;
-        gap:4px!important;
-        overflow:hidden!important;
-        color:#c4ced7!important;
-        font-size:8.4px!important;
-        font-weight:700!important;
-        line-height:1.15!important;
-        text-overflow:ellipsis!important;
-        white-space:nowrap!important;
-    }
-
-    .aside-showcase-list .ux-featured-category span:last-child{
-        min-width:0!important;
-        overflow:hidden!important;
-        text-overflow:ellipsis!important;
-        white-space:nowrap!important;
-    }
-
-    .aside-showcase-list .ux-featured-name{
-        min-width:0!important;
-        overflow:hidden!important;
-        color:#fff!important;
-        font-size:13.7px!important;
-        font-weight:800!important;
-        line-height:1.16!important;
-        letter-spacing:-.12px!important;
-        white-space:normal!important;
-        display:-webkit-box!important;
-        -webkit-box-orient:vertical!important;
-        -webkit-line-clamp:2!important;
-    }
-
-    .aside-showcase-list .ux-featured-address{
-        min-width:0!important;
-        display:flex!important;
-        align-items:flex-start!important;
-        gap:5px!important;
-        overflow:hidden!important;
-        color:#d4dce2!important;
-        font-size:8.2px!important;
-        line-height:1.25!important;
-    }
-
-    .aside-showcase-list .ux-featured-address > span:first-child{
-        flex:0 0 auto!important;
-        color:#8fa6ba!important;
-        font-size:9px!important;
-    }
-
-    .aside-showcase-list .ux-featured-address > span:last-child{
-        min-width:0!important;
-        overflow:hidden!important;
-        display:-webkit-box!important;
-        -webkit-box-orient:vertical!important;
-        -webkit-line-clamp:2!important;
-    }
-
-    .aside-showcase-list .ux-featured-data{
-        min-width:0!important;
-        display:grid!important;
-        grid-template-columns:repeat(2,minmax(0,1fr))!important;
-        gap:9px!important;
-        padding-top:5px!important;
-        border-top:1px solid rgba(151,172,194,.11)!important;
-    }
-
-    .aside-showcase-list .ux-featured-data-item{
-        min-width:0!important;
-        display:flex!important;
-        flex-direction:column!important;
-        gap:2px!important;
-        overflow:hidden!important;
-    }
-
-    .aside-showcase-list .ux-featured-data-item span{
-        color:#8294a3!important;
-        font-size:6.5px!important;
-        font-weight:800!important;
-        line-height:1!important;
-        letter-spacing:.38px!important;
-        text-transform:uppercase!important;
-    }
-
-    .aside-showcase-list .ux-featured-data-item strong{
-        min-width:0!important;
-        overflow:hidden!important;
-        color:#eef2f5!important;
-        font-size:7.8px!important;
-        font-weight:700!important;
-        line-height:1.15!important;
-        text-overflow:ellipsis!important;
-        white-space:nowrap!important;
-    }
-
-    .aside-showcase-list .ux-featured-bottom{
-        width:100%!important;
-        height:100%!important;
-        min-width:0!important;
-        min-height:0!important;
-        display:flex!important;
-        align-items:center!important;
-        align-content:center!important;
-        justify-content:space-between!important;
-        gap:8px!important;
-        margin:0!important;
-        padding:0!important;
-        overflow:visible!important;
-        border-top:1px solid rgba(151,172,194,.11)!important;
-    }
-
-    .aside-showcase-list .ux-featured-rating,
-    .aside-showcase-list .ux-featured-status,
-    .aside-showcase-list .ux-featured-rating .shop-rating-row{
-        display:flex!important;
-        align-items:center!important;
-        align-self:center!important;
-    }
-
-    .aside-showcase-list .ux-featured-rating .shop-rating-row{
-        min-width:0!important;
-        margin:0!important;
-        padding:0!important;
-        border:0!important;
-    }
-
-    .aside-showcase-list .ux-featured-rating .rating-count,
-    .aside-showcase-list .ux-featured-rating .rating-value{
-        color:#aeb7bf!important;
-        font-size:8px!important;
-    }
-
-    .aside-showcase-list .ux-featured-status{
-        padding-right:1px!important;
-        overflow:visible!important;
-    }
-
-    .aside-showcase-list .ux-featured-status .status-open,
-    .aside-showcase-list .ux-featured-status .status-closed{
-        display:inline-flex!important;
-        align-items:center!important;
-        min-height:22px!important;
-        margin:0!important;
-        padding:4px 9px!important;
-        border-radius:999px!important;
-        font-size:7.4px!important;
-        font-weight:700!important;
-        line-height:1.1!important;
-        white-space:nowrap!important;
-        overflow:visible!important;
-    }
-}
-
-/* Tres tarjetas conservan tipografía y proporción. */
-@media (min-width:1025px){
-    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-link{
-        gap:4px!important;
-        padding:7px!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-primary{
-        grid-template-columns:74px minmax(0,1fr)!important;
-        gap:8px!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-logo-box{
-        width:74px!important;
-        height:74px!important;
-        min-width:74px!important;
-        min-height:74px!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-content{
-        min-height:74px!important;
-        gap:3px!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-category{
-        font-size:8.4px!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-name{
-        font-size:13.2px!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-address{
-        font-size:8px!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-data-item span{
-        font-size:6.3px!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-data-item strong{
-        font-size:7.6px!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-status .status-open,
-    .aside-showcase-list .shops-scroll-area[data-visible-count="3"] .ux-featured-status .status-closed{
-        font-size:7.2px!important;
-    }
-}
-
-/* Tablet: mismo formato, máximo dos tarjetas. */
-@media (min-width:721px) and (max-width:1024px){
-    .aside-showcase-list .shops-scroll-area[data-visible-count="1"]{
-        grid-template-rows:174px!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area[data-visible-count="2"]{
-        grid-template-rows:repeat(2,174px)!important;
-    }
-
-    .aside-showcase-list .ux-featured-card{
-        max-height:180px!important;
-    }
-
-    .aside-showcase-list .ux-featured-primary{
-        grid-template-columns:82px minmax(0,1fr)!important;
-    }
-
-    .aside-showcase-list .ux-featured-logo-box{
-        width:82px!important;
-        height:82px!important;
-        min-width:82px!important;
-        min-height:82px!important;
-    }
-
-    .aside-showcase-list .ux-featured-content{
-        min-height:82px!important;
-    }
-
-    .aside-showcase-list .ux-featured-category{
-        font-size:8px!important;
-    }
-
-    .aside-showcase-list .ux-featured-name{
-        font-size:12.8px!important;
-    }
-
-    .aside-showcase-list .ux-featured-address{
-        font-size:7.8px!important;
-    }
-
-    .aside-showcase-list .ux-featured-data-item span{
-        font-size:6.2px!important;
-    }
-
-    .aside-showcase-list .ux-featured-data-item strong{
-        font-size:7.5px!important;
-    }
-}
-
-/* NeoDat Consultores continúa abriendo neodat.net. */
-.pie-pagina{
-    pointer-events:auto!important;
-}
-
-.pie-pagina a,
-.pie-pagina a:visited,
-.pie-pagina a:hover,
-.pie-pagina a:focus{
-    position:relative!important;
-    z-index:3!important;
-    color:inherit!important;
-    text-decoration:none!important;
-    pointer-events:auto!important;
-    cursor:pointer!important;
-}
-</style>
-
-
-<style id="urbanex-featured-definitive-guard">
-@media (min-width:721px){
-    .aside-showcase-list .shops-scroll-area > .shop-card:not(.ux-featured-card){
-        display:none!important;
-    }
-
-    .aside-showcase-list .ux-featured-card{
-        display:block!important;
-    }
-}
-</style>
-
-
-<style id="urbanex-index-mobile-featured-match-final">
-/* SOLO CELULAR: Destacados de index igual a Boulevard. */
-@media (max-width:720px){
-    .aside-showcase-list .showcase-stats,
-    .aside-showcase-list .sort-box,
-    .aside-showcase-list .action-footer-box{
-        display:none!important;
-    }
-
-    .aside-showcase-list{
-        min-height:0!important;
-        height:auto!important;
-        max-height:none!important;
-        overflow:hidden!important;
-    }
-
-    .aside-showcase-list .showcase-header{
-        min-height:auto!important;
-        padding:14px 12px 6px!important;
-        border-bottom:0!important;
-    }
-
-    .aside-showcase-list .showcase-header h2{
-        margin:0!important;
-        font-family:var(--font-serif)!important;
-        color:var(--gold)!important;
-        font-size:13px!important;
-        line-height:1.2!important;
-        letter-spacing:1px!important;
-        text-transform:uppercase!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area{
-        min-height:136px!important;
-        max-height:136px!important;
-        padding:7px 7px 3px!important;
-        overflow:hidden!important;
-    }
-}
-</style>
-
 </head>
 <body>
+
 <div class="dashboard-container">
+
+    <!-- HEADER -->
     <header class="header-top">
         <a href="../boulevard.html" class="brand-box" title="Volver al Boulevard">
             <img src="../imagenes/logo.png" alt="Logo Urbanex" style="height:60px;width:auto;display:block;">
@@ -7359,60 +6332,210 @@ body {
         </div>
     </header>
 
+    <!-- SIDEBAR CATEGORÍAS -->
     <aside class="aside-categories">
         <h2 class="section-title">Subcategorías</h2>
-        <ul class="categories-list" id="categoriesList"></ul>
+        <ul class="categories-list" id="categoriesList">
+            <!-- "Todos" -->
+            <li class="category-item">
+                <button class="cat-all-btn active" id="catAllBtn" onclick="openDirectorio()">
+                    <div class="icon-container">
+                        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--gold)"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                    </div>
+                    <div class="category-text-info">
+                        <span class="category-name">Todos los negocios</span>
+                        <span class="category-count" id="totalCount">cargando...</span>
+                    </div>
+                </button>
+            </li>
+            <!-- Dinámico -->
+            <li class="skeleton" style="height:46px;border-radius:12px;"></li>
+            <li class="skeleton" style="height:46px;border-radius:12px;"></li>
+            <li class="skeleton" style="height:46px;border-radius:12px;"></li>
+            <li class="skeleton" style="height:46px;border-radius:12px;"></li>
+        </ul>
     </aside>
 
+    <!-- MAIN BOULEVARD -->
     <main class="main-boulevard">
         <div class="boulevard-overlay"></div>
+
+        <!-- Etiqueta filtro activo -->
+        <div class="active-filter-pill" id="activeFilterPill">
+            <span id="activeFilterLabel"></span>
+            <button onclick="document.getElementById('activeFilterPill').classList.remove('visible')">✕</button>
+        </div>
+
         <div class="welcome-billboard">
             <h2 id="categoryHeroTitle">CATEGORÍA</h2>
-            <p id="categoryHeroSubtitle">TODOS LOS COMERCIOS DE LOJA EN UN SOLO LUGAR</p>
+            <p id="categoryHeroSubtitle">TODOS LOS COMERCIOS EN UN SOLO LUGAR</p>
+        </div>
+
+        <div class="bottom-filter-bar">
+            <div class="filter-pill" id="pillAll" onclick="window.location.href='../informativos/cerca-de-mi.html'">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg></div>
+                <div class="filter-label-group"><span class="filter-label">Cerca</span><span class="filter-sub" id="metricAll">0 locales</span></div>
+            </div>
+            <div class="filter-pill" id="pillOpen" onclick="window.location.href='../informativos/abiertos-ahora.html'">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+                <div class="filter-label-group"><span class="filter-label">Abiertos Ahora</span><span class="filter-sub" id="metricOpenNow">0 locales</span></div>
+            </div>
+            <div class="filter-pill" id="pillDelivery" onclick="window.location.href='../informativos/a-domicilio.html'">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/></svg></div>
+                <div class="filter-label-group"><span class="filter-label">A Domicilio</span><span class="filter-sub" id="metricDelivery">0 locales</span></div>
+            </div>
+            <div class="filter-pill" id="pillPromo" onclick="window.location.href='../informativos/ofertas.html'">
+                <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg></div>
+                <div class="filter-label-group"><span class="filter-label">Ofertas</span><span class="filter-sub" id="metricOffers">0 ofertas</span></div>
+            </div>
         </div>
     </main>
 
+    <!-- PANEL DERECHO: DESTACADOS -->
     <aside class="aside-showcase-list">
         <div class="showcase-header">
-            <h2>Destacados</h2>
-            <p class="showcase-stats" id="showcaseStats">Cargando negocios...</p>
+            <h2>DESTACADOS</h2>
+
         </div>
-        <div class="sort-box">
-            <select class="sort-select" id="sortSelect">
-                <option value="rating">Ordenar por: Mayor Calificación</option>
-                <option value="name">Ordenar por: Nombre A-Z</option>
-            </select>
+        <div class="shops-scroll-area" id="shopsScrollArea">
+            <div class="skeleton" style="height:64px;border-radius:8px;"></div>
+            <div class="skeleton" style="height:64px;border-radius:8px;"></div>
+            <div class="skeleton" style="height:64px;border-radius:8px;"></div>
         </div>
-        <div class="shops-scroll-area" id="shopsList">
-            <div class="empty-state">Cargando negocios...</div>
-        </div>
-        <div class="action-footer-box">
-            <button class="btn-view-all-shops" onclick="openDirectory()" type="button">Explorar Directorio Completo</button>
-        </div>
+
+        <nav
+            class="featured-large-rail"
+            id="featuredLargeRail"
+            aria-label="Navegación de negocios destacados"
+        ></nav>
     </aside>
+
+</div>
+
+<!-- MODAL DIRECTORIO -->
+<div
+    id="directorioModal"
+    class="uxd-modal"
+    aria-hidden="true"
+>
+    <section
+        class="uxd-shell"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="directoryTitle"
+    >
+        <header class="uxd-header">
+            <div class="uxd-heading">
+                <span class="uxd-eyebrow">Urbanex · Directorio comercial</span>
+                <h2 id="directoryTitle">Todos los negocios</h2>
+                <p class="uxd-meta" id="directoryMeta">Cargando negocios...</p>
+            </div>
+
+            <div class="uxd-tools">
+                <label class="uxd-search" for="directorySearch">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M9.5 3a6.5 6.5 0 1 0 3.98 11.64L19.85 21 21 19.85l-6.36-6.37A6.5 6.5 0 0 0 9.5 3Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z"/>
+                    </svg>
+                    <input
+                        id="directorySearch"
+                        type="search"
+                        placeholder="Buscar negocio"
+                        autocomplete="off"
+                        aria-label="Buscar negocio en el directorio"
+                    >
+                </label>
+
+                <label class="uxd-sort" for="directorySort">
+                    <select id="directorySort" aria-label="Ordenar negocios">
+                        <option value="featured">Destacados primero</option>
+                        <option value="name">Nombre A-Z</option>
+                        <option value="rating">Mejor calificación</option>
+                    </select>
+                </label>
+
+                <button
+                    class="uxd-close"
+                    id="directoryCloseButton"
+                    type="button"
+                    onclick="closeDirectorio()"
+                    aria-label="Cerrar directorio"
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18.3 5.71 12 12l6.3 6.29-1.41 1.42L10.59 13.41 4.29 19.71 2.88 18.3 9.17 12 2.88 5.7 4.29 4.29 10.59 10.59 16.89 4.29z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="uxd-summary">
+            <span>Mostrando negocios en <strong id="directoryLocationLabel">Todo Ecuador</strong></span>
+            <span class="uxd-summary-count" id="directoryVisibleCount">0 resultados</span>
+        </div>
+
+        <div id="dirGrid" class="uxd-grid" aria-live="polite">
+            <div class="uxd-loading-grid">
+                <div class="uxd-skeleton"></div>
+                <div class="uxd-skeleton"></div>
+                <div class="uxd-skeleton"></div>
+                <div class="uxd-skeleton"></div>
+                <div class="uxd-skeleton"></div>
+                <div class="uxd-skeleton"></div>
+            </div>
+        </div>
+    </section>
 </div>
 
 <footer class="pie-pagina"><p>&copy; <span id="currentYear"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
 
-<div class="directory-modal" id="directoryModal">
-    <div class="directory-box">
-        <div class="directory-head">
-            <h2 id="directoryTitle">Directorio completo</h2>
-            <button onclick="closeDirectory()" type="button">×</button>
-        </div>
-        <div class="directory-grid" id="directoryGrid"></div>
-    </div>
-</div>
-
-
-<script type="module" id="urbanex-categoria-inline-definitivo">
+<script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
+// ── Configuración de rutas ────────────────────────────────────
+// Cambia esta ruta según dónde esté tu negocio.html
+const NEGOCIO_URL = (slug) => `../business/?slug=${encodeURIComponent(slug || '')}`;
+// Si está en subcarpeta usa: `business/index.html?slug=${slug}`
+
+// ── Página dinámica única para todas las categorías ───────────
+// La categoría se identifica por su ID de Supabase.
+// No se requiere crear un HTML nuevo al registrar otra categoría.
+function getCategoryPageUrl(category) {
+    const id = category?.id;
+
+    if (id === null || id === undefined || String(id).trim() === '') {
+        return 'index.html';
+    }
+
+    return `index.html?categoria=${encodeURIComponent(id)}`;
+}
+
+window.openCategoryPage = (url) => {
+    if (!url) return;
+    window.location.href = url;
+};
+
+const SUPABASE_URL      = 'https://mlkynawsjqmawgxeuvks.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const VISUALS = {
+// ── Estado ────────────────────────────────────────────────────
+let allBusinesses  = [];
+let rootCategories = [];
+let subMap         = {};   // keys son NUMBER (id de la raíz)
+let activeCatId    = null; // NUMBER o null
+let activeSubId    = null; // NUMBER o null
+let activeQuick    = 'all';
+let searchQuery    = '';
+let fullDirectoryLoaded = false;
+let fullDirectoryLoadPromise = null;
+let offerProductCountByBusiness = new Map();
+let offerMetricsLoaded = false;
+let activeProvince = '__all__';
+let activeLocation = '__all__';
+
+let currentRoot = null;
+let currentSubcategories = [];
+
+const CATEGORY_VISUALS = {
     'alojamiento': {
         title: 'ALOJAMIENTO',
         subtitle: 'HOTELES, HOSTALES Y CABAÑAS PARA DESCANSAR EN LOJA',
@@ -7451,24 +6574,7 @@ const VISUALS = {
     }
 };
 
-const BUSINESS_SELECT_INITIAL = `
-    *,
-    categories!category_id(name,icon),
-    subcategories:categories!subcategory_id(name,icon)
-`;
-
-let rootCategories = [];
-let subCategories = [];
-let currentRoot = null;
-let currentSubcategories = [];
-let allBusinesses = [];
-let mobileGlobalFeaturedBusinesses = [];
-let searchTerm = '';
-let featuredCarouselOffset = 0;
-let featuredCarouselTimer = null;
-let featuredCarouselSignature = '';
-
-function normalize(value) {
+function normalizeCategoryValue(value) {
     return String(value || '')
         .trim()
         .toLowerCase()
@@ -7477,360 +6583,937 @@ function normalize(value) {
         .replace(/\s+/g, ' ');
 }
 
-function esc(value) {
-    return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-}
-
-function toNum(value) {
-    const number = Number(value);
-    return Number.isFinite(number) ? number : null;
-}
-
-function plural(count, singular = 'local', pluralText = 'locales') {
-    return `${count} ${count === 1 ? singular : pluralText}`;
-}
-
-function isRootCategory(category) {
-    return category.parent_id === null ||
-           category.parent_id === undefined ||
-           category.parent_id === '';
-}
-
 function categoryParameter() {
-    return new URLSearchParams(location.search).get('categoria');
+    return new URLSearchParams(window.location.search).get('categoria');
 }
 
-function resolveRootCategory(parameter) {
+function resolveCurrentRoot(parameter) {
     if (!parameter) return null;
 
-    const id = toNum(parameter);
-    if (id !== null) {
-        const byId = rootCategories.find(category => toNum(category.id) === id);
+    const numericId = toNum(parameter);
+    if (numericId !== null) {
+        const byId = rootCategories.find(category => toNum(category.id) === numericId);
         if (byId) return byId;
     }
 
-    const target = normalize(parameter);
-    return rootCategories.find(category => normalize(category.name) === target) ||
-           rootCategories.find(category => {
-               const name = normalize(category.name);
-               return name.includes(target) || target.includes(name);
-           }) || null;
+    const target = normalizeCategoryValue(parameter);
+    return rootCategories.find(category => normalizeCategoryValue(category.name) === target) ||
+        rootCategories.find(category => {
+            const name = normalizeCategoryValue(category.name);
+            return name.includes(target) || target.includes(name);
+        }) || null;
 }
 
-function visualForRoot(root) {
-    const key = normalize(root?.name);
-    const preset = VISUALS[key] || {};
+function businessBelongsToCurrentRoot(business) {
+    if (!currentRoot) return false;
+
+    const rootId = toNum(currentRoot.id);
+    const categoryId = toNum(business?.category_id);
+    const subcategoryId = toNum(business?.subcategory_id);
+    const rootSubs = subMap[rootId] || [];
+    const subIds = new Set(rootSubs.map(item => toNum(item.id)));
+
+    return categoryId === rootId ||
+        subIds.has(categoryId) ||
+        subIds.has(subcategoryId);
+}
+
+function filterBusinessesToCurrentRoot(rows) {
+    return (rows || []).filter(businessBelongsToCurrentRoot);
+}
+
+function categoryVisual() {
+    const preset = CATEGORY_VISUALS[normalizeCategoryValue(currentRoot?.name)] || {};
 
     return {
-        title: root?.display_title || preset.title || String(root?.name || 'Categoría').toUpperCase(),
-        subtitle: root?.subtitle || preset.subtitle || 'TODOS LOS COMERCIOS DE LOJA EN UN SOLO LUGAR',
-        search: root?.search_placeholder || preset.search || '¿Qué producto o servicio busca?',
-        image: root?.hero_image || root?.image_url || root?.cover_image || root?.banner_image || preset.image || '../imagenes/Boulevard.png'
+        title: currentRoot?.display_title || preset.title || String(currentRoot?.name || 'Categoría').toUpperCase(),
+        subtitle: currentRoot?.subtitle || preset.subtitle || 'TODOS LOS COMERCIOS EN UN SOLO LUGAR',
+        search: currentRoot?.search_placeholder || preset.search || '¿Qué producto o servicio busca?',
+        image: currentRoot?.hero_image || currentRoot?.image_url || currentRoot?.cover_image || currentRoot?.banner_image || preset.image || '../imagenes/Boulevard.png'
     };
 }
 
-function applyVisual() {
-    const visual = visualForRoot(currentRoot);
+function applyCategoryVisual() {
+    if (!currentRoot) return;
 
+    const visual = categoryVisual();
     document.title = `Urbanex - ${currentRoot.name}`;
-    document.documentElement.style.setProperty('--category-background', `url("${visual.image}")`);
-    document.getElementById('siteSearch').placeholder = visual.search;
-    document.getElementById('categoryHeroTitle').textContent = visual.title;
-    document.getElementById('categoryHeroSubtitle').textContent = visual.subtitle;
-    document.getElementById('directoryTitle').textContent = `Directorio completo — ${currentRoot.name}`;
+
+    const main = document.querySelector('.main-boulevard');
+    if (main) main.style.backgroundImage = `url("${visual.image}")`;
+
+    const search = document.getElementById('siteSearch');
+    if (search) search.placeholder = visual.search;
+
+    const heroTitle = document.getElementById('categoryHeroTitle');
+    if (heroTitle) heroTitle.textContent = visual.title;
+
+    const heroSubtitle = document.getElementById('categoryHeroSubtitle');
+    if (heroSubtitle) heroSubtitle.textContent = visual.subtitle;
+
+    const directoryTitle = document.getElementById('directoryTitle');
+    if (directoryTitle) directoryTitle.textContent = `Todos los negocios — ${currentRoot.name}`;
+}
+const URBANEX_LOCATION_STORAGE_KEY = 'urbanex_location_selection_v1';
+const URBANEX_LOCATION_PROVINCE_KEY = 'urbanex_active_province';
+const URBANEX_LOCATION_CITY_KEY = 'urbanex_active_location';
+const URBANEX_LOCATION_COMPAT_KEY = 'urbanex_location_v1';
+
+function readSavedUrbanexLocation() {
+    try {
+        const stored = JSON.parse(localStorage.getItem(URBANEX_LOCATION_STORAGE_KEY) || localStorage.getItem(URBANEX_LOCATION_COMPAT_KEY) || 'null');
+        const legacyProvince = localStorage.getItem(URBANEX_LOCATION_PROVINCE_KEY);
+        const legacyCity = localStorage.getItem(URBANEX_LOCATION_CITY_KEY);
+
+        const province = stored?.province || legacyProvince || '__all__';
+        const city = stored?.city || legacyCity || (province === '__all__' ? '__all__' : '__province__');
+
+        activeProvince = province;
+        activeLocation = city;
+    } catch (error) {
+        activeProvince = '__all__';
+        activeLocation = '__all__';
+    }
 }
 
-function isFeatured(business) {
-    return business.is_featured === true ||
-           business.is_featured === 1 ||
-           String(business.is_featured).toLowerCase() === 'true';
-}
+function saveUrbanexLocation() {
+    const payload = {
+        province: activeProvince,
+        city: activeLocation,
+        updatedAt: Date.now()
+    };
 
-function getBusinessRootId(business) {
-    const directCategoryId = toNum(business.category_id);
-    const subcategoryId = toNum(business.subcategory_id);
-
-    if (directCategoryId === toNum(currentRoot?.id)) {
-        return directCategoryId;
+    try {
+        localStorage.setItem(URBANEX_LOCATION_STORAGE_KEY, JSON.stringify(payload));
+        localStorage.setItem(URBANEX_LOCATION_COMPAT_KEY, JSON.stringify(payload));
+        localStorage.setItem(URBANEX_LOCATION_PROVINCE_KEY, activeProvince);
+        localStorage.setItem(URBANEX_LOCATION_CITY_KEY, activeLocation);
+    } catch (error) {
+        console.warn('Urbanex: no se pudo guardar la ubicación seleccionada.', error);
     }
 
-    const subcategory = subCategories.find(item =>
-        toNum(item.id) === subcategoryId ||
-        toNum(item.id) === directCategoryId
-    );
-
-    return subcategory ? toNum(subcategory.parent_id) : directCategoryId;
+    window.dispatchEvent(new CustomEvent('urbanex-location-change', { detail: payload }));
 }
+let featuredCarouselOffset = 0;
+let featuredCarouselTimer = null;
+let featuredCarouselSignature = '';
+let featuredSlotTimers = [];
+let featuredSlotIndices = [];
 
-function belongsToRoot(business) {
-    return currentRoot && getBusinessRootId(business) === toNum(currentRoot.id);
-}
+const BUSINESS_SELECT_FAST = `
+    *,
+    categories!category_id(name,icon),
+    subcategories:categories!subcategory_id(name,icon)
+`;
 
-function belongsToSubcategory(business, subcategory) {
-    const subId = toNum(subcategory?.id);
-    if (subId === null) return false;
-
-    return toNum(business.subcategory_id) === subId ||
-           toNum(business.category_id) === subId;
-}
-
-function getApprovedReviews(business) {
-    return (business.reviews || []).filter(review => review.is_approved !== false);
-}
-
-function getRating(business) {
-    const reviews = getApprovedReviews(business);
-    if (!reviews.length) return null;
-
-    return reviews.reduce(
-        (sum, review) => sum + Number(review.rating || 0),
-        0
-    ) / reviews.length;
-}
-
-function ecuadorNow() {
-    const parts = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'America/Guayaquil',
-        weekday: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    }).formatToParts(new Date());
-
-    const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
-    const days = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
-
-    return {
-        day: days[values.weekday],
-        minutes: Number(values.hour) * 60 + Number(values.minute)
-    };
-}
-
-function isOpenNow(business) {
-    const hours = business.business_hours || [];
-    if (!hours.length) return false;
-
-    const now = ecuadorNow();
-    const row = hours.find(item =>
-        Number(item.day_of_week) === now.day &&
-        item.is_closed !== true
-    );
-
-    if (!row?.open_time || !row?.close_time) return false;
-
-    const toMinutes = time => {
-        const [hour, minute] = String(time).split(':').map(Number);
-        return hour * 60 + (minute || 0);
-    };
-
-    const open = toMinutes(row.open_time);
-    const close = toMinutes(row.close_time);
-
-    if (!Number.isFinite(open) || !Number.isFinite(close)) return false;
-
-    return close >= open
-        ? now.minutes >= open && now.minutes <= close
-        : now.minutes >= open || now.minutes <= close;
-}
-
-function enrichBusiness(business) {
-    return {
+function normalizeBusinessRows(rows) {
+    return (rows || []).map(business => ({
         ...business,
-        _rating: getRating(business),
-        _reviewCount: getApprovedReviews(business).length,
-        _openNow: isOpenNow(business)
-    };
+        business_hours: business.business_hours || [],
+        reviews: business.reviews || [],
+        promotions: business.promotions || [],
+        _open: false,
+        _rating: null,
+        _promo: false,
+        _reviews: 0,
+    }));
 }
 
-function businessMatchesSearch(business) {
-    if (!searchTerm) return true;
+// Normalizar siempre a Number para comparaciones consistentes
+function toNum(v) { const n = Number(v); return isNaN(n) ? null : n; }
+function businessKey(v) { return String(v ?? '').trim(); }
+function businessOfferProductCount(business) { return offerProductCountByBusiness.get(businessKey(business?.id)) || 0; }
+function businessHasOfferProduct(business) { return businessOfferProductCount(business) > 0; }
 
-    const haystack = normalize(`
-        ${business.name || ''}
-        ${business.address || ''}
-        ${business.categories?.name || ''}
-        ${business.subcategories?.name || ''}
-    `);
+// ── Helpers ───────────────────────────────────────────────────
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-    return haystack.includes(searchTerm);
+function parseScheduleTimeToMinutes(value) {
+    const text = String(value || '').trim().toLowerCase().replace('h', ':');
+
+    if (!text) return null;
+
+    const parts = text.split(':');
+    if (parts.length < 2) return null;
+
+    const hours = Number(parts[0]);
+    const minutes = Number(parts[1]);
+
+    if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null;
+    if (hours === 24 && minutes === 0) return 1440;
+    if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+
+    return hours * 60 + minutes;
 }
 
-function rootBusinesses() {
-    return allBusinesses.filter(business =>
-        belongsToRoot(business) &&
-        businessMatchesSearch(business)
+function isOpenNow(hours) {
+    if (!hours?.length) return false;
+
+    const now = new Date();
+    const today = now.getDay();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    return hours.some(row => {
+        if (Number(row.day_of_week) !== today || row.is_closed) return false;
+
+        const open = parseScheduleTimeToMinutes(row.open_time);
+        const close = parseScheduleTimeToMinutes(row.close_time);
+
+        if (open === null || close === null) return false;
+
+        if (close >= open) {
+            return currentMinutes >= open && currentMinutes <= close;
+        }
+
+        return currentMinutes >= open || currentMinutes <= close;
+    });
+}
+function avgRating(reviews) {
+    const a = (reviews||[]).filter(r=>r.is_approved);
+    return a.length ? a.reduce((s,r)=>s+r.rating,0)/a.length : null;
+}
+function hasPromo(promos) {
+    const today = new Date().toISOString().slice(0,10);
+    return (promos||[]).some(p=>p.is_active&&(!p.end_date||p.end_date>=today));
+}
+
+
+// ── Ubicación y destacados responsive ─────────────────────────
+const ECUADOR_PROVINCE_CANTONS = {
+    "Azuay": [
+        "Cuenca",
+        "Camilo Ponce Enríquez",
+        "Chordeleg",
+        "El Pan",
+        "Girón",
+        "Guachapala",
+        "Gualaceo",
+        "Nabón",
+        "Oña",
+        "Paute",
+        "Pucará",
+        "San Fernando",
+        "Santa Isabel",
+        "Sevilla de Oro",
+        "Sígsig"
+    ],
+    "Bolívar": [
+        "Guaranda",
+        "Caluma",
+        "Chillanes",
+        "Chimbo",
+        "Echeandía",
+        "Las Naves",
+        "San Miguel"
+    ],
+    "Cañar": [
+        "Azogues",
+        "Biblián",
+        "Cañar",
+        "Déleg",
+        "El Tambo",
+        "La Troncal",
+        "Suscal"
+    ],
+    "Carchi": [
+        "Tulcán",
+        "Bolívar",
+        "Espejo",
+        "Mira",
+        "Montúfar",
+        "San Pedro de Huaca"
+    ],
+    "Chimborazo": [
+        "Riobamba",
+        "Alausí",
+        "Chambo",
+        "Chunchi",
+        "Colta",
+        "Cumandá",
+        "Guamote",
+        "Guano",
+        "Pallatanga",
+        "Penipe"
+    ],
+    "Cotopaxi": [
+        "Latacunga",
+        "La Maná",
+        "Pangua",
+        "Pujilí",
+        "Salcedo",
+        "Saquisilí",
+        "Sigchos"
+    ],
+    "El Oro": [
+        "Machala",
+        "Arenillas",
+        "Atahualpa",
+        "Balsas",
+        "Chilla",
+        "El Guabo",
+        "Huaquillas",
+        "Las Lajas",
+        "Marcabelí",
+        "Pasaje",
+        "Piñas",
+        "Portovelo",
+        "Santa Rosa",
+        "Zaruma"
+    ],
+    "Esmeraldas": [
+        "Esmeraldas",
+        "Atacames",
+        "Eloy Alfaro",
+        "Muisne",
+        "Quinindé",
+        "Rioverde",
+        "San Lorenzo"
+    ],
+    "Galápagos": [
+        "San Cristóbal",
+        "Isabela",
+        "Santa Cruz"
+    ],
+    "Guayas": [
+        "Guayaquil",
+        "Alfredo Baquerizo Moreno",
+        "Balao",
+        "Balzar",
+        "Colimes",
+        "Coronel Marcelino Maridueña",
+        "Daule",
+        "Durán",
+        "El Empalme",
+        "El Triunfo",
+        "General Antonio Elizalde",
+        "Isidro Ayora",
+        "Lomas de Sargentillo",
+        "Milagro",
+        "Naranjal",
+        "Naranjito",
+        "Nobol",
+        "Palestina",
+        "Pedro Carbo",
+        "Playas",
+        "Salitre",
+        "Samborondón",
+        "Santa Lucía",
+        "Simón Bolívar",
+        "Yaguachi"
+    ],
+    "Imbabura": [
+        "Ibarra",
+        "Antonio Ante",
+        "Cotacachi",
+        "Otavalo",
+        "Pimampiro",
+        "San Miguel de Urcuquí"
+    ],
+    "Loja": [
+        "Loja",
+        "Calvas",
+        "Catamayo",
+        "Celica",
+        "Chaguarpamba",
+        "Espíndola",
+        "Gonzanamá",
+        "Macará",
+        "Olmedo",
+        "Paltas",
+        "Pindal",
+        "Puyango",
+        "Quilanga",
+        "Saraguro",
+        "Sozoranga",
+        "Zapotillo"
+    ],
+    "Los Ríos": [
+        "Babahoyo",
+        "Baba",
+        "Buena Fe",
+        "Mocache",
+        "Montalvo",
+        "Palenque",
+        "Pueblo Viejo",
+        "Quevedo",
+        "Quinsaloma",
+        "Urdaneta",
+        "Valencia",
+        "Ventanas",
+        "Vinces"
+    ],
+    "Manabí": [
+        "Portoviejo",
+        "24 de Mayo",
+        "Bolívar",
+        "Chone",
+        "El Carmen",
+        "Flavio Alfaro",
+        "Jama",
+        "Jaramijó",
+        "Jipijapa",
+        "Junín",
+        "Manta",
+        "Montecristi",
+        "Olmedo",
+        "Paján",
+        "Pedernales",
+        "Pichincha",
+        "Puerto López",
+        "Rocafuerte",
+        "San Vicente",
+        "Santa Ana",
+        "Sucre",
+        "Tosagua"
+    ],
+    "Morona Santiago": [
+        "Morona",
+        "Gualaquiza",
+        "Huamboya",
+        "Limón Indanza",
+        "Logroño",
+        "Pablo Sexto",
+        "Palora",
+        "San Juan Bosco",
+        "Santiago",
+        "Sucúa",
+        "Taisha",
+        "Tiwintza"
+    ],
+    "Napo": [
+        "Tena",
+        "Archidona",
+        "Carlos Julio Arosemena Tola",
+        "El Chaco",
+        "Quijos"
+    ],
+    "Orellana": [
+        "Francisco de Orellana",
+        "Aguarico",
+        "La Joya de los Sachas",
+        "Loreto"
+    ],
+    "Pastaza": [
+        "Pastaza",
+        "Arajuno",
+        "Mera",
+        "Santa Clara"
+    ],
+    "Pichincha": [
+        "Quito",
+        "Cayambe",
+        "Mejía",
+        "Pedro Moncayo",
+        "Pedro Vicente Maldonado",
+        "Puerto Quito",
+        "Rumiñahui",
+        "San Miguel de los Bancos"
+    ],
+    "Santa Elena": [
+        "Santa Elena",
+        "La Libertad",
+        "Salinas"
+    ],
+    "Santo Domingo de los Tsáchilas": [
+        "Santo Domingo",
+        "La Concordia"
+    ],
+    "Sucumbíos": [
+        "Lago Agrio",
+        "Cascales",
+        "Cuyabeno",
+        "Gonzalo Pizarro",
+        "Putumayo",
+        "Shushufindi",
+        "Sucumbíos"
+    ],
+    "Tungurahua": [
+        "Ambato",
+        "Baños de Agua Santa",
+        "Cevallos",
+        "Mocha",
+        "Patate",
+        "Quero",
+        "San Pedro de Pelileo",
+        "Santiago de Píllaro",
+        "Tisaleo"
+    ],
+    "Zamora Chinchipe": [
+        "Zamora",
+        "Centinela del Cóndor",
+        "Chinchipe",
+        "El Pangui",
+        "Nangaritza",
+        "Palanda",
+        "Paquisha",
+        "Yacuambi",
+        "Yantzaza"
+    ]
+};
+
+const ECUADOR_CITY_ALIASES = {
+    "macas": "Morona Santiago",
+    "nueva loja": "Sucumbíos",
+    "coca": "Orellana",
+    "puerto francisco de orellana": "Orellana",
+    "puyo": "Pastaza",
+    "quito distrito metropolitano": "Pichincha",
+    "santo domingo de los colorados": "Santo Domingo de los Tsáchilas"
+};
+
+function normalizeLocationName(value) {
+    const text = String(value || '').trim().replace(/\s+/g, ' ');
+    if (!text) return '';
+
+    return text
+        .toLocaleLowerCase('es-EC')
+        .split(' ')
+        .map(word => word ? word.charAt(0).toLocaleUpperCase('es-EC') + word.slice(1) : '')
+        .join(' ');
+}
+
+function locationKey(value) {
+    return normalizeLocationName(value)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLocaleLowerCase('es-EC');
+}
+
+const ECUADOR_CITY_PROVINCE = (() => {
+    const map = new Map();
+
+    Object.entries(ECUADOR_PROVINCE_CANTONS).forEach(([province, cantons]) => {
+        cantons.forEach(canton => map.set(locationKey(canton), province));
+    });
+
+    Object.entries(ECUADOR_CITY_ALIASES).forEach(([city, province]) => {
+        map.set(locationKey(city), province);
+    });
+
+    return map;
+})();
+
+function businessCity(business) {
+    return normalizeLocationName(business?.city || 'Loja') || 'Loja';
+}
+
+function provinceForCity(city) {
+    return ECUADOR_CITY_PROVINCE.get(locationKey(city)) || '';
+}
+
+function businessMatchesLocation(business) {
+    if (activeProvince === '__all__') return true;
+
+    const city = businessCity(business);
+
+    if (activeLocation && activeLocation !== '__province__') {
+        return locationKey(city) === locationKey(activeLocation);
+    }
+
+    return provinceForCity(city) === activeProvince;
+}
+
+function locationFilteredBusinesses() {
+    return allBusinesses.filter(businessMatchesLocation);
+}
+
+function populateProvinceOptions() {
+    const select = document.getElementById('provinceSelect');
+    if (!select) return;
+
+    const provinces = Object.keys(ECUADOR_PROVINCE_CANTONS).sort((a, b) =>
+        a.localeCompare(b, 'es', { sensitivity: 'base' })
     );
+
+    select.innerHTML = [
+        '<option value="__all__">Todo Ecuador</option>',
+        ...provinces.map(province => `<option value="${esc(province)}">${esc(province)}</option>`)
+    ].join('');
+
+    select.value = activeProvince === '__all__' ? '__all__' : activeProvince;
 }
 
-function featuredBusinesses() {
-    const sort = document.getElementById('sortSelect')?.value || 'rating';
+function populateCityOptions(province, preferredCity = '__province__') {
+    const select = document.getElementById('citySelect');
+    if (!select) return;
+
+    if (province === '__all__') {
+        select.innerHTML = '<option value="__all__">Todo Ecuador</option>';
+        select.value = '__all__';
+        select.disabled = true;
+        return;
+    }
+
+    select.disabled = false;
+    const cantons = ECUADOR_PROVINCE_CANTONS[province] || [];
+
+    select.innerHTML = [
+        `<option value="__province__">Toda la provincia de ${esc(province)}</option>`,
+        ...cantons.map(canton => `<option value="${esc(canton)}">${esc(canton)}</option>`)
+    ].join('');
+
+    const hasPreferred = [...select.options].some(option => option.value === preferredCity);
+    select.value = hasPreferred ? preferredCity : '__province__';
+}
+
+function currentLocationLabel() {
+    if (activeProvince === '__all__') return 'Todo Ecuador';
+    if (activeLocation === '__province__') return activeProvince;
+    if (locationKey(activeLocation) === locationKey(activeProvince)) return `${activeLocation}, Ecuador`;
+    return `${activeLocation}, ${activeProvince}`;
+}
+
+function updateLocationPickerLabel() {
+    const label = document.getElementById('locationPickerLabel');
+    if (label) label.textContent = currentLocationLabel();
+}
+
+function populateLocationOptions() {
+    populateProvinceOptions();
+    populateCityOptions(activeProvince, activeLocation);
+    updateLocationPickerLabel();
+}
+
+function setLocationPickerOpen(open) {
+    const panel = document.getElementById('locationPickerPanel');
+    const button = document.getElementById('locationPickerButton');
+    if (!panel || !button) return;
+
+    panel.hidden = !open;
+    button.setAttribute('aria-expanded', String(open));
+}
+
+function applySelectedLocation() {
+    const provinceSelect = document.getElementById('provinceSelect');
+    const citySelect = document.getElementById('citySelect');
+    if (!provinceSelect || !citySelect) return;
+
+    const province = provinceSelect.value || '__all__';
+
+    if (province === '__all__') {
+        activeProvince = '__all__';
+        activeLocation = '__all__';
+    } else {
+        activeProvince = province;
+        activeLocation = citySelect.value || '__province__';
+    }
+
+    featuredCarouselOffset = 0;
+    featuredCarouselSignature = '';
+    saveUrbanexLocation();
+    updateLocationPickerLabel();
+    setLocationPickerOpen(false);
+    renderCatTree();
+    renderShowcase();
+    updateMetrics();
+
+    const modal = document.getElementById('directorioModal');
+    if (modal && modal.style.display !== 'none') renderDir();
+}
+
+function featuredVisibleCount() {
+    if (window.innerWidth <= 720) return 1;
 
     /*
-     * SOLO CELULAR:
-     * Destacados usa la misma fuente global del Boulevard para que el
-     * carrusel conserve todos sus anuncios, indicadores y ciclo infinito.
-     * Tablet y computador mantienen el filtrado original por categoría.
+     * Tablet: siempre se muestran como máximo dos tarjetas.
+     * Si existen tres o más negocios, continúan rotando,
+     * pero conservan exactamente el tamaño y distribución
+     * usados cuando solamente aparecen dos.
      */
-    const source = window.innerWidth <= 720
-        ? (
-            mobileGlobalFeaturedBusinesses.length
-                ? mobileGlobalFeaturedBusinesses
-                : rootBusinesses().filter(isFeatured)
-        )
-        : rootBusinesses().filter(isFeatured);
+    if (window.innerWidth <= 1024) return 2;
 
-    const list = source.slice();
+    const area = document.getElementById('shopsScrollArea');
+    const availableHeight = Math.max(
+        0,
+        area?.clientHeight || (window.innerHeight - 150)
+    );
 
-    if (sort === 'name') {
-        list.sort((a, b) =>
-            String(a.name || '').localeCompare(String(b.name || ''), 'es')
-        );
-    } else {
-        list.sort((a, b) =>
-            (b._rating || 0) - (a._rating || 0) ||
-            String(a.name || '').localeCompare(String(b.name || ''), 'es')
-        );
-    }
+    const cardMinimumHeight = 148;
+    const gap = 9;
+    const calculated = Math.floor(
+        (availableHeight + gap) / (cardMinimumHeight + gap)
+    );
 
-    return list;
+    return Math.max(1, Math.min(3, calculated || 1));
 }
-
-function countBySubcategory(subcategory) {
-    return allBusinesses.filter(business =>
-        belongsToRoot(business) &&
-        belongsToSubcategory(business, subcategory)
-    ).length;
-}
-
-function renderSubcategories() {
-    const container = document.getElementById('categoriesList');
-    const total = allBusinesses.filter(belongsToRoot).length;
-    const rootId = encodeURIComponent(currentRoot.id);
-
-    const allButton = `
-        <li class="category-item active">
-            <button type="button" class="active"
-                    onclick="window.location.href='index.html?categoria=${rootId}'">
-                <div class="icon-container">▦</div>
-                <div class="category-text-info">
-                    <span class="category-name">Todos</span>
-                    <span class="category-count">${plural(total)}</span>
-                </div>
-            </button>
-        </li>
-    `;
-
-    const subButtons = currentSubcategories.map(subcategory => {
-        const count = countBySubcategory(subcategory);
-        const url = `subcategoria.html?categoria=${rootId}&subcategoria=${encodeURIComponent(subcategory.id)}`;
-
-        return `
-            <li class="category-item">
-                <button type="button"
-                        onclick="window.location.href='${url}'">
-                    <div class="icon-container">${esc(subcategory.icon || '•')}</div>
-                    <div class="category-text-info">
-                        <span class="category-name">${esc(subcategory.name)}</span>
-                        <span class="category-count">${plural(count)}</span>
-                    </div>
-                </button>
-            </li>
-        `;
-    }).join('');
-
-    container.innerHTML = allButton + subButtons;
-}
-
-function businessUrl(business) {
-    if (business.slug) {
-        return `../business/?slug=${encodeURIComponent(business.slug)}`;
-    }
-
-    if (business.id !== null && business.id !== undefined) {
-        return `../business/?id=${encodeURIComponent(business.id)}`;
-    }
-
-    return '#';
-}
-
-function businessThumb(business) {
-    if (business.cover_image) {
-        return `<img class="shop-thumb" src="${esc(business.cover_image)}"
-                     alt="${esc(business.name)}" loading="lazy">`;
-    }
-
-    return `<span>${esc(
-        business.subcategories?.icon ||
-        business.categories?.icon ||
-        currentRoot?.icon ||
-        '🏪'
-    )}</span>`;
-}
-
-function businessCard(business) {
-    const ratingText = business._rating ? business._rating.toFixed(1) : '—';
-    const reviewText = business._reviewCount
-        ? `${business._reviewCount}`
-        : 'Sin reseñas';
-
-    const segment =
-        business.subcategories?.name ||
-        business.categories?.name ||
-        currentRoot.name;
-
-    const statusClass = business._openNow ? '' : 'closed';
-    const statusText = business._openNow ? 'Abierto' : 'Cerrado';
-
-    return `
-        <a class="shop-card" href="${businessUrl(business)}">
-            <div class="shop-thumb-wrapper">${businessThumb(business)}</div>
-            <div class="shop-details">
-                <div class="shop-title">${esc(business.name)}</div>
-                <div class="shop-segment">${esc(segment)}</div>
-                <div class="shop-rating-row">
-                    <span class="star-icon">★</span>
-                    <span class="rating-value">${ratingText}</span>
-                    <span class="rating-count">${esc(reviewText)}</span>
-                    <span class="status-indicator ${statusClass}">${statusText}</span>
-                </div>
-            </div>
-        </a>
-    `;
-}
-
 
 function stopFeaturedRotation() {
     if (featuredCarouselTimer) {
         window.clearTimeout(featuredCarouselTimer);
         featuredCarouselTimer = null;
     }
+
+    featuredSlotTimers.forEach(timer => window.clearTimeout(timer));
+    featuredSlotTimers = [];
 }
 
 function scheduleFeaturedRotation(total) {
     stopFeaturedRotation();
+    if (!total || document.hidden) return;
 
+    /* Celular: se conserva exactamente el comportamiento existente. */
+    if (window.innerWidth <= 720) {
+        featuredCarouselTimer = window.setTimeout(() => {
+            featuredCarouselOffset = (featuredCarouselOffset + 1) % total;
+            renderShowcase();
+        }, 2000);
+    }
+}
+
+function nextUniqueFeaturedIndex(slotIndex, total) {
+    if (total <= 1) return 0;
+
+    const occupied = new Set(
+        featuredSlotIndices.filter((_, index) => index !== slotIndex)
+    );
+
+    let candidate =
+        ((featuredSlotIndices[slotIndex] ?? slotIndex) + 1) % total;
+
+    for (let attempt = 0; attempt < total; attempt += 1) {
+        if (!occupied.has(candidate)) return candidate;
+        candidate = (candidate + 1) % total;
+    }
+
+    return candidate;
+}
+
+function scheduleFeaturedSlotRotations(list) {
     if (
-        window.innerWidth > 720 ||
-        total <= 1 ||
-        document.hidden
+        window.innerWidth <= 720 ||
+        document.hidden ||
+        !Array.isArray(list) ||
+        !list.length
     ) {
         return;
     }
 
-    featuredCarouselTimer = window.setTimeout(() => {
-        featuredCarouselOffset =
-            (featuredCarouselOffset + 1 + total) % total;
-        renderFeatured();
-    }, 2000);
+    const area = document.getElementById('shopsScrollArea');
+    if (!area) return;
+
+    /* Cada publicidad cambia en un tiempo distinto. */
+    const intervals = [2600, 4100, 5600];
+
+    featuredSlotIndices.forEach((_, slotIndex) => {
+        const rotateSlot = () => {
+            if (
+                document.hidden ||
+                window.innerWidth <= 720 ||
+                !area.isConnected
+            ) {
+                return;
+            }
+
+            featuredSlotIndices[slotIndex] =
+                nextUniqueFeaturedIndex(slotIndex, list.length);
+
+            const currentCard = area.children[slotIndex];
+            const business = list[featuredSlotIndices[slotIndex]];
+
+            if (currentCard && business) {
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = shopCardHtml(business).trim();
+                const nextCard = wrapper.firstElementChild;
+
+                if (nextCard) {
+                    nextCard.classList.add('featured-slot-enter');
+                    currentCard.replaceWith(nextCard);
+                }
+            }
+
+            featuredSlotTimers[slotIndex] = window.setTimeout(
+                rotateSlot,
+                intervals[slotIndex] || intervals[intervals.length - 1]
+            );
+        };
+
+        featuredSlotTimers[slotIndex] = window.setTimeout(
+            rotateSlot,
+            intervals[slotIndex] || intervals[intervals.length - 1]
+        );
+    });
 }
 
+
 function getFeaturedBusinessesForNavigation() {
-    return featuredBusinesses();
+    const sort = document.getElementById('showcaseSort')?.value || 'rating';
+
+    const list = allBusinesses
+        .filter(
+            business =>
+                business.is_featured === true &&
+                businessMatchesLocation(business)
+        )
+        .slice();
+
+    if (sort === 'name') {
+        list.sort((a, b) =>
+            String(a.name || '').localeCompare(
+                String(b.name || ''),
+                'es'
+            )
+        );
+    } else {
+        list.sort((a, b) =>
+            (b._rating || 0) - (a._rating || 0) ||
+            String(a.name || '').localeCompare(
+                String(b.name || ''),
+                'es'
+            )
+        );
+    }
+
+    return list;
 }
+
+window.featuredPreviousLarge = () => {
+    if (window.matchMedia('(max-width: 720px)').matches) return;
+
+    const list = getFeaturedBusinessesForNavigation();
+    if (!list.length) return;
+
+    featuredCarouselOffset =
+        (featuredCarouselOffset - 1 + list.length) % list.length;
+
+    featuredSlotIndices = [];
+    renderShowcase();
+};
+
+window.featuredNextLarge = () => {
+    if (window.matchMedia('(max-width: 720px)').matches) return;
+
+    const list = getFeaturedBusinessesForNavigation();
+    if (!list.length) return;
+
+    featuredCarouselOffset =
+        (featuredCarouselOffset + 1) % list.length;
+
+    featuredSlotIndices = [];
+    renderShowcase();
+};
+
+
+window.featuredGoToLarge = (index) => {
+    if (window.innerWidth <= 720) return;
+
+    const list = getFeaturedBusinessesForNavigation();
+    if (!list.length) return;
+
+    const safeIndex = Math.max(
+        0,
+        Math.min(Number(index) || 0, list.length - 1)
+    );
+
+    featuredCarouselOffset = safeIndex;
+    featuredSlotIndices = [];
+    renderShowcase();
+};
+
+function renderLargeFeaturedRail(list) {
+    const rail = document.getElementById('featuredLargeRail');
+    if (!rail) return;
+
+    if (
+        window.innerWidth <= 720 ||
+        !Array.isArray(list) ||
+        list.length <= 1
+    ) {
+        rail.innerHTML = '';
+        rail.hidden = true;
+        return;
+    }
+
+    rail.hidden = false;
+
+    const activeIndex =
+        ((featuredCarouselOffset % list.length) + list.length) % list.length;
+
+    rail.innerHTML = list.map((business, index) => `
+        <button
+            type="button"
+            class="featured-large-rail-item${index === activeIndex ? ' is-active' : ''}"
+            onclick="featuredGoToLarge(${index})"
+            aria-label="Mostrar destacado ${index + 1} de ${list.length}: ${esc(business.name)}"
+            aria-current="${index === activeIndex ? 'true' : 'false'}"
+            title="${esc(business.name)}"
+        >
+            <span></span>
+        </button>
+    `).join('');
+}
+
+function ensureLargeFeaturedGesture() {
+    const area = document.getElementById('shopsScrollArea');
+
+    if (
+        !area ||
+        area.dataset.largeGestureReady === 'true'
+    ) {
+        return;
+    }
+
+    area.dataset.largeGestureReady = 'true';
+
+    let startX = 0;
+    let startY = 0;
+    let pointerId = null;
+
+    area.addEventListener('pointerdown', event => {
+        if (
+            window.innerWidth <= 720 ||
+            event.button !== 0 ||
+            event.pointerType === 'touch' ||
+            event.pointerType === 'pen' ||
+            window.matchMedia('(pointer: coarse)').matches
+        ) return;
+
+        pointerId = event.pointerId;
+        startX = event.clientX;
+        startY = event.clientY;
+        area.classList.add('is-dragging');
+
+        try {
+            area.setPointerCapture(pointerId);
+        } catch (error) {
+            // El navegador puede no admitir captura para este evento.
+        }
+    });
+
+    area.addEventListener('pointerup', event => {
+        if (
+            window.innerWidth <= 720 ||
+            pointerId === null ||
+            event.pointerId !== pointerId
+        ) {
+            return;
+        }
+
+        const deltaX = event.clientX - startX;
+        const deltaY = event.clientY - startY;
+
+        area.classList.remove('is-dragging');
+        pointerId = null;
+
+        if (
+            Math.abs(deltaX) < 44 ||
+            Math.abs(deltaX) <= Math.abs(deltaY) * 1.2
+        ) {
+            return;
+        }
+
+        if (deltaX < 0) {
+            featuredNextLarge();
+        } else {
+            featuredPreviousLarge();
+        }
+    });
+
+    area.addEventListener('pointercancel', () => {
+        pointerId = null;
+        area.classList.remove('is-dragging');
+    });
+}
+
 
 window.featuredPreviousMobile = () => {
     if (window.innerWidth > 720) return;
@@ -7841,7 +7524,8 @@ window.featuredPreviousMobile = () => {
     featuredCarouselOffset =
         (featuredCarouselOffset - 1 + list.length) % list.length;
 
-    renderFeatured();
+    featuredSlotIndices = [];
+    renderShowcase();
 };
 
 window.featuredNextMobile = () => {
@@ -7853,28 +7537,30 @@ window.featuredNextMobile = () => {
     featuredCarouselOffset =
         (featuredCarouselOffset + 1) % list.length;
 
-    renderFeatured();
+    featuredSlotIndices = [];
+    renderShowcase();
 };
 
-window.featuredGoToMobile = index => {
+
+window.featuredGoToMobile = (index) => {
     if (window.innerWidth > 720) return;
 
     const list = getFeaturedBusinessesForNavigation();
     if (!list.length) return;
 
-    const safeIndex = Math.max(
-        0,
-        Math.min(Number(index) || 0, list.length - 1)
-    );
-
+    const safeIndex = Math.max(0, Math.min(Number(index) || 0, list.length - 1));
     featuredCarouselOffset = safeIndex;
-    renderFeatured();
+    featuredSlotIndices = [];
+    renderShowcase();
 };
 
 function ensureMobileFeaturedSwipe() {
-    const area = document.getElementById('shopsList');
+    const area = document.getElementById('shopsScrollArea');
 
-    if (!area || area.dataset.mobileSwipeReady === 'true') {
+    if (
+        !area ||
+        area.dataset.mobileSwipeReady === 'true'
+    ) {
         return;
     }
 
@@ -7916,90 +7602,477 @@ function ensureMobileFeaturedSwipe() {
     }, { passive: false });
 }
 
-function featuredVisibleCount() {
-    if (window.innerWidth <= 720) return 1;
-    if (window.innerWidth <= 1024) return 2;
+// ── Carga datos ───────────────────────────────────────────────
+async function boot() {
+    const [catsRes, featuredRes] = await Promise.all([
+        supabase
+            .from('categories')
+            .select('*')
+            .eq('is_active', true)
+            .order('sort_order')
+            .order('name'),
 
-    const area = document.getElementById('shopsList');
-    const availableHeight = Math.max(
-        0,
-        area?.clientHeight || (window.innerHeight - 150)
+        supabase
+            .from('businesses')
+            .select(BUSINESS_SELECT_FAST)
+            .eq('is_active', true)
+            .eq('is_featured', true)
+            .order('name', { ascending: true })
+    ]);
+
+    if (catsRes.error) console.error('categories error:', catsRes.error.message);
+    if (featuredRes.error) console.error('featured businesses error:', featuredRes.error.message);
+
+    const cats = catsRes.data || [];
+
+    rootCategories = cats.filter(c => !c.parent_id);
+    subMap = {};
+
+    cats.filter(c => c.parent_id).forEach(c => {
+        if (!subMap[c.parent_id]) subMap[c.parent_id] = [];
+        subMap[c.parent_id].push(c);
+    });
+
+    const requestedCategory = categoryParameter();
+    if (!requestedCategory) {
+        window.location.replace('../boulevard.html');
+        return;
+    }
+
+    currentRoot = resolveCurrentRoot(requestedCategory);
+    if (!currentRoot) {
+        window.location.replace('../boulevard.html');
+        return;
+    }
+
+    currentSubcategories = (subMap[toNum(currentRoot.id)] || []).slice().sort((a, b) =>
+        Number(a.sort_order || 0) - Number(b.sort_order || 0) ||
+        String(a.name || '').localeCompare(String(b.name || ''), 'es')
     );
 
-    const cardMinimumHeight = 148;
-    const gap = 9;
-    const calculated = Math.floor(
-        (availableHeight + gap) / (cardMinimumHeight + gap)
-    );
+    applyCategoryVisual();
 
-    return Math.max(1, Math.min(3, calculated || 1));
+    // Carga inicial liviana: destacados de la categoría actual.
+    allBusinesses = filterBusinessesToCurrentRoot(normalizeBusinessRows(featuredRes.data || []));
+    populateLocationOptions();
+
+    renderCatTree();
+    renderShowcase();
+    updateMetrics();
+
+    const runLater = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 900));
+
+    // Carga el directorio completo después de que la pantalla ya esté visible.
+    runLater(() => ensureAllBusinessesLoaded(false));
+
+    // Carga detalles solo de destacados para no bloquear la apertura.
+    runLater(() => loadBusinessDetails(allBusinesses.filter(business => business.is_featured === true).map(business => business.id)));
+    runLater(() => loadOfferMetrics());
 }
 
-function featuredBusinessCard(business) {
-    const ratingText = business._rating
-        ? business._rating.toFixed(1)
-        : '—';
+async function ensureAllBusinessesLoaded(renderAfterLoad = true) {
+    if (fullDirectoryLoaded) return;
 
-    const reviewText = business._reviewCount
-        ? `(${business._reviewCount})`
-        : 'Sin reseñas';
+    if (fullDirectoryLoadPromise) {
+        await fullDirectoryLoadPromise;
+        return;
+    }
 
-    const categoryName =
-        business.subcategories?.name ||
-        business.categories?.name ||
-        currentRoot.name;
+    fullDirectoryLoadPromise = (async () => {
+        const { data, error } = await supabase
+            .from('businesses')
+            .select(BUSINESS_SELECT_FAST)
+            .eq('is_active', true)
+            .order('is_featured', { ascending: false })
+            .order('name', { ascending: true });
 
-    const categoryIcon =
-        business.subcategories?.icon ||
-        business.categories?.icon ||
-        currentRoot?.icon ||
-        '🏪';
+        if (error) {
+            console.error('businesses full load error:', error.message);
+            return;
+        }
 
-    const addressLabel = String(
-        business.address ||
-        business.city ||
-        'Dirección no registrada'
-    ).trim();
+        allBusinesses = filterBusinessesToCurrentRoot(normalizeBusinessRows(data || []));
+        fullDirectoryLoaded = true;
+        populateLocationOptions();
 
-    const cityLabel = String(
-        business.city || 'No registrada'
-    ).trim();
+        if (renderAfterLoad) {
+            renderCatTree();
+            renderShowcase();
+            updateMetrics();
 
-    const phoneLabel = String(
-        business.phone ||
-        business.contact_phone ||
-        business.whatsapp ||
-        'No registrado'
-    ).trim();
+            const modal = document.getElementById('directorioModal');
+            if (modal && modal.style.display !== 'none') renderDir();
+        } else {
+            renderCatTree();
+            renderShowcase();
+            updateMetrics();
+        }
 
-    const statusHtml = business._openNow
+        // Después de cargar lo básico, actualiza detalles sin bloquear la interfaz.
+        const runLater = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 1200));
+        const allActiveIds = allBusinesses
+            .map(business => business.id)
+            .filter(id => id !== null && id !== undefined);
+
+        runLater(() => loadBusinessDetails(allActiveIds));
+        runLater(() => loadOfferMetrics());
+    })();
+
+    try {
+        await fullDirectoryLoadPromise;
+    } finally {
+        fullDirectoryLoadPromise = null;
+    }
+}
+
+async function loadBusinessDetails(targetIds = null) {
+    const ids = (targetIds && targetIds.length ? targetIds : allBusinesses
+        .map(business => business.id))
+        .filter(id => id !== null && id !== undefined);
+
+    if (!ids.length) return;
+
+    try {
+        const [hoursRes, reviewsRes, promotionsRes] = await Promise.all([
+            supabase
+                .from('business_hours')
+                .select('business_id,day_of_week,open_time,close_time,is_closed')
+                .in('business_id', ids),
+
+            supabase
+                .from('reviews')
+                .select('business_id,is_approved,rating')
+                .eq('is_approved', true)
+                .in('business_id', ids),
+
+            supabase
+                .from('promotions')
+                .select('business_id,is_active,end_date')
+                .eq('is_active', true)
+                .in('business_id', ids)
+        ]);
+
+        const groupByBusiness = (rows) => {
+            const map = new Map();
+
+            (rows || []).forEach(row => {
+                if (!map.has(row.business_id)) map.set(row.business_id, []);
+                map.get(row.business_id).push(row);
+            });
+
+            return map;
+        };
+
+        const hoursByBusiness = groupByBusiness(hoursRes.data || []);
+        const reviewsByBusiness = groupByBusiness(reviewsRes.data || []);
+        const promotionsByBusiness = groupByBusiness(promotionsRes.data || []);
+
+        allBusinesses = allBusinesses.map(business => {
+            if (!ids.includes(business.id)) return business;
+
+            const businessHours = hoursByBusiness.get(business.id) || [];
+            const reviews = reviewsByBusiness.get(business.id) || [];
+            const promotions = promotionsByBusiness.get(business.id) || [];
+
+            return {
+                ...business,
+                business_hours: businessHours,
+                reviews,
+                promotions,
+                _open: isOpenNow(businessHours),
+                _rating: avgRating(reviews),
+                _promo: hasPromo(promotions) || businessHasOfferProduct(business),
+                _reviews: reviews.length,
+            };
+        });
+
+        renderShowcase();
+        updateMetrics();
+
+        const modal = document.getElementById('directorioModal');
+        if (modal && modal.style.display !== 'none') renderDir();
+    } catch (error) {
+        console.warn('Urbanex: carga secundaria omitida para acelerar la página.', error);
+    }
+}
+
+
+async function loadOfferMetrics() {
+    try {
+        const { data, error } = await supabase
+            .from('business_products')
+            .select('business_id')
+            .eq('is_active', true)
+            .eq('is_on_sale', true);
+
+        if (error) {
+            console.warn('Urbanex: no se pudieron cargar las ofertas de productos.', error.message);
+            return;
+        }
+
+        const counts = new Map();
+
+        (data || []).forEach(row => {
+            const key = businessKey(row.business_id);
+            if (!key) return;
+            counts.set(key, (counts.get(key) || 0) + 1);
+        });
+
+        offerProductCountByBusiness = counts;
+        offerMetricsLoaded = true;
+
+        allBusinesses = allBusinesses.map(business => ({
+            ...business,
+            _promo: businessHasOfferProduct(business) || business._promo
+        }));
+
+        updateMetrics();
+
+        const modal = document.getElementById('directorioModal');
+        if (modal && modal.style.display !== 'none') renderDir();
+    } catch (error) {
+        console.warn('Urbanex: carga de ofertas de productos omitida.', error);
+    }
+}
+
+
+// ── Árbol de categorías ───────────────────────────────────────
+function renderCatTree() {
+    const list = document.getElementById('categoriesList');
+    if (!list || !currentRoot) return;
+
+    const visibleBusinesses = locationFilteredBusinesses();
+    const total = visibleBusinesses.length;
+    const rootId = encodeURIComponent(currentRoot.id);
+
+    list.innerHTML = `
+        <li class="category-item">
+            <button class="cat-all-btn active" id="catAllBtn" type="button" onclick="openDirectorio()">
+                <div class="icon-container">
+                    <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--gold)"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                </div>
+                <div class="category-text-info">
+                    <span class="category-name">Todos los negocios</span>
+                    <span class="category-count" id="totalCount">${total} local${total === 1 ? '' : 'es'}</span>
+                </div>
+            </button>
+        </li>
+    `;
+
+    currentSubcategories.forEach(subcategory => {
+        const subId = toNum(subcategory.id);
+        const count = visibleBusinesses.filter(business => {
+            const businessCategoryId = toNum(business.category_id);
+            const businessSubcategoryId = toNum(business.subcategory_id);
+            return businessCategoryId === subId || businessSubcategoryId === subId;
+        }).length;
+
+        const url = `subcategoria.html?categoria=${rootId}&subcategoria=${encodeURIComponent(subcategory.id)}`;
+        const item = document.createElement('li');
+        item.className = 'category-item';
+        item.innerHTML = `
+            <button class="cat-root-btn" type="button" onclick="openCategoryPage('${url}')">
+                <div class="icon-container">
+                    <span class="cat-emoji" style="font-size:15px;">${subcategory.icon || '📁'}</span>
+                </div>
+                <div class="category-text-info">
+                    <span class="category-name">${esc(subcategory.name)}</span>
+                    <span class="category-count">${count} local${count === 1 ? '' : 'es'}</span>
+                </div>
+            </button>
+        `;
+        list.appendChild(item);
+    });
+}
+
+// Click en raíz: abrir la página HTML oficial de la categoría.
+// Se conserva esta función para compatibilidad, pero ya NO despliega subcategorías en el sidebar.
+window.handleRootClick = (rootId, btn) => {
+    const root = rootCategories.find(r => toNum(r.id) === toNum(rootId));
+    if (!root) return;
+    window.location.href = getCategoryPageUrl(root);
+};
+
+// Seleccionar categoría / subcategoría
+window.selectCategory = (rootId, subId, btnEl) => {
+    activeCatId = rootId ? toNum(rootId) : null;
+    activeSubId = subId  ? toNum(subId)  : null;
+
+    document.querySelectorAll('.cat-root-btn,.sub-btn,.cat-all-btn').forEach(b=>b.classList.remove('active'));
+
+    if (!rootId && !subId) {
+        document.getElementById('catAllBtn').classList.add('active');
+        document.querySelectorAll('.sub-list').forEach(el=>el.classList.remove('open'));
+        document.querySelectorAll('.cat-root-btn').forEach(b=>b.classList.remove('expanded'));
+    }
+    if (btnEl) btnEl.classList.add('active');
+    if (subId) {
+        const rb = document.getElementById(`catRoot_${rootId}`);
+        if (rb) rb.classList.add('active');
+    }
+
+    updateActiveFilterLabel(rootId, subId);
+    renderShowcase();
+    updateMetrics();
+
+    // Si el modal del directorio está abierto, actualizarlo
+    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
+};
+
+function updateActiveFilterLabel(rootId, subId) {
+    const pill  = document.getElementById('activeFilterPill');
+    const label = document.getElementById('activeFilterLabel');
+    if (!rootId && !subId) { pill.classList.remove('visible'); return; }
+    let text = '';
+    if (subId) {
+        const sub  = Object.values(subMap).flat().find(s=>toNum(s.id)===toNum(subId));
+        const root = rootCategories.find(r=>toNum(r.id)===toNum(rootId));
+        text = `${root?.icon||''} ${root?.name||''} › ${sub?.icon||''} ${sub?.name||''}`;
+    } else {
+        const root = rootCategories.find(r=>r.id==rootId);
+        text = `${root?.icon||''} ${root?.name||''}`;
+    }
+    label.textContent = text;
+    pill.classList.add('visible');
+}
+
+// ── Filtro rápido ─────────────────────────────────────────────
+window.setQuickFilter = (filter, btn) => {
+    activeQuick = filter;
+    document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    renderShowcase();
+    updateMetrics();
+    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
+};
+
+// ── Búsqueda ──────────────────────────────────────────────────
+document.getElementById('siteSearch').addEventListener('input', e=>{
+    searchQuery = e.target.value.toLowerCase().trim();
+    renderShowcase();
+    if (document.getElementById('directorioModal').style.display !== 'none') renderDir();
+});
+
+// ── Filtrar lista ─────────────────────────────────────────────
+function filtered() {
+    return allBusinesses.filter(b=>{
+        if (!businessMatchesLocation(b)) return false;
+        const bCat = toNum(b.category_id);
+        const bSub = toNum(b.subcategory_id);
+        if (activeSubId !== null) {
+            if (bSub !== activeSubId) return false;
+        } else if (activeCatId !== null) {
+            const allSubs = Object.values(subMap).flat();
+            const subObj  = bSub !== null ? allSubs.find(s=>s.id === bSub) : null;
+            const matchRoot = bCat === activeCatId;
+            const matchSub  = subObj ? toNum(subObj.parent_id) === activeCatId : false;
+            if (!matchRoot && !matchSub) return false;
+        }
+        if (activeQuick==='open'     && !b._open)            return false;
+        if (activeQuick==='delivery' && !b.delivery_available) return false;
+        if (activeQuick==='promo'    && !(businessHasOfferProduct(b) || b._promo)) return false;
+        if (searchQuery) {
+            const hay = `${b.name} ${b.address||''} ${b.categories?.name||''} ${b.subcategories?.name||''}`.toLowerCase();
+            if (!hay.includes(searchQuery)) return false;
+        }
+        return true;
+    });
+}
+
+// ── Métricas filtros inferiores ───────────────────────────────
+function updateMetrics() {
+    const base = allCatFiltered();
+    document.getElementById('metricAll').textContent     = base.length + ' locales';
+    document.getElementById('metricOpenNow').textContent = base.filter(b=>b._open).length + ' locales';
+    document.getElementById('metricDelivery').textContent= base.filter(b=>b.delivery_available).length + ' locales';
+    const offerTotal = offerMetricsLoaded ? base.reduce((total, business) => total + businessOfferProductCount(business), 0) : base.filter(b=>b._promo).length;
+    document.getElementById('metricOffers').textContent  = offerTotal + (offerTotal === 1 ? ' oferta' : ' ofertas');
+}
+
+// Solo filtro de categoría (sin quick filter) para las métricas
+function allCatFiltered() {
+    return allBusinesses.filter(b=>{
+        if (!businessMatchesLocation(b)) return false;
+        const bCat = toNum(b.category_id);
+        const bSub = toNum(b.subcategory_id);
+        if (activeSubId !== null) {
+            if (bSub !== activeSubId) return false;
+        } else if (activeCatId !== null) {
+            const allSubs = Object.values(subMap).flat();
+            const subObj  = bSub !== null ? allSubs.find(s=>s.id === bSub) : null;
+            const matchRoot = bCat === activeCatId;
+            const matchSub  = subObj ? toNum(subObj.parent_id) === activeCatId : false;
+            if (!matchRoot && !matchSub) return false;
+        }
+        return true;
+    });
+}
+
+// ── Tarjeta de negocio (panel derecho) ───────────────────────
+function shopCardHtml(b) {
+    const catLabel = b.subcategories?.name
+        ? `${b.categories?.icon||''} ${b.subcategories.name}`
+        : `${b.categories?.icon||''} ${b.categories?.name||'Sin categoría'}`;
+
+    const ratingHtml = b._rating
+        ? `<svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+           <span class="rating-value">${b._rating.toFixed(1)}</span>
+           <span class="rating-count">(${b._reviews})</span>`
+        : `<span class="rating-count">Sin reseñas</span>`;
+
+    const statusHtml = b._open
         ? `<span class="status-open">Abierto</span>`
         : `<span class="status-closed">Cerrado</span>`;
 
-    if (window.innerWidth <= 720) {
-        const mobileImgHtml = business.cover_image
-            ? `<div class="shop-thumb-wrapper"><img class="shop-thumb" src="${esc(business.cover_image)}" alt="${esc(business.name)}" loading="lazy"></div>`
-            : `<div class="shop-thumb-wrapper"><span>${esc(categoryIcon)}</span></div>`;
+    const basicImgEl = b.cover_image
+        ? `<div class="shop-thumb-wrapper"><img class="shop-thumb" src="${esc(b.cover_image)}" alt="${esc(b.name)}" loading="lazy"></div>`
+        : `<div class="shop-thumb-wrapper">${b.subcategories?.icon||b.categories?.icon||'🏪'}</div>`;
 
+    const addressLabel = String(
+        b.address || b.city || 'Dirección no registrada'
+    ).trim();
+
+    const whatsappValue = String(
+        b.whatsapp || b.phone || b.contact_phone || ''
+    ).trim();
+
+    const whatsappDigits = whatsappValue.replace(/\D/g, '');
+
+    const whatsappUrl = whatsappDigits
+        ? `https://wa.me/${whatsappDigits}?text=${encodeURIComponent(
+            `Hola, le contacto desde Urbanex. Deseo información de ${b.name}.`
+        )}`
+        : '';
+
+    /* En celular se muestra una tarjeta un poco más alta y con información completa. */
+    if (window.innerWidth <= 720) {
         const mobilePhoneValue = String(
-            business.phone ||
-            business.contact_phone ||
-            business.whatsapp ||
-            ''
+            b.phone || b.contact_phone || b.whatsapp || ''
         ).trim();
 
         const mobilePhoneDigits = mobilePhoneValue.replace(/\D/g, '');
 
+        const mobileWebsiteValue = String(
+            b.website || b.website_url || b.web || b.url || ''
+        ).trim();
+
+        const mobileWebsiteHref = mobileWebsiteValue
+            ? (/^https?:\/\//i.test(mobileWebsiteValue)
+                ? mobileWebsiteValue
+                : `https://${mobileWebsiteValue}`)
+            : '';
+
+        const mobileWebsiteDisplay = mobileWebsiteValue
+            .replace(/^https?:\/\//i, '')
+            .replace(/^www\./i, '')
+            .replace(/\/$/, '');
+
         const mobileEmailValue = String(
-            business.email ||
-            business.contact_email ||
-            business.business_email ||
-            business.mail ||
-            ''
+            b.email || b.contact_email || b.business_email || b.mail || ''
         ).trim();
 
         const mobileExtraInfoHtml = (
-            mobilePhoneValue || mobileEmailValue
+            mobilePhoneValue || mobileWebsiteValue || mobileEmailValue
         )
             ? `
                 <div class="mobile-featured-extra-info">
@@ -8008,7 +8081,7 @@ function featuredBusinessCard(business) {
                             <a
                                 class="mobile-featured-info-item"
                                 href="tel:${mobilePhoneDigits}"
-                                aria-label="Llamar a ${esc(business.name)}"
+                                aria-label="Llamar a ${esc(b.name)}"
                             >
                                 <span>Teléfono:</span>
                                 <strong>${esc(mobilePhoneValue)}</strong>
@@ -8022,7 +8095,7 @@ function featuredBusinessCard(business) {
                             <a
                                 class="mobile-featured-info-item"
                                 href="mailto:${esc(mobileEmailValue)}"
-                                aria-label="Enviar correo a ${esc(business.name)}"
+                                aria-label="Enviar correo a ${esc(b.name)}"
                             >
                                 <span>Correo:</span>
                                 <strong>${esc(mobileEmailValue)}</strong>
@@ -8037,9 +8110,7 @@ function featuredBusinessCard(business) {
         const mobileFeaturedList = getFeaturedBusinessesForNavigation();
         const mobileCurrentIndex = Math.max(
             0,
-            mobileFeaturedList.findIndex(
-                item => String(item.id) === String(business.id)
-            )
+            mobileFeaturedList.findIndex(item => String(item.id) === String(b.id))
         );
 
         const mobileProgressHtml = mobileFeaturedList.length > 1
@@ -8070,79 +8141,131 @@ function featuredBusinessCard(business) {
                 <div class="mobile-featured-profile">
                     <a
                         class="mobile-featured-logo-link"
-                        href="${businessUrl(business)}"
-                        aria-label="Ver perfil de ${esc(business.name)}"
+                        href="${NEGOCIO_URL(b.slug)}"
+                        aria-label="Ver perfil de ${esc(b.name)}"
                     >
-                        ${mobileImgHtml}
+                        ${basicImgEl}
                     </a>
 
                     <div class="shop-details">
                         <div class="mobile-featured-topline">
-                            <div class="shop-segment">${esc(categoryIcon)} ${esc(categoryName)}</div>
+                            <div class="shop-segment">${catLabel}</div>
                             ${statusHtml}
                         </div>
 
                         <a
                             class="shop-title mobile-featured-title-link"
-                            href="${businessUrl(business)}"
-                        >${esc(business.name)}</a>
+                            href="${NEGOCIO_URL(b.slug)}"
+                        >${esc(b.name)}</a>
 
-                        <div
-                            class="mobile-featured-address"
-                            title="${esc(addressLabel)}"
-                        >
+                        <div class="mobile-featured-address" title="${esc(addressLabel)}">
                             <span aria-hidden="true">⌖</span>
                             <span>${esc(addressLabel)}</span>
                         </div>
 
                         ${mobileExtraInfoHtml}
 
-                        <div class="shop-rating-row">
-                            <span class="star-icon">★</span>
-                            <span class="rating-value">${ratingText}</span>
-                            <span class="rating-count">${esc(reviewText)}</span>
-                        </div>
+                        <div class="shop-rating-row">${ratingHtml}</div>
                     </div>
                 </div>
             </article>
         `;
     }
 
-    const logoHtml = business.cover_image
-        ? `
-            <div class="ux-featured-logo-box">
+    const desktopImgEl = b.cover_image
+        ? `<div class="ux-featured-logo-box">
                 <img
                     class="ux-featured-logo"
-                    src="${esc(business.cover_image)}"
-                    alt="${esc(business.name)}"
+                    src="${esc(b.cover_image)}"
+                    alt="${esc(b.name)}"
                     loading="lazy"
                 >
-            </div>
+           </div>`
+        : `<div class="ux-featured-logo-box ux-featured-logo-fallback">
+                <span>${b.subcategories?.icon||b.categories?.icon||'🏪'}</span>
+           </div>`;
+
+    const desktopPhoneValue = String(
+        b.phone || b.contact_phone || b.whatsapp || ''
+    ).trim();
+
+    const desktopEmailValue = String(
+        b.email || b.contact_email || b.business_email || b.mail || ''
+    ).trim();
+
+    const desktopWebsiteValue = String(
+        b.website || b.website_url || b.web || b.url || ''
+    ).trim();
+
+    const desktopWebsiteDisplay = desktopWebsiteValue
+        .replace(/^https?:\/\//i, '')
+        .replace(/^www\./i, '')
+        .replace(/\/$/, '');
+
+    const desktopMoreInfoHtml = [
+        b.city
+            ? `<div class="shop-extra-line"><span>Ciudad</span><strong>${esc(b.city)}</strong></div>`
+            : '',
+        desktopPhoneValue
+            ? `<div class="shop-extra-line"><span>Teléfono</span><strong>${esc(desktopPhoneValue)}</strong></div>`
+            : '',
+        desktopEmailValue
+            ? `<div class="shop-extra-line shop-extra-line-wide"><span>Correo</span><strong>${esc(desktopEmailValue)}</strong></div>`
+            : '',
+        desktopWebsiteValue
+            ? `<div class="shop-extra-line shop-extra-line-wide"><span>Web</span><strong>${esc(desktopWebsiteDisplay)}</strong></div>`
+            : ''
+    ].filter(Boolean).join('');
+
+
+    const whatsappBlock = whatsappValue
+        ? `
+            <a
+                class="shop-contact shop-contact-whatsapp"
+                href="${whatsappUrl}"
+                target="_blank"
+                rel="noopener noreferrer"
+                onclick="event.stopPropagation()"
+                aria-label="Contactar a ${esc(b.name)} por WhatsApp"
+            >
+                <span class="shop-contact-icon" aria-hidden="true">✆</span>
+                <span class="shop-contact-copy">
+                    <small>WhatsApp</small>
+                    <strong>${esc(whatsappValue)}</strong>
+                </span>
+            </a>
         `
         : `
-            <div class="ux-featured-logo-box ux-featured-logo-fallback">
-                <span>${esc(categoryIcon)}</span>
+            <div class="shop-contact shop-contact-unavailable">
+                <span class="shop-contact-icon" aria-hidden="true">✆</span>
+                <span class="shop-contact-copy">
+                    <small>WhatsApp</small>
+                    <strong>No registrado</strong>
+                </span>
             </div>
         `;
+
+    const desktopCityValue = String(
+        b.city || 'No registrada'
+    ).trim();
+
+    const desktopPhoneDisplay = desktopPhoneValue || 'No registrado';
 
     return `
         <article class="shop-card shop-card-ad ux-featured-card">
             <a
                 class="ux-featured-link"
-                href="${businessUrl(business)}"
-                aria-label="Ver perfil de ${esc(business.name)}"
+                href="${NEGOCIO_URL(b.slug)}"
+                aria-label="Ver perfil de ${esc(b.name)}"
             >
                 <div class="ux-featured-primary">
-                    ${logoHtml}
+                    ${desktopImgEl}
 
                     <div class="ux-featured-content">
-                        <div class="ux-featured-category">
-                            <span aria-hidden="true">${esc(categoryIcon)}</span>
-                            <span>${esc(categoryName)}</span>
-                        </div>
+                        <div class="ux-featured-category">${catLabel}</div>
 
                         <div class="ux-featured-name">
-                            ${esc(business.name)}
+                            ${esc(b.name)}
                         </div>
 
                         <div
@@ -8158,489 +8281,890 @@ function featuredBusinessCard(business) {
                 <div class="ux-featured-data">
                     <div class="ux-featured-data-item">
                         <span>Ciudad</span>
-                        <strong>${esc(cityLabel)}</strong>
+                        <strong>${esc(desktopCityValue)}</strong>
                     </div>
 
                     <div class="ux-featured-data-item">
                         <span>Teléfono</span>
-                        <strong>${esc(phoneLabel)}</strong>
+                        <strong>${esc(desktopPhoneDisplay)}</strong>
                     </div>
                 </div>
 
                 <div class="ux-featured-bottom">
-                    <div class="ux-featured-rating">
-                        <div class="shop-rating-row">
-                            <span class="star-icon">★</span>
-                            <span class="rating-value">${ratingText}</span>
-                            <span class="rating-count">${esc(reviewText)}</span>
-                        </div>
-                    </div>
-
-                    <div class="ux-featured-status">
-                        ${statusHtml}
-                    </div>
+                    <div class="ux-featured-rating">${ratingHtml}</div>
+                    <div class="ux-featured-status">${statusHtml}</div>
                 </div>
             </a>
         </article>
     `;
 }
 
-async function fetchBusinesses() {
-    let query = supabase
-        .from('businesses')
-        .select(BUSINESS_SELECT_INITIAL)
-        .eq('is_active', true);
+// ── Render: panel derecho ─────────────────────────────────────
+window.renderShowcase = () => {
+    const sort = document.getElementById('showcaseSort')?.value || 'rating';
 
-    const rootId = toNum(currentRoot.id);
-    const subcategoryIds = currentSubcategories
-        .map(item => toNum(item.id))
-        .filter(id => id !== null);
+    let list = allBusinesses
+        .filter(business => business.is_featured === true && businessMatchesLocation(business))
+        .slice();
 
-    const filters = [`category_id.eq.${rootId}`];
-
-    if (subcategoryIds.length) {
-        filters.push(`category_id.in.(${subcategoryIds.join(',')})`);
-        filters.push(`subcategory_id.in.(${subcategoryIds.join(',')})`);
-    }
-
-    query = query.or(filters.join(','));
-    return await query;
-}
-
-function groupRowsByBusiness(rows) {
-    const map = new Map();
-
-    (rows || []).forEach(row => {
-        const key = String(row.business_id);
-        if (!map.has(key)) map.set(key, []);
-        map.get(key).push(row);
-    });
-
-    return map;
-}
-
-async function loadMobileGlobalFeaturedBusinesses() {
-    if (window.innerWidth > 720) {
-        mobileGlobalFeaturedBusinesses = [];
-        return;
-    }
-
-    try {
-        const featuredResult = await supabase
-            .from('businesses')
-            .select(BUSINESS_SELECT_INITIAL)
-            .eq('is_active', true)
-            .eq('is_featured', true);
-
-        if (featuredResult.error) throw featuredResult.error;
-
-        let list = (featuredResult.data || [])
-            .filter(isFeatured)
-            .filter(business =>
-                !window.UrbanexLocation ||
-                window.UrbanexLocation.matchesBusiness(business)
-            );
-
-        const ids = list
-            .map(business => business.id)
-            .filter(id => id !== null && id !== undefined);
-
-        if (ids.length) {
-            const [hoursResult, reviewsResult] = await Promise.all([
-                supabase
-                    .from('business_hours')
-                    .select('business_id,day_of_week,open_time,close_time,is_closed')
-                    .in('business_id', ids),
-
-                supabase
-                    .from('reviews')
-                    .select('business_id,is_approved,rating')
-                    .eq('is_approved', true)
-                    .in('business_id', ids)
-            ]);
-
-            const hoursByBusiness = groupRowsByBusiness(hoursResult.data || []);
-            const reviewsByBusiness = groupRowsByBusiness(reviewsResult.data || []);
-
-            list = list.map(business => enrichBusiness({
-                ...business,
-                business_hours:
-                    hoursByBusiness.get(String(business.id)) || [],
-                reviews:
-                    reviewsByBusiness.get(String(business.id)) || []
-            }));
-        } else {
-            list = [];
-        }
-
-        mobileGlobalFeaturedBusinesses = list;
-    } catch (error) {
-        console.warn(
-            'Urbanex: no se pudieron cargar los destacados globales para celular.',
-            error
+    if (sort === 'name') {
+        list.sort((a, b) =>
+            String(a.name || '').localeCompare(String(b.name || ''), 'es')
         );
-        mobileGlobalFeaturedBusinesses = [];
-    }
-}
-
-async function loadBusinessDetails() {
-    const ids = allBusinesses
-        .map(business => business.id)
-        .filter(id => id !== null && id !== undefined);
-
-    if (!ids.length) return;
-
-    try {
-        const [hoursResult, reviewsResult] = await Promise.all([
-            supabase
-                .from('business_hours')
-                .select('business_id,day_of_week,open_time,close_time,is_closed')
-                .in('business_id', ids),
-
-            supabase
-                .from('reviews')
-                .select('business_id,is_approved,rating')
-                .eq('is_approved', true)
-                .in('business_id', ids)
-        ]);
-
-        const hoursByBusiness = groupRowsByBusiness(hoursResult.data || []);
-        const reviewsByBusiness = groupRowsByBusiness(reviewsResult.data || []);
-
-        allBusinesses = allBusinesses.map(business => {
-            const updatedBusiness = {
-                ...business,
-                business_hours:
-                    hoursByBusiness.get(String(business.id)) || [],
-                reviews:
-                    reviewsByBusiness.get(String(business.id)) || []
-            };
-
-            return enrichBusiness(updatedBusiness);
-        });
-
-        renderSubcategories();
-        renderFeatured();
-
-        const directoryModal = document.getElementById('directoryModal');
-        if (directoryModal?.classList.contains('open')) {
-            window.openDirectory();
-        }
-    } catch (error) {
-        console.warn('No se pudieron cargar horarios o reseñas:', error);
-    }
-}
-
-function renderError(message) {
-    document.getElementById('categoriesList').innerHTML = '';
-    document.getElementById('shopsList').innerHTML =
-        `<div class="empty-state">${esc(message)}</div>`;
-    document.getElementById('showcaseStats').textContent = 'Error de carga';
-}
-
-async function boot() {
-    try {
-        const parameter = categoryParameter();
-
-        if (!parameter) {
-            window.location.replace('../boulevard.html');
-            return;
-        }
-
-        const categoriesResult = await supabase
-            .from('categories')
-            .select('*')
-            .eq('is_active', true)
-            .order('sort_order', { ascending: true })
-            .order('name', { ascending: true });
-
-        if (categoriesResult.error) throw categoriesResult.error;
-
-        const categories = categoriesResult.data || [];
-        rootCategories = categories.filter(isRootCategory);
-        subCategories = categories.filter(category => !isRootCategory(category));
-        currentRoot = resolveRootCategory(parameter);
-
-        if (!currentRoot) {
-            throw new Error('La categoría no existe o está inactiva.');
-        }
-
-        currentSubcategories = subCategories
-            .filter(category =>
-                toNum(category.parent_id) === toNum(currentRoot.id)
-            )
-            .sort((a, b) =>
-                Number(a.sort_order || 0) - Number(b.sort_order || 0) ||
-                String(a.name || '').localeCompare(String(b.name || ''), 'es')
-            );
-
-        applyVisual();
-
-        const businessResult = await fetchBusinesses();
-        if (businessResult.error) throw businessResult.error;
-
-        allBusinesses = (businessResult.data || []).map(business =>
-            enrichBusiness({
-                ...business,
-                business_hours: business.business_hours || [],
-                reviews: business.reviews || []
-            })
-        ).filter(business =>
-            !window.UrbanexLocation || window.UrbanexLocation.matchesBusiness(business)
-        );
-
-        await loadMobileGlobalFeaturedBusinesses();
-
-        renderSubcategories();
-        renderFeatured();
-
-        const runLater =
-            window.requestIdleCallback ||
-            (callback => window.setTimeout(callback, 700));
-
-        runLater(loadBusinessDetails);
-    } catch (error) {
-        console.error(error);
-        renderError(
-            error?.message ||
-            'No se pudo cargar la información desde Supabase.'
+    } else {
+        list.sort((a, b) =>
+            (b._rating || 0) - (a._rating || 0) ||
+            String(a.name || '').localeCompare(String(b.name || ''), 'es')
         );
     }
-}
 
-function renderFeatured() {
-    const list = featuredBusinesses();
-    const container = document.getElementById('shopsList');
+    const area = document.getElementById('shopsScrollArea');
     const stats = document.getElementById('showcaseStats');
-    const sort = document.getElementById('sortSelect')?.value || 'rating';
-    const signature = `${searchTerm}|${sort}|${list.map(item => item.id).join(',')}`;
+    const signature = `${activeLocation}|${sort}|${list.map(item => item.id).join(',')}`;
 
     if (signature !== featuredCarouselSignature) {
         featuredCarouselSignature = signature;
         featuredCarouselOffset = 0;
+        featuredSlotIndices = [];
     }
 
-    stats.textContent =
-        `${list.length} destacado${list.length !== 1 ? 's' : ''} ` +
-        `seleccionado${list.length !== 1 ? 's' : ''}`;
+    if (stats) {
+        stats.textContent = `${list.length} destacado${list.length !== 1 ? 's' : ''}`;
+    }
+
+    const largePosition = document.getElementById('featuredLargePosition');
+
+    if (largePosition) {
+        largePosition.textContent = list.length
+            ? `${(featuredCarouselOffset % list.length) + 1} / ${list.length}`
+            : '';
+    }
+
+    if (!area) return;
 
     stopFeaturedRotation();
 
     if (!list.length) {
-        container.removeAttribute('data-visible-count');
-        container.innerHTML =
-            `<div class="empty-state">` +
-            `No hay negocios destacados seleccionados en Supabase.` +
-            `</div>`;
+        area.innerHTML = `
+            <div class="shop-card-empty">
+                No hay negocios destacados en esta ubicación.
+            </div>
+        `;
+        renderLargeFeaturedRail([]);
         return;
     }
 
-    const visibleCount = Math.max(
-        1,
-        Math.min(featuredVisibleCount(), list.length)
-    );
+    const visibleCount = Math.max(1, Math.min(featuredVisibleCount(), list.length));
 
-    container.dataset.visibleCount = String(visibleCount);
+    const mustResetSlots =
+        window.innerWidth <= 720 ||
+        featuredSlotIndices.length !== visibleCount ||
+        featuredSlotIndices.some(index => index >= list.length);
 
-    if (window.innerWidth <= 720) {
-        const activeIndex =
-            ((featuredCarouselOffset % list.length) + list.length) % list.length;
-
-        container.classList.remove('featured-changing');
-        void container.offsetWidth;
-        container.innerHTML = featuredBusinessCard(list[activeIndex]);
-        container.classList.add('featured-changing');
-
-        ensureMobileFeaturedSwipe();
-        scheduleFeaturedRotation(list.length);
-        return;
+    if (mustResetSlots) {
+        featuredSlotIndices = Array.from(
+            { length: visibleCount },
+            (_, index) => (featuredCarouselOffset + index) % list.length
+        );
     }
 
-    container.innerHTML = list
-        .slice(0, visibleCount)
-        .map(featuredBusinessCard)
-        .join('');
+    const visibleBusinesses = featuredSlotIndices.map(index => list[index]);
+
+    area.dataset.visibleCount = String(visibleCount);
+    area.classList.remove('featured-changing');
+    void area.offsetWidth;
+    area.innerHTML = visibleBusinesses.map(shopCardHtml).join('');
+    area.classList.add('featured-changing');
+
+    renderLargeFeaturedRail(list);
+    ensureLargeFeaturedGesture();
+    ensureMobileFeaturedSwipe();
+    scheduleFeaturedRotation(list.length);
+    scheduleFeaturedSlotRotations(list);
+};
+
+// ── Modal Directorio ──────────────────────────────────────────
+let directoryPreviousFocus = null;
+let directoryQuery = '';
+let directorySortMode = 'featured';
+
+function normalizeDirectoryText(value) {
+    return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
 }
 
-window.openDirectory = () => {
-    const list = rootBusinesses().sort((a, b) =>
-        String(a.name || '').localeCompare(String(b.name || ''), 'es')
+window.openDirectorio = async () => {
+    const modal = document.getElementById('directorioModal');
+    const grid = document.getElementById('dirGrid');
+    const closeButton = document.getElementById('directoryCloseButton');
+
+    directoryPreviousFocus = document.activeElement;
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    if (!fullDirectoryLoaded && grid) {
+        grid.innerHTML = `
+            <div class="uxd-loading-grid">
+                ${Array.from(
+                    { length: 12 },
+                    () => '<div class="uxd-skeleton"></div>'
+                ).join('')}
+            </div>
+        `;
+    }
+
+    window.setTimeout(() => closeButton?.focus(), 0);
+
+    await ensureAllBusinessesLoaded(true);
+    renderDir();
+};
+
+window.closeDirectorio = () => {
+    const modal = document.getElementById('directorioModal');
+
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+
+    if (directoryPreviousFocus instanceof HTMLElement) {
+        directoryPreviousFocus.focus();
+    }
+
+    directoryPreviousFocus = null;
+};
+
+function dirCardHtml(b) {
+    const media = b.cover_image
+        ? `
+            <img
+                class="uxd-business-logo-fit"
+                src="${esc(b.cover_image)}"
+                alt="${esc(b.name)}"
+                loading="lazy"
+                decoding="async"
+                style="width:auto!important;height:auto!important;max-width:92%!important;max-height:92%!important;object-fit:contain!important;object-position:center!important;display:block!important;margin:auto!important;transform:none!important;"
+            >
+        `
+        : `
+            <div class="uxd-placeholder" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 4h16l1 5v2a3 3 0 0 1-1 2.24V20h-7v-5h-2v5H4v-6.76A3 3 0 0 1 3 11V9l1-5Zm2 2-.6 3h13.2L18 6H6Zm-.9 5a1 1 0 0 0 2 0h-2Zm4 0a1 1 0 0 0 2 0h-2Zm4 0a1 1 0 0 0 2 0h-2Zm4 0a1 1 0 0 0 2 0h-2Z"/>
+                </svg>
+            </div>
+        `;
+
+    const categoryName = b.categories?.name || 'Sin categoría';
+    const subcategoryName = b.subcategories?.name || '';
+    const categoryLabel = subcategoryName
+        ? `${categoryName} · ${subcategoryName}`
+        : categoryName;
+
+    const cityLabel = businessCity(b) || b.address || 'Ubicación no registrada';
+    const statusClass = b._open ? 'uxd-status is-open' : 'uxd-status';
+    const statusText = b._open ? 'Abierto' : 'Cerrado';
+    const featuredBadge = b.is_featured === true
+        ? '<span class="uxd-featured">Destacado</span>'
+        : '';
+
+    return `
+        <a class="uxd-card" href="${NEGOCIO_URL(b.slug)}" aria-label="Ver perfil de ${esc(b.name)}">
+            <div class="uxd-card-media">
+                ${featuredBadge}
+                ${media}
+            </div>
+
+            <div class="uxd-card-body">
+                <span class="uxd-category">${esc(categoryLabel)}</span>
+                <h3>${esc(b.name)}</h3>
+
+                <p class="uxd-location">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z"/>
+                    </svg>
+                    <span>${esc(cityLabel)}</span>
+                </p>
+
+                <div class="uxd-card-footer">
+                    <span class="${statusClass}">${statusText}</span>
+                    <span class="uxd-card-action">
+                        Ver perfil
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="m13.17 5.17 1.42-1.42L22.83 12l-8.24 8.25-1.42-1.42L19 13H2v-2h17l-5.83-5.83Z"/>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+        </a>
+    `;
+}
+
+function renderDir() {
+    const baseList = filtered();
+    const query = normalizeDirectoryText(directoryQuery);
+
+    let list = baseList.filter(business => {
+        if (!query) return true;
+
+        const searchable = normalizeDirectoryText([
+            business.name,
+            business.categories?.name,
+            business.subcategories?.name,
+            businessCity(business),
+            business.address,
+        ].filter(Boolean).join(' '));
+
+        return searchable.includes(query);
+    });
+
+    list.sort((a, b) => {
+        if (directorySortMode === 'rating') {
+            const ratingDifference = Number(b._rating || 0) - Number(a._rating || 0);
+            if (ratingDifference !== 0) return ratingDifference;
+        }
+
+        if (directorySortMode === 'featured') {
+            const featuredDifference = Number(b.is_featured === true) - Number(a.is_featured === true);
+            if (featuredDifference !== 0) return featuredDifference;
+        }
+
+        return String(a.name || '').localeCompare(String(b.name || ''), 'es');
+    });
+
+    const grid = document.getElementById('dirGrid');
+    const meta = document.getElementById('directoryMeta');
+    const locationLabel = document.getElementById('directoryLocationLabel');
+    const visibleCount = document.getElementById('directoryVisibleCount');
+    const location = currentLocationLabel();
+
+    if (meta) {
+        meta.textContent = `${baseList.length} negocio${baseList.length === 1 ? '' : 's'} disponibles`;
+    }
+
+    if (locationLabel) {
+        locationLabel.textContent = location;
+    }
+
+    if (visibleCount) {
+        visibleCount.textContent = `${list.length} resultado${list.length === 1 ? '' : 's'}`;
+    }
+
+    if (!list.length) {
+        grid.innerHTML = `
+            <div class="uxd-empty">
+                No hay negocios que coincidan con la búsqueda, la ubicación y los filtros seleccionados.
+            </div>
+        `;
+        return;
+    }
+
+    const categoryGroups = new Map();
+
+    list.forEach(business => {
+        const categoryName = String(
+            business.categories?.name || 'Sin categoría'
+        ).trim() || 'Sin categoría';
+
+        if (!categoryGroups.has(categoryName)) {
+            categoryGroups.set(categoryName, []);
+        }
+
+        categoryGroups.get(categoryName).push(business);
+    });
+
+    const orderedGroups = Array.from(categoryGroups.entries()).sort(
+        ([categoryA], [categoryB]) =>
+            categoryA.localeCompare(categoryB, 'es', { sensitivity: 'base' })
     );
 
-    const grid = document.getElementById('directoryGrid');
+    grid.innerHTML = orderedGroups.map(([categoryName, businesses]) => `
+        <section class="uxd-category-section" aria-labelledby="uxd-category-${esc(normalizeDirectoryText(categoryName).replace(/[^a-z0-9]+/g, '-'))}">
+            <header class="uxd-category-head">
+                <div class="uxd-category-heading">
+                    <span class="uxd-category-marker" aria-hidden="true"></span>
+                    <h3
+                        class="uxd-category-title"
+                        id="uxd-category-${esc(normalizeDirectoryText(categoryName).replace(/[^a-z0-9]+/g, '-'))}"
+                    >${esc(categoryName)}</h3>
+                </div>
+                <span class="uxd-category-total">
+                    ${businesses.length} negocio${businesses.length === 1 ? '' : 's'}
+                </span>
+            </header>
 
-    grid.innerHTML = list.length
-        ? list.map(businessCard).join('')
-        : `<div class="empty-state">No hay negocios para mostrar.</div>`;
+            <div class="uxd-category-cards">
+                ${businesses.map(dirCardHtml).join('')}
+            </div>
+        </section>
+    `).join('');
+}
 
-    document.getElementById('directoryModal').classList.add('open');
-};
-
-window.closeDirectory = () => {
-    document.getElementById('directoryModal').classList.remove('open');
-};
-
-document.getElementById('directoryModal').addEventListener('click', event => {
-    if (event.target.id === 'directoryModal') closeDirectory();
+document.getElementById('directorySearch')?.addEventListener('input', event => {
+    directoryQuery = event.target.value || '';
+    renderDir();
 });
 
-document.getElementById('siteSearch').addEventListener('input', event => {
-    searchTerm = normalize(event.target.value);
-    renderFeatured();
+document.getElementById('directorySort')?.addEventListener('change', event => {
+    directorySortMode = event.target.value || 'featured';
+    renderDir();
 });
 
-document.getElementById('sortSelect').addEventListener('change', renderFeatured);
+document.getElementById('directorioModal')?.addEventListener('click', event => {
+    if (event.target.id === 'directorioModal') {
+        closeDirectorio();
+    }
+});
 
+// Cerrar modal con Escape
 document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') closeDirectory();
+    if (
+        event.key === 'Escape' &&
+        document.getElementById('directorioModal')?.style.display === 'flex'
+    ) {
+        closeDirectorio();
+    }
 });
 
+const locationPickerButton = document.getElementById('locationPickerButton');
+const locationPickerPanel = document.getElementById('locationPickerPanel');
+const provinceSelect = document.getElementById('provinceSelect');
+const locationPickerApply = document.getElementById('locationPickerApply');
+const locationPickerCancel = document.getElementById('locationPickerCancel');
+
+locationPickerButton?.addEventListener('click', event => {
+    event.stopPropagation();
+    const willOpen = locationPickerPanel?.hidden !== false;
+    populateProvinceOptions();
+    populateCityOptions(activeProvince, activeLocation);
+    setLocationPickerOpen(willOpen);
+});
+
+provinceSelect?.addEventListener('change', event => {
+    const province = event.target.value || '__all__';
+    populateCityOptions(province, province === activeProvince ? activeLocation : '__province__');
+});
+
+locationPickerApply?.addEventListener('click', applySelectedLocation);
+locationPickerCancel?.addEventListener('click', () => setLocationPickerOpen(false));
+
+locationPickerPanel?.addEventListener('click', event => event.stopPropagation());
+
+document.addEventListener('click', () => setLocationPickerOpen(false));
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') setLocationPickerOpen(false);
+});
 
 let featuredResizeTimer = null;
 window.addEventListener('resize', () => {
     window.clearTimeout(featuredResizeTimer);
     featuredResizeTimer = window.setTimeout(() => {
         featuredCarouselOffset = 0;
-        renderFeatured();
-    }, 120);
+        renderShowcase();
+    }, 160);
 });
 
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
         stopFeaturedRotation();
     } else {
-        renderFeatured();
+        renderShowcase();
     }
 });
 
+readSavedUrbanexLocation();
+
+window.addEventListener('storage', event => {
+    if (![URBANEX_LOCATION_STORAGE_KEY, URBANEX_LOCATION_COMPAT_KEY, URBANEX_LOCATION_PROVINCE_KEY, URBANEX_LOCATION_CITY_KEY].includes(event.key)) return;
+
+    readSavedUrbanexLocation();
+    populateLocationOptions();
+    renderCatTree();
+    renderShowcase();
+    updateMetrics();
+});
+
 boot();
+
+// ── Búsqueda (negocios + productos en tiempo real) ───────────
+const searchInput  = document.getElementById('siteSearch');
+const resultsPanel = document.getElementById('searchResults');
+
+let searchTimer = null;
+
+function showResults(html) {
+    resultsPanel.innerHTML = html;
+    resultsPanel.style.display = 'block';
+    resultsPanel.classList.add('active');
+}
+function hideResults() {
+    resultsPanel.style.display = 'none';
+    resultsPanel.classList.remove('active');
+}
+
+searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim();
+    if (!q || q.length < 3) { hideResults(); return; }
+    showResults('<div class="search-results-status">Buscando...</div>');
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => runSearch(q), 350);
+});
+
+async function runSearch(q) {
+    const qLow = q.toLowerCase();
+
+    // 1. Negocios por nombre/dirección (local)
+    const bizResults = locationFilteredBusinesses()
+        .filter(b => `${b.name} ${b.address||''} ${b.categories?.name||''} ${b.subcategories?.name||''}`.toLowerCase().includes(qLow))
+        .slice(0, 4);
+
+    // 2. Productos: buscar en Supabase
+    const { data: prodData } = await supabase
+        .from('products')
+        .select(`
+            name,
+            businesses!business_id(id, name, slug, city, category_id, subcategory_id,
+                categories!category_id(name, icon),
+                subcategories:categories!subcategory_id(name, icon)
+            )
+        `)
+        .ilike('name', `%${q}%`)
+        .eq('is_available', true)
+        .limit(6);
+
+    // Agrupar productos por negocio
+    const prodByBiz = new Map();
+    (prodData || []).forEach(p => {
+        const biz = p.businesses;
+        if (!biz) return;
+        if (!prodByBiz.has(biz.id)) prodByBiz.set(biz.id, { biz, products: [] });
+        prodByBiz.get(biz.id).products.push(p.name);
+    });
+
+    // Excluir negocios que ya aparecen en resultados directos
+    const bizIds = new Set(bizResults.map(b => b.id));
+    const prodResults = [...prodByBiz.values()].filter(r =>
+        !bizIds.has(r.biz.id) &&
+        businessBelongsToCurrentRoot(r.biz) &&
+        businessMatchesLocation(r.biz)
+    );
+
+    if (!bizResults.length && !prodResults.length) {
+        showResults(`<div class="search-results-status">Sin resultados para "${esc(q)}".</div>`);
+        return;
+    }
+
+    let html = '';
+
+    if (bizResults.length) {
+        html += `<div class="search-results-status">🏪 Negocios</div>`;
+        html += bizResults.map(b => `
+            <a class="search-result-item" href="${NEGOCIO_URL(b.slug)}">
+                <div class="search-result-title">${esc(b.name)}</div>
+                <div class="search-result-path">${b.categories?.icon||''} ${b.categories?.name||''}${b.subcategories?' › '+b.subcategories.name:''}</div>
+                <div class="search-result-snippet">${b.address ? '📍 '+esc(b.address) : ''}</div>
+            </a>`).join('');
+    }
+
+    if (prodResults.length) {
+        html += `<div class="search-results-status" style="border-top:1px solid rgba(255,255,255,.06);">🛍️ Productos encontrados en</div>`;
+        html += prodResults.map(({ biz, products }) => {
+            const catLabel = biz.subcategories?.name
+                ? `${biz.categories?.icon||''} ${biz.subcategories.name}`
+                : `${biz.categories?.icon||''} ${biz.categories?.name||''}`;
+            return `
+            <a class="search-result-item" href="${NEGOCIO_URL(biz.slug)}">
+                <div class="search-result-title">${esc(biz.name)}</div>
+                <div class="search-result-path">${catLabel}</div>
+                <div class="search-result-snippet">🛍️ ${products.slice(0,3).map(p=>esc(p)).join(' · ')}${products.length>3?' +'+(products.length-3)+' más':''}</div>
+            </a>`;
+        }).join('');
+    }
+
+    showResults(html);
+}
+
+document.addEventListener('click', e => {
+    if (!e.target.closest('.search-wrapper')) hideResults();
+});
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') hideResults();
+});
 </script>
 
 
 
-<script id="ux-subcategory-autoscroll-script">
+<div id="pwa-banner">
+    <img src="/imagenes/logo.png" alt="Urbanex">
+    <div id="pwa-banner-text">
+        <strong>Instalar Urbanex</strong>
+        <span>Acceda rápido desde su pantalla de inicio</span>
+    </div>
+    <button id="pwa-install-btn">Instalar</button>
+    <button id="pwa-dismiss-btn">✕</button>
+</div>
+
+<script>
+let deferredPrompt;
+const banner = document.getElementById('pwa-banner');
+
+window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    // Mostrar solo si no fue descartado antes
+    if (!localStorage.getItem('pwa-dismissed')) {
+        setTimeout(() => banner.classList.add('visible'), 2000);
+    }
+});
+
+document.getElementById('pwa-install-btn').addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    banner.classList.remove('visible');
+});
+
+document.getElementById('pwa-dismiss-btn').addEventListener('click', () => {
+    banner.classList.remove('visible');
+    localStorage.setItem('pwa-dismissed', '1');
+});
+
+// Ocultar banner si ya está instalada
+window.addEventListener('appinstalled', () => {
+    banner.classList.remove('visible');
+});
+</script>
+
+
+
+
+
+
+
+
+<div id="uxFinalPwaInstall" class="ux-final-pwa-install" hidden>
+  <img src="/imagenes/Urba4.png" alt="Urbanex">
+  <div class="ux-final-pwa-info">
+    <strong>Instalar Urbanex</strong>
+    <span id="uxFinalPwaText">Acceda rápido desde su pantalla de inicio.</span>
+  </div>
+  <button id="uxFinalPwaBtn" class="ux-final-pwa-btn" type="button">Instalar</button>
+  <button id="uxFinalPwaClose" class="ux-final-pwa-close" type="button" aria-label="Cerrar">×</button>
+</div>
+
+
+<script id="ux-final-pwa-script">
 (function () {
-    const SPEED_PX_PER_SECOND = 12;
-    const MOBILE_QUERY = window.matchMedia('(max-width: 1024px)');
+  let deferredPrompt = null;
+
+  const bar = document.getElementById('uxFinalPwaInstall');
+  const btn = document.getElementById('uxFinalPwaBtn');
+  const close = document.getElementById('uxFinalPwaClose');
+  const text = document.getElementById('uxFinalPwaText');
+
+  if (!bar || !btn || !close || !text) return;
+
+  const isStandalone =
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true;
+
+  if (isStandalone) {
+    bar.remove();
+    return;
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js')
+        .catch(error => console.warn('Urbanex Service Worker:', error));
+    });
+  }
+
+  function showInstallBar() {
+    if (localStorage.getItem('urbanex_install_closed') === '1') return;
+
+    bar.hidden = false;
+    bar.classList.add('show');
+  }
+
+  function hideInstallBar() {
+    bar.classList.remove('show');
+    bar.hidden = true;
+  }
+
+  window.addEventListener('beforeinstallprompt', function (event) {
+    event.preventDefault();
+    deferredPrompt = event;
+    showInstallBar();
+  });
+
+  btn.addEventListener('click', async function () {
+    if (!deferredPrompt) {
+      text.textContent = 'En Android, use el menú del navegador y seleccione “Agregar a pantalla principal”.';
+      showInstallBar();
+      return;
+    }
+
+    deferredPrompt.prompt();
+
+    const choice = await deferredPrompt.userChoice;
+
+    if (choice && choice.outcome === 'accepted') {
+      hideInstallBar();
+    }
+
+    deferredPrompt = null;
+  });
+
+  close.addEventListener('click', function () {
+    localStorage.setItem('urbanex_install_closed', '1');
+    hideInstallBar();
+  });
+
+  window.addEventListener('appinstalled', function () {
+    hideInstallBar();
+  });
+})();
+</script>
+
+
+<script id="ux-go-back-menu-script">
+function goBackMenu() {
+    if (document.referrer && document.referrer !== window.location.href) {
+        window.history.back();
+    } else {
+        window.location.href = "../boulevard.html";
+    }
+}
+</script>
+
+
+
+<script id="urbanex-category-bar-autoscroll">
+(function () {
+    const RESPONSIVE_QUERY = window.matchMedia('(max-width: 1024px)');
+    const SPEED_PX_PER_SECOND = 22;
+    const RESUME_DELAY = 4500;
 
     let bar = null;
-    let paused = false;
-    let direction = 1;
-    let rafId = null;
+    let list = null;
+    let loopWidth = 0;
+    let frameId = null;
     let lastTime = 0;
+    let carouselPosition = 0;
+    let interacting = false;
     let resumeTimer = null;
+    let rebuildTimer = null;
+    let observer = null;
+    let rebuilding = false;
 
-    function canAutoScroll() {
-        return Boolean(
-            bar &&
-            MOBILE_QUERY.matches &&
-            bar.scrollWidth > bar.clientWidth + 8
-        );
+    function removeCloneIds(element) {
+        element.removeAttribute('id');
+
+        element.querySelectorAll('[id]').forEach(function (child) {
+            child.removeAttribute('id');
+        });
+
+        element.dataset.urbanexCategoryClone = 'true';
+        element.setAttribute('aria-hidden', 'true');
     }
 
-    function pauseAutoScroll() {
-        paused = true;
-        if (bar) bar.classList.add('ux-auto-paused');
+    function removeClones() {
+        if (!list) return;
 
-        if (resumeTimer) {
-            window.clearTimeout(resumeTimer);
+        list
+            .querySelectorAll('[data-urbanex-category-clone="true"]')
+            .forEach(function (clone) {
+                clone.remove();
+            });
+    }
+
+    function rebuildLoop() {
+        if (rebuilding || !bar || !list) return;
+
+        rebuilding = true;
+
+        if (observer) observer.disconnect();
+
+        removeClones();
+
+        if (!RESPONSIVE_QUERY.matches) {
+            loopWidth = 0;
+            bar.scrollLeft = 0;
+
+            if (observer) {
+                observer.observe(list, { childList: true });
+            }
+
+            rebuilding = false;
+            return;
         }
+
+        const originals = Array.from(list.children);
+
+        if (!originals.length) {
+            loopWidth = 0;
+
+            if (observer) {
+                observer.observe(list, { childList: true });
+            }
+
+            rebuilding = false;
+            return;
+        }
+
+        const firstOriginal = originals[0];
+
+        /* Dos copias evitan espacios vacíos en pantallas anchas. */
+        for (let copy = 0; copy < 2; copy += 1) {
+            originals.forEach(function (item) {
+                const clone = item.cloneNode(true);
+                removeCloneIds(clone);
+                list.appendChild(clone);
+            });
+        }
+
+        window.requestAnimationFrame(function () {
+            const firstClone = list.querySelector(
+                '[data-urbanex-category-clone="true"]'
+            );
+
+            loopWidth = firstClone
+                ? firstClone.offsetLeft - firstOriginal.offsetLeft
+                : 0;
+
+            carouselPosition = Number(bar.scrollLeft) || 0;
+
+            if (loopWidth > 0 && carouselPosition >= loopWidth) {
+                carouselPosition %= loopWidth;
+                bar.scrollLeft = carouselPosition;
+            }
+
+            if (observer) {
+                observer.observe(list, { childList: true });
+            }
+
+            rebuilding = false;
+        });
+    }
+
+    function scheduleRebuild() {
+        window.clearTimeout(rebuildTimer);
+
+        rebuildTimer = window.setTimeout(function () {
+            rebuildLoop();
+        }, 100);
+    }
+
+    function pauseTemporarily() {
+        interacting = true;
+        window.clearTimeout(resumeTimer);
+    }
+
+    function resumeLater() {
+        window.clearTimeout(resumeTimer);
 
         resumeTimer = window.setTimeout(function () {
-            resumeAutoScroll();
-        }, 5000);
+            interacting = false;
+            lastTime = 0;
+        }, RESUME_DELAY);
     }
 
-    function resumeAutoScroll() {
-        paused = false;
-        lastTime = 0;
-
-        if (resumeTimer) {
-            window.clearTimeout(resumeTimer);
-            resumeTimer = null;
-        }
-
-        if (bar) bar.classList.remove('ux-auto-paused');
-    }
-
-    function stepAutoScroll(time) {
+    function animate(time) {
         if (!lastTime) lastTime = time;
 
         const delta = Math.min(40, time - lastTime) / 1000;
         lastTime = time;
 
-        if (canAutoScroll() && !paused && document.visibilityState === 'visible') {
-            const maxScroll = bar.scrollWidth - bar.clientWidth;
-            let nextScroll = bar.scrollLeft + direction * SPEED_PX_PER_SECOND * delta;
+        if (
+            bar &&
+            loopWidth > 0 &&
+            RESPONSIVE_QUERY.matches &&
+            !interacting &&
+            document.visibilityState === 'visible'
+        ) {
+            carouselPosition += SPEED_PX_PER_SECOND * delta;
 
-            if (nextScroll >= maxScroll) {
-                nextScroll = maxScroll;
-                direction = -1;
+            if (carouselPosition >= loopWidth) {
+                carouselPosition -= loopWidth;
             }
 
-            if (nextScroll <= 0) {
-                nextScroll = 0;
-                direction = 1;
-            }
-
-            bar.scrollLeft = nextScroll;
+            bar.scrollLeft = Math.floor(carouselPosition);
+        } else if (bar && interacting) {
+            carouselPosition = Number(bar.scrollLeft) || carouselPosition;
         }
 
-        rafId = window.requestAnimationFrame(stepAutoScroll);
+        frameId = window.requestAnimationFrame(animate);
     }
 
-    function initSubcategoryAutoScroll() {
+    function initialize() {
         bar = document.querySelector('.aside-categories');
-        const list = document.getElementById('categoriesList');
+        list = document.getElementById('categoriesList');
 
         if (!bar || !list) return;
 
-        bar.addEventListener('pointerdown', function () {
-            if (canAutoScroll()) pauseAutoScroll();
-        }, { passive: true });
-
-        bar.addEventListener('wheel', function () {
-            if (canAutoScroll()) pauseAutoScroll();
-        }, { passive: true });
-
-        bar.addEventListener('click', function (event) {
-            if (!canAutoScroll()) return;
-
-            if (event.target.closest('button, a')) return;
-
-            if (paused) {
-                resumeAutoScroll();
-            } else {
-                pauseAutoScroll();
-            }
+        observer = new MutationObserver(function () {
+            if (!rebuilding) scheduleRebuild();
         });
 
-        window.addEventListener('resize', function () {
-            lastTime = 0;
-            if (!canAutoScroll()) {
-                resumeAutoScroll();
-            }
+        observer.observe(list, { childList: true });
+
+        bar.addEventListener('pointerdown', pauseTemporarily, {
+            passive: true
+        });
+
+        bar.addEventListener('pointerup', resumeLater, {
+            passive: true
+        });
+
+        bar.addEventListener('pointercancel', resumeLater, {
+            passive: true
+        });
+
+        bar.addEventListener('touchstart', pauseTemporarily, {
+            passive: true
+        });
+
+        bar.addEventListener('touchend', resumeLater, {
+            passive: true
+        });
+
+        bar.addEventListener('wheel', function () {
+            pauseTemporarily();
+            resumeLater();
+        }, {
+            passive: true
+        });
+
+        window.addEventListener('resize', scheduleRebuild, {
+            passive: true
         });
 
         document.addEventListener('visibilitychange', function () {
             lastTime = 0;
         });
 
-        if (!rafId) {
-            rafId = window.requestAnimationFrame(stepAutoScroll);
+        scheduleRebuild();
+
+        if (!frameId) {
+            frameId = window.requestAnimationFrame(animate);
         }
     }
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initSubcategoryAutoScroll);
+        document.addEventListener('DOMContentLoaded', initialize);
     } else {
-        initSubcategoryAutoScroll();
+        initialize();
     }
 })();
 </script>
 
-<script id="urbanex-current-year-only">
-document.getElementById('currentYear').textContent = String(new Date().getFullYear());
+
+<script>
+document.getElementById('currentYear').textContent = new Date().getFullYear();
 </script>
 
 </body>
