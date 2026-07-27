@@ -3568,6 +3568,84 @@ body{
 }
 </style>
 
+
+<style id="urbanex-business-logo-box-v1">
+/* ÚNICO AJUSTE:
+   Recuadro del logotipo más grande y adaptación automática de la imagen.
+*/
+
+.hero-company-logo-shell{
+  width:132px!important;
+  height:132px!important;
+  min-width:132px!important;
+  min-height:132px!important;
+  max-width:132px!important;
+  max-height:132px!important;
+  flex:0 0 132px!important;
+
+  margin:0 auto!important;
+  padding:0!important;
+
+  display:grid!important;
+  place-items:center!important;
+  overflow:hidden!important;
+
+  border:1px solid #d8e0e9!important;
+  border-radius:24px!important;
+  background:#fff!important;
+  box-shadow:0 12px 28px rgba(20,43,77,.14)!important;
+}
+
+.hero-company-logo-image{
+  width:100%!important;
+  height:100%!important;
+  min-width:100%!important;
+  min-height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+
+  margin:0!important;
+  padding:0!important;
+
+  display:block!important;
+  object-fit:cover!important;
+  object-position:center!important;
+
+  border-radius:23px!important;
+  background:#fff!important;
+  transform:none!important;
+}
+
+.hero-company-logo-fallback{
+  width:100%!important;
+  height:100%!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:23px!important;
+}
+
+@media(max-width:760px){
+  .hero-company-card-top{
+    grid-template-columns:96px minmax(0,1fr)!important;
+  }
+
+  .hero-company-logo-shell{
+    width:96px!important;
+    height:96px!important;
+    min-width:96px!important;
+    min-height:96px!important;
+    max-width:96px!important;
+    max-height:96px!important;
+    flex-basis:96px!important;
+  }
+
+  .hero-company-logo-image,
+  .hero-company-logo-fallback{
+    border-radius:18px!important;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -3689,6 +3767,7 @@ body{
   <section id="businessPage" class="hidden">
     <section class="hero premium-surface">
       <div class="hero-copy">
+        <span class="eyebrow">Perfil comercial Urbanex</span>
 
         <div id="categoryPill" class="category-pill">Categoría</div>
 
