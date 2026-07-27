@@ -4231,6 +4231,155 @@ body{
 }
 </style>
 
+
+<style id="urbanex-ajuste-negocios-solicitado">
+/* ÚNICOS AJUSTES:
+   - Ocultar el contador visible.
+   - Quitar negritas dentro del listado.
+   - Mejorar la presentación de las tarjetas.
+   - Mostrar el estado únicamente cuando existe un horario válido.
+*/
+
+/* Se conserva el elemento para no afectar subcategoria.js, pero no se muestra. */
+#businessCount{
+  display:none!important;
+}
+
+/* Cabecera más limpia al quedar solo el título y los filtros. */
+.ux-panel-head>div:first-child{
+  display:block!important;
+}
+
+.ux-panel-head h2{
+  margin:0!important;
+  font-weight:400!important;
+}
+
+/* Ningún texto del listado de negocios aparece en negrita. */
+.ux-business-panel,
+.ux-business-panel h2,
+.ux-business-panel h3,
+.ux-business-panel strong,
+.ux-business-panel b,
+.ux-company-category,
+.ux-company-featured,
+.ux-company-description,
+.ux-company-meta,
+.ux-company-meta small,
+.ux-company-location,
+.ux-company-city,
+.ux-card-cta,
+.ux-opening-status{
+  font-weight:400!important;
+}
+
+/* Presentación más limpia y equilibrada de los negocios. */
+.ux-grid{
+  gap:14px!important;
+  align-items:stretch!important;
+}
+
+.ux-grid>.ux-card,
+.ux-card{
+  border:1px solid #303b49!important;
+  border-radius:16px!important;
+  background:
+    linear-gradient(145deg,#10151d 0%,#080b10 72%,#0d1219 100%)!important;
+  box-shadow:0 8px 22px rgba(8,14,23,.16)!important;
+}
+
+.ux-card:hover{
+  transform:translateY(-3px)!important;
+  border-color:rgba(229,193,88,.52)!important;
+  box-shadow:0 15px 32px rgba(8,14,23,.24)!important;
+}
+
+.ux-company-head{
+  border-bottom:1px solid rgba(255,255,255,.09)!important;
+}
+
+.ux-company-title h3{
+  color:#ffffff!important;
+  font-weight:400!important;
+  line-height:1.3!important;
+  letter-spacing:0!important;
+}
+
+.ux-company-category{
+  color:#e8c760!important;
+  font-weight:400!important;
+  letter-spacing:.15px!important;
+}
+
+.ux-company-featured{
+  color:#efd579!important;
+  font-weight:400!important;
+}
+
+.ux-company-description{
+  color:#e4e8ee!important;
+  font-weight:400!important;
+  line-height:1.48!important;
+}
+
+.ux-company-meta{
+  border-top:1px solid rgba(255,255,255,.09)!important;
+  border-bottom:1px solid rgba(255,255,255,.09)!important;
+}
+
+.ux-company-location,
+.ux-company-city{
+  color:#f0f2f5!important;
+  font-weight:400!important;
+}
+
+.ux-company-meta small{
+  color:#aeb7c3!important;
+  font-weight:400!important;
+}
+
+.ux-card-cta{
+  color:#e8c760!important;
+  font-weight:400!important;
+}
+
+/* El estado no se fuerza ni se inventa. */
+.ux-opening-status[hidden]{
+  display:none!important;
+}
+
+.ux-opening-status{
+  font-weight:400!important;
+  text-transform:none!important;
+}
+
+.ux-opening-status.is-open{
+  color:#43d98d!important;
+  border-color:rgba(67,217,141,.38)!important;
+  background:rgba(67,217,141,.09)!important;
+}
+
+.ux-opening-status.is-closed{
+  color:#ff8792!important;
+  border-color:rgba(255,135,146,.38)!important;
+  background:rgba(255,135,146,.09)!important;
+}
+
+@media(max-width:620px){
+  .ux-grid{
+    gap:10px!important;
+  }
+
+  .ux-company-title h3{
+    line-height:1.28!important;
+  }
+
+  .ux-company-description{
+    line-height:1.42!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="header-top">
@@ -4300,7 +4449,7 @@ body{
         <span class="ux-hero-accent" aria-hidden="true"></span>
       </section>
       <section class="ux-business-panel">
-        <div class="ux-panel-head"><div><h2 id="panelTitle">Negocios</h2><p id="businessCount" role="status" aria-live="polite">Cargando negocios...</p></div><div class="ux-panel-actions"><input id="panelSearch" type="search" placeholder="Buscar negocio" aria-label="Buscar negocio en esta subcategoría"><select id="sortBusiness" aria-label="Ordenar negocios"><option value="featured">Destacados primero</option><option value="name">Nombre A–Z</option></select></div></div>
+        <div class="ux-panel-head"><div><h2 id="panelTitle">Negocios</h2><p id="businessCount" hidden aria-hidden="true">Cargando negocios...</p></div><div class="ux-panel-actions"><input id="panelSearch" type="search" placeholder="Buscar negocio" aria-label="Buscar negocio en esta subcategoría"><select id="sortBusiness" aria-label="Ordenar negocios"><option value="featured">Destacados primero</option><option value="name">Nombre A–Z</option></select></div></div>
         <div id="businessGrid" class="ux-grid"><div class="ux-empty">Cargando...</div></div>
       </section>
     </div>
@@ -4429,122 +4578,434 @@ document.addEventListener("DOMContentLoaded", function () {
   const grid = document.getElementById("businessGrid");
   if (!grid) return;
 
-  const queuedCards = new Set();
-  let framePending = false;
-
   const normalize = function (value) {
-    return String(value || "")
+    return String(value ?? "")
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .trim()
       .toLowerCase();
   };
 
-  const parseMinutes = function (value) {
-    const match = String(value || "").match(/(\d{1,2})\s*:\s*(\d{2})/);
-    if (!match) return null;
+  const dayAliases = [
+    ["domingo", "dom", "sunday", "sun"],
+    ["lunes", "lun", "monday", "mon"],
+    ["martes", "mar", "tuesday", "tue"],
+    ["miercoles", "mie", "wednesday", "wed"],
+    ["jueves", "jue", "thursday", "thu"],
+    ["viernes", "vie", "friday", "fri"],
+    ["sabado", "sab", "saturday", "sat"]
+  ];
 
-    const hours = Number(match[1]);
-    const minutes = Number(match[2]);
-
-    if (
-      !Number.isFinite(hours) ||
-      !Number.isFinite(minutes) ||
-      hours < 0 ||
-      hours > 23 ||
-      minutes < 0 ||
-      minutes > 59
-    ) {
-      return null;
-    }
-
-    return (hours * 60) + minutes;
-  };
-
-  const currentMinutes = function () {
+  const getEcuadorNow = function () {
     try {
       const parts = new Intl.DateTimeFormat("es-EC", {
         timeZone: "America/Guayaquil",
+        weekday: "long",
         hour: "2-digit",
         minute: "2-digit",
         hour12: false
       }).formatToParts(new Date());
 
-      let hour = 0;
-      let minute = 0;
-
+      const values = {};
       parts.forEach(function (part) {
-        if (part.type === "hour") hour = Number(part.value);
-        if (part.type === "minute") minute = Number(part.value);
+        values[part.type] = part.value;
       });
 
-      return (hour * 60) + minute;
+      const weekday = normalize(values.weekday);
+      let dayIndex = dayAliases.findIndex(function (aliases) {
+        return aliases.includes(weekday);
+      });
+
+      if (dayIndex < 0) dayIndex = new Date().getDay();
+
+      return {
+        dayIndex: dayIndex,
+        minutes: (Number(values.hour) * 60) + Number(values.minute)
+      };
     } catch (error) {
       const now = new Date();
-      return (now.getHours() * 60) + now.getMinutes();
+      return {
+        dayIndex: now.getDay(),
+        minutes: (now.getHours() * 60) + now.getMinutes()
+      };
     }
+  };
+
+  const parseTime = function (value) {
+    if (value === null || value === undefined) return null;
+
+    let text = normalize(value);
+    if (!text) return null;
+
+    const isPM = /\b(pm|p\.m\.)\b/.test(text);
+    const isAM = /\b(am|a\.m\.)\b/.test(text);
+    const match = text.match(/(\d{1,2})\s*:\s*(\d{2})/);
+
+    if (!match) return null;
+
+    let hour = Number(match[1]);
+    const minute = Number(match[2]);
+
+    if (
+      !Number.isFinite(hour) ||
+      !Number.isFinite(minute) ||
+      hour < 0 ||
+      hour > 23 ||
+      minute < 0 ||
+      minute > 59
+    ) {
+      return null;
+    }
+
+    if (isPM && hour < 12) hour += 12;
+    if (isAM && hour === 12) hour = 0;
+
+    return (hour * 60) + minute;
+  };
+
+  const extractIntervals = function (value) {
+    if (value === null || value === undefined) return [];
+
+    if (Array.isArray(value)) {
+      return value.flatMap(extractIntervals);
+    }
+
+    if (typeof value === "object") {
+      const open =
+        value.open ??
+        value.abre ??
+        value.apertura ??
+        value.hora_apertura ??
+        value.horaApertura ??
+        value.inicio ??
+        value.desde;
+
+      const close =
+        value.close ??
+        value.cierra ??
+        value.cierre ??
+        value.hora_cierre ??
+        value.horaCierre ??
+        value.fin ??
+        value.hasta;
+
+      const openMinutes = parseTime(open);
+      const closeMinutes = parseTime(close);
+
+      if (openMinutes !== null && closeMinutes !== null) {
+        return [{ open: openMinutes, close: closeMinutes }];
+      }
+
+      const nestedKeys = [
+        "intervalos",
+        "periodos",
+        "periods",
+        "turnos",
+        "ranges",
+        "hours",
+        "horas"
+      ];
+
+      for (const key of nestedKeys) {
+        if (value[key] !== undefined) {
+          const nested = extractIntervals(value[key]);
+          if (nested.length) return nested;
+        }
+      }
+
+      return [];
+    }
+
+    const text = normalize(value);
+
+    if (/24\s*horas|24\/7/.test(text)) {
+      return [{ open: 0, close: 1440 }];
+    }
+
+    const ranges = text.match(
+      /\d{1,2}\s*:\s*\d{2}\s*(?:am|pm|a\.m\.|p\.m\.)?\s*(?:-|–|—|a|hasta)\s*\d{1,2}\s*:\s*\d{2}\s*(?:am|pm|a\.m\.|p\.m\.)?/g
+    ) || [];
+
+    return ranges.map(function (range) {
+      const times = range.match(
+        /\d{1,2}\s*:\s*\d{2}\s*(?:am|pm|a\.m\.|p\.m\.)?/g
+      ) || [];
+
+      const open = parseTime(times[0]);
+      const close = parseTime(times[1]);
+
+      if (open === null || close === null) return null;
+      return { open: open, close: close };
+    }).filter(Boolean);
+  };
+
+  const isClosedEntry = function (entry) {
+    if (entry === false || entry === null) return true;
+
+    if (typeof entry === "object" && entry) {
+      if (
+        entry.cerrado === true ||
+        entry.closed === true ||
+        entry.activo === false ||
+        entry.active === false
+      ) {
+        return true;
+      }
+
+      const state = normalize(
+        entry.estado ??
+        entry.status ??
+        entry.state ??
+        ""
+      );
+
+      return /cerrado|closed|inactivo/.test(state);
+    }
+
+    if (typeof entry === "string") {
+      const text = normalize(entry);
+      return /cerrado|closed/.test(text);
+    }
+
+    return false;
+  };
+
+  const dayMatches = function (value, dayIndex) {
+    const text = normalize(value);
+
+    if (/^\d+$/.test(text)) {
+      const number = Number(text);
+      return number === dayIndex || number === dayIndex + 1;
+    }
+
+    return dayAliases[dayIndex].some(function (alias) {
+      return text === alias || text.includes(alias);
+    });
+  };
+
+  const findTodayEntry = function (schedule, dayIndex) {
+    if (schedule === undefined || schedule === null || schedule === "") {
+      return undefined;
+    }
+
+    if (typeof schedule === "string") {
+      const trimmed = schedule.trim();
+
+      try {
+        return findTodayEntry(JSON.parse(trimmed), dayIndex);
+      } catch (error) {
+        const text = normalize(trimmed);
+        const hasAnyDay = dayAliases.flat().some(function (alias) {
+          return text.includes(alias);
+        });
+
+        if (!hasAnyDay) {
+          return extractIntervals(trimmed).length ? trimmed : undefined;
+        }
+
+        const segments = trimmed.split(/\n|;|\|/);
+
+        for (const segment of segments) {
+          if (dayMatches(segment, dayIndex)) return segment;
+        }
+
+        return undefined;
+      }
+    }
+
+    if (Array.isArray(schedule)) {
+      for (const item of schedule) {
+        if (!item || typeof item !== "object") continue;
+
+        const day =
+          item.dia ??
+          item.day ??
+          item.dia_semana ??
+          item.weekday ??
+          item.nombre_dia;
+
+        if (day !== undefined && dayMatches(day, dayIndex)) {
+          return item;
+        }
+      }
+
+      return undefined;
+    }
+
+    if (typeof schedule === "object") {
+      for (const key of Object.keys(schedule)) {
+        if (dayMatches(key, dayIndex)) {
+          return schedule[key];
+        }
+      }
+
+      const directDay =
+        schedule.dia ??
+        schedule.day ??
+        schedule.dia_semana ??
+        schedule.weekday ??
+        schedule.nombre_dia;
+
+      if (directDay !== undefined && dayMatches(directDay, dayIndex)) {
+        return schedule;
+      }
+
+      const nestedKeys = [
+        "horario",
+        "horarios",
+        "schedule",
+        "opening_hours",
+        "openingHours",
+        "business_hours",
+        "businessHours",
+        "semana",
+        "dias"
+      ];
+
+      for (const key of nestedKeys) {
+        if (schedule[key] !== undefined) {
+          const result = findTodayEntry(schedule[key], dayIndex);
+          if (result !== undefined) return result;
+        }
+      }
+
+      if (extractIntervals(schedule).length) return schedule;
+    }
+
+    return undefined;
+  };
+
+  const collectScheduleSources = function (card) {
+    const sources = [];
+    const attributeNames = [
+      "data-horario",
+      "data-horarios",
+      "data-schedule",
+      "data-hours",
+      "data-opening-hours",
+      "data-openinghours",
+      "data-business-hours",
+      "data-businesshours",
+      "data-horario-semanal",
+      "data-horarios-json"
+    ];
+
+    const nodes = [card].concat(Array.from(card.querySelectorAll("*")));
+
+    nodes.forEach(function (node) {
+      if (!node.getAttribute) return;
+
+      attributeNames.forEach(function (attribute) {
+        const value = node.getAttribute(attribute);
+        if (value) sources.push(value);
+      });
+
+      Array.from(node.attributes || []).forEach(function (attribute) {
+        const name = normalize(attribute.name);
+
+        if (
+          name.startsWith("data-") &&
+          /(horario|horarios|schedule|opening-hours|business-hours|hours)/.test(name) &&
+          attribute.value
+        ) {
+          sources.push(attribute.value);
+        }
+      });
+    });
+
+    const visibleSelectors = [
+      ".horario",
+      ".horarios",
+      ".business-hours",
+      ".opening-hours",
+      ".ux-company-hours",
+      "[data-role='horario']"
+    ];
+
+    card.querySelectorAll(visibleSelectors.join(",")).forEach(function (node) {
+      const value = node.textContent?.trim();
+      if (value) sources.push(value);
+    });
+
+    return sources;
+  };
+
+  const collectDirectIntervals = function (card) {
+    const intervals = [];
+    const nodes = [card].concat(Array.from(card.querySelectorAll("*")));
+
+    nodes.forEach(function (node) {
+      if (!node.dataset) return;
+
+      const open =
+        node.dataset.openTime ??
+        node.dataset.horaApertura ??
+        node.dataset.apertura ??
+        node.dataset.open;
+
+      const close =
+        node.dataset.closeTime ??
+        node.dataset.horaCierre ??
+        node.dataset.cierre ??
+        node.dataset.close;
+
+      const openMinutes = parseTime(open);
+      const closeMinutes = parseTime(close);
+
+      if (openMinutes !== null && closeMinutes !== null) {
+        intervals.push({ open: openMinutes, close: closeMinutes });
+      }
+    });
+
+    return intervals;
+  };
+
+  const evaluateIntervals = function (intervals, nowMinutes) {
+    if (!intervals.length) return null;
+
+    for (const interval of intervals) {
+      if (interval.open === 0 && interval.close === 1440) {
+        return "open";
+      }
+
+      if (interval.close > interval.open) {
+        if (nowMinutes >= interval.open && nowMinutes < interval.close) {
+          return "open";
+        }
+      } else if (
+        nowMinutes >= interval.open ||
+        nowMinutes < interval.close
+      ) {
+        return "open";
+      }
+    }
+
+    return "closed";
   };
 
   const resolveStatus = function (card) {
-    const directValue = normalize([
-      card.dataset.openingStatus,
-      card.dataset.openStatus,
-      card.dataset.estadoHorario,
-      card.dataset.estado,
-      card.dataset.status,
-      card.querySelector(".ux-badge, .status-open, .status-closed, .status-indicator")?.textContent
-    ].filter(Boolean).join(" "));
+    const now = getEcuadorNow();
 
-    if (/(proximo|pronto|apertura|soon)/.test(directValue)) return "upcoming";
-    if (/(cerrado|closed|inactivo|no disponible)/.test(directValue)) return "closed";
-    if (/(abierto|open|disponible|activo)/.test(directValue)) return "open";
+    const directIntervals = collectDirectIntervals(card);
+    const directStatus = evaluateIntervals(directIntervals, now.minutes);
 
-    const openValue =
-      card.dataset.openTime ||
-      card.dataset.horaApertura ||
-      card.querySelector("[data-open-time]")?.dataset.openTime ||
-      card.querySelector("[data-hora-apertura]")?.dataset.horaApertura;
+    if (directStatus) return directStatus;
 
-    const closeValue =
-      card.dataset.closeTime ||
-      card.dataset.horaCierre ||
-      card.querySelector("[data-close-time]")?.dataset.closeTime ||
-      card.querySelector("[data-hora-cierre]")?.dataset.horaCierre;
+    const sources = collectScheduleSources(card);
 
-    const open = parseMinutes(openValue);
-    const close = parseMinutes(closeValue);
+    for (const source of sources) {
+      const todayEntry = findTodayEntry(source, now.dayIndex);
 
-    if (open !== null && close !== null) {
-      const now = currentMinutes();
-      if (now < open) return "upcoming";
-      return now < close ? "open" : "closed";
+      if (todayEntry === undefined) continue;
+      if (isClosedEntry(todayEntry)) return "closed";
+
+      const intervals = extractIntervals(todayEntry);
+      const status = evaluateIntervals(intervals, now.minutes);
+
+      if (status) return status;
     }
 
-    return "open";
-  };
-
-  const statusConfig = {
-    open: { label: "Abierto", className: "is-open" },
-    closed: { label: "Cerrado", className: "is-closed" },
-    upcoming: { label: "Próximo a abrir", className: "is-upcoming" }
-  };
-
-  const simplifyLoadingText = function (root) {
-    const scope = root instanceof Element ? root : grid;
-    const candidates = [];
-
-    if (scope.matches?.(".ux-empty")) candidates.push(scope);
-
-    scope.querySelectorAll?.(".ux-empty").forEach(function (element) {
-      candidates.push(element);
-    });
-
-    candidates.forEach(function (element) {
-      const text = normalize(element.textContent);
-      if (text.includes("cargando") && element.textContent !== "Cargando...") {
-        element.textContent = "Cargando...";
-      }
-    });
+    return null;
   };
 
   const prepareLogo = function (card) {
@@ -4557,34 +5018,6 @@ document.addEventListener("DOMContentLoaded", function () {
     image.dataset.urbanexLogoReady = "true";
     image.loading = "lazy";
     image.decoding = "async";
-    image.style.setProperty("--urbanex-logo-scale", "1");
-
-    const classify = function () {
-      const container = image.closest(".ux-company-logo, .ux-logo, .ux-card-media");
-      if (!container || !image.naturalWidth || !image.naturalHeight) return;
-
-      const ratio = image.naturalWidth / image.naturalHeight;
-
-      container.classList.remove(
-        "ux-auto-logo-wide",
-        "ux-auto-logo-square",
-        "ux-auto-logo-tall"
-      );
-
-      if (ratio > 1.35) {
-        container.classList.add("ux-auto-logo-wide");
-      } else if (ratio < 0.74) {
-        container.classList.add("ux-auto-logo-tall");
-      } else {
-        container.classList.add("ux-auto-logo-square");
-      }
-    };
-
-    if (image.complete) {
-      classify();
-    } else {
-      image.addEventListener("load", classify, { once: true, passive: true });
-    }
   };
 
   const arrangeCard = function (card) {
@@ -4597,6 +5030,27 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   const installStatus = function (card) {
+    const oldStatus = card.querySelector(
+      ".ux-opening-status, .status-open, .status-closed, .status-indicator"
+    );
+
+    const generatedBadge = card.querySelector(".ux-badge");
+    const oldText = normalize(generatedBadge?.textContent);
+
+    if (
+      generatedBadge &&
+      /(abierto|cerrado|open|closed|proximo|pronto)/.test(oldText)
+    ) {
+      generatedBadge.remove();
+    }
+
+    const statusValue = resolveStatus(card);
+
+    if (!statusValue) {
+      oldStatus?.remove();
+      return;
+    }
+
     let footer = card.querySelector(".ux-card-bottom");
 
     if (!footer) {
@@ -4605,102 +5059,75 @@ document.addEventListener("DOMContentLoaded", function () {
       (card.querySelector(".ux-card-body") || card).appendChild(footer);
     }
 
-    let badge = card.querySelector(".ux-opening-status");
+    let status = card.querySelector(".ux-opening-status");
 
-    if (!badge) {
-      badge = card.querySelector(".ux-badge") || document.createElement("span");
+    if (!status) {
+      status = document.createElement("span");
+      footer.appendChild(status);
     }
 
-    const status = resolveStatus(card);
-    const config = statusConfig[status] || statusConfig.open;
+    const isOpen = statusValue === "open";
+    const label = isOpen ? "Abierto" : "Cerrado";
 
-    if (badge.dataset.urbanexStatus !== status) {
-      badge.className = "ux-opening-status " + config.className;
-      badge.innerHTML = '<i aria-hidden="true"></i><span>' + config.label + "</span>";
-      badge.setAttribute("aria-label", "Estado del negocio: " + config.label);
-      badge.dataset.urbanexStatus = status;
-    }
+    status.className =
+      "ux-opening-status " + (isOpen ? "is-open" : "is-closed");
 
-    if (badge.parentElement !== footer) {
-      footer.appendChild(badge);
-    }
+    status.innerHTML =
+      '<i aria-hidden="true"></i><span>' + label + "</span>";
+
+    status.setAttribute("aria-label", "Estado del negocio: " + label);
+    status.dataset.urbanexStatus = statusValue;
+    status.hidden = false;
   };
 
-  const processCard = function (card) {
-    if (!(card instanceof Element) || card.dataset.urbanexCardReady === "true") return;
+  const prepareCard = function (card) {
+    if (!(card instanceof Element)) return;
 
-    card.dataset.urbanexCardReady = "true";
     arrangeCard(card);
     prepareLogo(card);
     installStatus(card);
+    card.dataset.urbanexCardReady = "true";
   };
 
-  const flushQueue = function () {
-    framePending = false;
-
-    queuedCards.forEach(function (card) {
-      processCard(card);
-    });
-
-    queuedCards.clear();
+  const prepareCards = function () {
+    grid.querySelectorAll(".ux-card").forEach(prepareCard);
   };
 
-  const queueCard = function (card) {
-    if (!(card instanceof Element) || card.dataset.urbanexCardReady === "true") return;
+  prepareCards();
 
-    queuedCards.add(card);
-
-    if (!framePending) {
-      framePending = true;
-      window.requestAnimationFrame(flushQueue);
-    }
-  };
-
-  const inspectNode = function (node) {
-    if (!(node instanceof Element)) return;
-
-    simplifyLoadingText(node);
-
-    if (node.matches(".ux-card")) {
-      queueCard(node);
-      return;
-    }
-
-    const parentCard = node.closest(".ux-card");
-    if (parentCard) queueCard(parentCard);
-
-    node.querySelectorAll(".ux-card").forEach(queueCard);
-  };
-
-  simplifyLoadingText(grid);
-  grid.querySelectorAll(".ux-card").forEach(queueCard);
-
+  /* Solo observa reemplazos directos del listado; no observa el interior. */
   const observer = new MutationObserver(function (mutations) {
+    let hasNewCards = false;
+
     mutations.forEach(function (mutation) {
-      mutation.addedNodes.forEach(inspectNode);
+      mutation.addedNodes.forEach(function (node) {
+        if (!(node instanceof Element)) return;
+
+        if (node.matches(".ux-card") || node.querySelector(".ux-card")) {
+          hasNewCards = true;
+        }
+      });
     });
+
+    if (hasNewCards) {
+      window.requestAnimationFrame(prepareCards);
+    }
   });
 
   observer.observe(grid, {
     childList: true,
-    subtree: true
+    subtree: false
   });
 
-  window.setInterval(function () {
-    grid.querySelectorAll(".ux-card[data-urbanex-card-ready='true']").forEach(function (card) {
-      const badge = card.querySelector(".ux-opening-status");
-      if (!badge) return;
+  /* El estado cambia con el reloj sin reconstruir las tarjetas. */
+  const refreshStatus = function () {
+    if (!document.hidden) prepareCards();
 
-      const status = resolveStatus(card);
-      if (badge.dataset.urbanexStatus === status) return;
+    const delay = 60000 - (Date.now() % 60000) + 150;
+    window.setTimeout(refreshStatus, delay);
+  };
 
-      const config = statusConfig[status] || statusConfig.open;
-      badge.className = "ux-opening-status " + config.className;
-      badge.innerHTML = '<i aria-hidden="true"></i><span>' + config.label + "</span>";
-      badge.setAttribute("aria-label", "Estado del negocio: " + config.label);
-      badge.dataset.urbanexStatus = status;
-    });
-  }, 300000);
+  window.setTimeout(refreshStatus, 60000);
 })();
 </script>
 
