@@ -7462,6 +7462,7 @@ let subCategories = [];
 let currentRoot = null;
 let currentSubcategories = [];
 let allBusinesses = [];
+let mobileGlobalFeaturedBusinesses = [];
 let searchTerm = '';
 let featuredCarouselOffset = 0;
 let featuredCarouselTimer = null;
@@ -7667,14 +7668,32 @@ function rootBusinesses() {
 
 function featuredBusinesses() {
     const sort = document.getElementById('sortSelect')?.value || 'rating';
-    const list = rootBusinesses().filter(isFeatured);
+
+    /*
+     * SOLO CELULAR:
+     * Destacados usa la misma fuente global del Boulevard para que el
+     * carrusel conserve todos sus anuncios, indicadores y ciclo infinito.
+     * Tablet y computador mantienen el filtrado original por categoría.
+     */
+    const source = window.innerWidth <= 720
+        ? (
+            mobileGlobalFeaturedBusinesses.length
+                ? mobileGlobalFeaturedBusinesses
+                : rootBusinesses().filter(isFeatured)
+        )
+        : rootBusinesses().filter(isFeatured);
+
+    const list = source.slice();
 
     if (sort === 'name') {
         list.sort((a, b) =>
             String(a.name || '').localeCompare(String(b.name || ''), 'es')
         );
     } else {
-        list.sort((a, b) => (b._rating || 0) - (a._rating || 0));
+        list.sort((a, b) =>
+            (b._rating || 0) - (a._rating || 0) ||
+            String(a.name || '').localeCompare(String(b.name || ''), 'es')
+        );
     }
 
     return list;
@@ -8200,6 +8219,70 @@ function groupRowsByBusiness(rows) {
     return map;
 }
 
+async function loadMobileGlobalFeaturedBusinesses() {
+    if (window.innerWidth > 720) {
+        mobileGlobalFeaturedBusinesses = [];
+        return;
+    }
+
+    try {
+        const featuredResult = await supabase
+            .from('businesses')
+            .select(BUSINESS_SELECT_INITIAL)
+            .eq('is_active', true)
+            .eq('is_featured', true);
+
+        if (featuredResult.error) throw featuredResult.error;
+
+        let list = (featuredResult.data || [])
+            .filter(isFeatured)
+            .filter(business =>
+                !window.UrbanexLocation ||
+                window.UrbanexLocation.matchesBusiness(business)
+            );
+
+        const ids = list
+            .map(business => business.id)
+            .filter(id => id !== null && id !== undefined);
+
+        if (ids.length) {
+            const [hoursResult, reviewsResult] = await Promise.all([
+                supabase
+                    .from('business_hours')
+                    .select('business_id,day_of_week,open_time,close_time,is_closed')
+                    .in('business_id', ids),
+
+                supabase
+                    .from('reviews')
+                    .select('business_id,is_approved,rating')
+                    .eq('is_approved', true)
+                    .in('business_id', ids)
+            ]);
+
+            const hoursByBusiness = groupRowsByBusiness(hoursResult.data || []);
+            const reviewsByBusiness = groupRowsByBusiness(reviewsResult.data || []);
+
+            list = list.map(business => enrichBusiness({
+                ...business,
+                business_hours:
+                    hoursByBusiness.get(String(business.id)) || [],
+                reviews:
+                    reviewsByBusiness.get(String(business.id)) || []
+            }));
+        } else {
+            list = [];
+        }
+
+        mobileGlobalFeaturedBusinesses = list;
+    } catch (error) {
+        console.warn(
+            'Urbanex: no se pudieron cargar los destacados globales para celular.',
+            error
+        );
+        mobileGlobalFeaturedBusinesses = [];
+    }
+}
+
 async function loadBusinessDetails() {
     const ids = allBusinesses
         .map(business => business.id)
@@ -8305,6 +8388,8 @@ async function boot() {
         ).filter(business =>
             !window.UrbanexLocation || window.UrbanexLocation.matchesBusiness(business)
         );
+
+        await loadMobileGlobalFeaturedBusinesses();
 
         renderSubcategories();
         renderFeatured();
