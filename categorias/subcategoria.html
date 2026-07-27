@@ -5090,6 +5090,101 @@ body{
 }
 </style>
 
+
+<style id="urbanex-card-content-center-status-v17">
+/* ÚNICOS AJUSTES:
+   - Centrar correctamente descripción y datos.
+   - Mostrar Abierto/Cerrado según el horario cargado.
+*/
+
+/* Descripción centrada dentro de un espacio uniforme. */
+.ux-company-description,
+.ux-card-body .addr{
+  width:100%!important;
+  min-height:46px!important;
+  max-height:46px!important;
+  margin:0!important;
+  padding:3px 5px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  color:#e2e7ee!important;
+  font-size:8.4px!important;
+  font-weight:400!important;
+  line-height:1.45!important;
+  text-align:center!important;
+  -webkit-line-clamp:unset!important;
+  -webkit-box-orient:unset!important;
+}
+
+/* Ubicación y ciudad centradas y proporcionadas. */
+.ux-company-meta{
+  align-items:stretch!important;
+}
+
+.ux-company-location,
+.ux-company-city{
+  min-height:39px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+
+.ux-company-location>span:last-child,
+.ux-company-city>span:last-child{
+  width:100%!important;
+  text-align:center!important;
+}
+
+.ux-company-meta small{
+  width:100%!important;
+  text-align:center!important;
+}
+
+/* Estado visible y equilibrado dentro del pie. */
+.ux-card .ux-card-bottom{
+  min-height:40px!important;
+  padding-top:9px!important;
+}
+
+.ux-opening-status{
+  flex:0 0 auto!important;
+  max-width:none!important;
+  height:23px!important;
+  padding:0 9px!important;
+  font-size:6.4px!important;
+}
+
+.ux-card-cta{
+  margin-left:auto!important;
+}
+
+@media(max-width:720px){
+  .ux-company-description,
+  .ux-card-body .addr{
+    min-height:42px!important;
+    max-height:42px!important;
+    padding:2px 3px!important;
+    font-size:6.9px!important;
+    line-height:1.4!important;
+  }
+
+  .ux-company-location,
+  .ux-company-city{
+    min-height:35px!important;
+  }
+
+  .ux-opening-status{
+    height:20px!important;
+    padding:0 6px!important;
+    font-size:5.4px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="header-top">
@@ -5167,6 +5262,133 @@ body{
   <aside class="ux-right"><div class="ux-right-head"><h2>Destacados</h2><p id="featuredCount">Cargando...</p></div><div class="ux-sort"><select><option>Ordenar por: Destacados</option></select></div><div id="featuredList" class="ux-featured-list"><div class="ux-note">Cargando destacados...</div></div><a id="backLink" class="ux-back" href="index.html">Volver</a></aside>
 </div>
 <footer class="pie-pagina"><p>&copy; <span id="currentYear"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
+
+<script id="urbanex-supabase-schedule-capture">
+(function () {
+  "use strict";
+
+  if (window.__urbanexCaptureInstalled) return;
+  window.__urbanexCaptureInstalled = true;
+  window.__urbanexCapturedRecords = window.__urbanexCapturedRecords || [];
+
+  const normalizeKey = function (value) {
+    return String(value || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "");
+  };
+
+  const relevantKey = function (key) {
+    const normalized = normalizeKey(key);
+
+    return /^(id|uuid|nombre|name|titulo|title|razonsocial|nombrecomercial|nombrenegocio|negocioid|businessid|empresaid|comercioid|localid|horario|horarios|horarioatencion|horariosatencion|schedule|openinghours|businesshours|hours|diasemana|day|weekday|horaapertura|horacierre|open|close|abre|cierra|cerrado|closed|activo|active)$/.test(normalized);
+  };
+
+  const seen = new Set();
+
+  const recordSignature = function (record) {
+    try {
+      const compact = {};
+
+      Object.keys(record).forEach(function (key) {
+        if (relevantKey(key)) compact[key] = record[key];
+      });
+
+      return JSON.stringify(compact);
+    } catch (error) {
+      return "";
+    }
+  };
+
+  const collect = function (value, depth) {
+    if (depth > 8 || value === null || value === undefined) return;
+
+    if (Array.isArray(value)) {
+      value.forEach(function (item) {
+        collect(item, depth + 1);
+      });
+      return;
+    }
+
+    if (typeof value !== "object") return;
+
+    const keys = Object.keys(value);
+
+    if (keys.some(relevantKey)) {
+      const signature = recordSignature(value);
+
+      if (signature && !seen.has(signature)) {
+        seen.add(signature);
+        window.__urbanexCapturedRecords.push(value);
+      }
+    }
+
+    keys.forEach(function (key) {
+      const nested = value[key];
+
+      if (nested && typeof nested === "object") {
+        collect(nested, depth + 1);
+      }
+    });
+  };
+
+  const publish = function (data) {
+    const before = window.__urbanexCapturedRecords.length;
+    collect(data, 0);
+
+    if (window.__urbanexCapturedRecords.length !== before) {
+      window.dispatchEvent(new CustomEvent("urbanex:schedule-data-ready"));
+    }
+  };
+
+  const originalFetch = window.fetch;
+
+  if (typeof originalFetch === "function") {
+    window.fetch = function () {
+      return originalFetch.apply(this, arguments).then(function (response) {
+        try {
+          const clone = response.clone();
+          const contentType = clone.headers.get("content-type") || "";
+
+          if (contentType.includes("json")) {
+            clone.json().then(publish).catch(function () {});
+          }
+        } catch (error) {}
+
+        return response;
+      });
+    };
+  }
+
+  const OriginalXHR = window.XMLHttpRequest;
+
+  if (typeof OriginalXHR === "function") {
+    const originalOpen = OriginalXHR.prototype.open;
+    const originalSend = OriginalXHR.prototype.send;
+
+    OriginalXHR.prototype.open = function () {
+      this.__urbanexUrl = arguments[1];
+      return originalOpen.apply(this, arguments);
+    };
+
+    OriginalXHR.prototype.send = function () {
+      this.addEventListener("load", function () {
+        try {
+          const contentType = this.getResponseHeader("content-type") || "";
+
+          if (contentType.includes("json") && typeof this.responseText === "string") {
+            publish(JSON.parse(this.responseText));
+          }
+        } catch (error) {}
+      }, { once: true });
+
+      return originalSend.apply(this, arguments);
+    };
+  }
+})();
+</script>
+
 <script type="module" src="subcategoria.js?v=20260726-1"></script>
 
 <script>
@@ -5296,6 +5518,10 @@ document.addEventListener("DOMContentLoaded", function () {
       .toLowerCase();
   };
 
+  const normalizeKey = function (value) {
+    return normalize(value).replace(/[^a-z0-9]/g, "");
+  };
+
   const dayAliases = [
     ["domingo", "dom", "sunday", "sun"],
     ["lunes", "lun", "monday", "mon"],
@@ -5305,6 +5531,87 @@ document.addEventListener("DOMContentLoaded", function () {
     ["viernes", "vie", "friday", "fri"],
     ["sabado", "sab", "saturday", "sat"]
   ];
+
+  const nameKeys = [
+    "nombre",
+    "name",
+    "titulo",
+    "title",
+    "razon_social",
+    "razonSocial",
+    "nombre_comercial",
+    "nombreComercial",
+    "nombre_negocio",
+    "nombreNegocio"
+  ];
+
+  const idKeys = [
+    "id",
+    "uuid",
+    "negocio_id",
+    "negocioId",
+    "business_id",
+    "businessId",
+    "empresa_id",
+    "empresaId",
+    "comercio_id",
+    "comercioId",
+    "local_id",
+    "localId"
+  ];
+
+  const foreignIdKeys = [
+    "negocio_id",
+    "negocioId",
+    "business_id",
+    "businessId",
+    "empresa_id",
+    "empresaId",
+    "comercio_id",
+    "comercioId",
+    "local_id",
+    "localId"
+  ];
+
+  const scheduleKeys = [
+    "horario",
+    "horarios",
+    "horario_atencion",
+    "horarios_atencion",
+    "horarioAtencion",
+    "horariosAtencion",
+    "schedule",
+    "opening_hours",
+    "openingHours",
+    "business_hours",
+    "businessHours",
+    "hours",
+    "semana",
+    "dias"
+  ];
+
+  const getFirst = function (object, keys) {
+    if (!object || typeof object !== "object") return undefined;
+
+    for (const key of keys) {
+      if (object[key] !== undefined && object[key] !== null) {
+        return object[key];
+      }
+    }
+
+    const normalizedLookup = {};
+
+    Object.keys(object).forEach(function (key) {
+      normalizedLookup[normalizeKey(key)] = object[key];
+    });
+
+    for (const key of keys) {
+      const value = normalizedLookup[normalizeKey(key)];
+      if (value !== undefined && value !== null) return value;
+    }
+
+    return undefined;
+  };
 
   const getEcuadorNow = function () {
     try {
@@ -5334,6 +5641,7 @@ document.addEventListener("DOMContentLoaded", function () {
       };
     } catch (error) {
       const now = new Date();
+
       return {
         dayIndex: now.getDay(),
         minutes: (now.getHours() * 60) + now.getMinutes()
@@ -5391,23 +5699,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (typeof value === "object") {
-      const open =
-        value.open ??
-        value.abre ??
-        value.apertura ??
-        value.hora_apertura ??
-        value.horaApertura ??
-        value.inicio ??
-        value.desde;
+      const open = getFirst(value, [
+        "open",
+        "abre",
+        "apertura",
+        "hora_apertura",
+        "horaApertura",
+        "inicio",
+        "desde"
+      ]);
 
-      const close =
-        value.close ??
-        value.cierra ??
-        value.cierre ??
-        value.hora_cierre ??
-        value.horaCierre ??
-        value.fin ??
-        value.hasta;
+      const close = getFirst(value, [
+        "close",
+        "cierra",
+        "cierre",
+        "hora_cierre",
+        "horaCierre",
+        "fin",
+        "hasta"
+      ]);
 
       const openMinutes = parseTime(open);
       const closeMinutes = parseTime(close);
@@ -5425,8 +5735,10 @@ document.addEventListener("DOMContentLoaded", function () {
         "hours",
         "horas"
       ]) {
-        if (value[key] !== undefined) {
-          const intervals = extractIntervals(value[key]);
+        const nested = getFirst(value, [key]);
+
+        if (nested !== undefined) {
+          const intervals = extractIntervals(nested);
           if (intervals.length) return intervals;
         }
       }
@@ -5462,19 +5774,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (typeof entry === "object" && entry) {
       if (
-        entry.cerrado === true ||
-        entry.closed === true ||
-        entry.activo === false ||
-        entry.active === false
+        getFirst(entry, ["cerrado", "closed"]) === true ||
+        getFirst(entry, ["activo", "active"]) === false
       ) {
         return true;
       }
 
       const state = normalize(
-        entry.estado ??
-        entry.status ??
-        entry.state ??
-        ""
+        getFirst(entry, ["estado", "status", "state"]) || ""
       );
 
       return /\b(cerrado|closed|inactivo)\b/.test(state);
@@ -5499,11 +5806,11 @@ document.addEventListener("DOMContentLoaded", function () {
         return findTodayEntry(JSON.parse(trimmed), dayIndex);
       } catch (error) {
         const text = normalize(trimmed);
-        const containsDay = dayAliases.flat().some(function (alias) {
+        const hasDay = dayAliases.flat().some(function (alias) {
           return text.includes(alias);
         });
 
-        if (!containsDay) {
+        if (!hasDay) {
           return extractIntervals(trimmed).length ? trimmed : undefined;
         }
 
@@ -5519,16 +5826,24 @@ document.addEventListener("DOMContentLoaded", function () {
       for (const item of schedule) {
         if (!item || typeof item !== "object") continue;
 
-        const day =
-          item.dia ??
-          item.day ??
-          item.dia_semana ??
-          item.weekday ??
-          item.nombre_dia;
+        const day = getFirst(item, [
+          "dia",
+          "day",
+          "dia_semana",
+          "diaSemana",
+          "weekday",
+          "nombre_dia",
+          "nombreDia"
+        ]);
 
         if (day !== undefined && dayMatches(day, dayIndex)) {
           return item;
         }
+      }
+
+      for (const item of schedule) {
+        const entry = findTodayEntry(item, dayIndex);
+        if (entry !== undefined) return entry;
       }
 
       return undefined;
@@ -5541,30 +5856,25 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
 
-      const directDay =
-        schedule.dia ??
-        schedule.day ??
-        schedule.dia_semana ??
-        schedule.weekday ??
-        schedule.nombre_dia;
+      const directDay = getFirst(schedule, [
+        "dia",
+        "day",
+        "dia_semana",
+        "diaSemana",
+        "weekday",
+        "nombre_dia",
+        "nombreDia"
+      ]);
 
       if (directDay !== undefined && dayMatches(directDay, dayIndex)) {
         return schedule;
       }
 
-      for (const key of [
-        "horario",
-        "horarios",
-        "schedule",
-        "opening_hours",
-        "openingHours",
-        "business_hours",
-        "businessHours",
-        "semana",
-        "dias"
-      ]) {
-        if (schedule[key] !== undefined) {
-          const entry = findTodayEntry(schedule[key], dayIndex);
+      for (const key of scheduleKeys) {
+        const nested = getFirst(schedule, [key]);
+
+        if (nested !== undefined && nested !== schedule) {
+          const entry = findTodayEntry(nested, dayIndex);
           if (entry !== undefined) return entry;
         }
       }
@@ -5573,66 +5883,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     return undefined;
-  };
-
-  const collectSources = function (card) {
-    const sources = [];
-    const nodes = [card].concat(Array.from(card.querySelectorAll("*")));
-
-    nodes.forEach(function (node) {
-      Array.from(node.attributes || []).forEach(function (attribute) {
-        const name = normalize(attribute.name);
-
-        if (
-          name.startsWith("data-") &&
-          /(horario|horarios|schedule|opening|business-hours|hours|apertura|cierre)/.test(name) &&
-          attribute.value
-        ) {
-          sources.push(attribute.value);
-        }
-      });
-
-      if (
-        node.matches?.(
-          ".horario,.horarios,.business-hours,.opening-hours,.ux-company-hours,[data-role='horario']"
-        )
-      ) {
-        const value = node.textContent?.trim();
-        if (value) sources.push(value);
-      }
-    });
-
-    return sources;
-  };
-
-  const collectDirectIntervals = function (card) {
-    const intervals = [];
-    const nodes = [card].concat(Array.from(card.querySelectorAll("*")));
-
-    nodes.forEach(function (node) {
-      if (!node.dataset) return;
-
-      const open =
-        node.dataset.openTime ??
-        node.dataset.horaApertura ??
-        node.dataset.apertura ??
-        node.dataset.open;
-
-      const close =
-        node.dataset.closeTime ??
-        node.dataset.horaCierre ??
-        node.dataset.cierre ??
-        node.dataset.close;
-
-      const openMinutes = parseTime(open);
-      const closeMinutes = parseTime(close);
-
-      if (openMinutes !== null && closeMinutes !== null) {
-        intervals.push({ open: openMinutes, close: closeMinutes });
-      }
-    });
-
-    return intervals;
   };
 
   const evaluateIntervals = function (intervals, nowMinutes) {
@@ -5658,28 +5908,183 @@ document.addEventListener("DOMContentLoaded", function () {
     return "closed";
   };
 
-  const resolveStatus = function (card) {
-    const now = getEcuadorNow();
-
-    const directStatus = evaluateIntervals(
-      collectDirectIntervals(card),
-      now.minutes
+  const extractCardIdentity = function (card) {
+    const name = normalize(
+      card.querySelector(".ux-company-title h3, .ux-card-body h3")?.textContent
     );
 
-    if (directStatus) return directStatus;
+    const ids = new Set();
 
-    for (const source of collectSources(card)) {
+    [
+      card.dataset.id,
+      card.dataset.negocioId,
+      card.dataset.businessId,
+      card.dataset.empresaId,
+      card.dataset.comercioId,
+      card.getAttribute("data-id")
+    ].forEach(function (value) {
+      if (value !== undefined && value !== null && value !== "") {
+        ids.add(String(value));
+      }
+    });
+
+    const href = card.getAttribute("href") || "";
+
+    try {
+      const url = new URL(href, location.href);
+
+      [
+        "id",
+        "negocio",
+        "negocio_id",
+        "business",
+        "business_id",
+        "empresa",
+        "empresa_id",
+        "comercio",
+        "comercio_id"
+      ].forEach(function (key) {
+        const value = url.searchParams.get(key);
+        if (value) ids.add(value);
+      });
+
+      const segments = url.pathname.split("/").filter(Boolean);
+      const last = segments[segments.length - 1];
+
+      if (last && /^[a-z0-9-]{4,}$/i.test(last)) ids.add(last);
+    } catch (error) {}
+
+    return {
+      name: name,
+      ids: ids
+    };
+  };
+
+  const recordName = function (record) {
+    return normalize(getFirst(record, nameKeys));
+  };
+
+  const recordIds = function (record) {
+    const ids = new Set();
+
+    idKeys.forEach(function (key) {
+      const value = getFirst(record, [key]);
+
+      if (value !== undefined && value !== null && value !== "") {
+        ids.add(String(value));
+      }
+    });
+
+    return ids;
+  };
+
+  const intersects = function (first, second) {
+    for (const value of first) {
+      if (second.has(value)) return true;
+    }
+
+    return false;
+  };
+
+  const getScheduleCandidates = function (card) {
+    const records = window.__urbanexCapturedRecords || [];
+    const identity = extractCardIdentity(card);
+    const matched = [];
+    const businessIds = new Set(identity.ids);
+
+    records.forEach(function (record) {
+      if (!record || typeof record !== "object") return;
+
+      const name = recordName(record);
+      const ids = recordIds(record);
+
+      const nameMatch =
+        identity.name &&
+        name &&
+        (
+          name === identity.name ||
+          name.includes(identity.name) ||
+          identity.name.includes(name)
+        );
+
+      const idMatch = intersects(identity.ids, ids);
+
+      if (nameMatch || idMatch) {
+        matched.push(record);
+        ids.forEach(function (id) {
+          businessIds.add(id);
+        });
+      }
+    });
+
+    records.forEach(function (record) {
+      if (!record || typeof record !== "object") return;
+
+      const foreignIds = new Set();
+
+      foreignIdKeys.forEach(function (key) {
+        const value = getFirst(record, [key]);
+
+        if (value !== undefined && value !== null && value !== "") {
+          foreignIds.add(String(value));
+        }
+      });
+
+      if (intersects(businessIds, foreignIds)) {
+        matched.push(record);
+      }
+    });
+
+    return Array.from(new Set(matched));
+  };
+
+  const collectCardSources = function (card) {
+    const sources = [];
+    const nodes = [card].concat(Array.from(card.querySelectorAll("*")));
+
+    nodes.forEach(function (node) {
+      Array.from(node.attributes || []).forEach(function (attribute) {
+        const key = normalizeKey(attribute.name);
+
+        if (
+          key.startsWith("data") &&
+          /(horario|schedule|opening|businesshours|hours|apertura|cierre)/.test(key) &&
+          attribute.value
+        ) {
+          sources.push(attribute.value);
+        }
+      });
+    });
+
+    return sources;
+  };
+
+  const resolveStatus = function (card) {
+    const now = getEcuadorNow();
+    const candidates = getScheduleCandidates(card);
+    const sources = collectCardSources(card);
+
+    candidates.forEach(function (record) {
+      sources.push(record);
+
+      scheduleKeys.forEach(function (key) {
+        const value = getFirst(record, [key]);
+        if (value !== undefined) sources.push(value);
+      });
+    });
+
+    for (const source of sources) {
       const todayEntry = findTodayEntry(source, now.dayIndex);
 
       if (todayEntry === undefined) continue;
       if (isClosedEntry(todayEntry)) return "closed";
 
-      const status = evaluateIntervals(
+      const result = evaluateIntervals(
         extractIntervals(todayEntry),
         now.minutes
       );
 
-      if (status) return status;
+      if (result) return result;
     }
 
     return null;
@@ -5695,10 +6100,10 @@ document.addEventListener("DOMContentLoaded", function () {
       badge.remove();
     });
 
-    const statusValue = resolveStatus(card);
+    const value = resolveStatus(card);
     let status = footer.querySelector(".ux-opening-status");
 
-    if (!statusValue) {
+    if (!value) {
       status?.remove();
       return;
     }
@@ -5708,7 +6113,7 @@ document.addEventListener("DOMContentLoaded", function () {
       footer.insertBefore(status, footer.firstChild);
     }
 
-    const isOpen = statusValue === "open";
+    const isOpen = value === "open";
     const label = isOpen ? "Abierto" : "Cerrado";
 
     status.className =
@@ -5718,36 +6123,28 @@ document.addEventListener("DOMContentLoaded", function () {
       '<i aria-hidden="true"></i><span>' + label + "</span>";
 
     status.setAttribute("aria-label", "Estado del negocio: " + label);
-    status.dataset.urbanexStatus = statusValue;
-  };
-
-  const prepareCard = function (card) {
-    if (!(card instanceof Element)) return;
-
-    card.querySelectorAll(".ux-meta-icon").forEach(function (icon) {
-      icon.remove();
-    });
-
-    const image = card.querySelector(
-      ".ux-company-logo-img,.ux-company-logo img,.ux-logo img,.ux-card-media img,.ux-card-primary-logo"
-    );
-
-    if (image) {
-      image.loading = "lazy";
-      image.decoding = "async";
-    }
-
-    installStatus(card);
+    status.dataset.urbanexStatus = value;
   };
 
   const prepareCards = function () {
-    grid.querySelectorAll(".ux-card").forEach(prepareCard);
+    grid.querySelectorAll(".ux-card").forEach(function (card) {
+      const image = card.querySelector(
+        ".ux-company-logo-img,.ux-company-logo img,.ux-logo img,.ux-card-media img,.ux-card-primary-logo"
+      );
+
+      if (image) {
+        image.loading = "lazy";
+        image.decoding = "async";
+      }
+
+      installStatus(card);
+    });
   };
 
   prepareCards();
 
   const observer = new MutationObserver(function (mutations) {
-    let hasNewCards = false;
+    let hasCards = false;
 
     mutations.forEach(function (mutation) {
       mutation.addedNodes.forEach(function (node) {
@@ -5755,12 +6152,12 @@ document.addEventListener("DOMContentLoaded", function () {
           node instanceof Element &&
           (node.matches(".ux-card") || node.querySelector(".ux-card"))
         ) {
-          hasNewCards = true;
+          hasCards = true;
         }
       });
     });
 
-    if (hasNewCards) {
+    if (hasCards) {
       window.requestAnimationFrame(prepareCards);
     }
   });
@@ -5770,14 +6167,21 @@ document.addEventListener("DOMContentLoaded", function () {
     subtree: false
   });
 
-  [300, 800, 1600, 3000].forEach(function (delay) {
+  window.addEventListener(
+    "urbanex:schedule-data-ready",
+    function () {
+      window.requestAnimationFrame(prepareCards);
+    }
+  );
+
+  [250, 700, 1400, 2600, 4500].forEach(function (delay) {
     window.setTimeout(prepareCards, delay);
   });
 
   const refreshByClock = function () {
     if (!document.hidden) prepareCards();
 
-    const delay = 60000 - (Date.now() % 60000) + 150;
+    const delay = 60000 - (Date.now() % 60000) + 120;
     window.setTimeout(refreshByClock, delay);
   };
 
