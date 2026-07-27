@@ -7440,6 +7440,7 @@ let currentSubcategories = [];
 let allBusinesses = [];
 let globalFeaturedBusinesses = [];
 let searchTerm = '';
+let activeSubcategoryId = null;
 
 let featuredCarouselSignature = '';
 let featuredSlotIndices = [];
@@ -7643,13 +7644,30 @@ function rootBusinesses() {
     );
 }
 
+function selectedCategoryBusinesses() {
+    const list = rootBusinesses();
+
+    if (activeSubcategoryId === null) {
+        return list;
+    }
+
+    const selectedSubcategory = currentSubcategories.find(
+        subcategory =>
+            String(subcategory.id) === String(activeSubcategoryId)
+    );
+
+    if (!selectedSubcategory) {
+        return list;
+    }
+
+    return list.filter(
+        business => belongsToSubcategory(business, selectedSubcategory)
+    );
+}
+
 function featuredBusinesses() {
     const sort = document.getElementById('sortSelect')?.value || 'rating';
-
-    const list = globalFeaturedBusinesses
-        .filter(isFeatured)
-        .filter(businessMatchesSearch)
-        .slice();
+    const list = selectedCategoryBusinesses().slice();
 
     if (sort === 'name') {
         list.sort((a, b) =>
@@ -7657,6 +7675,7 @@ function featuredBusinesses() {
         );
     } else {
         list.sort((a, b) =>
+            Number(isFeatured(b)) - Number(isFeatured(a)) ||
             (b._rating || 0) - (a._rating || 0) ||
             String(a.name || '').localeCompare(String(b.name || ''), 'es')
         );
@@ -7675,12 +7694,16 @@ function countBySubcategory(subcategory) {
 function renderSubcategories() {
     const container = document.getElementById('categoriesList');
     const total = allBusinesses.filter(belongsToRoot).length;
-    const rootId = encodeURIComponent(currentRoot.id);
+
+    const allIsActive = activeSubcategoryId === null;
 
     const allButton = `
-        <li class="category-item active">
-            <button type="button" class="active"
-                    onclick="window.location.href='index.html?categoria=${rootId}'">
+        <li class="category-item${allIsActive ? ' active' : ''}">
+            <button
+                type="button"
+                class="${allIsActive ? 'active' : ''}"
+                onclick="selectSubcategory(null)"
+            >
                 <div class="icon-container">▦</div>
                 <div class="category-text-info">
                     <span class="category-name">Todos</span>
@@ -7692,12 +7715,16 @@ function renderSubcategories() {
 
     const subButtons = currentSubcategories.map(subcategory => {
         const count = countBySubcategory(subcategory);
-        const url = `subcategoria.html?categoria=${rootId}&subcategoria=${encodeURIComponent(subcategory.id)}`;
+        const isActive =
+            String(activeSubcategoryId) === String(subcategory.id);
 
         return `
-            <li class="category-item">
-                <button type="button"
-                        onclick="window.location.href='${url}'">
+            <li class="category-item${isActive ? ' active' : ''}">
+                <button
+                    type="button"
+                    class="${isActive ? 'active' : ''}"
+                    onclick="selectSubcategory('${esc(String(subcategory.id))}')"
+                >
                     <div class="icon-container">${esc(subcategory.icon || '•')}</div>
                     <div class="category-text-info">
                         <span class="category-name">${esc(subcategory.name)}</span>
@@ -7710,6 +7737,22 @@ function renderSubcategories() {
 
     container.innerHTML = allButton + subButtons;
 }
+
+window.selectSubcategory = subcategoryId => {
+    activeSubcategoryId =
+        subcategoryId === null ||
+        subcategoryId === undefined ||
+        subcategoryId === ''
+            ? null
+            : String(subcategoryId);
+
+    featuredCarouselSignature = '';
+    featuredSlotIndices = [];
+    stopFeaturedRotation();
+
+    renderSubcategories();
+    renderFeatured();
+};
 
 function businessUrl(business) {
     if (business.slug) {
@@ -8417,9 +8460,18 @@ function renderFeatured() {
     const container = document.getElementById('shopsList');
     const stats = document.getElementById('showcaseStats');
 
+    const selectedSubcategory = currentSubcategories.find(
+        subcategory =>
+            String(subcategory.id) === String(activeSubcategoryId)
+    );
+
+    const selectedLabel = selectedSubcategory
+        ? selectedSubcategory.name
+        : currentRoot.name;
+
     stats.textContent =
-        `${list.length} destacado${list.length !== 1 ? 's' : ''} ` +
-        `seleccionado${list.length !== 1 ? 's' : ''}`;
+        `${list.length} negocio${list.length !== 1 ? 's' : ''} · ` +
+        `${selectedLabel}`;
 
     stopFeaturedRotation();
 
@@ -8429,7 +8481,7 @@ function renderFeatured() {
         container.removeAttribute('data-visible-count');
         container.innerHTML =
             `<div class="empty-state">` +
-            `No hay negocios destacados seleccionados en Supabase.` +
+            `No hay negocios en la categoría seleccionada.` +
             `</div>`;
         return;
     }
@@ -8441,7 +8493,8 @@ function renderFeatured() {
 
     const sort = document.getElementById('sortSelect')?.value || 'rating';
     const signature =
-        `${sort}|${searchTerm}|${list.map(item => item.id).join(',')}`;
+        `${sort}|${searchTerm}|${activeSubcategoryId ?? 'all'}|` +
+        `${list.map(item => item.id).join(',')}`;
 
     const mustReset =
         signature !== featuredCarouselSignature ||
