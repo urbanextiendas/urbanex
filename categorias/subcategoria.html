@@ -5929,6 +5929,193 @@ body{
 }
 </style>
 
+
+<style id="urbanex-description-footer-polish-v27">
+/* ÚNICOS AJUSTES:
+   1. Ocultar el corte visible de la descripción.
+   2. Mejorar Abierto/Cerrado y Conocer empresa.
+*/
+
+/* Descripción uniforme de tres líneas, sin puntos suspensivos visibles. */
+.ux-company-description,
+.ux-card-body .addr{
+  position:relative!important;
+  width:100%!important;
+  min-height:42px!important;
+  max-height:42px!important;
+  height:42px!important;
+  margin:0!important;
+  padding:3px 6px!important;
+  display:block!important;
+  overflow:hidden!important;
+  color:#e7ebf0!important;
+  font-size:8.4px!important;
+  font-weight:400!important;
+  line-height:1.4!important;
+  text-align:center!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+  text-overflow:clip!important;
+  -webkit-line-clamp:unset!important;
+  -webkit-box-orient:unset!important;
+  mask-image:linear-gradient(to bottom,#000 0%,#000 84%,transparent 100%)!important;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 84%,transparent 100%)!important;
+}
+
+/* Pie más ordenado. */
+.ux-card .ux-card-bottom{
+  min-height:39px!important;
+  padding-top:10px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  border-top:1px solid rgba(255,255,255,.09)!important;
+}
+
+/* Estado profesional y legible. */
+.ux-card .ux-opening-status{
+  position:static!important;
+  width:max-content!important;
+  max-width:45%!important;
+  min-width:0!important;
+  height:23px!important;
+  margin:0!important;
+  padding:0 9px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  overflow:hidden!important;
+  border:1px solid transparent!important;
+  border-radius:999px!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:7px!important;
+  font-weight:400!important;
+  line-height:1!important;
+  text-transform:none!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+}
+
+.ux-card .ux-opening-status i{
+  width:6px!important;
+  height:6px!important;
+  flex:0 0 6px!important;
+  display:block!important;
+  border-radius:50%!important;
+  background:currentColor!important;
+  box-shadow:none!important;
+}
+
+.ux-card .ux-opening-status.is-open{
+  color:#56dfa0!important;
+  border-color:rgba(86,223,160,.36)!important;
+  background:rgba(86,223,160,.09)!important;
+}
+
+.ux-card .ux-opening-status.is-closed{
+  color:#ff98a2!important;
+  border-color:rgba(255,152,162,.36)!important;
+  background:rgba(255,152,162,.09)!important;
+}
+
+/* Acción limpia, sin rueda y con flecha integrada. */
+.ux-card .ux-card-cta{
+  position:relative!important;
+  min-width:0!important;
+  max-width:55%!important;
+  min-height:23px!important;
+  margin:0 0 0 auto!important;
+  padding:0 14px 2px 0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-bottom:1px solid rgba(232,199,96,.38)!important;
+  border-radius:0!important;
+  color:#f0d36f!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:7.2px!important;
+  font-weight:500!important;
+  line-height:1!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.ux-card .ux-card-cta::after{
+  content:"→"!important;
+  position:absolute!important;
+  right:0!important;
+  top:50%!important;
+  transform:translateY(-52%)!important;
+  color:#f0d36f!important;
+  font-size:10px!important;
+  line-height:1!important;
+}
+
+.ux-card .ux-card-cta b{
+  display:none!important;
+}
+
+@media(hover:hover){
+  .ux-card .ux-card-cta:hover{
+    color:#fff0af!important;
+    border-bottom-color:#f0d36f!important;
+  }
+
+  .ux-card .ux-card-cta:hover::after{
+    transform:translate(2px,-52%)!important;
+  }
+}
+
+@media(max-width:720px){
+  .ux-company-description,
+  .ux-card-body .addr{
+    min-height:36px!important;
+    max-height:36px!important;
+    height:36px!important;
+    padding:2px 3px!important;
+    font-size:7px!important;
+    line-height:1.4!important;
+  }
+
+  .ux-card .ux-card-bottom{
+    min-height:35px!important;
+    padding-top:8px!important;
+    gap:7px!important;
+  }
+
+  .ux-card .ux-opening-status{
+    height:20px!important;
+    padding:0 6px!important;
+    gap:4px!important;
+    font-size:5.7px!important;
+  }
+
+  .ux-card .ux-opening-status i{
+    width:5px!important;
+    height:5px!important;
+    flex-basis:5px!important;
+  }
+
+  .ux-card .ux-card-cta{
+    min-height:20px!important;
+    padding-right:11px!important;
+    font-size:6px!important;
+  }
+
+  .ux-card .ux-card-cta::after{
+    font-size:8px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="header-top">
