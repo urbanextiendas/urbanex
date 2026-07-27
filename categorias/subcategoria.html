@@ -5870,6 +5870,65 @@ body{
 }
 </style>
 
+
+<style id="urbanex-description-cta-fix-v26">
+/* ÚNICOS AJUSTES:
+   1. Quitar la rueda amarilla de "Conocer empresa".
+   2. Descripción uniforme de máximo tres líneas.
+*/
+
+/* Descripción con altura estándar y máximo tres líneas. */
+.ux-company-description,
+.ux-card-body .addr{
+  width:100%!important;
+  min-height:42px!important;
+  max-height:42px!important;
+  height:42px!important;
+  margin:0!important;
+  padding:3px 5px!important;
+  display:-webkit-box!important;
+  overflow:hidden!important;
+  color:#e2e7ee!important;
+  font-size:8.4px!important;
+  font-weight:400!important;
+  line-height:1.4!important;
+  text-align:center!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:3!important;
+}
+
+/* Retira únicamente el círculo amarillo. */
+.ux-card .ux-card-cta b{
+  display:none!important;
+}
+
+/* Reajusta la acción después de retirar el círculo. */
+.ux-card .ux-card-cta{
+  min-height:auto!important;
+  padding:0!important;
+  gap:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+
+@media(max-width:720px){
+  .ux-company-description,
+  .ux-card-body .addr{
+    min-height:36px!important;
+    max-height:36px!important;
+    height:36px!important;
+    padding:2px 3px!important;
+    font-size:7px!important;
+    line-height:1.4!important;
+    -webkit-line-clamp:3!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="header-top">
