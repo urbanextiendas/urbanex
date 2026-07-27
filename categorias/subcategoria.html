@@ -4482,36 +4482,258 @@ body{
 </style>
 
 
-<style id="urbanex-business-footer-polish-final">
-/* ÚNICO CAMBIO: metadatos y pie inferior de las tarjetas de negocios. */
+<style id="urbanex-professional-card-proposal-v16">
+/* ============================================================
+   PROPUESTA PROFESIONAL DE TARJETAS
+   Se limita al directorio de negocios.
+   No modifica encabezado, hero, filtros, Supabase ni rutas.
+   ============================================================ */
 
-/* Ubicación y ciudad: lectura clara, sin iconos sueltos. */
+/* Cuadrícula */
+.ux-grid{
+  width:100%!important;
+  margin:0!important;
+  padding:18px 0 0!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:14px!important;
+  align-items:stretch!important;
+}
+
+/* Tarjeta */
+.ux-grid>.ux-card,
+.ux-card{
+  position:relative!important;
+  isolation:isolate!important;
+  min-width:0!important;
+  width:100%!important;
+  min-height:252px!important;
+  height:100%!important;
+  padding:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  overflow:hidden!important;
+  border:1px solid #2f3a49!important;
+  border-radius:18px!important;
+  color:#f5f7fa!important;
+  background:
+    radial-gradient(circle at 4% 0%,rgba(229,193,88,.10),transparent 29%),
+    linear-gradient(150deg,#111720 0%,#090d13 62%,#070a0f 100%)!important;
+  box-shadow:0 10px 27px rgba(11,18,29,.17)!important;
+  transform:none!important;
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease!important;
+}
+
+.ux-card::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0 0 auto!important;
+  z-index:4!important;
+  width:100%!important;
+  height:3px!important;
+  display:block!important;
+  background:linear-gradient(90deg,#e5c158 0 38%,#1d416f 38% 100%)!important;
+  pointer-events:none!important;
+}
+
+.ux-card::after{
+  display:none!important;
+  content:none!important;
+}
+
+@media(hover:hover){
+  .ux-card:hover{
+    transform:translateY(-4px)!important;
+    border-color:rgba(229,193,88,.58)!important;
+    box-shadow:0 18px 36px rgba(11,18,29,.27)!important;
+  }
+}
+
+/* Cabecera: logotipo + identidad */
+.ux-company-head{
+  width:100%!important;
+  min-width:0!important;
+  min-height:104px!important;
+  padding:13px 12px 10px!important;
+  display:grid!important;
+  grid-template-columns:78px minmax(0,1fr)!important;
+  align-items:start!important;
+  gap:11px!important;
+  border:0!important;
+  border-bottom:1px solid rgba(255,255,255,.09)!important;
+  background:transparent!important;
+  text-align:left!important;
+}
+
+/* Logotipo completo dentro del recuadro */
+.ux-company-logo,
+.ux-grid>.ux-card>.ux-logo,
+.ux-card-media{
+  position:relative!important;
+  width:78px!important;
+  height:78px!important;
+  min-width:78px!important;
+  min-height:78px!important;
+  max-width:78px!important;
+  max-height:78px!important;
+  margin:0!important;
+  padding:0!important;
+  display:block!important;
+  overflow:hidden!important;
+  border:2px solid rgba(255,255,255,.92)!important;
+  border-radius:15px!important;
+  background:#fff!important;
+  box-shadow:0 8px 18px rgba(0,0,0,.28)!important;
+}
+
+.ux-company-logo::before,
+.ux-company-logo::after,
+.ux-grid>.ux-card>.ux-logo::before,
+.ux-card-media::before{
+  display:none!important;
+  content:none!important;
+}
+
+.ux-company-logo-img,
+.ux-company-logo img,
+.ux-grid>.ux-card>.ux-logo img,
+.ux-card-media img,
+.ux-card-primary-logo{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  border-radius:12px!important;
+  background:#fff!important;
+  transform:none!important;
+}
+
+/* Información principal */
+.ux-company-title{
+  min-width:0!important;
+  width:100%!important;
+  padding:1px 0 0!important;
+  overflow:hidden!important;
+  text-align:left!important;
+}
+
+.ux-company-category{
+  width:100%!important;
+  margin:0 0 5px!important;
+  overflow:hidden!important;
+  color:#e7c65f!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:7.2px!important;
+  font-weight:400!important;
+  line-height:1.2!important;
+  letter-spacing:.35px!important;
+  text-transform:none!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.ux-company-title h3{
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+  color:#fff!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:13px!important;
+  font-weight:500!important;
+  line-height:1.24!important;
+  letter-spacing:0!important;
+  text-align:left!important;
+  text-overflow:ellipsis!important;
+  overflow-wrap:anywhere!important;
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:2!important;
+}
+
+.ux-company-featured{
+  width:max-content!important;
+  max-width:100%!important;
+  margin:7px 0 0!important;
+  padding:4px 8px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  overflow:hidden!important;
+  border:1px solid rgba(229,193,88,.40)!important;
+  border-radius:999px!important;
+  color:#f0d478!important;
+  background:rgba(229,193,88,.09)!important;
+  font-size:6px!important;
+  font-weight:400!important;
+  line-height:1!important;
+  letter-spacing:.25px!important;
+  text-transform:none!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+/* Contenido */
+.ux-card .ux-card-body,
+.ux-grid>.ux-card>.ux-card-body{
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  flex:1 1 auto!important;
+  padding:10px 12px 12px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-start!important;
+  color:#f5f7fa!important;
+}
+
+.ux-company-description,
+.ux-card-body .addr{
+  min-height:31px!important;
+  margin:0!important;
+  overflow:hidden!important;
+  color:#d8dee7!important;
+  font-size:8.4px!important;
+  font-weight:400!important;
+  line-height:1.48!important;
+  text-align:left!important;
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:2!important;
+}
+
+/* Datos comerciales */
 .ux-company-meta{
   width:100%!important;
   min-width:0!important;
   margin:9px 0 0!important;
-  padding:10px 0!important;
+  padding:9px 0!important;
   display:grid!important;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr)!important;
   gap:0!important;
-  border-top:1px solid rgba(255,255,255,.11)!important;
-  border-bottom:1px solid rgba(255,255,255,.11)!important;
+  border-top:1px solid rgba(255,255,255,.10)!important;
+  border-bottom:1px solid rgba(255,255,255,.10)!important;
   background:transparent!important;
 }
 
 .ux-company-location,
 .ux-company-city{
   min-width:0!important;
-  min-height:36px!important;
+  min-height:34px!important;
   margin:0!important;
-  padding:0 9px!important;
+  padding:0 8px!important;
   display:block!important;
   overflow:hidden!important;
   border:0!important;
   border-radius:0!important;
-  color:#f2f4f7!important;
+  color:#f1f4f8!important;
   background:transparent!important;
-  font-size:7.4px!important;
+  font-size:7px!important;
   font-weight:400!important;
   line-height:1.35!important;
 }
@@ -4535,7 +4757,7 @@ body{
   width:100%!important;
   display:block!important;
   overflow:hidden!important;
-  color:#f2f4f7!important;
+  color:#f1f4f8!important;
   font-weight:400!important;
   text-overflow:ellipsis!important;
   white-space:nowrap!important;
@@ -4545,8 +4767,8 @@ body{
   display:block!important;
   margin:0 0 4px!important;
   overflow:hidden!important;
-  color:#e6c55d!important;
-  font-size:5.8px!important;
+  color:#e7c65f!important;
+  font-size:5.7px!important;
   font-weight:400!important;
   line-height:1!important;
   letter-spacing:.45px!important;
@@ -4555,22 +4777,22 @@ body{
   white-space:nowrap!important;
 }
 
-/* Pie de tarjeta: estado a la izquierda y acción a la derecha. */
+/* Pie: estado real + acción */
 .ux-card .ux-card-bottom{
   width:100%!important;
   min-width:0!important;
-  min-height:42px!important;
+  min-height:38px!important;
   margin:0!important;
-  padding:10px 0 0!important;
+  padding:9px 0 0!important;
   display:flex!important;
   align-items:center!important;
   justify-content:space-between!important;
-  gap:8px!important;
+  gap:7px!important;
   overflow:hidden!important;
   border-top:0!important;
 }
 
-/* Evita que aparezca “Disponible” antes de calcular el horario. */
+/* Se elimina el distintivo genérico “Disponible”. */
 .ux-card-bottom>.ux-badge,
 .ux-card-bottom>.status-indicator,
 .ux-card-bottom>.status-open,
@@ -4578,15 +4800,15 @@ body{
   display:none!important;
 }
 
-/* Estado real según el horario cargado. */
 .ux-opening-status{
   position:static!important;
+  inset:auto!important;
   width:max-content!important;
   max-width:46%!important;
   min-width:0!important;
-  height:24px!important;
+  height:23px!important;
   margin:0!important;
-  padding:0 9px!important;
+  padding:0 8px!important;
   display:inline-flex!important;
   align-items:center!important;
   justify-content:center!important;
@@ -4594,18 +4816,22 @@ body{
   overflow:hidden!important;
   border:1px solid transparent!important;
   border-radius:999px!important;
-  font-size:6.8px!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:6.4px!important;
   font-weight:400!important;
   line-height:1!important;
+  letter-spacing:0!important;
   text-transform:none!important;
   text-overflow:ellipsis!important;
   white-space:nowrap!important;
+  transform:none!important;
+  box-shadow:none!important;
 }
 
 .ux-opening-status i{
-  width:6px!important;
-  height:6px!important;
-  flex:0 0 6px!important;
+  width:5px!important;
+  height:5px!important;
+  flex:0 0 5px!important;
   display:block!important;
   border-radius:50%!important;
   background:currentColor!important;
@@ -4613,18 +4839,17 @@ body{
 }
 
 .ux-opening-status.is-open{
-  color:#43d98d!important;
-  border-color:rgba(67,217,141,.40)!important;
-  background:rgba(67,217,141,.10)!important;
+  color:#48d790!important;
+  border-color:rgba(72,215,144,.38)!important;
+  background:rgba(72,215,144,.09)!important;
 }
 
 .ux-opening-status.is-closed{
   color:#ff8792!important;
-  border-color:rgba(255,135,146,.40)!important;
-  background:rgba(255,135,146,.10)!important;
+  border-color:rgba(255,135,146,.38)!important;
+  background:rgba(255,135,146,.09)!important;
 }
 
-/* Botón “Conocer empresa”. */
 .ux-card-cta{
   min-width:0!important;
   max-width:54%!important;
@@ -4633,43 +4858,121 @@ body{
   display:inline-flex!important;
   align-items:center!important;
   justify-content:flex-end!important;
-  gap:6px!important;
+  gap:5px!important;
   overflow:hidden!important;
-  color:#e8c760!important;
+  color:#e7c65f!important;
   background:transparent!important;
   box-shadow:none!important;
-  font-size:7.2px!important;
+  font-size:6.8px!important;
   font-weight:400!important;
   line-height:1!important;
+  letter-spacing:0!important;
   text-overflow:ellipsis!important;
   white-space:nowrap!important;
 }
 
 .ux-card-cta b{
-  width:23px!important;
-  height:23px!important;
-  flex:0 0 23px!important;
+  width:22px!important;
+  height:22px!important;
+  flex:0 0 22px!important;
   margin:0!important;
   display:grid!important;
   place-items:center!important;
   border-radius:50%!important;
   color:#111820!important;
-  background:#e8c760!important;
+  background:#e7c65f!important;
   font-weight:400!important;
 }
 
-@media(max-width:620px){
+/* Ningún texto de las tarjetas aparece en negrita excesiva. */
+.ux-card strong,
+.ux-card b,
+.ux-card [style*="font-weight"]{
+  font-weight:500!important;
+}
+
+.ux-card-cta b{
+  font-weight:400!important;
+}
+
+/* Tablet */
+@media(max-width:1180px) and (min-width:721px){
+  .ux-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
+
+/* Celular: dos tarjetas por fila, sin desbordes. */
+@media(max-width:720px){
+  .ux-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+
+  .ux-grid>.ux-card,
+  .ux-card{
+    min-height:232px!important;
+    border-radius:16px!important;
+  }
+
+  .ux-company-head{
+    min-height:94px!important;
+    padding:11px 8px 8px!important;
+    grid-template-columns:64px minmax(0,1fr)!important;
+    gap:8px!important;
+  }
+
+  .ux-company-logo,
+  .ux-grid>.ux-card>.ux-logo,
+  .ux-card-media{
+    width:64px!important;
+    height:64px!important;
+    min-width:64px!important;
+    min-height:64px!important;
+    max-width:64px!important;
+    max-height:64px!important;
+    border-radius:13px!important;
+  }
+
+  .ux-company-category{
+    margin-bottom:4px!important;
+    font-size:6px!important;
+  }
+
+  .ux-company-title h3{
+    font-size:10.4px!important;
+    line-height:1.22!important;
+  }
+
+  .ux-company-featured{
+    margin-top:5px!important;
+    padding:3px 6px!important;
+    font-size:5.3px!important;
+  }
+
+  .ux-card .ux-card-body,
+  .ux-grid>.ux-card>.ux-card-body{
+    padding:8px 8px 9px!important;
+  }
+
+  .ux-company-description,
+  .ux-card-body .addr{
+    min-height:27px!important;
+    font-size:7px!important;
+    line-height:1.4!important;
+  }
+
   .ux-company-meta{
     margin-top:7px!important;
-    padding:8px 0!important;
+    padding:7px 0!important;
+    grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)!important;
   }
 
   .ux-company-location,
   .ux-company-city{
-    min-height:32px!important;
-    padding-right:6px!important;
-    padding-left:6px!important;
-    font-size:6.5px!important;
+    min-height:31px!important;
+    padding:0 5px!important;
+    font-size:5.9px!important;
   }
 
   .ux-company-location{
@@ -4682,36 +4985,56 @@ body{
 
   .ux-company-meta small{
     margin-bottom:3px!important;
-    font-size:5.1px!important;
+    font-size:4.9px!important;
   }
 
   .ux-card .ux-card-bottom{
-    min-height:38px!important;
-    padding-top:8px!important;
-    gap:5px!important;
+    min-height:33px!important;
+    padding-top:7px!important;
+    gap:4px!important;
   }
 
   .ux-opening-status{
-    height:21px!important;
+    height:20px!important;
     padding:0 6px!important;
-    font-size:5.8px!important;
-  }
-
-  .ux-opening-status i{
-    width:5px!important;
-    height:5px!important;
-    flex-basis:5px!important;
+    font-size:5.3px!important;
   }
 
   .ux-card-cta{
-    gap:4px!important;
-    font-size:6.2px!important;
+    gap:3px!important;
+    font-size:5.7px!important;
   }
 
   .ux-card-cta b{
-    width:21px!important;
-    height:21px!important;
-    flex-basis:21px!important;
+    width:20px!important;
+    height:20px!important;
+    flex-basis:20px!important;
+  }
+}
+
+/* Pantallas muy estrechas: una sola columna para mantener legibilidad. */
+@media(max-width:355px){
+  .ux-grid{
+    grid-template-columns:1fr!important;
+  }
+
+  .ux-company-head{
+    grid-template-columns:76px minmax(0,1fr)!important;
+  }
+
+  .ux-company-logo,
+  .ux-grid>.ux-card>.ux-logo,
+  .ux-card-media{
+    width:76px!important;
+    height:76px!important;
+    min-width:76px!important;
+    min-height:76px!important;
+    max-width:76px!important;
+    max-height:76px!important;
+  }
+
+  .ux-company-title h3{
+    font-size:12px!important;
   }
 }
 </style>
@@ -5042,7 +5365,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return [{ open: openMinutes, close: closeMinutes }];
       }
 
-      const nestedKeys = [
+      for (const key of [
         "intervalos",
         "periodos",
         "periods",
@@ -5050,9 +5373,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "ranges",
         "hours",
         "horas"
-      ];
-
-      for (const key of nestedKeys) {
+      ]) {
         if (value[key] !== undefined) {
           const intervals = extractIntervals(value[key]);
           if (intervals.length) return intervals;
@@ -5127,17 +5448,15 @@ document.addEventListener("DOMContentLoaded", function () {
         return findTodayEntry(JSON.parse(trimmed), dayIndex);
       } catch (error) {
         const text = normalize(trimmed);
-        const hasDayName = dayAliases.flat().some(function (alias) {
+        const containsDay = dayAliases.flat().some(function (alias) {
           return text.includes(alias);
         });
 
-        if (!hasDayName) {
+        if (!containsDay) {
           return extractIntervals(trimmed).length ? trimmed : undefined;
         }
 
-        const segments = trimmed.split(/\n|;|\|/);
-
-        for (const segment of segments) {
+        for (const segment of trimmed.split(/\n|;|\|/)) {
           if (dayMatches(segment, dayIndex)) return segment;
         }
 
@@ -5182,7 +5501,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return schedule;
       }
 
-      const nestedKeys = [
+      for (const key of [
         "horario",
         "horarios",
         "schedule",
@@ -5192,9 +5511,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "businessHours",
         "semana",
         "dias"
-      ];
-
-      for (const key of nestedKeys) {
+      ]) {
         if (schedule[key] !== undefined) {
           const entry = findTodayEntry(schedule[key], dayIndex);
           if (entry !== undefined) return entry;
@@ -5207,7 +5524,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return undefined;
   };
 
-  const collectScheduleSources = function (card) {
+  const collectSources = function (card) {
     const sources = [];
     const nodes = [card].concat(Array.from(card.querySelectorAll("*")));
 
@@ -5229,8 +5546,8 @@ document.addEventListener("DOMContentLoaded", function () {
           ".horario,.horarios,.business-hours,.opening-hours,.ux-company-hours,[data-role='horario']"
         )
       ) {
-        const text = node.textContent?.trim();
-        if (text) sources.push(text);
+        const value = node.textContent?.trim();
+        if (value) sources.push(value);
       }
     });
 
@@ -5300,9 +5617,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (directStatus) return directStatus;
 
-    const sources = collectScheduleSources(card);
-
-    for (const source of sources) {
+    for (const source of collectSources(card)) {
       const todayEntry = findTodayEntry(source, now.dayIndex);
 
       if (todayEntry === undefined) continue;
@@ -5320,10 +5635,9 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   const installStatus = function (card) {
-    let footer = card.querySelector(".ux-card-bottom");
+    const footer = card.querySelector(".ux-card-bottom");
     if (!footer) return;
 
-    /* Retira definitivamente el distintivo genérico “Disponible”. */
     footer.querySelectorAll(
       ".ux-badge,.status-indicator,.status-open,.status-closed"
     ).forEach(function (badge) {
@@ -5340,7 +5654,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!status) {
       status = document.createElement("span");
-      status.className = "ux-opening-status";
       footer.insertBefore(status, footer.firstChild);
     }
 
@@ -5360,6 +5673,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const prepareCard = function (card) {
     if (!(card instanceof Element)) return;
 
+    card.querySelectorAll(".ux-meta-icon").forEach(function (icon) {
+      icon.remove();
+    });
+
     const image = card.querySelector(
       ".ux-company-logo-img,.ux-company-logo img,.ux-logo img,.ux-card-media img,.ux-card-primary-logo"
     );
@@ -5378,9 +5695,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   prepareCards();
 
-  /* Detecta únicamente nuevas tarjetas directas, sin observar cada cambio interno. */
   const observer = new MutationObserver(function (mutations) {
-    let changed = false;
+    let hasNewCards = false;
 
     mutations.forEach(function (mutation) {
       mutation.addedNodes.forEach(function (node) {
@@ -5388,12 +5704,12 @@ document.addEventListener("DOMContentLoaded", function () {
           node instanceof Element &&
           (node.matches(".ux-card") || node.querySelector(".ux-card"))
         ) {
-          changed = true;
+          hasNewCards = true;
         }
       });
     });
 
-    if (changed) {
+    if (hasNewCards) {
       window.requestAnimationFrame(prepareCards);
     }
   });
@@ -5403,12 +5719,10 @@ document.addEventListener("DOMContentLoaded", function () {
     subtree: false
   });
 
-  /* Reintentos limitados para horarios que terminen de cargarse después. */
-  [300, 800, 1600, 3000, 5000].forEach(function (delay) {
+  [300, 800, 1600, 3000].forEach(function (delay) {
     window.setTimeout(prepareCards, delay);
   });
 
-  /* Actualiza al cambiar el minuto, sin reconstruir las tarjetas. */
   const refreshByClock = function () {
     if (!document.hidden) prepareCards();
 
@@ -5417,30 +5731,6 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   window.setTimeout(refreshByClock, 60000);
-
-  document.getElementById("panelSearch")?.addEventListener(
-    "input",
-    function () {
-      window.setTimeout(prepareCards, 200);
-    },
-    { passive: true }
-  );
-
-  document.getElementById("sortBusiness")?.addEventListener(
-    "change",
-    function () {
-      window.setTimeout(prepareCards, 200);
-    },
-    { passive: true }
-  );
-
-  document.getElementById("locationPickerApply")?.addEventListener(
-    "click",
-    function () {
-      window.setTimeout(prepareCards, 650);
-    },
-    { passive: true }
-  );
 })();
 </script>
 
