@@ -3466,6 +3466,246 @@ body{
 }
 </style>
 
+
+<style id="urbanex-auto-logo-status-final">
+/* ============================================================
+   LOGOTIPOS Y ESTADO COMERCIAL AUTOMÁTICOS
+   - Recuadro de logotipo más grande.
+   - Imagen centrada, contenida y escalada sin deformación.
+   - Estado: Abierto, Cerrado o Próximo a abrir.
+   ============================================================ */
+
+.ux-company-head{
+  padding-top:18px!important;
+  padding-bottom:22px!important;
+}
+
+.ux-company-logo,
+.ux-grid>.ux-card>.ux-logo,
+.ux-card-media{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:visible!important;
+  display:grid!important;
+  place-items:center!important;
+  flex-shrink:0!important;
+  border:1px solid #d7dee8!important;
+  background:#ffffff!important;
+  box-shadow:
+    0 9px 22px rgba(19,44,79,.12),
+    inset 0 0 0 1px rgba(255,255,255,.9)!important;
+}
+
+.ux-company-logo{
+  width:88px!important;
+  height:88px!important;
+  flex-basis:88px!important;
+  padding:4px!important;
+  border-radius:18px!important;
+}
+
+.ux-company-logo::before,
+.ux-grid>.ux-card>.ux-logo::before,
+.ux-card-media::before{
+  content:""!important;
+  position:absolute!important;
+  inset:5px!important;
+  z-index:-1!important;
+  border-radius:13px!important;
+  background:
+    radial-gradient(circle at 50% 28%,rgba(229,193,88,.10),transparent 50%),
+    #fff!important;
+  pointer-events:none!important;
+}
+
+.ux-company-logo-img,
+.ux-company-logo img,
+.ux-grid>.ux-card>.ux-logo img,
+.ux-card-media img,
+.ux-card-primary-logo{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  margin:auto!important;
+  padding:0!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  border-radius:12px!important;
+  background:transparent!important;
+  transform:scale(var(--urbanex-logo-scale,1))!important;
+  transform-origin:center!important;
+  transition:transform .28s ease!important;
+  image-rendering:auto!important;
+}
+
+/* Ajustes automáticos según la proporción real de cada imagen. */
+.ux-auto-logo-wide{
+  padding:2px!important;
+}
+
+.ux-auto-logo-square{
+  padding:3px!important;
+}
+
+.ux-auto-logo-tall{
+  padding:5px!important;
+}
+
+/* Estado superpuesto debajo del logotipo. */
+.ux-opening-status{
+  position:absolute!important;
+  left:50%!important;
+  bottom:-12px!important;
+  z-index:8!important;
+  min-width:max-content!important;
+  height:24px!important;
+  padding:0 9px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  transform:translateX(-50%)!important;
+  border:1px solid transparent!important;
+  border-radius:999px!important;
+  color:#fff!important;
+  background:#132c4f!important;
+  box-shadow:0 7px 16px rgba(19,44,79,.20)!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:7px!important;
+  font-weight:850!important;
+  line-height:1!important;
+  letter-spacing:.25px!important;
+  text-transform:uppercase!important;
+  white-space:nowrap!important;
+  pointer-events:none!important;
+}
+
+.ux-opening-status i{
+  width:6px!important;
+  height:6px!important;
+  flex:0 0 6px!important;
+  display:block!important;
+  border-radius:50%!important;
+  background:currentColor!important;
+  box-shadow:0 0 0 3px currentColor!important;
+  opacity:.95!important;
+}
+
+.ux-opening-status.is-open{
+  color:#087443!important;
+  border-color:rgba(34,168,97,.34)!important;
+  background:#e8f8ef!important;
+  box-shadow:0 7px 16px rgba(34,168,97,.16)!important;
+}
+
+.ux-opening-status.is-closed{
+  color:#b4232f!important;
+  border-color:rgba(220,53,69,.30)!important;
+  background:#fff0f2!important;
+  box-shadow:0 7px 16px rgba(220,53,69,.13)!important;
+}
+
+.ux-opening-status.is-upcoming{
+  color:#8a5600!important;
+  border-color:rgba(245,158,11,.38)!important;
+  background:#fff5df!important;
+  box-shadow:0 7px 16px rgba(245,158,11,.15)!important;
+}
+
+/* El pie interno conserva únicamente la acción de navegación. */
+.ux-card .ux-card-bottom{
+  justify-content:flex-end!important;
+}
+
+.ux-card .ux-card-bottom>.ux-opening-status{
+  position:static!important;
+  transform:none!important;
+}
+
+/* Compatibilidad con la tarjeta antigua. */
+.ux-grid>.ux-card>.ux-logo{
+  width:100%!important;
+  height:154px!important;
+  min-height:154px!important;
+  flex:0 0 154px!important;
+  padding:7px!important;
+  border-width:0 0 1px!important;
+  border-radius:0!important;
+  overflow:hidden!important;
+}
+
+.ux-grid>.ux-card>.ux-logo .ux-opening-status{
+  bottom:9px!important;
+}
+
+@media(min-width:1024px){
+  .ux-company-head{
+    min-height:168px!important;
+    padding:18px 10px 24px!important;
+  }
+
+  .ux-company-logo{
+    width:82px!important;
+    height:82px!important;
+    flex-basis:82px!important;
+    border-radius:17px!important;
+  }
+
+  .ux-company-title h3{
+    margin-top:4px!important;
+  }
+}
+
+@media(max-width:1023px) and (min-width:621px){
+  .ux-company-logo{
+    width:78px!important;
+    height:78px!important;
+    flex-basis:78px!important;
+  }
+}
+
+@media(max-width:620px){
+  .ux-company-head{
+    min-height:139px!important;
+    padding:14px 8px 22px!important;
+  }
+
+  .ux-company-logo{
+    width:68px!important;
+    height:68px!important;
+    flex-basis:68px!important;
+    padding:3px!important;
+    border-radius:15px!important;
+  }
+
+  .ux-opening-status{
+    bottom:-11px!important;
+    height:21px!important;
+    padding:0 7px!important;
+    gap:5px!important;
+    font-size:5.8px!important;
+  }
+
+  .ux-opening-status i{
+    width:5px!important;
+    height:5px!important;
+    flex-basis:5px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .ux-company-logo-img,
+  .ux-company-logo img,
+  .ux-grid>.ux-card>.ux-logo img,
+  .ux-card-media img,
+  .ux-card-primary-logo{
+    transition:none!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="header-top">
@@ -3655,6 +3895,442 @@ document.addEventListener("DOMContentLoaded", function () {
   const year = document.getElementById("currentYear");
   if (year) year.textContent = String(new Date().getFullYear());
 });
+</script>
+
+
+<script id="urbanex-auto-logo-status-script">
+(function () {
+  "use strict";
+
+  const GRID_SELECTOR = "#businessGrid";
+  const CARD_SELECTOR = ".ux-card";
+  const LOGO_CONTAINER_SELECTOR = ".ux-company-logo, .ux-logo, .ux-card-media";
+  const LOGO_IMAGE_SELECTOR = ".ux-company-logo-img, .ux-company-logo img, .ux-logo img, .ux-card-media img, .ux-card-primary-logo";
+
+  const normalize = function (value) {
+    return String(value || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim()
+      .toLowerCase();
+  };
+
+  const parseMinutes = function (value) {
+    const match = String(value || "").match(/(\d{1,2})\s*:\s*(\d{2})/);
+    if (!match) return null;
+    const hours = Number(match[1]);
+    const minutes = Number(match[2]);
+    if (!Number.isFinite(hours) || !Number.isFinite(minutes) || hours > 23 || minutes > 59) return null;
+    return (hours * 60) + minutes;
+  };
+
+  const ecuadorNow = function () {
+    try {
+      const parts = new Intl.DateTimeFormat("es-EC", {
+        timeZone: "America/Guayaquil",
+        weekday: "long",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+      }).formatToParts(new Date());
+
+      const values = {};
+      parts.forEach(function (part) {
+        values[part.type] = part.value;
+      });
+
+      return {
+        day: normalize(values.weekday),
+        minutes: (Number(values.hour) * 60) + Number(values.minute)
+      };
+    } catch (error) {
+      const now = new Date();
+      const days = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+      return {
+        day: days[now.getDay()],
+        minutes: (now.getHours() * 60) + now.getMinutes()
+      };
+    }
+  };
+
+  const explicitStatus = function (card) {
+    const attributeNames = [
+      "data-opening-status",
+      "data-open-status",
+      "data-estado-horario",
+      "data-estado",
+      "data-status"
+    ];
+
+    const values = [];
+
+    [card].concat(Array.from(card.querySelectorAll("*"))).forEach(function (element) {
+      attributeNames.forEach(function (name) {
+        if (element.hasAttribute && element.hasAttribute(name)) {
+          values.push(element.getAttribute(name));
+        }
+      });
+    });
+
+    const existing = card.querySelector(".ux-badge, .status-open, .status-closed, .status-indicator");
+    if (existing) values.push(existing.textContent);
+
+    const value = normalize(values.join(" "));
+
+    if (/(proximo|pronto|soon|apertura)/.test(value)) return "upcoming";
+    if (/(cerrado|closed|inactivo|no disponible)/.test(value)) return "closed";
+    if (/(abierto|open|disponible|activo)/.test(value)) return "open";
+
+    return null;
+  };
+
+  const statusFromScheduleObject = function (raw) {
+    if (!raw) return null;
+
+    let schedule = raw;
+    if (typeof raw === "string") {
+      try {
+        schedule = JSON.parse(raw);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    if (!schedule || typeof schedule !== "object") return null;
+
+    const now = ecuadorNow();
+    const aliases = {
+      domingo: ["domingo", "dom", "sunday", "sun"],
+      lunes: ["lunes", "lun", "monday", "mon"],
+      martes: ["martes", "mar", "tuesday", "tue"],
+      miercoles: ["miercoles", "mie", "wednesday", "wed"],
+      jueves: ["jueves", "jue", "thursday", "thu"],
+      viernes: ["viernes", "vie", "friday", "fri"],
+      sabado: ["sabado", "sab", "saturday", "sat"]
+    };
+
+    const keys = aliases[now.day] || [now.day];
+    let daySchedule = null;
+
+    Object.keys(schedule).some(function (key) {
+      if (keys.includes(normalize(key))) {
+        daySchedule = schedule[key];
+        return true;
+      }
+      return false;
+    });
+
+    if (daySchedule === null || daySchedule === undefined) return null;
+    if (daySchedule === false) return "closed";
+
+    if (typeof daySchedule === "string") {
+      const normalized = normalize(daySchedule);
+      if (/(cerrado|closed)/.test(normalized)) return "closed";
+      if (/(proximo|soon)/.test(normalized)) return "upcoming";
+
+      const times = daySchedule.match(/\d{1,2}\s*:\s*\d{2}/g);
+      if (times && times.length >= 2) {
+        const open = parseMinutes(times[0]);
+        const close = parseMinutes(times[1]);
+        if (open !== null && close !== null) {
+          if (now.minutes < open) return "upcoming";
+          return now.minutes < close ? "open" : "closed";
+        }
+      }
+      return null;
+    }
+
+    if (typeof daySchedule === "object") {
+      const state = normalize(daySchedule.status || daySchedule.estado);
+      if (/(cerrado|closed)/.test(state)) return "closed";
+      if (/(proximo|soon)/.test(state)) return "upcoming";
+
+      const open = parseMinutes(
+        daySchedule.open ||
+        daySchedule.abre ||
+        daySchedule.apertura ||
+        daySchedule.hora_apertura
+      );
+
+      const close = parseMinutes(
+        daySchedule.close ||
+        daySchedule.cierra ||
+        daySchedule.cierre ||
+        daySchedule.hora_cierre
+      );
+
+      if (open !== null && close !== null) {
+        if (now.minutes < open) return "upcoming";
+        return now.minutes < close ? "open" : "closed";
+      }
+    }
+
+    return null;
+  };
+
+  const scheduleStatus = function (card) {
+    const scheduleAttributes = [
+      "data-schedule",
+      "data-hours",
+      "data-opening-hours",
+      "data-horario",
+      "data-horarios"
+    ];
+
+    const nodes = [card].concat(Array.from(card.querySelectorAll("*")));
+
+    for (const node of nodes) {
+      for (const attribute of scheduleAttributes) {
+        if (node.hasAttribute && node.hasAttribute(attribute)) {
+          const result = statusFromScheduleObject(node.getAttribute(attribute));
+          if (result) return result;
+        }
+      }
+    }
+
+    const openValue = card.getAttribute("data-open-time") ||
+      card.getAttribute("data-hora-apertura") ||
+      card.querySelector("[data-open-time],[data-hora-apertura]")?.getAttribute("data-open-time") ||
+      card.querySelector("[data-hora-apertura]")?.getAttribute("data-hora-apertura");
+
+    const closeValue = card.getAttribute("data-close-time") ||
+      card.getAttribute("data-hora-cierre") ||
+      card.querySelector("[data-close-time],[data-hora-cierre]")?.getAttribute("data-close-time") ||
+      card.querySelector("[data-hora-cierre]")?.getAttribute("data-hora-cierre");
+
+    const open = parseMinutes(openValue);
+    const close = parseMinutes(closeValue);
+
+    if (open !== null && close !== null) {
+      const now = ecuadorNow().minutes;
+      if (now < open) return "upcoming";
+      return now < close ? "open" : "closed";
+    }
+
+    const visibleText = card.textContent || "";
+    const range = visibleText.match(/(\d{1,2}\s*:\s*\d{2})\s*(?:-|–|—|a)\s*(\d{1,2}\s*:\s*\d{2})/i);
+    if (range) {
+      const start = parseMinutes(range[1]);
+      const end = parseMinutes(range[2]);
+      if (start !== null && end !== null) {
+        const now = ecuadorNow().minutes;
+        if (now < start) return "upcoming";
+        return now < end ? "open" : "closed";
+      }
+    }
+
+    return null;
+  };
+
+  const resolveStatus = function (card) {
+    return explicitStatus(card) || scheduleStatus(card) || "open";
+  };
+
+  const statusContent = {
+    open: { label: "Abierto", className: "is-open" },
+    closed: { label: "Cerrado", className: "is-closed" },
+    upcoming: { label: "Próximo a abrir", className: "is-upcoming" }
+  };
+
+  const installStatus = function (card) {
+    const logoContainer = card.querySelector(LOGO_CONTAINER_SELECTOR);
+    if (!logoContainer) return;
+
+    let badge = card.querySelector(".ux-opening-status");
+    if (!badge) {
+      badge = card.querySelector(".ux-badge");
+    }
+
+    if (!badge) {
+      badge = document.createElement("span");
+    }
+
+    badge.className = "ux-opening-status";
+    const resolved = resolveStatus(card);
+    const config = statusContent[resolved] || statusContent.open;
+    badge.classList.add(config.className);
+    badge.innerHTML = "<i aria-hidden=\"true\"></i><span>" + config.label + "</span>";
+    badge.setAttribute("aria-label", "Estado del negocio: " + config.label);
+
+    if (badge.parentElement !== logoContainer) {
+      logoContainer.appendChild(badge);
+    }
+  };
+
+  const backgroundDistance = function (pixel, background) {
+    const dr = pixel[0] - background[0];
+    const dg = pixel[1] - background[1];
+    const db = pixel[2] - background[2];
+    return Math.sqrt((dr * dr) + (dg * dg) + (db * db));
+  };
+
+  const analyzeLogoWhitespace = function (image) {
+    if (!image || !image.complete || !image.naturalWidth || !image.naturalHeight) return;
+
+    const container = image.closest(LOGO_CONTAINER_SELECTOR);
+    if (!container) return;
+
+    container.classList.remove("ux-auto-logo-wide", "ux-auto-logo-square", "ux-auto-logo-tall");
+
+    const ratio = image.naturalWidth / image.naturalHeight;
+    if (ratio > 1.28) {
+      container.classList.add("ux-auto-logo-wide");
+    } else if (ratio < 0.78) {
+      container.classList.add("ux-auto-logo-tall");
+    } else {
+      container.classList.add("ux-auto-logo-square");
+    }
+
+    let scale = 1;
+
+    try {
+      const maxSide = 180;
+      const factor = Math.min(1, maxSide / Math.max(image.naturalWidth, image.naturalHeight));
+      const width = Math.max(1, Math.round(image.naturalWidth * factor));
+      const height = Math.max(1, Math.round(image.naturalHeight * factor));
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+
+      const context = canvas.getContext("2d", { willReadFrequently: true });
+      if (!context) throw new Error("Canvas no disponible.");
+
+      context.drawImage(image, 0, 0, width, height);
+      const data = context.getImageData(0, 0, width, height).data;
+
+      const sample = function (x, y) {
+        const index = ((y * width) + x) * 4;
+        return [data[index], data[index + 1], data[index + 2], data[index + 3]];
+      };
+
+      const corners = [
+        sample(0, 0),
+        sample(width - 1, 0),
+        sample(0, height - 1),
+        sample(width - 1, height - 1)
+      ];
+
+      const background = [0, 0, 0, 0];
+      corners.forEach(function (corner) {
+        background[0] += corner[0];
+        background[1] += corner[1];
+        background[2] += corner[2];
+        background[3] += corner[3];
+      });
+      background[0] /= corners.length;
+      background[1] /= corners.length;
+      background[2] /= corners.length;
+      background[3] /= corners.length;
+
+      let minX = width;
+      let minY = height;
+      let maxX = -1;
+      let maxY = -1;
+
+      for (let y = 0; y < height; y += 1) {
+        for (let x = 0; x < width; x += 1) {
+          const index = ((y * width) + x) * 4;
+          const pixel = [data[index], data[index + 1], data[index + 2], data[index + 3]];
+
+          if (pixel[3] < 20) continue;
+
+          const alphaDifference = Math.abs(pixel[3] - background[3]);
+          const colorDifference = backgroundDistance(pixel, background);
+          const isForeground = alphaDifference > 35 || colorDifference > 42;
+
+          if (isForeground) {
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x);
+            maxY = Math.max(maxY, y);
+          }
+        }
+      }
+
+      if (maxX >= minX && maxY >= minY) {
+        const contentWidthRatio = (maxX - minX + 1) / width;
+        const contentHeightRatio = (maxY - minY + 1) / height;
+        const dominantCoverage = Math.max(contentWidthRatio, contentHeightRatio);
+
+        if (dominantCoverage > 0 && dominantCoverage < 0.82) {
+          scale = Math.min(1.72, Math.max(1, 0.88 / dominantCoverage));
+        }
+      }
+    } catch (error) {
+      /* Si una imagen externa bloquea Canvas, object-fit: contain mantiene el ajuste seguro. */
+      scale = ratio > 2.1 || ratio < 0.48 ? 1.08 : 1;
+    }
+
+    image.style.setProperty("--urbanex-logo-scale", scale.toFixed(3));
+    image.dataset.urbanexLogoPrepared = "true";
+  };
+
+  const installLogoBehavior = function (card) {
+    const images = Array.from(card.querySelectorAll(LOGO_IMAGE_SELECTOR));
+
+    images.forEach(function (image) {
+      if (image.dataset.urbanexLogoListener !== "true") {
+        image.dataset.urbanexLogoListener = "true";
+        image.addEventListener("load", function () {
+          analyzeLogoWhitespace(image);
+        }, { passive: true });
+      }
+
+      if (image.complete && image.naturalWidth) {
+        analyzeLogoWhitespace(image);
+      }
+    });
+  };
+
+  const prepareCard = function (card) {
+    if (!(card instanceof Element)) return;
+    installLogoBehavior(card);
+    installStatus(card);
+  };
+
+  const prepareAllCards = function () {
+    const grid = document.querySelector(GRID_SELECTOR);
+    if (!grid) return;
+    grid.querySelectorAll(CARD_SELECTOR).forEach(prepareCard);
+  };
+
+  const start = function () {
+    const grid = document.querySelector(GRID_SELECTOR);
+    if (!grid) return;
+
+    prepareAllCards();
+
+    const observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        mutation.addedNodes.forEach(function (node) {
+          if (!(node instanceof Element)) return;
+
+          if (node.matches && node.matches(CARD_SELECTOR)) {
+            prepareCard(node);
+          }
+
+          node.querySelectorAll?.(CARD_SELECTOR).forEach(prepareCard);
+        });
+      });
+
+      prepareAllCards();
+    });
+
+    observer.observe(grid, {
+      childList: true,
+      subtree: true
+    });
+
+    window.setInterval(prepareAllCards, 60000);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start, { once: true });
+  } else {
+    start();
+  }
+})();
 </script>
 
 </body>
