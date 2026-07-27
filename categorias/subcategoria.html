@@ -3470,14 +3470,14 @@ body{
 <style id="urbanex-auto-logo-status-final">
 /* ============================================================
    LOGOTIPOS Y ESTADO COMERCIAL AUTOMÁTICOS
-   - Recuadro de logotipo más grande.
-   - Imagen centrada, contenida y escalada sin deformación.
-   - Estado: Abierto, Cerrado o Próximo a abrir.
+   - Recuadro de logotipo amplio.
+   - Imagen centrada y escalada sin deformación.
+   - Estado ubicado debajo del nombre, sin superposiciones.
    ============================================================ */
 
 .ux-company-head{
   padding-top:18px!important;
-  padding-bottom:22px!important;
+  padding-bottom:16px!important;
 }
 
 .ux-company-logo,
@@ -3485,12 +3485,12 @@ body{
 .ux-card-media{
   position:relative!important;
   isolation:isolate!important;
-  overflow:visible!important;
+  overflow:hidden!important;
   display:grid!important;
   place-items:center!important;
   flex-shrink:0!important;
   border:1px solid #d7dee8!important;
-  background:#ffffff!important;
+  background:#fff!important;
   box-shadow:
     0 9px 22px rgba(19,44,79,.12),
     inset 0 0 0 1px rgba(255,255,255,.9)!important;
@@ -3540,38 +3540,38 @@ body{
   image-rendering:auto!important;
 }
 
-/* Ajustes automáticos según la proporción real de cada imagen. */
-.ux-auto-logo-wide{
-  padding:2px!important;
+.ux-auto-logo-wide{padding:2px!important;}
+.ux-auto-logo-square{padding:3px!important;}
+.ux-auto-logo-tall{padding:5px!important;}
+
+/* El estado ocupa una línea propia dentro del bloque del nombre. */
+.ux-company-title{
+  min-width:0!important;
 }
 
-.ux-auto-logo-square{
-  padding:3px!important;
-}
-
-.ux-auto-logo-tall{
-  padding:5px!important;
-}
-
-/* Estado superpuesto debajo del logotipo. */
 .ux-opening-status{
-  position:absolute!important;
-  left:50%!important;
-  bottom:-12px!important;
-  z-index:8!important;
-  min-width:max-content!important;
-  height:24px!important;
+  position:static!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  z-index:auto!important;
+  width:max-content!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:23px!important;
+  margin:8px 0 0!important;
   padding:0 9px!important;
   display:inline-flex!important;
   align-items:center!important;
   justify-content:center!important;
   gap:6px!important;
-  transform:translateX(-50%)!important;
+  transform:none!important;
   border:1px solid transparent!important;
   border-radius:999px!important;
   color:#fff!important;
   background:#132c4f!important;
-  box-shadow:0 7px 16px rgba(19,44,79,.20)!important;
+  box-shadow:none!important;
   font-family:Montserrat,Arial,sans-serif!important;
   font-size:7px!important;
   font-weight:850!important;
@@ -3580,6 +3580,7 @@ body{
   text-transform:uppercase!important;
   white-space:nowrap!important;
   pointer-events:none!important;
+  vertical-align:middle!important;
 }
 
 .ux-opening-status i{
@@ -3589,7 +3590,7 @@ body{
   display:block!important;
   border-radius:50%!important;
   background:currentColor!important;
-  box-shadow:0 0 0 3px currentColor!important;
+  box-shadow:0 0 0 3px color-mix(in srgb,currentColor 18%,transparent)!important;
   opacity:.95!important;
 }
 
@@ -3597,53 +3598,25 @@ body{
   color:#087443!important;
   border-color:rgba(34,168,97,.34)!important;
   background:#e8f8ef!important;
-  box-shadow:0 7px 16px rgba(34,168,97,.16)!important;
 }
 
 .ux-opening-status.is-closed{
   color:#b4232f!important;
   border-color:rgba(220,53,69,.30)!important;
   background:#fff0f2!important;
-  box-shadow:0 7px 16px rgba(220,53,69,.13)!important;
 }
 
 .ux-opening-status.is-upcoming{
   color:#8a5600!important;
   border-color:rgba(245,158,11,.38)!important;
   background:#fff5df!important;
-  box-shadow:0 7px 16px rgba(245,158,11,.15)!important;
 }
 
-/* El pie interno conserva únicamente la acción de navegación. */
-.ux-card .ux-card-bottom{
-  justify-content:flex-end!important;
-}
-
-.ux-card .ux-card-bottom>.ux-opening-status{
-  position:static!important;
-  transform:none!important;
-}
-
-/* Compatibilidad con la tarjeta antigua. */
-.ux-grid>.ux-card>.ux-logo{
-  width:100%!important;
-  height:154px!important;
-  min-height:154px!important;
-  flex:0 0 154px!important;
-  padding:7px!important;
-  border-width:0 0 1px!important;
-  border-radius:0!important;
-  overflow:hidden!important;
-}
-
-.ux-grid>.ux-card>.ux-logo .ux-opening-status{
-  bottom:9px!important;
-}
-
+/* En tarjetas centradas, el estado se centra debajo del nombre. */
 @media(min-width:1024px){
   .ux-company-head{
-    min-height:168px!important;
-    padding:18px 10px 24px!important;
+    min-height:178px!important;
+    padding:18px 10px 15px!important;
   }
 
   .ux-company-logo{
@@ -3653,8 +3626,13 @@ body{
     border-radius:17px!important;
   }
 
-  .ux-company-title h3{
-    margin-top:4px!important;
+  .ux-company-title{
+    width:100%!important;
+    text-align:center!important;
+  }
+
+  .ux-opening-status{
+    margin:8px auto 0!important;
   }
 }
 
@@ -3664,12 +3642,16 @@ body{
     height:78px!important;
     flex-basis:78px!important;
   }
+
+  .ux-opening-status{
+    margin-top:7px!important;
+  }
 }
 
 @media(max-width:620px){
   .ux-company-head{
-    min-height:139px!important;
-    padding:14px 8px 22px!important;
+    min-height:148px!important;
+    padding:14px 8px 13px!important;
   }
 
   .ux-company-logo{
@@ -3680,9 +3662,14 @@ body{
     border-radius:15px!important;
   }
 
+  .ux-company-title{
+    width:100%!important;
+    text-align:center!important;
+  }
+
   .ux-opening-status{
-    bottom:-11px!important;
-    height:21px!important;
+    height:20px!important;
+    margin:7px auto 0!important;
     padding:0 7px!important;
     gap:5px!important;
     font-size:5.8px!important;
@@ -3693,6 +3680,21 @@ body{
     height:5px!important;
     flex-basis:5px!important;
   }
+}
+
+/* Compatibilidad con tarjetas antiguas. */
+.ux-grid>.ux-card>.ux-logo{
+  width:100%!important;
+  height:154px!important;
+  min-height:154px!important;
+  flex:0 0 154px!important;
+  padding:7px!important;
+  border-width:0 0 1px!important;
+  border-radius:0!important;
+}
+
+.ux-grid>.ux-card>.ux-card-body>.ux-opening-status{
+  margin:8px 0 10px!important;
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -4133,27 +4135,33 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   const installStatus = function (card) {
-    const logoContainer = card.querySelector(LOGO_CONTAINER_SELECTOR);
-    if (!logoContainer) return;
+    const statusHost =
+      card.querySelector(".ux-company-title") ||
+      card.querySelector(".ux-card-body") ||
+      card;
 
     let badge = card.querySelector(".ux-opening-status");
-    if (!badge) {
-      badge = card.querySelector(".ux-badge");
-    }
 
     if (!badge) {
-      badge = document.createElement("span");
+      const oldBadge = card.querySelector(".ux-badge");
+      if (oldBadge) {
+        badge = oldBadge;
+      } else {
+        badge = document.createElement("span");
+      }
     }
 
     badge.className = "ux-opening-status";
+
     const resolved = resolveStatus(card);
     const config = statusContent[resolved] || statusContent.open;
+
     badge.classList.add(config.className);
     badge.innerHTML = "<i aria-hidden=\"true\"></i><span>" + config.label + "</span>";
     badge.setAttribute("aria-label", "Estado del negocio: " + config.label);
 
-    if (badge.parentElement !== logoContainer) {
-      logoContainer.appendChild(badge);
+    if (badge.parentElement !== statusHost) {
+      statusHost.appendChild(badge);
     }
   };
 
