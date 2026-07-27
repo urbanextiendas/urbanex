@@ -3557,6 +3557,17 @@ body{
 }
 </style>
 
+
+<style id="urbanex-footer-link-exacto-boulevard">
+.pie-pagina a,
+.pie-pagina a:visited,
+.pie-pagina a:hover,
+.pie-pagina a:focus{
+  color:inherit!important;
+  text-decoration:none!important;
+}
+</style>
+
 </head>
 
 <body>
@@ -3917,9 +3928,7 @@ body{
   <img id="lightboxImage" alt="Imagen ampliada">
 </div>
 
-<footer class="footer">
-  © 2026 Urbanex. Desarrollado por NeoDat Consultores.
-</footer>
+<footer class="pie-pagina footer"><p>&copy; <span id="currentYear"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
 
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -4720,5 +4729,13 @@ loadPage();
   populateLocation();
 })();
 </script>
+
+<script id="urbanex-footer-year-boulevard">
+(function () {
+  const year = document.getElementById("currentYear");
+  if (year) year.textContent = new Date().getFullYear();
+})();
+</script>
+
 </body>
 </html>
