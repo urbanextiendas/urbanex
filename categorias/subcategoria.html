@@ -5039,6 +5039,57 @@ body{
 }
 </style>
 
+
+<style id="urbanex-translucent-business-cards">
+/* ÚNICO CAMBIO: recuadros de negocios translúcidos. */
+.ux-grid>.ux-card,
+.ux-card{
+  background:
+    radial-gradient(circle at 5% 0%,rgba(229,193,88,.10),transparent 31%),
+    linear-gradient(150deg,rgba(17,23,32,.88),rgba(7,10,15,.82))!important;
+  border-color:rgba(255,255,255,.18)!important;
+  box-shadow:
+    0 12px 30px rgba(7,12,20,.18),
+    inset 0 1px 0 rgba(255,255,255,.06)!important;
+  backdrop-filter:saturate(118%) blur(8px)!important;
+  -webkit-backdrop-filter:saturate(118%) blur(8px)!important;
+}
+
+.ux-company-head,
+.ux-card .ux-card-body,
+.ux-grid>.ux-card>.ux-card-body{
+  background:transparent!important;
+}
+
+.ux-company-logo,
+.ux-grid>.ux-card>.ux-logo,
+.ux-card-media{
+  background:rgba(255,255,255,.92)!important;
+}
+
+@media(hover:hover){
+  .ux-grid>.ux-card:hover,
+  .ux-card:hover{
+    background:
+      radial-gradient(circle at 5% 0%,rgba(229,193,88,.14),transparent 33%),
+      linear-gradient(150deg,rgba(21,28,39,.93),rgba(8,12,18,.89))!important;
+    border-color:rgba(229,193,88,.58)!important;
+  }
+}
+
+/* En celular se conserva la transparencia sin aplicar desenfoque pesado. */
+@media(max-width:720px){
+  .ux-grid>.ux-card,
+  .ux-card{
+    background:
+      radial-gradient(circle at 5% 0%,rgba(229,193,88,.09),transparent 30%),
+      linear-gradient(150deg,rgba(17,23,32,.90),rgba(7,10,15,.86))!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="header-top">
