@@ -7265,6 +7265,48 @@ body {
 }
 </style>
 
+
+<style id="urbanex-index-mobile-featured-match-final">
+/* SOLO CELULAR: Destacados de index igual a Boulevard. */
+@media (max-width:720px){
+    .aside-showcase-list .showcase-stats,
+    .aside-showcase-list .sort-box,
+    .aside-showcase-list .action-footer-box{
+        display:none!important;
+    }
+
+    .aside-showcase-list{
+        min-height:0!important;
+        height:auto!important;
+        max-height:none!important;
+        overflow:hidden!important;
+    }
+
+    .aside-showcase-list .showcase-header{
+        min-height:auto!important;
+        padding:14px 12px 6px!important;
+        border-bottom:0!important;
+    }
+
+    .aside-showcase-list .showcase-header h2{
+        margin:0!important;
+        font-family:var(--font-serif)!important;
+        color:var(--gold)!important;
+        font-size:13px!important;
+        line-height:1.2!important;
+        letter-spacing:1px!important;
+        text-transform:uppercase!important;
+    }
+
+    .aside-showcase-list .shops-scroll-area{
+        min-height:136px!important;
+        max-height:136px!important;
+        padding:7px 7px 3px!important;
+        overflow:hidden!important;
+    }
+}
+</style>
+
 </head>
 <body>
 <div class="dashboard-container">
@@ -7421,6 +7463,9 @@ let currentRoot = null;
 let currentSubcategories = [];
 let allBusinesses = [];
 let searchTerm = '';
+let featuredCarouselOffset = 0;
+let featuredCarouselTimer = null;
+let featuredCarouselSignature = '';
 
 function normalize(value) {
     return String(value || '')
@@ -7739,6 +7784,119 @@ function businessCard(business) {
 }
 
 
+function stopFeaturedRotation() {
+    if (featuredCarouselTimer) {
+        window.clearTimeout(featuredCarouselTimer);
+        featuredCarouselTimer = null;
+    }
+}
+
+function scheduleFeaturedRotation(total) {
+    stopFeaturedRotation();
+
+    if (
+        window.innerWidth > 720 ||
+        total <= 1 ||
+        document.hidden
+    ) {
+        return;
+    }
+
+    featuredCarouselTimer = window.setTimeout(() => {
+        featuredCarouselOffset =
+            (featuredCarouselOffset + 1 + total) % total;
+        renderFeatured();
+    }, 2000);
+}
+
+function getFeaturedBusinessesForNavigation() {
+    return featuredBusinesses();
+}
+
+window.featuredPreviousMobile = () => {
+    if (window.innerWidth > 720) return;
+
+    const list = getFeaturedBusinessesForNavigation();
+    if (!list.length) return;
+
+    featuredCarouselOffset =
+        (featuredCarouselOffset - 1 + list.length) % list.length;
+
+    renderFeatured();
+};
+
+window.featuredNextMobile = () => {
+    if (window.innerWidth > 720) return;
+
+    const list = getFeaturedBusinessesForNavigation();
+    if (!list.length) return;
+
+    featuredCarouselOffset =
+        (featuredCarouselOffset + 1) % list.length;
+
+    renderFeatured();
+};
+
+window.featuredGoToMobile = index => {
+    if (window.innerWidth > 720) return;
+
+    const list = getFeaturedBusinessesForNavigation();
+    if (!list.length) return;
+
+    const safeIndex = Math.max(
+        0,
+        Math.min(Number(index) || 0, list.length - 1)
+    );
+
+    featuredCarouselOffset = safeIndex;
+    renderFeatured();
+};
+
+function ensureMobileFeaturedSwipe() {
+    const area = document.getElementById('shopsList');
+
+    if (!area || area.dataset.mobileSwipeReady === 'true') {
+        return;
+    }
+
+    area.dataset.mobileSwipeReady = 'true';
+
+    let startX = 0;
+    let startY = 0;
+
+    area.addEventListener('touchstart', event => {
+        if (window.innerWidth > 720 || event.touches.length !== 1) return;
+
+        startX = event.touches[0].clientX;
+        startY = event.touches[0].clientY;
+    }, { passive: true });
+
+    area.addEventListener('touchend', event => {
+        if (
+            window.innerWidth > 720 ||
+            !event.changedTouches.length
+        ) {
+            return;
+        }
+
+        const deltaX = event.changedTouches[0].clientX - startX;
+        const deltaY = event.changedTouches[0].clientY - startY;
+        const isHorizontalSwipe =
+            Math.abs(deltaX) >= 42 &&
+            Math.abs(deltaX) > Math.abs(deltaY) * 1.25;
+
+        if (!isHorizontalSwipe) return;
+
+        event.preventDefault();
+
+        if (deltaX < 0) {
+            featuredNextMobile();
+        } else {
+            featuredPreviousMobile();
+        }
+    }, { passive: false });
+}
+
 function featuredVisibleCount() {
     if (window.innerWidth <= 720) return 1;
     if (window.innerWidth <= 1024) return 2;
@@ -7798,6 +7956,138 @@ function featuredBusinessCard(business) {
     const statusHtml = business._openNow
         ? `<span class="status-open">Abierto</span>`
         : `<span class="status-closed">Cerrado</span>`;
+
+    if (window.innerWidth <= 720) {
+        const mobileImgHtml = business.cover_image
+            ? `<div class="shop-thumb-wrapper"><img class="shop-thumb" src="${esc(business.cover_image)}" alt="${esc(business.name)}" loading="lazy"></div>`
+            : `<div class="shop-thumb-wrapper"><span>${esc(categoryIcon)}</span></div>`;
+
+        const mobilePhoneValue = String(
+            business.phone ||
+            business.contact_phone ||
+            business.whatsapp ||
+            ''
+        ).trim();
+
+        const mobilePhoneDigits = mobilePhoneValue.replace(/\D/g, '');
+
+        const mobileEmailValue = String(
+            business.email ||
+            business.contact_email ||
+            business.business_email ||
+            business.mail ||
+            ''
+        ).trim();
+
+        const mobileExtraInfoHtml = (
+            mobilePhoneValue || mobileEmailValue
+        )
+            ? `
+                <div class="mobile-featured-extra-info">
+                    ${mobilePhoneValue
+                        ? `
+                            <a
+                                class="mobile-featured-info-item"
+                                href="tel:${mobilePhoneDigits}"
+                                aria-label="Llamar a ${esc(business.name)}"
+                            >
+                                <span>Teléfono:</span>
+                                <strong>${esc(mobilePhoneValue)}</strong>
+                            </a>
+                        `
+                        : ''
+                    }
+
+                    ${mobileEmailValue
+                        ? `
+                            <a
+                                class="mobile-featured-info-item"
+                                href="mailto:${esc(mobileEmailValue)}"
+                                aria-label="Enviar correo a ${esc(business.name)}"
+                            >
+                                <span>Correo:</span>
+                                <strong>${esc(mobileEmailValue)}</strong>
+                            </a>
+                        `
+                        : ''
+                    }
+                </div>
+            `
+            : '';
+
+        const mobileFeaturedList = getFeaturedBusinessesForNavigation();
+        const mobileCurrentIndex = Math.max(
+            0,
+            mobileFeaturedList.findIndex(
+                item => String(item.id) === String(business.id)
+            )
+        );
+
+        const mobileProgressHtml = mobileFeaturedList.length > 1
+            ? `
+                <nav
+                    class="mobile-featured-progress"
+                    aria-label="Cambiar negocio destacado"
+                >
+                    ${mobileFeaturedList.map((item, index) => `
+                        <button
+                            type="button"
+                            class="mobile-featured-progress-item${index === mobileCurrentIndex ? ' is-active' : ''}"
+                            onclick="event.preventDefault(); event.stopPropagation(); featuredGoToMobile(${index});"
+                            aria-label="Ver destacado ${index + 1} de ${mobileFeaturedList.length}"
+                            aria-current="${index === mobileCurrentIndex ? 'true' : 'false'}"
+                        >
+                            <span></span>
+                        </button>
+                    `).join('')}
+                </nav>
+            `
+            : '';
+
+        return `
+            <article class="shop-card shop-card-mobile-rich">
+                ${mobileProgressHtml}
+
+                <div class="mobile-featured-profile">
+                    <a
+                        class="mobile-featured-logo-link"
+                        href="${businessUrl(business)}"
+                        aria-label="Ver perfil de ${esc(business.name)}"
+                    >
+                        ${mobileImgHtml}
+                    </a>
+
+                    <div class="shop-details">
+                        <div class="mobile-featured-topline">
+                            <div class="shop-segment">${esc(categoryIcon)} ${esc(categoryName)}</div>
+                            ${statusHtml}
+                        </div>
+
+                        <a
+                            class="shop-title mobile-featured-title-link"
+                            href="${businessUrl(business)}"
+                        >${esc(business.name)}</a>
+
+                        <div
+                            class="mobile-featured-address"
+                            title="${esc(addressLabel)}"
+                        >
+                            <span aria-hidden="true">⌖</span>
+                            <span>${esc(addressLabel)}</span>
+                        </div>
+
+                        ${mobileExtraInfoHtml}
+
+                        <div class="shop-rating-row">
+                            <span class="star-icon">★</span>
+                            <span class="rating-value">${ratingText}</span>
+                            <span class="rating-count">${esc(reviewText)}</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        `;
+    }
 
     const logoHtml = business.cover_image
         ? `
@@ -8037,10 +8327,19 @@ function renderFeatured() {
     const list = featuredBusinesses();
     const container = document.getElementById('shopsList');
     const stats = document.getElementById('showcaseStats');
+    const sort = document.getElementById('sortSelect')?.value || 'rating';
+    const signature = `${searchTerm}|${sort}|${list.map(item => item.id).join(',')}`;
+
+    if (signature !== featuredCarouselSignature) {
+        featuredCarouselSignature = signature;
+        featuredCarouselOffset = 0;
+    }
 
     stats.textContent =
         `${list.length} destacado${list.length !== 1 ? 's' : ''} ` +
         `seleccionado${list.length !== 1 ? 's' : ''}`;
+
+    stopFeaturedRotation();
 
     if (!list.length) {
         container.removeAttribute('data-visible-count');
@@ -8057,6 +8356,21 @@ function renderFeatured() {
     );
 
     container.dataset.visibleCount = String(visibleCount);
+
+    if (window.innerWidth <= 720) {
+        const activeIndex =
+            ((featuredCarouselOffset % list.length) + list.length) % list.length;
+
+        container.classList.remove('featured-changing');
+        void container.offsetWidth;
+        container.innerHTML = featuredBusinessCard(list[activeIndex]);
+        container.classList.add('featured-changing');
+
+        ensureMobileFeaturedSwipe();
+        scheduleFeaturedRotation(list.length);
+        return;
+    }
+
     container.innerHTML = list
         .slice(0, visibleCount)
         .map(featuredBusinessCard)
@@ -8101,8 +8415,17 @@ let featuredResizeTimer = null;
 window.addEventListener('resize', () => {
     window.clearTimeout(featuredResizeTimer);
     featuredResizeTimer = window.setTimeout(() => {
+        featuredCarouselOffset = 0;
         renderFeatured();
     }, 120);
+});
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        stopFeaturedRotation();
+    } else {
+        renderFeatured();
+    }
 });
 
 boot();
