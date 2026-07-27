@@ -7265,34 +7265,6 @@ body {
 }
 </style>
 
-
-<style id="urbanex-index-mobile-exact-boulevard-final">
-@media (max-width:720px){
-    .aside-showcase-list .shops-scroll-area > .ux-featured-card{
-        display:none!important;
-    }
-
-    .aside-showcase-list .shops-scroll-area > .shop-card-mobile-rich{
-        display:grid!important;
-    }
-
-    .aside-showcase-list .sort-box,
-    .aside-showcase-list .action-footer-box{
-        display:none!important;
-    }
-}
-</style>
-
-
-<style id="urbanex-category-carousel-gap-only">
-/* ÚNICO CAMBIO: reducir la separación entre categorías del carrusel. */
-@media (max-width:1024px){
-    .categories-list{
-        gap:4px!important;
-    }
-}
-</style>
-
 </head>
 <body>
 <div class="dashboard-container">
@@ -7448,14 +7420,7 @@ let subCategories = [];
 let currentRoot = null;
 let currentSubcategories = [];
 let allBusinesses = [];
-let globalFeaturedBusinesses = [];
-let allDirectoryBusinesses = [];
 let searchTerm = '';
-let activeSubcategoryId = null;
-
-let featuredCarouselSignature = '';
-let featuredSlotIndices = [];
-let featuredSlotTimers = [];
 
 function normalize(value) {
     return String(value || '')
@@ -7655,43 +7620,16 @@ function rootBusinesses() {
     );
 }
 
-function selectedCategoryBusinesses() {
-    const list = rootBusinesses();
-
-    if (activeSubcategoryId === null) {
-        return list;
-    }
-
-    const selectedSubcategory = currentSubcategories.find(
-        subcategory =>
-            String(subcategory.id) === String(activeSubcategoryId)
-    );
-
-    if (!selectedSubcategory) {
-        return list;
-    }
-
-    return list.filter(
-        business => belongsToSubcategory(business, selectedSubcategory)
-    );
-}
-
 function featuredBusinesses() {
     const sort = document.getElementById('sortSelect')?.value || 'rating';
-
-    const list = selectedCategoryBusinesses()
-        .filter(isFeatured)
-        .slice();
+    const list = rootBusinesses().filter(isFeatured);
 
     if (sort === 'name') {
         list.sort((a, b) =>
             String(a.name || '').localeCompare(String(b.name || ''), 'es')
         );
     } else {
-        list.sort((a, b) =>
-            (b._rating || 0) - (a._rating || 0) ||
-            String(a.name || '').localeCompare(String(b.name || ''), 'es')
-        );
+        list.sort((a, b) => (b._rating || 0) - (a._rating || 0));
     }
 
     return list;
@@ -7706,17 +7644,13 @@ function countBySubcategory(subcategory) {
 
 function renderSubcategories() {
     const container = document.getElementById('categoriesList');
-    const total = allDirectoryBusinesses.length;
-
-    const allIsActive = activeSubcategoryId === null;
+    const total = allBusinesses.filter(belongsToRoot).length;
+    const rootId = encodeURIComponent(currentRoot.id);
 
     const allButton = `
-        <li class="category-item${allIsActive ? ' active' : ''}">
-            <button
-                type="button"
-                class="${allIsActive ? 'active' : ''}"
-                onclick="openDirectory()"
-            >
+        <li class="category-item active">
+            <button type="button" class="active"
+                    onclick="window.location.href='index.html?categoria=${rootId}'">
                 <div class="icon-container">▦</div>
                 <div class="category-text-info">
                     <span class="category-name">Todos</span>
@@ -7728,16 +7662,12 @@ function renderSubcategories() {
 
     const subButtons = currentSubcategories.map(subcategory => {
         const count = countBySubcategory(subcategory);
-        const isActive =
-            String(activeSubcategoryId) === String(subcategory.id);
+        const url = `subcategoria.html?categoria=${rootId}&subcategoria=${encodeURIComponent(subcategory.id)}`;
 
         return `
-            <li class="category-item${isActive ? ' active' : ''}">
-                <button
-                    type="button"
-                    class="${isActive ? 'active' : ''}"
-                    onclick="selectSubcategory('${esc(String(subcategory.id))}')"
-                >
+            <li class="category-item">
+                <button type="button"
+                        onclick="window.location.href='${url}'">
                     <div class="icon-container">${esc(subcategory.icon || '•')}</div>
                     <div class="category-text-info">
                         <span class="category-name">${esc(subcategory.name)}</span>
@@ -7750,22 +7680,6 @@ function renderSubcategories() {
 
     container.innerHTML = allButton + subButtons;
 }
-
-window.selectSubcategory = subcategoryId => {
-    activeSubcategoryId =
-        subcategoryId === null ||
-        subcategoryId === undefined ||
-        subcategoryId === ''
-            ? null
-            : String(subcategoryId);
-
-    featuredCarouselSignature = '';
-    featuredSlotIndices = [];
-    stopFeaturedRotation();
-
-    renderSubcategories();
-    renderFeatured();
-};
 
 function businessUrl(business) {
     if (business.slug) {
@@ -7844,80 +7758,6 @@ function featuredVisibleCount() {
     return Math.max(1, Math.min(3, calculated || 1));
 }
 
-function stopFeaturedRotation() {
-    featuredSlotTimers.forEach(timer => window.clearTimeout(timer));
-    featuredSlotTimers = [];
-}
-
-function nextUniqueFeaturedIndex(slotIndex, total) {
-    if (total <= 1) return 0;
-
-    const occupied = new Set(
-        featuredSlotIndices.filter((_, index) => index !== slotIndex)
-    );
-
-    let candidate =
-        ((featuredSlotIndices[slotIndex] ?? slotIndex) + 1) % total;
-
-    for (let attempt = 0; attempt < total; attempt += 1) {
-        if (!occupied.has(candidate)) return candidate;
-        candidate = (candidate + 1) % total;
-    }
-
-    return featuredSlotIndices[slotIndex] ?? 0;
-}
-
-function scheduleFeaturedSlotRotations(list) {
-    stopFeaturedRotation();
-
-    if (
-        document.hidden ||
-        !Array.isArray(list) ||
-        list.length <= featuredSlotIndices.length
-    ) {
-        return;
-    }
-
-    const area = document.getElementById('shopsList');
-    if (!area) return;
-
-    const intervals = [2600, 4100, 5600];
-
-    featuredSlotIndices.forEach((_, slotIndex) => {
-        const rotateSlot = () => {
-            if (document.hidden || !area.isConnected) return;
-
-            featuredSlotIndices[slotIndex] =
-                nextUniqueFeaturedIndex(slotIndex, list.length);
-
-            const currentCard = area.children[slotIndex];
-            const business = list[featuredSlotIndices[slotIndex]];
-
-            if (currentCard && business) {
-                const wrapper = document.createElement('div');
-                wrapper.innerHTML = featuredBusinessCard(business).trim();
-
-                const nextCard = wrapper.firstElementChild;
-
-                if (nextCard) {
-                    nextCard.classList.add('featured-slot-enter');
-                    currentCard.replaceWith(nextCard);
-                }
-            }
-
-            featuredSlotTimers[slotIndex] = window.setTimeout(
-                rotateSlot,
-                intervals[slotIndex] || intervals[intervals.length - 1]
-            );
-        };
-
-        featuredSlotTimers[slotIndex] = window.setTimeout(
-            rotateSlot,
-            intervals[slotIndex] || intervals[intervals.length - 1]
-        );
-    });
-}
-
 function featuredBusinessCard(business) {
     const ratingText = business._rating
         ? business._rating.toFixed(1)
@@ -7938,172 +7778,26 @@ function featuredBusinessCard(business) {
         currentRoot?.icon ||
         '🏪';
 
-    const categoryLabel = `${categoryIcon} ${categoryName}`;
-
     const addressLabel = String(
         business.address ||
         business.city ||
         'Dirección no registrada'
     ).trim();
 
+    const cityLabel = String(
+        business.city || 'No registrada'
+    ).trim();
+
     const phoneLabel = String(
         business.phone ||
         business.contact_phone ||
         business.whatsapp ||
-        ''
-    ).trim();
-
-    const phoneDigits = phoneLabel.replace(/\D/g, '');
-
-    const emailLabel = String(
-        business.email ||
-        business.contact_email ||
-        business.business_email ||
-        business.mail ||
-        ''
+        'No registrado'
     ).trim();
 
     const statusHtml = business._openNow
         ? `<span class="status-open">Abierto</span>`
         : `<span class="status-closed">Cerrado</span>`;
-
-    const ratingHtml = business._rating
-        ? `
-            <span class="star-icon">★</span>
-            <span class="rating-value">${ratingText}</span>
-            <span class="rating-count">${esc(reviewText)}</span>
-        `
-        : `<span class="rating-count">Sin reseñas</span>`;
-
-    const basicLogoHtml = business.cover_image
-        ? `
-            <div class="shop-thumb-wrapper">
-                <img
-                    class="shop-thumb"
-                    src="${esc(business.cover_image)}"
-                    alt="${esc(business.name)}"
-                    loading="lazy"
-                >
-            </div>
-        `
-        : `
-            <div class="shop-thumb-wrapper">
-                <span>${esc(categoryIcon)}</span>
-            </div>
-        `;
-
-    if (window.innerWidth <= 720) {
-        const mobileExtraInfoHtml = (
-            phoneLabel || emailLabel
-        )
-            ? `
-                <div class="mobile-featured-extra-info">
-                    ${phoneLabel
-                        ? `
-                            <a
-                                class="mobile-featured-info-item"
-                                href="tel:${phoneDigits}"
-                                aria-label="Llamar a ${esc(business.name)}"
-                            >
-                                <span>Teléfono:</span>
-                                <strong>${esc(phoneLabel)}</strong>
-                            </a>
-                        `
-                        : ''
-                    }
-
-                    ${emailLabel
-                        ? `
-                            <a
-                                class="mobile-featured-info-item"
-                                href="mailto:${esc(emailLabel)}"
-                                aria-label="Enviar correo a ${esc(business.name)}"
-                            >
-                                <span>Correo:</span>
-                                <strong>${esc(emailLabel)}</strong>
-                            </a>
-                        `
-                        : ''
-                    }
-                </div>
-            `
-            : '';
-
-        const mobileFeaturedList = featuredBusinesses();
-        const mobileCurrentIndex = Math.max(
-            0,
-            mobileFeaturedList.findIndex(
-                item => String(item.id) === String(business.id)
-            )
-        );
-
-        const mobileProgressHtml = mobileFeaturedList.length > 1
-            ? `
-                <nav
-                    class="mobile-featured-progress"
-                    aria-label="Cambiar negocio destacado"
-                >
-                    ${mobileFeaturedList.map((item, index) => `
-                        <button
-                            type="button"
-                            class="mobile-featured-progress-item${index === mobileCurrentIndex ? ' is-active' : ''}"
-                            onclick="event.preventDefault(); event.stopPropagation(); featuredGoToMobile(${index});"
-                            aria-label="Ver destacado ${index + 1} de ${mobileFeaturedList.length}"
-                            aria-current="${index === mobileCurrentIndex ? 'true' : 'false'}"
-                        >
-                            <span></span>
-                        </button>
-                    `).join('')}
-                </nav>
-            `
-            : '';
-
-        return `
-            <article class="shop-card shop-card-mobile-rich">
-                ${mobileProgressHtml}
-
-                <div class="mobile-featured-profile">
-                    <a
-                        class="mobile-featured-logo-link"
-                        href="${businessUrl(business)}"
-                        aria-label="Ver perfil de ${esc(business.name)}"
-                    >
-                        ${basicLogoHtml}
-                    </a>
-
-                    <div class="shop-details">
-                        <div class="mobile-featured-topline">
-                            <div class="shop-segment">${esc(categoryLabel)}</div>
-                            ${statusHtml}
-                        </div>
-
-                        <a
-                            class="shop-title mobile-featured-title-link"
-                            href="${businessUrl(business)}"
-                        >${esc(business.name)}</a>
-
-                        <div
-                            class="mobile-featured-address"
-                            title="${esc(addressLabel)}"
-                        >
-                            <span aria-hidden="true">⌖</span>
-                            <span>${esc(addressLabel)}</span>
-                        </div>
-
-                        ${mobileExtraInfoHtml}
-
-                        <div class="shop-rating-row">${ratingHtml}</div>
-                    </div>
-                </div>
-            </article>
-        `;
-    }
-
-    const cityLabel = String(
-        business.city || 'No registrada'
-    ).trim();
-
-    const desktopPhoneLabel = phoneLabel || 'No registrado';
 
     const logoHtml = business.cover_image
         ? `
@@ -8160,14 +7854,16 @@ function featuredBusinessCard(business) {
 
                     <div class="ux-featured-data-item">
                         <span>Teléfono</span>
-                        <strong>${esc(desktopPhoneLabel)}</strong>
+                        <strong>${esc(phoneLabel)}</strong>
                     </div>
                 </div>
 
                 <div class="ux-featured-bottom">
                     <div class="ux-featured-rating">
                         <div class="shop-rating-row">
-                            ${ratingHtml}
+                            <span class="star-icon">★</span>
+                            <span class="rating-value">${ratingText}</span>
+                            <span class="rating-count">${esc(reviewText)}</span>
                         </div>
                     </div>
 
@@ -8178,21 +7874,6 @@ function featuredBusinessCard(business) {
             </a>
         </article>
     `;
-}
-
-async function fetchGlobalFeaturedBusinesses() {
-    return await supabase
-        .from('businesses')
-        .select(BUSINESS_SELECT_INITIAL)
-        .eq('is_active', true)
-        .eq('is_featured', true);
-}
-
-async function fetchAllDirectoryBusinesses() {
-    return await supabase
-        .from('businesses')
-        .select(BUSINESS_SELECT_INITIAL)
-        .eq('is_active', true);
 }
 
 async function fetchBusinesses() {
@@ -8230,19 +7911,9 @@ function groupRowsByBusiness(rows) {
 }
 
 async function loadBusinessDetails() {
-    const combinedBusinesses = [
-        ...allBusinesses,
-        ...globalFeaturedBusinesses,
-        ...allDirectoryBusinesses
-    ];
-
-    const ids = Array.from(
-        new Set(
-            combinedBusinesses
-                .map(business => business.id)
-                .filter(id => id !== null && id !== undefined)
-        )
-    );
+    const ids = allBusinesses
+        .map(business => business.id)
+        .filter(id => id !== null && id !== undefined);
 
     if (!ids.length) return;
 
@@ -8263,20 +7934,17 @@ async function loadBusinessDetails() {
         const hoursByBusiness = groupRowsByBusiness(hoursResult.data || []);
         const reviewsByBusiness = groupRowsByBusiness(reviewsResult.data || []);
 
-        const enrichWithDetails = business => enrichBusiness({
-            ...business,
-            business_hours:
-                hoursByBusiness.get(String(business.id)) || [],
-            reviews:
-                reviewsByBusiness.get(String(business.id)) || []
+        allBusinesses = allBusinesses.map(business => {
+            const updatedBusiness = {
+                ...business,
+                business_hours:
+                    hoursByBusiness.get(String(business.id)) || [],
+                reviews:
+                    reviewsByBusiness.get(String(business.id)) || []
+            };
+
+            return enrichBusiness(updatedBusiness);
         });
-
-        allBusinesses = allBusinesses.map(enrichWithDetails);
-        globalFeaturedBusinesses =
-            globalFeaturedBusinesses.map(enrichWithDetails);
-
-        allDirectoryBusinesses =
-            allDirectoryBusinesses.map(enrichWithDetails);
 
         renderSubcategories();
         renderFeatured();
@@ -8335,37 +8003,18 @@ async function boot() {
 
         applyVisual();
 
-        const [businessResult, featuredResult, directoryResult] = await Promise.all([
-            fetchBusinesses(),
-            fetchGlobalFeaturedBusinesses(),
-            fetchAllDirectoryBusinesses()
-        ]);
-
+        const businessResult = await fetchBusinesses();
         if (businessResult.error) throw businessResult.error;
-        if (featuredResult.error) throw featuredResult.error;
-        if (directoryResult.error) throw directoryResult.error;
 
-        const applyLocation = business =>
-            !window.UrbanexLocation ||
-            window.UrbanexLocation.matchesBusiness(business);
-
-        const prepareBusiness = business => enrichBusiness({
-            ...business,
-            business_hours: business.business_hours || [],
-            reviews: business.reviews || []
-        });
-
-        allBusinesses = (businessResult.data || [])
-            .map(prepareBusiness)
-            .filter(applyLocation);
-
-        globalFeaturedBusinesses = (featuredResult.data || [])
-            .map(prepareBusiness)
-            .filter(applyLocation);
-
-        allDirectoryBusinesses = (directoryResult.data || [])
-            .map(prepareBusiness)
-            .filter(applyLocation);
+        allBusinesses = (businessResult.data || []).map(business =>
+            enrichBusiness({
+                ...business,
+                business_hours: business.business_hours || [],
+                reviews: business.reviews || []
+            })
+        ).filter(business =>
+            !window.UrbanexLocation || window.UrbanexLocation.matchesBusiness(business)
+        );
 
         renderSubcategories();
         renderFeatured();
@@ -8384,134 +8033,20 @@ async function boot() {
     }
 }
 
-
-window.featuredGoToMobile = index => {
-    if (window.innerWidth > 720) return;
-
-    const list = featuredBusinesses();
-    if (!list.length) return;
-
-    const safeIndex = Math.max(
-        0,
-        Math.min(Number(index) || 0, list.length - 1)
-    );
-
-    featuredSlotIndices = [safeIndex];
-    renderFeatured();
-};
-
-window.featuredPreviousMobile = () => {
-    if (window.innerWidth > 720) return;
-
-    const list = featuredBusinesses();
-    if (!list.length) return;
-
-    const current = featuredSlotIndices[0] || 0;
-    featuredSlotIndices = [
-        (current - 1 + list.length) % list.length
-    ];
-
-    renderFeatured();
-};
-
-window.featuredNextMobile = () => {
-    if (window.innerWidth > 720) return;
-
-    const list = featuredBusinesses();
-    if (!list.length) return;
-
-    const current = featuredSlotIndices[0] || 0;
-    featuredSlotIndices = [
-        (current + 1) % list.length
-    ];
-
-    renderFeatured();
-};
-
-function ensureMobileFeaturedSwipe() {
-    const area = document.getElementById('shopsList');
-
-    if (
-        !area ||
-        area.dataset.mobileSwipeReady === 'true'
-    ) {
-        return;
-    }
-
-    area.dataset.mobileSwipeReady = 'true';
-
-    let startX = 0;
-    let startY = 0;
-
-    area.addEventListener('touchstart', event => {
-        if (
-            window.innerWidth > 720 ||
-            event.touches.length !== 1
-        ) {
-            return;
-        }
-
-        startX = event.touches[0].clientX;
-        startY = event.touches[0].clientY;
-    }, { passive: true });
-
-    area.addEventListener('touchend', event => {
-        if (
-            window.innerWidth > 720 ||
-            !event.changedTouches.length
-        ) {
-            return;
-        }
-
-        const deltaX =
-            event.changedTouches[0].clientX - startX;
-
-        const deltaY =
-            event.changedTouches[0].clientY - startY;
-
-        const isHorizontalSwipe =
-            Math.abs(deltaX) >= 42 &&
-            Math.abs(deltaX) > Math.abs(deltaY) * 1.25;
-
-        if (!isHorizontalSwipe) return;
-
-        event.preventDefault();
-
-        if (deltaX < 0) {
-            featuredNextMobile();
-        } else {
-            featuredPreviousMobile();
-        }
-    }, { passive: false });
-}
-
 function renderFeatured() {
     const list = featuredBusinesses();
     const container = document.getElementById('shopsList');
     const stats = document.getElementById('showcaseStats');
 
-    const selectedSubcategory = currentSubcategories.find(
-        subcategory =>
-            String(subcategory.id) === String(activeSubcategoryId)
-    );
-
-    const selectedLabel = selectedSubcategory
-        ? selectedSubcategory.name
-        : currentRoot.name;
-
     stats.textContent =
-        `${list.length} negocio${list.length !== 1 ? 's' : ''} · ` +
-        `${selectedLabel}`;
-
-    stopFeaturedRotation();
+        `${list.length} destacado${list.length !== 1 ? 's' : ''} ` +
+        `seleccionado${list.length !== 1 ? 's' : ''}`;
 
     if (!list.length) {
-        featuredCarouselSignature = '';
-        featuredSlotIndices = [];
         container.removeAttribute('data-visible-count');
         container.innerHTML =
             `<div class="empty-state">` +
-            `No hay negocios en la categoría seleccionada.` +
+            `No hay negocios destacados seleccionados en Supabase.` +
             `</div>`;
         return;
     }
@@ -8521,52 +8056,19 @@ function renderFeatured() {
         Math.min(featuredVisibleCount(), list.length)
     );
 
-    const sort = document.getElementById('sortSelect')?.value || 'rating';
-    const signature =
-        `${sort}|${searchTerm}|${activeSubcategoryId ?? 'all'}|` +
-        `${list.map(item => item.id).join(',')}`;
-
-    const mustReset =
-        signature !== featuredCarouselSignature ||
-        featuredSlotIndices.length !== visibleCount ||
-        featuredSlotIndices.some(index => index >= list.length);
-
-    if (mustReset) {
-        featuredCarouselSignature = signature;
-        featuredSlotIndices = Array.from(
-            { length: visibleCount },
-            (_, index) => index % list.length
-        );
-    }
-
-    const visibleBusinesses =
-        featuredSlotIndices.map(index => list[index]);
-
     container.dataset.visibleCount = String(visibleCount);
-    container.classList.remove('featured-changing');
-    void container.offsetWidth;
-    container.innerHTML =
-        visibleBusinesses.map(featuredBusinessCard).join('');
-    container.classList.add('featured-changing');
-
-    ensureMobileFeaturedSwipe();
-    scheduleFeaturedSlotRotations(list);
+    container.innerHTML = list
+        .slice(0, visibleCount)
+        .map(featuredBusinessCard)
+        .join('');
 }
 
 window.openDirectory = () => {
-    const list = allDirectoryBusinesses
-        .filter(businessMatchesSearch)
-        .slice()
-        .sort((a, b) =>
-            String(a.name || '').localeCompare(String(b.name || ''), 'es')
-        );
+    const list = rootBusinesses().sort((a, b) =>
+        String(a.name || '').localeCompare(String(b.name || ''), 'es')
+    );
 
     const grid = document.getElementById('directoryGrid');
-    const title = document.getElementById('directoryTitle');
-
-    if (title) {
-        title.textContent = 'Todos los negocios';
-    }
 
     grid.innerHTML = list.length
         ? list.map(businessCard).join('')
@@ -8594,14 +8096,6 @@ document.addEventListener('keydown', event => {
     if (event.key === 'Escape') closeDirectory();
 });
 
-
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-        stopFeaturedRotation();
-    } else {
-        renderFeatured();
-    }
-});
 
 let featuredResizeTimer = null;
 window.addEventListener('resize', () => {
