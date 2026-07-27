@@ -5697,6 +5697,179 @@ body{
 }
 </style>
 
+
+<style id="urbanex-footer-tablet-fix-v25">
+/* ÚNICOS AJUSTES:
+   1. Pie de tarjeta más limpio y profesional.
+   2. Tarjetas de tablet con proporciones iguales a computador.
+*/
+
+/* Pie integrado, sin dos cápsulas compitiendo visualmente. */
+.ux-card .ux-card-bottom{
+  width:100%!important;
+  min-width:0!important;
+  min-height:40px!important;
+  margin-top:auto!important;
+  padding:10px 0 0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  overflow:visible!important;
+  border-top:1px solid rgba(255,255,255,.10)!important;
+  background:transparent!important;
+}
+
+/* Estado como indicador discreto, no como botón. */
+.ux-card .ux-opening-status{
+  position:static!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  max-width:42%!important;
+  min-width:0!important;
+  height:auto!important;
+  margin:0!important;
+  padding:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:6px!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:7.2px!important;
+  font-weight:400!important;
+  line-height:1!important;
+  text-transform:none!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.ux-card .ux-opening-status i{
+  width:7px!important;
+  height:7px!important;
+  flex:0 0 7px!important;
+  display:block!important;
+  border-radius:50%!important;
+  background:currentColor!important;
+  box-shadow:0 0 0 3px rgba(255,255,255,.04)!important;
+}
+
+.ux-card .ux-opening-status.is-open{
+  color:#4bd894!important;
+}
+
+.ux-card .ux-opening-status.is-closed{
+  color:#ff8a95!important;
+}
+
+/* Acción limpia, sin contenedor tipo cápsula. */
+.ux-card .ux-card-cta{
+  min-width:0!important;
+  max-width:58%!important;
+  min-height:26px!important;
+  margin:0 0 0 auto!important;
+  padding:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:7px!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:0!important;
+  color:#f1cf69!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:7.2px!important;
+  font-weight:400!important;
+  line-height:1!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.ux-card .ux-card-cta b{
+  width:25px!important;
+  height:25px!important;
+  flex:0 0 25px!important;
+  margin:0!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:50%!important;
+  color:#10151d!important;
+  background:linear-gradient(145deg,#f2d16c,#d7aa3b)!important;
+  box-shadow:0 5px 12px rgba(229,193,88,.18)!important;
+  font-size:10px!important;
+  font-weight:400!important;
+}
+
+@media(hover:hover){
+  .ux-card .ux-card-cta:hover{
+    color:#fff0b8!important;
+  }
+
+  .ux-card .ux-card-cta:hover b{
+    transform:translateX(2px)!important;
+  }
+}
+
+/* Tablet: mismas proporciones compactas del computador.
+   Las tarjetas no se estiran para llenar toda la fila. */
+@media(min-width:721px) and (max-width:1180px){
+  .ux-grid{
+    grid-template-columns:repeat(auto-fit,minmax(180px,200px))!important;
+    justify-content:center!important;
+    align-items:stretch!important;
+    gap:14px!important;
+  }
+
+  .ux-grid>.ux-card,
+  .ux-card{
+    width:100%!important;
+    max-width:200px!important;
+    min-height:252px!important;
+    justify-self:center!important;
+  }
+}
+
+@media(max-width:720px){
+  .ux-card .ux-card-bottom{
+    min-height:36px!important;
+    padding-top:8px!important;
+    gap:7px!important;
+  }
+
+  .ux-card .ux-opening-status{
+    max-width:40%!important;
+    gap:5px!important;
+    font-size:5.8px!important;
+  }
+
+  .ux-card .ux-opening-status i{
+    width:5px!important;
+    height:5px!important;
+    flex-basis:5px!important;
+    box-shadow:none!important;
+  }
+
+  .ux-card .ux-card-cta{
+    max-width:60%!important;
+    gap:5px!important;
+    font-size:6px!important;
+  }
+
+  .ux-card .ux-card-cta b{
+    width:21px!important;
+    height:21px!important;
+    flex-basis:21px!important;
+    font-size:9px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="header-top">
