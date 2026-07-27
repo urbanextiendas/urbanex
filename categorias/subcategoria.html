@@ -4060,6 +4060,177 @@ body{
 }
 </style>
 
+
+<style id="urbanex-ultimos-cambios-solicitados">
+/* ÚNICOS CAMBIOS SOLICITADOS:
+   1. Título de la subcategoría más pequeño.
+   2. Ocultar el rótulo superior retirado del HTML.
+   3. Mejorar la cabecera del listado de negocios.
+*/
+
+.ux-hero-eyebrow{
+  display:none!important;
+}
+
+/* El título nunca supera visualmente la altura del logotipo Urbanex. */
+.ux-hero h1{
+  max-width:760px!important;
+  margin:0!important;
+  font-size:clamp(24px,3vw,38px)!important;
+  line-height:1.08!important;
+  letter-spacing:clamp(.8px,.28vw,2.4px)!important;
+  overflow-wrap:anywhere!important;
+  text-wrap:balance!important;
+}
+
+/* Hero más proporcionado después de retirar el rótulo superior. */
+.ux-hero{
+  min-height:150px!important;
+  padding:26px clamp(22px,3.4vw,42px)!important;
+}
+
+.ux-hero-content{
+  width:min(760px,84%)!important;
+}
+
+.ux-hero-description{
+  max-width:620px!important;
+  margin-top:11px!important;
+}
+
+/* Cabecera del listado de negocios. */
+.ux-panel-head{
+  min-height:0!important;
+  padding:14px 16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:16px!important;
+  border:1px solid #dfe5ec!important;
+  border-left:3px solid #d7a52e!important;
+  border-radius:14px!important;
+  background:linear-gradient(135deg,#ffffff 0%,#f7f9fc 100%)!important;
+  box-shadow:0 5px 15px rgba(19,44,79,.055)!important;
+}
+
+.ux-panel-head>div:first-child{
+  min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+  gap:7px 11px!important;
+}
+
+.ux-panel-head h2{
+  margin:0!important;
+  color:#1d3557!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:clamp(18px,1.65vw,22px)!important;
+  font-weight:500!important;
+  line-height:1.2!important;
+  letter-spacing:-.2px!important;
+  text-transform:none!important;
+}
+
+.ux-panel-head p{
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0!important;
+  padding:5px 9px!important;
+  border:1px solid #e1e6ec!important;
+  border-radius:999px!important;
+  color:#667085!important;
+  background:#fff!important;
+  font-size:9px!important;
+  font-weight:400!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+
+.ux-panel-actions{
+  flex:0 0 auto!important;
+  margin:0!important;
+}
+
+.ux-panel-actions input,
+.ux-panel-actions select{
+  height:38px!important;
+  border-radius:10px!important;
+  font-size:9.5px!important;
+}
+
+@media(max-width:820px){
+  .ux-hero{
+    min-height:136px!important;
+    padding:22px 20px!important;
+  }
+
+  .ux-hero h1{
+    font-size:clamp(23px,5.4vw,32px)!important;
+    letter-spacing:.8px!important;
+  }
+
+  .ux-panel-head{
+    align-items:flex-start!important;
+  }
+
+  .ux-panel-head>div:first-child{
+    display:block!important;
+  }
+
+  .ux-panel-head p{
+    margin-top:7px!important;
+  }
+}
+
+@media(max-width:620px){
+  .ux-hero{
+    min-height:120px!important;
+    padding:18px 15px!important;
+  }
+
+  .ux-hero-content{
+    width:100%!important;
+  }
+
+  .ux-hero h1{
+    font-size:clamp(21px,7vw,28px)!important;
+    line-height:1.1!important;
+    letter-spacing:.35px!important;
+  }
+
+  .ux-hero-description{
+    margin-top:8px!important;
+    font-size:9.5px!important;
+  }
+
+  .ux-panel-head{
+    padding:12px!important;
+    border-radius:12px!important;
+  }
+
+  .ux-panel-head h2{
+    font-size:18px!important;
+  }
+
+  .ux-panel-head p{
+    padding:4px 8px!important;
+    font-size:8.5px!important;
+  }
+
+  .ux-panel-actions{
+    width:100%!important;
+    margin-top:11px!important;
+  }
+
+  .ux-panel-actions input,
+  .ux-panel-actions select{
+    width:100%!important;
+    height:38px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="header-top">
@@ -4123,7 +4294,6 @@ body{
     <div class="ux-main-inner">
       <section class="ux-hero" aria-labelledby="pageTitle">
         <div class="ux-hero-content">
-          <span class="ux-hero-eyebrow">Urbanex · Directorio comercial</span>
           <h1 id="pageTitle">SUBCATEGORÍA</h1>
           <p class="ux-hero-description">Encuentre empresas, productos y servicios seleccionados dentro de esta subcategoría.</p>
         </div>
