@@ -3024,19 +3024,471 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 }
 </style>
 
+<style id="urbanex-index-boulevard-header">
+:root{
+  --urbanex-fixed-header:60px!important;
+}
+
+.site-header.header-top{
+  position:fixed!important;
+  top:0!important;
+  right:0!important;
+  left:0!important;
+  z-index:2147483646!important;
+  width:100%!important;
+  height:60px!important;
+  min-height:60px!important;
+  margin:0!important;
+  padding:0 20px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:18px!important;
+  overflow:visible!important;
+  border:0!important;
+  border-bottom:1px solid rgba(229,193,88,.15)!important;
+  background:rgba(6,6,6,.94)!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.22)!important;
+  backdrop-filter:blur(20px)!important;
+  -webkit-backdrop-filter:blur(20px)!important;
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
+}
+
+.site-header.header-top::after{
+  display:none!important;
+  content:none!important;
+}
+
+.site-header.header-top .brand-box{
+  min-width:164px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  flex:0 0 auto!important;
+  text-decoration:none!important;
+}
+
+.site-header.header-top .brand-box img{
+  display:block!important;
+  width:auto!important;
+  max-width:170px!important;
+  height:56px!important;
+  margin:0!important;
+  object-fit:contain!important;
+  filter:none!important;
+  transform:none!important;
+}
+
+.site-header.header-top .search-wrapper{
+  position:relative!important;
+  width:100%!important;
+  max-width:400px!important;
+  flex:1 1 400px!important;
+  margin:0 auto!important;
+}
+
+.site-header.header-top .search-input{
+  width:100%!important;
+  height:36px!important;
+  margin:0!important;
+  padding:0 42px 0 16px!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  border-radius:999px!important;
+  outline:0!important;
+  color:#fff!important;
+  background:rgba(0,0,0,.45)!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:11px!important;
+  font-weight:400!important;
+  text-align:center!important;
+  box-shadow:none!important;
+}
+
+.site-header.header-top .search-input::placeholder{
+  color:#aaa!important;
+  opacity:1!important;
+}
+
+.site-header.header-top .search-input:focus{
+  border-color:#e5c158!important;
+  background:rgba(0,0,0,.68)!important;
+}
+
+.site-header.header-top .search-icon{
+  position:absolute!important;
+  top:50%!important;
+  right:14px!important;
+  width:14px!important;
+  height:14px!important;
+  display:block!important;
+  fill:#aaa!important;
+  cursor:pointer!important;
+  transform:translateY(-50%)!important;
+}
+
+.site-header.header-top .search-icon:hover{
+  fill:#e5c158!important;
+}
+
+.site-header.header-top .search-results-panel{
+  position:absolute!important;
+  top:calc(100% + 8px)!important;
+  right:0!important;
+  left:0!important;
+  z-index:100!important;
+  max-height:min(420px,calc(100vh - 90px))!important;
+  display:none!important;
+  overflow-y:auto!important;
+  border:1px solid rgba(229,193,88,.28)!important;
+  border-radius:12px!important;
+  background:rgba(6,6,6,.97)!important;
+  box-shadow:0 18px 45px rgba(0,0,0,.65)!important;
+}
+
+.site-header.header-top .user-tools{
+  min-width:164px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  flex:0 0 auto!important;
+}
+
+.site-header.header-top .location-picker{
+  position:relative!important;
+  width:auto!important;
+}
+
+.site-header.header-top .location-picker-button{
+  width:148px!important;
+  min-width:148px!important;
+  max-width:148px!important;
+  height:36px!important;
+  padding:0 10px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  overflow:hidden!important;
+  border:1px solid rgba(229,193,88,.42)!important;
+  border-radius:999px!important;
+  color:#fff!important;
+  background:rgba(0,0,0,.42)!important;
+  cursor:pointer!important;
+}
+
+.site-header.header-top .location-picker-button svg{
+  width:13px!important;
+  height:13px!important;
+  flex:0 0 13px!important;
+  fill:#e5c158!important;
+}
+
+.site-header.header-top #locationPickerLabel{
+  min-width:0!important;
+  flex:1 1 auto!important;
+  overflow:hidden!important;
+  color:#fff!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  text-align:left!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.site-header.header-top .location-picker-chevron{
+  flex:0 0 auto!important;
+  margin-left:auto!important;
+  color:#e5c158!important;
+}
+
+.site-header.header-top .location-picker-panel{
+  position:absolute!important;
+  top:calc(100% + 10px)!important;
+  right:0!important;
+  z-index:1200!important;
+  width:min(310px,calc(100vw - 24px))!important;
+  padding:15px!important;
+  overflow-y:auto!important;
+  border:1px solid rgba(229,193,88,.35)!important;
+  border-radius:14px!important;
+  color:#fff!important;
+  background:rgba(8,8,8,.98)!important;
+  box-shadow:0 18px 42px rgba(0,0,0,.48)!important;
+}
+
+.site-header.header-top .location-picker-panel[hidden]{
+  display:none!important;
+}
+
+.site-header.header-top .location-picker-title{
+  margin-bottom:12px!important;
+  color:#e5c158!important;
+  font-size:12px!important;
+  font-weight:600!important;
+}
+
+.site-header.header-top .location-picker-field{
+  display:block!important;
+  margin-bottom:10px!important;
+}
+
+.site-header.header-top .location-picker-field>span{
+  display:block!important;
+  margin-bottom:5px!important;
+  color:#ddd!important;
+  font-size:10px!important;
+  font-weight:500!important;
+}
+
+.site-header.header-top .location-picker-field select{
+  width:100%!important;
+  height:39px!important;
+  padding:0 10px!important;
+  border:1px solid #343a43!important;
+  border-radius:9px!important;
+  outline:0!important;
+  color:#fff!important;
+  background:#111!important;
+  font-size:11px!important;
+}
+
+.site-header.header-top .location-picker-field option{
+  color:#111!important;
+  background:#fff!important;
+}
+
+.site-header.header-top .location-picker-actions{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:8px!important;
+  margin-top:4px!important;
+}
+
+.site-header.header-top .location-picker-actions button{
+  height:38px!important;
+  border-radius:9px!important;
+  font-family:Montserrat,Arial,sans-serif!important;
+  font-size:10px!important;
+  font-weight:600!important;
+  cursor:pointer!important;
+}
+
+.site-header.header-top .location-picker-cancel{
+  border:1px solid rgba(255,255,255,.15)!important;
+  color:#ddd!important;
+  background:transparent!important;
+}
+
+.site-header.header-top .location-picker-apply{
+  border:1px solid #e5c158!important;
+  color:#090909!important;
+  background:#e5c158!important;
+}
+
+.site-header.header-top .location-picker-apply:hover{
+  background:#f1cd6b!important;
+}
+
+@media(max-width:720px){
+  :root{
+    --urbanex-fixed-header:104px!important;
+  }
+
+  .site-header.header-top{
+    height:104px!important;
+    min-height:104px!important;
+    padding:7px 12px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-rows:52px 38px!important;
+    grid-template-areas:
+      "brand tools"
+      "search search"!important;
+    gap:6px 10px!important;
+  }
+
+  .site-header.header-top .brand-box{
+    grid-area:brand!important;
+    width:auto!important;
+    min-width:0!important;
+  }
+
+  .site-header.header-top .brand-box img{
+    width:auto!important;
+    max-width:158px!important;
+    height:48px!important;
+  }
+
+  .site-header.header-top .search-wrapper{
+    grid-area:search!important;
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+  }
+
+  .site-header.header-top .search-input{
+    height:38px!important;
+  }
+
+  .site-header.header-top .user-tools{
+    grid-area:tools!important;
+    width:auto!important;
+    min-width:0!important;
+    justify-self:end!important;
+    align-self:center!important;
+  }
+
+  .site-header.header-top .location-picker-button{
+    width:148px!important;
+    min-width:0!important;
+    max-width:148px!important;
+  }
+
+  .site-header.header-top .location-picker-panel{
+    position:fixed!important;
+    top:108px!important;
+    right:10px!important;
+    left:10px!important;
+    width:auto!important;
+    max-height:calc(100svh - 132px)!important;
+    padding:14px!important;
+  }
+}
+
+@media(max-width:390px){
+  .site-header.header-top{
+    grid-template-columns:minmax(0,1fr) 126px!important;
+    padding-right:10px!important;
+    padding-left:10px!important;
+  }
+
+  .site-header.header-top .brand-box img{
+    max-width:142px!important;
+    height:44px!important;
+  }
+
+  .site-header.header-top .location-picker,
+  .site-header.header-top .location-picker-button{
+    width:126px!important;
+    max-width:126px!important;
+  }
+
+  .site-header.header-top #locationPickerLabel{
+    font-size:9.5px!important;
+  }
+}
+</style>
 </head>
 
 <body>
-<header class="site-header">
-  <a id="backLogo" class="brand" href="../boulevard.html" aria-label="Volver">
-    <img src="../imagenes/logo.png" alt="Urbanex">
+<header class="site-header header-top">
+  <a
+    id="backLogo"
+    class="brand-box"
+    href="../boulevard.html"
+    title="Volver al Boulevard"
+    aria-label="Volver al Boulevard"
+  >
+    <img src="../imagenes/logo.png" alt="Logo Urbanex">
   </a>
 
-  <nav class="site-nav" aria-label="Navegación principal">
-    <a id="backLink" href="../boulevard.html">Volver</a>
-    <a href="../boulevard.html">Boulevard</a>
-    <a href="../index.html">Inicio</a>
-  </nav>
+  <div class="search-wrapper">
+    <input
+      type="search"
+      id="siteSearch"
+      class="search-input"
+      placeholder="¿Qué producto o servicio busca?"
+      autocomplete="off"
+      aria-label="Buscar en Urbanex"
+    >
+    <svg
+      class="search-icon"
+      id="searchButton"
+      viewBox="0 0 24 24"
+      role="button"
+      tabindex="0"
+      aria-label="Buscar"
+    >
+      <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+    </svg>
+    <div
+      class="search-results-panel"
+      id="searchResults"
+      aria-live="polite"
+    ></div>
+  </div>
+
+  <div class="user-tools">
+    <div class="location-picker" id="locationPicker">
+      <button
+        class="location-indicator location-picker-button"
+        id="locationPickerButton"
+        type="button"
+        aria-expanded="false"
+        aria-controls="locationPickerPanel"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
+        </svg>
+
+        <span id="locationPickerLabel">Todo Ecuador</span>
+        <span class="location-picker-chevron" aria-hidden="true">⌄</span>
+      </button>
+
+      <div
+        class="location-picker-panel"
+        id="locationPickerPanel"
+        hidden
+      >
+        <div class="location-picker-title">¿Dónde desea buscar?</div>
+
+        <label class="location-picker-field" for="provinceSelect">
+          <span>Provincia</span>
+          <select
+            id="provinceSelect"
+            aria-label="Seleccionar provincia"
+          ></select>
+        </label>
+
+        <label class="location-picker-field" for="citySelect">
+          <span>Ciudad / cantón</span>
+          <select
+            id="citySelect"
+            aria-label="Seleccionar ciudad o cantón"
+          ></select>
+        </label>
+
+        <div class="location-picker-actions">
+          <button
+            class="location-picker-cancel"
+            id="locationPickerCancel"
+            type="button"
+          >
+            Cancelar
+          </button>
+
+          <button
+            class="location-picker-apply"
+            id="locationPickerApply"
+            type="button"
+          >
+            Aplicar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Se conserva para la lógica de retorno existente, sin mostrarlo. -->
+  <a
+    id="backLink"
+    href="../boulevard.html"
+    hidden
+    aria-hidden="true"
+    tabindex="-1"
+  ></a>
 </header>
 
 <main class="page-shell">
@@ -3871,6 +4323,224 @@ loadPage();
   window.addEventListener('load', enforceFixedChrome);
   window.addEventListener('resize', enforceFixedChrome, { passive:true });
   window.addEventListener('orientationchange', enforceFixedChrome, { passive:true });
+})();
+</script>
+<script id="urbanex-index-boulevard-header-script">
+(function () {
+  "use strict";
+
+  const searchInput = document.getElementById("siteSearch");
+  const searchButton = document.getElementById("searchButton");
+  const locationButton = document.getElementById("locationPickerButton");
+  const locationPanel = document.getElementById("locationPickerPanel");
+  const locationLabel = document.getElementById("locationPickerLabel");
+  const provinceSelect = document.getElementById("provinceSelect");
+  const citySelect = document.getElementById("citySelect");
+  const cancelButton = document.getElementById("locationPickerCancel");
+  const applyButton = document.getElementById("locationPickerApply");
+
+  const provinces = [
+    "Azuay",
+    "Bolívar",
+    "Cañar",
+    "Carchi",
+    "Chimborazo",
+    "Cotopaxi",
+    "El Oro",
+    "Esmeraldas",
+    "Galápagos",
+    "Guayas",
+    "Imbabura",
+    "Loja",
+    "Los Ríos",
+    "Manabí",
+    "Morona Santiago",
+    "Napo",
+    "Orellana",
+    "Pastaza",
+    "Pichincha",
+    "Santa Elena",
+    "Santo Domingo de los Tsáchilas",
+    "Sucumbíos",
+    "Tungurahua",
+    "Zamora Chinchipe"
+  ];
+
+  const storageKey = "urbanex_location_header_v1";
+
+  const readLocation = function () {
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+
+      return {
+        province: saved.province || "__all__",
+        city: saved.city || "__all__"
+      };
+    } catch (error) {
+      return {
+        province: "__all__",
+        city: "__all__"
+      };
+    }
+  };
+
+  const updateCityOptions = function (province, selectedCity) {
+    if (!citySelect) return;
+
+    if (province === "__all__") {
+      citySelect.innerHTML =
+        '<option value="__all__">Todo Ecuador</option>';
+      citySelect.value = "__all__";
+      citySelect.disabled = true;
+      return;
+    }
+
+    citySelect.disabled = false;
+    citySelect.innerHTML =
+      '<option value="__province__">Toda la provincia de ' +
+      province.replace(/&/g, "&amp;").replace(/</g, "&lt;") +
+      "</option>";
+
+    citySelect.value =
+      selectedCity === "__province__"
+        ? "__province__"
+        : "__province__";
+  };
+
+  const updateLabel = function (province, city) {
+    if (!locationLabel) return;
+
+    if (province === "__all__") {
+      locationLabel.textContent = "Todo Ecuador";
+      return;
+    }
+
+    locationLabel.textContent =
+      city === "__province__" || city === "__all__"
+        ? province
+        : city + ", " + province;
+  };
+
+  const populateLocation = function () {
+    if (!provinceSelect || !citySelect) return;
+
+    const saved = readLocation();
+
+    provinceSelect.innerHTML = [
+      '<option value="__all__">Todo Ecuador</option>',
+      ...provinces.map(function (province) {
+        const escaped = province
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;");
+
+        return (
+          '<option value="' +
+          escaped +
+          '">' +
+          escaped +
+          "</option>"
+        );
+      })
+    ].join("");
+
+    provinceSelect.value = provinces.includes(saved.province)
+      ? saved.province
+      : "__all__";
+
+    updateCityOptions(provinceSelect.value, saved.city);
+    updateLabel(provinceSelect.value, citySelect.value);
+  };
+
+  const setPanelOpen = function (open) {
+    if (!locationPanel || !locationButton) return;
+
+    locationPanel.hidden = !open;
+    locationButton.setAttribute("aria-expanded", String(open));
+  };
+
+  const runSearch = function () {
+    const query = String(searchInput?.value || "").trim();
+
+    if (!query) {
+      window.location.href = "../boulevard.html";
+      return;
+    }
+
+    try {
+      sessionStorage.setItem("urbanex_pending_search", query);
+    } catch (error) {}
+
+    window.location.href =
+      "../boulevard.html?buscar=" + encodeURIComponent(query);
+  };
+
+  searchButton?.addEventListener("click", runSearch);
+
+  searchButton?.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      runSearch();
+    }
+  });
+
+  searchInput?.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      runSearch();
+    }
+  });
+
+  locationButton?.addEventListener("click", function () {
+    setPanelOpen(locationPanel?.hidden !== false);
+  });
+
+  provinceSelect?.addEventListener("change", function () {
+    updateCityOptions(provinceSelect.value, "__province__");
+  });
+
+  cancelButton?.addEventListener("click", function () {
+    populateLocation();
+    setPanelOpen(false);
+  });
+
+  applyButton?.addEventListener("click", function () {
+    const province = provinceSelect?.value || "__all__";
+    const city = citySelect?.value || "__all__";
+
+    try {
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify({
+          province: province,
+          city: city
+        })
+      );
+    } catch (error) {}
+
+    updateLabel(province, city);
+    setPanelOpen(false);
+  });
+
+  document.addEventListener("click", function (event) {
+    const picker = document.getElementById("locationPicker");
+
+    if (
+      picker &&
+      !picker.contains(event.target) &&
+      locationPanel &&
+      !locationPanel.hidden
+    ) {
+      setPanelOpen(false);
+    }
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      setPanelOpen(false);
+    }
+  });
+
+  populateLocation();
 })();
 </script>
 </body>
