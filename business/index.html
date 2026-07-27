@@ -3751,6 +3751,54 @@ body{
 }
 </style>
 
+
+<style id="urbanex-business-logo-autofit-final-v3">
+/* ÚNICO AJUSTE: adaptación automática del logo a su recuadro. */
+.hero-company-logo-shell{
+  position:relative!important;
+  padding:0!important;
+  display:block!important;
+  overflow:hidden!important;
+  background:#fff!important;
+}
+
+.hero-company-logo-image{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:100%!important;
+  min-height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0!important;
+  display:block!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  border-radius:inherit!important;
+  background:#fff!important;
+  transform:none!important;
+  transform-origin:center!important;
+}
+
+/* Respaldo para imágenes cuyo recorte automático no puede analizarse. */
+.hero-company-logo-image[data-urbanex-logo-fit="contain"]{
+  object-fit:contain!important;
+  inset:4%!important;
+  width:92%!important;
+  height:92%!important;
+  min-width:0!important;
+  min-height:0!important;
+}
+
+.hero-company-logo-fallback{
+  width:100%!important;
+  height:100%!important;
+  border-radius:inherit!important;
+}
+</style>
+
 </head>
 
 <body>
@@ -4925,27 +4973,56 @@ loadPage();
 </script>
 
 
-<script id="urbanex-business-logo-autofit-script-v2">
+<script id="urbanex-business-logo-autofit-script-v3">
 (function () {
   "use strict";
 
-  const IMAGE_SELECTOR = ".hero-company-logo-image";
-  const SHELL_SELECTOR = ".hero-company-logo-shell";
+  const SELECTOR = ".hero-company-logo-image";
 
-  function applyFallback(image) {
-    image.dataset.urbanexLogoFit = "fallback";
+  function resetImage(image) {
+    image.removeAttribute("data-urbanex-logo-fit");
+
+    [
+      "top",
+      "left",
+      "right",
+      "bottom",
+      "width",
+      "height",
+      "min-width",
+      "min-height",
+      "max-width",
+      "max-height",
+      "object-fit",
+      "transform"
+    ].forEach(function (property) {
+      image.style.removeProperty(property);
+    });
   }
 
-  function detectVisibleBounds(sourceImage) {
-    const naturalWidth = sourceImage.naturalWidth;
-    const naturalHeight = sourceImage.naturalHeight;
+  function useRatioFallback(image) {
+    resetImage(image);
+
+    const ratio =
+      image.naturalWidth && image.naturalHeight
+        ? image.naturalWidth / image.naturalHeight
+        : 1;
+
+    if (ratio < 0.72 || ratio > 1.38) {
+      image.dataset.urbanexLogoFit = "contain";
+    }
+  }
+
+  function detectContentBounds(image) {
+    const naturalWidth = image.naturalWidth;
+    const naturalHeight = image.naturalHeight;
 
     if (!naturalWidth || !naturalHeight) return null;
 
-    const maxAnalysisSize = 700;
+    const maxSide = 720;
     const reduction = Math.min(
       1,
-      maxAnalysisSize / Math.max(naturalWidth, naturalHeight)
+      maxSide / Math.max(naturalWidth, naturalHeight)
     );
 
     const canvas = document.createElement("canvas");
@@ -4958,10 +5035,9 @@ loadPage();
 
     if (!context) return null;
 
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(sourceImage, 0, 0, canvas.width, canvas.height);
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-    const pixels = context.getImageData(
+    const data = context.getImageData(
       0,
       0,
       canvas.width,
@@ -4976,51 +5052,48 @@ loadPage();
     for (let y = 0; y < canvas.height; y += 1) {
       for (let x = 0; x < canvas.width; x += 1) {
         const index = (y * canvas.width + x) * 4;
-        const red = pixels[index];
-        const green = pixels[index + 1];
-        const blue = pixels[index + 2];
-        const alpha = pixels[index + 3];
+        const red = data[index];
+        const green = data[index + 1];
+        const blue = data[index + 2];
+        const alpha = data[index + 3];
 
         if (alpha < 18) continue;
 
-        const distanceFromWhite =
+        const whiteDistance =
           (255 - red) +
           (255 - green) +
           (255 - blue);
 
-        const channelDifference =
+        const chroma =
           Math.max(red, green, blue) -
           Math.min(red, green, blue);
 
-        const isVisibleContent =
-          distanceFromWhite > 45 ||
-          channelDifference > 24;
+        if (whiteDistance <= 32 && chroma <= 18) continue;
 
-        if (!isVisibleContent) continue;
-
-        if (x < minX) minX = x;
-        if (x > maxX) maxX = x;
-        if (y < minY) minY = y;
-        if (y > maxY) maxY = y;
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x);
+        maxY = Math.max(maxY, y);
       }
     }
 
     if (maxX < minX || maxY < minY) return null;
 
-    const inverseReduction = 1 / reduction;
+    const inverse = 1 / reduction;
 
     return {
-      x: minX * inverseReduction,
-      y: minY * inverseReduction,
-      width: (maxX - minX + 1) * inverseReduction,
-      height: (maxY - minY + 1) * inverseReduction
+      x: minX * inverse,
+      y: minY * inverse,
+      width: (maxX - minX + 1) * inverse,
+      height: (maxY - minY + 1) * inverse
     };
   }
 
   function positionImage(image, bounds) {
-    const shell = image.closest(SHELL_SELECTOR);
+    const shell = image.closest(".hero-company-logo-shell");
+
     if (!shell || !bounds) {
-      applyFallback(image);
+      useRatioFallback(image);
       return;
     }
 
@@ -5037,15 +5110,19 @@ loadPage();
       !bounds.width ||
       !bounds.height
     ) {
-      applyFallback(image);
+      useRatioFallback(image);
       return;
     }
 
-    const innerRatio = 0.88;
+    /*
+      0.98 aprovecha casi todo el recuadro.
+      No deja el margen excesivo que tenía la versión anterior.
+    */
+    const fillRatio = 0.98;
 
     const scale = Math.min(
-      (shellWidth * innerRatio) / bounds.width,
-      (shellHeight * innerRatio) / bounds.height
+      (shellWidth * fillRatio) / bounds.width,
+      (shellHeight * fillRatio) / bounds.height
     );
 
     const renderedWidth = naturalWidth * scale;
@@ -5053,79 +5130,85 @@ loadPage();
 
     const left =
       ((shellWidth - bounds.width * scale) / 2) -
-      bounds.x * scale;
+      (bounds.x * scale);
 
     const top =
       ((shellHeight - bounds.height * scale) / 2) -
-      bounds.y * scale;
+      (bounds.y * scale);
 
-    image.dataset.urbanexLogoFit = "ready";
+    resetImage(image);
+    image.dataset.urbanexLogoFit = "cropped";
 
     image.style.setProperty("position", "absolute", "important");
+    image.style.setProperty("inset", "auto", "important");
     image.style.setProperty("width", renderedWidth + "px", "important");
     image.style.setProperty("height", renderedHeight + "px", "important");
-    image.style.setProperty("top", top + "px", "important");
-    image.style.setProperty("left", left + "px", "important");
+    image.style.setProperty("min-width", "0", "important");
+    image.style.setProperty("min-height", "0", "important");
     image.style.setProperty("max-width", "none", "important");
     image.style.setProperty("max-height", "none", "important");
+    image.style.setProperty("left", left + "px", "important");
+    image.style.setProperty("top", top + "px", "important");
     image.style.setProperty("object-fit", "fill", "important");
     image.style.setProperty("transform", "none", "important");
   }
 
-  function fitLogo(image) {
+  function fitImage(image) {
     if (!(image instanceof HTMLImageElement)) return;
 
-    const source = image.currentSrc || image.src;
-    if (!source) return;
-
-    const probe = new Image();
-    probe.crossOrigin = "anonymous";
-    probe.decoding = "async";
-
-    probe.onload = function () {
+    const process = function () {
       try {
-        const bounds = detectVisibleBounds(probe);
+        /*
+          Se analiza la misma imagen ya cargada. Si el servidor no permite
+          leerla mediante canvas, se utiliza el respaldo por proporción.
+        */
+        const bounds = detectContentBounds(image);
 
-        if (!bounds) {
-          applyFallback(image);
-          return;
+        if (bounds) {
+          positionImage(image, bounds);
+        } else {
+          useRatioFallback(image);
         }
-
-        positionImage(image, bounds);
       } catch (error) {
-        applyFallback(image);
+        useRatioFallback(image);
       }
     };
 
-    probe.onerror = function () {
-      applyFallback(image);
-    };
+    if (image.complete && image.naturalWidth) {
+      window.requestAnimationFrame(process);
+    } else {
+      image.addEventListener("load", function () {
+        window.requestAnimationFrame(process);
+      }, { once: true });
 
-    probe.src = source;
+      image.addEventListener("error", function () {
+        useRatioFallback(image);
+      }, { once: true });
+    }
   }
 
-  function fitAllLogos() {
-    document.querySelectorAll(IMAGE_SELECTOR).forEach(fitLogo);
+  function fitAll() {
+    document.querySelectorAll(SELECTOR).forEach(fitImage);
   }
 
   const observer = new MutationObserver(function (mutations) {
-    let logoAdded = false;
+    let changed = false;
 
     mutations.forEach(function (mutation) {
       mutation.addedNodes.forEach(function (node) {
         if (!(node instanceof Element)) return;
 
         if (
-          node.matches?.(IMAGE_SELECTOR) ||
-          node.querySelector?.(IMAGE_SELECTOR)
+          node.matches?.(SELECTOR) ||
+          node.querySelector?.(SELECTOR)
         ) {
-          logoAdded = true;
+          changed = true;
         }
       });
     });
 
-    if (logoAdded) {
-      window.requestAnimationFrame(fitAllLogos);
+    if (changed) {
+      window.requestAnimationFrame(fitAll);
     }
   });
 
@@ -5134,21 +5217,17 @@ loadPage();
     subtree: true
   });
 
-  window.addEventListener("load", fitAllLogos);
+  window.addEventListener("load", fitAll);
 
   let resizeTimer = 0;
 
-  window.addEventListener(
-    "resize",
-    function () {
-      window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(fitAllLogos, 120);
-    },
-    { passive: true }
-  );
+  window.addEventListener("resize", function () {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(fitAll, 120);
+  }, { passive: true });
 
-  [250, 700, 1400, 2600].forEach(function (delay) {
-    window.setTimeout(fitAllLogos, delay);
+  [200, 600, 1200, 2200].forEach(function (delay) {
+    window.setTimeout(fitAll, delay);
   });
 })();
 </script>
