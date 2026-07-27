@@ -3568,7 +3568,7 @@ body{
 }
 </style>
 
-<style id="urbanex-logo-fit-real-v6">
+<style id="urbanex-logo-fit-contain-v7">
 /* ÚNICO CAMBIO: el contenido real de todos los logos llena el recuadro. */
 .hero-company-logo-shell{
   position:relative!important;
@@ -3608,13 +3608,13 @@ body{
 
 /* Respaldo cuando el servidor no permite analizar píxeles. */
 .hero-company-logo-image[data-urbanex-fit="fallback"]{
-  top:50%!important;
-  left:50%!important;
+  top:0!important;
+  left:0!important;
   width:100%!important;
   height:100%!important;
-  object-fit:cover!important;
+  object-fit:contain!important;
   object-position:center!important;
-  transform:translate(-50%,-50%) scale(1.38)!important;
+  transform:none!important;
 }
 
 .hero-company-logo-fallback{
@@ -4799,14 +4799,14 @@ loadPage();
 })();
 </script>
 
-<script id="urbanex-logo-fit-real-script-v6">
+<script id="urbanex-logo-fit-contain-script-v7">
 (function () {
   "use strict";
 
   const IMAGE_SELECTOR = ".hero-company-logo-image";
   const SHELL_SELECTOR = ".hero-company-logo-shell";
   const MAX_ANALYSIS_SIDE = 900;
-  const INNER_FILL = 1.01;
+  const INNER_FILL = 0.96;
   const SAFE_MARGIN = 0.018;
 
   function clearFit(image) {
@@ -5062,10 +5062,10 @@ loadPage();
     }
 
     /*
-      MAX, no MIN: el área útil detectada cubre todo el recuadro,
-      igual que object-fit: cover.
+      MIN: el área útil detectada se muestra completa dentro
+      del recuadro, sin cortar texto, símbolos ni bordes.
     */
-    const scale = Math.max(
+    const scale = Math.min(
       (shellWidth * INNER_FILL) / bounds.width,
       (shellHeight * INNER_FILL) / bounds.height
     );
