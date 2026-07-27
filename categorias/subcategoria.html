@@ -5480,6 +5480,58 @@ body{
 }
 </style>
 
+
+<style id="urbanex-remove-location-boxes-v20">
+/* ÚNICO AJUSTE: quitar los recuadros de Ubicación y Ciudad. */
+.ux-company-meta{
+  gap:0!important;
+  padding:9px 0!important;
+  border-top:1px solid rgba(255,255,255,.10)!important;
+  border-bottom:1px solid rgba(255,255,255,.10)!important;
+  background:transparent!important;
+}
+
+.ux-company-location,
+.ux-company-city{
+  min-height:38px!important;
+  padding:0 10px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+
+.ux-company-location{
+  padding-left:0!important;
+}
+
+.ux-company-city{
+  padding-right:0!important;
+  border-left:1px solid rgba(255,255,255,.10)!important;
+}
+
+@media(max-width:720px){
+  .ux-company-meta{
+    padding:7px 0!important;
+  }
+
+  .ux-company-location,
+  .ux-company-city{
+    min-height:34px!important;
+    padding-right:6px!important;
+    padding-left:6px!important;
+  }
+
+  .ux-company-location{
+    padding-left:0!important;
+  }
+
+  .ux-company-city{
+    padding-right:0!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="header-top">
