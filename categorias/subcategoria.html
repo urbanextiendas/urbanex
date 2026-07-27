@@ -4026,6 +4026,40 @@ body{
 }
 </style>
 
+
+<style id="urbanex-subcategory-performance-final">
+.ux-card{
+  content-visibility:auto!important;
+  contain:layout paint style!important;
+  contain-intrinsic-size:206px 220px!important;
+}
+
+.ux-company-logo img,
+.ux-logo img,
+.ux-card-media img{
+  will-change:auto!important;
+}
+
+@media(max-width:620px){
+  .ux-reveal{
+    opacity:1!important;
+    animation:none!important;
+  }
+
+  .ux-card{
+    transition:none!important;
+    box-shadow:0 5px 14px rgba(7,12,20,.16)!important;
+    contain-intrinsic-size:220px 230px!important;
+  }
+
+  .header-top,
+  .ux-panel-head{
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header class="header-top">
@@ -4097,7 +4131,7 @@ body{
       </section>
       <section class="ux-business-panel">
         <div class="ux-panel-head"><div><h2 id="panelTitle">Negocios</h2><p id="businessCount" role="status" aria-live="polite">Cargando negocios...</p></div><div class="ux-panel-actions"><input id="panelSearch" type="search" placeholder="Buscar negocio" aria-label="Buscar negocio en esta subcategoría"><select id="sortBusiness" aria-label="Ordenar negocios"><option value="featured">Destacados primero</option><option value="name">Nombre A–Z</option></select></div></div>
-        <div id="businessGrid" class="ux-grid"><div class="ux-empty">Cargando</div></div>
+        <div id="businessGrid" class="ux-grid"><div class="ux-empty">Cargando...</div></div>
       </section>
     </div>
   </main>
@@ -4222,10 +4256,11 @@ document.addEventListener("DOMContentLoaded", function () {
 (function () {
   "use strict";
 
-  const GRID_SELECTOR = "#businessGrid";
-  const CARD_SELECTOR = ".ux-card";
-  const LOGO_CONTAINER_SELECTOR = ".ux-company-logo, .ux-logo, .ux-card-media";
-  const LOGO_IMAGE_SELECTOR = ".ux-company-logo-img, .ux-company-logo img, .ux-logo img, .ux-card-media img, .ux-card-primary-logo";
+  const grid = document.getElementById("businessGrid");
+  if (!grid) return;
+
+  const queuedCards = new Set();
+  let framePending = false;
 
   const normalize = function (value) {
     return String(value || "")
@@ -4238,454 +4273,264 @@ document.addEventListener("DOMContentLoaded", function () {
   const parseMinutes = function (value) {
     const match = String(value || "").match(/(\d{1,2})\s*:\s*(\d{2})/);
     if (!match) return null;
+
     const hours = Number(match[1]);
     const minutes = Number(match[2]);
-    if (!Number.isFinite(hours) || !Number.isFinite(minutes) || hours > 23 || minutes > 59) return null;
+
+    if (
+      !Number.isFinite(hours) ||
+      !Number.isFinite(minutes) ||
+      hours < 0 ||
+      hours > 23 ||
+      minutes < 0 ||
+      minutes > 59
+    ) {
+      return null;
+    }
+
     return (hours * 60) + minutes;
   };
 
-  const ecuadorNow = function () {
+  const currentMinutes = function () {
     try {
       const parts = new Intl.DateTimeFormat("es-EC", {
         timeZone: "America/Guayaquil",
-        weekday: "long",
         hour: "2-digit",
         minute: "2-digit",
         hour12: false
       }).formatToParts(new Date());
 
-      const values = {};
+      let hour = 0;
+      let minute = 0;
+
       parts.forEach(function (part) {
-        values[part.type] = part.value;
+        if (part.type === "hour") hour = Number(part.value);
+        if (part.type === "minute") minute = Number(part.value);
       });
 
-      return {
-        day: normalize(values.weekday),
-        minutes: (Number(values.hour) * 60) + Number(values.minute)
-      };
+      return (hour * 60) + minute;
     } catch (error) {
       const now = new Date();
-      const days = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-      return {
-        day: days[now.getDay()],
-        minutes: (now.getHours() * 60) + now.getMinutes()
-      };
+      return (now.getHours() * 60) + now.getMinutes();
     }
   };
 
-  const explicitStatus = function (card) {
-    const attributeNames = [
-      "data-opening-status",
-      "data-open-status",
-      "data-estado-horario",
-      "data-estado",
-      "data-status"
-    ];
+  const resolveStatus = function (card) {
+    const directValue = normalize([
+      card.dataset.openingStatus,
+      card.dataset.openStatus,
+      card.dataset.estadoHorario,
+      card.dataset.estado,
+      card.dataset.status,
+      card.querySelector(".ux-badge, .status-open, .status-closed, .status-indicator")?.textContent
+    ].filter(Boolean).join(" "));
 
-    const values = [];
+    if (/(proximo|pronto|apertura|soon)/.test(directValue)) return "upcoming";
+    if (/(cerrado|closed|inactivo|no disponible)/.test(directValue)) return "closed";
+    if (/(abierto|open|disponible|activo)/.test(directValue)) return "open";
 
-    [card].concat(Array.from(card.querySelectorAll("*"))).forEach(function (element) {
-      attributeNames.forEach(function (name) {
-        if (element.hasAttribute && element.hasAttribute(name)) {
-          values.push(element.getAttribute(name));
-        }
-      });
-    });
+    const openValue =
+      card.dataset.openTime ||
+      card.dataset.horaApertura ||
+      card.querySelector("[data-open-time]")?.dataset.openTime ||
+      card.querySelector("[data-hora-apertura]")?.dataset.horaApertura;
 
-    const existing = card.querySelector(".ux-badge, .status-open, .status-closed, .status-indicator");
-    if (existing) values.push(existing.textContent);
-
-    const value = normalize(values.join(" "));
-
-    if (/(proximo|pronto|soon|apertura)/.test(value)) return "upcoming";
-    if (/(cerrado|closed|inactivo|no disponible)/.test(value)) return "closed";
-    if (/(abierto|open|disponible|activo)/.test(value)) return "open";
-
-    return null;
-  };
-
-  const statusFromScheduleObject = function (raw) {
-    if (!raw) return null;
-
-    let schedule = raw;
-    if (typeof raw === "string") {
-      try {
-        schedule = JSON.parse(raw);
-      } catch (error) {
-        return null;
-      }
-    }
-
-    if (!schedule || typeof schedule !== "object") return null;
-
-    const now = ecuadorNow();
-    const aliases = {
-      domingo: ["domingo", "dom", "sunday", "sun"],
-      lunes: ["lunes", "lun", "monday", "mon"],
-      martes: ["martes", "mar", "tuesday", "tue"],
-      miercoles: ["miercoles", "mie", "wednesday", "wed"],
-      jueves: ["jueves", "jue", "thursday", "thu"],
-      viernes: ["viernes", "vie", "friday", "fri"],
-      sabado: ["sabado", "sab", "saturday", "sat"]
-    };
-
-    const keys = aliases[now.day] || [now.day];
-    let daySchedule = null;
-
-    Object.keys(schedule).some(function (key) {
-      if (keys.includes(normalize(key))) {
-        daySchedule = schedule[key];
-        return true;
-      }
-      return false;
-    });
-
-    if (daySchedule === null || daySchedule === undefined) return null;
-    if (daySchedule === false) return "closed";
-
-    if (typeof daySchedule === "string") {
-      const normalized = normalize(daySchedule);
-      if (/(cerrado|closed)/.test(normalized)) return "closed";
-      if (/(proximo|soon)/.test(normalized)) return "upcoming";
-
-      const times = daySchedule.match(/\d{1,2}\s*:\s*\d{2}/g);
-      if (times && times.length >= 2) {
-        const open = parseMinutes(times[0]);
-        const close = parseMinutes(times[1]);
-        if (open !== null && close !== null) {
-          if (now.minutes < open) return "upcoming";
-          return now.minutes < close ? "open" : "closed";
-        }
-      }
-      return null;
-    }
-
-    if (typeof daySchedule === "object") {
-      const state = normalize(daySchedule.status || daySchedule.estado);
-      if (/(cerrado|closed)/.test(state)) return "closed";
-      if (/(proximo|soon)/.test(state)) return "upcoming";
-
-      const open = parseMinutes(
-        daySchedule.open ||
-        daySchedule.abre ||
-        daySchedule.apertura ||
-        daySchedule.hora_apertura
-      );
-
-      const close = parseMinutes(
-        daySchedule.close ||
-        daySchedule.cierra ||
-        daySchedule.cierre ||
-        daySchedule.hora_cierre
-      );
-
-      if (open !== null && close !== null) {
-        if (now.minutes < open) return "upcoming";
-        return now.minutes < close ? "open" : "closed";
-      }
-    }
-
-    return null;
-  };
-
-  const scheduleStatus = function (card) {
-    const scheduleAttributes = [
-      "data-schedule",
-      "data-hours",
-      "data-opening-hours",
-      "data-horario",
-      "data-horarios"
-    ];
-
-    const nodes = [card].concat(Array.from(card.querySelectorAll("*")));
-
-    for (const node of nodes) {
-      for (const attribute of scheduleAttributes) {
-        if (node.hasAttribute && node.hasAttribute(attribute)) {
-          const result = statusFromScheduleObject(node.getAttribute(attribute));
-          if (result) return result;
-        }
-      }
-    }
-
-    const openValue = card.getAttribute("data-open-time") ||
-      card.getAttribute("data-hora-apertura") ||
-      card.querySelector("[data-open-time],[data-hora-apertura]")?.getAttribute("data-open-time") ||
-      card.querySelector("[data-hora-apertura]")?.getAttribute("data-hora-apertura");
-
-    const closeValue = card.getAttribute("data-close-time") ||
-      card.getAttribute("data-hora-cierre") ||
-      card.querySelector("[data-close-time],[data-hora-cierre]")?.getAttribute("data-close-time") ||
-      card.querySelector("[data-hora-cierre]")?.getAttribute("data-hora-cierre");
+    const closeValue =
+      card.dataset.closeTime ||
+      card.dataset.horaCierre ||
+      card.querySelector("[data-close-time]")?.dataset.closeTime ||
+      card.querySelector("[data-hora-cierre]")?.dataset.horaCierre;
 
     const open = parseMinutes(openValue);
     const close = parseMinutes(closeValue);
 
     if (open !== null && close !== null) {
-      const now = ecuadorNow().minutes;
+      const now = currentMinutes();
       if (now < open) return "upcoming";
       return now < close ? "open" : "closed";
     }
 
-    const visibleText = card.textContent || "";
-    const range = visibleText.match(/(\d{1,2}\s*:\s*\d{2})\s*(?:-|–|—|a)\s*(\d{1,2}\s*:\s*\d{2})/i);
-    if (range) {
-      const start = parseMinutes(range[1]);
-      const end = parseMinutes(range[2]);
-      if (start !== null && end !== null) {
-        const now = ecuadorNow().minutes;
-        if (now < start) return "upcoming";
-        return now < end ? "open" : "closed";
-      }
-    }
-
-    return null;
+    return "open";
   };
 
-  const resolveStatus = function (card) {
-    return explicitStatus(card) || scheduleStatus(card) || "open";
-  };
-
-  const statusContent = {
+  const statusConfig = {
     open: { label: "Abierto", className: "is-open" },
     closed: { label: "Cerrado", className: "is-closed" },
     upcoming: { label: "Próximo a abrir", className: "is-upcoming" }
   };
 
-  const installStatus = function (card) {
-    let footer = card.querySelector(".ux-card-bottom");
+  const simplifyLoadingText = function (root) {
+    const scope = root instanceof Element ? root : grid;
+    const candidates = [];
 
-    if (!footer) {
-      const body = card.querySelector(".ux-card-body") || card;
-      footer = document.createElement("div");
-      footer.className = "ux-card-bottom";
-      body.appendChild(footer);
-    }
+    if (scope.matches?.(".ux-empty")) candidates.push(scope);
 
-    let badge = card.querySelector(".ux-opening-status");
+    scope.querySelectorAll?.(".ux-empty").forEach(function (element) {
+      candidates.push(element);
+    });
 
-    if (!badge) {
-      const oldBadge = card.querySelector(".ux-badge");
-      badge = oldBadge || document.createElement("span");
-    }
+    candidates.forEach(function (element) {
+      const text = normalize(element.textContent);
+      if (text.includes("cargando") && element.textContent !== "Cargando...") {
+        element.textContent = "Cargando...";
+      }
+    });
+  };
 
-    badge.className = "ux-opening-status";
+  const prepareLogo = function (card) {
+    const image = card.querySelector(
+      ".ux-company-logo-img, .ux-company-logo img, .ux-logo img, .ux-card-media img, .ux-card-primary-logo"
+    );
 
-    const resolved = resolveStatus(card);
-    const config = statusContent[resolved] || statusContent.open;
+    if (!image || image.dataset.urbanexLogoReady === "true") return;
 
-    badge.classList.add(config.className);
-    badge.innerHTML = "<i aria-hidden=\"true\"></i><span>" + config.label + "</span>";
-    badge.setAttribute("aria-label", "Estado del negocio: " + config.label);
+    image.dataset.urbanexLogoReady = "true";
+    image.loading = "lazy";
+    image.decoding = "async";
+    image.style.setProperty("--urbanex-logo-scale", "1");
 
-    if (badge.parentElement !== footer) {
-      footer.appendChild(badge);
+    const classify = function () {
+      const container = image.closest(".ux-company-logo, .ux-logo, .ux-card-media");
+      if (!container || !image.naturalWidth || !image.naturalHeight) return;
+
+      const ratio = image.naturalWidth / image.naturalHeight;
+
+      container.classList.remove(
+        "ux-auto-logo-wide",
+        "ux-auto-logo-square",
+        "ux-auto-logo-tall"
+      );
+
+      if (ratio > 1.35) {
+        container.classList.add("ux-auto-logo-wide");
+      } else if (ratio < 0.74) {
+        container.classList.add("ux-auto-logo-tall");
+      } else {
+        container.classList.add("ux-auto-logo-square");
+      }
+    };
+
+    if (image.complete) {
+      classify();
+    } else {
+      image.addEventListener("load", classify, { once: true, passive: true });
     }
   };
 
-  const arrangeCardContent = function (card) {
+  const arrangeCard = function (card) {
     const titleHost = card.querySelector(".ux-company-title");
     const description = card.querySelector(".ux-company-description");
 
     if (titleHost && description && description.parentElement !== titleHost) {
       titleHost.appendChild(description);
     }
-
-    card.querySelectorAll(".ux-company-title h3, .ux-company-category, .ux-company-description")
-      .forEach(function (element) {
-        element.removeAttribute("style");
-      });
   };
 
-  const backgroundDistance = function (pixel, background) {
-    const dr = pixel[0] - background[0];
-    const dg = pixel[1] - background[1];
-    const db = pixel[2] - background[2];
-    return Math.sqrt((dr * dr) + (dg * dg) + (db * db));
-  };
+  const installStatus = function (card) {
+    let footer = card.querySelector(".ux-card-bottom");
 
-  const analyzeLogoWhitespace = function (image) {
-    if (!image || !image.complete || !image.naturalWidth || !image.naturalHeight) return;
-
-    const container = image.closest(LOGO_CONTAINER_SELECTOR);
-    if (!container) return;
-
-    container.classList.remove("ux-auto-logo-wide", "ux-auto-logo-square", "ux-auto-logo-tall");
-
-    const ratio = image.naturalWidth / image.naturalHeight;
-    if (ratio > 1.28) {
-      container.classList.add("ux-auto-logo-wide");
-    } else if (ratio < 0.78) {
-      container.classList.add("ux-auto-logo-tall");
-    } else {
-      container.classList.add("ux-auto-logo-square");
+    if (!footer) {
+      footer = document.createElement("div");
+      footer.className = "ux-card-bottom";
+      (card.querySelector(".ux-card-body") || card).appendChild(footer);
     }
 
-    let scale = 1;
+    let badge = card.querySelector(".ux-opening-status");
 
-    try {
-      const maxSide = 180;
-      const factor = Math.min(1, maxSide / Math.max(image.naturalWidth, image.naturalHeight));
-      const width = Math.max(1, Math.round(image.naturalWidth * factor));
-      const height = Math.max(1, Math.round(image.naturalHeight * factor));
-
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-
-      const context = canvas.getContext("2d", { willReadFrequently: true });
-      if (!context) throw new Error("Canvas no disponible.");
-
-      context.drawImage(image, 0, 0, width, height);
-      const data = context.getImageData(0, 0, width, height).data;
-
-      const sample = function (x, y) {
-        const index = ((y * width) + x) * 4;
-        return [data[index], data[index + 1], data[index + 2], data[index + 3]];
-      };
-
-      const corners = [
-        sample(0, 0),
-        sample(width - 1, 0),
-        sample(0, height - 1),
-        sample(width - 1, height - 1)
-      ];
-
-      const background = [0, 0, 0, 0];
-      corners.forEach(function (corner) {
-        background[0] += corner[0];
-        background[1] += corner[1];
-        background[2] += corner[2];
-        background[3] += corner[3];
-      });
-      background[0] /= corners.length;
-      background[1] /= corners.length;
-      background[2] /= corners.length;
-      background[3] /= corners.length;
-
-      let minX = width;
-      let minY = height;
-      let maxX = -1;
-      let maxY = -1;
-
-      for (let y = 0; y < height; y += 1) {
-        for (let x = 0; x < width; x += 1) {
-          const index = ((y * width) + x) * 4;
-          const pixel = [data[index], data[index + 1], data[index + 2], data[index + 3]];
-
-          if (pixel[3] < 20) continue;
-
-          const alphaDifference = Math.abs(pixel[3] - background[3]);
-          const colorDifference = backgroundDistance(pixel, background);
-          const isForeground = alphaDifference > 35 || colorDifference > 42;
-
-          if (isForeground) {
-            minX = Math.min(minX, x);
-            minY = Math.min(minY, y);
-            maxX = Math.max(maxX, x);
-            maxY = Math.max(maxY, y);
-          }
-        }
-      }
-
-      if (maxX >= minX && maxY >= minY) {
-        const contentWidthRatio = (maxX - minX + 1) / width;
-        const contentHeightRatio = (maxY - minY + 1) / height;
-        const dominantCoverage = Math.max(contentWidthRatio, contentHeightRatio);
-
-        if (dominantCoverage > 0 && dominantCoverage < 0.82) {
-          scale = Math.min(1.28, Math.max(1, 0.86 / dominantCoverage));
-        }
-      }
-    } catch (error) {
-      /* Si una imagen externa bloquea Canvas, object-fit: contain mantiene el ajuste seguro. */
-      scale = ratio > 2.1 || ratio < 0.48 ? 1.08 : 1;
+    if (!badge) {
+      badge = card.querySelector(".ux-badge") || document.createElement("span");
     }
 
-    image.style.setProperty("--urbanex-logo-scale", scale.toFixed(3));
-    image.dataset.urbanexLogoPrepared = "true";
+    const status = resolveStatus(card);
+    const config = statusConfig[status] || statusConfig.open;
+
+    if (badge.dataset.urbanexStatus !== status) {
+      badge.className = "ux-opening-status " + config.className;
+      badge.innerHTML = '<i aria-hidden="true"></i><span>' + config.label + "</span>";
+      badge.setAttribute("aria-label", "Estado del negocio: " + config.label);
+      badge.dataset.urbanexStatus = status;
+    }
+
+    if (badge.parentElement !== footer) {
+      footer.appendChild(badge);
+    }
   };
 
-  const installLogoBehavior = function (card) {
-    const images = Array.from(card.querySelectorAll(LOGO_IMAGE_SELECTOR));
+  const processCard = function (card) {
+    if (!(card instanceof Element) || card.dataset.urbanexCardReady === "true") return;
 
-    images.forEach(function (image) {
-      if (image.dataset.urbanexLogoListener !== "true") {
-        image.dataset.urbanexLogoListener = "true";
-        image.addEventListener("load", function () {
-          analyzeLogoWhitespace(image);
-        }, { passive: true });
-      }
-
-      if (image.complete && image.naturalWidth) {
-        analyzeLogoWhitespace(image);
-      }
-    });
-  };
-
-  const prepareCard = function (card) {
-    if (!(card instanceof Element)) return;
-    arrangeCardContent(card);
-    installLogoBehavior(card);
+    card.dataset.urbanexCardReady = "true";
+    arrangeCard(card);
+    prepareLogo(card);
     installStatus(card);
   };
 
+  const flushQueue = function () {
+    framePending = false;
 
-  const simplifyLoadingText = function () {
-    const grid = document.querySelector(GRID_SELECTOR);
-    if (!grid) return;
-
-    grid.querySelectorAll(".ux-empty").forEach(function (element) {
-      const text = normalize(element.textContent);
-      if (text.includes("cargando") && text.includes("supabase")) {
-        element.textContent = "Cargando";
-      }
-    });
-  };
-
-  const prepareAllCards = function () {
-    const grid = document.querySelector(GRID_SELECTOR);
-    if (!grid) return;
-    grid.querySelectorAll(CARD_SELECTOR).forEach(prepareCard);
-  };
-
-  const start = function () {
-    const grid = document.querySelector(GRID_SELECTOR);
-    if (!grid) return;
-
-    simplifyLoadingText();
-    prepareAllCards();
-
-    const observer = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        mutation.addedNodes.forEach(function (node) {
-          if (!(node instanceof Element)) return;
-
-          if (node.matches && node.matches(CARD_SELECTOR)) {
-            prepareCard(node);
-          }
-
-          node.querySelectorAll?.(CARD_SELECTOR).forEach(prepareCard);
-        });
-      });
-
-      simplifyLoadingText();
-      prepareAllCards();
+    queuedCards.forEach(function (card) {
+      processCard(card);
     });
 
-    observer.observe(grid, {
-      childList: true,
-      subtree: true
-    });
-
-    window.setInterval(prepareAllCards, 60000);
+    queuedCards.clear();
   };
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", start, { once: true });
-  } else {
-    start();
-  }
+  const queueCard = function (card) {
+    if (!(card instanceof Element) || card.dataset.urbanexCardReady === "true") return;
+
+    queuedCards.add(card);
+
+    if (!framePending) {
+      framePending = true;
+      window.requestAnimationFrame(flushQueue);
+    }
+  };
+
+  const inspectNode = function (node) {
+    if (!(node instanceof Element)) return;
+
+    simplifyLoadingText(node);
+
+    if (node.matches(".ux-card")) {
+      queueCard(node);
+      return;
+    }
+
+    const parentCard = node.closest(".ux-card");
+    if (parentCard) queueCard(parentCard);
+
+    node.querySelectorAll(".ux-card").forEach(queueCard);
+  };
+
+  simplifyLoadingText(grid);
+  grid.querySelectorAll(".ux-card").forEach(queueCard);
+
+  const observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      mutation.addedNodes.forEach(inspectNode);
+    });
+  });
+
+  observer.observe(grid, {
+    childList: true,
+    subtree: true
+  });
+
+  window.setInterval(function () {
+    grid.querySelectorAll(".ux-card[data-urbanex-card-ready='true']").forEach(function (card) {
+      const badge = card.querySelector(".ux-opening-status");
+      if (!badge) return;
+
+      const status = resolveStatus(card);
+      if (badge.dataset.urbanexStatus === status) return;
+
+      const config = statusConfig[status] || statusConfig.open;
+      badge.className = "ux-opening-status " + config.className;
+      badge.innerHTML = '<i aria-hidden="true"></i><span>' + config.label + "</span>";
+      badge.setAttribute("aria-label", "Estado del negocio: " + config.label);
+      badge.dataset.urbanexStatus = status;
+    });
+  }, 300000);
 })();
 </script>
 
