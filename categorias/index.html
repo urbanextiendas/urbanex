@@ -7449,6 +7449,7 @@ let currentRoot = null;
 let currentSubcategories = [];
 let allBusinesses = [];
 let globalFeaturedBusinesses = [];
+let allDirectoryBusinesses = [];
 let searchTerm = '';
 let activeSubcategoryId = null;
 
@@ -7705,7 +7706,7 @@ function countBySubcategory(subcategory) {
 
 function renderSubcategories() {
     const container = document.getElementById('categoriesList');
-    const total = allBusinesses.filter(belongsToRoot).length;
+    const total = allDirectoryBusinesses.length;
 
     const allIsActive = activeSubcategoryId === null;
 
@@ -7714,7 +7715,7 @@ function renderSubcategories() {
             <button
                 type="button"
                 class="${allIsActive ? 'active' : ''}"
-                onclick="selectSubcategory(null)"
+                onclick="openDirectory()"
             >
                 <div class="icon-container">▦</div>
                 <div class="category-text-info">
@@ -8187,6 +8188,13 @@ async function fetchGlobalFeaturedBusinesses() {
         .eq('is_featured', true);
 }
 
+async function fetchAllDirectoryBusinesses() {
+    return await supabase
+        .from('businesses')
+        .select(BUSINESS_SELECT_INITIAL)
+        .eq('is_active', true);
+}
+
 async function fetchBusinesses() {
     let query = supabase
         .from('businesses')
@@ -8224,7 +8232,8 @@ function groupRowsByBusiness(rows) {
 async function loadBusinessDetails() {
     const combinedBusinesses = [
         ...allBusinesses,
-        ...globalFeaturedBusinesses
+        ...globalFeaturedBusinesses,
+        ...allDirectoryBusinesses
     ];
 
     const ids = Array.from(
@@ -8265,6 +8274,9 @@ async function loadBusinessDetails() {
         allBusinesses = allBusinesses.map(enrichWithDetails);
         globalFeaturedBusinesses =
             globalFeaturedBusinesses.map(enrichWithDetails);
+
+        allDirectoryBusinesses =
+            allDirectoryBusinesses.map(enrichWithDetails);
 
         renderSubcategories();
         renderFeatured();
@@ -8323,13 +8335,15 @@ async function boot() {
 
         applyVisual();
 
-        const [businessResult, featuredResult] = await Promise.all([
+        const [businessResult, featuredResult, directoryResult] = await Promise.all([
             fetchBusinesses(),
-            fetchGlobalFeaturedBusinesses()
+            fetchGlobalFeaturedBusinesses(),
+            fetchAllDirectoryBusinesses()
         ]);
 
         if (businessResult.error) throw businessResult.error;
         if (featuredResult.error) throw featuredResult.error;
+        if (directoryResult.error) throw directoryResult.error;
 
         const applyLocation = business =>
             !window.UrbanexLocation ||
@@ -8346,6 +8360,10 @@ async function boot() {
             .filter(applyLocation);
 
         globalFeaturedBusinesses = (featuredResult.data || [])
+            .map(prepareBusiness)
+            .filter(applyLocation);
+
+        allDirectoryBusinesses = (directoryResult.data || [])
             .map(prepareBusiness)
             .filter(applyLocation);
 
@@ -8536,11 +8554,19 @@ function renderFeatured() {
 }
 
 window.openDirectory = () => {
-    const list = rootBusinesses().sort((a, b) =>
-        String(a.name || '').localeCompare(String(b.name || ''), 'es')
-    );
+    const list = allDirectoryBusinesses
+        .filter(businessMatchesSearch)
+        .slice()
+        .sort((a, b) =>
+            String(a.name || '').localeCompare(String(b.name || ''), 'es')
+        );
 
     const grid = document.getElementById('directoryGrid');
+    const title = document.getElementById('directoryTitle');
+
+    if (title) {
+        title.textContent = 'Todos los negocios';
+    }
 
     grid.innerHTML = list.length
         ? list.map(businessCard).join('')
