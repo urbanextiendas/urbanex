@@ -7420,7 +7420,12 @@ let subCategories = [];
 let currentRoot = null;
 let currentSubcategories = [];
 let allBusinesses = [];
+let globalFeaturedBusinesses = [];
 let searchTerm = '';
+
+let featuredCarouselSignature = '';
+let featuredSlotIndices = [];
+let featuredSlotTimers = [];
 
 function normalize(value) {
     return String(value || '')
@@ -7622,14 +7627,21 @@ function rootBusinesses() {
 
 function featuredBusinesses() {
     const sort = document.getElementById('sortSelect')?.value || 'rating';
-    const list = rootBusinesses().filter(isFeatured);
+
+    const list = globalFeaturedBusinesses
+        .filter(isFeatured)
+        .filter(businessMatchesSearch)
+        .slice();
 
     if (sort === 'name') {
         list.sort((a, b) =>
             String(a.name || '').localeCompare(String(b.name || ''), 'es')
         );
     } else {
-        list.sort((a, b) => (b._rating || 0) - (a._rating || 0));
+        list.sort((a, b) =>
+            (b._rating || 0) - (a._rating || 0) ||
+            String(a.name || '').localeCompare(String(b.name || ''), 'es')
+        );
     }
 
     return list;
@@ -7758,6 +7770,80 @@ function featuredVisibleCount() {
     return Math.max(1, Math.min(3, calculated || 1));
 }
 
+function stopFeaturedRotation() {
+    featuredSlotTimers.forEach(timer => window.clearTimeout(timer));
+    featuredSlotTimers = [];
+}
+
+function nextUniqueFeaturedIndex(slotIndex, total) {
+    if (total <= 1) return 0;
+
+    const occupied = new Set(
+        featuredSlotIndices.filter((_, index) => index !== slotIndex)
+    );
+
+    let candidate =
+        ((featuredSlotIndices[slotIndex] ?? slotIndex) + 1) % total;
+
+    for (let attempt = 0; attempt < total; attempt += 1) {
+        if (!occupied.has(candidate)) return candidate;
+        candidate = (candidate + 1) % total;
+    }
+
+    return featuredSlotIndices[slotIndex] ?? 0;
+}
+
+function scheduleFeaturedSlotRotations(list) {
+    stopFeaturedRotation();
+
+    if (
+        document.hidden ||
+        !Array.isArray(list) ||
+        list.length <= featuredSlotIndices.length
+    ) {
+        return;
+    }
+
+    const area = document.getElementById('shopsList');
+    if (!area) return;
+
+    const intervals = [2600, 4100, 5600];
+
+    featuredSlotIndices.forEach((_, slotIndex) => {
+        const rotateSlot = () => {
+            if (document.hidden || !area.isConnected) return;
+
+            featuredSlotIndices[slotIndex] =
+                nextUniqueFeaturedIndex(slotIndex, list.length);
+
+            const currentCard = area.children[slotIndex];
+            const business = list[featuredSlotIndices[slotIndex]];
+
+            if (currentCard && business) {
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = featuredBusinessCard(business).trim();
+
+                const nextCard = wrapper.firstElementChild;
+
+                if (nextCard) {
+                    nextCard.classList.add('featured-slot-enter');
+                    currentCard.replaceWith(nextCard);
+                }
+            }
+
+            featuredSlotTimers[slotIndex] = window.setTimeout(
+                rotateSlot,
+                intervals[slotIndex] || intervals[intervals.length - 1]
+            );
+        };
+
+        featuredSlotTimers[slotIndex] = window.setTimeout(
+            rotateSlot,
+            intervals[slotIndex] || intervals[intervals.length - 1]
+        );
+    });
+}
+
 function featuredBusinessCard(business) {
     const ratingText = business._rating
         ? business._rating.toFixed(1)
@@ -7876,6 +7962,14 @@ function featuredBusinessCard(business) {
     `;
 }
 
+async function fetchGlobalFeaturedBusinesses() {
+    return await supabase
+        .from('businesses')
+        .select(BUSINESS_SELECT_INITIAL)
+        .eq('is_active', true)
+        .eq('is_featured', true);
+}
+
 async function fetchBusinesses() {
     let query = supabase
         .from('businesses')
@@ -7911,9 +8005,18 @@ function groupRowsByBusiness(rows) {
 }
 
 async function loadBusinessDetails() {
-    const ids = allBusinesses
-        .map(business => business.id)
-        .filter(id => id !== null && id !== undefined);
+    const combinedBusinesses = [
+        ...allBusinesses,
+        ...globalFeaturedBusinesses
+    ];
+
+    const ids = Array.from(
+        new Set(
+            combinedBusinesses
+                .map(business => business.id)
+                .filter(id => id !== null && id !== undefined)
+        )
+    );
 
     if (!ids.length) return;
 
@@ -7934,17 +8037,17 @@ async function loadBusinessDetails() {
         const hoursByBusiness = groupRowsByBusiness(hoursResult.data || []);
         const reviewsByBusiness = groupRowsByBusiness(reviewsResult.data || []);
 
-        allBusinesses = allBusinesses.map(business => {
-            const updatedBusiness = {
-                ...business,
-                business_hours:
-                    hoursByBusiness.get(String(business.id)) || [],
-                reviews:
-                    reviewsByBusiness.get(String(business.id)) || []
-            };
-
-            return enrichBusiness(updatedBusiness);
+        const enrichWithDetails = business => enrichBusiness({
+            ...business,
+            business_hours:
+                hoursByBusiness.get(String(business.id)) || [],
+            reviews:
+                reviewsByBusiness.get(String(business.id)) || []
         });
+
+        allBusinesses = allBusinesses.map(enrichWithDetails);
+        globalFeaturedBusinesses =
+            globalFeaturedBusinesses.map(enrichWithDetails);
 
         renderSubcategories();
         renderFeatured();
@@ -8003,18 +8106,31 @@ async function boot() {
 
         applyVisual();
 
-        const businessResult = await fetchBusinesses();
-        if (businessResult.error) throw businessResult.error;
+        const [businessResult, featuredResult] = await Promise.all([
+            fetchBusinesses(),
+            fetchGlobalFeaturedBusinesses()
+        ]);
 
-        allBusinesses = (businessResult.data || []).map(business =>
-            enrichBusiness({
-                ...business,
-                business_hours: business.business_hours || [],
-                reviews: business.reviews || []
-            })
-        ).filter(business =>
-            !window.UrbanexLocation || window.UrbanexLocation.matchesBusiness(business)
-        );
+        if (businessResult.error) throw businessResult.error;
+        if (featuredResult.error) throw featuredResult.error;
+
+        const applyLocation = business =>
+            !window.UrbanexLocation ||
+            window.UrbanexLocation.matchesBusiness(business);
+
+        const prepareBusiness = business => enrichBusiness({
+            ...business,
+            business_hours: business.business_hours || [],
+            reviews: business.reviews || []
+        });
+
+        allBusinesses = (businessResult.data || [])
+            .map(prepareBusiness)
+            .filter(applyLocation);
+
+        globalFeaturedBusinesses = (featuredResult.data || [])
+            .map(prepareBusiness)
+            .filter(applyLocation);
 
         renderSubcategories();
         renderFeatured();
@@ -8042,7 +8158,11 @@ function renderFeatured() {
         `${list.length} destacado${list.length !== 1 ? 's' : ''} ` +
         `seleccionado${list.length !== 1 ? 's' : ''}`;
 
+    stopFeaturedRotation();
+
     if (!list.length) {
+        featuredCarouselSignature = '';
+        featuredSlotIndices = [];
         container.removeAttribute('data-visible-count');
         container.innerHTML =
             `<div class="empty-state">` +
@@ -8056,11 +8176,34 @@ function renderFeatured() {
         Math.min(featuredVisibleCount(), list.length)
     );
 
+    const sort = document.getElementById('sortSelect')?.value || 'rating';
+    const signature =
+        `${sort}|${searchTerm}|${list.map(item => item.id).join(',')}`;
+
+    const mustReset =
+        signature !== featuredCarouselSignature ||
+        featuredSlotIndices.length !== visibleCount ||
+        featuredSlotIndices.some(index => index >= list.length);
+
+    if (mustReset) {
+        featuredCarouselSignature = signature;
+        featuredSlotIndices = Array.from(
+            { length: visibleCount },
+            (_, index) => index % list.length
+        );
+    }
+
+    const visibleBusinesses =
+        featuredSlotIndices.map(index => list[index]);
+
     container.dataset.visibleCount = String(visibleCount);
-    container.innerHTML = list
-        .slice(0, visibleCount)
-        .map(featuredBusinessCard)
-        .join('');
+    container.classList.remove('featured-changing');
+    void container.offsetWidth;
+    container.innerHTML =
+        visibleBusinesses.map(featuredBusinessCard).join('');
+    container.classList.add('featured-changing');
+
+    scheduleFeaturedSlotRotations(list);
 }
 
 window.openDirectory = () => {
@@ -8096,6 +8239,14 @@ document.addEventListener('keydown', event => {
     if (event.key === 'Escape') closeDirectory();
 });
 
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        stopFeaturedRotation();
+    } else {
+        renderFeatured();
+    }
+});
 
 let featuredResizeTimer = null;
 window.addEventListener('resize', () => {
