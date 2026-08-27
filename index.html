@@ -6702,6 +6702,391 @@ body{
 }
 </style>
 
+
+<style id="urbanex-texto-iconos-mejorados-final">
+/* ==========================================================
+   MEJORA DE TEXTO E ÍCONOS
+   - Mantiene la distribución actual
+   - Mejora legibilidad
+   - Mejora presencia de iconos
+   - Aplica a grandes, medianas y pequeñas
+   ========================================================== */
+
+/* ---------- Base compartida ---------- */
+.item-caracteristica span,
+.desktop-reference-v2__quick-card strong,
+.desktop-quick-card__label{
+    color:#102b4a !important;
+    font-weight:700 !important;
+    text-shadow:none !important;
+    letter-spacing:.1px !important;
+}
+
+.item-caracteristica svg,
+.desktop-reference-v2__quick-icon svg,
+.desktop-quick-card__icon svg{
+    fill:#e0ad10 !important;
+    filter:
+        drop-shadow(0 1px 1px rgba(255,255,255,.22))
+        drop-shadow(0 2px 6px rgba(224,173,16,.18)) !important;
+}
+
+/* ---------- Pantallas grandes ---------- */
+@media (min-width:1200px){
+
+    .desktop-reference-v2__quick-card,
+    .item-caracteristica{
+        box-shadow:
+            0 8px 18px rgba(0,0,0,.10),
+            inset 0 1px 0 rgba(255,255,255,.35) !important;
+    }
+
+    .desktop-reference-v2__quick-icon,
+    .item-caracteristica svg{
+        filter:none !important;
+    }
+
+    .desktop-reference-v2__quick-icon{
+        width:38px !important;
+        height:38px !important;
+        border-radius:12px !important;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.34) 0%,
+                rgba(241,194,50,.18) 100%
+            ) !important;
+
+        border:1px solid rgba(229,193,88,.88) !important;
+
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.36),
+            0 4px 10px rgba(229,193,88,.12) !important;
+    }
+
+    .desktop-reference-v2__quick-icon svg{
+        width:18px !important;
+        height:18px !important;
+    }
+
+    .desktop-reference-v2__quick-card strong{
+        font-size:10px !important;
+        line-height:1.15 !important;
+    }
+}
+
+/* ---------- Pantallas medianas ---------- */
+@media (min-width:641px) and (max-width:1199px){
+
+    .item-caracteristica{
+        box-shadow:
+            0 7px 14px rgba(0,0,0,.09),
+            inset 0 1px 0 rgba(255,255,255,.30) !important;
+    }
+
+    .item-caracteristica svg{
+        width:34px !important;
+        height:34px !important;
+        flex-basis:34px !important;
+
+        padding:8px !important;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.30) 0%,
+                rgba(241,194,50,.16) 100%
+            ) !important;
+
+        border:1px solid rgba(229,193,88,.82) !important;
+        border-radius:11px !important;
+
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.34),
+            0 4px 9px rgba(229,193,88,.10) !important;
+    }
+
+    .item-caracteristica span{
+        font-size:8.6px !important;
+        line-height:1.18 !important;
+    }
+}
+
+/* ---------- Pantallas pequeñas ---------- */
+@media (max-width:640px){
+
+    .item-caracteristica{
+        box-shadow:
+            0 6px 12px rgba(0,0,0,.08),
+            inset 0 1px 0 rgba(255,255,255,.28) !important;
+    }
+
+    .item-caracteristica svg{
+        width:32px !important;
+        height:32px !important;
+        flex-basis:32px !important;
+
+        padding:7px !important;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.28) 0%,
+                rgba(241,194,50,.14) 100%
+            ) !important;
+
+        border:1px solid rgba(229,193,88,.78) !important;
+        border-radius:10px !important;
+
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.30),
+            0 3px 8px rgba(229,193,88,.10) !important;
+    }
+
+    .item-caracteristica span{
+        font-size:8.2px !important;
+        line-height:1.18 !important;
+    }
+}
+
+@media (max-width:390px){
+
+    .item-caracteristica svg{
+        width:29px !important;
+        height:29px !important;
+        flex-basis:29px !important;
+        padding:6px !important;
+    }
+
+    .item-caracteristica span{
+        font-size:7.5px !important;
+    }
+}
+</style>
+
+
+<style id="urbanex-cajas-bonitas-texto-blanco-final">
+/* ==========================================================
+   MEJORA REAL DE CAJAS, TEXTOS E ÍCONOS
+   - Mantiene la distribución actual
+   - Texto blanco
+   - Cajas más elegantes
+   - Iconos más notorios
+   - Grandes, medianas y pequeñas
+   ========================================================== */
+
+/* -------------------- ESTILO BASE -------------------- */
+.item-caracteristica,
+.desktop-reference-v2__quick-card{
+    position:relative !important;
+    overflow:hidden !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.26) 0%,
+            rgba(247,236,214,.18) 42%,
+            rgba(220,191,132,.14) 100%
+        ) !important;
+
+    border:1px solid rgba(229,193,88,.68) !important;
+    border-radius:16px !important;
+
+    backdrop-filter:blur(12px) saturate(118%) !important;
+    -webkit-backdrop-filter:blur(12px) saturate(118%) !important;
+
+    box-shadow:
+        0 10px 22px rgba(0,0,0,.12),
+        inset 0 1px 0 rgba(255,255,255,.34),
+        inset 0 -1px 0 rgba(255,255,255,.08) !important;
+}
+
+.item-caracteristica::before,
+.desktop-reference-v2__quick-card::before{
+    content:"" !important;
+    position:absolute !important;
+    inset:0 !important;
+    border-radius:inherit !important;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.12) 0%,
+            rgba(255,255,255,0) 38%
+        ) !important;
+    pointer-events:none !important;
+}
+
+.item-caracteristica:hover,
+.desktop-reference-v2__quick-card:hover{
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.31) 0%,
+            rgba(248,239,220,.23) 44%,
+            rgba(229,193,88,.16) 100%
+        ) !important;
+
+    border-color:#f1c232 !important;
+
+    box-shadow:
+        0 12px 24px rgba(0,0,0,.14),
+        inset 0 1px 0 rgba(255,255,255,.38),
+        0 0 0 1px rgba(241,194,50,.08) !important;
+}
+
+/* -------------------- TEXTO BLANCO -------------------- */
+.item-caracteristica span,
+.desktop-reference-v2__quick-card strong,
+.desktop-quick-card__label{
+    color:#ffffff !important;
+    font-weight:700 !important;
+    letter-spacing:.12px !important;
+    text-shadow:
+        0 1px 2px rgba(0,0,0,.72),
+        0 3px 10px rgba(0,0,0,.18) !important;
+}
+
+/* -------------------- ÍCONOS -------------------- */
+/* Variante donde el icono es el propio SVG */
+.item-caracteristica svg{
+    fill:#f3c849 !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.20),
+            rgba(241,194,50,.14)
+        ) !important;
+
+    border:1px solid rgba(241,194,50,.88) !important;
+    border-radius:12px !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.24),
+        0 4px 10px rgba(229,193,88,.12) !important;
+
+    filter:
+        drop-shadow(0 1px 1px rgba(0,0,0,.25))
+        drop-shadow(0 0 8px rgba(241,194,50,.10)) !important;
+}
+
+/* Variante donde el icono tiene contenedor */
+.desktop-reference-v2__quick-icon,
+.desktop-quick-card__icon{
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.20),
+            rgba(241,194,50,.14)
+        ) !important;
+
+    border:1px solid rgba(241,194,50,.88) !important;
+    border-radius:12px !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.24),
+        0 4px 10px rgba(229,193,88,.12) !important;
+}
+
+.desktop-reference-v2__quick-icon svg,
+.desktop-quick-card__icon svg{
+    fill:#f3c849 !important;
+    filter:
+        drop-shadow(0 1px 1px rgba(0,0,0,.25))
+        drop-shadow(0 0 8px rgba(241,194,50,.10)) !important;
+}
+
+/* -------------------- PANTALLAS GRANDES -------------------- */
+@media (min-width:1200px){
+
+    .desktop-reference-v2__quick-card strong,
+    .desktop-quick-card__label,
+    .item-caracteristica span{
+        font-size:10px !important;
+        line-height:1.16 !important;
+    }
+
+    .desktop-reference-v2__quick-icon{
+        width:38px !important;
+        height:38px !important;
+    }
+
+    .desktop-reference-v2__quick-icon svg{
+        width:18px !important;
+        height:18px !important;
+    }
+}
+
+/* -------------------- PANTALLAS MEDIANAS -------------------- */
+@media (min-width:641px) and (max-width:1199px){
+
+    .item-caracteristica,
+    .desktop-reference-v2__quick-card{
+        border-radius:15px !important;
+    }
+
+    .item-caracteristica span,
+    .desktop-reference-v2__quick-card strong,
+    .desktop-quick-card__label{
+        font-size:9.2px !important;
+        line-height:1.15 !important;
+    }
+
+    .item-caracteristica svg{
+        width:34px !important;
+        height:34px !important;
+        flex-basis:34px !important;
+        padding:8px !important;
+        border-radius:11px !important;
+    }
+}
+
+/* -------------------- PANTALLAS PEQUEÑAS -------------------- */
+@media (max-width:640px){
+
+    .item-caracteristica,
+    .desktop-reference-v2__quick-card{
+        border-radius:14px !important;
+        box-shadow:
+            0 8px 16px rgba(0,0,0,.11),
+            inset 0 1px 0 rgba(255,255,255,.30) !important;
+    }
+
+    .item-caracteristica span,
+    .desktop-reference-v2__quick-card strong,
+    .desktop-quick-card__label{
+        font-size:8.6px !important;
+        line-height:1.14 !important;
+    }
+
+    .item-caracteristica svg{
+        width:32px !important;
+        height:32px !important;
+        flex-basis:32px !important;
+        padding:7px !important;
+        border-radius:10px !important;
+    }
+}
+
+@media (max-width:390px){
+
+    .item-caracteristica span,
+    .desktop-reference-v2__quick-card strong,
+    .desktop-quick-card__label{
+        font-size:7.8px !important;
+    }
+
+    .item-caracteristica svg{
+        width:29px !important;
+        height:29px !important;
+        flex-basis:29px !important;
+        padding:6px !important;
+        border-radius:9px !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
@@ -6975,11 +7360,11 @@ body{
 
     function obtenerFranjaHoraria(hora) {
 
-        if (hora >= 6 && hora < 17) {
+        if (hora >= 7 && hora < 13) {
             return 'dia';
         }
 
-        if (hora >= 17 && hora < 19) {
+        if (hora >= 13 && hora < 19) {
             return 'tarde';
         }
 
