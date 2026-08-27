@@ -5396,6 +5396,123 @@ body{
 }
 </style>
 
+
+<style id="urbanex-bloque-un-poco-mas-abajo">
+/* Solo baja ligeramente el bloque izquierdo */
+@media (min-width:1200px){
+
+    .desktop-reference-v2__inner{
+        bottom:98px !important;
+    }
+}
+
+@media (min-width:1200px) and (max-height:760px){
+
+    .desktop-reference-v2__inner{
+        bottom:82px !important;
+    }
+}
+</style>
+
+
+<style id="urbanex-logo-arriba-texto-abajo">
+/* ==========================================================
+   AJUSTE SOLICITADO — SOLO ESCRITORIO
+   - Logo Urbanex arriba, alineado con "Registre su negocio"
+   - Titular y accesos un poco más abajo
+   - CTA inferior se mantiene intacto
+   ========================================================== */
+
+@media (min-width:1200px){
+
+    /* Logo y frase de marca arriba */
+    .desktop-reference-v2__brand{
+        position:fixed !important;
+        top:20px !important;
+        left:clamp(28px,3.2vw,50px) !important;
+
+        width:auto !important;
+        max-width:360px !important;
+
+        margin:0 !important;
+
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:flex-start !important;
+
+        gap:3px !important;
+
+        z-index:85 !important;
+
+        pointer-events:auto !important;
+    }
+
+    .desktop-reference-v2__logo{
+        width:clamp(220px,18vw,300px) !important;
+        max-width:300px !important;
+        height:auto !important;
+
+        margin:0 !important;
+    }
+
+    .desktop-reference-v2__brand p{
+        margin:0 !important;
+
+        font-size:clamp(10px,.78vw,12px) !important;
+        line-height:1.15 !important;
+    }
+
+    /* El contenido textual baja un poco más */
+    .desktop-reference-v2__inner{
+        top:auto !important;
+        bottom:62px !important;
+
+        left:clamp(22px,3vw,46px) !important;
+
+        width:min(440px,34vw) !important;
+
+        display:grid !important;
+
+        grid-template-columns:1fr !important;
+        grid-template-rows:
+            auto
+            auto !important;
+
+        grid-template-areas:
+            "headline"
+            "quick" !important;
+
+        row-gap:clamp(12px,1.5vh,18px) !important;
+    }
+
+    .desktop-reference-v2__headline{
+        grid-area:headline !important;
+    }
+
+    .desktop-reference-v2__quick{
+        grid-area:quick !important;
+    }
+}
+
+/* Laptops de poca altura */
+@media (min-width:1200px) and (max-height:760px){
+
+    .desktop-reference-v2__brand{
+        top:16px !important;
+        left:24px !important;
+    }
+
+    .desktop-reference-v2__logo{
+        width:clamp(190px,16vw,250px) !important;
+        max-width:250px !important;
+    }
+
+    .desktop-reference-v2__inner{
+        bottom:54px !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
