@@ -49,18 +49,20 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center center;
+    object-fit: fill; 
     display: block;
-    filter: brightness(1.05) saturate(1.03) contrast(1.01);
 }
 
-/* SIN PELÍCULA OSCURA GLOBAL: la imagen conserva su luminosidad original */
+/* CAPA OSCURA REFINADA PARA MEJORAR CONTRASTE DE TEXTOS */
 .portada::before{
     content:"";
     position:absolute;
     inset:0;
-    background: transparent;
+    background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,.30),
+        rgba(0,0,0,.50)
+    );
     z-index: 1;
     pointer-events: none;
 }
@@ -146,24 +148,21 @@ html, body {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: rgba(7, 15, 25, 0.34);
-    padding: 11px 14px;
-    border-radius: 9px;
-    backdrop-filter: blur(9px);
-    -webkit-backdrop-filter: blur(9px);
-    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 14px;
+    border-radius: 6px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     border-left: 3px solid #e5c158;
-    box-shadow: 0 8px 22px rgba(0,0,0,0.16);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     cursor: pointer;
     text-decoration: none;
     pointer-events: auto;
-    transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
 .item-caracteristica:hover {
     border-left-color: #f4d675;
-    background: rgba(229, 193, 88, 0.14);
-    transform: translateX(-2px);
+    background: rgba(229, 193, 88, 0.10);
 }
 
 .item-caracteristica svg {
@@ -272,7 +271,7 @@ html, body {
         width: 56%;
         height: 54%;
     }
-    
+
     .puerta-link::after {
         opacity: 1; /* Siempre visible en móvil ya que no existe el hover */
         font-size: 12px;
@@ -316,25 +315,20 @@ html, body {
     /* UBICACIÓN CLAVE: Los beneficios se alinean horizontalmente abajo de la puerta */
     .caracteristicas-lista {
         top: auto;
-        bottom: 7%;
-        left: 4%;
-        width: 92%;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        bottom: 14%;
+        left: 5%;
+        width: 90%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 6px;
     }
 
     .item-caracteristica {
-        min-width: 0;
-        padding: 7px 8px;
+        padding: 5px 8px;
         border-left: none;
         border-bottom: 2px solid #e5c158;
-        background: rgba(7, 15, 25, 0.38);
-    }
-
-    .item-caracteristica:last-child {
-        grid-column: 1 / -1;
-        justify-content: center;
+        background: rgba(0, 0, 0, 0.7);
     }
 
     .item-caracteristica svg {
@@ -348,49 +342,34 @@ html, body {
         letter-spacing: 0.5px;
     }
 
-    /* El encabezado se mantiene arriba también en móvil */
+    /* UBICACIÓN CLAVE: Registro de negocio toma la base oscura inferior */
     .registro-contenedor {
-        top: 2%;
-        right: 3%;
-        bottom: auto;
-        left: auto;
-        transform: none;
+        top: auto;
+        bottom: 3%;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
         flex-direction: row;
-        justify-content: flex-end;
-        gap: 8px;
-        width: auto;
+        justify-content: center;
+        gap: 10px;
+        width: 90%;
     }
 
     .registro-texto {
-        font-size: 10px;
+        font-size: 11px;
     }
 
     .btn-registro {
-        padding: 7px 10px;
-        font-size: 8px;
-        border-radius: 7px;
-        white-space: nowrap;
-        background: rgba(7, 15, 25, 0.28);
+        padding: 6px 14px;
+        font-size: 11px;
     }
 }
 
 /* Ajuste fino para pantallas extremadamente pequeñas */
 @media(max-width:380px){
     .caracteristicas-lista {
-        bottom: 6%;
-        left: 3%;
-        width: 94%;
+        bottom: 16%;
     }
-
-    .header-branding img{
-        width: 34% !important;
-    }
-
-    .btn-registro{
-        padding: 6px 8px;
-        font-size: 7px;
-    }
-
     .item-caracteristica span {
         font-size: 8px;
     }
@@ -414,15 +393,1276 @@ html, body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+</style>
+
+
+<style>
+/* ================================================== */
+/* URBANEX — PORTADA PROFESIONAL RESPONSIVE V4       */
+/* Mantiene estructura, imagen, rutas y funcionalidad */
+/* ================================================== */
+
+:root{
+  --ux-gold:#e5c158;
+  --ux-gold-soft:#f4dd9a;
+  --ux-ink:#07111e;
+  --ux-glass:rgba(5,12,22,.24);
+  --ux-glass-strong:rgba(5,12,22,.36);
+  --ux-line:rgba(255,255,255,.16);
+  --ux-shadow:0 16px 42px rgba(0,0,0,.18);
+}
+
+html,body{
+  background:#000;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.portada{
+  width:100%;
+  height:calc(100vh - 30px);
+  height:calc(100svh - 30px);
+  min-height:620px;
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  display:grid;
+  grid-template-columns:minmax(260px,.86fr) minmax(360px,1.45fr) minmax(280px,.92fr);
+  grid-template-rows:88px minmax(0,1fr) 120px;
+  grid-template-areas:
+    "brand brand register"
+    "slogan center menu"
+    ". cta .";
+  column-gap:clamp(18px,2.5vw,42px);
+  padding:0 clamp(24px,3.5vw,58px);
+  background:#0b1624;
+}
+
+/* La fotografía se mantiene clara y natural */
+.portada-img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  filter:brightness(1.12) saturate(1.04) contrast(1.01);
+  z-index:-3;
+}
+
+/* Elimina la capa oscura global original */
+.portada::before{
+  background:transparent !important;
+  z-index:-2;
+}
+
+/* Sólo un sombreado muy suave en los extremos para lectura, sin oscurecer la imagen */
+.portada::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:transparent;
+}
+
+.header-branding{
+  grid-area:brand;
+  position:relative;
+  top:auto; left:auto; transform:none;
+  width:auto; max-width:none;
+  align-self:center;
+  justify-self:center;
+  text-align:center;
+  z-index:20;
+  pointer-events:none;
+}
+
+.header-branding img{
+  width:clamp(138px,10vw,178px) !important;
+  max-width:none !important;
+  height:auto !important;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,.28));
+}
+
+.registro-contenedor{
+  grid-area:register;
+  position:relative;
+  top:auto; right:auto; bottom:auto; left:auto; transform:none;
+  width:auto;
+  align-self:center;
+  justify-self:end;
+  display:flex;
+  z-index:22;
+}
+
+.btn-registro{
+  min-height:42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 20px;
+  border:1px solid rgba(229,193,88,.78);
+  border-radius:12px;
+  background:rgba(5,12,22,.26);
+  color:var(--ux-gold-soft);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  font:700 10px/1 Arial,Helvetica,sans-serif;
+  letter-spacing:.9px;
+  text-transform:uppercase;
+  box-shadow:0 8px 24px rgba(0,0,0,.10);
+  transition:transform .2s ease, background .2s ease, color .2s ease;
+}
+.btn-registro:hover{background:var(--ux-gold);color:#10151b;transform:translateY(-2px)}
+
+.slogan-lateral{
+  grid-area:slogan;
+  position:relative;
+  top:auto; right:auto; bottom:auto; left:auto; transform:none;
+  width:auto;
+  align-self:center;
+  justify-self:start;
+  padding:0 0 0 18px;
+  border-left:3px solid var(--ux-gold);
+  z-index:18;
+  pointer-events:none;
+}
+
+.slogan-lateral h2{
+  margin:0;
+  max-width:390px;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:clamp(28px,2.55vw,39px);
+  line-height:1.08;
+  font-weight:700;
+  letter-spacing:-.6px;
+  text-transform:uppercase;
+  text-shadow:0 2px 3px rgba(0,0,0,.78),0 8px 22px rgba(0,0,0,.38);
+}
+
+/* Acceso central al Boulevard: aprovecha el corredor visual de la foto */
+.puerta-link{
+  grid-area:cta;
+  position:relative;
+  top:auto; right:auto; bottom:auto; left:auto;
+  width:auto; height:auto;
+  align-self:center;
+  justify-self:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:220px;
+  min-height:46px;
+  cursor:pointer;
+  background:transparent;
+  z-index:18;
+  text-decoration:none;
+}
+
+.puerta-link::after{
+  content:"ENTRAR AL BOULEVARD";
+  position:static;
+  inset:auto;
+  transform:none;
+  min-width:max-content;
+  padding:12px 22px;
+  border:1px solid rgba(229,193,88,.86);
+  border-radius:999px;
+  background:rgba(5,12,22,.24);
+  color:var(--ux-gold-soft);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  font:700 9px/1 Arial,Helvetica,sans-serif;
+  letter-spacing:1.15px;
+  text-transform:uppercase;
+  text-shadow:0 2px 7px rgba(0,0,0,.40);
+  box-shadow:0 8px 24px rgba(0,0,0,.10);
+  opacity:1;
+  transition:transform .2s ease, background .2s ease, color .2s ease;
+}
+.puerta-link:hover::after{background:var(--ux-gold);color:#11161c;transform:translateY(-2px)}
+
+/* Menú lateral: compacto, elegante y ligero */
+.caracteristicas-lista{
+  grid-area:menu;
+  position:relative;
+  top:auto; right:auto; bottom:auto; left:auto; transform:none;
+  width:100%;
+  align-self:center;
+  justify-self:end;
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  padding:7px;
+  border:1px solid var(--ux-line);
+  border-radius:18px;
+  background:var(--ux-glass);
+  backdrop-filter:blur(12px) saturate(120%);
+  -webkit-backdrop-filter:blur(12px) saturate(120%);
+  box-shadow:var(--ux-shadow);
+  z-index:24;
+}
+
+.item-caracteristica{
+  min-height:54px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:8px 9px;
+  border:0;
+  border-left:0;
+  border-bottom:1px solid rgba(255,255,255,.10);
+  border-radius:10px;
+  background:transparent;
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  text-decoration:none;
+  transition:background .18s ease, transform .18s ease;
+}
+.item-caracteristica:last-child{border-bottom:0}
+.item-caracteristica:hover{background:rgba(255,255,255,.09);transform:translateX(-2px)}
+
+.item-caracteristica svg{
+  width:34px;
+  height:34px;
+  flex:0 0 34px;
+  padding:8px;
+  border-radius:10px;
+  fill:var(--ux-gold);
+  background:rgba(229,193,88,.11);
+  border:1px solid rgba(229,193,88,.20);
+}
+
+.item-caracteristica span{
+  min-width:0;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:9.6px;
+  line-height:1.2;
+  font-weight:700;
+  letter-spacing:.55px;
+  text-transform:uppercase;
+  text-shadow:0 2px 6px rgba(0,0,0,.35);
+}
+
+.item-caracteristica::after{
+  content:"›";
+  margin-left:auto;
+  color:rgba(255,255,255,.68);
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:20px;
+  line-height:1;
+  transition:transform .18s ease,color .18s ease;
+}
+.item-caracteristica:hover::after{color:var(--ux-gold-soft);transform:translateX(2px)}
+
+.pie-pagina{
+  width:100%;
+  height:30px;
+  background:#050608;
+  border-top:1px solid rgba(255,255,255,.06);
+  color:#8c939b;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:9px;
+  letter-spacing:.1px;
+}
+.pie-pagina a{color:#c5cad0;text-decoration:none;transition:color .18s ease}
+.pie-pagina a:hover{color:var(--ux-gold)}
+
+.item-caracteristica:focus-visible,.btn-registro:focus-visible,.puerta-link:focus-visible,.pie-pagina a:focus-visible{
+  outline:2px solid var(--ux-gold-soft);outline-offset:3px;
+}
+
+/* ================================================== */
+/* TABLET LANDSCAPE / TABLET                          */
+/* ================================================== */
+@media (max-width:1100px){
+  .portada{
+    min-height:650px;
+    grid-template-columns:minmax(230px,.82fr) minmax(320px,1.28fr) minmax(240px,.88fr);
+    grid-template-rows:82px minmax(0,1fr) 108px;
+    column-gap:18px;
+    padding:0 24px;
+  }
+  .header-branding img{width:145px !important}
+  .slogan-lateral h2{font-size:clamp(23px,2.8vw,30px)}
+  .item-caracteristica{min-height:50px;padding:7px 8px;gap:8px}
+  .item-caracteristica svg{width:31px;height:31px;flex-basis:31px;padding:7px}
+  .item-caracteristica span{font-size:8.5px;letter-spacing:.35px}
+}
+
+/* ================================================== */
+/* TABLET PORTRAIT                                    */
+/* ================================================== */
+@media (max-width:900px){
+  .portada{
+    height:auto;
+    min-height:100svh;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:78px auto minmax(300px,1fr) auto;
+    grid-template-areas:
+      "brand register"
+      "slogan slogan"
+      "center center"
+      "menu menu";
+    gap:12px 16px;
+    padding:0 20px 18px;
+  }
+  .header-branding{justify-self:start}
+  .registro-contenedor{justify-self:end}
+  .slogan-lateral{
+    align-self:start;
+    justify-self:start;
+    max-width:560px;
+    padding-left:14px;
+  }
+  .slogan-lateral h2{font-size:clamp(24px,4vw,32px)}
+  .puerta-link{
+    grid-area:center;
+    align-self:end;
+    margin-bottom:18px;
+  }
+  .caracteristicas-lista{
+    grid-area:menu;
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:0;
+    width:100%;
+    padding:7px;
+    align-self:end;
+  }
+  .item-caracteristica{
+    min-height:58px;
+    justify-content:center;
+    border-bottom:0;
+    border-right:1px solid rgba(255,255,255,.10);
+    border-radius:10px;
+    padding:7px 8px;
+  }
+  .item-caracteristica:last-child{border-right:0}
+  .item-caracteristica::after{display:none}
+  .item-caracteristica span{font-size:7.8px;text-align:left}
+}
+
+/* ================================================== */
+/* MÓVIL                                              */
+/* ================================================== */
+@media (max-width:640px){
+  .portada{
+    height:auto;
+    min-height:100svh;
+    overflow:visible;
+    grid-template-columns:1fr auto;
+    grid-template-rows:68px auto minmax(270px,1fr) auto;
+    grid-template-areas:
+      "brand register"
+      "slogan slogan"
+      "center center"
+      "menu menu";
+    gap:10px 10px;
+    padding:0 12px 14px;
+  }
+  .portada-img{
+    object-fit:cover;
+    object-position:center center;
+    filter:brightness(1.09) saturate(1.03);
+  }
+  .portada::after{background:transparent}
+
+  .header-branding{align-self:center;justify-self:start}
+  .header-branding img{width:108px !important;max-width:108px !important}
+
+  .registro-contenedor{align-self:center;justify-self:end}
+  .btn-registro{
+    min-height:34px;
+    padding:0 11px;
+    border-radius:9px;
+    font-size:7.3px;
+    letter-spacing:.45px;
+    white-space:nowrap;
+  }
+
+  .slogan-lateral{
+    align-self:start;
+    justify-self:stretch;
+    width:auto;
+    max-width:none;
+    padding:8px 10px 9px;
+    border-left:0;
+    border-top:1px solid rgba(229,193,88,.55);
+    text-align:center;
+    background:rgba(5,12,22,.08);
+    backdrop-filter:blur(2px);
+    -webkit-backdrop-filter:blur(2px);
+  }
+  .slogan-lateral h2{
+    max-width:none;
+    font-size:clamp(17px,5vw,22px);
+    line-height:1.1;
+    letter-spacing:0;
+  }
+
+  .puerta-link{
+    align-self:end;
+    justify-self:center;
+    min-width:auto;
+    min-height:42px;
+    margin-bottom:8px;
+  }
+  .puerta-link::after{
+    padding:10px 15px;
+    font-size:7.4px;
+    letter-spacing:.8px;
+  }
+
+  .caracteristicas-lista{
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:6px;
+    padding:7px;
+    border-radius:15px;
+    background:rgba(5,12,22,.22);
+    backdrop-filter:blur(9px);
+    -webkit-backdrop-filter:blur(9px);
+  }
+  .item-caracteristica{
+    min-width:0;
+    min-height:50px;
+    justify-content:flex-start;
+    border:1px solid rgba(255,255,255,.10);
+    border-right:1px solid rgba(255,255,255,.10);
+    border-radius:10px;
+    padding:6px 7px;
+    background:rgba(255,255,255,.025);
+    gap:7px;
+  }
+  .item-caracteristica:last-child{grid-column:1/-1;justify-content:center;border:1px solid rgba(255,255,255,.10)}
+  .item-caracteristica svg{width:30px;height:30px;flex-basis:30px;padding:7px}
+  .item-caracteristica span{font-size:7.5px;line-height:1.15;letter-spacing:.25px}
+  .item-caracteristica:hover{transform:none}
+
+  .pie-pagina{height:30px;padding:0 8px;font-size:7.5px}
+}
+
+@media (max-width:380px){
+  .portada{padding-left:8px;padding-right:8px}
+  .header-branding img{width:98px !important;max-width:98px !important}
+  .btn-registro{padding:0 9px;font-size:6.8px}
+  .slogan-lateral h2{font-size:16px}
+  .item-caracteristica{padding:5px 6px}
+  .item-caracteristica span{font-size:6.9px}
+}
+
+@media (max-height:680px) and (min-width:641px){
+  .portada{min-height:560px;grid-template-rows:74px minmax(0,1fr) 94px}
+  .item-caracteristica{min-height:46px}
+  .slogan-lateral h2{font-size:clamp(22px,2.2vw,32px)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .item-caracteristica,.btn-registro,.puerta-link::after{transition:none}
+}
+</style>
+
+
+<style id="urbanex-responsive-fix">
+/* ==========================================================
+   AJUSTE RESPONSIVE NO DESTRUCTIVO
+   IMPORTANTE:
+   - No reemplaza ni elimina el código anterior.
+   - Solo sobrescribe estilos al final del <head>.
+   - Mantiene todas las rutas, HTML y funcionalidades.
+   ========================================================== */
+
+:root{
+    --urbanex-gold:#e5c158;
+    --urbanex-gold-soft:#f3d98b;
+    --urbanex-footer-h:24px;
+    --urbanex-glass:rgba(7,15,25,.22);
+    --urbanex-glass-strong:rgba(7,15,25,.34);
+    --urbanex-border:rgba(255,255,255,.16);
+}
+
+/* ----------------------------------------------------------
+   1. BASE
+   ---------------------------------------------------------- */
+
+html,
+body{
+    width:100%;
+    min-height:100%;
+    background:#000;
+}
+
+body{
+    display:flex;
+    flex-direction:column;
+}
+
+/* La portada sigue ocupando la pantalla disponible antes del pie */
+.portada{
+    width:100%;
+    height:calc(100vh - var(--urbanex-footer-h));
+    height:calc(100svh - var(--urbanex-footer-h));
+    min-height:560px;
+    position:relative;
+    overflow:hidden;
+    background:#07111d;
+}
+
+/* La imagen NO se cambia.
+   Solo se evita deformarla y se mantiene clara. */
+.portada-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center center;
+    filter:brightness(1.08) saturate(1.03);
+}
+
+/* Se anula únicamente la capa oscura global anterior */
+.portada::before{
+    background:transparent !important;
+}
+
+/* ----------------------------------------------------------
+   2. ENCABEZADO
+   Urbanex permanece SIEMPRE centrado arriba.
+   ---------------------------------------------------------- */
+
+.header-branding{
+    position:absolute;
+    top:10px;
+    left:50%;
+    right:auto;
+    bottom:auto;
+    transform:translateX(-50%);
+    width:auto;
+    max-width:none;
+    text-align:center;
+    z-index:30;
+    pointer-events:none;
+}
+
+.header-branding img{
+    display:block;
+    width:clamp(125px,10vw,170px) !important;
+    max-width:none !important;
+    height:auto !important;
+    margin:0 auto;
+    filter:drop-shadow(0 4px 12px rgba(0,0,0,.28));
+}
+
+/* Registro permanece arriba a la derecha */
+.registro-contenedor{
+    position:absolute;
+    top:16px;
+    right:clamp(18px,3.5vw,52px);
+    left:auto;
+    bottom:auto;
+    transform:none;
+    width:auto;
+    z-index:31;
+}
+
+.btn-registro{
+    min-height:40px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 18px;
+    border:1px solid rgba(229,193,88,.82);
+    border-radius:10px;
+    background:rgba(7,15,25,.20);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    color:var(--urbanex-gold-soft);
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:.85px;
+    text-transform:uppercase;
+    box-shadow:0 8px 24px rgba(0,0,0,.10);
+    transition:
+        background .20s ease,
+        color .20s ease,
+        transform .20s ease,
+        box-shadow .20s ease;
+}
+
+.btn-registro:hover{
+    background:var(--urbanex-gold);
+    color:#10151b;
+    transform:translateY(-1px);
+    box-shadow:0 9px 26px rgba(229,193,88,.18);
+}
+
+/* ----------------------------------------------------------
+   3. ESLOGAN
+   ---------------------------------------------------------- */
+
+.slogan-lateral{
+    position:absolute;
+    top:44%;
+    left:clamp(30px,4.5vw,74px);
+    right:auto;
+    bottom:auto;
+    width:clamp(285px,27vw,405px);
+    transform:translateY(-50%);
+    padding:0 0 0 18px;
+    border-left:3px solid var(--urbanex-gold);
+    background:transparent;
+    z-index:18;
+    pointer-events:none;
+}
+
+.slogan-lateral h2{
+    margin:0;
+    max-width:none;
+    color:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:clamp(28px,2.65vw,40px);
+    line-height:1.06;
+    font-weight:700;
+    letter-spacing:-.60px;
+    text-transform:uppercase;
+    text-shadow:
+        0 2px 3px rgba(0,0,0,.78),
+        0 8px 24px rgba(0,0,0,.34);
+}
+
+/* ----------------------------------------------------------
+   4. MENÚ DERECHO
+   Mantiene la misma estructura de enlaces.
+   ---------------------------------------------------------- */
+
+.caracteristicas-lista{
+    position:absolute;
+    top:47%;
+    right:clamp(24px,3.6vw,56px);
+    left:auto;
+    bottom:auto;
+    width:clamp(285px,24vw,350px);
+    transform:translateY(-50%);
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    padding:7px;
+    border:1px solid var(--urbanex-border);
+    border-radius:16px;
+    background:var(--urbanex-glass);
+    backdrop-filter:blur(12px) saturate(118%);
+    -webkit-backdrop-filter:blur(12px) saturate(118%);
+    box-shadow:0 14px 38px rgba(0,0,0,.14);
+    z-index:24;
+}
+
+.item-caracteristica{
+    min-height:52px;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-start;
+    gap:10px;
+    padding:8px 10px;
+    border:0;
+    border-left:0;
+    border-bottom:0;
+    border-radius:10px;
+    background:transparent;
+    box-shadow:none;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+    text-decoration:none;
+    transition:
+        background .18s ease,
+        transform .18s ease;
+}
+
+.item-caracteristica:hover{
+    background:rgba(255,255,255,.10);
+    border-left-color:transparent;
+    transform:translateX(-2px);
+}
+
+.item-caracteristica svg{
+    width:31px;
+    height:31px;
+    flex:0 0 31px;
+    padding:7px;
+    border-radius:9px;
+    fill:var(--urbanex-gold);
+    background:rgba(229,193,88,.10);
+    border:1px solid rgba(229,193,88,.18);
+}
+
+.item-caracteristica span{
+    min-width:0;
+    color:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:9.2px;
+    line-height:1.15;
+    font-weight:700;
+    letter-spacing:.50px;
+    text-transform:uppercase;
+    text-shadow:0 2px 6px rgba(0,0,0,.38);
+}
+
+.item-caracteristica::after{
+    content:"›";
+    margin-left:auto;
+    color:rgba(255,255,255,.72);
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:19px;
+    line-height:1;
+    transition:
+        color .18s ease,
+        transform .18s ease;
+}
+
+.item-caracteristica:hover::after{
+    color:var(--urbanex-gold-soft);
+    transform:translateX(2px);
+}
+
+/* ----------------------------------------------------------
+   5. ENTRADA AL BOULEVARD
+   Se conserva el mismo enlace existente.
+   ---------------------------------------------------------- */
+
+.puerta-link{
+    position:absolute;
+    top:auto;
+    left:50%;
+    right:auto;
+    bottom:clamp(26px,6vh,58px);
+    width:auto;
+    height:auto;
+    transform:translateX(-50%);
+    z-index:20;
+    display:block;
+    cursor:pointer;
+    background:transparent;
+    text-decoration:none;
+}
+
+.puerta-link::after{
+    content:"ENTRAR AL BOULEVARD";
+    position:static;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-width:220px;
+    min-height:44px;
+    padding:0 20px;
+    border:1px solid rgba(229,193,88,.86);
+    border-radius:999px;
+    background:rgba(7,15,25,.18);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    color:var(--urbanex-gold-soft);
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:8.5px;
+    line-height:1;
+    font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    text-shadow:0 2px 6px rgba(0,0,0,.38);
+    box-shadow:0 8px 24px rgba(0,0,0,.10);
+    opacity:1;
+    transform:none;
+    transition:
+        background .20s ease,
+        color .20s ease,
+        transform .20s ease;
+}
+
+.puerta-link:hover::after{
+    opacity:1;
+    background:var(--urbanex-gold);
+    color:#10151b;
+    transform:translateY(-2px);
+}
+
+/* ----------------------------------------------------------
+   6. PIE DE PÁGINA
+   Mantiene su lugar original al final.
+   ---------------------------------------------------------- */
+
+.pie-pagina{
+    width:100%;
+    height:var(--urbanex-footer-h);
+    flex:0 0 var(--urbanex-footer-h);
+    position:relative;
+    left:auto;
+    right:auto;
+    top:auto;
+    bottom:auto;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    background:#050608;
+    border-top:1px solid rgba(255,255,255,.06);
+    color:#8c939b;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:8.5px;
+    line-height:1;
+    z-index:40;
+}
 
 .pie-pagina a{
-    color: inherit;
-    text-decoration: none;
+    color:#c5cad0;
+    text-decoration:none;
+    transition:color .18s ease;
 }
 
 .pie-pagina a:hover,
 .pie-pagina a:focus-visible{
-    color: #e5c158;
+    color:var(--urbanex-gold);
+}
+
+/* ----------------------------------------------------------
+   7. ACCESIBILIDAD
+   ---------------------------------------------------------- */
+
+.item-caracteristica:focus-visible,
+.btn-registro:focus-visible,
+.puerta-link:focus-visible{
+    outline:2px solid var(--urbanex-gold-soft);
+    outline-offset:3px;
+}
+
+/* ==========================================================
+   PANTALLAS GRANDES
+   ========================================================== */
+
+@media (min-width:1400px){
+
+    .header-branding{
+        top:12px;
+    }
+
+    .header-branding img{
+        width:165px !important;
+    }
+
+    .registro-contenedor{
+        top:18px;
+        right:48px;
+    }
+
+    .slogan-lateral{
+        left:5%;
+        width:400px;
+    }
+
+    .caracteristicas-lista{
+        right:4%;
+        width:350px;
+    }
+}
+
+/* ==========================================================
+   PANTALLAS MEDIANAS / TABLET HORIZONTAL
+   El encabezado y el pie NO cambian de lugar.
+   ========================================================== */
+
+@media (max-width:1100px){
+
+    .header-branding{
+        top:10px;
+        left:50%;
+        transform:translateX(-50%);
+    }
+
+    .header-branding img{
+        width:136px !important;
+    }
+
+    .registro-contenedor{
+        top:13px;
+        right:16px;
+    }
+
+    .btn-registro{
+        min-height:36px;
+        padding:0 13px;
+        font-size:7.8px;
+        letter-spacing:.60px;
+    }
+
+    .slogan-lateral{
+        top:42%;
+        left:3.5%;
+        width:31%;
+        padding-left:14px;
+    }
+
+    .slogan-lateral h2{
+        font-size:clamp(22px,3vw,30px);
+    }
+
+    .caracteristicas-lista{
+        top:47%;
+        right:2.5%;
+        width:30%;
+        padding:6px;
+    }
+
+    .item-caracteristica{
+        min-height:47px;
+        padding:7px 8px;
+        gap:8px;
+    }
+
+    .item-caracteristica svg{
+        width:28px;
+        height:28px;
+        flex-basis:28px;
+        padding:6px;
+    }
+
+    .item-caracteristica span{
+        font-size:7.8px;
+        letter-spacing:.30px;
+    }
+
+    .puerta-link{
+        bottom:30px;
+    }
+
+    .puerta-link::after{
+        min-width:200px;
+        min-height:40px;
+        font-size:7.8px;
+    }
+}
+
+/* ==========================================================
+   TABLET VERTICAL
+   Logo siempre centrado.
+   Pie siempre abajo.
+   El contenido central sí se reorganiza.
+   ========================================================== */
+
+@media (max-width:900px){
+
+    .portada{
+        min-height:620px;
+    }
+
+    .slogan-lateral{
+        top:20%;
+        left:5%;
+        width:90%;
+        transform:none;
+        padding:8px 12px 9px;
+        border-left:0;
+        border-top:2px solid rgba(229,193,88,.72);
+        text-align:center;
+        background:rgba(7,15,25,.06);
+    }
+
+    .slogan-lateral h2{
+        font-size:clamp(20px,4.6vw,29px);
+        line-height:1.07;
+        letter-spacing:-.25px;
+    }
+
+    .caracteristicas-lista{
+        top:auto;
+        right:auto;
+        bottom:12px;
+        left:4%;
+        width:92%;
+        transform:none;
+        display:grid;
+        grid-template-columns:repeat(5,minmax(0,1fr));
+        gap:4px;
+        padding:6px;
+        border-radius:14px;
+        background:rgba(7,15,25,.18);
+    }
+
+    .item-caracteristica{
+        min-width:0;
+        min-height:58px;
+        flex-direction:column;
+        justify-content:center;
+        gap:5px;
+        padding:6px 5px;
+        text-align:center;
+    }
+
+    .item-caracteristica svg{
+        width:25px;
+        height:25px;
+        flex-basis:25px;
+        padding:5px;
+    }
+
+    .item-caracteristica span{
+        font-size:6.8px;
+        line-height:1.05;
+        letter-spacing:.10px;
+        text-align:center;
+    }
+
+    .item-caracteristica::after{
+        display:none;
+    }
+
+    .item-caracteristica:hover{
+        transform:none;
+    }
+
+    .puerta-link{
+        bottom:98px;
+    }
+
+    .puerta-link::after{
+        min-width:200px;
+    }
+}
+
+/* ==========================================================
+   MÓVIL
+   Logo permanece centrado arriba.
+   Registro permanece arriba a la derecha.
+   Pie permanece abajo.
+   ========================================================== */
+
+@media (max-width:640px){
+
+    .portada{
+        height:calc(100svh - var(--urbanex-footer-h));
+        min-height:610px;
+    }
+
+    .portada-img{
+        object-fit:cover;
+        object-position:center center;
+        filter:brightness(1.07) saturate(1.02);
+    }
+
+    .header-branding{
+        top:7px;
+        left:50%;
+        transform:translateX(-50%);
+    }
+
+    .header-branding img{
+        width:92px !important;
+        max-width:92px !important;
+    }
+
+    .registro-contenedor{
+        top:8px;
+        right:7px;
+    }
+
+    .btn-registro{
+        min-height:29px;
+        padding:0 7px;
+        border-radius:8px;
+        font-size:5.8px;
+        letter-spacing:.22px;
+        white-space:nowrap;
+    }
+
+    .slogan-lateral{
+        top:15%;
+        left:4%;
+        width:92%;
+        padding:7px 8px 8px;
+    }
+
+    .slogan-lateral h2{
+        font-size:clamp(16px,5.3vw,22px);
+        line-height:1.06;
+    }
+
+    .caracteristicas-lista{
+        bottom:8px;
+        left:3%;
+        width:94%;
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:5px;
+        padding:6px;
+    }
+
+    .item-caracteristica{
+        min-height:46px;
+        flex-direction:row;
+        justify-content:flex-start;
+        gap:6px;
+        padding:6px 7px;
+        text-align:left;
+        border:1px solid rgba(255,255,255,.08);
+        background:rgba(255,255,255,.02);
+    }
+
+    .item-caracteristica:last-child{
+        grid-column:1 / -1;
+        justify-content:center;
+    }
+
+    .item-caracteristica svg{
+        width:26px;
+        height:26px;
+        flex-basis:26px;
+        padding:5px;
+    }
+
+    .item-caracteristica span{
+        font-size:6.7px;
+        line-height:1.10;
+        letter-spacing:.08px;
+        text-align:left;
+    }
+
+    .puerta-link{
+        bottom:160px;
+    }
+
+    .puerta-link::after{
+        min-width:180px;
+        min-height:37px;
+        padding:0 12px;
+        font-size:6.7px;
+        letter-spacing:.55px;
+    }
+
+    .pie-pagina{
+        font-size:6.8px;
+        padding:0 5px;
+    }
+}
+
+/* ==========================================================
+   MÓVILES MUY ESTRECHOS
+   ========================================================== */
+
+@media (max-width:390px){
+
+    .header-branding img{
+        width:84px !important;
+        max-width:84px !important;
+    }
+
+    .registro-contenedor{
+        right:5px;
+    }
+
+    .btn-registro{
+        min-height:27px;
+        padding:0 6px;
+        font-size:5.3px;
+    }
+
+    .slogan-lateral{
+        top:13%;
+        left:3%;
+        width:94%;
+    }
+
+    .slogan-lateral h2{
+        font-size:15px;
+    }
+
+    .caracteristicas-lista{
+        left:2%;
+        width:96%;
+    }
+
+    .item-caracteristica{
+        min-height:43px;
+        padding:5px 6px;
+    }
+
+    .item-caracteristica span{
+        font-size:6.1px;
+    }
+
+    .puerta-link{
+        bottom:150px;
+    }
+
+    .puerta-link::after{
+        min-width:170px;
+        min-height:35px;
+        font-size:6.2px;
+    }
+}
+
+/* ==========================================================
+   PANTALLAS DE POCA ALTURA
+   No mueve encabezado ni pie; solo compacta el contenido.
+   ========================================================== */
+
+@media (max-height:700px) and (min-width:901px){
+
+    .portada{
+        min-height:520px;
+    }
+
+    .slogan-lateral{
+        top:42%;
+    }
+
+    .caracteristicas-lista{
+        top:46%;
+    }
+
+    .item-caracteristica{
+        min-height:44px;
+    }
+
+    .puerta-link{
+        bottom:18px;
+    }
+}
+
+@media (max-width:900px) and (max-height:700px){
+
+    .portada{
+        min-height:560px;
+    }
+
+    .slogan-lateral{
+        top:14%;
+    }
+
+    .caracteristicas-lista{
+        bottom:6px;
+    }
+
+    .item-caracteristica{
+        min-height:42px;
+    }
+
+    .puerta-link{
+        bottom:142px;
+    }
+}
+
+/* ==========================================================
+   REDUCCIÓN DE MOVIMIENTO
+   ========================================================== */
+
+@media (prefers-reduced-motion:reduce){
+
+    .btn-registro,
+    .item-caracteristica,
+    .item-caracteristica::after,
+    .puerta-link::after{
+        transition:none;
+    }
 }
 
 </style>
@@ -432,47 +1672,47 @@ html, body {
 <body>
 
 <section class="portada">
-    <img src="imagenes/Portada.png" alt="Portada" class="portada-img">
+    <img src="https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/portada1.png" alt="Portada" class="portada-img">
 
     <!-- Reemplazo del bloque de texto por la imagen solicitada -->
     <div class="header-branding">
-        <img src="imagenes/logo.png" alt="Urbanex" style="width: 40%; max-width: 400px; height: auto;">
+        <img src="https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/logo.png" alt="Urbanex" style="width: 40%; max-width: 400px; height: auto;">
     </div>
-    
+
     <div class="slogan-lateral">
         <h2>Todos los comercios en un solo lugar</h2>
     </div>
 
     <div class="caracteristicas-lista">
-        <a class="item-caracteristica" href="informativos/cerca-de-mi.html" title="Ver negocios cerca de usted" onclick="event.stopPropagation();">
+        <a class="item-caracteristica" href="https://urbanex.app/informativos/cerca-de-mi.html" title="Ver negocios cerca de usted" onclick="event.stopPropagation();">
             <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
             <span>Cerca de usted</span>
         </a>
-        <a class="item-caracteristica" href="informativos/abiertos-ahora.html" title="Ver negocios abiertos ahora" onclick="event.stopPropagation();">
+        <a class="item-caracteristica" href="https://urbanex.app/informativos/abiertos-ahora.html" title="Ver negocios abiertos ahora" onclick="event.stopPropagation();">
             <svg viewBox="0 0 24 24"><path d="M12 1.75A10.25 10.25 0 1 0 22.25 12 10.262 10.262 0 0 0 12 1.75zm0 18.5A8.25 8.25 0 1 1 20.25 12 8.259 8.259 0 0 1 12 20.25zm.75-13.5h-1.5v6l5 3 .75-1.23-4.25-2.52z"/></svg>
             <span>Abiertos ahora</span>
         </a>
-        <a class="item-caracteristica" href="informativos/a-domicilio.html" title="Ver negocios con servicio a domicilio" onclick="event.stopPropagation();">
+        <a class="item-caracteristica" href="https://urbanex.app/informativos/a-domicilio.html" title="Ver negocios con servicio a domicilio" onclick="event.stopPropagation();">
             <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM17 12V9.5h2.5l1.88 2.5H17z"/></svg>
             <span>A domicilio</span>
         </a>
-        <a class="item-caracteristica" href="informativos/ofertas.html" title="Ver ofertas disponibles" onclick="event.stopPropagation();">
+        <a class="item-caracteristica" href="https://urbanex.app/informativos/ofertas.html" title="Ver ofertas disponibles" onclick="event.stopPropagation();">
             <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
             <span>Ofertas</span>
         </a>
-        <!-- ACCESO INDEPENDIENTE AL MAPA -->
-        <a class="item-caracteristica" href="mapa.html" title="Explorar negocios en el mapa" onclick="event.stopPropagation();">
+
+        <!-- NUEVO ACCESO INDEPENDIENTE AL MAPA -->
+        <a class="item-caracteristica" href="https://urbanex.app/mapa.html" title="Explorar negocios en el mapa" onclick="event.stopPropagation();">
             <svg viewBox="0 0 24 24"><path d="M15 5.1 9 3 3 5.1v15.8l6-2.1 6 2.1 6-2.1V3l-6 2.1zM10 5.4l4 1.4v11.8l-4-1.4V5.4zm-5 1.1 3-1.05v11.8L5 18.3V6.5zm14 10.85-3 1.05V6.6l3-1.05v11.8z"/></svg>
             <span>Mapa</span>
         </a>
-
     </div>
 
     <div class="registro-contenedor">
-        <a href="registro.html" class="btn-registro">Registre su negocio</a>
+        <a href="https://urbanex.app/registro.html" class="btn-registro">Registre su negocio</a>
     </div>
 
-    <a href="boulevard.html" class="puerta-link"></a>
+    <a href="https://urbanex.app/boulevard.html" class="puerta-link"></a>
 </section>
 
 <footer class="pie-pagina">
