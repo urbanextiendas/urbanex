@@ -7559,6 +7559,34 @@ body{
 }
 </style>
 
+
+<style id="urbanex-alinear-tagline-con-headline">
+/* ==========================================================
+   ALINEACIÓN EXACTA DEL TEXTO SUPERIOR
+   "Todos los comercios..." inicia en la misma línea vertical
+   que "Su marketplace..."
+   Solo pantallas grandes. No cambia tamaños.
+   ========================================================== */
+@media (min-width:1200px){
+
+    .desktop-reference-v2__brand{
+        left:clamp(22px,3vw,46px) !important;
+    }
+
+    .desktop-reference-v2__brand p{
+        margin-left:0 !important;
+        padding-left:0 !important;
+        text-align:left !important;
+    }
+
+    /* Mantiene el logo ligeramente desplazado a la derecha,
+       como se solicitó anteriormente. */
+    .desktop-reference-v2__logo{
+        margin-left:18px !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
