@@ -49,20 +49,18 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: fill; 
+    object-fit: cover;
+    object-position: center center;
     display: block;
+    filter: brightness(1.05) saturate(1.03) contrast(1.01);
 }
 
-/* CAPA OSCURA REFINADA PARA MEJORAR CONTRASTE DE TEXTOS */
+/* SIN PELÍCULA OSCURA GLOBAL: la imagen conserva su luminosidad original */
 .portada::before{
     content:"";
     position:absolute;
     inset:0;
-    background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,.30),
-        rgba(0,0,0,.50)
-    );
+    background: transparent;
     z-index: 1;
     pointer-events: none;
 }
@@ -148,21 +146,24 @@ html, body {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 10px 14px;
-    border-radius: 6px;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    background: rgba(7, 15, 25, 0.34);
+    padding: 11px 14px;
+    border-radius: 9px;
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+    border: 1px solid rgba(255,255,255,0.10);
     border-left: 3px solid #e5c158;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.16);
     cursor: pointer;
     text-decoration: none;
     pointer-events: auto;
+    transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
 .item-caracteristica:hover {
     border-left-color: #f4d675;
-    background: rgba(229, 193, 88, 0.10);
+    background: rgba(229, 193, 88, 0.14);
+    transform: translateX(-2px);
 }
 
 .item-caracteristica svg {
@@ -315,20 +316,25 @@ html, body {
     /* UBICACIÓN CLAVE: Los beneficios se alinean horizontalmente abajo de la puerta */
     .caracteristicas-lista {
         top: auto;
-        bottom: 14%;
-        left: 5%;
-        width: 90%;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
+        bottom: 7%;
+        left: 4%;
+        width: 92%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 6px;
     }
 
     .item-caracteristica {
-        padding: 5px 8px;
+        min-width: 0;
+        padding: 7px 8px;
         border-left: none;
         border-bottom: 2px solid #e5c158;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(7, 15, 25, 0.38);
+    }
+
+    .item-caracteristica:last-child {
+        grid-column: 1 / -1;
+        justify-content: center;
     }
 
     .item-caracteristica svg {
@@ -342,34 +348,49 @@ html, body {
         letter-spacing: 0.5px;
     }
 
-    /* UBICACIÓN CLAVE: Registro de negocio toma la base oscura inferior */
+    /* El encabezado se mantiene arriba también en móvil */
     .registro-contenedor {
-        top: auto;
-        bottom: 3%;
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
+        top: 2%;
+        right: 3%;
+        bottom: auto;
+        left: auto;
+        transform: none;
         flex-direction: row;
-        justify-content: center;
-        gap: 10px;
-        width: 90%;
+        justify-content: flex-end;
+        gap: 8px;
+        width: auto;
     }
 
     .registro-texto {
-        font-size: 11px;
+        font-size: 10px;
     }
 
     .btn-registro {
-        padding: 6px 14px;
-        font-size: 11px;
+        padding: 7px 10px;
+        font-size: 8px;
+        border-radius: 7px;
+        white-space: nowrap;
+        background: rgba(7, 15, 25, 0.28);
     }
 }
 
 /* Ajuste fino para pantallas extremadamente pequeñas */
 @media(max-width:380px){
     .caracteristicas-lista {
-        bottom: 16%;
+        bottom: 6%;
+        left: 3%;
+        width: 94%;
     }
+
+    .header-branding img{
+        width: 34% !important;
+    }
+
+    .btn-registro{
+        padding: 6px 8px;
+        font-size: 7px;
+    }
+
     .item-caracteristica span {
         font-size: 8px;
     }
@@ -393,6 +414,17 @@ html, body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+
+.pie-pagina a{
+    color: inherit;
+    text-decoration: none;
+}
+
+.pie-pagina a:hover,
+.pie-pagina a:focus-visible{
+    color: #e5c158;
+}
+
 </style>
 
 </head>
@@ -400,7 +432,7 @@ html, body {
 <body>
 
 <section class="portada">
-    <img src="imagenes/portada1.png" alt="Portada" class="portada-img">
+    <img src="imagenes/Portada.png" alt="Portada" class="portada-img">
 
     <!-- Reemplazo del bloque de texto por la imagen solicitada -->
     <div class="header-branding">
@@ -428,6 +460,12 @@ html, body {
             <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
             <span>Ofertas</span>
         </a>
+        <!-- ACCESO INDEPENDIENTE AL MAPA -->
+        <a class="item-caracteristica" href="mapa.html" title="Explorar negocios en el mapa" onclick="event.stopPropagation();">
+            <svg viewBox="0 0 24 24"><path d="M15 5.1 9 3 3 5.1v15.8l6-2.1 6 2.1 6-2.1V3l-6 2.1zM10 5.4l4 1.4v11.8l-4-1.4V5.4zm-5 1.1 3-1.05v11.8L5 18.3V6.5zm14 10.85-3 1.05V6.6l3-1.05v11.8z"/></svg>
+            <span>Mapa</span>
+        </a>
+
     </div>
 
     <div class="registro-contenedor">
@@ -438,7 +476,7 @@ html, body {
 </section>
 
 <footer class="pie-pagina">
-    <p>&copy; 2026 Urbanex. Desarrollado por NeoDat Consultores.</p>
+    <p>&copy; 2026 Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p>
 </footer>
 
 </body>
