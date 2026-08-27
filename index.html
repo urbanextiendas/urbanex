@@ -5943,6 +5943,53 @@ body{
 }
 </style>
 
+
+<style id="urbanex-footer-translucido-ajuste">
+/* ==========================================================
+   AJUSTE FINAL DEL FOOTER
+   - Fondo translúcido
+   - Mejor legibilidad
+   - Sin afectar el diseño actual
+   ========================================================== */
+
+.pie-pagina{
+    background:rgba(7, 12, 18, 0.34) !important;
+    background-color:rgba(7, 12, 18, 0.34) !important;
+
+    backdrop-filter:blur(8px) saturate(115%) !important;
+    -webkit-backdrop-filter:blur(8px) saturate(115%) !important;
+
+    border-top:1px solid rgba(229,193,88,.22) !important;
+    box-shadow:
+        0 -6px 18px rgba(0,0,0,.10),
+        inset 0 1px 0 rgba(255,255,255,.05) !important;
+
+    color:rgba(255,255,255,.94) !important;
+}
+
+.pie-pagina a{
+    color:#f1cf63 !important;
+}
+
+.pie-pagina a:hover{
+    color:#ffffff !important;
+}
+
+@media (min-width:1200px){
+    .pie-pagina{
+        background:rgba(7, 12, 18, 0.30) !important;
+        background-color:rgba(7, 12, 18, 0.30) !important;
+    }
+}
+
+@media (max-width:640px){
+    .pie-pagina{
+        background:rgba(7, 12, 18, 0.38) !important;
+        background-color:rgba(7, 12, 18, 0.38) !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
