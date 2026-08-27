@@ -1878,6 +1878,236 @@ body{
 }
 </style>
 
+
+<style id="urbanex-imagenes-responsive-2026">
+/* ==========================================================
+   AJUSTE FINAL DE IMÁGENES POR DISPOSITIVO
+   NO ELIMINA NI REEMPLAZA LOS ESTILOS ANTERIORES.
+   Solo prevalece por estar ubicado al final del <head>.
+   ========================================================== */
+
+/* ----------------------------------------------------------
+   ESCRITORIO Y PANTALLAS GRANDES
+   Las nuevas portadas horizontales son 2400 x 1000.
+   Se respeta su proporción real 12:5 para evitar:
+   - laterales desenfocados,
+   - deformación,
+   - recortes innecesarios.
+   ---------------------------------------------------------- */
+@media (min-width: 901px){
+
+    body{
+        min-height:0 !important;
+        display:block !important;
+        background:#050608 !important;
+    }
+
+    .portada{
+        width:100% !important;
+        height:auto !important;
+        min-height:0 !important;
+        max-height:none !important;
+        aspect-ratio:12 / 5 !important;
+        flex:none !important;
+        position:relative !important;
+        overflow:hidden !important;
+        background:#07111d !important;
+    }
+
+    .portada-img{
+        position:absolute !important;
+        inset:0 !important;
+        width:100% !important;
+        height:100% !important;
+        padding:0 !important;
+        object-fit:cover !important;
+        object-position:center center !important;
+        transform:none !important;
+        z-index:-3 !important;
+        filter:brightness(1.03) saturate(1.02) contrast(1.01) !important;
+        background:transparent !important;
+    }
+
+    /* Se elimina visualmente el relleno desenfocado lateral,
+       pero NO se elimina el código anterior. */
+    .portada::before{
+        content:"" !important;
+        position:absolute !important;
+        inset:0 !important;
+        z-index:-2 !important;
+        display:block !important;
+        background:
+            linear-gradient(
+                90deg,
+                rgba(3,8,14,.22) 0%,
+                rgba(3,8,14,.05) 27%,
+                rgba(3,8,14,0) 54%,
+                rgba(3,8,14,.12) 100%
+            ) !important;
+        background-image:
+            linear-gradient(
+                90deg,
+                rgba(3,8,14,.22) 0%,
+                rgba(3,8,14,.05) 27%,
+                rgba(3,8,14,0) 54%,
+                rgba(3,8,14,.12) 100%
+            ) !important;
+        filter:none !important;
+        transform:none !important;
+        pointer-events:none !important;
+    }
+
+    .portada::after{
+        content:"" !important;
+        position:absolute !important;
+        inset:0 !important;
+        z-index:-1 !important;
+        display:block !important;
+        background:
+            linear-gradient(
+                to bottom,
+                rgba(0,0,0,.02) 0%,
+                transparent 64%,
+                rgba(0,0,0,.10) 100%
+            ) !important;
+        pointer-events:none !important;
+    }
+
+    /* Urbanex centrado de forma real en escritorio */
+    .header-branding{
+        position:absolute !important;
+        top:clamp(14px,1.45vw,24px) !important;
+        left:0 !important;
+        right:0 !important;
+        bottom:auto !important;
+        width:100% !important;
+        max-width:none !important;
+        transform:none !important;
+        display:flex !important;
+        justify-content:center !important;
+        align-items:flex-start !important;
+        text-align:center !important;
+    }
+
+    .header-branding img{
+        width:clamp(128px,9vw,168px) !important;
+        max-width:168px !important;
+        height:auto !important;
+        margin:0 auto !important;
+        object-fit:contain !important;
+    }
+
+    .registro-contenedor{
+        top:clamp(14px,1.45vw,24px) !important;
+    }
+
+    .slogan-lateral{
+        top:49% !important;
+    }
+
+    .caracteristicas-lista{
+        top:49% !important;
+    }
+
+    .puerta-link{
+        bottom:clamp(18px,3vw,42px) !important;
+    }
+
+    .pie-pagina{
+        min-height:30px !important;
+        height:30px !important;
+        flex:0 0 30px !important;
+    }
+}
+
+/* ----------------------------------------------------------
+   TABLET HORIZONTAL
+   Mantiene la portada panorámica.
+   ---------------------------------------------------------- */
+@media (min-width: 901px) and (max-width: 1199px){
+
+    .portada{
+        aspect-ratio:12 / 5 !important;
+    }
+
+    .slogan-lateral{
+        left:4% !important;
+        width:34% !important;
+    }
+
+    .caracteristicas-lista{
+        right:3% !important;
+        width:30% !important;
+    }
+}
+
+/* ----------------------------------------------------------
+   TABLET VERTICAL Y CELULAR
+   Las imágenes se cambian por JavaScript a las versiones:
+   *_celular.png
+   ---------------------------------------------------------- */
+@media (max-width: 900px){
+
+    .portada-img{
+        position:absolute !important;
+        inset:0 !important;
+        width:100% !important;
+        height:100% !important;
+        object-fit:cover !important;
+        object-position:center center !important;
+        transform:none !important;
+        filter:brightness(1.02) saturate(1.02) contrast(1.01) !important;
+        background:transparent !important;
+    }
+
+    .portada::before{
+        background:
+            linear-gradient(
+                to bottom,
+                rgba(3,8,14,.07) 0%,
+                rgba(3,8,14,.01) 40%,
+                rgba(3,8,14,.05) 66%,
+                rgba(3,8,14,.20) 100%
+            ) !important;
+        background-image:
+            linear-gradient(
+                to bottom,
+                rgba(3,8,14,.07) 0%,
+                rgba(3,8,14,.01) 40%,
+                rgba(3,8,14,.05) 66%,
+                rgba(3,8,14,.20) 100%
+            ) !important;
+        filter:none !important;
+        transform:none !important;
+    }
+}
+
+/* ----------------------------------------------------------
+   CELULAR
+   Conserva la distribución móvil existente.
+   ---------------------------------------------------------- */
+@media (max-width: 640px){
+
+    .portada{
+        aspect-ratio:auto !important;
+    }
+
+    .portada-img{
+        object-fit:cover !important;
+        object-position:center center !important;
+    }
+}
+
+/* ----------------------------------------------------------
+   ACCESIBILIDAD
+   ---------------------------------------------------------- */
+@media (prefers-reduced-motion:reduce){
+    .portada-img{
+        transition:none !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
@@ -1941,9 +2171,19 @@ body{
 
     const imagenes = {
         dia: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada%20d%C3%ADa.png',
-        tarde: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada%20tarde.png',
-        noche: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada%20noche.png'
+        tarde: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada_tarde.png',
+        noche: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada_noche.png'
     };
+
+    /* Imágenes verticales específicas para celular y tablet vertical */
+    const imagenesCelular = {
+        dia: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada_diacelular.png',
+        tarde: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada_tardecelular.png',
+        noche: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada_nochecelular.png'
+    };
+
+    /* El punto de cambio coincide con el diseño responsive */
+    const mediaCelular = window.matchMedia('(max-width: 900px)');
 
     const logos = {
         dia: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Urba4.png',
@@ -1980,7 +2220,9 @@ body{
         const hora = obtenerHoraEcuador();
         const franja = obtenerFranjaHoraria(hora);
 
-        const nuevaPortada = imagenes[franja];
+        /* Selecciona automáticamente la portada según el tamaño de pantalla */
+        const conjuntoImagenes = mediaCelular.matches ? imagenesCelular : imagenes;
+        const nuevaPortada = conjuntoImagenes[franja];
         const nuevoLogo = logos[franja];
         const contenedorPortada = portada ? portada.closest('.portada') : null;
 
@@ -1998,6 +2240,14 @@ body{
     }
 
     actualizarBranding();
+
+    /* Si cambia de escritorio a móvil o viceversa, actualiza la imagen
+       inmediatamente sin necesidad de recargar la página. */
+    if (typeof mediaCelular.addEventListener === 'function') {
+        mediaCelular.addEventListener('change', actualizarBranding);
+    } else if (typeof mediaCelular.addListener === 'function') {
+        mediaCelular.addListener(actualizarBranding);
+    }
 
     // Comprueba la hora cada minuto sin necesidad de recargar la página
     setInterval(actualizarBranding, 60000);
