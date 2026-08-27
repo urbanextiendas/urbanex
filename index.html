@@ -5990,6 +5990,250 @@ body{
 }
 </style>
 
+
+<style id="urbanex-footer-translucido-responsive-final">
+/* ==========================================================
+   URBANEX — FOOTER TRANSLÚCIDO RESPONSIVE
+   Solo modifica el pie de página.
+   ========================================================== */
+
+/* BASE */
+.pie-pagina{
+    width:100% !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    margin:0 !important;
+
+    background:rgba(7,12,18,.34) !important;
+    background-color:rgba(7,12,18,.34) !important;
+
+    backdrop-filter:blur(8px) saturate(115%) !important;
+    -webkit-backdrop-filter:blur(8px) saturate(115%) !important;
+
+    border-top:1px solid rgba(229,193,88,.22) !important;
+
+    color:rgba(255,255,255,.95) !important;
+
+    font-family:Arial,Helvetica,sans-serif !important;
+    font-weight:400 !important;
+    line-height:1.2 !important;
+    letter-spacing:.18px !important;
+
+    text-align:center !important;
+
+    box-shadow:
+        0 -6px 18px rgba(0,0,0,.10),
+        inset 0 1px 0 rgba(255,255,255,.05) !important;
+
+    z-index:9999 !important;
+}
+
+.pie-pagina p{
+    margin:0 !important;
+    padding:0 !important;
+}
+
+.pie-pagina a{
+    color:#f1cf63 !important;
+    font-weight:700 !important;
+    text-decoration:none !important;
+}
+
+.pie-pagina a:hover{
+    color:#ffffff !important;
+}
+
+/* ==========================================================
+   PANTALLAS GRANDES
+   ========================================================== */
+@media (min-width:1200px){
+
+    body{
+        padding-bottom:0 !important;
+    }
+
+    .portada{
+        height:100vh !important;
+        height:100svh !important;
+    }
+
+    .pie-pagina{
+        position:fixed !important;
+        left:0 !important;
+        right:0 !important;
+        bottom:0 !important;
+
+        height:46px !important;
+        min-height:46px !important;
+
+        padding:0 22px !important;
+
+        font-size:12px !important;
+
+        background:rgba(7,12,18,.31) !important;
+        background-color:rgba(7,12,18,.31) !important;
+    }
+
+    .desktop-reference-v2__boulevard{
+        bottom:60px !important;
+    }
+}
+
+/* ==========================================================
+   PANTALLAS MEDIANAS / TABLET
+   ========================================================== */
+@media (min-width:641px) and (max-width:1199px){
+
+    .pie-pagina{
+        position:relative !important;
+
+        height:42px !important;
+        min-height:42px !important;
+
+        padding:0 16px !important;
+
+        font-size:10.5px !important;
+
+        background:rgba(7,12,18,.35) !important;
+        background-color:rgba(7,12,18,.35) !important;
+
+        backdrop-filter:blur(7px) saturate(112%) !important;
+        -webkit-backdrop-filter:blur(7px) saturate(112%) !important;
+    }
+}
+
+/* ==========================================================
+   PANTALLAS PEQUEÑAS / MÓVIL
+   ========================================================== */
+@media (max-width:640px){
+
+    .pie-pagina{
+        position:relative !important;
+
+        height:40px !important;
+        min-height:40px !important;
+
+        padding:0 10px !important;
+
+        font-size:9px !important;
+        line-height:1.25 !important;
+
+        background:rgba(7,12,18,.40) !important;
+        background-color:rgba(7,12,18,.40) !important;
+
+        backdrop-filter:blur(6px) saturate(110%) !important;
+        -webkit-backdrop-filter:blur(6px) saturate(110%) !important;
+    }
+}
+
+/* MÓVILES MUY ESTRECHOS */
+@media (max-width:390px){
+
+    .pie-pagina{
+        height:38px !important;
+        min-height:38px !important;
+
+        padding:0 8px !important;
+
+        font-size:8px !important;
+    }
+}
+</style>
+
+
+<style id="urbanex-footer-compacto-final">
+/* ==========================================================
+   URBANEX — FOOTER TRANSLÚCIDO COMPACTO
+   Solo reduce espacios y altura.
+   ========================================================== */
+
+.pie-pagina{
+    padding:0 8px !important;
+    margin:0 !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    line-height:1 !important;
+
+    background:rgba(7,12,18,.34) !important;
+    background-color:rgba(7,12,18,.34) !important;
+
+    backdrop-filter:blur(8px) saturate(115%) !important;
+    -webkit-backdrop-filter:blur(8px) saturate(115%) !important;
+}
+
+.pie-pagina p{
+    margin:0 !important;
+    padding:0 !important;
+    line-height:1 !important;
+}
+
+/* GRANDES */
+@media (min-width:1200px){
+
+    .pie-pagina{
+        height:30px !important;
+        min-height:30px !important;
+        flex:0 0 30px !important;
+
+        padding:0 10px !important;
+
+        font-size:11px !important;
+    }
+
+    .desktop-reference-v2__boulevard{
+        bottom:44px !important;
+    }
+}
+
+/* MEDIANAS / TABLET */
+@media (min-width:641px) and (max-width:1199px){
+
+    .pie-pagina{
+        height:28px !important;
+        min-height:28px !important;
+        flex:0 0 28px !important;
+
+        padding:0 8px !important;
+
+        font-size:10px !important;
+    }
+}
+
+/* PEQUEÑAS / MÓVIL */
+@media (max-width:640px){
+
+    .pie-pagina{
+        height:26px !important;
+        min-height:26px !important;
+        flex:0 0 26px !important;
+
+        padding:0 6px !important;
+
+        font-size:8.5px !important;
+    }
+}
+
+/* MUY PEQUEÑAS */
+@media (max-width:390px){
+
+    .pie-pagina{
+        height:24px !important;
+        min-height:24px !important;
+        flex:0 0 24px !important;
+
+        padding:0 5px !important;
+
+        font-size:7.8px !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
