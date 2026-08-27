@@ -5513,6 +5513,180 @@ body{
 }
 </style>
 
+
+<style id="urbanex-cajas-iconos-final">
+/* ==========================================================
+   SOLO MEJORA VISUAL DE LAS 5 CAJAS E ICONOS EN ESCRITORIO
+   - Mantiene distribución, posiciones y dimensiones generales
+   - Fondo menos oscuro
+   - Mayor limpieza visual
+   - Iconos mejor definidos
+   ========================================================== */
+
+@media (min-width:1200px){
+
+    .desktop-reference-v2__quick-card{
+        position:relative !important;
+        overflow:hidden !important;
+
+        /* Fondo más claro: glass cálido y limpio */
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.22) 0%,
+                rgba(255,255,255,.13) 48%,
+                rgba(244,228,184,.10) 100%
+            ) !important;
+
+        border:1px solid rgba(229,193,88,.58) !important;
+        border-radius:14px !important;
+
+        backdrop-filter:blur(10px) saturate(118%) !important;
+        -webkit-backdrop-filter:blur(10px) saturate(118%) !important;
+
+        box-shadow:
+            0 8px 20px rgba(0,0,0,.13),
+            inset 0 1px 0 rgba(255,255,255,.24) !important;
+
+        transition:
+            transform .20s ease,
+            background .20s ease,
+            border-color .20s ease,
+            box-shadow .20s ease !important;
+    }
+
+    /* Brillo sutil en la parte superior de cada caja */
+    .desktop-reference-v2__quick-card::before{
+        content:"" !important;
+        position:absolute !important;
+        left:12px !important;
+        right:12px !important;
+        top:0 !important;
+        height:1px !important;
+
+        background:
+            linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,.55),
+                transparent
+            ) !important;
+
+        pointer-events:none !important;
+    }
+
+    .desktop-reference-v2__quick-card:hover{
+        transform:translateY(-2px) !important;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.29) 0%,
+                rgba(255,255,255,.18) 48%,
+                rgba(244,228,184,.14) 100%
+            ) !important;
+
+        border-color:rgba(241,194,50,.92) !important;
+
+        box-shadow:
+            0 11px 24px rgba(0,0,0,.16),
+            inset 0 1px 0 rgba(255,255,255,.32) !important;
+    }
+
+    /* Contenedor del icono */
+    .desktop-reference-v2__quick-icon{
+        width:34px !important;
+        height:34px !important;
+
+        display:flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+
+        border-radius:10px !important;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(229,193,88,.24),
+                rgba(229,193,88,.11)
+            ) !important;
+
+        border:1px solid rgba(241,194,50,.72) !important;
+
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.18),
+            0 3px 8px rgba(0,0,0,.10) !important;
+
+        transition:
+            transform .20s ease,
+            background .20s ease,
+            border-color .20s ease !important;
+    }
+
+    .desktop-reference-v2__quick-card:hover .desktop-reference-v2__quick-icon{
+        transform:translateY(-1px) scale(1.04) !important;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(241,194,50,.31),
+                rgba(229,193,88,.16)
+            ) !important;
+
+        border-color:#f1c232 !important;
+    }
+
+    /* SVG más limpio, nítido y visible */
+    .desktop-reference-v2__quick-icon svg{
+        width:18px !important;
+        height:18px !important;
+
+        fill:#f6cf50 !important;
+
+        filter:
+            drop-shadow(0 1px 1px rgba(0,0,0,.35))
+            drop-shadow(0 0 4px rgba(241,194,50,.12)) !important;
+    }
+
+    /* Texto: conserva tamaño y distribución, mejora legibilidad */
+    .desktop-reference-v2__quick-card strong{
+        color:#ffffff !important;
+
+        font-weight:700 !important;
+
+        text-shadow:
+            0 1px 2px rgba(0,0,0,.82),
+            0 3px 8px rgba(0,0,0,.25) !important;
+    }
+}
+
+/* Mantiene la misma mejora en laptops grandes de poca altura */
+@media (min-width:1200px) and (max-height:760px){
+
+    .desktop-reference-v2__quick-card{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.21) 0%,
+                rgba(255,255,255,.12) 50%,
+                rgba(244,228,184,.09) 100%
+            ) !important;
+    }
+
+    .desktop-reference-v2__quick-icon{
+        width:28px !important;
+        height:28px !important;
+        border-radius:8px !important;
+    }
+
+    .desktop-reference-v2__quick-icon svg{
+        width:15px !important;
+        height:15px !important;
+    }
+}
+
+</style>
+
 </head>
 
 <body>
