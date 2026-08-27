@@ -6234,6 +6234,272 @@ body{
 }
 </style>
 
+
+<style id="urbanex-ajuste-final-responsive">
+/* ==========================================================
+   AJUSTE FINAL
+   - Footer más angosto
+   - Tarjetas más legibles y menos oscuras
+   - Íconos mejor presentados
+   - Responsive: grandes, medianas y pequeñas
+   ========================================================== */
+
+/* ----------------------------------------------------------
+   TARJETAS / ACCESOS
+   Se aplica tanto a la composición actual como a variantes.
+   ---------------------------------------------------------- */
+
+/* Escritorio grande */
+@media (min-width:1200px){
+
+    .desktop-reference-v2__brand p{
+        max-width:360px !important;
+        font-size:clamp(12px,.9vw,14px) !important;
+        font-weight:600 !important;
+        color:#ffffff !important;
+        text-shadow:
+            0 1px 2px rgba(0,0,0,.88),
+            0 3px 10px rgba(0,0,0,.22) !important;
+    }
+
+    .desktop-reference-v2__quick-card{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.26) 0%,
+                rgba(255,255,255,.17) 46%,
+                rgba(241,194,50,.11) 100%
+            ) !important;
+
+        border:1px solid rgba(229,193,88,.62) !important;
+        border-radius:14px !important;
+
+        backdrop-filter:blur(10px) saturate(118%) !important;
+        -webkit-backdrop-filter:blur(10px) saturate(118%) !important;
+
+        box-shadow:
+            0 8px 20px rgba(0,0,0,.12),
+            inset 0 1px 0 rgba(255,255,255,.26) !important;
+    }
+
+    .desktop-reference-v2__quick-card:hover{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.31) 0%,
+                rgba(255,255,255,.21) 46%,
+                rgba(241,194,50,.14) 100%
+            ) !important;
+
+        border-color:#f1c232 !important;
+
+        box-shadow:
+            0 10px 24px rgba(0,0,0,.14),
+            inset 0 1px 0 rgba(255,255,255,.30) !important;
+    }
+
+    .desktop-reference-v2__quick-icon{
+        width:34px !important;
+        height:34px !important;
+        border-radius:10px !important;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(241,194,50,.24),
+                rgba(241,194,50,.10)
+            ) !important;
+
+        border:1px solid rgba(241,194,50,.78) !important;
+
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.18),
+            0 3px 8px rgba(0,0,0,.10) !important;
+    }
+
+    .desktop-reference-v2__quick-icon svg{
+        width:18px !important;
+        height:18px !important;
+        fill:#ffd455 !important;
+        filter:
+            drop-shadow(0 1px 1px rgba(0,0,0,.35))
+            drop-shadow(0 0 4px rgba(241,194,50,.10)) !important;
+    }
+
+    .desktop-reference-v2__quick-card strong{
+        color:#ffffff !important;
+        font-size:9px !important;
+        font-weight:700 !important;
+        line-height:1.1 !important;
+        text-shadow:
+            0 1px 2px rgba(0,0,0,.84),
+            0 2px 6px rgba(0,0,0,.18) !important;
+    }
+}
+
+/* Pantallas medianas */
+@media (min-width:641px) and (max-width:1199px){
+
+    .item-caracteristica,
+    .desktop-reference-v2__quick-card{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.24) 0%,
+                rgba(255,255,255,.15) 50%,
+                rgba(241,194,50,.10) 100%
+            ) !important;
+
+        border:1px solid rgba(229,193,88,.58) !important;
+        border-radius:14px !important;
+
+        backdrop-filter:blur(9px) saturate(115%) !important;
+        -webkit-backdrop-filter:blur(9px) saturate(115%) !important;
+
+        box-shadow:
+            0 7px 16px rgba(0,0,0,.11),
+            inset 0 1px 0 rgba(255,255,255,.20) !important;
+    }
+
+    .item-caracteristica-ico,
+    .desktop-reference-v2__quick-icon{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(241,194,50,.20),
+                rgba(241,194,50,.08)
+            ) !important;
+
+        border:1px solid rgba(241,194,50,.72) !important;
+        border-radius:10px !important;
+    }
+
+    .item-caracteristica-ico svg,
+    .desktop-reference-v2__quick-icon svg{
+        fill:#ffd455 !important;
+    }
+
+    .item-caracteristica-titulo,
+    .desktop-reference-v2__quick-card strong{
+        color:#ffffff !important;
+        font-weight:700 !important;
+        text-shadow:0 1px 2px rgba(0,0,0,.82) !important;
+    }
+}
+
+/* Pantallas pequeñas */
+@media (max-width:640px){
+
+    .item-caracteristica,
+    .desktop-reference-v2__quick-card{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.22) 0%,
+                rgba(255,255,255,.13) 50%,
+                rgba(241,194,50,.10) 100%
+            ) !important;
+
+        border:1px solid rgba(229,193,88,.55) !important;
+        border-radius:12px !important;
+
+        backdrop-filter:blur(8px) saturate(112%) !important;
+        -webkit-backdrop-filter:blur(8px) saturate(112%) !important;
+
+        box-shadow:
+            0 6px 14px rgba(0,0,0,.10),
+            inset 0 1px 0 rgba(255,255,255,.18) !important;
+    }
+
+    .item-caracteristica-ico,
+    .desktop-reference-v2__quick-icon{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(241,194,50,.18),
+                rgba(241,194,50,.08)
+            ) !important;
+
+        border:1px solid rgba(241,194,50,.68) !important;
+    }
+
+    .item-caracteristica-ico svg,
+    .desktop-reference-v2__quick-icon svg{
+        fill:#ffd455 !important;
+    }
+
+    .item-caracteristica-titulo,
+    .desktop-reference-v2__quick-card strong{
+        color:#ffffff !important;
+        font-weight:700 !important;
+        text-shadow:0 1px 2px rgba(0,0,0,.82) !important;
+    }
+}
+
+/* ----------------------------------------------------------
+   FOOTER MÁS ANGOSTO
+   ---------------------------------------------------------- */
+
+.pie-pagina{
+    padding:0 6px !important;
+    line-height:1 !important;
+}
+
+.pie-pagina p{
+    margin:0 !important;
+    padding:0 !important;
+    line-height:1 !important;
+}
+
+/* Grandes */
+@media (min-width:1200px){
+    .pie-pagina{
+        height:26px !important;
+        min-height:26px !important;
+        flex:0 0 26px !important;
+        padding:0 8px !important;
+        font-size:10.5px !important;
+    }
+
+    .desktop-reference-v2__boulevard{
+        bottom:38px !important;
+    }
+}
+
+/* Medianas */
+@media (min-width:641px) and (max-width:1199px){
+    .pie-pagina{
+        height:24px !important;
+        min-height:24px !important;
+        flex:0 0 24px !important;
+        padding:0 7px !important;
+        font-size:9.5px !important;
+    }
+}
+
+/* Pequeñas */
+@media (max-width:640px){
+    .pie-pagina{
+        height:22px !important;
+        min-height:22px !important;
+        flex:0 0 22px !important;
+        padding:0 6px !important;
+        font-size:8.3px !important;
+    }
+}
+
+/* Muy pequeñas */
+@media (max-width:390px){
+    .pie-pagina{
+        height:20px !important;
+        min-height:20px !important;
+        flex:0 0 20px !important;
+        padding:0 5px !important;
+        font-size:7.5px !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
@@ -6257,7 +6523,7 @@ body{
                     alt="Urbanex"
                     class="desktop-reference-v2__logo"
                 >
-                <p>Conecta. Descubre. Vive la ciudad.</p>
+                <p>Todos los comercios en un solo lugar.</p>
             </div>
 
             <h1 class="desktop-reference-v2__headline">
@@ -6331,7 +6597,7 @@ body{
 
             <div class="desktop-showcase__brand">
                 <img id="logoHeroDesktop" src="/imagenes/logo.png" alt="Urbanex" class="desktop-showcase__logo">
-                <p class="desktop-showcase__tagline">Conecta. Descubre. Vive la ciudad.</p>
+                <p class="desktop-showcase__tagline">Todos los comercios en un solo lugar.</p>
             </div>
 
             <h2 class="desktop-showcase__headline">
