@@ -689,6 +689,72 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .assisted-panel{margin-top:17px;padding:22px;border:1px solid var(--line);border-radius:25px;background:var(--panel);box-shadow:0 25px 60px rgba(0,0,0,.5);backdrop-filter:blur(18px)}.assisted-panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:16px}.assisted-panel-head .eyebrow{color:var(--gold);font-size:9px;font-weight:900;letter-spacing:1.8px;text-transform:uppercase}.assisted-panel-head h2{margin:6px 0 7px;font:700 clamp(20px,3vw,30px)/1.15 var(--serif);letter-spacing:1.5px;text-transform:uppercase}.assisted-panel-head p{margin:0;max-width:760px;color:var(--muted);font-size:11px;line-height:1.65}.assisted-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.assisted-item{padding:15px;border:1px solid rgba(229,193,88,.17);border-radius:16px;background:rgba(28,25,20,.58)}.assisted-item strong{display:block;margin-bottom:7px;color:var(--gold2);font:700 11px var(--serif);letter-spacing:.45px;text-transform:uppercase}.assisted-item p{margin:0;color:#cfcfcf;font-size:9.5px;line-height:1.65}.assisted-contact{margin-top:14px;padding:18px;border:1px solid rgba(229,193,88,.32);border-radius:18px;background:linear-gradient(110deg,rgba(229,193,88,.16),rgba(30,26,18,.62) 52%,rgba(229,193,88,.07));box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}.assisted-contact-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center}.assisted-contact-info strong{display:block;margin-bottom:6px;color:#fff;font:700 13px/1.35 var(--serif);letter-spacing:.35px;text-transform:uppercase}.assisted-contact-info p{margin:0;max-width:690px;color:var(--muted);font-size:10px;line-height:1.7}.assisted-contact-meta{display:flex;gap:15px;flex-wrap:wrap;margin-top:11px}.assisted-contact-meta span{display:inline-flex;align-items:center;gap:6px;color:#d8d8d8;font-size:9px}.assisted-contact-meta b{color:var(--gold2);font-weight:800}.assisted-actions{display:grid;grid-template-columns:1fr;gap:8px;min-width:230px}.contact-btn{min-height:43px;display:flex;align-items:center;justify-content:center;padding:10px 15px;border-radius:11px;font-size:9px;font-weight:900;letter-spacing:.55px;text-align:center;text-transform:uppercase;transition:transform .18s ease,border-color .18s ease,background .18s ease}.contact-btn:hover{transform:translateY(-1px)}.contact-btn.primary-contact{border:1px solid var(--gold);background:var(--gold);color:#000}.contact-btn.primary-contact:hover{background:var(--gold2);border-color:var(--gold2)}.contact-btn.secondary-contact{border:1px solid var(--line);background:rgba(26,23,18,.68);color:#fff}.contact-btn.secondary-contact:hover{border-color:var(--gold);background:rgba(229,193,88,.09)}.contact-note{margin-top:10px;color:var(--soft);font-size:8.5px;line-height:1.55}
 @media(max-width:900px){.registration-options,.assisted-list{grid-template-columns:1fr}.assisted-panel-head{flex-direction:column}.assisted-contact-grid{grid-template-columns:1fr}.assisted-actions{grid-template-columns:repeat(2,minmax(0,1fr));min-width:0}.header{flex-direction:column}.grid,.map-layout,.photo-grid,.review-grid{grid-template-columns:1fr}.time-grid{grid-template-columns:repeat(2,1fr)}.product-photo-grid{grid-template-columns:1fr}.section-head{align-items:flex-start;flex-direction:column}.section-head p{text-align:left}.map-tools{flex-direction:column}.nav{flex-direction:column}.nav-right{width:100%;margin:0}.nav-btn{flex:1}#map{height:310px}}@media(max-width:520px){.page{width:min(100% - 16px,1180px)}.form-step{padding:16px}.hero{padding:20px}.time-grid{grid-template-columns:1fr}.photo-actions{display:grid;grid-template-columns:1fr 1fr}.photo-btn:last-child{grid-column:1/-1}.assisted-actions{grid-template-columns:1fr}.assisted-contact{padding:15px}.assisted-contact-meta{flex-direction:column;gap:6px}}
 </style>
+
+<style id="urbanex-form-lighten-only">
+/* ÚNICO CAMBIO: aclarar visualmente el formulario de registro. */
+#selfRegistrationShell{
+  background:rgba(48,43,34,.94);
+}
+#selfRegistrationShell .progress-wrap{
+  background:rgba(255,255,255,.035);
+}
+#selfRegistrationShell input,
+#selfRegistrationShell textarea,
+#selfRegistrationShell select{
+  background:rgba(66,59,46,.92);
+  border-color:rgba(255,255,255,.20);
+}
+#selfRegistrationShell input::placeholder,
+#selfRegistrationShell textarea::placeholder{
+  color:#c8c0b2;
+}
+#selfRegistrationShell input:focus,
+#selfRegistrationShell textarea:focus,
+#selfRegistrationShell select:focus{
+  background:rgba(78,69,52,.97);
+  border-color:var(--gold);
+}
+#selfRegistrationShell select option{
+  background:#3b352a;
+  color:#fff;
+}
+#selfRegistrationShell .prefix-input{
+  background:rgba(66,59,46,.92);
+  border-color:rgba(255,255,255,.20);
+}
+#selfRegistrationShell .prefix-input span{
+  background:rgba(229,193,88,.14);
+  border-right-color:rgba(255,255,255,.14);
+}
+#selfRegistrationShell .check-card,
+#selfRegistrationShell .card,
+#selfRegistrationShell .photo-slot,
+#selfRegistrationShell .day-row,
+#selfRegistrationShell .review-card{
+  background:rgba(58,52,41,.84);
+  border-color:rgba(229,193,88,.24);
+}
+#selfRegistrationShell .product-card{
+  background:linear-gradient(180deg,rgba(229,193,88,.10),rgba(54,48,38,.88));
+  border-color:rgba(229,193,88,.24);
+}
+#selfRegistrationShell .secondary-btn,
+#selfRegistrationShell .photo-btn,
+#selfRegistrationShell .add-btn,
+#selfRegistrationShell .nav-btn:not(.primary){
+  background:rgba(63,56,44,.90);
+}
+#selfRegistrationShell .nav{
+  background:rgba(49,44,35,.92);
+  border-top-color:rgba(255,255,255,.12);
+}
+#selfRegistrationShell .help,
+#selfRegistrationShell .section-head p,
+#selfRegistrationShell .check-card small{
+  color:#c2baad;
+}
+</style>
+
 </head>
 <body>
 <header class="header"><a class="brand" href="index.html"><img src="imagenes/logo.png" alt="Urbanex"></a><div class="header-links"><a class="pill" href="index.html">Inicio</a><a class="pill" href="boulevard.html">Boulevard</a></div></header>
