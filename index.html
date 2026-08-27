@@ -7408,13 +7408,66 @@ body{
 </style>
 
 
-<style id="urbanex-tagline-un-poco-mas-grande">
-/* Solo aumenta ligeramente:
-   "Todos los comercios en un solo lugar." */
-@media (min-width:1200px){
-    .desktop-reference-v2__brand p{
-        font-size:clamp(14px,1vw,16px) !important;
-        line-height:1.18 !important;
+<style id="urbanex-tagline-casi-marketplace">
+/* Aumenta el texto: "Todos los comercios en un solo lugar." 
+   casi al tamaño del titular "Su marketplace..." */
+@media (min-width: 1200px){
+    .desktop-reference-v2__brand p,
+    .desktop-showcase__tagline{
+        font-size: clamp(34px, 2.8vw, 46px) !important;
+        line-height: 1.06 !important;
+        font-weight: 800 !important;
+        max-width: 760px !important;
+        letter-spacing: -0.02em !important;
+        color: #ffffff !important;
+        text-shadow: 0 3px 8px rgba(0,0,0,.45), 0 8px 20px rgba(0,0,0,.35) !important;
+        margin-top: 0 !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1199px){
+    .desktop-reference-v2__brand p,
+    .desktop-showcase__tagline{
+        font-size: clamp(26px, 3vw, 36px) !important;
+        line-height: 1.08 !important;
+        font-weight: 800 !important;
+        max-width: 620px !important;
+        letter-spacing: -0.015em !important;
+        color: #ffffff !important;
+        text-shadow: 0 2px 6px rgba(0,0,0,.42), 0 6px 16px rgba(0,0,0,.28) !important;
+    }
+}
+
+@media (max-width: 767px){
+    .desktop-reference-v2__brand p,
+    .desktop-showcase__tagline{
+        font-size: clamp(20px, 5vw, 28px) !important;
+        line-height: 1.12 !important;
+        font-weight: 800 !important;
+        max-width: 92% !important;
+        color: #ffffff !important;
+        text-shadow: 0 2px 5px rgba(0,0,0,.40), 0 5px 14px rgba(0,0,0,.22) !important;
+    }
+}
+</style>
+
+
+<style id="urbanex-logo-alineado-marketplace">
+/* ==========================================================
+   MÓVIL — ALINEACIÓN DEL LOGO URBANEX
+   Solo desplaza ligeramente el logo hacia la derecha
+   para alinearlo con "Su marketplace..."
+   ========================================================== */
+
+@media (max-width:640px){
+    .header-branding{
+        margin-left:14px !important;
+    }
+}
+
+@media (max-width:390px){
+    .header-branding{
+        margin-left:12px !important;
     }
 }
 </style>
