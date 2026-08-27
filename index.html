@@ -7190,6 +7190,78 @@ body{
 }
 </style>
 
+
+<style id="urbanex-cajas-un-poco-mas-opacas">
+/* ==========================================================
+   AJUSTE SUAVE DE OPACIDAD EN CAJAS
+   Solo hace las cajas un poco más opacas.
+   No cambia distribución, textos ni posición.
+   ========================================================== */
+
+/* Pantallas grandes */
+@media (min-width:1200px){
+    .desktop-reference-v2__quick-card{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.34) 0%,
+                rgba(255,255,255,.24) 46%,
+                rgba(241,194,50,.15) 100%
+            ) !important;
+
+        box-shadow:
+            0 8px 20px rgba(0,0,0,.13),
+            inset 0 1px 0 rgba(255,255,255,.30) !important;
+    }
+
+    .desktop-reference-v2__quick-card:hover{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.38) 0%,
+                rgba(255,255,255,.28) 46%,
+                rgba(241,194,50,.18) 100%
+            ) !important;
+    }
+}
+
+/* Pantallas medianas */
+@media (min-width:641px) and (max-width:1199px){
+    .item-caracteristica,
+    .desktop-reference-v2__quick-card{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.31) 0%,
+                rgba(255,255,255,.22) 50%,
+                rgba(241,194,50,.14) 100%
+            ) !important;
+
+        box-shadow:
+            0 7px 16px rgba(0,0,0,.12),
+            inset 0 1px 0 rgba(255,255,255,.25) !important;
+    }
+}
+
+/* Pantallas pequeñas */
+@media (max-width:640px){
+    .item-caracteristica,
+    .desktop-reference-v2__quick-card{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.30) 0%,
+                rgba(255,255,255,.21) 50%,
+                rgba(241,194,50,.14) 100%
+            ) !important;
+
+        box-shadow:
+            0 6px 14px rgba(0,0,0,.11),
+            inset 0 1px 0 rgba(255,255,255,.24) !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
