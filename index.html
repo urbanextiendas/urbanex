@@ -1672,7 +1672,10 @@ body{
 <body>
 
 <section class="portada">
-    <img src="https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/portada1.png" alt="Portada" class="portada-img">
+    <img id="portadaDinamica"
+     src="https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada%20d%C3%ADa.png"
+     alt="Portada Urbanex"
+     class="portada-img">
 
     <!-- Reemplazo del bloque de texto por la imagen solicitada -->
     <div class="header-branding">
@@ -1718,6 +1721,64 @@ body{
 <footer class="pie-pagina">
     <p>&copy; 2026 Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p>
 </footer>
+
+    <script>
+(function () {
+
+    const portada = document.getElementById('portadaDinamica');
+
+    const imagenes = {
+        dia: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada%20d%C3%ADa.png',
+        tarde: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada%20tarde.png',
+        noche: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada%20noche.png'
+    };
+
+    function obtenerHoraEcuador() {
+
+        const partes = new Intl.DateTimeFormat('es-EC', {
+            timeZone: 'America/Guayaquil',
+            hour: '2-digit',
+            hourCycle: 'h23'
+        }).formatToParts(new Date());
+
+        const hora = partes.find(parte => parte.type === 'hour');
+
+        return Number(hora.value);
+    }
+
+    function actualizarPortada() {
+
+        const hora = obtenerHoraEcuador();
+        let nuevaImagen;
+
+        // DÍA: 06:00 - 16:59
+        if (hora >= 6 && hora < 17) {
+
+            nuevaImagen = imagenes.dia;
+
+        // TARDE: 17:00 - 18:59
+        } else if (hora >= 17 && hora < 19) {
+
+            nuevaImagen = imagenes.tarde;
+
+        // NOCHE: 19:00 - 05:59
+        } else {
+
+            nuevaImagen = imagenes.noche;
+        }
+
+        if (portada.getAttribute('src') !== nuevaImagen) {
+            portada.setAttribute('src', nuevaImagen);
+        }
+    }
+
+    actualizarPortada();
+
+    // Comprueba la hora cada minuto sin necesidad de recargar la página
+    setInterval(actualizarPortada, 60000);
+
+})();
+</script>
 
 </body>
 </html>
