@@ -6500,6 +6500,76 @@ body{
 }
 </style>
 
+
+<style id="urbanex-movil-footer-y-texto-azul">
+/* ==========================================================
+   AJUSTE SOLO MÓVIL
+   - Footer translúcido claro
+   - Texto azul oscuro
+   - Etiquetas de los accesos en azul oscuro
+   ========================================================== */
+
+@media (max-width:640px){
+
+    /* Footer: elimina definitivamente el fondo negro */
+    .pie-pagina{
+        background:rgba(238, 229, 213, .58) !important;
+        background-color:rgba(238, 229, 213, .58) !important;
+
+        backdrop-filter:blur(8px) saturate(112%) !important;
+        -webkit-backdrop-filter:blur(8px) saturate(112%) !important;
+
+        border-top:1px solid rgba(11,39,69,.16) !important;
+
+        color:#0b2745 !important;
+
+        box-shadow:
+            0 -4px 14px rgba(0,0,0,.06),
+            inset 0 1px 0 rgba(255,255,255,.28) !important;
+    }
+
+    .pie-pagina p{
+        color:#0b2745 !important;
+        text-shadow:none !important;
+    }
+
+    .pie-pagina a{
+        color:#0b2745 !important;
+        font-weight:700 !important;
+        text-shadow:none !important;
+    }
+
+    .pie-pagina a:hover{
+        color:#163f69 !important;
+    }
+
+    /* Texto de las cajas en azul oscuro */
+    .item-caracteristica span,
+    .desktop-reference-v2__quick-card strong,
+    .desktop-quick-card__label{
+        color:#0b2745 !important;
+        text-shadow:none !important;
+        font-weight:700 !important;
+    }
+
+    /* Mejora de contraste del icono con las cajas claras */
+    .item-caracteristica svg,
+    .desktop-reference-v2__quick-icon svg,
+    .desktop-quick-card__icon svg{
+        fill:#d7a900 !important;
+    }
+}
+
+/* Móviles muy estrechos */
+@media (max-width:390px){
+
+    .pie-pagina{
+        background:rgba(238, 229, 213, .64) !important;
+        background-color:rgba(238, 229, 213, .64) !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
