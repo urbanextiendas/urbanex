@@ -4857,6 +4857,47 @@ body{
 
 </style>
 
+
+<style id="urbanex-sin-publicidad-final">
+@media (min-width:1200px){
+
+    .desktop-reference-v2__inner{
+        grid-template-rows:
+            auto
+            auto
+            auto
+            minmax(40px,1fr) !important;
+
+        grid-template-areas:
+            "brand ."
+            "headline ."
+            "quick ."
+            "boulevard boulevard" !important;
+    }
+
+    .desktop-reference-v2__boulevard{
+        align-items:flex-end !important;
+        justify-content:center !important;
+        padding-bottom:clamp(18px,3vh,34px) !important;
+    }
+}
+
+@media (min-width:1200px) and (max-height:760px){
+
+    .desktop-reference-v2__inner{
+        grid-template-rows:
+            auto
+            auto
+            auto
+            minmax(28px,1fr) !important;
+    }
+
+    .desktop-reference-v2__boulevard{
+        padding-bottom:12px !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
@@ -4940,52 +4981,7 @@ body{
                 <span></span>
                 <h2>Publicidad destacada</h2>
             </div>
-
-            <div class="desktop-reference-v2__features desktop-reference-v2__ads">
-
-                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature desktop-reference-v2__ad">
-                    <span class="desktop-reference-v2__ad-badge">PUBLICIDAD</span>
-                    <div class="desktop-reference-v2__ad-content">
-                        <strong>Espacio publicitario</strong>
-                        <small>Promocione su negocio en Urbanex</small>
-                    </div>
-                </a>
-
-                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature desktop-reference-v2__ad">
-                    <span class="desktop-reference-v2__ad-badge">PUBLICIDAD</span>
-                    <div class="desktop-reference-v2__ad-content">
-                        <strong>Espacio publicitario</strong>
-                        <small>Mayor visibilidad para su marca</small>
-                    </div>
-                </a>
-
-                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature desktop-reference-v2__ad">
-                    <span class="desktop-reference-v2__ad-badge">PUBLICIDAD</span>
-                    <div class="desktop-reference-v2__ad-content">
-                        <strong>Espacio publicitario</strong>
-                        <small>Conecte con nuevos clientes</small>
-                    </div>
-                </a>
-
-                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature desktop-reference-v2__ad">
-                    <span class="desktop-reference-v2__ad-badge">PUBLICIDAD</span>
-                    <div class="desktop-reference-v2__ad-content">
-                        <strong>Espacio publicitario</strong>
-                        <small>Destaque promociones y servicios</small>
-                    </div>
-                </a>
-
-                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature desktop-reference-v2__ad">
-                    <span class="desktop-reference-v2__ad-badge">PUBLICIDAD</span>
-                    <div class="desktop-reference-v2__ad-content">
-                        <strong>Espacio publicitario</strong>
-                        <small>Posicione su negocio en Urbanex</small>
-                    </div>
-                </a>
-
-            </div>
-
-            <div class="desktop-reference-v2__boulevard">
+<div class="desktop-reference-v2__boulevard">
                 <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__boulevard-btn">
                     Entrar al Boulevard
                 </a>
