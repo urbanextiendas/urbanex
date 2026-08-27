@@ -1879,160 +1879,525 @@ body{
 </style>
 
 
-<style id="urbanex-imagenes-responsive-2026">
+<style id="urbanex-desktop-premium-v2">
 /* ==========================================================
-   AJUSTE FINAL DE IMÁGENES POR DISPOSITIVO
-   NO ELIMINA NI REEMPLAZA LOS ESTILOS ANTERIORES.
-   Solo prevalece por estar ubicado al final del <head>.
+   URBANEX — MEJORA VISUAL FINAL
+   Mantiene todo el código original.
+   Este bloque únicamente prevalece sobre estilos anteriores.
    ========================================================== */
 
-/* ----------------------------------------------------------
-   ESCRITORIO Y PANTALLAS GRANDES
-   Las nuevas portadas horizontales son 2400 x 1000.
-   Se respeta su proporción real 12:5 para evitar:
-   - laterales desenfocados,
-   - deformación,
-   - recortes innecesarios.
-   ---------------------------------------------------------- */
-@media (min-width: 901px){
+@media (min-width:901px){
 
+    html,
     body{
-        min-height:0 !important;
-        display:block !important;
+        width:100% !important;
+        min-height:100% !important;
+        margin:0 !important;
+        padding:0 !important;
+        overflow-x:hidden !important;
         background:#050608 !important;
+        font-family:Arial,Helvetica,sans-serif !important;
     }
 
+    body{
+        display:block !important;
+    }
+
+    /* ======================================================
+       HERO
+       Más cercano a la composición visual de la referencia.
+       ====================================================== */
     .portada{
-        width:100% !important;
-        height:auto !important;
-        min-height:0 !important;
-        max-height:none !important;
-        aspect-ratio:12 / 5 !important;
-        flex:none !important;
         position:relative !important;
+
+        width:100% !important;
+        height:clamp(620px,82vh,900px) !important;
+        min-height:620px !important;
+        max-height:900px !important;
+
+        margin:0 !important;
+        padding:0 !important;
+
+        display:block !important;
+
         overflow:hidden !important;
+        isolation:isolate !important;
+
         background:#07111d !important;
     }
 
+    /* Imagen real como fondo completo.
+       Sin contain, blur lateral, scale ni deformaciones. */
     .portada-img{
         position:absolute !important;
         inset:0 !important;
+
         width:100% !important;
         height:100% !important;
+
+        margin:0 !important;
         padding:0 !important;
+
+        display:block !important;
+
         object-fit:cover !important;
         object-position:center center !important;
+
         transform:none !important;
+
         z-index:-3 !important;
-        filter:brightness(1.03) saturate(1.02) contrast(1.01) !important;
-        background:transparent !important;
+
+        background:#07111d !important;
+
+        filter:
+            brightness(1.015)
+            saturate(1.035)
+            contrast(1.015) !important;
     }
 
-    /* Se elimina visualmente el relleno desenfocado lateral,
-       pero NO se elimina el código anterior. */
+    /* Gradiente lateral únicamente para garantizar lectura.
+       No sustituye ni tapa la fotografía. */
     .portada::before{
         content:"" !important;
+
         position:absolute !important;
         inset:0 !important;
+
         z-index:-2 !important;
-        display:block !important;
+
         background:
             linear-gradient(
                 90deg,
-                rgba(3,8,14,.22) 0%,
-                rgba(3,8,14,.05) 27%,
-                rgba(3,8,14,0) 54%,
-                rgba(3,8,14,.12) 100%
+                rgba(2,7,13,.42) 0%,
+                rgba(2,7,13,.18) 22%,
+                rgba(2,7,13,.025) 45%,
+                rgba(2,7,13,.015) 67%,
+                rgba(2,7,13,.16) 100%
             ) !important;
+
         background-image:
             linear-gradient(
                 90deg,
-                rgba(3,8,14,.22) 0%,
-                rgba(3,8,14,.05) 27%,
-                rgba(3,8,14,0) 54%,
-                rgba(3,8,14,.12) 100%
+                rgba(2,7,13,.42) 0%,
+                rgba(2,7,13,.18) 22%,
+                rgba(2,7,13,.025) 45%,
+                rgba(2,7,13,.015) 67%,
+                rgba(2,7,13,.16) 100%
             ) !important;
+
+        background-size:auto !important;
+        background-position:center !important;
+
         filter:none !important;
         transform:none !important;
+
         pointer-events:none !important;
     }
 
     .portada::after{
         content:"" !important;
+
         position:absolute !important;
         inset:0 !important;
+
         z-index:-1 !important;
+
         display:block !important;
+
         background:
             linear-gradient(
                 to bottom,
-                rgba(0,0,0,.02) 0%,
-                transparent 64%,
-                rgba(0,0,0,.10) 100%
+                rgba(0,0,0,.025) 0%,
+                rgba(0,0,0,0) 52%,
+                rgba(0,0,0,.18) 100%
             ) !important;
+
         pointer-events:none !important;
     }
 
-    /* Urbanex centrado de forma real en escritorio */
+    /* ======================================================
+       LOGO
+       Centrado real en computador.
+       ====================================================== */
     .header-branding{
         position:absolute !important;
-        top:clamp(14px,1.45vw,24px) !important;
+
+        top:clamp(18px,2vw,34px) !important;
         left:0 !important;
         right:0 !important;
         bottom:auto !important;
+
         width:100% !important;
         max-width:none !important;
+
+        margin:0 !important;
+
         transform:none !important;
+
         display:flex !important;
         justify-content:center !important;
         align-items:flex-start !important;
+
         text-align:center !important;
+
+        z-index:30 !important;
+
+        pointer-events:none !important;
     }
 
     .header-branding img{
-        width:clamp(128px,9vw,168px) !important;
-        max-width:168px !important;
+        display:block !important;
+
+        width:clamp(138px,10vw,190px) !important;
+        max-width:190px !important;
         height:auto !important;
+
         margin:0 auto !important;
+
         object-fit:contain !important;
+
+        filter:
+            drop-shadow(0 3px 5px rgba(0,0,0,.50))
+            drop-shadow(0 10px 24px rgba(0,0,0,.18)) !important;
     }
 
+    /* ======================================================
+       REGISTRO
+       ====================================================== */
     .registro-contenedor{
-        top:clamp(14px,1.45vw,24px) !important;
+        position:absolute !important;
+
+        top:clamp(22px,2.2vw,38px) !important;
+        right:clamp(28px,5.5vw,100px) !important;
+        left:auto !important;
+        bottom:auto !important;
+
+        width:auto !important;
+
+        margin:0 !important;
+
+        transform:none !important;
+
+        z-index:31 !important;
     }
 
+    .btn-registro{
+        min-height:43px !important;
+
+        display:inline-flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+
+        padding:0 21px !important;
+
+        border:1px solid rgba(229,193,88,.92) !important;
+        border-radius:12px !important;
+
+        background:rgba(7,15,25,.40) !important;
+
+        color:#f4dc92 !important;
+
+        backdrop-filter:blur(10px) !important;
+        -webkit-backdrop-filter:blur(10px) !important;
+
+        font-family:Arial,Helvetica,sans-serif !important;
+        font-size:8.5px !important;
+        line-height:1 !important;
+        font-weight:700 !important;
+
+        letter-spacing:.72px !important;
+
+        text-transform:uppercase !important;
+        text-decoration:none !important;
+
+        box-shadow:
+            0 8px 24px rgba(0,0,0,.16),
+            inset 0 1px 0 rgba(255,255,255,.04) !important;
+    }
+
+    /* ======================================================
+       ESLOGAN
+       Mayor presencia, pero sin tapar el foco de la imagen.
+       ====================================================== */
     .slogan-lateral{
-        top:49% !important;
+        position:absolute !important;
+
+        top:50% !important;
+        left:clamp(48px,7.5vw,135px) !important;
+        right:auto !important;
+        bottom:auto !important;
+
+        width:clamp(315px,31vw,510px) !important;
+
+        margin:0 !important;
+        padding:0 0 0 18px !important;
+
+        transform:translateY(-50%) !important;
+
+        border-left:3px solid #e5c158 !important;
+        border-top:0 !important;
+
+        background:transparent !important;
+
+        text-align:left !important;
+
+        z-index:20 !important;
     }
 
+    .slogan-lateral h2{
+        max-width:480px !important;
+
+        margin:0 !important;
+
+        color:#fff !important;
+
+        font-family:Arial,Helvetica,sans-serif !important;
+
+        font-size:clamp(31px,3.15vw,50px) !important;
+        line-height:1.01 !important;
+
+        font-weight:750 !important;
+
+        letter-spacing:-.90px !important;
+
+        text-transform:uppercase !important;
+
+        text-wrap:balance;
+
+        text-shadow:
+            0 3px 5px rgba(0,0,0,.92),
+            0 10px 28px rgba(0,0,0,.30) !important;
+    }
+
+    /* ======================================================
+       MENÚ DERECHO
+       ====================================================== */
     .caracteristicas-lista{
-        top:49% !important;
+        position:absolute !important;
+
+        top:50% !important;
+        right:clamp(42px,7.3vw,130px) !important;
+        left:auto !important;
+        bottom:auto !important;
+
+        width:clamp(310px,25vw,380px) !important;
+
+        margin:0 !important;
+        padding:9px !important;
+
+        transform:translateY(-50%) !important;
+
+        display:flex !important;
+        flex-direction:column !important;
+
+        gap:2px !important;
+
+        border:1px solid rgba(255,255,255,.16) !important;
+        border-radius:19px !important;
+
+        background:
+            linear-gradient(
+                135deg,
+                rgba(8,20,31,.64),
+                rgba(10,17,24,.43)
+            ) !important;
+
+        backdrop-filter:blur(17px) saturate(118%) !important;
+        -webkit-backdrop-filter:blur(17px) saturate(118%) !important;
+
+        box-shadow:
+            0 20px 46px rgba(0,0,0,.23),
+            inset 0 1px 0 rgba(255,255,255,.04) !important;
+
+        z-index:24 !important;
     }
 
+    .item-caracteristica{
+        min-height:52px !important;
+
+        display:flex !important;
+        flex-direction:row !important;
+        align-items:center !important;
+        justify-content:flex-start !important;
+
+        gap:10px !important;
+
+        padding:7px 10px !important;
+
+        border:0 !important;
+        border-radius:11px !important;
+
+        background:transparent !important;
+
+        box-shadow:none !important;
+    }
+
+    .item-caracteristica:hover{
+        background:rgba(255,255,255,.08) !important;
+        transform:translateX(-2px) !important;
+    }
+
+    .item-caracteristica svg{
+        width:32px !important;
+        height:32px !important;
+
+        flex:0 0 32px !important;
+
+        padding:7px !important;
+
+        border:1px solid rgba(229,193,88,.25) !important;
+        border-radius:9px !important;
+
+        background:rgba(229,193,88,.12) !important;
+
+        fill:#e5c158 !important;
+    }
+
+    .item-caracteristica span{
+        color:#fff !important;
+
+        font-family:Arial,Helvetica,sans-serif !important;
+
+        font-size:8.9px !important;
+        line-height:1.13 !important;
+
+        font-weight:700 !important;
+
+        letter-spacing:.38px !important;
+
+        text-transform:uppercase !important;
+    }
+
+    .item-caracteristica::after{
+        content:"›" !important;
+
+        display:block !important;
+
+        margin-left:auto !important;
+
+        color:rgba(255,255,255,.72) !important;
+
+        font-size:18px !important;
+        line-height:1 !important;
+    }
+
+    /* ======================================================
+       BOULEVARD
+       ====================================================== */
     .puerta-link{
-        bottom:clamp(18px,3vw,42px) !important;
+        position:absolute !important;
+
+        top:auto !important;
+        left:50% !important;
+        right:auto !important;
+        bottom:clamp(24px,4vw,66px) !important;
+
+        width:auto !important;
+        height:auto !important;
+
+        margin:0 !important;
+
+        transform:translateX(-50%) !important;
+
+        display:block !important;
+
+        z-index:25 !important;
     }
 
+    .puerta-link::after{
+        content:"ENTRAR AL BOULEVARD" !important;
+
+        position:static !important;
+
+        min-width:235px !important;
+        min-height:43px !important;
+
+        display:flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+
+        padding:0 22px !important;
+
+        border:1px solid rgba(229,193,88,.92) !important;
+        border-radius:999px !important;
+
+        background:rgba(9,18,25,.39) !important;
+
+        color:#f5dda0 !important;
+
+        backdrop-filter:blur(10px) !important;
+        -webkit-backdrop-filter:blur(10px) !important;
+
+        font-family:Arial,Helvetica,sans-serif !important;
+
+        font-size:8px !important;
+        line-height:1 !important;
+
+        font-weight:700 !important;
+
+        letter-spacing:.84px !important;
+
+        text-transform:uppercase !important;
+
+        opacity:1 !important;
+
+        transform:none !important;
+
+        box-shadow:0 10px 28px rgba(0,0,0,.17) !important;
+    }
+
+    /* ======================================================
+       PIE
+       ====================================================== */
     .pie-pagina{
-        min-height:30px !important;
+        width:100% !important;
+
         height:30px !important;
-        flex:0 0 30px !important;
+        min-height:30px !important;
+
+        margin:0 !important;
+        padding:0 12px !important;
+
+        display:flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+
+        background:#050608 !important;
+
+        border-top:1px solid rgba(255,255,255,.06) !important;
+
+        font-family:Arial,Helvetica,sans-serif !important;
+        font-size:7.8px !important;
     }
 }
 
-/* ----------------------------------------------------------
-   TABLET HORIZONTAL
-   Mantiene la portada panorámica.
-   ---------------------------------------------------------- */
-@media (min-width: 901px) and (max-width: 1199px){
+/* ==========================================================
+   PANTALLA MEDIANA / TABLET HORIZONTAL
+   ========================================================== */
+@media (min-width:901px) and (max-width:1199px){
 
     .portada{
-        aspect-ratio:12 / 5 !important;
+        height:clamp(560px,78vh,680px) !important;
+        min-height:560px !important;
+        max-height:680px !important;
+    }
+
+    .header-branding img{
+        width:128px !important;
+        max-width:128px !important;
+    }
+
+    .registro-contenedor{
+        right:20px !important;
     }
 
     .slogan-lateral{
         left:4% !important;
         width:34% !important;
+    }
+
+    .slogan-lateral h2{
+        font-size:clamp(23px,3vw,32px) !important;
     }
 
     .caracteristicas-lista{
@@ -2041,86 +2406,35 @@ body{
     }
 }
 
-/* ----------------------------------------------------------
+/* ==========================================================
    TABLET VERTICAL Y CELULAR
-   Las imágenes se cambian por JavaScript a las versiones:
-   *_celular.png
-   ---------------------------------------------------------- */
-@media (max-width: 900px){
-
-    .portada-img{
-        position:absolute !important;
-        inset:0 !important;
-        width:100% !important;
-        height:100% !important;
-        object-fit:cover !important;
-        object-position:center center !important;
-        transform:none !important;
-        filter:brightness(1.02) saturate(1.02) contrast(1.01) !important;
-        background:transparent !important;
-    }
-
-    .portada::before{
-        background:
-            linear-gradient(
-                to bottom,
-                rgba(3,8,14,.07) 0%,
-                rgba(3,8,14,.01) 40%,
-                rgba(3,8,14,.05) 66%,
-                rgba(3,8,14,.20) 100%
-            ) !important;
-        background-image:
-            linear-gradient(
-                to bottom,
-                rgba(3,8,14,.07) 0%,
-                rgba(3,8,14,.01) 40%,
-                rgba(3,8,14,.05) 66%,
-                rgba(3,8,14,.20) 100%
-            ) !important;
-        filter:none !important;
-        transform:none !important;
-    }
-}
-
-/* ----------------------------------------------------------
-   CELULAR
-   Conserva la distribución móvil existente.
-   ---------------------------------------------------------- */
-@media (max-width: 640px){
-
-    .portada{
-        aspect-ratio:auto !important;
-    }
+   Mantiene su diseño móvil previo; solo garantiza
+   la portada vertical correspondiente.
+   ========================================================== */
+@media (max-width:900px){
 
     .portada-img{
         object-fit:cover !important;
         object-position:center center !important;
+        transform:none !important;
     }
 }
 
-/* ----------------------------------------------------------
-   ACCESIBILIDAD
-   ---------------------------------------------------------- */
-@media (prefers-reduced-motion:reduce){
-    .portada-img{
-        transition:none !important;
-    }
-}
 </style>
 
 </head>
 
 <body>
 
-<section class="portada" style="--portada-bg:url('https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada%20d%C3%ADa.png');">
+<section class="portada" style="--portada-bg:url('/imagenes/Portada%20d%C3%ADa.png');">
     <img id="portadaDinamica"
-     src="https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada%20d%C3%ADa.png"
+     src="/imagenes/Portada%20d%C3%ADa.png"
      alt="Portada Urbanex"
      class="portada-img">
 
     <!-- Reemplazo del bloque de texto por la imagen solicitada -->
     <div class="header-branding">
-        <img id="logoDinamico" src="https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/.png" alt="Urbanex" style="width: 40%; max-width: 400px; height: auto;">
+        <img id="logoDinamico" src="/imagenes/Urba4.png" alt="Urbanex" style="width: 40%; max-width: 400px; height: auto;">
     </div>
 
     <div class="slogan-lateral">
@@ -2170,26 +2484,26 @@ body{
     const logo = document.getElementById('logoDinamico');
 
     const imagenes = {
-        dia: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada%20d%C3%ADa.png',
-        tarde: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada_tarde.png',
-        noche: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada_noche.png'
-    };
+        desktop: {
+            dia: '/imagenes/Portada%20d%C3%ADa.png',
+            tarde: '/imagenes/Portada_tarde.png',
+            noche: '/imagenes/Portada_noche.png'
+        },
 
-    /* Imágenes verticales específicas para celular y tablet vertical */
-    const imagenesCelular = {
-        dia: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada_diacelular.png',
-        tarde: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada_tardecelular.png',
-        noche: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada_nochecelular.png'
+        celular: {
+            dia: '/imagenes/Portada_diacelular.png',
+            tarde: '/imagenes/Portada_tardecelular.png',
+            noche: '/imagenes/Portada_nochecelular.png'
+        }
     };
-
-    /* El punto de cambio coincide con el diseño responsive */
-    const mediaCelular = window.matchMedia('(max-width: 900px)');
 
     const logos = {
-        dia: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/logo.png',
-        tarde: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/logo.png',
-        noche: 'https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/logo.png'
+        dia: '/imagenes/Urba4.png',
+        tarde: '/imagenes/Urba4.png',
+        noche: '/imagenes/logo.png'
     };
+
+    const mediaCelular = window.matchMedia('(max-width: 900px)');
 
     function obtenerHoraEcuador() {
 
@@ -2199,20 +2513,22 @@ body{
             hourCycle: 'h23'
         }).formatToParts(new Date());
 
-        const hora = partes.find(parte => parte.type === 'hour');
+        const parteHora = partes.find(parte => parte.type === 'hour');
 
-        return Number(hora.value);
+        return parteHora ? Number(parteHora.value) : new Date().getHours();
     }
 
     function obtenerFranjaHoraria(hora) {
 
         if (hora >= 6 && hora < 17) {
             return 'dia';
-        } else if (hora >= 17 && hora < 19) {
-            return 'tarde';
-        } else {
-            return 'noche';
         }
+
+        if (hora >= 17 && hora < 19) {
+            return 'tarde';
+        }
+
+        return 'noche';
     }
 
     function actualizarBranding() {
@@ -2220,18 +2536,27 @@ body{
         const hora = obtenerHoraEcuador();
         const franja = obtenerFranjaHoraria(hora);
 
-        /* Selecciona automáticamente la portada según el tamaño de pantalla */
-        const conjuntoImagenes = mediaCelular.matches ? imagenesCelular : imagenes;
-        const nuevaPortada = conjuntoImagenes[franja];
+        const dispositivo = mediaCelular.matches
+            ? 'celular'
+            : 'desktop';
+
+        const nuevaPortada = imagenes[dispositivo][franja];
         const nuevoLogo = logos[franja];
-        const contenedorPortada = portada ? portada.closest('.portada') : null;
 
-        if (contenedorPortada) {
-            contenedorPortada.style.setProperty('--portada-bg', `url("${nuevaPortada}")`);
-        }
+        if (portada) {
 
-        if (portada && portada.getAttribute('src') !== nuevaPortada) {
-            portada.setAttribute('src', nuevaPortada);
+            if (portada.getAttribute('src') !== nuevaPortada) {
+                portada.setAttribute('src', nuevaPortada);
+            }
+
+            const contenedorPortada = portada.closest('.portada');
+
+            if (contenedorPortada) {
+                contenedorPortada.style.setProperty(
+                    '--portada-bg',
+                    'url("' + nuevaPortada + '")'
+                );
+            }
         }
 
         if (logo && logo.getAttribute('src') !== nuevoLogo) {
@@ -2241,15 +2566,12 @@ body{
 
     actualizarBranding();
 
-    /* Si cambia de escritorio a móvil o viceversa, actualiza la imagen
-       inmediatamente sin necesidad de recargar la página. */
     if (typeof mediaCelular.addEventListener === 'function') {
         mediaCelular.addEventListener('change', actualizarBranding);
     } else if (typeof mediaCelular.addListener === 'function') {
         mediaCelular.addListener(actualizarBranding);
     }
 
-    // Comprueba la hora cada minuto sin necesidad de recargar la página
     setInterval(actualizarBranding, 60000);
 
 })();
