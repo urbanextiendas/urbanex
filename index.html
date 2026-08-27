@@ -5836,6 +5836,113 @@ body{
 }
 </style>
 
+
+<style id="urbanex-footer-transparente-final">
+/* ==========================================================
+   URBANEX — FOOTER TRANSPARENTE + TEXTO MÁS GRANDE
+   Solo modifica el pie de página.
+   ========================================================== */
+
+.pie-pagina{
+    background:transparent !important;
+    background-color:transparent !important;
+
+    border-top:1px solid rgba(229,193,88,.18) !important;
+
+    color:rgba(255,255,255,.88) !important;
+
+    font-family:Arial,Helvetica,sans-serif !important;
+    font-size:12px !important;
+    line-height:1.2 !important;
+    font-weight:400 !important;
+    letter-spacing:.18px !important;
+
+    box-shadow:none !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+}
+
+.pie-pagina p{
+    margin:0 !important;
+    padding:0 !important;
+}
+
+.pie-pagina a{
+    color:#f1cf63 !important;
+    font-weight:700 !important;
+    text-decoration:none !important;
+}
+
+.pie-pagina a:hover{
+    color:#ffffff !important;
+    text-shadow:0 0 8px rgba(229,193,88,.30) !important;
+}
+
+/* Escritorio: el footer queda superpuesto sobre la imagen,
+   por eso la transparencia es real y no aparece una franja negra. */
+@media (min-width:1200px){
+
+    body{
+        padding-bottom:0 !important;
+    }
+
+    .portada{
+        height:100vh !important;
+        height:100svh !important;
+    }
+
+    .pie-pagina{
+        position:fixed !important;
+        left:0 !important;
+        right:0 !important;
+        bottom:0 !important;
+
+        width:100% !important;
+        height:44px !important;
+        min-height:44px !important;
+
+        display:flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+
+        padding:0 18px !important;
+
+        z-index:9999 !important;
+    }
+
+    /* Mantiene el CTA separado del pie */
+    .desktop-reference-v2__boulevard{
+        bottom:58px !important;
+    }
+}
+
+/* Tablet */
+@media (min-width:641px) and (max-width:1199px){
+    .pie-pagina{
+        font-size:11px !important;
+        height:40px !important;
+        min-height:40px !important;
+    }
+}
+
+/* Móvil */
+@media (max-width:640px){
+    .pie-pagina{
+        font-size:9px !important;
+        height:38px !important;
+        min-height:38px !important;
+    }
+}
+
+@media (max-width:390px){
+    .pie-pagina{
+        font-size:8.5px !important;
+        height:36px !important;
+        min-height:36px !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
