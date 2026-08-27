@@ -899,20 +899,20 @@ body{
 }
 
 body{
-    min-height:100vh;
-    min-height:100svh;
-    display:flex;
-    flex-direction:column;
+    min-height:0;
+    display:block;
 }
 
 .portada{
     position:relative;
     width:100%;
-    height:calc(100vh - 30px);
-    height:calc(100svh - 30px);
-    min-height:540px;
-    max-height:none;
-    flex:1 0 auto;
+
+    /* La portada ya NO depende de la altura completa de la pantalla */
+    height:clamp(410px, 38vw, 500px);
+    min-height:410px;
+    max-height:500px;
+
+    flex:none;
     overflow:hidden;
     isolation:isolate;
     background:var(--urbanex-dark);
@@ -1238,11 +1238,38 @@ body{
 }
 
 /* ==========================================================
+   PANTALLAS GRANDES
+   El hero no aumenta indefinidamente con el monitor.
+   ========================================================== */
+@media (min-width:1400px){
+    .portada{
+        height:480px;
+        min-height:480px;
+        max-height:480px;
+    }
+
+    .header-branding img{
+        width:150px !important;
+        max-width:150px !important;
+    }
+}
+
+@media (min-width:1800px){
+    .portada{
+        height:500px;
+        min-height:500px;
+        max-height:500px;
+    }
+}
+
+/* ==========================================================
    TABLET HORIZONTAL
    ========================================================== */
 @media (max-width:1199px) and (min-width:901px){
     .portada{
-        min-height:520px;
+        height:420px;
+        min-height:420px;
+        max-height:420px;
     }
 
     .header-branding img{
@@ -1714,6 +1741,32 @@ body{
     }
 }
 
+
+/* Escritorios con poca altura */
+@media (min-width:901px) and (max-height:720px){
+    .portada{
+        height:400px;
+        min-height:400px;
+        max-height:400px;
+    }
+
+    .slogan-lateral{
+        top:48% !important;
+    }
+
+    .caracteristicas-lista{
+        top:49% !important;
+    }
+
+    .item-caracteristica{
+        min-height:42px !important;
+    }
+
+    .puerta-link{
+        bottom:14px !important;
+    }
+}
+
 /* ==========================================================
    REDUCCIÓN DE MOVIMIENTO
    ========================================================== */
@@ -1727,11 +1780,109 @@ body{
 }
 </style>
 
+<style id="urbanex-desktop-image-fit-final">
+/* ==========================================================
+   SOLO ESCRITORIO — IMAGEN MÁS ALEJADA SIN FRANJAS NEGRAS
+   ========================================================== */
+@media (min-width:901px){
+
+    body{
+        min-height:100vh !important;
+        min-height:100svh !important;
+        display:flex !important;
+        flex-direction:column !important;
+        background:#050608 !important;
+    }
+
+    .portada{
+        position:relative !important;
+        width:100% !important;
+        height:calc(100vh - 30px) !important;
+        height:calc(100svh - 30px) !important;
+        min-height:520px !important;
+        max-height:none !important;
+        flex:1 0 auto !important;
+        overflow:hidden !important;
+        background:#07111d !important;
+    }
+
+    /* Fondo de relleno: usa la misma portada, ampliada y desenfocada */
+    .portada::before{
+        content:"" !important;
+        position:absolute !important;
+        inset:-28px !important;
+        z-index:-3 !important;
+        display:block !important;
+        background-image:var(--portada-bg) !important;
+        background-size:cover !important;
+        background-position:center center !important;
+        background-repeat:no-repeat !important;
+        filter:blur(24px) brightness(.68) saturate(.92) !important;
+        transform:scale(1.06) !important;
+        pointer-events:none !important;
+    }
+
+    /* La fotografía principal se muestra completa, sin crop ni zoom artificial */
+    .portada-img{
+        position:absolute !important;
+        inset:0 !important;
+        width:100% !important;
+        height:100% !important;
+        padding:0 !important;
+        object-fit:contain !important;
+        object-position:center center !important;
+        transform:none !important;
+        transform-origin:center center !important;
+        z-index:-2 !important;
+        filter:brightness(1.03) saturate(1.02) contrast(1.01) !important;
+        background:transparent !important;
+    }
+
+    /* Contraste muy ligero encima de la fotografía */
+    .portada::after{
+        content:"" !important;
+        position:absolute !important;
+        inset:0 !important;
+        z-index:-1 !important;
+        display:block !important;
+        background:
+            linear-gradient(
+                90deg,
+                rgba(3,8,14,.16) 0%,
+                rgba(3,8,14,.03) 28%,
+                rgba(3,8,14,0) 55%,
+                rgba(3,8,14,.10) 100%
+            ) !important;
+        pointer-events:none !important;
+    }
+
+    /* Logo Urbanex centrado de forma real */
+    .header-branding{
+        left:0 !important;
+        right:0 !important;
+        width:100% !important;
+        transform:none !important;
+        display:flex !important;
+        justify-content:center !important;
+    }
+
+    .header-branding img{
+        margin:0 auto !important;
+    }
+
+    .pie-pagina{
+        height:30px !important;
+        min-height:30px !important;
+        flex:0 0 30px !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
 
-<section class="portada">
+<section class="portada" style="--portada-bg:url('https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada%20d%C3%ADa.png');">
     <img id="portadaDinamica"
      src="https://raw.githubusercontent.com/urbanextiendas/urbanex/main/imagenes/Portada%20d%C3%ADa.png"
      alt="Portada Urbanex"
@@ -1831,6 +1982,11 @@ body{
 
         const nuevaPortada = imagenes[franja];
         const nuevoLogo = logos[franja];
+        const contenedorPortada = portada ? portada.closest('.portada') : null;
+
+        if (contenedorPortada) {
+            contenedorPortada.style.setProperty('--portada-bg', `url("${nuevaPortada}")`);
+        }
 
         if (portada && portada.getAttribute('src') !== nuevaPortada) {
             portada.setAttribute('src', nuevaPortada);
