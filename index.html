@@ -7087,6 +7087,109 @@ body{
 }
 </style>
 
+
+<style id="urbanex-boulevard-mismo-estilo-todas-pantallas">
+/* ==========================================================
+   ENTRAR AL BOULEVARD
+   Replica en medianas y grandes el estilo de pantalla pequeña.
+   No modifica posición ni estructura.
+   ========================================================== */
+
+/* PANTALLAS MEDIANAS */
+@media (min-width:641px) and (max-width:1199px){
+
+    .puerta-link::after{
+        content:"ENTRAR AL BOULEVARD" !important;
+
+        min-width:0 !important;
+        min-height:39px !important;
+
+        padding:0 18px !important;
+
+        display:flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+
+        border:1px solid rgba(229,193,88,.90) !important;
+        border-radius:999px !important;
+
+        background:rgba(7,15,25,.34) !important;
+        color:#f4dc92 !important;
+
+        backdrop-filter:blur(10px) !important;
+        -webkit-backdrop-filter:blur(10px) !important;
+
+        font-family:Arial,Helvetica,sans-serif !important;
+        font-size:7.1px !important;
+        line-height:1 !important;
+        font-weight:700 !important;
+
+        letter-spacing:.68px !important;
+        text-transform:uppercase !important;
+
+        text-shadow:0 2px 5px rgba(0,0,0,.34) !important;
+
+        box-shadow:0 8px 22px rgba(0,0,0,.14) !important;
+
+        opacity:1 !important;
+    }
+
+    .puerta-link:hover::after{
+        background:#e5c158 !important;
+        color:#111820 !important;
+        transform:translateY(-2px) !important;
+    }
+}
+
+/* PANTALLAS GRANDES */
+@media (min-width:1200px){
+
+    .desktop-reference-v2__boulevard-btn{
+        min-width:0 !important;
+        min-height:39px !important;
+
+        padding:0 18px !important;
+
+        display:inline-flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+
+        border:1px solid rgba(229,193,88,.90) !important;
+        border-radius:999px !important;
+
+        background:rgba(7,15,25,.34) !important;
+        color:#f4dc92 !important;
+
+        backdrop-filter:blur(10px) !important;
+        -webkit-backdrop-filter:blur(10px) !important;
+
+        font-family:Arial,Helvetica,sans-serif !important;
+        font-size:7.1px !important;
+        line-height:1 !important;
+        font-weight:700 !important;
+
+        letter-spacing:.68px !important;
+        text-transform:uppercase !important;
+        text-decoration:none !important;
+
+        text-shadow:0 2px 5px rgba(0,0,0,.34) !important;
+
+        box-shadow:0 8px 22px rgba(0,0,0,.14) !important;
+
+        transition:
+            background .2s ease,
+            color .2s ease,
+            transform .2s ease !important;
+    }
+
+    .desktop-reference-v2__boulevard-btn:hover{
+        background:#e5c158 !important;
+        color:#111820 !important;
+        transform:translateY(-2px) !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
