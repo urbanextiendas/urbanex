@@ -7472,6 +7472,93 @@ body{
 }
 </style>
 
+
+<style id="urbanex-ajuste-logo-texto-responsive-final">
+/* ==========================================================
+   AJUSTE SOLICITADO
+   - Grandes/medianas: logo un poco a la derecha
+   - Grandes/medianas: "Todos los comercios..." más pequeño
+   - Pequeñas: NO mover logo; solo hacerlo un poco más grande
+   ========================================================== */
+
+/* ----------------------------------------------------------
+   PANTALLAS GRANDES
+   ---------------------------------------------------------- */
+@media (min-width:1200px){
+
+    /* Solo mueve el logo, no el bloque completo */
+    .desktop-reference-v2__logo{
+        margin-left:18px !important;
+    }
+
+    /* Reduce el texto que había quedado demasiado grande */
+    .desktop-reference-v2__brand p{
+        font-size:clamp(18px,1.55vw,23px) !important;
+        line-height:1.12 !important;
+        font-weight:700 !important;
+        letter-spacing:-.20px !important;
+        max-width:430px !important;
+    }
+}
+
+/* ----------------------------------------------------------
+   PANTALLAS MEDIANAS
+   ---------------------------------------------------------- */
+@media (min-width:641px) and (max-width:1199px){
+
+    /* Desplazamiento leve del logo hacia la derecha */
+    .header-branding img{
+        transform:translateX(16px) !important;
+    }
+
+    /* Texto más proporcionado */
+    .slogan-lateral h2{
+        font-size:clamp(17px,2.25vw,21px) !important;
+        line-height:1.10 !important;
+        font-weight:700 !important;
+        letter-spacing:-.15px !important;
+    }
+
+    .desktop-showcase__tagline{
+        font-size:clamp(17px,2.25vw,21px) !important;
+        line-height:1.10 !important;
+        font-weight:700 !important;
+    }
+}
+
+/* ----------------------------------------------------------
+   PANTALLAS PEQUEÑAS
+   No se mueve el logo. Solo aumenta ligeramente.
+   ---------------------------------------------------------- */
+@media (max-width:640px){
+
+    /* Revierte el desplazamiento anterior */
+    .header-branding{
+        margin:2px 0 0 2px !important;
+    }
+
+    .header-branding img{
+        width:94px !important;
+        max-width:94px !important;
+        transform:none !important;
+    }
+}
+
+/* Móviles estrechos */
+@media (max-width:390px){
+
+    .header-branding{
+        margin:2px 0 0 2px !important;
+    }
+
+    .header-branding img{
+        width:86px !important;
+        max-width:86px !important;
+        transform:none !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
