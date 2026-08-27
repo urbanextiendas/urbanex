@@ -7263,98 +7263,62 @@ body{
 </style>
 
 
-<style id="urbanex-registro-estilo-movil-real">
+<style id="urbanex-registro-solo-colores-movil">
 /* ==========================================================
-   REGISTRE SU NEGOCIO
-   Replica visualmente el botón móvil en medianas y grandes.
-   No cambia posición.
+   REGISTRE SU NEGOCIO — SOLO COLORES
+   Mantiene tamaños, padding, posición y proporciones actuales.
+   Replica el lenguaje cromático de móvil en medianas y grandes.
    ========================================================== */
 
-/* MEDIANAS */
+/* PANTALLAS MEDIANAS */
 @media (min-width:641px) and (max-width:1199px){
-    body .registro-contenedor > .btn-registro{
-        width:auto !important;
-        min-width:0 !important;
-        min-height:32px !important;
-        height:32px !important;
+    .btn-registro{
+        background:rgba(35, 42, 48, .88) !important;
+        background-color:rgba(35, 42, 48, .88) !important;
 
-        padding:0 11px !important;
+        color:#f6d34f !important;
 
-        display:inline-flex !important;
-        align-items:center !important;
-        justify-content:center !important;
+        border-color:#e5c158 !important;
 
-        border:1px solid #e5c158 !important;
-        border-radius:11px !important;
-
-        background:rgba(18,27,35,.88) !important;
-        color:#f4d675 !important;
-
-        backdrop-filter:blur(6px) !important;
-        -webkit-backdrop-filter:blur(6px) !important;
-
-        font-family:Arial,Helvetica,sans-serif !important;
-        font-size:6.1px !important;
-        line-height:1 !important;
-        font-weight:700 !important;
-
-        letter-spacing:.25px !important;
-        text-transform:uppercase !important;
-        white-space:nowrap !important;
+        backdrop-filter:blur(8px) saturate(108%) !important;
+        -webkit-backdrop-filter:blur(8px) saturate(108%) !important;
 
         box-shadow:
-            0 5px 12px rgba(0,0,0,.18),
-            inset 0 1px 0 rgba(255,255,255,.04) !important;
+            0 7px 18px rgba(0,0,0,.18),
+            inset 0 1px 0 rgba(255,255,255,.05) !important;
     }
 
-    body .registro-contenedor > .btn-registro:hover{
+    .btn-registro:hover{
         background:#e5c158 !important;
-        color:#111820 !important;
-        transform:translateY(-1px) !important;
+        background-color:#e5c158 !important;
+        color:#151a1f !important;
+        border-color:#e5c158 !important;
     }
 }
 
-/* GRANDES */
+/* PANTALLAS GRANDES */
 @media (min-width:1200px){
-    body .registro-contenedor > .btn-registro{
-        width:auto !important;
-        min-width:0 !important;
-        min-height:34px !important;
-        height:34px !important;
+    .btn-registro{
+        background:rgba(35, 42, 48, .88) !important;
+        background-color:rgba(35, 42, 48, .88) !important;
 
-        padding:0 13px !important;
+        color:#f6d34f !important;
 
-        display:inline-flex !important;
-        align-items:center !important;
-        justify-content:center !important;
+        border-color:#e5c158 !important;
 
-        border:1px solid #e5c158 !important;
-        border-radius:12px !important;
-
-        background:rgba(18,27,35,.88) !important;
-        color:#f4d675 !important;
-
-        backdrop-filter:blur(6px) !important;
-        -webkit-backdrop-filter:blur(6px) !important;
-
-        font-family:Arial,Helvetica,sans-serif !important;
-        font-size:6.4px !important;
-        line-height:1 !important;
-        font-weight:700 !important;
-
-        letter-spacing:.28px !important;
-        text-transform:uppercase !important;
-        white-space:nowrap !important;
+        backdrop-filter:blur(8px) saturate(108%) !important;
+        -webkit-backdrop-filter:blur(8px) saturate(108%) !important;
 
         box-shadow:
-            0 6px 14px rgba(0,0,0,.19),
-            inset 0 1px 0 rgba(255,255,255,.04) !important;
+            0 8px 20px rgba(0,0,0,.18),
+            inset 0 1px 0 rgba(255,255,255,.05) !important;
     }
 
-    body .registro-contenedor > .btn-registro:hover{
+    .btn-registro:hover{
         background:#e5c158 !important;
-        color:#111820 !important;
-        transform:translateY(-1px) !important;
+        background-color:#e5c158 !important;
+        color:#151a1f !important;
+        border-color:#e5c158 !important;
     }
 }
 </style>
