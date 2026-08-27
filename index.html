@@ -5687,6 +5687,155 @@ body{
 
 </style>
 
+
+<style id="urbanex-footer-premium-final">
+/* ==========================================================
+   URBANEX — PIE DE PÁGINA MEJORADO
+   Solo mejora el footer y reserva correctamente su espacio.
+   No altera la distribución principal.
+   ========================================================== */
+
+/* Base del pie */
+.pie-pagina{
+    width:100% !important;
+    min-height:44px !important;
+    height:44px !important;
+
+    margin:0 !important;
+    padding:0 18px !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            #090b0e 0%,
+            #050608 100%
+        ) !important;
+
+    border-top:1px solid rgba(229,193,88,.28) !important;
+
+    color:#a8adb3 !important;
+
+    font-family:Arial,Helvetica,sans-serif !important;
+    font-size:10px !important;
+    line-height:1.2 !important;
+    font-weight:400 !important;
+    letter-spacing:.18px !important;
+
+    text-align:center !important;
+
+    box-shadow:
+        0 -8px 22px rgba(0,0,0,.10),
+        inset 0 1px 0 rgba(255,255,255,.025) !important;
+
+    z-index:9999 !important;
+}
+
+.pie-pagina p{
+    margin:0 !important;
+    padding:0 !important;
+}
+
+.pie-pagina a{
+    color:#f0d47c !important;
+    text-decoration:none !important;
+    font-weight:600 !important;
+    transition:
+        color .18s ease,
+        text-shadow .18s ease !important;
+}
+
+.pie-pagina a:hover{
+    color:#ffffff !important;
+    text-shadow:0 0 10px rgba(229,193,88,.28) !important;
+}
+
+/* ==========================================================
+   ESCRITORIO GRANDE
+   El footer sigue fijo y la portada reserva exactamente
+   los 44px, evitando que tape o reduzca el diseño.
+   ========================================================== */
+@media (min-width:1200px){
+
+    body{
+        padding-bottom:44px !important;
+    }
+
+    .portada{
+        height:calc(100vh - 44px) !important;
+        height:calc(100svh - 44px) !important;
+    }
+
+    .pie-pagina{
+        position:fixed !important;
+        left:0 !important;
+        right:0 !important;
+        bottom:0 !important;
+
+        min-height:44px !important;
+        height:44px !important;
+        flex:0 0 44px !important;
+    }
+
+    /* Mantiene la misma separación visual que tenía el CTA
+       respecto al pie anterior de 30px. */
+    .desktop-reference-v2__boulevard{
+        bottom:58px !important;
+    }
+}
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+@media (min-width:641px) and (max-width:1199px){
+
+    .pie-pagina{
+        min-height:40px !important;
+        height:40px !important;
+        flex:0 0 40px !important;
+
+        padding:0 14px !important;
+
+        font-size:9px !important;
+    }
+}
+
+/* ==========================================================
+   MÓVIL
+   ========================================================== */
+@media (max-width:640px){
+
+    .pie-pagina{
+        position:relative !important;
+
+        min-height:38px !important;
+        height:38px !important;
+        flex:0 0 38px !important;
+
+        padding:0 10px !important;
+
+        font-size:8px !important;
+        line-height:1.25 !important;
+    }
+}
+
+@media (max-width:390px){
+
+    .pie-pagina{
+        min-height:36px !important;
+        height:36px !important;
+        flex-basis:36px !important;
+
+        padding:0 8px !important;
+
+        font-size:7.4px !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
