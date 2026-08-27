@@ -2422,6 +2422,89 @@ body{
 
 </style>
 
+
+<style id="urbanex-footer-preservado">
+/* ==========================================================
+   URBANEX — BARRA INFERIOR SIEMPRE VISIBLE
+   Solo corrige el footer. No modifica portada ni contenidos.
+   ========================================================== */
+
+html,
+body{
+    min-height:100% !important;
+}
+
+body{
+    padding-bottom:30px !important;
+}
+
+/* Barra inferior fija y siempre visible */
+.pie-pagina{
+    position:fixed !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+
+    width:100% !important;
+    height:30px !important;
+    min-height:30px !important;
+
+    margin:0 !important;
+    padding:0 12px !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    background:#050608 !important;
+    border-top:1px solid rgba(255,255,255,.08) !important;
+
+    color:#8c939b !important;
+
+    font-family:Arial,Helvetica,sans-serif !important;
+    font-size:7.8px !important;
+    line-height:1.2 !important;
+
+    text-align:center !important;
+
+    z-index:9999 !important;
+
+    box-shadow:0 -1px 0 rgba(255,255,255,.02) !important;
+}
+
+.pie-pagina p{
+    margin:0 !important;
+    padding:0 !important;
+}
+
+.pie-pagina a{
+    color:#c7cbd0 !important;
+    text-decoration:none !important;
+}
+
+.pie-pagina a:hover{
+    color:#e5c158 !important;
+}
+
+/* En móvil mantiene el mismo comportamiento */
+@media (max-width:640px){
+    body{
+        padding-bottom:30px !important;
+    }
+
+    .pie-pagina{
+        height:30px !important;
+        min-height:30px !important;
+        padding:
+            0
+            max(7px, env(safe-area-inset-right))
+            env(safe-area-inset-bottom)
+            max(7px, env(safe-area-inset-left)) !important;
+        font-size:6.7px !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
