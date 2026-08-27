@@ -3902,6 +3902,213 @@ body{
 
 </style>
 
+
+<style id="urbanex-publicidad-boulevard-logo">
+
+@media (min-width:1200px){
+
+    /* Ajuste del grid para dar espacio al botón Boulevard */
+    .desktop-reference-v2__inner{
+        grid-template-rows:
+            auto
+            auto
+            auto
+            auto
+            minmax(92px,1fr)
+            auto !important;
+    }
+
+    /* Franja publicitaria */
+    .desktop-reference-v2__ads{
+        width:min(100%,760px) !important;
+        min-height:0 !important;
+        display:grid !important;
+        grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+        gap:10px !important;
+    }
+
+    .desktop-reference-v2__ad{
+        position:relative !important;
+        min-width:0 !important;
+        min-height:100px !important;
+        max-height:135px !important;
+        height:100% !important;
+
+        display:flex !important;
+        flex-direction:column !important;
+        justify-content:space-between !important;
+
+        padding:12px !important;
+
+        overflow:hidden !important;
+
+        border:1px solid rgba(229,193,88,.42) !important;
+        border-radius:16px !important;
+
+        background:
+            linear-gradient(
+                145deg,
+                #111820 0%,
+                #17212b 55%,
+                #0d141b 100%
+            ) !important;
+
+        box-shadow:0 10px 24px rgba(0,0,0,.20) !important;
+
+        text-decoration:none !important;
+
+        isolation:isolate !important;
+    }
+
+    .desktop-reference-v2__ad::before{
+        content:"" !important;
+        position:absolute !important;
+        inset:auto -18px -32px auto !important;
+        width:95px !important;
+        height:95px !important;
+        border-radius:50% !important;
+        background:rgba(229,193,88,.10) !important;
+        z-index:-1 !important;
+    }
+
+    .desktop-reference-v2__ad::after{
+        content:"" !important;
+        position:absolute !important;
+        top:-35px !important;
+        left:-35px !important;
+        width:90px !important;
+        height:90px !important;
+        border-radius:50% !important;
+        background:rgba(255,255,255,.035) !important;
+        z-index:-1 !important;
+    }
+
+    .desktop-reference-v2__ad:hover{
+        transform:translateY(-3px) !important;
+        border-color:#e5c158 !important;
+        background:
+            linear-gradient(
+                145deg,
+                #16212b 0%,
+                #1b2732 55%,
+                #111920 100%
+            ) !important;
+    }
+
+    .desktop-reference-v2__ad-badge{
+        align-self:flex-start;
+
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+
+        min-height:21px;
+
+        padding:0 7px;
+
+        border:1px solid rgba(229,193,88,.35);
+        border-radius:999px;
+
+        color:#e5c158;
+
+        font:700 7px/1 Arial,Helvetica,sans-serif;
+        letter-spacing:.65px;
+    }
+
+    .desktop-reference-v2__ad-content{
+        display:flex;
+        flex-direction:column;
+        gap:4px;
+    }
+
+    .desktop-reference-v2__ad-content strong{
+        position:static !important;
+        color:#fff !important;
+        font:700 clamp(10px,.85vw,12px)/1.12 Arial,Helvetica,sans-serif !important;
+        text-shadow:none !important;
+    }
+
+    .desktop-reference-v2__ad-content small{
+        color:rgba(255,255,255,.68);
+        font:500 clamp(8px,.72vw,10px)/1.18 Arial,Helvetica,sans-serif;
+    }
+
+    /* Botón Entrar al Boulevard */
+    .desktop-reference-v2__boulevard{
+        display:flex;
+        justify-content:flex-start;
+        align-items:center;
+        padding-top:2px;
+    }
+
+    .desktop-reference-v2__boulevard-btn{
+        min-width:230px;
+        min-height:42px;
+
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+
+        padding:0 22px;
+
+        border:1px solid #e5c158;
+        border-radius:999px;
+
+        background:#111920;
+
+        color:#f4d77f;
+
+        font:700 8px/1 Arial,Helvetica,sans-serif;
+        letter-spacing:.85px;
+        text-transform:uppercase;
+        text-decoration:none;
+
+        box-shadow:0 9px 22px rgba(0,0,0,.18);
+
+        transition:
+            background .18s ease,
+            color .18s ease,
+            transform .18s ease;
+    }
+
+    .desktop-reference-v2__boulevard-btn:hover{
+        background:#e5c158;
+        color:#10151b;
+        transform:translateY(-2px);
+    }
+}
+
+/* Ajuste para pantallas de poca altura */
+@media (min-width:1200px) and (max-height:760px){
+
+    .desktop-reference-v2__ad{
+        min-height:76px !important;
+        max-height:92px !important;
+        padding:8px !important;
+    }
+
+    .desktop-reference-v2__ad-badge{
+        min-height:18px;
+        font-size:6px;
+    }
+
+    .desktop-reference-v2__ad-content strong{
+        font-size:9px !important;
+    }
+
+    .desktop-reference-v2__ad-content small{
+        font-size:7px;
+    }
+
+    .desktop-reference-v2__boulevard-btn{
+        min-height:36px;
+        min-width:205px;
+        font-size:7px;
+    }
+}
+
+</style>
+
 </head>
 
 <body>
@@ -3921,7 +4128,7 @@ body{
             <div class="desktop-reference-v2__brand">
                 <img
                     id="logoHeroReference"
-                    src="/imagenes/Urba4.png"
+                    src="/imagenes/logo.png"
                     alt="Urbanex"
                     class="desktop-reference-v2__logo"
                 >
@@ -3983,28 +4190,56 @@ body{
 
             <div class="desktop-reference-v2__section-title">
                 <span></span>
-                <h2>Explora lo mejor de Urbanex</h2>
+                <h2>Publicidad destacada</h2>
             </div>
 
-            <div class="desktop-reference-v2__features">
-                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature" style="--feature:url('/imagenes/Gastronomía.png')">
-                    <strong>Gastronomía</strong>
+            <div class="desktop-reference-v2__features desktop-reference-v2__ads">
+
+                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature desktop-reference-v2__ad">
+                    <span class="desktop-reference-v2__ad-badge">PUBLICIDAD</span>
+                    <div class="desktop-reference-v2__ad-content">
+                        <strong>Espacio publicitario</strong>
+                        <small>Promocione su negocio en Urbanex</small>
+                    </div>
                 </a>
 
-                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature" style="--feature:url('/imagenes/Turismo.png')">
-                    <strong>Turismo</strong>
+                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature desktop-reference-v2__ad">
+                    <span class="desktop-reference-v2__ad-badge">PUBLICIDAD</span>
+                    <div class="desktop-reference-v2__ad-content">
+                        <strong>Espacio publicitario</strong>
+                        <small>Mayor visibilidad para su marca</small>
+                    </div>
                 </a>
 
-                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature" style="--feature:url('/imagenes/Comercio.png')">
-                    <strong>Comercio</strong>
+                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature desktop-reference-v2__ad">
+                    <span class="desktop-reference-v2__ad-badge">PUBLICIDAD</span>
+                    <div class="desktop-reference-v2__ad-content">
+                        <strong>Espacio publicitario</strong>
+                        <small>Conecte con nuevos clientes</small>
+                    </div>
                 </a>
 
-                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature" style="--feature:url('/imagenes/Salud.png')">
-                    <strong>Salud</strong>
+                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature desktop-reference-v2__ad">
+                    <span class="desktop-reference-v2__ad-badge">PUBLICIDAD</span>
+                    <div class="desktop-reference-v2__ad-content">
+                        <strong>Espacio publicitario</strong>
+                        <small>Destaque promociones y servicios</small>
+                    </div>
                 </a>
 
-                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature" style="--feature:url('/imagenes/Movilidad.png')">
-                    <strong>Movilidad</strong>
+                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__feature desktop-reference-v2__ad">
+                    <span class="desktop-reference-v2__ad-badge">PUBLICIDAD</span>
+                    <div class="desktop-reference-v2__ad-content">
+                        <strong>Espacio publicitario</strong>
+                        <small>Posicione su negocio en Urbanex</small>
+                    </div>
+                </a>
+
+            </div>
+
+            <div class="desktop-reference-v2__boulevard">
+                <a href="https://urbanex.app/boulevard.html" class="desktop-reference-v2__boulevard-btn">
+                    Entrar al Boulevard
                 </a>
             </div>
 
@@ -4015,7 +4250,7 @@ body{
         <div class="desktop-showcase__content">
 
             <div class="desktop-showcase__brand">
-                <img id="logoHeroDesktop" src="/imagenes/Urba4.png" alt="Urbanex" class="desktop-showcase__logo">
+                <img id="logoHeroDesktop" src="/imagenes/logo.png" alt="Urbanex" class="desktop-showcase__logo">
                 <p class="desktop-showcase__tagline">Conecta. Descubre. Vive la ciudad.</p>
             </div>
 
@@ -4104,7 +4339,7 @@ body{
 
     <!-- Reemplazo del bloque de texto por la imagen solicitada -->
     <div class="header-branding">
-        <img id="logoDinamico" src="/imagenes/Urba4.png" alt="Urbanex" style="width: 40%; max-width: 400px; height: auto;">
+        <img id="logoDinamico" src="/imagenes/logo.png" alt="Urbanex" style="width: 40%; max-width: 400px; height: auto;">
     </div>
 
     <div class="slogan-lateral">
@@ -4170,8 +4405,8 @@ body{
     };
 
     const logos = {
-        dia: '/imagenes/Urba4.png',
-        tarde: '/imagenes/Urba4.png',
+        dia: '/imagenes/logo.png',
+        tarde: '/imagenes/logo.png',
         noche: '/imagenes/logo.png'
     };
 
