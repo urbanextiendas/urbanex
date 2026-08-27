@@ -2423,84 +2423,355 @@ body{
 </style>
 
 
-<style id="urbanex-footer-preservado">
+<style id="urbanex-desktop-reference-like">
 /* ==========================================================
-   URBANEX — BARRA INFERIOR SIEMPRE VISIBLE
-   Solo corrige el footer. No modifica portada ni contenidos.
+   URBANEX — ESCRITORIO SIMILAR A LA REFERENCIA
+   No elimina la estructura original.
+   Solo se activa en pantallas grandes.
    ========================================================== */
 
-html,
-body{
-    min-height:100% !important;
+.desktop-showcase{
+    display:none;
 }
 
-body{
-    padding-bottom:30px !important;
-}
+@media (min-width:1200px){
 
-/* Barra inferior fija y siempre visible */
-.pie-pagina{
-    position:fixed !important;
-    left:0 !important;
-    right:0 !important;
-    bottom:0 !important;
-
-    width:100% !important;
-    height:30px !important;
-    min-height:30px !important;
-
-    margin:0 !important;
-    padding:0 12px !important;
-
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-
-    background:#050608 !important;
-    border-top:1px solid rgba(255,255,255,.08) !important;
-
-    color:#8c939b !important;
-
-    font-family:Arial,Helvetica,sans-serif !important;
-    font-size:7.8px !important;
-    line-height:1.2 !important;
-
-    text-align:center !important;
-
-    z-index:9999 !important;
-
-    box-shadow:0 -1px 0 rgba(255,255,255,.02) !important;
-}
-
-.pie-pagina p{
-    margin:0 !important;
-    padding:0 !important;
-}
-
-.pie-pagina a{
-    color:#c7cbd0 !important;
-    text-decoration:none !important;
-}
-
-.pie-pagina a:hover{
-    color:#e5c158 !important;
-}
-
-/* En móvil mantiene el mismo comportamiento */
-@media (max-width:640px){
     body{
+        min-height:100vh !important;
+        min-height:100svh !important;
+        display:block !important;
+        background:#050608 !important;
         padding-bottom:30px !important;
     }
 
+    .portada{
+        position:relative !important;
+        width:100% !important;
+        height:calc(100vh - 30px) !important;
+        height:calc(100svh - 30px) !important;
+        min-height:760px !important;
+        max-height:none !important;
+        overflow:hidden !important;
+        background:#0a1220 !important;
+    }
+
+    .portada-img{
+        object-fit:cover !important;
+        object-position:center center !important;
+        filter:brightness(.90) saturate(1.05) contrast(1.02) !important;
+        z-index:-4 !important;
+    }
+
+    .portada::before{
+        content:"" !important;
+        position:absolute !important;
+        inset:0 !important;
+        z-index:-3 !important;
+        background:
+            linear-gradient(
+                90deg,
+                rgba(7,10,15,.62) 0%,
+                rgba(7,10,15,.35) 22%,
+                rgba(7,10,15,.14) 44%,
+                rgba(7,10,15,.08) 67%,
+                rgba(7,10,15,.16) 100%
+            ) !important;
+        pointer-events:none !important;
+    }
+
+    .portada::after{
+        content:"" !important;
+        position:absolute !important;
+        inset:0 !important;
+        z-index:-2 !important;
+        background:
+            linear-gradient(
+                to bottom,
+                rgba(0,0,0,.04) 0%,
+                rgba(0,0,0,0) 48%,
+                rgba(0,0,0,.24) 100%
+            ) !important;
+        pointer-events:none !important;
+    }
+
+    /* Se ocultan únicamente los bloques viejos en desktop grande */
+    .header-branding,
+    .slogan-lateral,
+    .caracteristicas-lista,
+    .puerta-link{
+        display:none !important;
+    }
+
+    .registro-contenedor{
+        position:absolute !important;
+        top:22px !important;
+        right:28px !important;
+        z-index:60 !important;
+    }
+
+    .btn-registro{
+        min-height:42px !important;
+        padding:0 18px !important;
+        border-radius:12px !important;
+        font-size:9px !important;
+        letter-spacing:.70px !important;
+        background:rgba(7,15,25,.42) !important;
+        border:1px solid rgba(229,193,88,.88) !important;
+        color:#f5dda0 !important;
+        backdrop-filter:blur(10px) !important;
+        -webkit-backdrop-filter:blur(10px) !important;
+        box-shadow:0 8px 24px rgba(0,0,0,.16) !important;
+    }
+
+    .desktop-showcase{
+        position:absolute;
+        inset:0;
+        display:flex;
+        align-items:flex-start;
+        justify-content:flex-start;
+        padding:84px 72px 88px;
+        z-index:40;
+        pointer-events:none;
+    }
+
+    .desktop-showcase__content{
+        width:min(78vw, 1140px);
+        display:flex;
+        flex-direction:column;
+        gap:28px;
+        pointer-events:auto;
+    }
+
+    .desktop-showcase__brand{
+        display:flex;
+        flex-direction:column;
+        align-items:flex-start;
+        gap:8px;
+        max-width:520px;
+    }
+
+    .desktop-showcase__logo{
+        width:min(28vw, 430px);
+        max-width:430px;
+        min-width:290px;
+        height:auto;
+        object-fit:contain;
+        filter:drop-shadow(0 6px 24px rgba(0,0,0,.26));
+    }
+
+    .desktop-showcase__tagline{
+        margin:0;
+        color:rgba(255,255,255,.96);
+        font:500 18px/1.25 Arial,Helvetica,sans-serif;
+        letter-spacing:-.2px;
+        text-shadow:0 2px 10px rgba(0,0,0,.28);
+    }
+
+    .desktop-showcase__headline{
+        max-width:640px;
+        margin:0;
+        color:#fff;
+        font:700 clamp(30px, 3.2vw, 54px)/1.15 Arial,Helvetica,sans-serif;
+        letter-spacing:-.6px;
+        text-shadow:0 3px 14px rgba(0,0,0,.36);
+    }
+
+    .desktop-showcase__headline span{
+        color:#f1c33e;
+    }
+
+    .desktop-quick-grid{
+        width:min(100%, 680px);
+        display:grid;
+        grid-template-columns:repeat(5, minmax(0, 1fr));
+        gap:12px;
+    }
+
+    .desktop-quick-card{
+        min-height:110px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+        padding:14px 10px;
+        border:1px solid rgba(255,255,255,.18);
+        border-radius:16px;
+        background:linear-gradient(180deg, rgba(15,12,12,.34), rgba(20,18,18,.22));
+        backdrop-filter:blur(10px);
+        -webkit-backdrop-filter:blur(10px);
+        text-decoration:none;
+        box-shadow:0 12px 28px rgba(0,0,0,.18);
+        transition:transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+
+    .desktop-quick-card:hover{
+        transform:translateY(-3px);
+        border-color:rgba(229,193,88,.42);
+        background:linear-gradient(180deg, rgba(18,15,15,.42), rgba(24,21,21,.28));
+    }
+
+    .desktop-quick-card__icon{
+        width:52px;
+        height:52px;
+        border-radius:14px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:rgba(11,14,18,.34);
+        border:1px solid rgba(229,193,88,.24);
+    }
+
+    .desktop-quick-card__icon svg{
+        width:28px;
+        height:28px;
+        fill:#f1c33e;
+    }
+
+    .desktop-quick-card__label{
+        color:#fff;
+        text-align:center;
+        font:500 15px/1.2 Arial,Helvetica,sans-serif;
+        letter-spacing:-.15px;
+        text-shadow:0 2px 10px rgba(0,0,0,.28);
+    }
+
+    .desktop-showcase__section-title{
+        display:flex;
+        align-items:center;
+        gap:14px;
+        margin-top:4px;
+    }
+
+    .desktop-showcase__accent{
+        width:4px;
+        height:22px;
+        border-radius:4px;
+        background:#f1c33e;
+        flex:0 0 4px;
+    }
+
+    .desktop-showcase__section-title h3{
+        margin:0;
+        color:#fff;
+        font:500 17px/1.2 Arial,Helvetica,sans-serif;
+        letter-spacing:-.15px;
+        text-shadow:0 2px 10px rgba(0,0,0,.26);
+    }
+
+    .desktop-feature-grid{
+        width:min(100%, 1100px);
+        display:grid;
+        grid-template-columns:repeat(5, minmax(0, 1fr));
+        gap:12px;
+    }
+
+    .desktop-feature-card{
+        position:relative;
+        min-height:182px;
+        overflow:hidden;
+        border-radius:18px;
+        border:1px solid rgba(255,255,255,.16);
+        background:#111;
+        box-shadow:0 14px 34px rgba(0,0,0,.18);
+        text-decoration:none;
+        isolation:isolate;
+        transition:transform .2s ease, border-color .2s ease;
+    }
+
+    .desktop-feature-card::before{
+        content:"";
+        position:absolute;
+        inset:0;
+        z-index:-2;
+        background-image:var(--feature-image);
+        background-size:cover;
+        background-position:center center;
+        background-repeat:no-repeat;
+        transform:scale(1.02);
+    }
+
+    .desktop-feature-card::after{
+        content:"";
+        position:absolute;
+        inset:0;
+        z-index:-1;
+        background:
+            linear-gradient(
+                to bottom,
+                rgba(0,0,0,.04) 0%,
+                rgba(0,0,0,.08) 44%,
+                rgba(0,0,0,.62) 100%
+            );
+    }
+
+    .desktop-feature-card:hover{
+        transform:translateY(-3px);
+        border-color:rgba(229,193,88,.36);
+    }
+
+    .desktop-feature-card__label{
+        position:absolute;
+        left:16px;
+        right:16px;
+        bottom:14px;
+        color:#fff;
+        font:500 14px/1.15 Arial,Helvetica,sans-serif;
+        letter-spacing:-.15px;
+        text-shadow:0 2px 12px rgba(0,0,0,.48);
+    }
+
     .pie-pagina{
+        position:fixed !important;
+        left:0 !important;
+        right:0 !important;
+        bottom:0 !important;
+        width:100% !important;
         height:30px !important;
         min-height:30px !important;
-        padding:
-            0
-            max(7px, env(safe-area-inset-right))
-            env(safe-area-inset-bottom)
-            max(7px, env(safe-area-inset-left)) !important;
-        font-size:6.7px !important;
+        margin:0 !important;
+        z-index:9999 !important;
+        background:#050608 !important;
+        border-top:1px solid rgba(255,255,255,.08) !important;
+    }
+}
+
+/* Ajuste para laptops medianos grandes */
+@media (min-width:1200px) and (max-width:1439px){
+
+    .desktop-showcase{
+        padding:76px 54px 86px;
+    }
+
+    .desktop-showcase__content{
+        width:min(80vw, 1030px);
+        gap:24px;
+    }
+
+    .desktop-showcase__logo{
+        width:min(31vw, 380px);
+        min-width:250px;
+    }
+
+    .desktop-showcase__tagline{
+        font-size:16px;
+    }
+
+    .desktop-showcase__headline{
+        max-width:560px;
+        font-size:clamp(28px, 3vw, 44px);
+    }
+
+    .desktop-quick-card{
+        min-height:100px;
+    }
+
+    .desktop-quick-card__label{
+        font-size:13px;
+    }
+
+    .desktop-feature-card{
+        min-height:165px;
     }
 }
 </style>
@@ -2509,11 +2780,103 @@ body{
 
 <body>
 
-<section class="portada" style="--portada-bg:url('/imagenes/Portada%20d%C3%ADa.png');">
+<section class="portada" style="--portada-bg:url('/imagenes/Portada_día.png');">
     <img id="portadaDinamica"
-     src="/imagenes/Portada%20d%C3%ADa.png"
+     src="/imagenes/Portada_día.png"
      alt="Portada Urbanex"
      class="portada-img">
+
+    <!-- BLOQUE SOLO PARA PANTALLAS GRANDES -->
+    <div class="desktop-showcase" aria-hidden="false">
+        <div class="desktop-showcase__content">
+
+            <div class="desktop-showcase__brand">
+                <img id="logoHeroDesktop" src="/imagenes/Urba4.png" alt="Urbanex" class="desktop-showcase__logo">
+                <p class="desktop-showcase__tagline">Conecta. Descubre. Vive la ciudad.</p>
+            </div>
+
+            <h2 class="desktop-showcase__headline">
+                Tu marketplace de negocios, servicios, gastronomía, turismo y
+                <span>experiencias.</span>
+            </h2>
+
+            <div class="desktop-quick-grid">
+                <a class="desktop-quick-card" href="https://urbanex.app/informativos/cerca-de-mi.html">
+                    <span class="desktop-quick-card__icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                    </span>
+                    <span class="desktop-quick-card__label">Cerca de usted</span>
+                </a>
+
+                <a class="desktop-quick-card" href="https://urbanex.app/informativos/abiertos-ahora.html">
+                    <span class="desktop-quick-card__icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 1.75A10.25 10.25 0 1 0 22.25 12 10.262 10.262 0 0 0 12 1.75zm0 18.5A8.25 8.25 0 1 1 20.25 12 8.259 8.259 0 0 1 12 20.25zm.75-13.5h-1.5v6l5 3 .75-1.23-4.25-2.52z"/>
+                        </svg>
+                    </span>
+                    <span class="desktop-quick-card__label">Abiertos ahora</span>
+                </a>
+
+                <a class="desktop-quick-card" href="https://urbanex.app/informativos/a-domicilio.html">
+                    <span class="desktop-quick-card__icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM17 12V9.5h2.5l1.88 2.5H17z"/>
+                        </svg>
+                    </span>
+                    <span class="desktop-quick-card__label">A domicilio</span>
+                </a>
+
+                <a class="desktop-quick-card" href="https://urbanex.app/informativos/ofertas.html">
+                    <span class="desktop-quick-card__icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
+                        </svg>
+                    </span>
+                    <span class="desktop-quick-card__label">Ofertas</span>
+                </a>
+
+                <a class="desktop-quick-card" href="https://urbanex.app/mapa.html">
+                    <span class="desktop-quick-card__icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M15 5.1 9 3 3 5.1v15.8l6-2.1 6 2.1 6-2.1V3l-6 2.1zM10 5.4l4 1.4v11.8l-4-1.4V5.4zm-5 1.1 3-1.05v11.8L5 18.3V6.5zm14 10.85-3 1.05V6.6l3-1.05v11.8z"/>
+                        </svg>
+                    </span>
+                    <span class="desktop-quick-card__label">Mapa</span>
+                </a>
+            </div>
+
+            <div class="desktop-showcase__section-title">
+                <span class="desktop-showcase__accent"></span>
+                <h3>Explora lo mejor de Urbanex</h3>
+            </div>
+
+            <div class="desktop-feature-grid">
+                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Gastronomía.png');">
+                    <span class="desktop-feature-card__label">Gastronomía</span>
+                </a>
+
+                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Turismo.png');">
+                    <span class="desktop-feature-card__label">Turismo</span>
+                </a>
+
+                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Comercio.png');">
+                    <span class="desktop-feature-card__label">Comercio</span>
+                </a>
+
+                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Salud.png');">
+                    <span class="desktop-feature-card__label">Salud</span>
+                </a>
+
+                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Movilidad.png');">
+                    <span class="desktop-feature-card__label">Movilidad</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
 
     <!-- Reemplazo del bloque de texto por la imagen solicitada -->
     <div class="header-branding">
@@ -2565,6 +2928,7 @@ body{
 
     const portada = document.getElementById('portadaDinamica');
     const logo = document.getElementById('logoDinamico');
+    const logoHeroDesktop = document.getElementById('logoHeroDesktop');
 
     const imagenes = {
         desktop: {
@@ -2644,6 +3008,10 @@ body{
 
         if (logo && logo.getAttribute('src') !== nuevoLogo) {
             logo.setAttribute('src', nuevoLogo);
+        }
+
+        if (logoHeroDesktop && logoHeroDesktop.getAttribute('src') !== nuevoLogo) {
+            logoHeroDesktop.setAttribute('src', nuevoLogo);
         }
     }
 
