@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urbanex · Asistente de voz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Paleta real de Urbanex (extraída de boulevard.html) */
+    --bg-main:#020202;
+    --bg-panel: rgba(6,6,6,0.72);
+    --bg-card: rgba(20,20,20,0.55);
+    --gold:#e5c158;
+    --gold-dim:#a68b44;
+    --gold-soft: rgba(229,193,88,0.15);
+    --text-main:#ffffff;
+    --text-muted:#e0e0e0;
+    --text-dark:#aaaaaa;
+    --green:#2ed573;
+    --red:#ff4757;
+    --font-serif:'Cinzel', serif;
+    --font-sans:'Montserrat', sans-serif;
+    --radius:12px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(900px 500px at 50% -8%, rgba(229,193,88,0.07), transparent 60%),
+      var(--bg-main);
+    color:var(--text-main);
+    font-family:var(--font-sans);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:32px 16px 60px;
+  }
+
+  header{
+    width:100%; max-width:760px;
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:26px;
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand-mark{
+    width:30px; height:30px; border-radius:50%;
+    border:1.5px solid var(--gold);
+    position:relative; flex-shrink:0;
+  }
+  .brand-mark::after{
+    content:""; position:absolute; inset:8px; border-radius:50%;
+    background:var(--gold); box-shadow:0 0 10px var(--gold);
+  }
+  .brand h1{
+    font-family:var(--font-serif); font-size:17px; letter-spacing:3px;
+    margin:0; font-weight:600; color:var(--text-main); text-transform:uppercase;
+  }
+  .brand p{ margin:2px 0 0; font-size:10.5px; color:var(--text-dark); letter-spacing:0.05em; }
+
+  .conn-pill{
+    font-family:var(--font-sans); font-size:10.5px; letter-spacing:0.04em;
+    color:var(--text-dark);
+    border:1px solid var(--gold-soft);
+    padding:6px 11px; border-radius:99px;
+    background:var(--bg-panel);
+    display:flex; align-items:center; gap:6px;
+  }
+  .conn-pill .dot{ width:6px;height:6px;border-radius:50%; background:var(--text-dark); }
+  .conn-pill.ok .dot{ background:var(--green); box-shadow:0 0 6px var(--green); }
+  .conn-pill.ok{ color:var(--green); }
+  .conn-pill.err .dot{ background:var(--red); box-shadow:0 0 6px var(--red); }
+  .conn-pill.err{ color:var(--red); }
+
+  main{ width:100%; max-width:760px; display:flex; flex-direction:column; align-items:center; }
+
+  .orb-wrap{ position:relative; width:120px; height:120px; display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+
+  .mic-btn{
+    position:relative; width:92px; height:92px; border-radius:50%;
+    border:1.5px solid var(--gold-dim); cursor:pointer;
+    background: radial-gradient(circle at 35% 30%, #1c1a12, #0a0a08 72%);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold);
+    transition: box-shadow .25s ease, border-color .25s ease, transform .15s ease;
+    z-index:2;
+  }
+  .mic-btn:active{ transform:scale(0.96); }
+  .mic-btn svg{ width:32px; height:32px; }
+  .mic-btn.listening{
+    border-color:var(--gold);
+    box-shadow:0 0 0 10px rgba(229,193,88,0.08), 0 0 24px rgba(229,193,88,0.35);
+    animation:pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ box-shadow:0 0 0 6px rgba(229,193,88,0.10), 0 0 18px rgba(229,193,88,0.3); }
+    50%{ box-shadow:0 0 0 16px rgba(229,193,88,0.04), 0 0 30px rgba(229,193,88,0.5); }
+  }
+  .mic-btn.processing{ border-color:var(--text-dark); color:var(--text-muted); animation:none; }
+
+  .state-label{
+    font-size:11px; letter-spacing:0.16em; color:var(--text-dark); text-transform:uppercase;
+    margin-bottom:6px; min-height:15px; font-weight:600;
+  }
+  .transcript{
+    min-height:26px; font-size:16.5px; color:var(--text-main); text-align:center;
+    margin-bottom:20px; max-width:580px; line-height:1.4;
+  }
+  .transcript.placeholder{ color:var(--text-dark); font-size:13.5px; font-weight:300; }
+
+  .input-row{ width:100%; display:flex; gap:8px; margin-bottom:16px; }
+  .input-row input{
+    flex:1; background:var(--bg-card); border:1px solid var(--gold-soft); color:var(--text-main);
+    padding:12px 14px; border-radius:10px; font-family:var(--font-sans); font-size:14px; outline:none;
+  }
+  .input-row input::placeholder{ color:var(--text-dark); }
+  .input-row input:focus{ border-color:var(--gold-dim); }
+  .input-row button{
+    background:var(--gold); color:#141105; border:none; padding:0 18px; border-radius:10px;
+    font-weight:700; cursor:pointer; font-family:var(--font-sans); font-size:13px; letter-spacing:0.02em;
+  }
+  .mute-btn{
+    background:var(--bg-card); border:1px solid var(--gold-soft); color:var(--text-dark);
+    border-radius:10px; padding:0 14px; cursor:pointer;
+  }
+  .mute-btn.active{ color:var(--gold); border-color:var(--gold-dim); }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:26px; }
+  .chip{
+    font-size:11px; color:var(--text-dark); border:1px solid var(--gold-soft); background:var(--bg-card);
+    padding:7px 12px; border-radius:99px; cursor:pointer; transition:border-color .2s, color .2s;
+  }
+  .chip:hover{ border-color:var(--gold-dim); color:var(--gold); }
+
+  .results-header{
+    width:100%; display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:10px; border-bottom:1px solid var(--gold-soft); padding-bottom:8px;
+  }
+  .results-header h2{
+    font-family:var(--font-serif); font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+    margin:0; color:var(--gold); font-weight:600;
+  }
+  .results-header span{ font-size:11px; color:var(--text-dark); }
+
+  .results{ width:100%; display:flex; flex-direction:column; gap:10px; }
+  .card{
+    background:var(--bg-card); border:1px solid var(--gold-soft); border-radius:var(--radius);
+    padding:13px 16px; display:flex; gap:14px; align-items:center; animation:fadein .35s ease both;
+  }
+  @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+  .card-icon{
+    width:40px; height:40px; border-radius:9px; background:rgba(255,255,255,0.04);
+    border:1px solid var(--gold-soft); display:flex; align-items:center; justify-content:center;
+    font-size:18px; flex-shrink:0; overflow:hidden;
+  }
+  .card-icon img{ width:100%; height:100%; object-fit:cover; }
+  .card-body{ flex:1; min-width:0; }
+  .card-top{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .card-top h3{ font-size:14.5px; margin:0; font-weight:600; color:var(--text-main); }
+  .rating{ font-size:11.5px; color:var(--gold); white-space:nowrap; font-weight:600; }
+  .card-meta{ font-size:12px; color:var(--text-dark); margin-top:2px; }
+  .badges{ display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+  .badge{ font-size:9.5px; letter-spacing:0.04em; padding:3px 8px; border-radius:6px; text-transform:uppercase; font-weight:600; }
+  .badge.open{ background:rgba(46,213,115,0.12); color:var(--green); }
+  .badge.delivery{ background:rgba(229,193,88,0.14); color:var(--gold); }
+  .badge.offer{ background:rgba(255,71,87,0.12); color:var(--red); }
+
+  .empty-state{ width:100%; text-align:center; color:var(--text-dark); font-size:13px; padding:18px 0; }
+
+  .footnote{
+    margin-top:32px; font-size:10.5px; color:var(--text-dark); text-align:center; max-width:580px;
+    line-height:1.6; border-top:1px dashed var(--gold-soft); padding-top:14px;
+  }
+  .footnote a{ color:var(--gold-dim); }
+
+  @media (max-width:480px){
+    .orb-wrap{ width:100px; height:100px; }
+    .mic-btn{ width:78px; height:78px; }
+    header{ flex-direction:column; align-items:flex-start; gap:10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div>
+      <h1>Urbanex</h1>
+      <p>Asistente de voz · directorio en vivo</p>
+    </div>
+  </div>
+  <div class="conn-pill" id="connPill"><span class="dot"></span><span id="connLabel">CONECTANDO…</span></div>
+</header>
+
+<main>
+  <div class="orb-wrap">
+    <button class="mic-btn" id="micBtn" aria-label="Activar micrófono">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M12 15a3.5 3.5 0 0 0 3.5-3.5V6a3.5 3.5 0 0 0-7 0v5.5A3.5 3.5 0 0 0 12 15Z"/>
+        <path d="M6.5 11.5a5.5 5.5 0 0 0 11 0"/>
+        <path d="M12 17v3.5M9 20.5h6"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="state-label" id="stateLabel">TOQUE PARA HABLAR</div>
+  <div class="transcript placeholder" id="transcript">Diga algo como «busca restaurantes abiertos ahora» o «farmacias con oferta»</div>
+
+  <div class="input-row">
+    <input type="text" id="textInput" placeholder="O escriba su búsqueda aquí…">
+    <button id="sendBtn">Buscar</button>
+    <button class="mute-btn active" id="muteBtn" title="Silenciar respuesta hablada">🔊</button>
+  </div>
+
+  <div class="chips" id="chips">
+    <div class="chip" data-cmd="Busca hamburguesas">hamburguesas</div>
+    <div class="chip" data-cmd="Qué puedes hacer">ayuda</div>
+  </div>
+
+  <div class="results-header">
+    <h2>Resultados</h2>
+    <span id="resultCount">—</span>
+  </div>
+  <div class="results" id="results">
+    <div class="empty-state">Cargando negocios desde Urbanex…</div>
+  </div>
+
+  <div class="footnote">
+    Conectado en vivo a la base de datos real de Urbanex en Supabase (tablas <code>businesses</code>, <code>categories</code>, <code>products</code>, <code>business_hours</code>, <code>reviews</code>, <code>promotions</code>). El motor de intención usa coincidencia de palabras clave, sin modelo de lenguaje. Datos y disponibilidad reflejan lo publicado por cada negocio en <a href="https://urbanex.app" target="_blank" rel="noopener">urbanex.app</a>.
+  </div>
+</main>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+/* ============ CONEXIÓN REAL A SUPABASE DE URBANEX ============ */
+const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const BUSINESS_SELECT = `
+  *,
+  categories!category_id(id,name,icon),
+  subcategories:categories!subcategory_id(id,name,icon)
+`;
+
+let categories = [];      // todas las categorías (raíz + sub)
+let businesses = [];      // negocios activos con detalles enriquecidos
+let cityList = [];        // ciudades detectadas en los datos reales
+
+/* ---- Helpers replicados de la lógica real de boulevard.html ---- */
+function parseScheduleTimeToMinutes(value) {
+  const text = String(value || '').trim().toLowerCase().replace('h', ':');
+  if (!text) return null;
+  const parts = text.split(':');
+  if (parts.length < 2) return null;
+  const hours = Number(parts[0]), minutes = Number(parts[1]);
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null;
+  if (hours === 24 && minutes === 0) return 1440;
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+  return hours * 60 + minutes;
+}
+function isOpenNow(hours) {
+  if (!hours?.length) return false;
+  const now = new Date();
+  const today = now.getDay();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  return hours.some(row => {
+    if (Number(row.day_of_week) !== today || row.is_closed) return false;
+    const open = parseScheduleTimeToMinutes(row.open_time);
+    const close = parseScheduleTimeToMinutes(row.close_time);
+    if (open === null || close === null) return false;
+    if (close >= open) return currentMinutes >= open && currentMinutes <= close;
+    return currentMinutes >= open || currentMinutes <= close;
+  });
+}
+function avgRating(reviews) {
+  const a = (reviews || []).filter(r => r.is_approved);
+  return a.length ? a.reduce((s, r) => s + r.rating, 0) / a.length : null;
+}
+function hasPromo(promos) {
+  const today = new Date().toISOString().slice(0, 10);
+  return (promos || []).some(p => p.is_active && (!p.end_date || p.end_date >= today));
+}
+function normalizar(t){
+  return String(t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+}
+function capitalizar(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+function phoneOf(b){ return b.whatsapp || b.phone || b.contact_phone || ''; }
+
+/* ============ CARGA DE DATOS REALES ============ */
+const connPill = document.getElementById('connPill');
+const connLabel = document.getElementById('connLabel');
+const chipsEl = document.getElementById('chips');
+
+async function boot() {
+  try {
+    const [catsRes, bizRes] = await Promise.all([
+      supabase.from('categories').select('id,name,icon,parent_id,sort_order').order('sort_order').order('name'),
+      supabase.from('businesses').select(BUSINESS_SELECT).eq('is_active', true).order('is_featured', { ascending:false }).order('name', { ascending:true })
+    ]);
+
+    if (catsRes.error) throw catsRes.error;
+    if (bizRes.error) throw bizRes.error;
+
+    categories = catsRes.data || [];
+    businesses = (bizRes.data || []).map(b => ({
+      ...b,
+      business_hours: b.business_hours || [],
+      reviews: b.reviews || [],
+      promotions: b.promotions || [],
+      _open: false, _rating: null, _promo: false
+    }));
+
+    connPill.classList.add('ok');
+    connLabel.textContent = `${businesses.length} NEGOCIOS EN VIVO`;
+
+    // Ciudades reales presentes en los datos (sin inventar una lista fija)
+    cityList = [...new Set(businesses.map(b => normalizar(b.city)).filter(Boolean))];
+
+    buildDynamicChips();
+    renderResultados(businesses.filter(b=>b.is_featured).slice(0,6), { label: 'destacados' });
+
+    // Cargar detalles (horarios, reseñas, promociones) igual que el sitio real
+    await loadBusinessDetails();
+  } catch (err) {
+    console.error('Urbanex Supabase error:', err);
+    connPill.classList.add('err');
+    connLabel.textContent = 'SIN CONEXIÓN A URBANEX';
+    document.getElementById('results').innerHTML =
+      `<div class="empty-state">No se pudo conectar a la base de datos de Urbanex (${esc(err.message||'error desconocido')}). Verifique la conexión o las políticas RLS de Supabase.</div>`;
+  }
+}
+
+async function loadBusinessDetails() {
+  const ids = businesses.map(b => b.id).filter(id => id !== null && id !== undefined);
+  if (!ids.length) return;
+
+  const [hoursRes, reviewsRes, promosRes] = await Promise.all([
+    supabase.from('business_hours').select('business_id,day_of_week,open_time,close_time,is_closed').in('business_id', ids),
+    supabase.from('reviews').select('business_id,is_approved,rating').eq('is_approved', true).in('business_id', ids),
+    supabase.from('promotions').select('business_id,is_active,end_date').eq('is_active', true).in('business_id', ids),
+  ]);
+
+  const groupBy = (rows) => {
+    const map = new Map();
+    (rows || []).forEach(r => { if (!map.has(r.business_id)) map.set(r.business_id, []); map.get(r.business_id).push(r); });
+    return map;
+  };
+  const hoursMap = groupBy(hoursRes.data), reviewsMap = groupBy(reviewsRes.data), promosMap = groupBy(promosRes.data);
+
+  businesses = businesses.map(b => {
+    const hours = hoursMap.get(b.id) || [];
+    const reviews = reviewsMap.get(b.id) || [];
+    const promos = promosMap.get(b.id) || [];
+    return { ...b, business_hours: hours, reviews, promotions: promos,
+      _open: isOpenNow(hours), _rating: avgRating(reviews), _promo: hasPromo(promos) };
+  });
+}
+
+/* ============ MOTOR DE INTENCIÓN (sin LLM, basado en datos reales) ============ */
+// Construye el mapa de categorías -> palabras clave a partir de los nombres reales de Urbanex,
+// más sinónimos comunes en español para mejorar la coincidencia por voz.
+const SYNONYMS = {
+  comida: ["comida","restaurante","restaurantes","comer","almorzar","cenar","pizza","hamburguesa","cafe","café","marisco"],
+  salud: ["salud","farmacia","farmacias","clinica","clínica","doctor","dental","dentista"],
+  hogar: ["hogar","ferreteria","ferretería","mueble","muebles"],
+  moda: ["moda","ropa","zapatos","boutique"],
+  tecnologia: ["tecnologia","tecnología","celular","celulares","computador","computadora"],
+  belleza: ["belleza","peluqueria","peluquería","spa","salon","salón"],
+  turismo: ["turismo","hotel","hoteles","hostal","hospedaje","tour"],
+  automotriz: ["auto","autos","taller","mecanico","mecánico","llantas"],
+};
+
+function categoriaKeywordsFor(cat){
+  const base = [normalizar(cat.name)];
+  const key = Object.keys(SYNONYMS).find(k => normalizar(cat.name).includes(k));
+  if (key) base.push(...SYNONYMS[key]);
+  return base;
+}
+
+function parseComando(rawText){
+  const t = normalizar(rawText);
+  let intent = 'buscar';
+  let categoria = null, ciudad = null;
+  let abiertoAhora=false, domicilio=false, oferta=false, cerca=false;
+
+  if (/ayuda|que puedes hacer|comandos|opciones/.test(t)) intent = 'ayuda';
+  else if (/^hola\b|buenos dias|buenas tardes|buenas noches/.test(t)) intent = 'saludo';
+
+  // Categoría: contra el nombre real de cada categoría en la base de Urbanex
+  for (const cat of categories){
+    const keywords = categoriaKeywordsFor(cat);
+    if (keywords.some(k => k && t.includes(k))) { categoria = cat; break; }
+  }
+
+  // Ciudad: contra las ciudades reales presentes en los negocios cargados
+  ciudad = cityList.find(c => t.includes(c)) || null;
+
+  if (/abiert[oa]s?( ahora)?/.test(t)) abiertoAhora = true;
+  if (/domicilio|delivery|entrega/.test(t)) domicilio = true;
+  if (/oferta|ofertas|descuento|promocion/.test(t)) oferta = true;
+  if (/cerca/.test(t)) cerca = true;
+
+  return { intent, categoria, ciudad, abiertoAhora, domicilio, oferta, cerca, raw: rawText };
+}
+
+function buscarNegocios(slots){
+  let r = businesses.slice();
+  if (slots.categoria) {
+    r = r.filter(b => b.category_id === slots.categoria.id || b.subcategory_id === slots.categoria.id);
+  }
+  if (slots.ciudad) r = r.filter(b => normalizar(b.city) === slots.ciudad);
+  if (slots.abiertoAhora) r = r.filter(b => b._open);
+  if (slots.domicilio) r = r.filter(b => b.delivery_available);
+  if (slots.oferta) r = r.filter(b => b._promo);
+  r.sort((a,b) => (b._rating||0) - (a._rating||0) || (b.is_featured?1:0) - (a.is_featured?1:0));
+  return r;
+}
+
+// Quita verbos de comando, muletillas y ciudad ya detectada, dejando el término real de búsqueda
+// (por ejemplo "busca hamburguesas en Loja" -> "hamburguesas")
+const STOPWORDS = new Set(["busca","buscar","encuentra","encontrar","quiero","necesito","dame","muestrame",
+  "muéstrame","mostrar","ver","hay","algun","algún","alguna","algunos","algunas","por","favor","porfavor",
+  "negocio","negocios","local","locales","tienda","tiendas","de","en","con","que","tengan","tenga","cerca",
+  "abierto","abiertos","abierta","ahora","domicilio","delivery","entrega","oferta","ofertas","descuento",
+  "promocion","promoción","un","una","unos","unas","el","la","los","las","y","o","del","al"]);
+
+function limpiarTermino(texto, categoria){
+  const catWords = categoria ? categoriaKeywordsFor(categoria).flatMap(k => k.split(' ')).map(normalizar) : [];
+  const palabras = texto.split(/\s+/).filter(Boolean);
+  const kept = palabras.filter(w => {
+    const wn = normalizar(w);
+    if (!wn) return false;
+    if (STOPWORDS.has(wn)) return false;
+    if (cityList.includes(wn)) return false;
+    if (catWords.includes(wn)) return false;
+    return true;
+  });
+  return kept.join(' ').trim();
+}
+
+async function buscarProductos(rawText){
+  const q = rawText.trim();
+  if (q.length < 3) return [];
+  const { data, error } = await supabase
+    .from('products')
+    .select(`name, businesses!business_id(id,name,slug,city,cover_image, categories!category_id(name,icon))`)
+    .ilike('name', `%${q}%`)
+    .eq('is_available', true)
+    .limit(8);
+  if (error) { console.warn('Urbanex products search error:', error.message); return []; }
+  const byBiz = new Map();
+  (data||[]).forEach(p => {
+    const biz = p.businesses;
+    if (!biz) return;
+    if (!byBiz.has(biz.id)) byBiz.set(biz.id, { biz, productos: [] });
+    byBiz.get(biz.id).productos.push(p.name);
+  });
+  return [...byBiz.values()];
+}
+
+function construirRespuestaHablada(slots, resultados, matchedProductsByBiz){
+  if (slots.intent === 'ayuda') {
+    return 'Puedo buscar negocios reales de Urbanex por categoría, ciudad, si están abiertos ahora, si tienen servicio a domicilio, o si tienen ofertas. También puedo buscar directamente por producto, por ejemplo hamburguesas o pizza.';
+  }
+  if (slots.intent === 'saludo') return 'Hola. Soy el asistente de Urbanex. Dígame qué negocio o producto está buscando.';
+  if (!resultados.length) return 'No encontré negocios ni productos que coincidan con esa búsqueda en la base de datos de Urbanex.';
+
+  const top = resultados[0];
+  const topProductos = matchedProductsByBiz.get(top.id);
+  let frase = `Encontré ${resultados.length} resultado${resultados.length===1?'':'s'}`;
+  if (slots.categoria) frase += ` en ${slots.categoria.name}`;
+  if (slots.ciudad) frase += ` en ${capitalizar(slots.ciudad)}`;
+  if (topProductos) frase += `. ${top.name} tiene ${topProductos[0]}.`;
+  else frase += `. El mejor calificado es ${top.name}${top._rating ? `, con ${top._rating.toFixed(1)} estrellas` : ''}.`;
+  return frase;
+}
+
+/* ============ INTERFAZ ============ */
+const micBtn = document.getElementById('micBtn');
+const stateLabel = document.getElementById('stateLabel');
+const transcriptEl = document.getElementById('transcript');
+const resultsEl = document.getElementById('results');
+const resultCountEl = document.getElementById('resultCount');
+const textInput = document.getElementById('textInput');
+const sendBtn = document.getElementById('sendBtn');
+const muteBtn = document.getElementById('muteBtn');
+
+let muted = false;
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function setState(label, mode){
+  stateLabel.textContent = label;
+  micBtn.classList.remove('listening','processing');
+  if (mode) micBtn.classList.add(mode);
+}
+
+function buildDynamicChips(){
+  const roots = categories.filter(c=>!c.parent_id).slice(0,3);
+  const extra = [];
+  if (roots[0]) extra.push(`${roots[0].icon||''} ${roots[0].name} abiertos ahora`.trim());
+  if (roots[1]) extra.push(`${roots[1].icon||''} ${roots[1].name} con oferta`.trim());
+  if (cityList[0]) extra.push(`Negocios en ${capitalizar(cityList[0])}`);
+  extra.push('Talleres con servicio a domicilio');
+  extra.forEach(cmd=>{
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.dataset.cmd = cmd;
+    chip.textContent = cmd;
+    chipsEl.insertBefore(chip, chipsEl.firstChild);
+  });
+  attachChipHandlers();
+}
+function attachChipHandlers(){
+  document.querySelectorAll('.chip').forEach(chip=>{
+    chip.onclick = () => procesarComando(chip.dataset.cmd);
+  });
+}
+
+function renderResultados(list, { label, matchedProductsByBiz = new Map() } = {}){
+  resultCountEl.textContent = label ? `${list.length} · ${label}` : `${list.length} resultado${list.length===1?'':'s'}`;
+  resultsEl.innerHTML = '';
+  if (!list.length){
+    resultsEl.innerHTML = `<div class="empty-state">Sin coincidencias en la base real de Urbanex. Pruebe otra ciudad, categoría o producto.</div>`;
+    return;
+  }
+  list.forEach(b=>{
+    const icon = b.subcategories?.icon || b.categories?.icon || '🏪';
+    const catName = b.subcategories?.name || b.categories?.name || 'Sin categoría';
+    const productos = matchedProductsByBiz.get(b.id);
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-icon">${b.cover_image ? `<img src="${esc(b.cover_image)}" alt="">` : icon}</div>
+      <div class="card-body">
+        <div class="card-top">
+          <h3>${esc(b.name)}</h3>
+          ${b._rating ? `<span class="rating">★ ${b._rating.toFixed(1)}</span>` : ''}
+        </div>
+        <div class="card-meta">${esc(catName)}${b.city ? ' · ' + esc(capitalizar(b.city)) : ''}</div>
+        ${productos ? `<div class="card-meta" style="margin-top:4px; color:var(--gold);">Producto: ${esc(productos.slice(0,3).join(', '))}</div>` : ''}
+        <div class="badges">
+          ${b._open ? '<span class="badge open">Abierto ahora</span>' : ''}
+          ${b.delivery_available ? '<span class="badge delivery">A domicilio</span>' : ''}
+          ${b._promo ? '<span class="badge offer">Oferta</span>' : ''}
+        </div>
+      </div>
+    `;
+    resultsEl.appendChild(card);
+  });
+}
+
+function hablar(texto){
+  if (muted || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(texto);
+  u.lang = 'es-ES';
+  u.rate = 1.02;
+  window.speechSynthesis.speak(u);
+}
+
+async function procesarComando(texto){
+  transcriptEl.classList.remove('placeholder');
+  transcriptEl.textContent = `"${texto}"`;
+  setState('PROCESANDO', 'processing');
+
+  const slots = parseComando(texto);
+  const termino = limpiarTermino(texto, slots.categoria);
+  const terminoNorm = normalizar(termino);
+
+  let resultados = [];
+  const matchedProductsByBiz = new Map();
+
+  if (slots.intent === 'buscar') {
+    // 1. Filtros estructurales: categoría/ciudad/abierto/domicilio/oferta
+    resultados = slots.categoria || slots.ciudad || slots.abiertoAhora || slots.domicilio || slots.oferta
+      ? buscarNegocios(slots)
+      : [];
+    const idsPresentes = new Set(resultados.map(b => b.id));
+
+    // 2. Coincidencia libre por nombre/dirección/categoría del negocio (ej. "El Fogón")
+    if (terminoNorm.length >= 3) {
+      businesses.forEach(b => {
+        if (idsPresentes.has(b.id)) return;
+        if (slots.ciudad && normalizar(b.city) !== slots.ciudad) return;
+        if (slots.abiertoAhora && !b._open) return;
+        if (slots.domicilio && !b.delivery_available) return;
+        if (slots.oferta && !b._promo) return;
+        const haystack = normalizar(`${b.name} ${b.address||''} ${b.categories?.name||''} ${b.subcategories?.name||''}`);
+        if (haystack.includes(terminoNorm)) { resultados.push(b); idsPresentes.add(b.id); }
+      });
+    }
+
+    // 3. Coincidencia por producto real en la tabla `products` (ej. "hamburguesas", "pizza")
+    if (terminoNorm.length >= 3) {
+      const prodGroups = await buscarProductos(termino);
+      prodGroups.forEach(({ biz, productos }) => {
+        const full = businesses.find(b => b.id === biz.id);
+        if (!full) return;
+        if (slots.ciudad && normalizar(full.city) !== slots.ciudad) return;
+        if (slots.abiertoAhora && !full._open) return;
+        if (slots.domicilio && !full.delivery_available) return;
+        if (slots.oferta && !full._promo) return;
+        matchedProductsByBiz.set(full.id, productos);
+        if (!idsPresentes.has(full.id)) { resultados.push(full); idsPresentes.add(full.id); }
+      });
+    }
+
+    // Si no había ningún filtro ni término (comando vacío de intención "buscar"), muestra destacados
+    if (!resultados.length && !slots.categoria && !slots.ciudad && terminoNorm.length < 3) {
+      resultados = businesses.filter(b => b.is_featured);
+    }
+
+    // Orden: coincidencias de producto primero, luego rating, luego destacados
+    resultados.sort((a,b)=>{
+      const aProd = matchedProductsByBiz.has(a.id) ? 1 : 0;
+      const bProd = matchedProductsByBiz.has(b.id) ? 1 : 0;
+      if (aProd !== bProd) return bProd - aProd;
+      return (b._rating||0) - (a._rating||0) || (b.is_featured?1:0) - (a.is_featured?1:0);
+    });
+    resultados = resultados.slice(0, 12);
+
+    renderResultados(resultados, { matchedProductsByBiz });
+  }
+
+  const respuesta = construirRespuestaHablada(slots, resultados, matchedProductsByBiz);
+  hablar(respuesta);
+  setState('TOQUE PARA HABLAR', null);
+  console.log('Slots detectados (motor de reglas, sin LLM):', slots, '| término:', termino, '| productos:', matchedProductsByBiz);
+}
+
+sendBtn.addEventListener('click', ()=>{
+  const val = textInput.value.trim();
+  if (!val) return;
+  procesarComando(val);
+  textInput.value = '';
+});
+textInput.addEventListener('keydown', e => { if (e.key==='Enter') sendBtn.click(); });
+
+muteBtn.addEventListener('click', ()=>{
+  muted = !muted;
+  muteBtn.textContent = muted ? '🔇' : '🔊';
+  muteBtn.classList.toggle('active', !muted);
+  if (muted) window.speechSynthesis.cancel();
+});
+
+/* ============ RECONOCIMIENTO DE VOZ ============ */
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null, listening = false;
+
+if (SpeechRecognition) {
+  recognition = new SpeechRecognition();
+  recognition.lang = 'es-EC';
+  recognition.continuous = false;
+  recognition.interimResults = true;
+
+  recognition.onstart = () => {
+    listening = true;
+    setState('ESCUCHANDO…', 'listening');
+    transcriptEl.classList.remove('placeholder');
+    transcriptEl.textContent = '…';
+  };
+  recognition.onresult = (event) => {
+    let interim = '', final = '';
+    for (let i = event.resultIndex; i < event.results.length; i++){
+      const t = event.results[i][0].transcript;
+      if (event.results[i].isFinal) final += t; else interim += t;
+    }
+    if (interim) transcriptEl.textContent = interim;
+    if (final) { recognition.stop(); procesarComando(final.trim()); }
+  };
+  recognition.onerror = (e) => {
+    listening = false;
+    setState('TOQUE PARA HABLAR', null);
+    if (e.error === 'not-allowed') {
+      transcriptEl.classList.remove('placeholder');
+      transcriptEl.textContent = 'Permiso de micrófono denegado. Use el campo de texto.';
+    }
+  };
+  recognition.onend = () => {
+    listening = false;
+    if (!micBtn.classList.contains('processing')) setState('TOQUE PARA HABLAR', null);
+  };
+  micBtn.addEventListener('click', () => {
+    if (listening) { recognition.stop(); return; }
+    try { recognition.start(); } catch(e){}
+  });
+} else {
+  micBtn.disabled = true;
+  micBtn.style.opacity = 0.4;
+  micBtn.style.cursor = 'not-allowed';
+  transcriptEl.textContent = 'Este navegador no soporta reconocimiento de voz. Use el campo de texto abajo.';
+}
+
+boot();
+</script>
+</body>
+</html>
