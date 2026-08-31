@@ -6953,6 +6953,734 @@ body {
 }
 </style>
 
+
+<style id="urbanex-boulevard-profesional-corregido">
+/* ============================================================
+   URBANEX BOULEVARD
+   MEJORA EXCLUSIVA PARA TABLET Y ESCRITORIO
+   Móvil (<=720px) queda intacto.
+   ============================================================ */
+
+@media (min-width:721px){
+
+    :root{
+        --ux-header-h:64px;
+        --ux-footer-h:24px;
+        --ux-left-w:246px;
+        --ux-right-w:300px;
+        --ux-side-gap:16px;
+        --ux-gold:#e5c158;
+        --ux-panel:rgba(5,10,15,.62);
+        --ux-panel-border:rgba(229,193,88,.20);
+    }
+
+    html,
+    body{
+        width:100%!important;
+        height:100%!important;
+        min-height:100%!important;
+        overflow:hidden!important;
+        background:#03070b!important;
+    }
+
+    .dashboard-container{
+        position:relative!important;
+        display:block!important;
+        width:100%!important;
+        height:calc(100svh - var(--ux-footer-h))!important;
+        min-height:0!important;
+        overflow:hidden!important;
+        background:transparent!important;
+    }
+
+    /* ========================================================
+       LA IMAGEN DEL BOULEVARD OCUPA TODO EL VIEWPORT DISPONIBLE
+       Mantiene el cambio automático mañana/tarde/noche existente.
+       ======================================================== */
+    .main-boulevard{
+        position:absolute!important;
+        inset:0!important;
+        z-index:1!important;
+
+        width:100%!important;
+        height:100%!important;
+        min-height:0!important;
+
+        background-size:cover!important;
+        background-position:center center!important;
+        background-repeat:no-repeat!important;
+
+        overflow:hidden!important;
+    }
+
+    .boulevard-overlay{
+        position:absolute!important;
+        inset:0!important;
+        z-index:1!important;
+
+        background:
+            linear-gradient(
+                180deg,
+                rgba(1,4,8,.18) 0%,
+                rgba(1,4,8,.03) 24%,
+                rgba(1,4,8,.02) 63%,
+                rgba(1,4,8,.22) 100%
+            )!important;
+    }
+
+    /* ========================================================
+       HEADER
+       ======================================================== */
+    .header-top{
+        position:absolute!important;
+        top:0!important;
+        left:0!important;
+        right:0!important;
+
+        z-index:30!important;
+
+        height:var(--ux-header-h)!important;
+        min-height:var(--ux-header-h)!important;
+
+        display:grid!important;
+        grid-template-columns:210px minmax(320px,660px) 220px!important;
+        align-items:center!important;
+        justify-content:space-between!important;
+        gap:18px!important;
+
+        padding:0 18px!important;
+
+        background:
+            linear-gradient(
+                90deg,
+                rgba(4,9,14,.80),
+                rgba(4,9,14,.64),
+                rgba(4,9,14,.80)
+            )!important;
+
+        border-bottom:1px solid rgba(229,193,88,.18)!important;
+
+        backdrop-filter:blur(16px) saturate(112%)!important;
+        -webkit-backdrop-filter:blur(16px) saturate(112%)!important;
+
+        box-shadow:0 10px 28px rgba(0,0,0,.16)!important;
+    }
+
+    .brand-box{
+        display:flex!important;
+        align-items:center!important;
+        min-width:0!important;
+    }
+
+    .brand-box img{
+        height:52px!important;
+        width:auto!important;
+        display:block!important;
+    }
+
+    .search-wrapper{
+        width:100%!important;
+        max-width:660px!important;
+        margin:0 auto!important;
+    }
+
+    .search-input{
+        width:100%!important;
+        height:42px!important;
+
+        padding:0 44px 0 20px!important;
+
+        background:rgba(2,6,10,.62)!important;
+        border:1px solid rgba(255,255,255,.10)!important;
+        border-radius:999px!important;
+
+        color:#fff!important;
+        font-size:13px!important;
+
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.03),
+            0 8px 18px rgba(0,0,0,.12)!important;
+    }
+
+    .search-input:focus{
+        background:rgba(2,6,10,.76)!important;
+        border-color:rgba(229,193,88,.58)!important;
+
+        box-shadow:
+            0 0 0 3px rgba(229,193,88,.07),
+            0 10px 22px rgba(0,0,0,.14)!important;
+    }
+
+    .user-tools{
+        justify-self:end!important;
+        gap:0!important;
+    }
+
+    .location-picker-button,
+    .location-indicator{
+        min-height:40px!important;
+        padding:0 16px!important;
+
+        background:rgba(2,6,10,.60)!important;
+        border:1px solid rgba(229,193,88,.40)!important;
+        border-radius:999px!important;
+
+        backdrop-filter:blur(10px)!important;
+        -webkit-backdrop-filter:blur(10px)!important;
+    }
+
+    /* ========================================================
+       CATEGORÍAS — PANEL FLOTANTE IZQUIERDO
+       ======================================================== */
+    .aside-categories{
+        position:absolute!important;
+
+        z-index:20!important;
+
+        top:calc(var(--ux-header-h) + 16px)!important;
+        left:var(--ux-side-gap)!important;
+        bottom:16px!important;
+
+        width:var(--ux-left-w)!important;
+        min-height:0!important;
+
+        display:flex!important;
+        flex-direction:column!important;
+
+        padding:16px 12px!important;
+
+        overflow:hidden!important;
+
+        background:
+            linear-gradient(
+                180deg,
+                rgba(5,10,15,.68),
+                rgba(5,10,15,.58)
+            )!important;
+
+        border:1px solid var(--ux-panel-border)!important;
+        border-radius:20px!important;
+
+        backdrop-filter:blur(17px) saturate(112%)!important;
+        -webkit-backdrop-filter:blur(17px) saturate(112%)!important;
+
+        box-shadow:
+            0 18px 38px rgba(0,0,0,.22),
+            inset 0 1px 0 rgba(255,255,255,.03)!important;
+    }
+
+    .section-title{
+        margin:0 4px 12px!important;
+        padding:0!important;
+
+        color:var(--ux-gold)!important;
+
+        font-size:11px!important;
+        line-height:1!important;
+        font-weight:800!important;
+        letter-spacing:2.2px!important;
+    }
+
+    .categories-list{
+        flex:1!important;
+        min-height:0!important;
+
+        display:flex!important;
+        flex-direction:column!important;
+        gap:7px!important;
+
+        padding-right:3px!important;
+
+        overflow-y:auto!important;
+        overflow-x:hidden!important;
+    }
+
+    .cat-root-btn,
+    .cat-all-btn{
+        min-height:52px!important;
+
+        padding:8px 10px!important;
+        gap:10px!important;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(9,14,20,.80),
+                rgba(4,8,12,.68)
+            )!important;
+
+        border:1px solid rgba(229,193,88,.19)!important;
+        border-radius:14px!important;
+
+        box-shadow:
+            0 8px 16px rgba(0,0,0,.13),
+            inset 0 1px 0 rgba(255,255,255,.03)!important;
+
+        transition:
+            transform .18s ease,
+            border-color .18s ease,
+            background .18s ease,
+            box-shadow .18s ease!important;
+    }
+
+    .cat-root-btn:hover,
+    .cat-all-btn:hover{
+        transform:translateY(-1px)!important;
+
+        border-color:rgba(229,193,88,.45)!important;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(14,20,27,.84),
+                rgba(6,10,15,.74)
+            )!important;
+    }
+
+    .cat-root-btn.active,
+    .cat-all-btn.active{
+        border-color:rgba(241,205,107,.76)!important;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(229,193,88,.16),
+                rgba(8,12,17,.78)
+            )!important;
+
+        box-shadow:
+            0 12px 22px rgba(0,0,0,.18),
+            inset 0 1px 0 rgba(255,255,255,.04),
+            0 0 22px rgba(229,193,88,.05)!important;
+    }
+
+    .icon-container{
+        width:30px!important;
+        height:30px!important;
+
+        min-width:30px!important;
+        min-height:30px!important;
+
+        border-radius:10px!important;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.09),
+                rgba(229,193,88,.07)
+            )!important;
+
+        border:1px solid rgba(229,193,88,.22)!important;
+    }
+
+    .category-name{
+        color:#fff!important;
+        font-size:12px!important;
+        font-weight:700!important;
+    }
+
+    .category-count{
+        color:rgba(235,239,243,.68)!important;
+        font-size:9px!important;
+    }
+
+    /* ========================================================
+       DESTACADOS — PANEL FLOTANTE DERECHO
+       ======================================================== */
+    .aside-showcase-list{
+        position:absolute!important;
+
+        z-index:20!important;
+
+        top:calc(var(--ux-header-h) + 16px)!important;
+        right:var(--ux-side-gap)!important;
+        bottom:16px!important;
+
+        width:var(--ux-right-w)!important;
+        min-height:0!important;
+
+        display:flex!important;
+        flex-direction:column!important;
+
+        padding:16px 12px 12px!important;
+
+        overflow:hidden!important;
+
+        background:
+            linear-gradient(
+                180deg,
+                rgba(5,10,15,.68),
+                rgba(5,10,15,.58)
+            )!important;
+
+        border:1px solid var(--ux-panel-border)!important;
+        border-radius:20px!important;
+
+        backdrop-filter:blur(17px) saturate(112%)!important;
+        -webkit-backdrop-filter:blur(17px) saturate(112%)!important;
+
+        box-shadow:
+            0 18px 38px rgba(0,0,0,.22),
+            inset 0 1px 0 rgba(255,255,255,.03)!important;
+    }
+
+    .showcase-header{
+        flex:0 0 auto!important;
+
+        margin:0 0 10px!important;
+        padding:0 4px 10px!important;
+
+        border-bottom:1px solid rgba(229,193,88,.11)!important;
+    }
+
+    .showcase-header h2{
+        color:var(--ux-gold)!important;
+
+        font-size:11px!important;
+        line-height:1!important;
+        font-weight:800!important;
+        letter-spacing:2.2px!important;
+    }
+
+    .shops-scroll-area{
+        flex:1!important;
+        min-height:0!important;
+
+        height:auto!important;
+        max-height:none!important;
+
+        display:flex!important;
+        flex-direction:column!important;
+        gap:10px!important;
+
+        padding-right:3px!important;
+
+        overflow-y:auto!important;
+        overflow-x:hidden!important;
+    }
+
+    .aside-showcase-list .ux-featured-card,
+    .shop-card,
+    .shop-card.shop-card-ad{
+        width:100%!important;
+        min-height:0!important;
+
+        margin:0!important;
+
+        background:
+            radial-gradient(
+                circle at 100% 0,
+                rgba(229,193,88,.07),
+                transparent 31%
+            ),
+            linear-gradient(
+                145deg,
+                rgba(8,13,18,.86),
+                rgba(4,8,12,.74)
+            )!important;
+
+        border:1px solid rgba(255,255,255,.08)!important;
+        border-radius:16px!important;
+
+        box-shadow:
+            0 12px 24px rgba(0,0,0,.18),
+            inset 0 1px 0 rgba(255,255,255,.03)!important;
+    }
+
+    .aside-showcase-list .ux-featured-card:hover,
+    .shop-card:hover{
+        transform:translateY(-1px)!important;
+
+        border-color:rgba(229,193,88,.34)!important;
+
+        box-shadow:
+            0 16px 30px rgba(0,0,0,.23)!important;
+    }
+
+    .shop-title,
+    .ux-featured-name{
+        color:#fff!important;
+        font-weight:800!important;
+    }
+
+    .shop-segment,
+    .ux-featured-category{
+        color:#e5c158!important;
+    }
+
+    /* ========================================================
+       BIENVENIDA CENTRAL
+       ======================================================== */
+    .welcome-billboard{
+        position:absolute!important;
+
+        z-index:8!important;
+
+        top:calc(var(--ux-header-h) + 30px)!important;
+
+        left:calc(var(--ux-left-w) + var(--ux-side-gap) * 2)!important;
+        right:calc(var(--ux-right-w) + var(--ux-side-gap) * 2)!important;
+
+        width:auto!important;
+
+        transform:none!important;
+
+        text-align:center!important;
+
+        pointer-events:none!important;
+    }
+
+    .welcome-billboard h2{
+        color:#fff!important;
+
+        font-size:clamp(28px,2.6vw,42px)!important;
+        line-height:1.05!important;
+
+        font-weight:700!important;
+        letter-spacing:7px!important;
+
+        text-shadow:
+            0 2px 6px rgba(0,0,0,.66),
+            0 10px 28px rgba(0,0,0,.28)!important;
+    }
+
+    .welcome-billboard p{
+        margin-top:8px!important;
+
+        color:var(--ux-gold)!important;
+
+        font-size:clamp(10px,.82vw,13px)!important;
+        font-weight:800!important;
+        letter-spacing:3px!important;
+
+        text-shadow:0 2px 6px rgba(0,0,0,.68)!important;
+    }
+
+    /* ========================================================
+       FILTROS INFERIORES
+       ======================================================== */
+    .bottom-filter-bar{
+        position:absolute!important;
+
+        z-index:15!important;
+
+        left:calc(var(--ux-left-w) + var(--ux-side-gap) * 2)!important;
+        right:calc(var(--ux-right-w) + var(--ux-side-gap) * 2)!important;
+        bottom:20px!important;
+
+        width:auto!important;
+        max-width:none!important;
+
+        transform:none!important;
+
+        display:grid!important;
+        grid-template-columns:repeat(4,minmax(0,1fr))!important;
+        gap:8px!important;
+
+        padding:8px!important;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(7,12,17,.78),
+                rgba(4,8,12,.66)
+            )!important;
+
+        border:1px solid rgba(229,193,88,.20)!important;
+        border-radius:16px!important;
+
+        backdrop-filter:blur(16px) saturate(110%)!important;
+        -webkit-backdrop-filter:blur(16px) saturate(110%)!important;
+
+        box-shadow:
+            0 16px 34px rgba(0,0,0,.24),
+            inset 0 1px 0 rgba(255,255,255,.03)!important;
+    }
+
+    .filter-pill{
+        min-height:48px!important;
+
+        padding:8px 10px!important;
+        gap:8px!important;
+
+        background:rgba(255,255,255,.03)!important;
+        border:1px solid rgba(255,255,255,.05)!important;
+        border-radius:11px!important;
+    }
+
+    .filter-pill:hover,
+    .filter-pill.active{
+        transform:translateY(-1px)!important;
+
+        background:rgba(229,193,88,.08)!important;
+        border-color:rgba(229,193,88,.40)!important;
+    }
+
+    .filter-label{
+        color:#fff!important;
+        font-size:11px!important;
+        font-weight:700!important;
+    }
+
+    .filter-sub{
+        color:rgba(235,239,243,.66)!important;
+        font-size:8.5px!important;
+    }
+
+    /* ========================================================
+       PIE
+       ======================================================== */
+    .pie-pagina{
+        position:fixed!important;
+
+        z-index:40!important;
+
+        left:0!important;
+        right:0!important;
+        bottom:0!important;
+
+        width:100%!important;
+        height:var(--ux-footer-h)!important;
+        min-height:var(--ux-footer-h)!important;
+
+        background:rgba(4,8,12,.64)!important;
+
+        border-top:1px solid rgba(229,193,88,.14)!important;
+
+        backdrop-filter:blur(10px)!important;
+        -webkit-backdrop-filter:blur(10px)!important;
+
+        color:#fff!important;
+        font-size:10px!important;
+    }
+
+    .pie-pagina p,
+    .pie-pagina span,
+    .pie-pagina a{
+        color:#fff!important;
+    }
+}
+
+/* ============================================================
+   TABLET / PANTALLAS MEDIANAS
+   ============================================================ */
+@media (min-width:721px) and (max-width:1024px){
+
+    :root{
+        --ux-header-h:60px;
+        --ux-left-w:190px;
+        --ux-right-w:210px;
+        --ux-side-gap:10px;
+    }
+
+    .header-top{
+        grid-template-columns:160px minmax(220px,1fr) 180px!important;
+
+        gap:10px!important;
+
+        padding:0 12px!important;
+    }
+
+    .brand-box img{
+        height:46px!important;
+    }
+
+    .search-input{
+        height:38px!important;
+        font-size:11px!important;
+    }
+
+    .location-picker-button,
+    .location-indicator{
+        min-height:36px!important;
+
+        padding:0 12px!important;
+
+        font-size:10px!important;
+    }
+
+    .aside-categories,
+    .aside-showcase-list{
+        top:calc(var(--ux-header-h) + 10px)!important;
+        bottom:10px!important;
+
+        padding:12px 9px!important;
+
+        border-radius:16px!important;
+    }
+
+    .section-title,
+    .showcase-header h2{
+        font-size:9px!important;
+        letter-spacing:1.8px!important;
+    }
+
+    .cat-root-btn,
+    .cat-all-btn{
+        min-height:46px!important;
+
+        padding:7px 8px!important;
+        gap:8px!important;
+
+        border-radius:12px!important;
+    }
+
+    .icon-container{
+        width:27px!important;
+        height:27px!important;
+
+        min-width:27px!important;
+        min-height:27px!important;
+    }
+
+    .category-name{
+        font-size:10px!important;
+    }
+
+    .category-count{
+        font-size:8px!important;
+    }
+
+    .welcome-billboard{
+        top:calc(var(--ux-header-h) + 22px)!important;
+    }
+
+    .welcome-billboard h2{
+        font-size:clamp(22px,3vw,30px)!important;
+        letter-spacing:5px!important;
+    }
+
+    .welcome-billboard p{
+        font-size:9px!important;
+        letter-spacing:2px!important;
+    }
+
+    .bottom-filter-bar{
+        bottom:12px!important;
+
+        gap:6px!important;
+        padding:6px!important;
+
+        border-radius:14px!important;
+    }
+
+    .filter-pill{
+        min-height:44px!important;
+        padding:7px 8px!important;
+    }
+
+    .filter-label{
+        font-size:9.5px!important;
+    }
+
+    .filter-sub{
+        font-size:7.5px!important;
+    }
+}
+
+/* MÓVIL <=720px: SIN CAMBIOS */
+</style>
+
 </head>
 <body>
 
@@ -9690,6 +10418,86 @@ function goBackMenu() {
 
 <script>
 document.getElementById('currentYear').textContent = new Date().getFullYear();
+</script>
+
+
+<script id="urbanex-boulevard-horario-automatico">
+(function () {
+    const boulevard = document.querySelector('.main-boulevard');
+
+    if (!boulevard) {
+        return;
+    }
+
+    const imagenesBoulevard = {
+        desktop: {
+            dia: '/imagenes/Boulevard mañana.png',
+            tarde: '/imagenes/Boulevard tarde.png',
+            noche: '/imagenes/Boulevard noche.png'
+        },
+        celular: {
+            dia: '/imagenes/Boulevard mañana celular.png',
+            tarde: '/imagenes/Boulevard tarde celular.png',
+            noche: '/imagenes/Boulevard noche celular.png'
+        }
+    };
+
+    /* Mismo corte responsive utilizado en index */
+    const mediaCelular = window.matchMedia('(max-width: 900px)');
+
+    function obtenerHoraEcuador() {
+        const partes = new Intl.DateTimeFormat('es-EC', {
+            timeZone: 'America/Guayaquil',
+            hour: '2-digit',
+            hourCycle: 'h23'
+        }).formatToParts(new Date());
+
+        const parteHora = partes.find(parte => parte.type === 'hour');
+
+        return parteHora ? Number(parteHora.value) : new Date().getHours();
+    }
+
+    /* Mismas franjas horarias del index:
+       07:00–12:59 = día/mañana
+       13:00–18:59 = tarde
+       19:00–06:59 = noche
+    */
+    function obtenerFranjaHoraria(hora) {
+        if (hora >= 7 && hora < 13) {
+            return 'dia';
+        }
+
+        if (hora >= 13 && hora < 19) {
+            return 'tarde';
+        }
+
+        return 'noche';
+    }
+
+    function actualizarImagenBoulevard() {
+        const hora = obtenerHoraEcuador();
+        const franja = obtenerFranjaHoraria(hora);
+        const dispositivo = mediaCelular.matches ? 'celular' : 'desktop';
+        const nuevaImagen = imagenesBoulevard[dispositivo][franja];
+
+        boulevard.style.setProperty(
+            'background-image',
+            'url("' + nuevaImagen + '")',
+            'important'
+        );
+    }
+
+    actualizarImagenBoulevard();
+
+    if (typeof mediaCelular.addEventListener === 'function') {
+        mediaCelular.addEventListener('change', actualizarImagenBoulevard);
+    } else if (typeof mediaCelular.addListener === 'function') {
+        mediaCelular.addListener(actualizarImagenBoulevard);
+    }
+
+    /* Revisa la hora cada minuto, igual que index */
+    setInterval(actualizarImagenBoulevard, 60000);
+})();
 </script>
 
 </body>
