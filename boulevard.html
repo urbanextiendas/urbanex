@@ -9692,5 +9692,85 @@ function goBackMenu() {
 document.getElementById('currentYear').textContent = new Date().getFullYear();
 </script>
 
+
+<script id="urbanex-boulevard-horario-automatico">
+(function () {
+    const boulevard = document.querySelector('.main-boulevard');
+
+    if (!boulevard) {
+        return;
+    }
+
+    const imagenesBoulevard = {
+        desktop: {
+            dia: '/imagenes/Boulevard mañana.png',
+            tarde: '/imagenes/Boulevard tarde.png',
+            noche: '/imagenes/Boulevard noche.png'
+        },
+        celular: {
+            dia: '/imagenes/Boulevard mañana celular.png',
+            tarde: '/imagenes/Boulevard tarde celular.png',
+            noche: '/imagenes/Boulevard noche celular.png'
+        }
+    };
+
+    /* Mismo corte responsive utilizado en index */
+    const mediaCelular = window.matchMedia('(max-width: 900px)');
+
+    function obtenerHoraEcuador() {
+        const partes = new Intl.DateTimeFormat('es-EC', {
+            timeZone: 'America/Guayaquil',
+            hour: '2-digit',
+            hourCycle: 'h23'
+        }).formatToParts(new Date());
+
+        const parteHora = partes.find(parte => parte.type === 'hour');
+
+        return parteHora ? Number(parteHora.value) : new Date().getHours();
+    }
+
+    /* Mismas franjas horarias del index:
+       07:00–12:59 = día/mañana
+       13:00–18:59 = tarde
+       19:00–06:59 = noche
+    */
+    function obtenerFranjaHoraria(hora) {
+        if (hora >= 7 && hora < 13) {
+            return 'dia';
+        }
+
+        if (hora >= 13 && hora < 19) {
+            return 'tarde';
+        }
+
+        return 'noche';
+    }
+
+    function actualizarImagenBoulevard() {
+        const hora = obtenerHoraEcuador();
+        const franja = obtenerFranjaHoraria(hora);
+        const dispositivo = mediaCelular.matches ? 'celular' : 'desktop';
+        const nuevaImagen = imagenesBoulevard[dispositivo][franja];
+
+        boulevard.style.setProperty(
+            'background-image',
+            'url("' + nuevaImagen + '")',
+            'important'
+        );
+    }
+
+    actualizarImagenBoulevard();
+
+    if (typeof mediaCelular.addEventListener === 'function') {
+        mediaCelular.addEventListener('change', actualizarImagenBoulevard);
+    } else if (typeof mediaCelular.addListener === 'function') {
+        mediaCelular.addListener(actualizarImagenBoulevard);
+    }
+
+    /* Revisa la hora cada minuto, igual que index */
+    setInterval(actualizarImagenBoulevard, 60000);
+})();
+</script>
+
 </body>
 </html>
