@@ -6954,324 +6954,333 @@ body {
 </style>
 
 
-<style id="urbanex-boulevard-desktop-tablet-premium-only">
+<style id="urbanex-boulevard-fullscreen-desktop-tablet-corregido">
 /* ============================================================
-   URBANEX BOULEVARD — MEJORA EXCLUSIVA TABLET / COMPUTADOR
-   IMPORTANTE:
-   - No modifica la vista móvil (<=720px).
-   - No cambia HTML, Supabase, filtros, rutas ni funcionamiento.
-   - La imagen del Boulevard ocupa visualmente todo el viewport.
+   URBANEX BOULEVARD
+   SOLO TABLET Y COMPUTADOR
+   - Fondo del Boulevard en toda la pantalla
+   - Misma imagen horaria del Boulevard
+   - Mejora visual de paneles y recuadros
+   - Móvil intacto
    ============================================================ */
 
 @media (min-width:721px){
 
-    /* Fondo global: la misma imagen horaria del Boulevard cubre
-       todo el viewport, detrás de encabezado, paneles y contenido. */
-    #uxBoulevardViewportBackground{
+    :root{
+        --ux-boulevard-bg: url("imagenes/Boulevard.png");
+    }
+
+    html,
+    body{
+        background:#05080c !important;
+    }
+
+    body::before{
+        content:"";
         position:fixed;
         inset:0;
         z-index:0;
-        display:block;
-        width:100vw;
-        height:100vh;
-        height:100dvh;
         pointer-events:none;
-        background-image:var(--ux-boulevard-current-image, url('/imagenes/Boulevard.png'));
+        background-image:var(--ux-boulevard-bg);
         background-size:cover;
         background-position:center center;
         background-repeat:no-repeat;
         transform:translateZ(0);
     }
 
-    #uxBoulevardViewportBackground::after{
+    body::after{
         content:"";
-        position:absolute;
+        position:fixed;
         inset:0;
+        z-index:0;
         pointer-events:none;
         background:
             linear-gradient(180deg,
-                rgba(2,5,9,.34) 0%,
-                rgba(2,5,9,.10) 23%,
-                rgba(2,5,9,.06) 58%,
-                rgba(2,5,9,.28) 100%);
+                rgba(2,5,10,.34) 0%,
+                rgba(2,5,10,.12) 20%,
+                rgba(2,5,10,.08) 56%,
+                rgba(2,5,10,.26) 100%);
     }
 
-    body{
-        position:relative!important;
-        background:#030609!important;
-    }
-
-    .header-top,
     .dashboard-container,
+    .header-top,
+    .aside-categories,
+    .main-boulevard,
+    .aside-showcase-list,
     .pie-pagina{
         position:relative;
-        z-index:2;
+        z-index:1;
     }
 
-    /* La zona central deja de utilizar un fondo independiente para
-       evitar cortes, repeticiones o cambios de encuadre entre paneles. */
+    .dashboard-container{
+        background:transparent !important;
+    }
+
+    /* Se elimina el recorte del fondo solo al bloque central */
     .main-boulevard{
-        background-image:none!important;
-        background-color:transparent!important;
+        background:none !important;
+        background-image:none !important;
+        background-color:transparent !important;
     }
 
     .boulevard-overlay{
         background:
             linear-gradient(180deg,
-                rgba(1,4,8,.15) 0%,
-                rgba(1,4,8,0) 34%,
-                rgba(1,4,8,.04) 70%,
-                rgba(1,4,8,.24) 100%)!important;
+                rgba(0,0,0,.18) 0%,
+                rgba(0,0,0,0) 35%,
+                rgba(0,0,0,0) 72%,
+                rgba(0,0,0,.32) 100%) !important;
     }
 
-    /* Encabezado profesional translúcido. */
+    /* ---------------- HEADER ---------------- */
     .header-top{
-        background:rgba(3,6,10,.82)!important;
-        border-bottom:1px solid rgba(229,193,88,.22)!important;
-        backdrop-filter:blur(16px) saturate(112%)!important;
-        -webkit-backdrop-filter:blur(16px) saturate(112%)!important;
-        box-shadow:0 8px 30px rgba(0,0,0,.16)!important;
+        background:rgba(4,8,12,.74) !important;
+        backdrop-filter:blur(14px) saturate(110%) !important;
+        -webkit-backdrop-filter:blur(14px) saturate(110%) !important;
+        border-bottom:1px solid rgba(229,193,88,.20) !important;
+        box-shadow:0 8px 26px rgba(0,0,0,.16) !important;
     }
 
     .search-input{
-        background:rgba(2,5,9,.58)!important;
-        border:1px solid rgba(255,255,255,.13)!important;
+        background:rgba(3,7,11,.62) !important;
+        border:1px solid rgba(255,255,255,.12) !important;
         box-shadow:
-            inset 0 1px 0 rgba(255,255,255,.025),
-            0 8px 20px rgba(0,0,0,.12)!important;
+            inset 0 1px 0 rgba(255,255,255,.03),
+            0 8px 20px rgba(0,0,0,.12) !important;
     }
 
     .search-input:focus{
-        background:rgba(2,5,9,.72)!important;
-        border-color:rgba(229,193,88,.72)!important;
+        background:rgba(3,7,11,.78) !important;
+        border-color:rgba(229,193,88,.72) !important;
         box-shadow:
             0 0 0 3px rgba(229,193,88,.08),
-            0 10px 24px rgba(0,0,0,.16)!important;
+            0 10px 24px rgba(0,0,0,.14) !important;
     }
 
-    .location-picker-button,
-    .location-selector{
-        background:rgba(4,8,13,.68)!important;
-        border-color:rgba(229,193,88,.40)!important;
-        box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
-        backdrop-filter:blur(12px)!important;
-        -webkit-backdrop-filter:blur(12px)!important;
-    }
-
-    /* Paneles laterales: la imagen continúa por detrás. */
+    /* ---------------- PANELES LATERALES ---------------- */
     .aside-categories,
     .aside-showcase-list{
         background:
             linear-gradient(180deg,
-                rgba(3,7,11,.78),
-                rgba(3,7,11,.68))!important;
-        border-color:rgba(229,193,88,.15)!important;
-        backdrop-filter:blur(18px) saturate(108%)!important;
-        -webkit-backdrop-filter:blur(18px) saturate(108%)!important;
+                rgba(4,8,12,.64) 0%,
+                rgba(4,8,12,.58) 100%) !important;
+        backdrop-filter:blur(18px) saturate(108%) !important;
+        -webkit-backdrop-filter:blur(18px) saturate(108%) !important;
         box-shadow:
-            inset 0 1px 0 rgba(255,255,255,.025),
-            0 0 34px rgba(0,0,0,.14)!important;
+            inset 0 1px 0 rgba(255,255,255,.03),
+            0 0 30px rgba(0,0,0,.12) !important;
+    }
+
+    .aside-categories{
+        border-right:1px solid rgba(229,193,88,.16) !important;
+    }
+
+    .aside-showcase-list{
+        border-left:1px solid rgba(229,193,88,.16) !important;
     }
 
     .section-title,
+    .showcase-title,
     .showcase-header h2{
-        color:#f1c95d!important;
-        font-weight:800!important;
-        letter-spacing:2.2px!important;
-        text-shadow:0 2px 10px rgba(0,0,0,.36)!important;
+        color:#f1cb63 !important;
+        letter-spacing:2.1px !important;
+        font-weight:800 !important;
+        text-shadow:0 2px 8px rgba(0,0,0,.30) !important;
     }
 
-    /* Categorías: acabado más limpio y comercial. */
+    /* ---------------- CATEGORÍAS ---------------- */
     .cat-root-btn,
     .cat-all-btn{
         background:
             linear-gradient(145deg,
-                rgba(7,11,16,.78),
-                rgba(3,6,10,.64))!important;
-        border:1px solid rgba(229,193,88,.21)!important;
-        border-radius:14px!important;
+                rgba(7,12,17,.72) 0%,
+                rgba(5,9,13,.62) 100%) !important;
+        border:1px solid rgba(229,193,88,.20) !important;
+        border-radius:14px !important;
         box-shadow:
             0 8px 18px rgba(0,0,0,.14),
-            inset 0 1px 0 rgba(255,255,255,.025)!important;
-        backdrop-filter:blur(10px)!important;
-        -webkit-backdrop-filter:blur(10px)!important;
+            inset 0 1px 0 rgba(255,255,255,.03) !important;
+        backdrop-filter:blur(10px) !important;
+        -webkit-backdrop-filter:blur(10px) !important;
         transition:
-            transform .20s ease,
-            border-color .20s ease,
-            background .20s ease,
-            box-shadow .20s ease!important;
+            transform .2s ease,
+            box-shadow .2s ease,
+            border-color .2s ease,
+            background .2s ease !important;
     }
 
-    .cat-root-btn:hover,
-    .cat-all-btn:hover{
-        transform:translateY(-1px)!important;
-        border-color:rgba(229,193,88,.56)!important;
+    .cat-root-btn:hover:not(.active),
+    .cat-all-btn:hover:not(.active){
+        transform:translateY(-1px) !important;
+        border-color:rgba(229,193,88,.46) !important;
         background:
             linear-gradient(145deg,
-                rgba(20,20,18,.82),
-                rgba(7,9,12,.72))!important;
+                rgba(11,17,24,.78) 0%,
+                rgba(7,11,15,.70) 100%) !important;
         box-shadow:
-            0 11px 24px rgba(0,0,0,.20),
-            0 0 0 1px rgba(229,193,88,.05)!important;
+            0 12px 24px rgba(0,0,0,.18),
+            0 0 0 1px rgba(229,193,88,.04) !important;
     }
 
     .cat-root-btn.active,
     .cat-all-btn.active{
-        border-color:rgba(241,205,107,.78)!important;
+        border-color:rgba(241,205,107,.78) !important;
         background:
             linear-gradient(145deg,
-                rgba(229,193,88,.16),
-                rgba(7,10,14,.74))!important;
+                rgba(229,193,88,.14) 0%,
+                rgba(9,13,18,.74) 100%) !important;
         box-shadow:
-            0 12px 26px rgba(0,0,0,.20),
+            0 12px 24px rgba(0,0,0,.18),
             inset 0 1px 0 rgba(255,255,255,.04),
-            0 0 24px rgba(229,193,88,.05)!important;
+            0 0 20px rgba(229,193,88,.05) !important;
     }
 
     .icon-container{
-        border-color:rgba(229,193,88,.25)!important;
         background:
             linear-gradient(145deg,
                 rgba(255,255,255,.08),
-                rgba(229,193,88,.07))!important;
+                rgba(229,193,88,.06)) !important;
+        border:1px solid rgba(229,193,88,.20) !important;
+        box-shadow:
+            0 5px 12px rgba(0,0,0,.24),
+            inset 0 1px 0 rgba(255,255,255,.05) !important;
+    }
+
+    .cat-root-btn:hover .icon-container,
+    .cat-all-btn:hover .icon-container{
+        border-color:rgba(229,193,88,.54) !important;
+        background:
+            linear-gradient(145deg,
+                rgba(255,255,255,.11),
+                rgba(229,193,88,.10)) !important;
+    }
+
+    .cat-root-btn.active .icon-container,
+    .cat-all-btn.active .icon-container{
+        background:#e5c158 !important;
+        border-color:#e5c158 !important;
+        box-shadow:0 0 15px rgba(229,193,88,.22) !important;
     }
 
     .category-name{
-        color:#f5f6f7!important;
-        font-weight:600!important;
+        color:#ffffff !important;
+        font-weight:700 !important;
     }
 
     .category-count{
-        color:rgba(231,235,239,.66)!important;
+        color:rgba(238,241,245,.70) !important;
     }
 
-    /* Texto de bienvenida con mejor presencia sobre la imagen. */
-    .welcome-billboard{
-        z-index:4!important;
-    }
-
+    /* ---------------- BLOQUE CENTRAL ---------------- */
     .welcome-billboard h2{
-        color:#fff!important;
-        font-weight:700!important;
+        color:#ffffff !important;
         text-shadow:
-            0 2px 5px rgba(0,0,0,.78),
-            0 7px 24px rgba(0,0,0,.34)!important;
+            0 2px 6px rgba(0,0,0,.78),
+            0 8px 22px rgba(0,0,0,.28) !important;
     }
 
     .welcome-billboard p{
-        color:#f3c94f!important;
-        font-weight:800!important;
+        color:#f1cb63 !important;
+        font-weight:800 !important;
         text-shadow:
-            0 2px 5px rgba(0,0,0,.78),
-            0 5px 16px rgba(0,0,0,.28)!important;
+            0 2px 5px rgba(0,0,0,.72),
+            0 6px 16px rgba(0,0,0,.24) !important;
     }
 
-    /* Barra inferior: vidrio oscuro, más limpia y premium. */
     .bottom-filter-bar{
         background:
             linear-gradient(145deg,
-                rgba(8,12,17,.82),
-                rgba(3,6,10,.68))!important;
-        border:1px solid rgba(229,193,88,.24)!important;
-        border-radius:15px!important;
-        backdrop-filter:blur(16px) saturate(112%)!important;
-        -webkit-backdrop-filter:blur(16px) saturate(112%)!important;
+                rgba(8,12,17,.80) 0%,
+                rgba(4,7,11,.70) 100%) !important;
+        border:1px solid rgba(229,193,88,.22) !important;
+        border-radius:15px !important;
         box-shadow:
-            0 15px 34px rgba(0,0,0,.26),
-            inset 0 1px 0 rgba(255,255,255,.035)!important;
+            0 16px 34px rgba(0,0,0,.24),
+            inset 0 1px 0 rgba(255,255,255,.03) !important;
+        backdrop-filter:blur(16px) saturate(110%) !important;
+        -webkit-backdrop-filter:blur(16px) saturate(110%) !important;
     }
 
     .filter-pill{
-        background:rgba(2,5,9,.43)!important;
-        border:1px solid rgba(255,255,255,.045)!important;
-        border-radius:10px!important;
+        background:rgba(255,255,255,.03) !important;
+        border:1px solid rgba(255,255,255,.04) !important;
+        border-radius:10px !important;
         transition:
+            transform .18s ease,
             background .18s ease,
-            border-color .18s ease,
-            transform .18s ease!important;
+            border-color .18s ease !important;
     }
 
     .filter-pill:hover,
     .filter-pill.active{
-        transform:translateY(-1px)!important;
-        background:rgba(229,193,88,.10)!important;
-        border-color:rgba(229,193,88,.48)!important;
+        transform:translateY(-1px) !important;
+        background:rgba(229,193,88,.08) !important;
+        border-color:rgba(229,193,88,.40) !important;
     }
 
     .filter-label{
-        color:#fff!important;
-        font-weight:700!important;
+        color:#ffffff !important;
+        font-weight:700 !important;
     }
 
     .filter-sub{
-        color:rgba(235,238,241,.64)!important;
+        color:rgba(232,235,239,.68) !important;
     }
 
-    /* Destacados: conserva estructura y datos; solo refina acabado. */
-    .aside-showcase-list .ux-featured-card,
+    /* ---------------- DESTACADOS ---------------- */
+    .shop-card,
     .shop-card.shop-card-ad,
-    .shop-card{
-        border-color:rgba(157,180,203,.20)!important;
+    .ux-featured-card{
         background:
-            radial-gradient(circle at 100% 0,
+            radial-gradient(circle at top right,
                 rgba(229,193,88,.08),
-                transparent 34%),
+                transparent 28%),
             linear-gradient(145deg,
-                rgba(8,12,17,.86),
-                rgba(3,6,10,.74))!important;
+                rgba(8,12,17,.86) 0%,
+                rgba(4,7,11,.74) 100%) !important;
+        border:1px solid rgba(157,180,203,.18) !important;
         box-shadow:
             0 14px 30px rgba(0,0,0,.22),
-            inset 0 1px 0 rgba(255,255,255,.03)!important;
-        backdrop-filter:blur(12px) saturate(106%)!important;
-        -webkit-backdrop-filter:blur(12px) saturate(106%)!important;
+            inset 0 1px 0 rgba(255,255,255,.03) !important;
+        backdrop-filter:blur(12px) saturate(106%) !important;
+        -webkit-backdrop-filter:blur(12px) saturate(106%) !important;
     }
 
-    .aside-showcase-list .ux-featured-card:hover,
+    .shop-card:hover,
     .shop-card.shop-card-ad:hover,
-    .shop-card:hover{
-        border-color:rgba(229,193,88,.42)!important;
+    .ux-featured-card:hover{
+        border-color:rgba(229,193,88,.38) !important;
         box-shadow:
-            0 18px 36px rgba(0,0,0,.28),
-            0 0 0 1px rgba(229,193,88,.035)!important;
+            0 18px 34px rgba(0,0,0,.26),
+            0 0 0 1px rgba(229,193,88,.03) !important;
     }
 
-    .aside-showcase-list .ux-featured-logo-box,
-    .shop-thumb-wrapper{
-        border-color:rgba(229,193,88,.18)!important;
-        box-shadow:
-            0 8px 20px rgba(0,0,0,.20),
-            inset 0 1px 0 rgba(255,255,255,.50)!important;
+    .shop-title,
+    .ux-featured-name{
+        color:#ffffff !important;
+        font-weight:800 !important;
     }
 
-    .aside-showcase-list .ux-featured-name,
-    .shop-title{
-        color:#fff!important;
-        font-weight:800!important;
+    .shop-segment,
+    .ux-featured-category{
+        color:#e7c15d !important;
     }
 
-    .aside-showcase-list .ux-featured-category,
-    .shop-segment{
-        color:#e8c463!important;
-    }
-
-    /* Pie translúcido sobre el fondo global. */
+    /* ---------------- FOOTER ---------------- */
     .pie-pagina{
-        background:rgba(2,5,8,.76)!important;
-        border-top:1px solid rgba(229,193,88,.18)!important;
-        color:#f1f3f4!important;
-        backdrop-filter:blur(12px)!important;
-        -webkit-backdrop-filter:blur(12px)!important;
-        box-shadow:0 -8px 24px rgba(0,0,0,.14)!important;
+        background:rgba(3,7,11,.70) !important;
+        backdrop-filter:blur(12px) !important;
+        -webkit-backdrop-filter:blur(12px) !important;
+        border-top:1px solid rgba(229,193,88,.14) !important;
+        box-shadow:0 -8px 24px rgba(0,0,0,.14) !important;
     }
 }
 
-/* MÓVIL <=720px: deliberadamente sin reglas nuevas. */
+/* MÓVIL: sin cambios nuevos */
 </style>
 
 </head>
 <body>
-<div id="uxBoulevardViewportBackground" aria-hidden="true"></div>
-
 
 <div class="dashboard-container">
 
@@ -10090,41 +10099,43 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
 </script>
 
 
-<script id="urbanex-sync-fullscreen-boulevard-background">
+<script id="urbanex-fullscreen-background-sync">
 (function(){
-    const mediaDesktopTablet = window.matchMedia('(min-width: 721px)');
+    const mediaDesktopTablet = window.matchMedia('(min-width:721px)');
     const boulevard = document.querySelector('.main-boulevard');
-    const globalBg = document.getElementById('uxBoulevardViewportBackground');
 
-    if (!boulevard || !globalBg) return;
+    if (!boulevard) return;
 
-    function sincronizarFondo(){
-        if (!mediaDesktopTablet.matches) {
-            document.documentElement.style.removeProperty('--ux-boulevard-current-image');
+    function syncFullScreenBackground(){
+        if (!mediaDesktopTablet.matches){
+            document.documentElement.style.removeProperty('--ux-boulevard-bg');
             return;
         }
 
         const inlineImage = boulevard.style.getPropertyValue('background-image');
         const computedImage = getComputedStyle(boulevard).backgroundImage;
-        const selectedImage = inlineImage && inlineImage !== 'none' ? inlineImage : computedImage;
+        const selectedImage = (inlineImage && inlineImage !== 'none') ? inlineImage : computedImage;
 
-        if (selectedImage && selectedImage !== 'none') {
-            document.documentElement.style.setProperty('--ux-boulevard-current-image', selectedImage);
+        if (selectedImage && selectedImage !== 'none'){
+            document.documentElement.style.setProperty('--ux-boulevard-bg', selectedImage);
         }
     }
 
-    /* Observa únicamente el cambio horario que ya hace el Boulevard. */
-    const observer = new MutationObserver(sincronizarFondo);
-    observer.observe(boulevard, { attributes:true, attributeFilter:['style'] });
+    const observer = new MutationObserver(syncFullScreenBackground);
+    observer.observe(boulevard, {
+        attributes: true,
+        attributeFilter: ['style']
+    });
 
-    if (typeof mediaDesktopTablet.addEventListener === 'function') {
-        mediaDesktopTablet.addEventListener('change', sincronizarFondo);
-    } else if (typeof mediaDesktopTablet.addListener === 'function') {
-        mediaDesktopTablet.addListener(sincronizarFondo);
+    if (typeof mediaDesktopTablet.addEventListener === 'function'){
+        mediaDesktopTablet.addEventListener('change', syncFullScreenBackground);
+    } else if (typeof mediaDesktopTablet.addListener === 'function'){
+        mediaDesktopTablet.addListener(syncFullScreenBackground);
     }
 
-    window.addEventListener('resize', sincronizarFondo, { passive:true });
-    sincronizarFondo();
+    window.addEventListener('resize', syncFullScreenBackground, { passive:true });
+
+    syncFullScreenBackground();
 })();
 </script>
 
