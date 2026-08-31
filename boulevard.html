@@ -2451,7 +2451,7 @@ body {
 .aside-categories{
     background:
         linear-gradient(rgba(3,3,3,.94), rgba(3,3,3,.94)),
-        url("imagenes/boulevard/Boul_mañana.png") left center / cover no-repeat!important;
+        url("imagenes/Boulevard.png") left center / cover no-repeat!important;
     backdrop-filter:blur(8px)!important;
     -webkit-backdrop-filter:blur(8px)!important;
 }
@@ -2459,7 +2459,7 @@ body {
 .aside-showcase-list{
     background:
         linear-gradient(rgba(3,3,3,.94), rgba(3,3,3,.94)),
-        url("imagenes/boulevard/Boul_mañana.png") right center / cover no-repeat!important;
+        url("imagenes/Boulevard.png") right center / cover no-repeat!important;
     backdrop-filter:blur(8px)!important;
     -webkit-backdrop-filter:blur(8px)!important;
 }
@@ -3758,7 +3758,7 @@ body {
     .aside-showcase-list{
         background:
             linear-gradient(rgba(4,6,9,.78),rgba(4,6,9,.78)),
-            url("imagenes/boulevard/Boul_mañana.png") right center / cover no-repeat!important;
+            url("imagenes/Boulevard.png") right center / cover no-repeat!important;
         backdrop-filter:blur(12px) saturate(.92)!important;
         -webkit-backdrop-filter:blur(12px) saturate(.92)!important;
     }
@@ -6954,2214 +6954,249 @@ body {
 </style>
 
 
-<style id="urbanex-boulevard-profesional-corregido">
-/* ============================================================
-   URBANEX BOULEVARD
-   MEJORA EXCLUSIVA PARA TABLET Y ESCRITORIO
-   Móvil (<=720px) queda intacto.
-   ============================================================ */
-
-@media (min-width:721px){
-
-    :root{
-        --ux-header-h:64px;
-        --ux-footer-h:24px;
-        --ux-left-w:246px;
-        --ux-right-w:300px;
-        --ux-side-gap:16px;
-        --ux-gold:#e5c158;
-        --ux-panel:rgba(5,10,15,.62);
-        --ux-panel-border:rgba(229,193,88,.20);
-    }
-
-    html,
-    body{
-        width:100%!important;
-        height:100%!important;
-        min-height:100%!important;
-        overflow:hidden!important;
-        background:#03070b!important;
-    }
-
-    .dashboard-container{
-        position:relative!important;
-        display:block!important;
-        width:100%!important;
-        height:calc(100svh - var(--ux-footer-h))!important;
-        min-height:0!important;
-        overflow:hidden!important;
-        background:transparent!important;
-    }
-
-    /* ========================================================
-       LA IMAGEN DEL BOULEVARD OCUPA TODO EL VIEWPORT DISPONIBLE
-       Mantiene el cambio automático mañana/tarde/noche existente.
-       ======================================================== */
-    .main-boulevard{
-        position:absolute!important;
-        inset:0!important;
-        z-index:1!important;
-
-        width:100%!important;
-        height:100%!important;
-        min-height:0!important;
-
-        background-size:cover!important;
-        background-position:center center!important;
-        background-repeat:no-repeat!important;
-
-        overflow:hidden!important;
-    }
-
-    .boulevard-overlay{
-        position:absolute!important;
-        inset:0!important;
-        z-index:1!important;
-
-        background:
-            linear-gradient(
-                180deg,
-                rgba(1,4,8,.18) 0%,
-                rgba(1,4,8,.03) 24%,
-                rgba(1,4,8,.02) 63%,
-                rgba(1,4,8,.22) 100%
-            )!important;
-    }
-
-    /* ========================================================
-       HEADER
-       ======================================================== */
-    .header-top{
-        position:absolute!important;
-        top:0!important;
-        left:0!important;
-        right:0!important;
-
-        z-index:30!important;
-
-        height:var(--ux-header-h)!important;
-        min-height:var(--ux-header-h)!important;
-
-        display:grid!important;
-        grid-template-columns:210px minmax(320px,660px) 220px!important;
-        align-items:center!important;
-        justify-content:space-between!important;
-        gap:18px!important;
-
-        padding:0 18px!important;
-
-        background:
-            linear-gradient(
-                90deg,
-                rgba(4,9,14,.80),
-                rgba(4,9,14,.64),
-                rgba(4,9,14,.80)
-            )!important;
-
-        border-bottom:1px solid rgba(229,193,88,.18)!important;
-
-        backdrop-filter:blur(16px) saturate(112%)!important;
-        -webkit-backdrop-filter:blur(16px) saturate(112%)!important;
-
-        box-shadow:0 10px 28px rgba(0,0,0,.16)!important;
-    }
-
-    .brand-box{
-        display:flex!important;
-        align-items:center!important;
-        min-width:0!important;
-    }
-
-    .brand-box img{
-        height:52px!important;
-        width:auto!important;
-        display:block!important;
-    }
-
-    .search-wrapper{
-        width:100%!important;
-        max-width:660px!important;
-        margin:0 auto!important;
-    }
-
-    .search-input{
-        width:100%!important;
-        height:42px!important;
-
-        padding:0 44px 0 20px!important;
-
-        background:rgba(2,6,10,.62)!important;
-        border:1px solid rgba(255,255,255,.10)!important;
-        border-radius:999px!important;
-
-        color:#fff!important;
-        font-size:13px!important;
-
-        box-shadow:
-            inset 0 1px 0 rgba(255,255,255,.03),
-            0 8px 18px rgba(0,0,0,.12)!important;
-    }
-
-    .search-input:focus{
-        background:rgba(2,6,10,.76)!important;
-        border-color:rgba(229,193,88,.58)!important;
-
-        box-shadow:
-            0 0 0 3px rgba(229,193,88,.07),
-            0 10px 22px rgba(0,0,0,.14)!important;
-    }
-
-    .user-tools{
-        justify-self:end!important;
-        gap:0!important;
-    }
-
-    .location-picker-button,
-    .location-indicator{
-        min-height:40px!important;
-        padding:0 16px!important;
-
-        background:rgba(2,6,10,.60)!important;
-        border:1px solid rgba(229,193,88,.40)!important;
-        border-radius:999px!important;
-
-        backdrop-filter:blur(10px)!important;
-        -webkit-backdrop-filter:blur(10px)!important;
-    }
-
-    /* ========================================================
-       CATEGORÍAS — PANEL FLOTANTE IZQUIERDO
-       ======================================================== */
-    .aside-categories{
-        position:absolute!important;
-
-        z-index:20!important;
-
-        top:calc(var(--ux-header-h) + 16px)!important;
-        left:var(--ux-side-gap)!important;
-        bottom:16px!important;
-
-        width:var(--ux-left-w)!important;
-        min-height:0!important;
-
-        display:flex!important;
-        flex-direction:column!important;
-
-        padding:16px 12px!important;
-
-        overflow:hidden!important;
-
-        background:
-            linear-gradient(
-                180deg,
-                rgba(5,10,15,.68),
-                rgba(5,10,15,.58)
-            )!important;
-
-        border:1px solid var(--ux-panel-border)!important;
-        border-radius:20px!important;
-
-        backdrop-filter:blur(17px) saturate(112%)!important;
-        -webkit-backdrop-filter:blur(17px) saturate(112%)!important;
-
-        box-shadow:
-            0 18px 38px rgba(0,0,0,.22),
-            inset 0 1px 0 rgba(255,255,255,.03)!important;
-    }
-
-    .section-title{
-        margin:0 4px 12px!important;
-        padding:0!important;
-
-        color:var(--ux-gold)!important;
-
-        font-size:11px!important;
-        line-height:1!important;
-        font-weight:800!important;
-        letter-spacing:2.2px!important;
-    }
-
-    .categories-list{
-        flex:1!important;
-        min-height:0!important;
-
-        display:flex!important;
-        flex-direction:column!important;
-        gap:7px!important;
-
-        padding-right:3px!important;
-
-        overflow-y:auto!important;
-        overflow-x:hidden!important;
-    }
-
-    .cat-root-btn,
-    .cat-all-btn{
-        min-height:52px!important;
-
-        padding:8px 10px!important;
-        gap:10px!important;
-
-        background:
-            linear-gradient(
-                145deg,
-                rgba(9,14,20,.80),
-                rgba(4,8,12,.68)
-            )!important;
-
-        border:1px solid rgba(229,193,88,.19)!important;
-        border-radius:14px!important;
-
-        box-shadow:
-            0 8px 16px rgba(0,0,0,.13),
-            inset 0 1px 0 rgba(255,255,255,.03)!important;
-
-        transition:
-            transform .18s ease,
-            border-color .18s ease,
-            background .18s ease,
-            box-shadow .18s ease!important;
-    }
-
-    .cat-root-btn:hover,
-    .cat-all-btn:hover{
-        transform:translateY(-1px)!important;
-
-        border-color:rgba(229,193,88,.45)!important;
-
-        background:
-            linear-gradient(
-                145deg,
-                rgba(14,20,27,.84),
-                rgba(6,10,15,.74)
-            )!important;
-    }
-
-    .cat-root-btn.active,
-    .cat-all-btn.active{
-        border-color:rgba(241,205,107,.76)!important;
-
-        background:
-            linear-gradient(
-                145deg,
-                rgba(229,193,88,.16),
-                rgba(8,12,17,.78)
-            )!important;
-
-        box-shadow:
-            0 12px 22px rgba(0,0,0,.18),
-            inset 0 1px 0 rgba(255,255,255,.04),
-            0 0 22px rgba(229,193,88,.05)!important;
-    }
-
-    .icon-container{
-        width:30px!important;
-        height:30px!important;
-
-        min-width:30px!important;
-        min-height:30px!important;
-
-        border-radius:10px!important;
-
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.09),
-                rgba(229,193,88,.07)
-            )!important;
-
-        border:1px solid rgba(229,193,88,.22)!important;
-    }
-
-    .category-name{
-        color:#fff!important;
-        font-size:12px!important;
-        font-weight:700!important;
-    }
-
-    .category-count{
-        color:rgba(235,239,243,.68)!important;
-        font-size:9px!important;
-    }
-
-    /* ========================================================
-       DESTACADOS — PANEL FLOTANTE DERECHO
-       ======================================================== */
-    .aside-showcase-list{
-        position:absolute!important;
-
-        z-index:20!important;
-
-        top:calc(var(--ux-header-h) + 16px)!important;
-        right:var(--ux-side-gap)!important;
-        bottom:16px!important;
-
-        width:var(--ux-right-w)!important;
-        min-height:0!important;
-
-        display:flex!important;
-        flex-direction:column!important;
-
-        padding:16px 12px 12px!important;
-
-        overflow:hidden!important;
-
-        background:
-            linear-gradient(
-                180deg,
-                rgba(5,10,15,.68),
-                rgba(5,10,15,.58)
-            )!important;
-
-        border:1px solid var(--ux-panel-border)!important;
-        border-radius:20px!important;
-
-        backdrop-filter:blur(17px) saturate(112%)!important;
-        -webkit-backdrop-filter:blur(17px) saturate(112%)!important;
-
-        box-shadow:
-            0 18px 38px rgba(0,0,0,.22),
-            inset 0 1px 0 rgba(255,255,255,.03)!important;
-    }
-
-    .showcase-header{
-        flex:0 0 auto!important;
-
-        margin:0 0 10px!important;
-        padding:0 4px 10px!important;
-
-        border-bottom:1px solid rgba(229,193,88,.11)!important;
-    }
-
-    .showcase-header h2{
-        color:var(--ux-gold)!important;
-
-        font-size:11px!important;
-        line-height:1!important;
-        font-weight:800!important;
-        letter-spacing:2.2px!important;
-    }
-
-    .shops-scroll-area{
-        flex:1!important;
-        min-height:0!important;
-
-        height:auto!important;
-        max-height:none!important;
-
-        display:flex!important;
-        flex-direction:column!important;
-        gap:10px!important;
-
-        padding-right:3px!important;
-
-        overflow-y:auto!important;
-        overflow-x:hidden!important;
-    }
-
-    .aside-showcase-list .ux-featured-card,
-    .shop-card,
-    .shop-card.shop-card-ad{
-        width:100%!important;
-        min-height:0!important;
-
-        margin:0!important;
-
-        background:
-            radial-gradient(
-                circle at 100% 0,
-                rgba(229,193,88,.07),
-                transparent 31%
-            ),
-            linear-gradient(
-                145deg,
-                rgba(8,13,18,.86),
-                rgba(4,8,12,.74)
-            )!important;
-
-        border:1px solid rgba(255,255,255,.08)!important;
-        border-radius:16px!important;
-
-        box-shadow:
-            0 12px 24px rgba(0,0,0,.18),
-            inset 0 1px 0 rgba(255,255,255,.03)!important;
-    }
-
-    .aside-showcase-list .ux-featured-card:hover,
-    .shop-card:hover{
-        transform:translateY(-1px)!important;
-
-        border-color:rgba(229,193,88,.34)!important;
-
-        box-shadow:
-            0 16px 30px rgba(0,0,0,.23)!important;
-    }
-
-    .shop-title,
-    .ux-featured-name{
-        color:#fff!important;
-        font-weight:800!important;
-    }
-
-    .shop-segment,
-    .ux-featured-category{
-        color:#e5c158!important;
-    }
-
-    /* ========================================================
-       BIENVENIDA CENTRAL
-       ======================================================== */
-    .welcome-billboard{
-        position:absolute!important;
-
-        z-index:8!important;
-
-        top:calc(var(--ux-header-h) + 30px)!important;
-
-        left:calc(var(--ux-left-w) + var(--ux-side-gap) * 2)!important;
-        right:calc(var(--ux-right-w) + var(--ux-side-gap) * 2)!important;
-
-        width:auto!important;
-
-        transform:none!important;
-
-        text-align:center!important;
-
-        pointer-events:none!important;
-    }
-
-    .welcome-billboard h2{
-        color:#fff!important;
-
-        font-size:clamp(28px,2.6vw,42px)!important;
-        line-height:1.05!important;
-
-        font-weight:700!important;
-        letter-spacing:7px!important;
-
-        text-shadow:
-            0 2px 6px rgba(0,0,0,.66),
-            0 10px 28px rgba(0,0,0,.28)!important;
-    }
-
-    .welcome-billboard p{
-        margin-top:8px!important;
-
-        color:var(--ux-gold)!important;
-
-        font-size:clamp(10px,.82vw,13px)!important;
-        font-weight:800!important;
-        letter-spacing:3px!important;
-
-        text-shadow:0 2px 6px rgba(0,0,0,.68)!important;
-    }
-
-    /* ========================================================
-       FILTROS INFERIORES
-       ======================================================== */
-    .bottom-filter-bar{
-        position:absolute!important;
-
-        z-index:15!important;
-
-        left:calc(var(--ux-left-w) + var(--ux-side-gap) * 2)!important;
-        right:calc(var(--ux-right-w) + var(--ux-side-gap) * 2)!important;
-        bottom:20px!important;
-
-        width:auto!important;
-        max-width:none!important;
-
-        transform:none!important;
-
-        display:grid!important;
-        grid-template-columns:repeat(4,minmax(0,1fr))!important;
-        gap:8px!important;
-
-        padding:8px!important;
-
-        background:
-            linear-gradient(
-                145deg,
-                rgba(7,12,17,.78),
-                rgba(4,8,12,.66)
-            )!important;
-
-        border:1px solid rgba(229,193,88,.20)!important;
-        border-radius:16px!important;
-
-        backdrop-filter:blur(16px) saturate(110%)!important;
-        -webkit-backdrop-filter:blur(16px) saturate(110%)!important;
-
-        box-shadow:
-            0 16px 34px rgba(0,0,0,.24),
-            inset 0 1px 0 rgba(255,255,255,.03)!important;
-    }
-
-    .filter-pill{
-        min-height:48px!important;
-
-        padding:8px 10px!important;
-        gap:8px!important;
-
-        background:rgba(255,255,255,.03)!important;
-        border:1px solid rgba(255,255,255,.05)!important;
-        border-radius:11px!important;
-    }
-
-    .filter-pill:hover,
-    .filter-pill.active{
-        transform:translateY(-1px)!important;
-
-        background:rgba(229,193,88,.08)!important;
-        border-color:rgba(229,193,88,.40)!important;
-    }
-
-    .filter-label{
-        color:#fff!important;
-        font-size:11px!important;
-        font-weight:700!important;
-    }
-
-    .filter-sub{
-        color:rgba(235,239,243,.66)!important;
-        font-size:8.5px!important;
-    }
-
-    /* ========================================================
-       PIE
-       ======================================================== */
-    .pie-pagina{
-        position:fixed!important;
-
-        z-index:40!important;
-
-        left:0!important;
-        right:0!important;
-        bottom:0!important;
-
-        width:100%!important;
-        height:var(--ux-footer-h)!important;
-        min-height:var(--ux-footer-h)!important;
-
-        background:rgba(4,8,12,.64)!important;
-
-        border-top:1px solid rgba(229,193,88,.14)!important;
-
-        backdrop-filter:blur(10px)!important;
-        -webkit-backdrop-filter:blur(10px)!important;
-
-        color:#fff!important;
-        font-size:10px!important;
-    }
-
-    .pie-pagina p,
-    .pie-pagina span,
-    .pie-pagina a{
-        color:#fff!important;
-    }
-}
-
-/* ============================================================
-   TABLET / PANTALLAS MEDIANAS
-   ============================================================ */
-@media (min-width:721px) and (max-width:1024px){
-
-    :root{
-        --ux-header-h:60px;
-        --ux-left-w:190px;
-        --ux-right-w:210px;
-        --ux-side-gap:10px;
-    }
-
-    .header-top{
-        grid-template-columns:160px minmax(220px,1fr) 180px!important;
-
-        gap:10px!important;
-
-        padding:0 12px!important;
-    }
-
-    .brand-box img{
-        height:46px!important;
-    }
-
-    .search-input{
-        height:38px!important;
-        font-size:11px!important;
-    }
-
-    .location-picker-button,
-    .location-indicator{
-        min-height:36px!important;
-
-        padding:0 12px!important;
-
-        font-size:10px!important;
-    }
-
-    .aside-categories,
-    .aside-showcase-list{
-        top:calc(var(--ux-header-h) + 10px)!important;
-        bottom:10px!important;
-
-        padding:12px 9px!important;
-
-        border-radius:16px!important;
-    }
-
-    .section-title,
-    .showcase-header h2{
-        font-size:9px!important;
-        letter-spacing:1.8px!important;
-    }
-
-    .cat-root-btn,
-    .cat-all-btn{
-        min-height:46px!important;
-
-        padding:7px 8px!important;
-        gap:8px!important;
-
-        border-radius:12px!important;
-    }
-
-    .icon-container{
-        width:27px!important;
-        height:27px!important;
-
-        min-width:27px!important;
-        min-height:27px!important;
-    }
-
-    .category-name{
-        font-size:10px!important;
-    }
-
-    .category-count{
-        font-size:8px!important;
-    }
-
-    .welcome-billboard{
-        top:calc(var(--ux-header-h) + 22px)!important;
-    }
-
-    .welcome-billboard h2{
-        font-size:clamp(22px,3vw,30px)!important;
-        letter-spacing:5px!important;
-    }
-
-    .welcome-billboard p{
-        font-size:9px!important;
-        letter-spacing:2px!important;
-    }
-
-    .bottom-filter-bar{
-        bottom:12px!important;
-
-        gap:6px!important;
-        padding:6px!important;
-
-        border-radius:14px!important;
-    }
-
-    .filter-pill{
-        min-height:44px!important;
-        padding:7px 8px!important;
-    }
-
-    .filter-label{
-        font-size:9.5px!important;
-    }
-
-    .filter-sub{
-        font-size:7.5px!important;
-    }
-}
-
-/* MÓVIL <=720px: SIN CAMBIOS */
-</style>
-
-
-<style id="urbanex-quitar-espacio-superior-desktop-tablet">
-/* SOLO elimina el espacio negro superior en tablet y escritorio.
-   Móvil queda intacto. */
-@media (min-width:721px){
-    html,
-    body{
-        margin-top:0 !important;
-        padding-top:0 !important;
-    }
-
-    .dashboard-container{
-        margin-top:0 !important;
-        top:0 !important;
-    }
-}
-</style>
-
-
-<style id="urbanex-boulevard-colores-vivos-final">
-/* ============================================================
-   AJUSTE SOLICITADO:
-   - usar nuevas imágenes
-   - quitar el exceso de negro
-   - colores más vivos y profesionales
-   - sin cambiar la estructura ni la lógica
-   ============================================================ */
-
-@media (min-width:721px){
-
-    .boulevard-overlay{
-        background:
-            linear-gradient(
-                180deg,
-                rgba(8,26,42,.06) 0%,
-                rgba(255,196,88,.03) 34%,
-                rgba(255,196,88,.02) 66%,
-                rgba(10,18,28,.10) 100%
-            ) !important;
-    }
-
-    .header-top{
-        background:
-            linear-gradient(
-                90deg,
-                rgba(18,40,62,.58) 0%,
-                rgba(24,34,48,.46) 42%,
-                rgba(54,36,12,.30) 100%
-            ) !important;
-        border-bottom:1px solid rgba(229,193,88,.26) !important;
-        box-shadow:0 10px 28px rgba(0,0,0,.10) !important;
-    }
-
-    .aside-categories,
-    .aside-showcase-list{
-        background:
-            linear-gradient(
-                180deg,
-                rgba(24,45,66,.54) 0%,
-                rgba(23,31,40,.40) 58%,
-                rgba(70,45,14,.24) 100%
-            ) !important;
-
-        border-color:rgba(229,193,88,.26) !important;
-
-        backdrop-filter:blur(18px) saturate(135%) !important;
-        -webkit-backdrop-filter:blur(18px) saturate(135%) !important;
-
-        box-shadow:
-            0 18px 36px rgba(0,0,0,.14),
-            inset 0 1px 0 rgba(255,255,255,.05) !important;
-    }
-
-    .cat-root-btn,
-    .cat-all-btn{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(20,43,64,.68) 0%,
-                rgba(23,31,40,.50) 100%
-            ) !important;
-        border-color:rgba(229,193,88,.28) !important;
-        box-shadow:
-            0 8px 18px rgba(0,0,0,.10),
-            inset 0 1px 0 rgba(255,255,255,.05) !important;
-    }
-
-    .cat-root-btn:hover,
-    .cat-all-btn:hover{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(27,53,77,.76) 0%,
-                rgba(27,36,46,.58) 100%
-            ) !important;
-        border-color:rgba(229,193,88,.48) !important;
-        box-shadow:
-            0 12px 22px rgba(0,0,0,.14),
-            0 0 0 1px rgba(229,193,88,.04) !important;
-    }
-
-    .cat-root-btn.active,
-    .cat-all-btn.active{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(229,193,88,.22) 0%,
-                rgba(27,43,57,.76) 100%
-            ) !important;
-        border-color:rgba(241,205,107,.82) !important;
-        box-shadow:
-            0 14px 24px rgba(0,0,0,.16),
-            0 0 22px rgba(229,193,88,.08) !important;
-    }
-
-    .icon-container,
-    .filter-icon-box{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.12),
-                rgba(229,193,88,.10)
-            ) !important;
-        border-color:rgba(229,193,88,.34) !important;
-        box-shadow:
-            0 6px 14px rgba(0,0,0,.12),
-            inset 0 1px 0 rgba(255,255,255,.06) !important;
-    }
-
-    .bottom-filter-bar{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(22,42,62,.62) 0%,
-                rgba(28,36,46,.50) 54%,
-                rgba(68,45,14,.24) 100%
-            ) !important;
-        border-color:rgba(229,193,88,.26) !important;
-        box-shadow:
-            0 18px 36px rgba(0,0,0,.14),
-            inset 0 1px 0 rgba(255,255,255,.05) !important;
-    }
-
-    .filter-pill{
-        background:rgba(255,255,255,.05) !important;
-        border-color:rgba(255,255,255,.08) !important;
-    }
-
-    .filter-pill:hover,
-    .filter-pill.active{
-        background:rgba(229,193,88,.12) !important;
-        border-color:rgba(229,193,88,.42) !important;
-    }
-
-    .shop-card,
-    .shop-card.shop-card-ad,
-    .ux-featured-card{
-        background:
-            radial-gradient(
-                circle at top right,
-                rgba(229,193,88,.10),
-                transparent 28%
-            ),
-            linear-gradient(
-                145deg,
-                rgba(20,42,61,.72) 0%,
-                rgba(23,32,42,.56) 100%
-            ) !important;
-
-        border-color:rgba(255,255,255,.10) !important;
-
-        box-shadow:
-            0 14px 28px rgba(0,0,0,.14),
-            inset 0 1px 0 rgba(255,255,255,.05) !important;
-    }
-
-    .shop-card:hover,
-    .shop-card.shop-card-ad:hover,
-    .ux-featured-card:hover{
-        border-color:rgba(229,193,88,.40) !important;
-        box-shadow:
-            0 18px 34px rgba(0,0,0,.16),
-            0 0 0 1px rgba(229,193,88,.04) !important;
-    }
-
-    .pie-pagina{
-        background:
-            linear-gradient(
-                90deg,
-                rgba(29,46,61,.54),
-                rgba(63,46,22,.28)
-            ) !important;
-        border-top:1px solid rgba(229,193,88,.18) !important;
-        backdrop-filter:blur(10px) saturate(120%) !important;
-        -webkit-backdrop-filter:blur(10px) saturate(120%) !important;
-    }
-
-    .pie-pagina p,
-    .pie-pagina span,
-    .pie-pagina a{
-        color:#ffffff !important;
-    }
-}
-
-/* En móvil no se cambia el layout, solo se vuelve menos negro el acabado */
-@media (max-width:720px){
-
-    .header-top{
-        background:
-            linear-gradient(
-                180deg,
-                rgba(20,42,61,.70),
-                rgba(31,38,48,.56)
-            ) !important;
-    }
-
-    .aside-categories,
-    .aside-showcase-list,
-    .bottom-filter-bar{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(31,50,69,.56),
-                rgba(82,61,26,.24)
-            ) !important;
-        backdrop-filter:blur(14px) saturate(128%) !important;
-        -webkit-backdrop-filter:blur(14px) saturate(128%) !important;
-    }
-
-    .cat-root-btn,
-    .cat-all-btn,
-    .filter-pill{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(27,47,68,.58),
-                rgba(36,41,48,.42)
-            ) !important;
-        border-color:rgba(229,193,88,.30) !important;
-    }
-
-    .icon-container,
-    .filter-icon-box{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.14),
-                rgba(229,193,88,.12)
-            ) !important;
-        border-color:rgba(229,193,88,.36) !important;
-    }
-
-    .pie-pagina{
-        background:
-            linear-gradient(
-                90deg,
-                rgba(31,49,67,.58),
-                rgba(79,58,25,.28)
-            ) !important;
-        border-top:1px solid rgba(229,193,88,.18) !important;
-    }
-
-    .pie-pagina p,
-    .pie-pagina span,
-    .pie-pagina a{
-        color:#ffffff !important;
-    }
-}
-</style>
-
-
-<style id="urbanex-boulevard-colores-claros-final">
-/* ============================================================
-   PALETA CLARA URBANEX
-   - Fondos claros translúcidos
-   - Texto azul oscuro
-   - Acentos dorados
-   - Sin cambiar estructura ni funcionamiento
-   ============================================================ */
+<style id="urbanex-original-paleta-clara-final">
+/* =============================================================
+   URBANEX — PALETA CLARA SOBRE EL BOULEVARD ORIGINAL
+   No modifica estructura, grid, tamaños ni responsive original.
+   ============================================================= */
 
 :root{
-    --ux-clear-surface: rgba(250,247,240,.78);
-    --ux-clear-surface-strong: rgba(255,252,246,.88);
-    --ux-clear-surface-soft: rgba(246,241,230,.68);
-    --ux-clear-border: rgba(201,158,52,.48);
-    --ux-clear-border-soft: rgba(36,69,96,.14);
-    --ux-clear-text: #12324a;
-    --ux-clear-muted: #587083;
-    --ux-clear-gold: #c99a2e;
-    --ux-clear-shadow: 0 14px 32px rgba(35,55,73,.16);
+    --ux-clear-navy:#173a54;
+    --ux-clear-navy-2:#4d687a;
+    --ux-clear-gold:#bd8b1c;
+    --ux-clear-cream:rgba(255,252,246,.94);
+    --ux-clear-cream-2:rgba(246,239,224,.91);
+    --ux-clear-line:rgba(188,143,34,.34);
+    --ux-clear-shadow:0 10px 26px rgba(43,63,77,.12);
 }
-
-/* ============================================================
-   TABLET Y ESCRITORIO
-   ============================================================ */
-@media (min-width:721px){
-
-    /* Header claro y elegante */
-    .header-top{
-        background:
-            linear-gradient(
-                90deg,
-                rgba(250,247,240,.90) 0%,
-                rgba(247,243,235,.84) 50%,
-                rgba(250,247,240,.90) 100%
-            ) !important;
-
-        border-bottom:1px solid var(--ux-clear-border) !important;
-
-        backdrop-filter:blur(16px) saturate(120%) !important;
-        -webkit-backdrop-filter:blur(16px) saturate(120%) !important;
-
-        box-shadow:
-            0 10px 28px rgba(43,64,80,.12),
-            inset 0 1px 0 rgba(255,255,255,.72) !important;
-    }
-
-    .search-input{
-        background:rgba(255,255,255,.76) !important;
-        border:1px solid rgba(34,73,101,.18) !important;
-        color:var(--ux-clear-text) !important;
-
-        box-shadow:
-            0 8px 20px rgba(39,62,79,.10),
-            inset 0 1px 0 rgba(255,255,255,.75) !important;
-    }
-
-    .search-input::placeholder{
-        color:#6e7f8c !important;
-    }
-
-    .search-input:focus{
-        background:#ffffff !important;
-        border-color:rgba(201,154,46,.70) !important;
-
-        box-shadow:
-            0 0 0 3px rgba(201,154,46,.10),
-            0 10px 24px rgba(39,62,79,.12) !important;
-    }
-
-    .search-icon{
-        fill:#34546b !important;
-    }
-
-    .location-picker-button,
-    .location-indicator{
-        background:rgba(255,255,255,.80) !important;
-        color:var(--ux-clear-text) !important;
-        border:1px solid rgba(201,154,46,.56) !important;
-
-        box-shadow:
-            0 8px 20px rgba(39,62,79,.10),
-            inset 0 1px 0 rgba(255,255,255,.78) !important;
-    }
-
-    .location-picker-button svg,
-    .location-indicator svg{
-        fill:var(--ux-clear-gold) !important;
-    }
-
-    /* Paneles laterales realmente claros */
-    .aside-categories,
-    .aside-showcase-list{
-        background:
-            linear-gradient(
-                180deg,
-                rgba(255,252,246,.84) 0%,
-                rgba(247,242,231,.76) 100%
-            ) !important;
-
-        border:1px solid rgba(201,154,46,.42) !important;
-
-        backdrop-filter:blur(18px) saturate(120%) !important;
-        -webkit-backdrop-filter:blur(18px) saturate(120%) !important;
-
-        box-shadow:
-            var(--ux-clear-shadow),
-            inset 0 1px 0 rgba(255,255,255,.72) !important;
-    }
-
-    .section-title,
-    .showcase-header h2{
-        color:#9d7318 !important;
-        text-shadow:none !important;
-    }
-
-    /* Categorías claras */
-    .cat-root-btn,
-    .cat-all-btn{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.88) 0%,
-                rgba(244,237,222,.82) 100%
-            ) !important;
-
-        border:1px solid rgba(201,154,46,.34) !important;
-
-        box-shadow:
-            0 8px 18px rgba(55,75,91,.09),
-            inset 0 1px 0 rgba(255,255,255,.84) !important;
-    }
-
-    .cat-root-btn:hover,
-    .cat-all-btn:hover{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.98) 0%,
-                rgba(248,239,215,.92) 100%
-            ) !important;
-
-        border-color:rgba(201,154,46,.64) !important;
-
-        box-shadow:
-            0 11px 22px rgba(55,75,91,.12),
-            0 0 0 1px rgba(201,154,46,.06) !important;
-    }
-
-    .cat-root-btn.active,
-    .cat-all-btn.active{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(251,238,199,.96) 0%,
-                rgba(255,250,237,.94) 100%
-            ) !important;
-
-        border-color:rgba(201,154,46,.84) !important;
-
-        box-shadow:
-            0 12px 24px rgba(55,75,91,.12),
-            0 0 20px rgba(201,154,46,.08) !important;
-    }
-
-    .category-name{
-        color:var(--ux-clear-text) !important;
-        text-shadow:none !important;
-    }
-
-    .category-count{
-        color:var(--ux-clear-muted) !important;
-    }
-
-    .cat-root-btn.active .category-name,
-    .cat-all-btn.active .category-name{
-        color:#8a6415 !important;
-    }
-
-    .icon-container{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.92),
-                rgba(241,223,172,.78)
-            ) !important;
-
-        border:1px solid rgba(201,154,46,.46) !important;
-
-        box-shadow:
-            0 5px 12px rgba(55,75,91,.08),
-            inset 0 1px 0 rgba(255,255,255,.88) !important;
-    }
-
-    .cat-root-btn.active .icon-container,
-    .cat-all-btn.active .icon-container{
-        background:#e9bf54 !important;
-        border-color:#d7a936 !important;
-    }
-
-    /* Filtros inferiores claros */
-    .bottom-filter-bar{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,252,246,.88),
-                rgba(246,239,224,.80)
-            ) !important;
-
-        border:1px solid rgba(201,154,46,.44) !important;
-
-        box-shadow:
-            0 16px 34px rgba(49,70,87,.14),
-            inset 0 1px 0 rgba(255,255,255,.76) !important;
-
-        backdrop-filter:blur(16px) saturate(120%) !important;
-        -webkit-backdrop-filter:blur(16px) saturate(120%) !important;
-    }
-
-    .filter-pill{
-        background:rgba(255,255,255,.70) !important;
-        border:1px solid rgba(45,76,99,.12) !important;
-    }
-
-    .filter-pill:hover,
-    .filter-pill.active{
-        background:rgba(252,239,202,.92) !important;
-        border-color:rgba(201,154,46,.58) !important;
-    }
-
-    .filter-label{
-        color:var(--ux-clear-text) !important;
-        text-shadow:none !important;
-    }
-
-    .filter-sub{
-        color:var(--ux-clear-muted) !important;
-    }
-
-    .filter-icon-box{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.92),
-                rgba(242,222,166,.80)
-            ) !important;
-
-        border:1px solid rgba(201,154,46,.46) !important;
-    }
-
-    .filter-icon-box svg{
-        fill:#bb8a1f !important;
-    }
-
-    /* Destacados claros */
-    .shop-card,
-    .shop-card.shop-card-ad,
-    .ux-featured-card{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.92) 0%,
-                rgba(246,240,228,.84) 100%
-            ) !important;
-
-        border:1px solid rgba(47,78,101,.14) !important;
-
-        box-shadow:
-            0 12px 26px rgba(49,70,87,.11),
-            inset 0 1px 0 rgba(255,255,255,.86) !important;
-    }
-
-    .shop-card:hover,
-    .shop-card.shop-card-ad:hover,
-    .ux-featured-card:hover{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.98) 0%,
-                rgba(250,241,216,.92) 100%
-            ) !important;
-
-        border-color:rgba(201,154,46,.52) !important;
-
-        box-shadow:
-            0 16px 30px rgba(49,70,87,.14) !important;
-    }
-
-    .shop-title,
-    .ux-featured-name{
-        color:var(--ux-clear-text) !important;
-        text-shadow:none !important;
-    }
-
-    .shop-segment,
-    .ux-featured-category{
-        color:#9b7118 !important;
-    }
-
-    .shop-text p,
-    .ux-featured-address,
-    .ux-featured-data-item strong{
-        color:#4f687a !important;
-    }
-
-    .ux-featured-data-item span{
-        color:#718491 !important;
-    }
-
-    /* Footer claro */
-    .pie-pagina{
-        background:
-            linear-gradient(
-                90deg,
-                rgba(243,237,225,.92),
-                rgba(252,249,243,.92)
-            ) !important;
-
-        border-top:1px solid rgba(201,154,46,.36) !important;
-
-        box-shadow:
-            0 -7px 20px rgba(49,70,87,.10),
-            inset 0 1px 0 rgba(255,255,255,.76) !important;
-    }
-
-    .pie-pagina p,
-    .pie-pagina span,
-    .pie-pagina a{
-        color:#24455e !important;
-        text-shadow:none !important;
-    }
-
-    .pie-pagina a{
-        color:#9b7118 !important;
-    }
-}
-
-/* ============================================================
-   MÓVIL
-   Solo cambio de color. No altera el diseño ni posiciones.
-   ============================================================ */
-@media (max-width:720px){
-
-    .header-top{
-        background:
-            linear-gradient(
-                180deg,
-                rgba(252,249,242,.88),
-                rgba(245,239,227,.80)
-            ) !important;
-
-        border-bottom:1px solid rgba(201,154,46,.36) !important;
-    }
-
-    .search-input{
-        background:rgba(255,255,255,.82) !important;
-        color:var(--ux-clear-text) !important;
-        border-color:rgba(36,69,96,.18) !important;
-    }
-
-    .search-input::placeholder{
-        color:#71818d !important;
-    }
-
-    .location-picker-button,
-    .location-indicator{
-        background:rgba(255,255,255,.84) !important;
-        color:var(--ux-clear-text) !important;
-        border-color:rgba(201,154,46,.50) !important;
-    }
-
-    .aside-categories,
-    .aside-showcase-list,
-    .bottom-filter-bar{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,252,246,.84),
-                rgba(246,239,224,.76)
-            ) !important;
-
-        border-color:rgba(201,154,46,.42) !important;
-
-        backdrop-filter:blur(14px) saturate(118%) !important;
-        -webkit-backdrop-filter:blur(14px) saturate(118%) !important;
-    }
-
-    .cat-root-btn,
-    .cat-all-btn,
-    .filter-pill{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.90),
-                rgba(245,237,219,.82)
-            ) !important;
-
-        border-color:rgba(201,154,46,.36) !important;
-    }
-
-    .category-name,
-    .filter-label{
-        color:var(--ux-clear-text) !important;
-        text-shadow:none !important;
-    }
-
-    .category-count,
-    .filter-sub{
-        color:var(--ux-clear-muted) !important;
-    }
-
-    .icon-container,
-    .filter-icon-box{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.94),
-                rgba(241,221,166,.80)
-            ) !important;
-
-        border-color:rgba(201,154,46,.46) !important;
-    }
-
-    .pie-pagina{
-        background:rgba(247,241,229,.92) !important;
-        border-top:1px solid rgba(201,154,46,.34) !important;
-    }
-
-    .pie-pagina p,
-    .pie-pagina span{
-        color:#24455e !important;
-    }
-
-    .pie-pagina a{
-        color:#9b7118 !important;
-    }
-}
-</style>
-
-
-<style id="urbanex-responsive-claro-definitivo">
-/* ===================================================================
-   URBANEX — DISEÑO RESPONSIVE CLARO DEFINITIVO
-   Mantiene estructura, datos, rutas, Supabase y lógica horaria.
-   =================================================================== */
-
-:root{
-    --ux-navy:#163a54;
-    --ux-navy-2:#244f68;
-    --ux-gold:#c7962b;
-    --ux-gold-soft:#e7c765;
-    --ux-cream:rgba(255,252,246,.88);
-    --ux-cream-2:rgba(247,241,229,.84);
-    --ux-white:rgba(255,255,255,.92);
-    --ux-muted:#607789;
-    --ux-line:rgba(35,73,101,.15);
-    --ux-gold-line:rgba(199,150,43,.44);
-    --ux-shadow:0 14px 34px rgba(45,67,83,.14);
-}
-
-/* =========================
-   BASE VISUAL COMPARTIDA
-   ========================= */
-.header-top,
-.aside-categories,
-.aside-showcase-list,
-.bottom-filter-bar,
-.cat-root-btn,
-.cat-all-btn,
-.filter-pill,
-.shop-card,
-.shop-card.shop-card-ad,
-.ux-featured-card{
-    transition:
-        background .18s ease,
-        border-color .18s ease,
-        box-shadow .18s ease,
-        transform .18s ease !important;
-}
-
-/* Quitar oscuridad excesiva de la imagen */
-.boulevard-overlay{
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,.02) 0%,
-            rgba(255,255,255,0) 46%,
-            rgba(20,52,74,.08) 100%
-        ) !important;
-}
-
-/* =========================
-   ESCRITORIO GRANDE
-   ========================= */
-@media (min-width:1200px){
-
-    html,
-    body{
-        background:#edf1f2 !important;
-    }
-
-    .header-top{
-        background:
-            linear-gradient(
-                90deg,
-                rgba(255,252,246,.94),
-                rgba(249,244,235,.90)
-            ) !important;
-        border-bottom:1px solid var(--ux-gold-line) !important;
-        box-shadow:
-            0 8px 26px rgba(40,61,76,.11),
-            inset 0 1px 0 rgba(255,255,255,.85) !important;
-        backdrop-filter:blur(16px) saturate(125%) !important;
-        -webkit-backdrop-filter:blur(16px) saturate(125%) !important;
-    }
-
-    .search-input{
-        background:rgba(255,255,255,.88) !important;
-        border:1px solid rgba(35,73,101,.18) !important;
-        color:var(--ux-navy) !important;
-        box-shadow:
-            0 7px 18px rgba(45,67,83,.08),
-            inset 0 1px 0 rgba(255,255,255,.90) !important;
-    }
-
-    .search-input::placeholder{
-        color:#718492 !important;
-    }
-
-    .search-icon{
-        fill:#3c6179 !important;
-    }
-
-    .location-picker-button,
-    .location-indicator{
-        background:rgba(255,255,255,.88) !important;
-        color:var(--ux-navy) !important;
-        border:1px solid rgba(199,150,43,.52) !important;
-        box-shadow:0 7px 18px rgba(45,67,83,.08) !important;
-    }
-
-    .aside-categories,
-    .aside-showcase-list{
-        background:
-            linear-gradient(
-                180deg,
-                rgba(255,253,248,.90),
-                rgba(246,239,224,.84)
-            ) !important;
-        border:1px solid var(--ux-gold-line) !important;
-        box-shadow:
-            var(--ux-shadow),
-            inset 0 1px 0 rgba(255,255,255,.90) !important;
-        backdrop-filter:blur(18px) saturate(125%) !important;
-        -webkit-backdrop-filter:blur(18px) saturate(125%) !important;
-    }
-
-    .section-title,
-    .showcase-header h2{
-        color:#956b11 !important;
-        text-shadow:none !important;
-    }
-
-    .cat-root-btn,
-    .cat-all-btn{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.96),
-                rgba(244,236,216,.88)
-            ) !important;
-        border:1px solid rgba(199,150,43,.34) !important;
-        box-shadow:
-            0 7px 16px rgba(45,67,83,.07),
-            inset 0 1px 0 rgba(255,255,255,.92) !important;
-    }
-
-    .cat-root-btn:hover,
-    .cat-all-btn:hover{
-        transform:translateY(-1px) !important;
-        background:#ffffff !important;
-        border-color:rgba(199,150,43,.66) !important;
-        box-shadow:0 11px 22px rgba(45,67,83,.11) !important;
-    }
-
-    .cat-root-btn.active,
-    .cat-all-btn.active{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,239,190,.95),
-                rgba(255,252,244,.96)
-            ) !important;
-        border-color:rgba(199,150,43,.82) !important;
-    }
-
-    .category-name{
-        color:var(--ux-navy) !important;
-        font-weight:700 !important;
-        text-shadow:none !important;
-    }
-
-    .category-count{
-        color:var(--ux-muted) !important;
-    }
-
-    .cat-root-btn.active .category-name,
-    .cat-all-btn.active .category-name{
-        color:#865f11 !important;
-    }
-
-    .icon-container{
-        background:
-            linear-gradient(
-                145deg,
-                #ffffff,
-                rgba(240,216,153,.76)
-            ) !important;
-        border:1px solid rgba(199,150,43,.48) !important;
-        box-shadow:
-            0 4px 10px rgba(45,67,83,.07),
-            inset 0 1px 0 #fff !important;
-    }
-
-    .bottom-filter-bar{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,253,248,.94),
-                rgba(244,236,216,.88)
-            ) !important;
-        border:1px solid rgba(199,150,43,.46) !important;
-        box-shadow:
-            0 15px 32px rgba(45,67,83,.14),
-            inset 0 1px 0 rgba(255,255,255,.92) !important;
-        backdrop-filter:blur(16px) saturate(125%) !important;
-        -webkit-backdrop-filter:blur(16px) saturate(125%) !important;
-    }
-
-    .filter-pill{
-        background:rgba(255,255,255,.76) !important;
-        border:1px solid rgba(35,73,101,.12) !important;
-    }
-
-    .filter-pill:hover,
-    .filter-pill.active{
-        background:rgba(255,237,183,.88) !important;
-        border-color:rgba(199,150,43,.56) !important;
-    }
-
-    .filter-label{
-        color:var(--ux-navy) !important;
-        text-shadow:none !important;
-    }
-
-    .filter-sub{
-        color:var(--ux-muted) !important;
-    }
-
-    .filter-icon-box{
-        background:
-            linear-gradient(145deg,#fff,rgba(240,216,153,.74)) !important;
-        border:1px solid rgba(199,150,43,.46) !important;
-    }
-
-    .filter-icon-box svg{
-        fill:#b6831a !important;
-    }
-
-    .shop-card,
-    .shop-card.shop-card-ad,
-    .ux-featured-card{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.96),
-                rgba(247,241,228,.90)
-            ) !important;
-        border:1px solid rgba(35,73,101,.14) !important;
-        box-shadow:
-            0 10px 24px rgba(45,67,83,.10),
-            inset 0 1px 0 rgba(255,255,255,.94) !important;
-    }
-
-    .shop-card:hover,
-    .shop-card.shop-card-ad:hover,
-    .ux-featured-card:hover{
-        transform:translateY(-1px) !important;
-        border-color:rgba(199,150,43,.48) !important;
-        box-shadow:0 14px 28px rgba(45,67,83,.13) !important;
-    }
-
-    .shop-title,
-    .ux-featured-name{
-        color:var(--ux-navy) !important;
-        text-shadow:none !important;
-    }
-
-    .shop-segment,
-    .ux-featured-category{
-        color:#956b11 !important;
-    }
-
-    .shop-text p,
-    .ux-featured-address,
-    .ux-featured-data-item strong{
-        color:#506d80 !important;
-    }
-
-    .ux-featured-data-item span{
-        color:#738695 !important;
-    }
-
-    .pie-pagina{
-        background:rgba(255,252,246,.94) !important;
-        border-top:1px solid rgba(199,150,43,.36) !important;
-        box-shadow:0 -7px 20px rgba(45,67,83,.08) !important;
-    }
-
-    .pie-pagina p,
-    .pie-pagina span{
-        color:var(--ux-navy) !important;
-    }
-
-    .pie-pagina a{
-        color:#956b11 !important;
-    }
-}
-
-/* =========================
-   TABLET / MEDIANAS
-   ========================= */
-@media (min-width:721px) and (max-width:1199px){
-
-    html,
-    body{
-        background:#edf1f2 !important;
-    }
-
-    .header-top{
-        background:rgba(255,252,246,.93) !important;
-        border-bottom:1px solid rgba(199,150,43,.40) !important;
-        box-shadow:0 7px 20px rgba(45,67,83,.09) !important;
-        backdrop-filter:blur(14px) saturate(120%) !important;
-        -webkit-backdrop-filter:blur(14px) saturate(120%) !important;
-    }
-
-    .search-input,
-    .location-picker-button,
-    .location-indicator{
-        background:rgba(255,255,255,.90) !important;
-        color:var(--ux-navy) !important;
-        border-color:rgba(35,73,101,.16) !important;
-    }
-
-    .search-input::placeholder{
-        color:#728491 !important;
-    }
-
-    .search-icon{
-        fill:#3d6178 !important;
-    }
-
-    .aside-categories,
-    .aside-showcase-list{
-        background:
-            linear-gradient(
-                180deg,
-                rgba(255,253,248,.91),
-                rgba(246,239,224,.85)
-            ) !important;
-        border:1px solid rgba(199,150,43,.42) !important;
-        box-shadow:
-            0 12px 28px rgba(45,67,83,.12),
-            inset 0 1px 0 rgba(255,255,255,.90) !important;
-        backdrop-filter:blur(15px) saturate(120%) !important;
-        -webkit-backdrop-filter:blur(15px) saturate(120%) !important;
-    }
-
-    .section-title,
-    .showcase-header h2{
-        color:#956b11 !important;
-    }
-
-    .cat-root-btn,
-    .cat-all-btn,
-    .filter-pill{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.94),
-                rgba(245,237,218,.86)
-            ) !important;
-        border-color:rgba(199,150,43,.34) !important;
-    }
-
-    .cat-root-btn.active,
-    .cat-all-btn.active{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,239,190,.94),
-                rgba(255,252,244,.94)
-            ) !important;
-        border-color:rgba(199,150,43,.80) !important;
-    }
-
-    .category-name,
-    .filter-label,
-    .shop-title,
-    .ux-featured-name{
-        color:var(--ux-navy) !important;
-        text-shadow:none !important;
-    }
-
-    .category-count,
-    .filter-sub,
-    .ux-featured-address,
-    .ux-featured-data-item strong{
-        color:var(--ux-muted) !important;
-    }
-
-    .icon-container,
-    .filter-icon-box{
-        background:
-            linear-gradient(145deg,#fff,rgba(240,216,153,.72)) !important;
-        border-color:rgba(199,150,43,.46) !important;
-    }
-
-    .bottom-filter-bar{
-        background:rgba(255,252,246,.91) !important;
-        border-color:rgba(199,150,43,.43) !important;
-        box-shadow:0 12px 28px rgba(45,67,83,.12) !important;
-    }
-
-    .shop-card,
-    .shop-card.shop-card-ad,
-    .ux-featured-card{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.95),
-                rgba(247,241,228,.88)
-            ) !important;
-        border-color:rgba(35,73,101,.13) !important;
-    }
-
-    .shop-segment,
-    .ux-featured-category{
-        color:#956b11 !important;
-    }
-
-    .pie-pagina{
-        background:rgba(255,252,246,.94) !important;
-        border-top-color:rgba(199,150,43,.34) !important;
-    }
-
-    .pie-pagina p,
-    .pie-pagina span{
-        color:var(--ux-navy) !important;
-    }
-
-    .pie-pagina a{
-        color:#956b11 !important;
-    }
-}
-
-/* =========================
-   CELULAR / PEQUEÑAS
-   Mantiene la estructura original móvil.
-   Solo mejora proporciones, contraste y acabado.
-   ========================= */
-@media (max-width:720px){
-
-    html,
-    body{
-        background:#f1f3f3 !important;
-    }
-
-    .header-top{
-        background:
-            linear-gradient(
-                180deg,
-                rgba(255,253,248,.97),
-                rgba(247,241,229,.94)
-            ) !important;
-        border-bottom:1px solid rgba(199,150,43,.42) !important;
-        box-shadow:
-            0 7px 20px rgba(45,67,83,.10),
-            inset 0 1px 0 rgba(255,255,255,.92) !important;
-        backdrop-filter:blur(14px) saturate(120%) !important;
-        -webkit-backdrop-filter:blur(14px) saturate(120%) !important;
-    }
-
-    .brand-box img{
-        filter:none !important;
-    }
-
-    .search-input{
-        background:rgba(255,255,255,.94) !important;
-        color:var(--ux-navy) !important;
-        border:1px solid rgba(35,73,101,.16) !important;
-        box-shadow:
-            0 5px 14px rgba(45,67,83,.08),
-            inset 0 1px 0 #fff !important;
-    }
-
-    .search-input::placeholder{
-        color:#718492 !important;
-    }
-
-    .search-icon{
-        fill:#41657b !important;
-    }
-
-    /* Barra horizontal de categorías: clara y compacta */
-    .aside-categories{
-        background:
-            linear-gradient(
-                180deg,
-                rgba(255,253,248,.98),
-                rgba(245,238,224,.95)
-            ) !important;
-        border-bottom:1px solid rgba(199,150,43,.40) !important;
-        box-shadow:0 6px 18px rgba(45,67,83,.08) !important;
-        backdrop-filter:blur(12px) saturate(118%) !important;
-        -webkit-backdrop-filter:blur(12px) saturate(118%) !important;
-    }
-
-    .cat-root-btn,
-    .cat-all-btn{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.98),
-                rgba(244,235,213,.92)
-            ) !important;
-        border:1px solid rgba(199,150,43,.38) !important;
-        box-shadow:
-            0 5px 12px rgba(45,67,83,.07),
-            inset 0 1px 0 #fff !important;
-    }
-
-    .cat-root-btn.active,
-    .cat-all-btn.active{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,238,187,.98),
-                rgba(255,252,244,.98)
-            ) !important;
-        border-color:rgba(199,150,43,.82) !important;
-    }
-
-    .category-name{
-        color:var(--ux-navy) !important;
-        font-weight:700 !important;
-        text-shadow:none !important;
-    }
-
-    .category-count{
-        color:var(--ux-muted) !important;
-    }
-
-    .cat-root-btn.active .category-name,
-    .cat-all-btn.active .category-name{
-        color:#865f11 !important;
-    }
-
-    .icon-container{
-        background:
-            linear-gradient(145deg,#fff,rgba(239,213,144,.78)) !important;
-        border:1px solid rgba(199,150,43,.48) !important;
-        box-shadow:0 4px 9px rgba(45,67,83,.07) !important;
-    }
-
-    /* Hero móvil conserva fondo vertical y composición */
-    .main-boulevard{
-        background-color:#e9ecec !important;
-    }
-
-    .welcome-billboard h2{
-        color:#ffffff !important;
-        text-shadow:
-            0 2px 5px rgba(16,43,62,.70),
-            0 6px 18px rgba(16,43,62,.28) !important;
-    }
-
-    .welcome-billboard p{
-        color:#f1c650 !important;
-        font-weight:800 !important;
-        text-shadow:0 2px 5px rgba(16,43,62,.70) !important;
-    }
-
-    /* Filtros móviles: claros, sin tapar excesivamente la imagen */
-    .bottom-filter-bar{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,253,248,.94),
-                rgba(244,236,216,.90)
-            ) !important;
-        border:1px solid rgba(199,150,43,.46) !important;
-        box-shadow:
-            0 10px 24px rgba(45,67,83,.12),
-            inset 0 1px 0 rgba(255,255,255,.92) !important;
-        backdrop-filter:blur(12px) saturate(120%) !important;
-        -webkit-backdrop-filter:blur(12px) saturate(120%) !important;
-    }
-
-    .filter-pill{
-        background:rgba(255,255,255,.78) !important;
-        border:1px solid rgba(35,73,101,.11) !important;
-    }
-
-    .filter-pill:hover,
-    .filter-pill.active{
-        background:rgba(255,238,190,.92) !important;
-        border-color:rgba(199,150,43,.56) !important;
-    }
-
-    .filter-label{
-        color:var(--ux-navy) !important;
-        text-shadow:none !important;
-        font-weight:700 !important;
-    }
-
-    .filter-sub{
-        color:var(--ux-muted) !important;
-    }
-
-    .filter-icon-box{
-        background:
-            linear-gradient(145deg,#fff,rgba(239,213,144,.76)) !important;
-        border:1px solid rgba(199,150,43,.46) !important;
-    }
-
-    .filter-icon-box svg{
-        fill:#b78318 !important;
-    }
-
-    /* Destacados móvil */
-    .aside-showcase-list{
-        background:
-            linear-gradient(
-                180deg,
-                rgba(255,253,248,.98),
-                rgba(246,240,227,.96)
-            ) !important;
-        border-top:1px solid rgba(199,150,43,.40) !important;
-        box-shadow:0 -7px 20px rgba(45,67,83,.08) !important;
-    }
-
-    .showcase-header h2{
-        color:#956b11 !important;
-        text-shadow:none !important;
-    }
-
-    .shop-card,
-    .shop-card.shop-card-ad,
-    .ux-featured-card{
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255,255,255,.98),
-                rgba(246,239,224,.94)
-            ) !important;
-        border:1px solid rgba(35,73,101,.13) !important;
-        box-shadow:
-            0 8px 20px rgba(45,67,83,.09),
-            inset 0 1px 0 #fff !important;
-    }
-
-    .shop-title,
-    .ux-featured-name{
-        color:var(--ux-navy) !important;
-        text-shadow:none !important;
-    }
-
-    .shop-segment,
-    .ux-featured-category{
-        color:#956b11 !important;
-    }
-
-    .shop-text p,
-    .ux-featured-address,
-    .ux-featured-data-item strong{
-        color:#546f81 !important;
-    }
-
-    .ux-featured-data-item span{
-        color:#738695 !important;
-    }
-
-    /* Pie móvil */
-    .pie-pagina{
-        background:rgba(255,252,246,.98) !important;
-        border-top:1px solid rgba(199,150,43,.36) !important;
-        box-shadow:0 -5px 16px rgba(45,67,83,.08) !important;
-    }
-
-    .pie-pagina p,
-    .pie-pagina span{
-        color:var(--ux-navy) !important;
-    }
-
-    .pie-pagina a{
-        color:#956b11 !important;
-    }
-}
-
-/* =========================
-   CELULARES MUY PEQUEÑOS
-   ========================= */
-@media (max-width:390px){
-
-    .cat-root-btn,
-    .cat-all-btn{
-        padding-left:8px !important;
-        padding-right:8px !important;
-    }
-
-    .category-name{
-        font-size:10px !important;
-    }
-
-    .category-count{
-        font-size:8px !important;
-    }
-
-    .filter-pill{
-        min-width:124px !important;
-    }
-
-    .filter-label{
-        font-size:9.5px !important;
-    }
-}
-</style>
-
-
-<style id="urbanex-corregir-franja-inferior-y-altura">
-/* ============================================================
-   CORRECCIÓN PUNTUAL
-   1. Elimina la franja vacía entre Boulevard y footer.
-   2. No modifica diseño, colores, paneles ni estructura.
-   ============================================================ */
 
 html,
 body{
-    width:100% !important;
-    height:100svh !important;
-    min-height:100svh !important;
-    max-height:100svh !important;
-    margin:0 !important;
-    padding:0 !important;
-    overflow:hidden !important;
+    background:#f2efe7 !important;
 }
 
-.dashboard-container{
-    width:100% !important;
-    height:calc(100svh - 24px) !important;
-    min-height:calc(100svh - 24px) !important;
-    max-height:calc(100svh - 24px) !important;
-
-    margin:0 !important;
-    margin-bottom:0 !important;
-    padding-bottom:0 !important;
-
-    overflow:hidden !important;
+/* HEADER */
+.header-top{
+    background:linear-gradient(180deg,rgba(255,253,248,.97),rgba(247,240,226,.94)) !important;
+    border-bottom-color:var(--ux-clear-line) !important;
+    box-shadow:0 7px 22px rgba(43,63,77,.10) !important;
+    backdrop-filter:blur(14px) saturate(120%) !important;
+    -webkit-backdrop-filter:blur(14px) saturate(120%) !important;
 }
 
-/* El pie ocupa exactamente los 24px reservados arriba. */
-.pie-pagina{
-    position:fixed !important;
-    left:0 !important;
-    right:0 !important;
-    bottom:0 !important;
+.search-input{
+    background:rgba(255,255,255,.94) !important;
+    border-color:rgba(74,105,127,.20) !important;
+    color:var(--ux-clear-navy) !important;
+    box-shadow:0 5px 16px rgba(43,63,77,.08) !important;
+}
+.search-input::placeholder{ color:#718492 !important; }
+.search-input:focus{
+    background:#fff !important;
+    border-color:rgba(188,143,34,.62) !important;
+}
+.search-icon{ fill:#547186 !important; }
 
-    width:100% !important;
-    height:24px !important;
-    min-height:24px !important;
-    max-height:24px !important;
+.location-indicator,
+.location-picker-button{
+    background:rgba(255,255,255,.92) !important;
+    color:var(--ux-clear-navy) !important;
+    border-color:rgba(188,143,34,.44) !important;
+}
+.location-indicator svg{ fill:var(--ux-clear-gold) !important; }
 
-    margin:0 !important;
-    padding:0 !important;
+/* CATEGORÍAS */
+.aside-categories{
+    background:linear-gradient(180deg,var(--ux-clear-cream),var(--ux-clear-cream-2)) !important;
+    border-color:var(--ux-clear-line) !important;
+    box-shadow:var(--ux-clear-shadow) !important;
+    backdrop-filter:blur(14px) saturate(118%) !important;
+    -webkit-backdrop-filter:blur(14px) saturate(118%) !important;
+}
+.section-title{
+    color:#93690f !important;
+    text-shadow:none !important;
+}
+.cat-root-btn,
+.cat-all-btn{
+    background:linear-gradient(145deg,#fff,rgba(244,236,217,.96)) !important;
+    border-color:rgba(188,143,34,.30) !important;
+    box-shadow:0 5px 14px rgba(43,63,77,.07) !important;
+}
+.cat-root-btn:hover:not(.active),
+.cat-all-btn:hover{
+    background:#fff !important;
+    border-color:rgba(188,143,34,.50) !important;
+}
+.cat-root-btn.active,
+.cat-all-btn.active{
+    background:linear-gradient(145deg,#fff2ca,#fffaf0) !important;
+    border-color:rgba(188,143,34,.76) !important;
+}
+.icon-container{
+    background:linear-gradient(145deg,#fff,#f0daa1) !important;
+    border-color:rgba(188,143,34,.40) !important;
+    box-shadow:0 4px 10px rgba(43,63,77,.07) !important;
+}
+.cat-root-btn.active .icon-container{
+    background:#e8c45e !important;
+    border-color:#d8aa36 !important;
+    box-shadow:0 0 13px rgba(188,143,34,.15) !important;
+}
+.category-name{
+    color:var(--ux-clear-navy) !important;
+    font-weight:700 !important;
+    text-shadow:none !important;
+}
+.category-count,
+.cat-arrow,
+.sub-count{
+    color:#718492 !important;
+}
+.cat-root-btn.active .category-name,
+.cat-all-btn .category-name{
+    color:#8c6310 !important;
+}
+.sub-btn{ color:#657b8b !important; }
+.sub-btn:hover{ color:var(--ux-clear-navy) !important; background:rgba(255,255,255,.55) !important; }
+.sub-btn.active{ color:#8c6310 !important; background:rgba(232,196,94,.16) !important; }
+
+/* HERO: mejora contraste, sin cambiar posición */
+.boulevard-overlay{
+    background:linear-gradient(to bottom,rgba(18,43,61,.10) 0%,transparent 38%,transparent 72%,rgba(18,43,61,.14) 100%) !important;
+}
+.welcome-billboard{
+    background:rgba(255,252,246,.72) !important;
+    border:1px solid rgba(188,143,34,.27) !important;
+    border-radius:14px !important;
+    padding:8px 14px !important;
+    backdrop-filter:blur(7px) saturate(115%) !important;
+    -webkit-backdrop-filter:blur(7px) saturate(115%) !important;
+    box-shadow:0 8px 22px rgba(43,63,77,.09) !important;
+}
+.welcome-billboard h2{
+    color:var(--ux-clear-navy) !important;
+    text-shadow:none !important;
+}
+.welcome-billboard p{
+    color:#9d7011 !important;
+    text-shadow:none !important;
+    font-weight:800 !important;
 }
 
-/* Evita espacios residuales del último bloque visual. */
-.main-boulevard,
-.aside-categories,
+/* FILTROS */
+.bottom-filter-bar{
+    background:linear-gradient(145deg,rgba(255,253,248,.95),rgba(243,234,214,.92)) !important;
+    border-color:rgba(188,143,34,.34) !important;
+    box-shadow:0 11px 26px rgba(43,63,77,.12) !important;
+    backdrop-filter:blur(14px) saturate(120%) !important;
+    -webkit-backdrop-filter:blur(14px) saturate(120%) !important;
+}
+.filter-pill{
+    background:rgba(255,255,255,.80) !important;
+    border-color:rgba(74,105,127,.14) !important;
+}
+.filter-pill:hover,
+.filter-pill.active{
+    background:rgba(255,239,193,.90) !important;
+    border-color:rgba(188,143,34,.48) !important;
+}
+.filter-label{
+    color:var(--ux-clear-navy) !important;
+    text-shadow:none !important;
+}
+.filter-sub{ color:#718492 !important; }
+.filter-icon-box svg{ fill:#b37f14 !important; }
+
+/* DESTACADOS: panel claro + tarjetas oscuras para lectura */
 .aside-showcase-list{
-    margin-bottom:0 !important;
+    background:linear-gradient(180deg,var(--ux-clear-cream),var(--ux-clear-cream-2)) !important;
+    border-color:var(--ux-clear-line) !important;
+    box-shadow:var(--ux-clear-shadow) !important;
+    backdrop-filter:blur(14px) saturate(118%) !important;
+    -webkit-backdrop-filter:blur(14px) saturate(118%) !important;
+}
+.showcase-header h2{ color:#93690f !important; text-shadow:none !important; }
+.showcase-stats{ color:var(--ux-clear-navy-2) !important; }
+.sort-box{ border-color:rgba(74,105,127,.12) !important; }
+.sort-select{
+    background:#fff !important;
+    color:var(--ux-clear-navy) !important;
+    border-color:rgba(74,105,127,.20) !important;
 }
 
-/* Móvil mantiene su layout; solo se corrige la altura disponible. */
+.shop-card,
+.shop-card.shop-card-ad,
+.shop-card.shop-card-mobile-rich,
+.aside-showcase-list .ux-featured-card{
+    background:linear-gradient(145deg,#424d55,#303a40) !important;
+    border-color:rgba(255,255,255,.11) !important;
+    box-shadow:0 9px 22px rgba(31,44,53,.20) !important;
+}
+.shop-card:hover,
+.shop-card.shop-card-ad:hover,
+.shop-card.shop-card-mobile-rich:hover,
+.aside-showcase-list .ux-featured-card:hover{
+    background:linear-gradient(145deg,#4a565e,#354047) !important;
+    border-color:rgba(226,190,92,.42) !important;
+}
+.shop-title,
+.aside-showcase-list .ux-featured-name{
+    color:#fff !important;
+    text-shadow:none !important;
+}
+.shop-segment,
+.aside-showcase-list .ux-featured-category{
+    color:#e7c363 !important;
+}
+.shop-address,
+.shop-text p,
+.aside-showcase-list .ux-featured-address{
+    color:rgba(255,255,255,.80) !important;
+}
+.aside-showcase-list .ux-featured-data-item span{ color:#b7c3ca !important; }
+.aside-showcase-list .ux-featured-data-item strong{ color:#fff !important; }
+.rating-value,
+.rating-count,
+.aside-showcase-list .ux-featured-rating .rating-value,
+.aside-showcase-list .ux-featured-rating .rating-count{
+    color:#eef2f4 !important;
+}
+.star-icon{ fill:#e7c363 !important; }
+
+/* FOOTER */
+.pie-pagina{
+    background:rgba(255,252,246,.98) !important;
+    color:var(--ux-clear-navy) !important;
+    border-top-color:rgba(188,143,34,.28) !important;
+    box-shadow:0 -4px 14px rgba(43,63,77,.06) !important;
+}
+.pie-pagina p,
+.pie-pagina span{ color:var(--ux-clear-navy) !important; }
+.pie-pagina a{ color:#93690f !important; }
+
+/* MOBILE: únicamente color/contraste. Layout original permanece intacto. */
 @media (max-width:720px){
-    html,
-    body{
-        height:100svh !important;
-        min-height:100svh !important;
-        max-height:100svh !important;
-        padding-bottom:0 !important;
+    .header-top,
+    .aside-categories,
+    .aside-showcase-list{
+        background:linear-gradient(180deg,rgba(255,253,248,.98),rgba(247,240,226,.96)) !important;
     }
 
-    .dashboard-container{
-        height:calc(100svh - 24px) !important;
-        min-height:calc(100svh - 24px) !important;
-        max-height:calc(100svh - 24px) !important;
-        margin-bottom:0 !important;
-        padding-bottom:0 !important;
+    .cat-root-btn,
+    .cat-all-btn{
+        background:linear-gradient(145deg,#fff,#f4ecd8) !important;
+    }
+
+    .welcome-billboard{
+        background:rgba(255,252,246,.74) !important;
+        padding:6px 10px !important;
+    }
+
+    .shop-card.shop-card-mobile-rich,
+    .shop-card.shop-card-ad,
+    .aside-showcase-list .ux-featured-card{
+        background:linear-gradient(145deg,#424d55,#303a40) !important;
     }
 }
 </style>
@@ -11906,15 +9941,12 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
 </script>
 
 
-<script id="urbanex-boulevard-horario-automatico">
-(function () {
+<script id="urbanex-boulevard-horario-original">
+(function(){
     const boulevard = document.querySelector('.main-boulevard');
+    if (!boulevard) return;
 
-    if (!boulevard) {
-        return;
-    }
-
-    const imagenesBoulevard = {
+    const imagenes = {
         desktop: {
             dia: '/imagenes/boulevard/Boul_mañana.png',
             tarde: '/imagenes/boulevard/Boul_tarde.png',
@@ -11927,61 +9959,37 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
         }
     };
 
-    /* Mismo corte responsive utilizado en index */
     const mediaCelular = window.matchMedia('(max-width: 720px)');
 
-    function obtenerHoraEcuador() {
+    function horaEcuador(){
         const partes = new Intl.DateTimeFormat('es-EC', {
-            timeZone: 'America/Guayaquil',
-            hour: '2-digit',
-            hourCycle: 'h23'
+            timeZone:'America/Guayaquil',
+            hour:'2-digit',
+            hourCycle:'h23'
         }).formatToParts(new Date());
-
-        const parteHora = partes.find(parte => parte.type === 'hour');
-
-        return parteHora ? Number(parteHora.value) : new Date().getHours();
+        const parte = partes.find(p => p.type === 'hour');
+        return parte ? Number(parte.value) : new Date().getHours();
     }
 
-    /* Mismas franjas horarias del index:
-       07:00–12:59 = día/mañana
-       13:00–18:59 = tarde
-       19:00–06:59 = noche
-    */
-    function obtenerFranjaHoraria(hora) {
-        if (hora >= 7 && hora < 13) {
-            return 'dia';
-        }
-
-        if (hora >= 13 && hora < 19) {
-            return 'tarde';
-        }
-
+    function franja(hora){
+        if (hora >= 7 && hora < 13) return 'dia';
+        if (hora >= 13 && hora < 19) return 'tarde';
         return 'noche';
     }
 
-    function actualizarImagenBoulevard() {
-        const hora = obtenerHoraEcuador();
-        const franja = obtenerFranjaHoraria(hora);
-        const dispositivo = mediaCelular.matches ? 'celular' : 'desktop';
-        const nuevaImagen = imagenesBoulevard[dispositivo][franja];
-
+    function actualizar(){
+        const tipo = mediaCelular.matches ? 'celular' : 'desktop';
         boulevard.style.setProperty(
             'background-image',
-            'url("' + nuevaImagen + '")',
+            'url("' + imagenes[tipo][franja(horaEcuador())] + '")',
             'important'
         );
     }
 
-    actualizarImagenBoulevard();
-
-    if (typeof mediaCelular.addEventListener === 'function') {
-        mediaCelular.addEventListener('change', actualizarImagenBoulevard);
-    } else if (typeof mediaCelular.addListener === 'function') {
-        mediaCelular.addListener(actualizarImagenBoulevard);
-    }
-
-    /* Revisa la hora cada minuto, igual que index */
-    setInterval(actualizarImagenBoulevard, 60000);
+    actualizar();
+    setInterval(actualizar, 60000);
+    if (mediaCelular.addEventListener) mediaCelular.addEventListener('change', actualizar);
+    else if (mediaCelular.addListener) mediaCelular.addListener(actualizar);
 })();
 </script>
 
