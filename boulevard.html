@@ -7993,6 +7993,169 @@ body::after{
 }
 </style>
 
+
+<style id="urbanex-fullscreen-continuo-sin-wrapper-ubicacion">
+/* ============================================================
+   AJUSTE PUNTUAL SOLICITADO
+   1) Una sola imagen ocupa TODO el viewport.
+   2) Componentes conservan su distribución actual.
+   3) Se elimina el recuadro externo del selector de ubicación.
+   ============================================================ */
+
+/* Fondo único y continuo en toda la pantalla */
+html,
+body{
+    background:transparent !important;
+}
+
+body{
+    position:relative !important;
+    isolation:isolate !important;
+}
+
+body::before{
+    content:"" !important;
+    position:fixed !important;
+    inset:0 !important;
+    z-index:-2 !important;
+    pointer-events:none !important;
+
+    background-image:var(
+        --urbanex-fullscreen-bg,
+        url('/imagenes/boulevard/Boul_mañana.png')
+    ) !important;
+
+    background-size:cover !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+
+    filter:none !important;
+    transform:none !important;
+}
+
+/* Capa muy ligera para conservar lectura sin apagar la imagen */
+body::after{
+    content:"" !important;
+    position:fixed !important;
+    inset:0 !important;
+    z-index:-1 !important;
+    pointer-events:none !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,250,240,.03) 0%,
+            rgba(255,250,240,.02) 55%,
+            rgba(20,45,62,.04) 100%
+        ) !important;
+}
+
+/* El bloque central deja de dibujar una segunda imagen.
+   Así no hay cortes ni diferencias de encuadre. */
+.main-boulevard{
+    background-image:none !important;
+    background-color:transparent !important;
+}
+
+/* Paneles continúan encima del mismo fondo */
+.dashboard-container{
+    background:transparent !important;
+}
+
+.header-top{
+    background:rgba(255,251,243,.38) !important;
+}
+
+.aside-categories,
+.aside-showcase-list{
+    background:rgba(255,251,243,.28) !important;
+}
+
+.bottom-filter-bar{
+    background:rgba(255,251,243,.44) !important;
+}
+
+.pie-pagina{
+    background:rgba(255,251,243,.42) !important;
+}
+
+/* ============================================================
+   SELECTOR DE UBICACIÓN
+   El wrapper NO debe dibujar ningún recuadro.
+   Solo el botón ovalado queda visible.
+   ============================================================ */
+.location-picker{
+    background:transparent !important;
+    border:0 !important;
+    outline:0 !important;
+    box-shadow:none !important;
+
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+}
+
+/* Óvalo único */
+.location-picker-button,
+.location-indicator.location-picker-button{
+    background:rgba(255,251,243,.44) !important;
+    border:1px solid rgba(194,150,42,.52) !important;
+    border-radius:999px !important;
+
+    box-shadow:
+        0 7px 18px rgba(41,53,66,.07),
+        inset 0 1px 0 rgba(255,255,255,.38) !important;
+
+    backdrop-filter:blur(13px) saturate(135%) !important;
+    -webkit-backdrop-filter:blur(13px) saturate(135%) !important;
+}
+
+#locationPickerLabel{
+    color:#36566d !important;
+    font-weight:700 !important;
+    opacity:1 !important;
+}
+
+.location-picker-chevron{
+    color:#b88318 !important;
+    opacity:1 !important;
+}
+
+.location-picker-button svg,
+.location-indicator.location-picker-button svg{
+    fill:#b88318 !important;
+    opacity:1 !important;
+}
+
+/* MÓVIL:
+   la variable --urbanex-fullscreen-bg ya recibe automáticamente
+   la imagen -Celular. Solo aseguramos que cubra todo el viewport. */
+@media (max-width:720px){
+    body::before{
+        inset:0 !important;
+        background-size:cover !important;
+        background-position:center center !important;
+        filter:none !important;
+        transform:none !important;
+    }
+
+    .main-boulevard{
+        background-image:none !important;
+        background-color:transparent !important;
+    }
+
+    .location-picker{
+        background:transparent !important;
+        border:0 !important;
+        box-shadow:none !important;
+    }
+
+    .location-picker-button,
+    .location-indicator.location-picker-button{
+        background:rgba(255,251,243,.52) !important;
+    }
+}
+</style>
+
 </head>
 <body>
 
