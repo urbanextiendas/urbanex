@@ -6953,8 +6953,325 @@ body {
 }
 </style>
 
+
+<style id="urbanex-boulevard-desktop-tablet-premium-only">
+/* ============================================================
+   URBANEX BOULEVARD — MEJORA EXCLUSIVA TABLET / COMPUTADOR
+   IMPORTANTE:
+   - No modifica la vista móvil (<=720px).
+   - No cambia HTML, Supabase, filtros, rutas ni funcionamiento.
+   - La imagen del Boulevard ocupa visualmente todo el viewport.
+   ============================================================ */
+
+@media (min-width:721px){
+
+    /* Fondo global: la misma imagen horaria del Boulevard cubre
+       todo el viewport, detrás de encabezado, paneles y contenido. */
+    #uxBoulevardViewportBackground{
+        position:fixed;
+        inset:0;
+        z-index:0;
+        display:block;
+        width:100vw;
+        height:100vh;
+        height:100dvh;
+        pointer-events:none;
+        background-image:var(--ux-boulevard-current-image, url('/imagenes/Boulevard.png'));
+        background-size:cover;
+        background-position:center center;
+        background-repeat:no-repeat;
+        transform:translateZ(0);
+    }
+
+    #uxBoulevardViewportBackground::after{
+        content:"";
+        position:absolute;
+        inset:0;
+        pointer-events:none;
+        background:
+            linear-gradient(180deg,
+                rgba(2,5,9,.34) 0%,
+                rgba(2,5,9,.10) 23%,
+                rgba(2,5,9,.06) 58%,
+                rgba(2,5,9,.28) 100%);
+    }
+
+    body{
+        position:relative!important;
+        background:#030609!important;
+    }
+
+    .header-top,
+    .dashboard-container,
+    .pie-pagina{
+        position:relative;
+        z-index:2;
+    }
+
+    /* La zona central deja de utilizar un fondo independiente para
+       evitar cortes, repeticiones o cambios de encuadre entre paneles. */
+    .main-boulevard{
+        background-image:none!important;
+        background-color:transparent!important;
+    }
+
+    .boulevard-overlay{
+        background:
+            linear-gradient(180deg,
+                rgba(1,4,8,.15) 0%,
+                rgba(1,4,8,0) 34%,
+                rgba(1,4,8,.04) 70%,
+                rgba(1,4,8,.24) 100%)!important;
+    }
+
+    /* Encabezado profesional translúcido. */
+    .header-top{
+        background:rgba(3,6,10,.82)!important;
+        border-bottom:1px solid rgba(229,193,88,.22)!important;
+        backdrop-filter:blur(16px) saturate(112%)!important;
+        -webkit-backdrop-filter:blur(16px) saturate(112%)!important;
+        box-shadow:0 8px 30px rgba(0,0,0,.16)!important;
+    }
+
+    .search-input{
+        background:rgba(2,5,9,.58)!important;
+        border:1px solid rgba(255,255,255,.13)!important;
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.025),
+            0 8px 20px rgba(0,0,0,.12)!important;
+    }
+
+    .search-input:focus{
+        background:rgba(2,5,9,.72)!important;
+        border-color:rgba(229,193,88,.72)!important;
+        box-shadow:
+            0 0 0 3px rgba(229,193,88,.08),
+            0 10px 24px rgba(0,0,0,.16)!important;
+    }
+
+    .location-picker-button,
+    .location-selector{
+        background:rgba(4,8,13,.68)!important;
+        border-color:rgba(229,193,88,.40)!important;
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+        backdrop-filter:blur(12px)!important;
+        -webkit-backdrop-filter:blur(12px)!important;
+    }
+
+    /* Paneles laterales: la imagen continúa por detrás. */
+    .aside-categories,
+    .aside-showcase-list{
+        background:
+            linear-gradient(180deg,
+                rgba(3,7,11,.78),
+                rgba(3,7,11,.68))!important;
+        border-color:rgba(229,193,88,.15)!important;
+        backdrop-filter:blur(18px) saturate(108%)!important;
+        -webkit-backdrop-filter:blur(18px) saturate(108%)!important;
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.025),
+            0 0 34px rgba(0,0,0,.14)!important;
+    }
+
+    .section-title,
+    .showcase-header h2{
+        color:#f1c95d!important;
+        font-weight:800!important;
+        letter-spacing:2.2px!important;
+        text-shadow:0 2px 10px rgba(0,0,0,.36)!important;
+    }
+
+    /* Categorías: acabado más limpio y comercial. */
+    .cat-root-btn,
+    .cat-all-btn{
+        background:
+            linear-gradient(145deg,
+                rgba(7,11,16,.78),
+                rgba(3,6,10,.64))!important;
+        border:1px solid rgba(229,193,88,.21)!important;
+        border-radius:14px!important;
+        box-shadow:
+            0 8px 18px rgba(0,0,0,.14),
+            inset 0 1px 0 rgba(255,255,255,.025)!important;
+        backdrop-filter:blur(10px)!important;
+        -webkit-backdrop-filter:blur(10px)!important;
+        transition:
+            transform .20s ease,
+            border-color .20s ease,
+            background .20s ease,
+            box-shadow .20s ease!important;
+    }
+
+    .cat-root-btn:hover,
+    .cat-all-btn:hover{
+        transform:translateY(-1px)!important;
+        border-color:rgba(229,193,88,.56)!important;
+        background:
+            linear-gradient(145deg,
+                rgba(20,20,18,.82),
+                rgba(7,9,12,.72))!important;
+        box-shadow:
+            0 11px 24px rgba(0,0,0,.20),
+            0 0 0 1px rgba(229,193,88,.05)!important;
+    }
+
+    .cat-root-btn.active,
+    .cat-all-btn.active{
+        border-color:rgba(241,205,107,.78)!important;
+        background:
+            linear-gradient(145deg,
+                rgba(229,193,88,.16),
+                rgba(7,10,14,.74))!important;
+        box-shadow:
+            0 12px 26px rgba(0,0,0,.20),
+            inset 0 1px 0 rgba(255,255,255,.04),
+            0 0 24px rgba(229,193,88,.05)!important;
+    }
+
+    .icon-container{
+        border-color:rgba(229,193,88,.25)!important;
+        background:
+            linear-gradient(145deg,
+                rgba(255,255,255,.08),
+                rgba(229,193,88,.07))!important;
+    }
+
+    .category-name{
+        color:#f5f6f7!important;
+        font-weight:600!important;
+    }
+
+    .category-count{
+        color:rgba(231,235,239,.66)!important;
+    }
+
+    /* Texto de bienvenida con mejor presencia sobre la imagen. */
+    .welcome-billboard{
+        z-index:4!important;
+    }
+
+    .welcome-billboard h2{
+        color:#fff!important;
+        font-weight:700!important;
+        text-shadow:
+            0 2px 5px rgba(0,0,0,.78),
+            0 7px 24px rgba(0,0,0,.34)!important;
+    }
+
+    .welcome-billboard p{
+        color:#f3c94f!important;
+        font-weight:800!important;
+        text-shadow:
+            0 2px 5px rgba(0,0,0,.78),
+            0 5px 16px rgba(0,0,0,.28)!important;
+    }
+
+    /* Barra inferior: vidrio oscuro, más limpia y premium. */
+    .bottom-filter-bar{
+        background:
+            linear-gradient(145deg,
+                rgba(8,12,17,.82),
+                rgba(3,6,10,.68))!important;
+        border:1px solid rgba(229,193,88,.24)!important;
+        border-radius:15px!important;
+        backdrop-filter:blur(16px) saturate(112%)!important;
+        -webkit-backdrop-filter:blur(16px) saturate(112%)!important;
+        box-shadow:
+            0 15px 34px rgba(0,0,0,.26),
+            inset 0 1px 0 rgba(255,255,255,.035)!important;
+    }
+
+    .filter-pill{
+        background:rgba(2,5,9,.43)!important;
+        border:1px solid rgba(255,255,255,.045)!important;
+        border-radius:10px!important;
+        transition:
+            background .18s ease,
+            border-color .18s ease,
+            transform .18s ease!important;
+    }
+
+    .filter-pill:hover,
+    .filter-pill.active{
+        transform:translateY(-1px)!important;
+        background:rgba(229,193,88,.10)!important;
+        border-color:rgba(229,193,88,.48)!important;
+    }
+
+    .filter-label{
+        color:#fff!important;
+        font-weight:700!important;
+    }
+
+    .filter-sub{
+        color:rgba(235,238,241,.64)!important;
+    }
+
+    /* Destacados: conserva estructura y datos; solo refina acabado. */
+    .aside-showcase-list .ux-featured-card,
+    .shop-card.shop-card-ad,
+    .shop-card{
+        border-color:rgba(157,180,203,.20)!important;
+        background:
+            radial-gradient(circle at 100% 0,
+                rgba(229,193,88,.08),
+                transparent 34%),
+            linear-gradient(145deg,
+                rgba(8,12,17,.86),
+                rgba(3,6,10,.74))!important;
+        box-shadow:
+            0 14px 30px rgba(0,0,0,.22),
+            inset 0 1px 0 rgba(255,255,255,.03)!important;
+        backdrop-filter:blur(12px) saturate(106%)!important;
+        -webkit-backdrop-filter:blur(12px) saturate(106%)!important;
+    }
+
+    .aside-showcase-list .ux-featured-card:hover,
+    .shop-card.shop-card-ad:hover,
+    .shop-card:hover{
+        border-color:rgba(229,193,88,.42)!important;
+        box-shadow:
+            0 18px 36px rgba(0,0,0,.28),
+            0 0 0 1px rgba(229,193,88,.035)!important;
+    }
+
+    .aside-showcase-list .ux-featured-logo-box,
+    .shop-thumb-wrapper{
+        border-color:rgba(229,193,88,.18)!important;
+        box-shadow:
+            0 8px 20px rgba(0,0,0,.20),
+            inset 0 1px 0 rgba(255,255,255,.50)!important;
+    }
+
+    .aside-showcase-list .ux-featured-name,
+    .shop-title{
+        color:#fff!important;
+        font-weight:800!important;
+    }
+
+    .aside-showcase-list .ux-featured-category,
+    .shop-segment{
+        color:#e8c463!important;
+    }
+
+    /* Pie translúcido sobre el fondo global. */
+    .pie-pagina{
+        background:rgba(2,5,8,.76)!important;
+        border-top:1px solid rgba(229,193,88,.18)!important;
+        color:#f1f3f4!important;
+        backdrop-filter:blur(12px)!important;
+        -webkit-backdrop-filter:blur(12px)!important;
+        box-shadow:0 -8px 24px rgba(0,0,0,.14)!important;
+    }
+}
+
+/* MÓVIL <=720px: deliberadamente sin reglas nuevas. */
+</style>
+
 </head>
 <body>
+<div id="uxBoulevardViewportBackground" aria-hidden="true"></div>
+
 
 <div class="dashboard-container">
 
@@ -9769,6 +10086,45 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
 
     /* Revisa la hora cada minuto, igual que index */
     setInterval(actualizarImagenBoulevard, 60000);
+})();
+</script>
+
+
+<script id="urbanex-sync-fullscreen-boulevard-background">
+(function(){
+    const mediaDesktopTablet = window.matchMedia('(min-width: 721px)');
+    const boulevard = document.querySelector('.main-boulevard');
+    const globalBg = document.getElementById('uxBoulevardViewportBackground');
+
+    if (!boulevard || !globalBg) return;
+
+    function sincronizarFondo(){
+        if (!mediaDesktopTablet.matches) {
+            document.documentElement.style.removeProperty('--ux-boulevard-current-image');
+            return;
+        }
+
+        const inlineImage = boulevard.style.getPropertyValue('background-image');
+        const computedImage = getComputedStyle(boulevard).backgroundImage;
+        const selectedImage = inlineImage && inlineImage !== 'none' ? inlineImage : computedImage;
+
+        if (selectedImage && selectedImage !== 'none') {
+            document.documentElement.style.setProperty('--ux-boulevard-current-image', selectedImage);
+        }
+    }
+
+    /* Observa únicamente el cambio horario que ya hace el Boulevard. */
+    const observer = new MutationObserver(sincronizarFondo);
+    observer.observe(boulevard, { attributes:true, attributeFilter:['style'] });
+
+    if (typeof mediaDesktopTablet.addEventListener === 'function') {
+        mediaDesktopTablet.addEventListener('change', sincronizarFondo);
+    } else if (typeof mediaDesktopTablet.addListener === 'function') {
+        mediaDesktopTablet.addListener(sincronizarFondo);
+    }
+
+    window.addEventListener('resize', sincronizarFondo, { passive:true });
+    sincronizarFondo();
 })();
 </script>
 
