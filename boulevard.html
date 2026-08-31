@@ -8411,6 +8411,47 @@ body::after{
 }
 </style>
 
+
+<style id="urbanex-category-typography-professional-only">
+/* ÚNICO CAMBIO:
+   mejorar la presentación tipográfica dentro de las categorías
+   en tablet y computador. No modifica tarjetas, iconos ni layout.
+*/
+@media (min-width:721px){
+    .aside-categories .category-text-info{
+        gap:2px !important;
+    }
+
+    .aside-categories .category-name,
+    .aside-categories .cat-all-btn .category-name{
+        color:#15384f !important;
+        font-size:11.5px !important;
+        font-weight:650 !important;
+        line-height:1.15 !important;
+        letter-spacing:-0.08px !important;
+        text-shadow:none !important;
+        opacity:1 !important;
+    }
+
+    .aside-categories .category-count,
+    .aside-categories .cat-all-btn .category-count{
+        color:#526a7a !important;
+        font-size:8.6px !important;
+        font-weight:550 !important;
+        line-height:1.1 !important;
+        letter-spacing:0 !important;
+        text-shadow:none !important;
+        opacity:.96 !important;
+    }
+
+    .aside-categories .cat-root-btn.active .category-name,
+    .aside-categories .cat-all-btn.active .category-name{
+        color:#15384f !important;
+        font-weight:700 !important;
+    }
+}
+</style>
+
 </head>
 <body>
 
