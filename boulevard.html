@@ -7201,6 +7201,335 @@ body{
 }
 </style>
 
+
+<style id="urbanex-translucido-legible-final">
+/* =========================================================
+   AJUSTE VISUAL FINAL
+   - Más transparencia donde sí conviene
+   - Mejor contraste y legibilidad
+   - Sin cambiar la estructura responsive original
+   ========================================================= */
+
+:root{
+    --ux-tr-clear: rgba(255, 252, 246, 0.68);
+    --ux-tr-clear-strong: rgba(255, 252, 246, 0.82);
+    --ux-tr-card: rgba(255, 255, 255, 0.46);
+    --ux-tr-dark-card: rgba(34, 44, 52, 0.82);
+    --ux-tr-dark-card-hover: rgba(40, 51, 60, 0.90);
+    --ux-navy-strong: #16384f;
+    --ux-navy-soft: #526d80;
+    --ux-gold-strong: #b88318;
+    --ux-gold-soft: rgba(188, 143, 34, 0.30);
+    --ux-white: #ffffff;
+}
+
+/* Fondos generales translúcidos */
+.header-top{
+    background: linear-gradient(180deg, rgba(255,253,248,0.70), rgba(247,240,226,0.62)) !important;
+    backdrop-filter: blur(18px) saturate(125%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(125%) !important;
+    box-shadow: 0 8px 26px rgba(34, 52, 67, 0.10) !important;
+}
+
+.aside-categories,
+.aside-showcase-list{
+    background: linear-gradient(180deg, rgba(255,252,246,0.60), rgba(246,239,224,0.54)) !important;
+    backdrop-filter: blur(18px) saturate(125%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(125%) !important;
+    box-shadow: 0 12px 30px rgba(32, 49, 63, 0.12) !important;
+}
+
+/* Buscador y selector de ubicación */
+.search-input{
+    background: rgba(255,255,255,0.72) !important;
+    color: var(--ux-navy-strong) !important;
+    border-color: rgba(92,118,136,0.22) !important;
+    box-shadow: 0 4px 14px rgba(33,50,63,0.06) inset, 0 3px 14px rgba(33,50,63,0.05) !important;
+}
+.search-input::placeholder{
+    color: #748896 !important;
+}
+.search-icon{
+    fill: #46667d !important;
+}
+
+.location-indicator,
+.location-picker-button{
+    background: rgba(255,255,255,0.70) !important;
+    color: var(--ux-navy-strong) !important;
+    border-color: rgba(188,143,34,0.48) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+.location-indicator svg,
+.location-picker-button svg{
+    fill: var(--ux-gold-strong) !important;
+}
+
+/* Categorías: más claras, pero con mejor lectura */
+.cat-root-btn,
+.cat-all-btn{
+    background: linear-gradient(145deg, rgba(255,255,255,0.56), rgba(247,239,221,0.44)) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border-color: rgba(188,143,34,0.30) !important;
+    box-shadow: 0 8px 16px rgba(31,47,61,0.06) !important;
+}
+.cat-root-btn:hover:not(.active),
+.cat-all-btn:hover{
+    background: linear-gradient(145deg, rgba(255,255,255,0.74), rgba(250,243,228,0.62)) !important;
+    border-color: rgba(188,143,34,0.46) !important;
+}
+.cat-root-btn.active,
+.cat-all-btn.active{
+    background: linear-gradient(145deg, rgba(255,248,226,0.85), rgba(255,252,242,0.78)) !important;
+    border-color: rgba(188,143,34,0.72) !important;
+}
+.icon-container{
+    background: linear-gradient(145deg, rgba(255,255,255,0.84), rgba(241,218,161,0.78)) !important;
+    border-color: rgba(188,143,34,0.42) !important;
+    box-shadow: 0 5px 12px rgba(32,49,63,0.08) !important;
+}
+.category-name{
+    color: var(--ux-navy-strong) !important;
+    font-weight: 700 !important;
+    text-shadow: none !important;
+}
+.category-count,
+.sub-count,
+.cat-arrow{
+    color: #687d8d !important;
+    opacity: 1 !important;
+}
+.section-title{
+    color: #946a12 !important;
+    text-shadow: none !important;
+}
+.sub-btn{
+    color: #5f7788 !important;
+}
+.sub-btn.active{
+    color: #8f6510 !important;
+    background: rgba(232,196,94,0.14) !important;
+}
+
+/* Título central: translúcido pero legible */
+.welcome-billboard{
+    background: linear-gradient(180deg, rgba(255,252,246,0.26), rgba(255,252,246,0.20)) !important;
+    border: 1px solid rgba(188,143,34,0.24) !important;
+    backdrop-filter: blur(10px) saturate(118%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(118%) !important;
+    box-shadow: 0 8px 22px rgba(32,49,63,0.08) !important;
+}
+.welcome-billboard h2{
+    color: #ffffff !important;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.35), 0 0 1px rgba(255,255,255,0.25) !important;
+}
+.welcome-billboard p{
+    color: #ffd164 !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.35) !important;
+    font-weight: 800 !important;
+}
+
+/* Barra inferior de filtros */
+.bottom-filter-bar{
+    background: linear-gradient(145deg, rgba(255,252,246,0.72), rgba(244,235,214,0.64)) !important;
+    backdrop-filter: blur(16px) saturate(122%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(122%) !important;
+    border-color: rgba(188,143,34,0.30) !important;
+    box-shadow: 0 12px 30px rgba(32,49,63,0.12) !important;
+}
+.filter-pill{
+    background: rgba(255,255,255,0.54) !important;
+    backdrop-filter: blur(9px) !important;
+    -webkit-backdrop-filter: blur(9px) !important;
+    border-color: rgba(83,109,128,0.14) !important;
+}
+.filter-pill:hover,
+.filter-pill.active{
+    background: rgba(255,245,215,0.78) !important;
+    border-color: rgba(188,143,34,0.42) !important;
+}
+.filter-label{
+    color: var(--ux-navy-strong) !important;
+    font-weight: 700 !important;
+    text-shadow: none !important;
+}
+.filter-sub{
+    color: #6f8393 !important;
+    opacity: 1 !important;
+}
+.filter-icon-box svg{
+    fill: var(--ux-gold-strong) !important;
+}
+
+/* Destacados: panel claro, tarjetas oscuras translúcidas */
+.showcase-header h2{
+    color: #946a12 !important;
+    text-shadow: none !important;
+}
+.showcase-stats{
+    color: var(--ux-navy-soft) !important;
+    opacity: 1 !important;
+}
+.sort-select{
+    background: rgba(255,255,255,0.74) !important;
+    color: var(--ux-navy-strong) !important;
+    border-color: rgba(83,109,128,0.18) !important;
+}
+
+/* Tarjetas destacadas */
+.shop-card,
+.shop-card.shop-card-ad,
+.shop-card.shop-card-mobile-rich,
+.aside-showcase-list .ux-featured-card{
+    background: linear-gradient(145deg, rgba(41,51,59,0.82), rgba(30,39,46,0.80)) !important;
+    backdrop-filter: blur(12px) saturate(115%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(115%) !important;
+    border-color: rgba(255,255,255,0.10) !important;
+    box-shadow: 0 10px 24px rgba(24,34,41,0.18) !important;
+}
+.shop-card:hover,
+.shop-card.shop-card-ad:hover,
+.shop-card.shop-card-mobile-rich:hover,
+.aside-showcase-list .ux-featured-card:hover{
+    background: linear-gradient(145deg, rgba(47,59,69,0.90), rgba(34,43,51,0.88)) !important;
+    border-color: rgba(230,194,96,0.42) !important;
+}
+
+/* Texto de tarjetas: contraste real */
+.shop-title,
+.shop-card-ad .shop-title,
+.shop-card-mobile-rich .shop-title,
+.aside-showcase-list .ux-featured-name{
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    text-shadow: none !important;
+    opacity: 1 !important;
+}
+.shop-segment,
+.shop-card-ad .shop-segment,
+.shop-card-mobile-rich .shop-segment,
+.aside-showcase-list .ux-featured-category{
+    color: #efc75f !important;
+    font-weight: 700 !important;
+    opacity: 1 !important;
+}
+.shop-address,
+.shop-card-ad .shop-address,
+.shop-card-mobile-rich .shop-address,
+.shop-text p,
+.aside-showcase-list .ux-featured-address{
+    color: rgba(255,255,255,0.86) !important;
+    opacity: 1 !important;
+}
+.aside-showcase-list .ux-featured-address > span:first-child{
+    color: rgba(255,255,255,0.92) !important;
+}
+.aside-showcase-list .ux-featured-address > span:last-child{
+    color: rgba(255,255,255,0.82) !important;
+}
+.aside-showcase-list .ux-featured-data-item span{
+    color: #bfcad0 !important;
+    opacity: 1 !important;
+}
+.aside-showcase-list .ux-featured-data-item strong{
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+.rating-count,
+.rating-value,
+.shop-card-mobile-rich .rating-count,
+.shop-card-mobile-rich .rating-value,
+.aside-showcase-list .ux-featured-rating .rating-count,
+.aside-showcase-list .ux-featured-rating .rating-value{
+    color: #edf2f4 !important;
+    opacity: 1 !important;
+}
+.status-open,
+.shop-card-mobile-rich .status-open,
+.aside-showcase-list .ux-featured-status .status-open{
+    color: #7ce3a0 !important;
+    background: rgba(33, 106, 63, 0.18) !important;
+    border: 1px solid rgba(124,227,160,0.26) !important;
+    border-radius: 999px !important;
+    padding: 5px 10px !important;
+}
+.status-closed,
+.shop-card-mobile-rich .status-closed,
+.aside-showcase-list .ux-featured-status .status-closed{
+    color: #ff8791 !important;
+    background: rgba(122, 34, 47, 0.16) !important;
+    border: 1px solid rgba(255,135,145,0.22) !important;
+    border-radius: 999px !important;
+    padding: 5px 10px !important;
+}
+
+/* Logos y miniaturas */
+.shop-thumb-wrapper,
+.aside-showcase-list .ux-featured-logo-box{
+    background: rgba(255,255,255,0.96) !important;
+    box-shadow: 0 6px 16px rgba(23,45,58,0.16) !important;
+}
+
+/* Footer */
+.pie-pagina{
+    background: rgba(255,252,246,0.66) !important;
+    backdrop-filter: blur(16px) saturate(120%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(120%) !important;
+    border-top: 1px solid rgba(188,143,34,0.24) !important;
+    box-shadow: 0 -5px 18px rgba(33,50,63,0.06) !important;
+}
+.pie-pagina,
+.pie-pagina p,
+.pie-pagina span{
+    color: var(--ux-navy-strong) !important;
+}
+.pie-pagina a,
+.pie-pagina a:visited,
+.pie-pagina a:hover,
+.pie-pagina a:focus{
+    color: #946a12 !important;
+}
+
+/* Móvil: mantener legibilidad */
+@media (max-width: 720px){
+    .header-top{
+        background: linear-gradient(180deg, rgba(255,253,248,0.82), rgba(247,240,226,0.76)) !important;
+    }
+
+    .aside-categories{
+        background: linear-gradient(180deg, rgba(255,252,246,0.76), rgba(246,239,224,0.70)) !important;
+    }
+
+    .welcome-billboard{
+        background: linear-gradient(180deg, rgba(255,252,246,0.22), rgba(255,252,246,0.16)) !important;
+    }
+
+    .bottom-filter-bar{
+        background: linear-gradient(145deg, rgba(255,252,246,0.78), rgba(244,235,214,0.72)) !important;
+    }
+
+    .filter-pill{
+        background: rgba(255,255,255,0.62) !important;
+    }
+
+    .aside-showcase-list{
+        background: linear-gradient(180deg, rgba(255,252,246,0.86), rgba(246,239,224,0.80)) !important;
+    }
+
+    .shop-card.shop-card-mobile-rich,
+    .shop-card.shop-card-ad,
+    .aside-showcase-list .ux-featured-card{
+        background: linear-gradient(145deg, rgba(44,54,63,0.88), rgba(31,39,46,0.86)) !important;
+    }
+
+    .pie-pagina{
+        background: rgba(255,252,246,0.78) !important;
+    }
+}
+</style>
+
 </head>
 <body>
 
