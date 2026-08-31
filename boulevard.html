@@ -9091,6 +9091,81 @@ body {
 }
 </style>
 
+
+<style id="urbanex-corregir-franja-inferior-y-altura">
+/* ============================================================
+   CORRECCIÓN PUNTUAL
+   1. Elimina la franja vacía entre Boulevard y footer.
+   2. No modifica diseño, colores, paneles ni estructura.
+   ============================================================ */
+
+html,
+body{
+    width:100% !important;
+    height:100svh !important;
+    min-height:100svh !important;
+    max-height:100svh !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:hidden !important;
+}
+
+.dashboard-container{
+    width:100% !important;
+    height:calc(100svh - 24px) !important;
+    min-height:calc(100svh - 24px) !important;
+    max-height:calc(100svh - 24px) !important;
+
+    margin:0 !important;
+    margin-bottom:0 !important;
+    padding-bottom:0 !important;
+
+    overflow:hidden !important;
+}
+
+/* El pie ocupa exactamente los 24px reservados arriba. */
+.pie-pagina{
+    position:fixed !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+
+    width:100% !important;
+    height:24px !important;
+    min-height:24px !important;
+    max-height:24px !important;
+
+    margin:0 !important;
+    padding:0 !important;
+}
+
+/* Evita espacios residuales del último bloque visual. */
+.main-boulevard,
+.aside-categories,
+.aside-showcase-list{
+    margin-bottom:0 !important;
+}
+
+/* Móvil mantiene su layout; solo se corrige la altura disponible. */
+@media (max-width:720px){
+    html,
+    body{
+        height:100svh !important;
+        min-height:100svh !important;
+        max-height:100svh !important;
+        padding-bottom:0 !important;
+    }
+
+    .dashboard-container{
+        height:calc(100svh - 24px) !important;
+        min-height:calc(100svh - 24px) !important;
+        max-height:calc(100svh - 24px) !important;
+        margin-bottom:0 !important;
+        padding-bottom:0 !important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -9099,7 +9174,7 @@ body {
     <!-- HEADER -->
     <header class="header-top">
         <a href="/index.html" class="brand-box" title="Ir a la página principal" aria-label="Ir a la página principal">
-            <img src="imagenes/logo.png" alt="Logo Urbanex" style="height:60px;width:auto;display:block;">
+            <img src="imagenes/Urba4.png" alt="Logo Urbanex" style="height:60px;width:auto;display:block;">
         </a>
 
         <div class="search-wrapper">
