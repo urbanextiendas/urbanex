@@ -7885,6 +7885,114 @@ body::after{
 }
 </style>
 
+
+<style id="urbanex-correccion-encuadre-fullscreen">
+/* ============================================================
+   CORRECCIÓN DEL FONDO
+   - El Boulevard central conserva su encuadre original.
+   - La misma imagen continúa detrás de header y barras laterales.
+   - La extensión exterior queda suavizada para evitar sensación
+     de imagen agrandada o deformada.
+   - No cambia distribución ni tamaños.
+   ============================================================ */
+
+/* Fondo global: solo sirve como continuidad detrás de los paneles. */
+body::before{
+    inset:-18px !important;
+    background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_mañana.png')) !important;
+    background-size:cover !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+
+    filter:blur(12px) saturate(.92) brightness(.94) !important;
+    transform:scale(1.025) !important;
+    transform-origin:center !important;
+}
+
+/* Suaviza la extensión exterior, sin cubrir la imagen central. */
+body::after{
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,249,240,.05) 0%,
+            rgba(255,249,240,.08) 45%,
+            rgba(255,249,240,.10) 100%
+        ) !important;
+}
+
+/* IMPORTANTE:
+   El área central vuelve a dibujar la imagen en su propio espacio,
+   igual que en el diseño original. */
+.main-boulevard{
+    background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_mañana.png')) !important;
+    background-size:cover !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+    background-color:transparent !important;
+}
+
+/* Evita que la capa del Boulevard altere visualmente el encuadre. */
+.boulevard-overlay{
+    background:
+        linear-gradient(
+            180deg,
+            rgba(19,38,52,.06) 0%,
+            rgba(19,38,52,0) 38%,
+            rgba(19,38,52,0) 72%,
+            rgba(19,38,52,.08) 100%
+        ) !important;
+}
+
+/* Los paneles siguen dejando ver la continuidad del fondo. */
+.header-top{
+    background:rgba(255,251,243,.34) !important;
+}
+
+.aside-categories,
+.aside-showcase-list{
+    background:rgba(255,251,243,.27) !important;
+}
+
+.bottom-filter-bar{
+    background:rgba(255,251,243,.42) !important;
+}
+
+.pie-pagina{
+    background:rgba(255,251,243,.42) !important;
+}
+
+/* CELULAR:
+   conserva exactamente la lógica de tamaño existente;
+   solo se restaura el fondo central independiente. */
+@media (max-width:720px){
+    body::before{
+        inset:-14px !important;
+        filter:blur(10px) saturate(.94) brightness(.95) !important;
+        transform:scale(1.02) !important;
+        background-position:center center !important;
+    }
+
+    .main-boulevard{
+        background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_mañana-Celular.png')) !important;
+        background-size:cover !important;
+        background-position:center center !important;
+        background-repeat:no-repeat !important;
+    }
+
+    .header-top{
+        background:rgba(255,251,243,.56) !important;
+    }
+
+    .aside-categories{
+        background:rgba(255,251,243,.46) !important;
+    }
+
+    .aside-showcase-list{
+        background:rgba(255,251,243,.54) !important;
+    }
+}
+</style>
+
 </head>
 <body>
 
