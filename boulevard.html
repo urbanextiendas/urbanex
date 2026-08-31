@@ -7951,6 +7951,445 @@ body {
 }
 </style>
 
+
+<style id="urbanex-boulevard-colores-claros-final">
+/* ============================================================
+   PALETA CLARA URBANEX
+   - Fondos claros translúcidos
+   - Texto azul oscuro
+   - Acentos dorados
+   - Sin cambiar estructura ni funcionamiento
+   ============================================================ */
+
+:root{
+    --ux-clear-surface: rgba(250,247,240,.78);
+    --ux-clear-surface-strong: rgba(255,252,246,.88);
+    --ux-clear-surface-soft: rgba(246,241,230,.68);
+    --ux-clear-border: rgba(201,158,52,.48);
+    --ux-clear-border-soft: rgba(36,69,96,.14);
+    --ux-clear-text: #12324a;
+    --ux-clear-muted: #587083;
+    --ux-clear-gold: #c99a2e;
+    --ux-clear-shadow: 0 14px 32px rgba(35,55,73,.16);
+}
+
+/* ============================================================
+   TABLET Y ESCRITORIO
+   ============================================================ */
+@media (min-width:721px){
+
+    /* Header claro y elegante */
+    .header-top{
+        background:
+            linear-gradient(
+                90deg,
+                rgba(250,247,240,.90) 0%,
+                rgba(247,243,235,.84) 50%,
+                rgba(250,247,240,.90) 100%
+            ) !important;
+
+        border-bottom:1px solid var(--ux-clear-border) !important;
+
+        backdrop-filter:blur(16px) saturate(120%) !important;
+        -webkit-backdrop-filter:blur(16px) saturate(120%) !important;
+
+        box-shadow:
+            0 10px 28px rgba(43,64,80,.12),
+            inset 0 1px 0 rgba(255,255,255,.72) !important;
+    }
+
+    .search-input{
+        background:rgba(255,255,255,.76) !important;
+        border:1px solid rgba(34,73,101,.18) !important;
+        color:var(--ux-clear-text) !important;
+
+        box-shadow:
+            0 8px 20px rgba(39,62,79,.10),
+            inset 0 1px 0 rgba(255,255,255,.75) !important;
+    }
+
+    .search-input::placeholder{
+        color:#6e7f8c !important;
+    }
+
+    .search-input:focus{
+        background:#ffffff !important;
+        border-color:rgba(201,154,46,.70) !important;
+
+        box-shadow:
+            0 0 0 3px rgba(201,154,46,.10),
+            0 10px 24px rgba(39,62,79,.12) !important;
+    }
+
+    .search-icon{
+        fill:#34546b !important;
+    }
+
+    .location-picker-button,
+    .location-indicator{
+        background:rgba(255,255,255,.80) !important;
+        color:var(--ux-clear-text) !important;
+        border:1px solid rgba(201,154,46,.56) !important;
+
+        box-shadow:
+            0 8px 20px rgba(39,62,79,.10),
+            inset 0 1px 0 rgba(255,255,255,.78) !important;
+    }
+
+    .location-picker-button svg,
+    .location-indicator svg{
+        fill:var(--ux-clear-gold) !important;
+    }
+
+    /* Paneles laterales realmente claros */
+    .aside-categories,
+    .aside-showcase-list{
+        background:
+            linear-gradient(
+                180deg,
+                rgba(255,252,246,.84) 0%,
+                rgba(247,242,231,.76) 100%
+            ) !important;
+
+        border:1px solid rgba(201,154,46,.42) !important;
+
+        backdrop-filter:blur(18px) saturate(120%) !important;
+        -webkit-backdrop-filter:blur(18px) saturate(120%) !important;
+
+        box-shadow:
+            var(--ux-clear-shadow),
+            inset 0 1px 0 rgba(255,255,255,.72) !important;
+    }
+
+    .section-title,
+    .showcase-header h2{
+        color:#9d7318 !important;
+        text-shadow:none !important;
+    }
+
+    /* Categorías claras */
+    .cat-root-btn,
+    .cat-all-btn{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.88) 0%,
+                rgba(244,237,222,.82) 100%
+            ) !important;
+
+        border:1px solid rgba(201,154,46,.34) !important;
+
+        box-shadow:
+            0 8px 18px rgba(55,75,91,.09),
+            inset 0 1px 0 rgba(255,255,255,.84) !important;
+    }
+
+    .cat-root-btn:hover,
+    .cat-all-btn:hover{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.98) 0%,
+                rgba(248,239,215,.92) 100%
+            ) !important;
+
+        border-color:rgba(201,154,46,.64) !important;
+
+        box-shadow:
+            0 11px 22px rgba(55,75,91,.12),
+            0 0 0 1px rgba(201,154,46,.06) !important;
+    }
+
+    .cat-root-btn.active,
+    .cat-all-btn.active{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(251,238,199,.96) 0%,
+                rgba(255,250,237,.94) 100%
+            ) !important;
+
+        border-color:rgba(201,154,46,.84) !important;
+
+        box-shadow:
+            0 12px 24px rgba(55,75,91,.12),
+            0 0 20px rgba(201,154,46,.08) !important;
+    }
+
+    .category-name{
+        color:var(--ux-clear-text) !important;
+        text-shadow:none !important;
+    }
+
+    .category-count{
+        color:var(--ux-clear-muted) !important;
+    }
+
+    .cat-root-btn.active .category-name,
+    .cat-all-btn.active .category-name{
+        color:#8a6415 !important;
+    }
+
+    .icon-container{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.92),
+                rgba(241,223,172,.78)
+            ) !important;
+
+        border:1px solid rgba(201,154,46,.46) !important;
+
+        box-shadow:
+            0 5px 12px rgba(55,75,91,.08),
+            inset 0 1px 0 rgba(255,255,255,.88) !important;
+    }
+
+    .cat-root-btn.active .icon-container,
+    .cat-all-btn.active .icon-container{
+        background:#e9bf54 !important;
+        border-color:#d7a936 !important;
+    }
+
+    /* Filtros inferiores claros */
+    .bottom-filter-bar{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,252,246,.88),
+                rgba(246,239,224,.80)
+            ) !important;
+
+        border:1px solid rgba(201,154,46,.44) !important;
+
+        box-shadow:
+            0 16px 34px rgba(49,70,87,.14),
+            inset 0 1px 0 rgba(255,255,255,.76) !important;
+
+        backdrop-filter:blur(16px) saturate(120%) !important;
+        -webkit-backdrop-filter:blur(16px) saturate(120%) !important;
+    }
+
+    .filter-pill{
+        background:rgba(255,255,255,.70) !important;
+        border:1px solid rgba(45,76,99,.12) !important;
+    }
+
+    .filter-pill:hover,
+    .filter-pill.active{
+        background:rgba(252,239,202,.92) !important;
+        border-color:rgba(201,154,46,.58) !important;
+    }
+
+    .filter-label{
+        color:var(--ux-clear-text) !important;
+        text-shadow:none !important;
+    }
+
+    .filter-sub{
+        color:var(--ux-clear-muted) !important;
+    }
+
+    .filter-icon-box{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.92),
+                rgba(242,222,166,.80)
+            ) !important;
+
+        border:1px solid rgba(201,154,46,.46) !important;
+    }
+
+    .filter-icon-box svg{
+        fill:#bb8a1f !important;
+    }
+
+    /* Destacados claros */
+    .shop-card,
+    .shop-card.shop-card-ad,
+    .ux-featured-card{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.92) 0%,
+                rgba(246,240,228,.84) 100%
+            ) !important;
+
+        border:1px solid rgba(47,78,101,.14) !important;
+
+        box-shadow:
+            0 12px 26px rgba(49,70,87,.11),
+            inset 0 1px 0 rgba(255,255,255,.86) !important;
+    }
+
+    .shop-card:hover,
+    .shop-card.shop-card-ad:hover,
+    .ux-featured-card:hover{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.98) 0%,
+                rgba(250,241,216,.92) 100%
+            ) !important;
+
+        border-color:rgba(201,154,46,.52) !important;
+
+        box-shadow:
+            0 16px 30px rgba(49,70,87,.14) !important;
+    }
+
+    .shop-title,
+    .ux-featured-name{
+        color:var(--ux-clear-text) !important;
+        text-shadow:none !important;
+    }
+
+    .shop-segment,
+    .ux-featured-category{
+        color:#9b7118 !important;
+    }
+
+    .shop-text p,
+    .ux-featured-address,
+    .ux-featured-data-item strong{
+        color:#4f687a !important;
+    }
+
+    .ux-featured-data-item span{
+        color:#718491 !important;
+    }
+
+    /* Footer claro */
+    .pie-pagina{
+        background:
+            linear-gradient(
+                90deg,
+                rgba(243,237,225,.92),
+                rgba(252,249,243,.92)
+            ) !important;
+
+        border-top:1px solid rgba(201,154,46,.36) !important;
+
+        box-shadow:
+            0 -7px 20px rgba(49,70,87,.10),
+            inset 0 1px 0 rgba(255,255,255,.76) !important;
+    }
+
+    .pie-pagina p,
+    .pie-pagina span,
+    .pie-pagina a{
+        color:#24455e !important;
+        text-shadow:none !important;
+    }
+
+    .pie-pagina a{
+        color:#9b7118 !important;
+    }
+}
+
+/* ============================================================
+   MÓVIL
+   Solo cambio de color. No altera el diseño ni posiciones.
+   ============================================================ */
+@media (max-width:720px){
+
+    .header-top{
+        background:
+            linear-gradient(
+                180deg,
+                rgba(252,249,242,.88),
+                rgba(245,239,227,.80)
+            ) !important;
+
+        border-bottom:1px solid rgba(201,154,46,.36) !important;
+    }
+
+    .search-input{
+        background:rgba(255,255,255,.82) !important;
+        color:var(--ux-clear-text) !important;
+        border-color:rgba(36,69,96,.18) !important;
+    }
+
+    .search-input::placeholder{
+        color:#71818d !important;
+    }
+
+    .location-picker-button,
+    .location-indicator{
+        background:rgba(255,255,255,.84) !important;
+        color:var(--ux-clear-text) !important;
+        border-color:rgba(201,154,46,.50) !important;
+    }
+
+    .aside-categories,
+    .aside-showcase-list,
+    .bottom-filter-bar{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,252,246,.84),
+                rgba(246,239,224,.76)
+            ) !important;
+
+        border-color:rgba(201,154,46,.42) !important;
+
+        backdrop-filter:blur(14px) saturate(118%) !important;
+        -webkit-backdrop-filter:blur(14px) saturate(118%) !important;
+    }
+
+    .cat-root-btn,
+    .cat-all-btn,
+    .filter-pill{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.90),
+                rgba(245,237,219,.82)
+            ) !important;
+
+        border-color:rgba(201,154,46,.36) !important;
+    }
+
+    .category-name,
+    .filter-label{
+        color:var(--ux-clear-text) !important;
+        text-shadow:none !important;
+    }
+
+    .category-count,
+    .filter-sub{
+        color:var(--ux-clear-muted) !important;
+    }
+
+    .icon-container,
+    .filter-icon-box{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.94),
+                rgba(241,221,166,.80)
+            ) !important;
+
+        border-color:rgba(201,154,46,.46) !important;
+    }
+
+    .pie-pagina{
+        background:rgba(247,241,229,.92) !important;
+        border-top:1px solid rgba(201,154,46,.34) !important;
+    }
+
+    .pie-pagina p,
+    .pie-pagina span{
+        color:#24455e !important;
+    }
+
+    .pie-pagina a{
+        color:#9b7118 !important;
+    }
+}
+</style>
+
 </head>
 <body>
 
