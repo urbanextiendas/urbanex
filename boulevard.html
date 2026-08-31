@@ -8219,6 +8219,71 @@ body::after{
 }
 </style>
 
+
+<style id="urbanex-solo-labels-mejorados">
+/* ============================================================
+   ÚNICO CAMBIO:
+   Mejorar visibilidad de:
+   - CATEGORÍAS
+   - Todos los negocios
+   - DESTACADOS
+   No cambia layout, tamaños, posiciones ni responsive.
+   ============================================================ */
+
+/* Títulos laterales */
+.section-title,
+.showcase-header h2{
+    color:#7a560c !important;
+    font-weight:900 !important;
+    opacity:1 !important;
+    text-shadow:
+        0 1px 0 rgba(255,255,255,.50),
+        0 2px 5px rgba(74,47,8,.12) !important;
+}
+
+/* "Todos los negocios" */
+.cat-all-btn .category-name{
+    color:#6b4b0a !important;
+    font-weight:900 !important;
+    opacity:1 !important;
+    text-shadow:none !important;
+}
+
+.cat-all-btn .category-count{
+    color:#5f7484 !important;
+    font-weight:700 !important;
+    opacity:1 !important;
+}
+
+/* Icono de "Todos los negocios" */
+.cat-all-btn .icon-container{
+    border-color:rgba(188,143,34,.48) !important;
+}
+
+.cat-all-btn .icon-container svg{
+    fill:#a97512 !important;
+    opacity:1 !important;
+}
+
+/* Refuerzo exclusivo en móvil, sin mover nada */
+@media (max-width:720px){
+    .section-title,
+    .showcase-header h2{
+        color:#6f4d08 !important;
+        font-weight:900 !important;
+    }
+
+    .cat-all-btn .category-name{
+        color:#604307 !important;
+        font-weight:900 !important;
+    }
+
+    .cat-all-btn .category-count{
+        color:#566d7d !important;
+    }
+}
+</style>
+
 </head>
 <body>
 
