@@ -8386,68 +8386,67 @@ body::after{
 </style>
 
 
-<style id="urbanex-category-count-legibility-only">
+<style id="urbanex-categorias-texto-profesional-visible">
 /* ÚNICO CAMBIO:
-   mejorar la lectura de los textos pequeños de cantidad
-   dentro de las categorías en tablet y computador.
-   No modifica tarjetas, nombres principales ni celular.
+   mejorar de forma visible y profesional la tipografía
+   de las categorías, sin tocar tarjetas, iconos ni distribución.
 */
-@media (min-width:721px){
-    .aside-categories .category-count{
-        color:#24445b !important;
-        font-size:10px !important;
-        font-weight:700 !important;
-        line-height:1.25 !important;
-        opacity:1 !important;
-        text-shadow:0 1px 0 rgba(255,255,255,.55) !important;
-    }
 
-    .aside-categories .cat-all-btn .category-count{
-        color:#24445b !important;
-        font-size:10px !important;
-        font-weight:700 !important;
-        opacity:1 !important;
-    }
+/* estructura del bloque de texto */
+.aside-categories .category-text-info{
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    gap:3px !important;
 }
-</style>
 
+/* nombre principal */
+.aside-categories .category-name,
+.aside-categories .cat-all-btn .category-name{
+    color:#173c57 !important;
+    font-size:15px !important;
+    font-weight:700 !important;
+    line-height:1.12 !important;
+    letter-spacing:-0.01em !important;
+    text-shadow:none !important;
+    opacity:1 !important;
+}
 
-<style id="urbanex-category-typography-professional-only">
-/* ÚNICO CAMBIO:
-   mejorar la presentación tipográfica dentro de las categorías
-   en tablet y computador. No modifica tarjetas, iconos ni layout.
-*/
-@media (min-width:721px){
-    .aside-categories .category-text-info{
-        gap:2px !important;
-    }
+/* cantidad */
+.aside-categories .category-count,
+.aside-categories .cat-all-btn .category-count{
+    color:#6f8090 !important;
+    font-size:11.5px !important;
+    font-weight:600 !important;
+    line-height:1.15 !important;
+    letter-spacing:0 !important;
+    text-shadow:none !important;
+    opacity:1 !important;
+}
 
+/* estado activo: solo un poco más marcado, sin exagerar */
+.aside-categories .cat-root-btn.active .category-name,
+.aside-categories .cat-all-btn.active .category-name{
+    color:#12324a !important;
+    font-weight:800 !important;
+}
+
+.aside-categories .cat-root-btn.active .category-count,
+.aside-categories .cat-all-btn.active .category-count{
+    color:#5f7385 !important;
+    font-weight:650 !important;
+}
+
+/* ajuste fino desktop/tablet */
+@media (min-width: 721px){
     .aside-categories .category-name,
     .aside-categories .cat-all-btn .category-name{
-        color:#15384f !important;
-        font-size:11.5px !important;
-        font-weight:650 !important;
-        line-height:1.15 !important;
-        letter-spacing:-0.08px !important;
-        text-shadow:none !important;
-        opacity:1 !important;
+        font-size:14px !important;
     }
 
     .aside-categories .category-count,
     .aside-categories .cat-all-btn .category-count{
-        color:#526a7a !important;
-        font-size:8.6px !important;
-        font-weight:550 !important;
-        line-height:1.1 !important;
-        letter-spacing:0 !important;
-        text-shadow:none !important;
-        opacity:.96 !important;
-    }
-
-    .aside-categories .cat-root-btn.active .category-name,
-    .aside-categories .cat-all-btn.active .category-name{
-        color:#15384f !important;
-        font-weight:700 !important;
+        font-size:10.5px !important;
     }
 }
 </style>
