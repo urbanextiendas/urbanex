@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
     <link rel="preconnect" href="https://esm.sh" crossorigin>
     <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
-    <link rel="preload" as="image" href="imagenes/Boulevard.png" fetchpriority="high">
+    <link rel="preload" as="image" href="imagenes/boulevard/Boul_mañana.png" fetchpriority="high">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
@@ -172,7 +172,7 @@
         /* ── MAIN BOULEVARD ── */
         .main-boulevard {
             grid-area: main; position: relative; overflow: hidden;
-            background-image: url("imagenes/Boulevard.png");
+            background-image: url("imagenes/boulevard/Boul_mañana.png");
             background-size: cover; background-position: center bottom;
             background-repeat: no-repeat; z-index: 2;
         }
@@ -2451,7 +2451,7 @@ body {
 .aside-categories{
     background:
         linear-gradient(rgba(3,3,3,.94), rgba(3,3,3,.94)),
-        url("imagenes/Boulevard.png") left center / cover no-repeat!important;
+        url("imagenes/boulevard/Boul_mañana.png") left center / cover no-repeat!important;
     backdrop-filter:blur(8px)!important;
     -webkit-backdrop-filter:blur(8px)!important;
 }
@@ -2459,7 +2459,7 @@ body {
 .aside-showcase-list{
     background:
         linear-gradient(rgba(3,3,3,.94), rgba(3,3,3,.94)),
-        url("imagenes/Boulevard.png") right center / cover no-repeat!important;
+        url("imagenes/boulevard/Boul_mañana.png") right center / cover no-repeat!important;
     backdrop-filter:blur(8px)!important;
     -webkit-backdrop-filter:blur(8px)!important;
 }
@@ -3758,7 +3758,7 @@ body {
     .aside-showcase-list{
         background:
             linear-gradient(rgba(4,6,9,.78),rgba(4,6,9,.78)),
-            url("imagenes/Boulevard.png") right center / cover no-repeat!important;
+            url("imagenes/boulevard/Boul_mañana.png") right center / cover no-repeat!important;
         backdrop-filter:blur(12px) saturate(.92)!important;
         -webkit-backdrop-filter:blur(12px) saturate(.92)!important;
     }
@@ -7699,6 +7699,258 @@ body {
 }
 </style>
 
+
+<style id="urbanex-boulevard-colores-vivos-final">
+/* ============================================================
+   AJUSTE SOLICITADO:
+   - usar nuevas imágenes
+   - quitar el exceso de negro
+   - colores más vivos y profesionales
+   - sin cambiar la estructura ni la lógica
+   ============================================================ */
+
+@media (min-width:721px){
+
+    .boulevard-overlay{
+        background:
+            linear-gradient(
+                180deg,
+                rgba(8,26,42,.06) 0%,
+                rgba(255,196,88,.03) 34%,
+                rgba(255,196,88,.02) 66%,
+                rgba(10,18,28,.10) 100%
+            ) !important;
+    }
+
+    .header-top{
+        background:
+            linear-gradient(
+                90deg,
+                rgba(18,40,62,.58) 0%,
+                rgba(24,34,48,.46) 42%,
+                rgba(54,36,12,.30) 100%
+            ) !important;
+        border-bottom:1px solid rgba(229,193,88,.26) !important;
+        box-shadow:0 10px 28px rgba(0,0,0,.10) !important;
+    }
+
+    .aside-categories,
+    .aside-showcase-list{
+        background:
+            linear-gradient(
+                180deg,
+                rgba(24,45,66,.54) 0%,
+                rgba(23,31,40,.40) 58%,
+                rgba(70,45,14,.24) 100%
+            ) !important;
+
+        border-color:rgba(229,193,88,.26) !important;
+
+        backdrop-filter:blur(18px) saturate(135%) !important;
+        -webkit-backdrop-filter:blur(18px) saturate(135%) !important;
+
+        box-shadow:
+            0 18px 36px rgba(0,0,0,.14),
+            inset 0 1px 0 rgba(255,255,255,.05) !important;
+    }
+
+    .cat-root-btn,
+    .cat-all-btn{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(20,43,64,.68) 0%,
+                rgba(23,31,40,.50) 100%
+            ) !important;
+        border-color:rgba(229,193,88,.28) !important;
+        box-shadow:
+            0 8px 18px rgba(0,0,0,.10),
+            inset 0 1px 0 rgba(255,255,255,.05) !important;
+    }
+
+    .cat-root-btn:hover,
+    .cat-all-btn:hover{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(27,53,77,.76) 0%,
+                rgba(27,36,46,.58) 100%
+            ) !important;
+        border-color:rgba(229,193,88,.48) !important;
+        box-shadow:
+            0 12px 22px rgba(0,0,0,.14),
+            0 0 0 1px rgba(229,193,88,.04) !important;
+    }
+
+    .cat-root-btn.active,
+    .cat-all-btn.active{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(229,193,88,.22) 0%,
+                rgba(27,43,57,.76) 100%
+            ) !important;
+        border-color:rgba(241,205,107,.82) !important;
+        box-shadow:
+            0 14px 24px rgba(0,0,0,.16),
+            0 0 22px rgba(229,193,88,.08) !important;
+    }
+
+    .icon-container,
+    .filter-icon-box{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.12),
+                rgba(229,193,88,.10)
+            ) !important;
+        border-color:rgba(229,193,88,.34) !important;
+        box-shadow:
+            0 6px 14px rgba(0,0,0,.12),
+            inset 0 1px 0 rgba(255,255,255,.06) !important;
+    }
+
+    .bottom-filter-bar{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(22,42,62,.62) 0%,
+                rgba(28,36,46,.50) 54%,
+                rgba(68,45,14,.24) 100%
+            ) !important;
+        border-color:rgba(229,193,88,.26) !important;
+        box-shadow:
+            0 18px 36px rgba(0,0,0,.14),
+            inset 0 1px 0 rgba(255,255,255,.05) !important;
+    }
+
+    .filter-pill{
+        background:rgba(255,255,255,.05) !important;
+        border-color:rgba(255,255,255,.08) !important;
+    }
+
+    .filter-pill:hover,
+    .filter-pill.active{
+        background:rgba(229,193,88,.12) !important;
+        border-color:rgba(229,193,88,.42) !important;
+    }
+
+    .shop-card,
+    .shop-card.shop-card-ad,
+    .ux-featured-card{
+        background:
+            radial-gradient(
+                circle at top right,
+                rgba(229,193,88,.10),
+                transparent 28%
+            ),
+            linear-gradient(
+                145deg,
+                rgba(20,42,61,.72) 0%,
+                rgba(23,32,42,.56) 100%
+            ) !important;
+
+        border-color:rgba(255,255,255,.10) !important;
+
+        box-shadow:
+            0 14px 28px rgba(0,0,0,.14),
+            inset 0 1px 0 rgba(255,255,255,.05) !important;
+    }
+
+    .shop-card:hover,
+    .shop-card.shop-card-ad:hover,
+    .ux-featured-card:hover{
+        border-color:rgba(229,193,88,.40) !important;
+        box-shadow:
+            0 18px 34px rgba(0,0,0,.16),
+            0 0 0 1px rgba(229,193,88,.04) !important;
+    }
+
+    .pie-pagina{
+        background:
+            linear-gradient(
+                90deg,
+                rgba(29,46,61,.54),
+                rgba(63,46,22,.28)
+            ) !important;
+        border-top:1px solid rgba(229,193,88,.18) !important;
+        backdrop-filter:blur(10px) saturate(120%) !important;
+        -webkit-backdrop-filter:blur(10px) saturate(120%) !important;
+    }
+
+    .pie-pagina p,
+    .pie-pagina span,
+    .pie-pagina a{
+        color:#ffffff !important;
+    }
+}
+
+/* En móvil no se cambia el layout, solo se vuelve menos negro el acabado */
+@media (max-width:720px){
+
+    .header-top{
+        background:
+            linear-gradient(
+                180deg,
+                rgba(20,42,61,.70),
+                rgba(31,38,48,.56)
+            ) !important;
+    }
+
+    .aside-categories,
+    .aside-showcase-list,
+    .bottom-filter-bar{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(31,50,69,.56),
+                rgba(82,61,26,.24)
+            ) !important;
+        backdrop-filter:blur(14px) saturate(128%) !important;
+        -webkit-backdrop-filter:blur(14px) saturate(128%) !important;
+    }
+
+    .cat-root-btn,
+    .cat-all-btn,
+    .filter-pill{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(27,47,68,.58),
+                rgba(36,41,48,.42)
+            ) !important;
+        border-color:rgba(229,193,88,.30) !important;
+    }
+
+    .icon-container,
+    .filter-icon-box{
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255,255,255,.14),
+                rgba(229,193,88,.12)
+            ) !important;
+        border-color:rgba(229,193,88,.36) !important;
+    }
+
+    .pie-pagina{
+        background:
+            linear-gradient(
+                90deg,
+                rgba(31,49,67,.58),
+                rgba(79,58,25,.28)
+            ) !important;
+        border-top:1px solid rgba(229,193,88,.18) !important;
+    }
+
+    .pie-pagina p,
+    .pie-pagina span,
+    .pie-pagina a{
+        color:#ffffff !important;
+    }
+}
+</style>
+
 </head>
 <body>
 
@@ -10449,14 +10701,14 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
 
     const imagenesBoulevard = {
         desktop: {
-            dia: '/imagenes/Boulevard mañana.png',
-            tarde: '/imagenes/Boulevard tarde.png',
-            noche: '/imagenes/Boulevard noche.png'
+            dia: '/imagenes/boulevard/Boul_mañana.png',
+            tarde: '/imagenes/boulevard/Boul_tarde.png',
+            noche: '/imagenes/boulevard/Boul_noche.png'
         },
         celular: {
-            dia: '/imagenes/Boulevard mañana celular.png',
-            tarde: '/imagenes/Boulevard tarde celular.png',
-            noche: '/imagenes/Boulevard noche celular.png'
+            dia: '/imagenes/boulevard/Boul_mañana-Celular.png',
+            tarde: '/imagenes/boulevard/Boul_tarde-Celular.png',
+            noche: '/imagenes/boulevard/Boul_noche-Celular.png'
         }
     };
 
