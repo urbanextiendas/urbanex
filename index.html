@@ -7587,6 +7587,20 @@ body{
 }
 </style>
 
+
+<style id="urbanex-parqueaderos-junto-mapa-movil">
+/* ÚNICO AJUSTE:
+   En celular, Mapa y Parqueaderos quedan juntos en la misma fila.
+   No modifica escritorio ni tablet.
+*/
+@media (max-width:640px){
+    .caracteristicas-lista .item-caracteristica:last-child{
+        grid-column:auto !important;
+        justify-content:flex-start !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
