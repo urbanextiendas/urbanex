@@ -1,0 +1,344 @@
+/* ============================================================
+   URBANEX · PALETA COMPARTIDA PARA /informativos
+   Basada en la paleta clara/translúcida vigente de boulevard.html.
+   Solo modifica color, contraste y superficies. No cambia layout.
+   ============================================================ */
+:root{
+    --ux-clear-navy:#173a54;
+    --ux-clear-navy-2:#4d687a;
+    --ux-clear-gold:#bd8b1c;
+    --ux-clear-gold-dark:#93690f;
+    --ux-clear-cream:rgba(255,252,246,.94);
+    --ux-clear-cream-2:rgba(246,239,224,.91);
+    --ux-clear-cream-glass:rgba(255,251,243,.76);
+    --ux-clear-card:rgba(255,253,248,.93);
+    --ux-clear-line:rgba(188,143,34,.34);
+    --ux-clear-line-soft:rgba(74,105,127,.16);
+    --ux-clear-muted:#617789;
+    --ux-clear-soft:#718492;
+    --ux-clear-shadow:0 10px 26px rgba(43,63,77,.12);
+    --ux-clear-green:#168a57;
+    --ux-clear-red:#b94b55;
+}
+
+html,
+body{
+    background-color:#f2efe7 !important;
+    color:var(--ux-clear-navy) !important;
+}
+
+body{
+    background-image:
+        linear-gradient(180deg,rgba(255,252,246,.70),rgba(246,239,224,.74)),
+        url("../imagenes/Boulevard.webp") !important;
+    background-position:center bottom !important;
+    background-size:cover !important;
+    background-repeat:no-repeat !important;
+    background-attachment:fixed !important;
+}
+
+/* Encabezado */
+.header-top{
+    background:linear-gradient(180deg,rgba(255,253,248,.94),rgba(247,240,226,.90)) !important;
+    border-bottom-color:var(--ux-clear-line) !important;
+    box-shadow:0 7px 22px rgba(43,63,77,.10) !important;
+    backdrop-filter:blur(14px) saturate(120%) !important;
+    -webkit-backdrop-filter:blur(14px) saturate(120%) !important;
+}
+
+.back-link,
+.breadcrumb,
+.breadcrumb a{
+    color:var(--ux-clear-navy) !important;
+}
+
+.back-link{
+    background:rgba(255,255,255,.84) !important;
+    border-color:rgba(188,143,34,.42) !important;
+    box-shadow:0 4px 14px rgba(43,63,77,.07) !important;
+}
+.back-link:hover{
+    background:#fff8e9 !important;
+    border-color:rgba(188,143,34,.68) !important;
+    color:var(--ux-clear-gold-dark) !important;
+}
+
+/* Hero / cabecera de cada informativo */
+.hero,
+.filter-hero{
+    background:
+        radial-gradient(circle at 16% 0%,rgba(229,193,88,.20),transparent 30%),
+        linear-gradient(145deg,rgba(255,253,248,.91),rgba(246,239,224,.86)) !important;
+    border-color:var(--ux-clear-line) !important;
+    box-shadow:var(--ux-clear-shadow) !important;
+    backdrop-filter:blur(15px) saturate(118%) !important;
+    -webkit-backdrop-filter:blur(15px) saturate(118%) !important;
+}
+.hero h1,
+.filter-hero h1{
+    color:var(--ux-clear-navy) !important;
+    text-shadow:none !important;
+}
+.hero p,
+.filter-hero p{
+    color:var(--ux-clear-navy-2) !important;
+}
+.eyebrow{
+    color:var(--ux-clear-gold-dark) !important;
+}
+.filter-icon-circle{
+    background:rgba(255,246,221,.90) !important;
+    border-color:var(--ux-clear-gold) !important;
+}
+.filter-icon-circle svg{
+    fill:var(--ux-clear-gold-dark) !important;
+}
+
+/* Contadores */
+.total-card{
+    background:rgba(255,255,255,.82) !important;
+    border-color:rgba(188,143,34,.42) !important;
+    box-shadow:0 5px 16px rgba(43,63,77,.07) !important;
+}
+.total-card strong{
+    color:var(--ux-clear-gold-dark) !important;
+}
+.total-card span{
+    color:var(--ux-clear-navy-2) !important;
+}
+
+/* Buscadores, selects y controles */
+.search-input,
+.category-select,
+.sort-select,
+.header-search input,
+.sort-select,
+.filter-toggle{
+    background:rgba(255,255,255,.92) !important;
+    color:var(--ux-clear-navy) !important;
+    border-color:rgba(74,105,127,.22) !important;
+    box-shadow:0 4px 14px rgba(43,63,77,.06) !important;
+}
+.search-input::placeholder,
+.header-search input::placeholder{
+    color:var(--ux-clear-soft) !important;
+}
+.search-input:focus,
+.category-select:focus,
+.sort-select:focus,
+.header-search input:focus{
+    background:#fff !important;
+    border-color:rgba(188,143,34,.62) !important;
+    outline:none !important;
+}
+.category-select option,
+.sort-select option{
+    background:#fff !important;
+    color:var(--ux-clear-navy) !important;
+}
+
+/* Secciones y agrupadores */
+.category-section,
+.city-section,
+.location-permission-banner{
+    background:linear-gradient(145deg,rgba(255,253,248,.91),rgba(246,239,224,.86)) !important;
+    border-color:rgba(188,143,34,.28) !important;
+    box-shadow:0 8px 22px rgba(43,63,77,.08) !important;
+    backdrop-filter:blur(12px) saturate(115%) !important;
+    -webkit-backdrop-filter:blur(12px) saturate(115%) !important;
+}
+.category-header,
+.city-header{
+    border-bottom-color:rgba(74,105,127,.12) !important;
+    background:rgba(255,255,255,.42) !important;
+}
+.category-header h2,
+.city-header h2{
+    color:var(--ux-clear-gold-dark) !important;
+}
+.category-header span,
+.city-header span,
+.location-note{
+    color:var(--ux-clear-navy-2) !important;
+}
+
+/* Tarjetas de negocios */
+.business-card,
+.parking-card,
+.offer-card,
+.skeleton-card{
+    background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(246,239,224,.92)) !important;
+    border-color:rgba(188,143,34,.24) !important;
+    box-shadow:0 8px 20px rgba(43,63,77,.08) !important;
+    color:var(--ux-clear-navy) !important;
+}
+.business-card:hover,
+.parking-card:hover,
+.offer-card:hover{
+    background:linear-gradient(145deg,#fff,rgba(255,246,221,.96)) !important;
+    border-color:rgba(188,143,34,.52) !important;
+    box-shadow:0 12px 28px rgba(43,63,77,.13) !important;
+}
+.business-title,
+.parking-title,
+.card-title,
+.offer-title,
+.business-name{
+    color:var(--ux-clear-navy) !important;
+}
+.business-segment,
+.card-category-tag,
+.offer-badge,
+.parking-rate,
+.price-sale{
+    color:var(--ux-clear-gold-dark) !important;
+}
+.business-description,
+.card-desc,
+.card-address,
+.parking-address,
+.parking-notes,
+.offer-description,
+.offer-meta,
+.business-meta,
+.location-note{
+    color:var(--ux-clear-navy-2) !important;
+}
+.business-footer,
+.parking-footer,
+.card-footer{
+    border-top-color:rgba(74,105,127,.12) !important;
+}
+
+/* Imágenes / placeholders */
+.card-thumb-placeholder,
+.offer-placeholder,
+.offer-image{
+    background:rgba(255,246,221,.72) !important;
+    color:var(--ux-clear-gold-dark) !important;
+}
+
+/* Estados */
+.business-status,
+.status-open,
+.card-status.open,
+.parking-status.available,
+.parking-status.is-open{
+    color:var(--ux-clear-green) !important;
+    border-color:rgba(22,138,87,.28) !important;
+    background:rgba(22,138,87,.08) !important;
+}
+.status-closed,
+.card-status.closed,
+.parking-status.closed,
+.parking-status.full{
+    color:var(--ux-clear-red) !important;
+    border-color:rgba(185,75,85,.28) !important;
+    background:rgba(185,75,85,.08) !important;
+}
+
+/* Texto auxiliar */
+.results-count,
+.empty-state,
+.loading-state,
+.card-distance,
+.rating-count,
+.offer-old-price{
+    color:var(--ux-clear-muted) !important;
+}
+.results-count strong,
+.card-rating,
+.rating-value{
+    color:var(--ux-clear-gold-dark) !important;
+}
+
+/* Ofertas: mantiene la identidad dorada pero dentro de la paleta clara */
+.offer-card .offer-badge{
+    background:rgba(255,246,221,.90) !important;
+    border-color:rgba(188,143,34,.40) !important;
+}
+.offer-image{
+    border-bottom-color:rgba(188,143,34,.18) !important;
+}
+.price-current,
+.offer-price,
+.price-sale{
+    color:var(--ux-clear-gold-dark) !important;
+}
+
+/* Parqueaderos */
+.parking-card strong,
+.parking-capacity strong,
+.parking-available strong{
+    color:var(--ux-clear-navy) !important;
+}
+.parking-available,
+.availability-number{
+    color:var(--ux-clear-gold-dark) !important;
+}
+
+/* Pie */
+.footer,
+.pie-pagina{
+    background:rgba(255,251,243,.92) !important;
+    color:#647786 !important;
+    border-top-color:rgba(188,143,34,.26) !important;
+    box-shadow:0 -5px 18px rgba(43,63,77,.06) !important;
+}
+.footer a,
+.pie-pagina a{
+    color:var(--ux-clear-gold-dark) !important;
+}
+
+/* Scrollbar en la misma escala */
+::-webkit-scrollbar-thumb{
+    background:rgba(188,143,34,.34) !important;
+}
+::-webkit-scrollbar-thumb:hover{
+    background:var(--ux-clear-gold) !important;
+}
+
+@media (max-width:720px){
+    body{
+        background-image:
+            linear-gradient(180deg,rgba(255,252,246,.78),rgba(246,239,224,.82)),
+            url("../imagenes/Boulevard.webp") !important;
+    }
+    .header-top{
+        background:linear-gradient(180deg,rgba(255,253,248,.97),rgba(247,240,226,.95)) !important;
+    }
+}
+
+/* ==========================================================
+   CORRECCIÓN VISIBILIDAD · ENLACE VER PERFIL
+   Mantiene la paleta clara del Boulevard y garantiza contraste.
+   ========================================================== */
+.profile-link,
+a.profile-link,
+.business-card .profile-link,
+.parking-card .profile-link,
+.offer-card .profile-link{
+    color:var(--ux-clear-navy) !important;
+    background:rgba(255,255,255,.88) !important;
+    border-color:rgba(188,143,34,.48) !important;
+    text-decoration:none !important;
+    box-shadow:0 3px 10px rgba(43,63,77,.05) !important;
+}
+
+.profile-link:hover,
+.profile-link:focus-visible,
+a.profile-link:hover,
+a.profile-link:focus-visible,
+.business-card .profile-link:hover,
+.parking-card .profile-link:hover,
+.offer-card .profile-link:hover{
+    color:#10243f !important;
+    background:#e5c158 !important;
+    border-color:#c49a31 !important;
+    text-decoration:none !important;
+}
+
+.profile-link:focus-visible{
+    outline:2px solid rgba(188,143,34,.78) !important;
+    outline-offset:2px !important;
+}

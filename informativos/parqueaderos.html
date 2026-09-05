@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urbanex - Parqueaderos</title>
+    <link rel="icon" type="image/png" href="../imagenes/log.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+    <link rel="preconnect" href="https://esm.sh" crossorigin>
+    <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #020202;
+            --bg-panel: rgba(8, 8, 8, 0.74);
+            --bg-card: rgba(18, 18, 18, 0.76);
+            --gold: #e5c158;
+            --border-color: rgba(229, 193, 88, 0.22);
+            --text-main: #ffffff;
+            --text-muted: #d7d7d7;
+            --text-soft: #9c9c9c;
+            --success: #2ed573;
+            --danger: #ff5b68;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --transition: all 0.25s ease;
+            --blur: blur(18px);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            background:
+                linear-gradient(135deg, rgba(0,0,0,0.66), rgba(0,0,0,0.34)),
+                url("../imagenes/Boulevard.webp") center bottom / cover fixed no-repeat;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            padding-bottom: 24px;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        button, input, select { font-family: var(--font-sans); }
+
+        .header-top {
+            height: 60px;
+            background: rgba(6, 6, 6, 0.45);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .brand-box img { height: 60px; width: auto; display: block; }
+
+        .back-link {
+            border: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.42);
+            color: #ffffff;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 11px;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            border-color: var(--gold);
+            background: rgba(229, 193, 88, 0.10);
+        }
+
+        .page-wrap {
+            width: min(1180px, calc(100% - 28px));
+            margin: 22px auto 36px;
+        }
+
+        .hero {
+            border: 1px solid var(--border-color);
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at 16% 0%, rgba(229, 193, 88, 0.18), transparent 28%),
+                rgba(6, 6, 6, 0.68);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            padding: 26px 28px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 18px;
+            align-items: center;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.42);
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(24px, 4vw, 42px);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 12px;
+            line-height: 1.6;
+            max-width: 760px;
+        }
+
+        .total-card {
+            min-width: 150px;
+            border: 1px solid rgba(229,193,88,0.32);
+            background: rgba(0,0,0,0.44);
+            border-radius: 18px;
+            padding: 14px 16px;
+            text-align: center;
+        }
+
+        .total-card strong {
+            display: block;
+            color: var(--gold);
+            font-family: var(--font-serif);
+            font-size: 30px;
+            line-height: 1;
+        }
+
+        .total-card span {
+            color: var(--text-soft);
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .location-note {
+            margin-top: 8px;
+            color: var(--text-soft);
+            font-size: 9px;
+        }
+
+        .location-note strong { color: var(--gold); }
+
+        .toolbar {
+            margin: 14px 0;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+        }
+
+        .search-input,
+        .sort-select {
+            height: 36px;
+            background: rgba(0,0,0,0.56);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 999px;
+            color: #ffffff;
+            font-family: var(--font-sans);
+            font-size: 11px;
+            outline: none;
+        }
+
+        .search-input { padding: 0 15px; }
+        .sort-select { padding: 0 12px; min-width: 210px; cursor: pointer; }
+        .sort-select option { color: #111; background: #fff; }
+
+        .city-section {
+            margin-top: 14px;
+            border: 1px solid rgba(229,193,88,0.16);
+            border-radius: 18px;
+            background: rgba(5,5,5,0.52);
+            overflow: hidden;
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+        }
+
+        .city-header {
+            padding: 12px 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .city-header h2 {
+            color: var(--gold);
+            font-family: var(--font-serif);
+            font-size: 13px;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .city-header span {
+            color: #000000;
+            background: var(--gold);
+            border-radius: 999px;
+            padding: 4px 9px;
+            font-size: 9px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .parking-grid {
+            padding: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+            gap: 10px;
+        }
+
+        .parking-card {
+            border: 1px solid rgba(255,255,255,0.09);
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 11px;
+            min-height: 170px;
+            transition: var(--transition);
+        }
+
+        .parking-card:hover {
+            border-color: rgba(229,193,88,0.50);
+            background: rgba(229,193,88,0.08);
+            transform: translateY(-2px);
+        }
+
+        .parking-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 7px;
+        }
+
+        .parking-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .parking-status {
+            border-radius: 999px;
+            padding: 3px 7px;
+            font-size: 7.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .parking-status.available {
+            color: var(--success);
+            border: 1px solid rgba(46,213,115,0.34);
+            background: rgba(46,213,115,0.10);
+        }
+
+        .parking-status.unavailable {
+            color: var(--danger);
+            border: 1px solid rgba(255,91,104,0.34);
+            background: rgba(255,91,104,0.10);
+        }
+
+        .availability-row {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr 1fr;
+            gap: 7px;
+            margin: 9px 0;
+        }
+
+        .availability-item {
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.28);
+            padding: 8px;
+            min-width: 0;
+        }
+
+        .availability-item span {
+            display: block;
+            color: var(--text-soft);
+            font-size: 6.8px;
+            text-transform: uppercase;
+            letter-spacing: .45px;
+            font-weight: 700;
+        }
+
+        .availability-item strong {
+            display: block;
+            margin-top: 3px;
+            color: #fff;
+            font-size: 10px;
+            line-height: 1.2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .availability-item.primary strong {
+            color: var(--gold);
+            font-size: 15px;
+        }
+
+        .parking-address {
+            color: var(--text-muted);
+            font-size: 9px;
+            line-height: 1.45;
+            min-height: 38px;
+        }
+
+        .parking-notes {
+            margin-top: 7px;
+            color: var(--text-soft);
+            font-size: 8px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .parking-footer {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .updated {
+            color: var(--text-soft);
+            font-size: 7px;
+            line-height: 1.3;
+        }
+
+        .profile-link {
+            border: 1px solid rgba(229,193,88,0.28);
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 8px;
+            font-weight: 800;
+            color: #ffffff;
+            white-space: nowrap;
+        }
+
+        .profile-link:hover {
+            border-color: var(--gold);
+            background: rgba(229,193,88,.10);
+        }
+
+        .empty-state {
+            margin-top: 14px;
+            border: 1px dashed rgba(229,193,88,0.34);
+            border-radius: 18px;
+            padding: 24px;
+            text-align: center;
+            background: rgba(0,0,0,0.44);
+            color: var(--text-muted);
+            font-size: 12px;
+            display: none;
+        }
+
+        .loading-state {
+            margin-top: 14px;
+            color: var(--text-muted);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 24px;
+            background-color: #000000;
+            color: #8c8c8c;
+            font-size: 11px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+            z-index: 50;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        @media (max-width: 720px) {
+            .header-top {
+                height: auto;
+                padding: 12px;
+                gap: 10px;
+                flex-direction: column;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+
+            .total-card { width: 100%; }
+            .toolbar { grid-template-columns: 1fr; }
+            .sort-select { width: 100%; }
+            .parking-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+    <link rel="stylesheet" href="urbanex-boulevard-palette.css">
+</head>
+<body>
+
+<header class="header-top">
+    <a href="../boulevard.html" class="brand-box" title="Volver al Boulevard">
+        <img src="../imagenes/logo.png" alt="Logo Urbanex">
+    </a>
+    <a class="back-link" href="../boulevard.html">Volver al Boulevard</a>
+</header>
+
+<main class="page-wrap">
+    <section class="hero">
+        <div>
+            <div class="eyebrow">Filtro global</div>
+            <h1>Parqueaderos</h1>
+            <p>
+                Parqueaderos publicados por empresas registradas en Urbanex. Aquí se muestran los lugares disponibles,
+                la capacidad total, la tarifa, la dirección y la última actualización informada por cada establecimiento.
+            </p>
+            <div class="location-note">Ubicación seleccionada: <strong id="locationLabel">Todo Ecuador</strong></div>
+        </div>
+        <div class="total-card">
+            <strong id="totalAvailable">0</strong>
+            <span>Lugares disponibles</span>
+        </div>
+    </section>
+
+    <section class="toolbar">
+        <input type="search" id="globalSearch" class="search-input" placeholder="Buscar parqueadero, ciudad o dirección..." autocomplete="off">
+        <select id="sortFilter" class="sort-select">
+            <option value="availability">Más disponibilidad</option>
+            <option value="rate">Menor tarifa</option>
+            <option value="name">Nombre</option>
+        </select>
+    </section>
+
+    <div id="loadingState" class="loading-state">Cargando parqueaderos...</div>
+    <div id="resultsContainer"></div>
+    <div id="emptyState" class="empty-state"></div>
+</main>
+
+<footer class="footer">
+    <p>&copy; 2026 Urbanex. Desarrollado por NeoDat Consultores.</p>
+</footer>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const LOCATION_KEY = 'urbanex_location_selection_v1';
+const searchInput = document.getElementById('globalSearch');
+const sortFilter = document.getElementById('sortFilter');
+const totalAvailable = document.getElementById('totalAvailable');
+const locationLabel = document.getElementById('locationLabel');
+const loadingState = document.getElementById('loadingState');
+const resultsContainer = document.getElementById('resultsContainer');
+const emptyState = document.getElementById('emptyState');
+
+let allResults = [];
+
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function normalizeText(value) {
+    return String(value ?? '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9\s./:_-]/gi, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function money(value) {
+    const number = Number(value);
+    if (!Number.isFinite(number) || number < 0) return 'Consultar';
+    return new Intl.NumberFormat('es-EC', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2
+    }).format(number);
+}
+
+function savedLocation() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(LOCATION_KEY) || 'null');
+        return {
+            province: saved?.province || '__all__',
+            city: saved?.city || '__all__'
+        };
+    } catch {
+        return { province: '__all__', city: '__all__' };
+    }
+}
+
+function currentLocationLabel() {
+    const location = savedLocation();
+    if (location.province === '__all__') return 'Todo Ecuador';
+    if (location.city && !['__all__', '__province__'].includes(location.city)) return `${location.city}, ${location.province}`;
+    return location.province;
+}
+
+function matchesLocation(business) {
+    const location = savedLocation();
+    if (location.province === '__all__') return true;
+
+    const businessProvince = normalizeText(business.province);
+    const businessCity = normalizeText(business.city);
+
+    if (location.city && !['__all__', '__province__'].includes(location.city)) {
+        return businessCity === normalizeText(location.city);
+    }
+
+    return businessProvince === normalizeText(location.province);
+}
+
+function businessUrl(business) {
+    if (business.slug) return `../business/?slug=${encodeURIComponent(business.slug)}&return=${encodeURIComponent('../informativos/parqueaderos.html')}`;
+    if (business.id !== undefined && business.id !== null) return `../business/?id=${encodeURIComponent(business.id)}&return=${encodeURIComponent('../informativos/parqueaderos.html')}`;
+    return '#';
+}
+
+function updatedText(value) {
+    if (!value) return 'Sin actualización registrada';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Sin actualización registrada';
+    return 'Actualizado ' + new Intl.DateTimeFormat('es-EC', {
+        timeZone: 'America/Guayaquil',
+        dateStyle: 'short',
+        timeStyle: 'short'
+    }).format(date);
+}
+
+function cityGroupName(item) {
+    const city = String(item.city || '').trim();
+    const province = String(item.province || '').trim();
+    if (city && province) return `${city} · ${province}`;
+    return city || province || 'Ecuador';
+}
+
+function renderResults() {
+    const query = normalizeText(searchInput.value);
+    const sort = sortFilter.value;
+
+    let filtered = allResults.filter(item => {
+        if (!query) return true;
+        return item._searchable.includes(query);
+    });
+
+    filtered = [...filtered].sort((a, b) => {
+        if (sort === 'rate') {
+            const ar = Number.isFinite(Number(a.hourly_rate)) ? Number(a.hourly_rate) : Number.POSITIVE_INFINITY;
+            const br = Number.isFinite(Number(b.hourly_rate)) ? Number(b.hourly_rate) : Number.POSITIVE_INFINITY;
+            if (ar !== br) return ar - br;
+        } else if (sort === 'name') {
+            return String(a.name || '').localeCompare(String(b.name || ''), 'es');
+        } else {
+            const availableDiff = Number(b.available_spaces || 0) - Number(a.available_spaces || 0);
+            if (availableDiff !== 0) return availableDiff;
+        }
+        return String(a.name || '').localeCompare(String(b.name || ''), 'es');
+    });
+
+    const total = filtered.reduce((sum, item) => {
+        if (item.is_open === false) return sum;
+        return sum + Math.max(0, Number(item.available_spaces) || 0);
+    }, 0);
+    totalAvailable.textContent = total;
+
+    if (!filtered.length) {
+        resultsContainer.innerHTML = '';
+        emptyState.textContent = 'No hay parqueaderos publicados para la ubicación o búsqueda seleccionada.';
+        emptyState.style.display = 'block';
+        return;
+    }
+
+    emptyState.style.display = 'none';
+
+    const grouped = filtered.reduce((groups, item) => {
+        const key = cityGroupName(item);
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(item);
+        return groups;
+    }, {});
+
+    resultsContainer.innerHTML = Object.keys(grouped)
+        .sort((a, b) => a.localeCompare(b, 'es'))
+        .map(groupName => {
+            const items = grouped[groupName];
+            const availableInGroup = items.reduce((sum, item) => {
+                if (item.is_open === false) return sum;
+                return sum + Math.max(0, Number(item.available_spaces) || 0);
+            }, 0);
+
+            const cards = items.map(item => {
+                const available = Math.max(0, Number(item.available_spaces) || 0);
+                const totalSpaces = Math.max(0, Number(item.total_spaces) || 0);
+                const isOpen = item.is_open !== false;
+                const hasSpaces = isOpen && available > 0;
+                const status = !isOpen ? 'Cerrado' : hasSpaces ? 'Disponible' : 'Sin cupos';
+                const statusClass = hasSpaces ? 'available' : 'unavailable';
+                const address = [item.address, item.city, item.province].filter(Boolean).join(' · ') || 'Dirección no informada';
+
+                return `
+                    <article class="parking-card">
+                        <div class="parking-top">
+                            <h3 class="parking-title">${escapeHtml(item.name || 'Parqueadero')}</h3>
+                            <span class="parking-status ${statusClass}">${escapeHtml(status)}</span>
+                        </div>
+                        <div class="availability-row">
+                            <div class="availability-item primary">
+                                <span>Disponibles</span>
+                                <strong>${isOpen ? available : 0}</strong>
+                            </div>
+                            <div class="availability-item">
+                                <span>Capacidad</span>
+                                <strong>${totalSpaces}</strong>
+                            </div>
+                            <div class="availability-item">
+                                <span>Tarifa/hora</span>
+                                <strong>${escapeHtml(money(item.hourly_rate))}</strong>
+                            </div>
+                        </div>
+                        <p class="parking-address">${escapeHtml(address)}</p>
+                        ${item.notes ? `<p class="parking-notes">${escapeHtml(item.notes)}</p>` : ''}
+                        <div class="parking-footer">
+                            <span class="updated">${escapeHtml(updatedText(item.updated_at))}</span>
+                            <a class="profile-link" href="${escapeHtml(businessUrl(item))}">Ver perfil</a>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            return `
+                <section class="city-section">
+                    <div class="city-header">
+                        <h2>${escapeHtml(groupName)}</h2>
+                        <span>${availableInGroup} disponibles</span>
+                    </div>
+                    <div class="parking-grid">${cards}</div>
+                </section>
+            `;
+        }).join('');
+}
+
+async function init() {
+    locationLabel.textContent = currentLocationLabel();
+
+    try {
+        const { data: availability, error: parkingError } = await supabase
+            .from('parking_availability')
+            .select('business_id,total_spaces,available_spaces,hourly_rate,is_open,notes,updated_at')
+            .eq('is_published', true)
+            .order('available_spaces', { ascending: false });
+
+        if (parkingError) throw parkingError;
+
+        const businessIds = [...new Set((availability || []).map(row => row.business_id).filter(Boolean))];
+        if (!businessIds.length) {
+            allResults = [];
+            loadingState.style.display = 'none';
+            renderResults();
+            return;
+        }
+
+        const { data: businesses, error: businessError } = await supabase
+            .from('businesses')
+            .select('id,name,slug,province,city,address,is_active')
+            .in('id', businessIds)
+            .eq('is_active', true);
+
+        if (businessError) throw businessError;
+
+        const businessById = new Map((businesses || []).map(business => [String(business.id), business]));
+
+        allResults = (availability || [])
+            .map(row => ({
+                ...row,
+                ...(businessById.get(String(row.business_id)) || {})
+            }))
+            .filter(item => item.id && matchesLocation(item))
+            .map(item => ({
+                ...item,
+                _searchable: normalizeText([
+                    item.name,
+                    item.address,
+                    item.city,
+                    item.province,
+                    item.notes
+                ].join(' '))
+            }));
+
+        loadingState.style.display = 'none';
+        renderResults();
+    } catch (error) {
+        console.warn('No se pudo cargar Parqueaderos desde Supabase:', error);
+        allResults = [];
+        loadingState.style.display = 'none';
+        totalAvailable.textContent = '0';
+        resultsContainer.innerHTML = '';
+        emptyState.textContent = 'No se pudo cargar la disponibilidad de parqueaderos desde Supabase.';
+        emptyState.style.display = 'block';
+    }
+}
+
+searchInput.addEventListener('input', renderResults);
+sortFilter.addEventListener('change', renderResults);
+window.addEventListener('storage', event => {
+    if (event.key === LOCATION_KEY) location.reload();
+});
+
+init();
+</script>
+</body>
+</html>
