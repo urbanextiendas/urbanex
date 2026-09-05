@@ -530,21 +530,25 @@ async function buscarProductos(rawText){
   const q = rawText.trim();
   if (q.length < 3) return [];
   try {
-    // FIX: la tabla real del catálogo es `business_products`, no `products`.
-    // El flag de disponibilidad se llama `is_active`, no `is_available`.
+    // FIX: no usamos el embed automático `businesses!business_id(...)` porque PostgREST
+    // reporta "Could not find a relationship between business_products and businesses" —
+    // no hay una foreign key declarada (o hay un mismatch de tipos: business_id es text).
+    // En su lugar, traemos solo las columnas de business_products y cruzamos con el array
+    // `businesses` ya cargado en memoria, comparando IDs como string para evitar problemas
+    // de tipo (uuid vs text).
     const { data, error } = await supabase
       .from('business_products')
-      .select(`name, price, currency, is_on_sale, sale_price, offer_label, businesses!business_id(id,name,slug,city,cover_image, categories!category_id(name,icon))`)
+      .select('name, price, currency, is_on_sale, sale_price, offer_label, business_id')
       .ilike('name', `%${q}%`)
       .eq('is_active', true)
       .limit(8);
     if (error) { console.warn('Urbanex business_products search error:', error.message); return []; }
     const byBiz = new Map();
     (data||[]).forEach(p => {
-      const biz = p.businesses;
-      if (!biz) return;
-      if (!byBiz.has(biz.id)) byBiz.set(biz.id, { biz, productos: [] });
-      byBiz.get(biz.id).productos.push({
+      if (p.business_id === null || p.business_id === undefined) return;
+      const key = String(p.business_id);
+      if (!byBiz.has(key)) byBiz.set(key, []);
+      byBiz.get(key).push({
         name: p.name,
         price: p.price,
         currency: p.currency,
@@ -553,7 +557,7 @@ async function buscarProductos(rawText){
         offer_label: p.offer_label
       });
     });
-    return [...byBiz.values()];
+    return [...byBiz.entries()].map(([businessId, productos]) => ({ businessId, productos }));
   } catch (err) {
     console.warn('Urbanex business_products search exception:', err);
     return [];
@@ -713,10 +717,10 @@ async function procesarComando(texto){
         // Diagnóstico: si prodGroups tiene datos pero terminan 0 agregados, el producto
         // existe pero su negocio quedó excluido (is_active=false, RLS, o negocio no cargado).
         let agregados = 0;
-        prodGroups.forEach(({ biz, productos }) => {
-          const full = businesses.find(b => b.id === biz.id);
+        prodGroups.forEach(({ businessId, productos }) => {
+          const full = businesses.find(b => String(b.id) === businessId);
           if (!full) {
-            console.warn(`Urbanex: producto "${productos[0]}" encontrado en negocio "${biz.name}" (id ${biz.id}), pero ese negocio no está en la lista de negocios activos cargados. Revisa is_active o RLS de ese negocio.`);
+            console.warn(`Urbanex: producto(s) "${productos.map(p=>p.name).join(', ')}" encontrados para business_id ${businessId}, pero ese negocio no está en la lista de negocios activos cargados. Revisa is_active o RLS de ese negocio.`);
             return;
           }
           if (slots.ciudad && normalizar(full.city) !== slots.ciudad) return;
