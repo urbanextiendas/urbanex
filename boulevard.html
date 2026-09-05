@@ -10,11 +10,32 @@
     <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
     <link rel="preconnect" href="https://esm.sh" crossorigin>
     <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
-    <link rel="preload" as="image" href="imagenes/boulevard/Boul_mañana.png" fetchpriority="high">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
+    <script>
+    (function(){
+        const mobile = window.matchMedia('(max-width: 720px)').matches;
+        const parts = new Intl.DateTimeFormat('es-EC',{timeZone:'America/Guayaquil',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+        const hourPart = parts.find(part => part.type === 'hour');
+        const hour = hourPart ? Number(hourPart.value) : new Date().getHours();
+        const slot = hour >= 7 && hour < 13 ? 'dia' : (hour >= 13 && hour < 19 ? 'tarde' : 'noche');
+        const images = {
+            desktop:{dia:'/imagenes/boulevard/Boul_manana.webp',tarde:'/imagenes/boulevard/Boul_tarde.webp',noche:'/imagenes/boulevard/Boul_noche.webp'},
+            mobile:{dia:'/imagenes/boulevard/Boul_manana-celular.webp',tarde:'/imagenes/boulevard/Boul_tarde-celular.webp',noche:'/imagenes/boulevard/Boul_noche-celular.webp'}
+        };
+        const path = images[mobile ? 'mobile' : 'desktop'][slot];
+        document.documentElement.style.setProperty('--urbanex-fullscreen-bg','url("' + path + '")');
+        const preload = document.createElement('link');
+        preload.rel='preload'; preload.as='image'; preload.href=path; preload.fetchPriority='high';
+        document.head.appendChild(preload);
+        window.__urbanexBoulevardInitialBackground = path;
+    })();
+    </script>
+
+    <style id="urbanex-boulevard-consolidated">
+
+/* ===== CONSOLIDADO: base-1 ===== */
+:root {
             --bg-main: #020202;
             --bg-panels-glass: rgba(6, 6, 6, 0.42);
             --bg-cards-glass: rgba(20, 20, 20, 0.32);
@@ -172,7 +193,7 @@
         /* ── MAIN BOULEVARD ── */
         .main-boulevard {
             grid-area: main; position: relative; overflow: hidden;
-            background-image: url("imagenes/boulevard/Boul_mañana.png");
+            background-image: var(--urbanex-fullscreen-bg);
             background-size: cover; background-position: center bottom;
             background-repeat: no-repeat; z-index: 2;
         }
@@ -364,19 +385,7 @@ html, body { height: 100% !important; overflow: hidden !important; }
 }
 /* === FIN URBANEX PATCH MINIMO === */
 
-</style>
-
-
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#e5c158">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Urbanex">
-    <link rel="apple-touch-icon" href="/imagenes/logo.png">
-
-<style>
+/* ===== CONSOLIDADO: base-2 ===== */
 /* === UX_BOULEVARD_ONLY_FIXED_BARS START === */
 html,
 body {
@@ -440,11 +449,9 @@ body {
     }
 }
 /* === UX_BOULEVARD_ONLY_FIXED_BARS END === */
-</style>
 
-
-<style id="ux-boulevard-bars-style">
-  /* Solo fijar encabezado y pie. No congela todo el boulevard. */
+/* ===== CONSOLIDADO: ux-boulevard-bars-style ===== */
+/* Solo fijar encabezado y pie. No congela todo el boulevard. */
   html,
   body {
     overflow-x: hidden !important;
@@ -476,11 +483,9 @@ body {
     min-height: calc(100vh - 24px) !important;
     padding-bottom: 24px !important;
   }
-</style>
 
-
-<style id="ux-final-pwa-style">
-  .ux-final-pwa-install {
+/* ===== CONSOLIDADO: ux-final-pwa-style ===== */
+.ux-final-pwa-install {
     position: fixed;
     left: 0;
     right: 0;
@@ -577,10 +582,8 @@ body {
       padding: 0 16px;
     }
   }
-</style>
 
-
-<style id="ux-boulevard-final-requested">
+/* ===== CONSOLIDADO: ux-boulevard-final-requested ===== */
 /* === CAMBIOS SOLICITADOS SOLO PARA BOULEVARD ===
    1) Encabezado fijo en cualquier dispositivo.
    2) Pie fijo en cualquier dispositivo.
@@ -864,10 +867,8 @@ body {
     }
 }
 /* === FIN CAMBIOS SOLICITADOS SOLO PARA BOULEVARD === */
-</style>
 
-
-<style id="ux-boulevard-mobile-filters-visible">
+/* ===== CONSOLIDADO: ux-boulevard-mobile-filters-visible ===== */
 /* SOLO CAMBIO: mostrar la barra de filtros inferiores en celular */
 @media (max-width: 760px) {
     .bottom-filter-bar {
@@ -914,10 +915,8 @@ body {
         font-size: 8px !important;
     }
 }
-</style>
 
-
-<style id="ux-performance-patch">
+/* ===== CONSOLIDADO: ux-performance-patch ===== */
 /* SOLO OPTIMIZACIÓN: reduce trabajo de repintado sin cambiar diseño */
 .aside-categories,
 .aside-showcase-list,
@@ -937,10 +936,8 @@ body {
         background-size: cover !important;
     }
 }
-</style>
 
-
-<style id="urbanex-original-focused-improvements">
+/* ===== CONSOLIDADO: urbanex-original-focused-improvements ===== */
 /* Mejoras limitadas sobre el original. No sustituye tipografías ni identidad. */
 .location-selector{
     position:relative;
@@ -1075,10 +1072,8 @@ body {
         animation:none!important;
     }
 }
-</style>
 
-
-<style id="urbanex-province-city-picker-v1">
+/* ===== CONSOLIDADO: urbanex-province-city-picker-v1 ===== */
 /* ÚNICO CAMBIO: selector de provincia y ciudad/cantón. */
 .location-picker{
     position:relative;
@@ -1223,10 +1218,8 @@ body {
         width:auto;
     }
 }
-</style>
 
-
-<style id="urbanex-location-mobile-final-v2">
+/* ===== CONSOLIDADO: urbanex-location-mobile-final-v2 ===== */
 /* Ajuste puntual: ubicación visible, compacta y responsive. */
 .tool-icon.icon-corazon,
 .profile-avatar{
@@ -1393,10 +1386,8 @@ body {
         font-size:9.5px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-desktop-tablet-only-v1">
+/* ===== CONSOLIDADO: urbanex-featured-desktop-tablet-only-v1 ===== */
 /* Ajustes exclusivos para computador y tablet. La vista móvil (<=640px) no se modifica. */
 @media (min-width:721px){
     .showcase-header{
@@ -1571,10 +1562,8 @@ body {
         font-size:12px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-directory-premium-v2">
+/* ===== CONSOLIDADO: urbanex-directory-premium-v2 ===== */
 /* =========================================================
    URBANEX · DIRECTORIO PREMIUM V2
    Diseño compacto, comercial y coherente con index.html.
@@ -2192,10 +2181,8 @@ body {
     .uxd-close{transition:none!important;}
     .uxd-skeleton{animation:none!important;}
 }
-</style>
 
-
-<style id="urbanex-directory-category-groups-v3">
+/* ===== CONSOLIDADO: urbanex-directory-category-groups-v3 ===== */
 /* Distinción visual por categoría dentro de Todos los negocios. */
 .uxd-grid{
     display:block!important;
@@ -2312,10 +2299,8 @@ body {
     .uxd-loading-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:9px;}
     .uxd-loading-grid{padding:0;}
 }
-</style>
 
-
-<style id="urbanex-category-bar-like-index">
+/* ===== CONSOLIDADO: urbanex-category-bar-like-index ===== */
 /* ============================================================
    SOLO BARRA DE CATEGORÍAS
    Replica la estructura de desplazamiento usada en index.html.
@@ -2349,10 +2334,8 @@ body {
         align-items:stretch!important;
     }
 }
-</style>
 
-
-<style id="urbanex-logo-fit-real-only">
+/* ===== CONSOLIDADO: urbanex-logo-fit-real-only ===== */
 /* ÚNICO CAMBIO: mostrar cada logotipo completo, centrado y sin recortes. */
 .uxd-card-media{
     display:flex!important;
@@ -2381,10 +2364,8 @@ body {
 .uxd-card:hover .uxd-card-media > img.uxd-business-logo-fit{
     transform:none!important;
 }
-</style>
 
-
-<style id="urbanex-featured-single-only">
+/* ===== CONSOLIDADO: urbanex-featured-single-only ===== */
 /* ÚNICOS CAMBIOS:
    - Ocultar la barra horizontal visible.
    - Mostrar un destacado por vez.
@@ -2443,15 +2424,13 @@ body {
         flex-basis:74px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-side-panels-translucent-only">
+/* ===== CONSOLIDADO: urbanex-side-panels-translucent-only ===== */
 /* ÚNICO CAMBIO: paneles laterales menos transparentes en computador, tablet y celular. */
 .aside-categories{
     background:
         linear-gradient(rgba(3,3,3,.94), rgba(3,3,3,.94)),
-        url("imagenes/Boulevard.png") left center / cover no-repeat!important;
+        url("imagenes/Boulevard.webp") left center / cover no-repeat!important;
     backdrop-filter:blur(8px)!important;
     -webkit-backdrop-filter:blur(8px)!important;
 }
@@ -2459,24 +2438,20 @@ body {
 .aside-showcase-list{
     background:
         linear-gradient(rgba(3,3,3,.94), rgba(3,3,3,.94)),
-        url("imagenes/Boulevard.png") right center / cover no-repeat!important;
+        url("imagenes/Boulevard.webp") right center / cover no-repeat!important;
     backdrop-filter:blur(8px)!important;
     -webkit-backdrop-filter:blur(8px)!important;
 }
-</style>
 
-
-<style id="urbanex-mobile-category-spacing-only">
+/* ===== CONSOLIDADO: urbanex-mobile-category-spacing-only ===== */
 /* ÚNICO CAMBIO: aumentar la separación entre la barra de categorías y el Boulevard en celular. */
 @media (max-width:720px){
     body{
         padding-top:200px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-mobile-header-category-gap-only">
+/* ===== CONSOLIDADO: urbanex-mobile-header-category-gap-only ===== */
 /* ÚNICO CAMBIO: aumentar la separación entre las dos líneas en celular. */
 @media (max-width:720px){
     .aside-categories{
@@ -2487,10 +2462,8 @@ body {
         padding-top:214px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-footer-link-style-only">
+/* ===== CONSOLIDADO: urbanex-footer-link-style-only ===== */
 /* ÚNICO CAMBIO: enlace del pie con el mismo color del texto y sin subrayado. */
 .pie-pagina a,
 .pie-pagina a:visited,
@@ -2499,10 +2472,8 @@ body {
     color:inherit!important;
     text-decoration:none!important;
 }
-</style>
 
-
-<style id="urbanex-mobile-lines-spacing-final">
+/* ===== CONSOLIDADO: urbanex-mobile-lines-spacing-final ===== */
 /* ÚNICO CAMBIO: separar las líneas del encabezado sin alterar
    el espacio interno ni la posición de los nombres de categorías. */
 @media (max-width:720px){
@@ -2519,10 +2490,8 @@ body {
         padding-top:198px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-professional-large-screens-only">
+/* ===== CONSOLIDADO: urbanex-featured-professional-large-screens-only ===== */
 /* ============================================================
    ÚNICO CAMBIO: presentación de DESTACADOS en tablet y computador.
    La vista celular (hasta 640px) queda completamente intacta.
@@ -2796,10 +2765,8 @@ body {
         transition:none!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-multiple-large-screens-only">
+/* ===== CONSOLIDADO: urbanex-featured-multiple-large-screens-only ===== */
 /* ============================================================
    SOLO TABLET Y COMPUTADOR (641 px en adelante)
    - Tres publicidades visibles.
@@ -3001,10 +2968,8 @@ body {
         transition:none!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-card-reference-large-only">
+/* ===== CONSOLIDADO: urbanex-featured-card-reference-large-only ===== */
 /* ============================================================
    SOLO TABLET Y COMPUTADOR: 721 px en adelante.
    Celular permanece intacto.
@@ -3221,10 +3186,8 @@ body {
         transition:none!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-different-times-large-only">
+/* ===== CONSOLIDADO: urbanex-featured-different-times-large-only ===== */
 /* Solo tablet y computador: cada publicidad cambia de forma independiente. */
 @media (min-width:721px){
     .shop-card.featured-slot-enter{
@@ -3248,10 +3211,8 @@ body {
         animation:none!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-luxury-large-only">
+/* ===== CONSOLIDADO: urbanex-featured-luxury-large-only ===== */
 /* ============================================================
    SOLO TABLET Y COMPUTADOR
    Tarjetas publicitarias completas, sin franja dorada.
@@ -3726,10 +3687,8 @@ body {
         transition:none!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-logo-fit-only">
+/* ===== CONSOLIDADO: urbanex-featured-logo-fit-only ===== */
 /* ÚNICO CAMBIO: ajustar el logo al recuadro de Destacados en pantallas grandes. */
 @media (min-width:721px){
     .shop-card-ad .shop-thumb-wrapper{
@@ -3749,16 +3708,14 @@ body {
         transform:none!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-translucency-restored-only">
+/* ===== CONSOLIDADO: urbanex-featured-translucency-restored-only ===== */
 /* ÚNICO CAMBIO: recuperar la translucidez de Destacados en tablet y computador. */
 @media (min-width:721px){
     .aside-showcase-list{
         background:
             linear-gradient(rgba(4,6,9,.78),rgba(4,6,9,.78)),
-            url("imagenes/Boulevard.png") right center / cover no-repeat!important;
+            url("imagenes/Boulevard.webp") right center / cover no-repeat!important;
         backdrop-filter:blur(12px) saturate(.92)!important;
         -webkit-backdrop-filter:blur(12px) saturate(.92)!important;
     }
@@ -3796,10 +3753,8 @@ body {
         -webkit-backdrop-filter:blur(10px)!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-header-width-adjust-only">
+/* ===== CONSOLIDADO: urbanex-featured-header-width-adjust-only ===== */
 /* Ajuste leve exclusivo para tablet y computador. Celular intacto. */
 @media (min-width:721px){
     .dashboard-container{
@@ -3849,10 +3804,8 @@ body {
         grid-template-columns:220px 1fr 226px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-inline-arrows-only">
+/* ===== CONSOLIDADO: urbanex-featured-inline-arrows-only ===== */
 /* ÚNICOS CAMBIOS:
    - flechas sin círculos
    - mejor distribución interna del destacado
@@ -3962,10 +3915,8 @@ body {
         font-size:7.8px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-only-requested-spacing-scroll">
+/* ===== CONSOLIDADO: urbanex-only-requested-spacing-scroll ===== */
 /* ÚNICOS CAMBIOS:
    - reducir márgenes internos en Destacados
    - mostrar la barra únicamente en Categorías
@@ -4019,10 +3970,8 @@ body {
         border-radius:999px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-only-more-compact-margins-and-divider-arrows">
+/* ===== CONSOLIDADO: urbanex-only-more-compact-margins-and-divider-arrows ===== */
 /* ÚNICOS CAMBIOS:
    - reducir mucho más los márgenes internos en Destacados
    - mover las flechas a las líneas divisorias laterales
@@ -4082,10 +4031,8 @@ body {
         right:4px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-mobile-featured-rich-card-only">
+/* ===== CONSOLIDADO: urbanex-mobile-featured-rich-card-only ===== */
 /* ÚNICO CAMBIO: Destacados del celular con más información y un poco más alto. */
 @media (max-width:720px){
     .aside-showcase-list{
@@ -4368,10 +4315,8 @@ body {
         right:-2px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-mobile-featured-professional-navigation-only">
+/* ===== CONSOLIDADO: urbanex-mobile-featured-professional-navigation-only ===== */
 /* ÚNICO CAMBIO:
    sustituir las flechas móviles por navegación mediante:
    - segmentos táctiles
@@ -4465,10 +4410,8 @@ body {
         touch-action:pan-y!important;
     }
 }
-</style>
 
-
-<style id="urbanex-mobile-featured-margins-reduced-only">
+/* ===== CONSOLIDADO: urbanex-mobile-featured-margins-reduced-only ===== */
 /* ÚNICO CAMBIO: reducir márgenes del destacado móvil
    y mantener una separación uniforme similar al espacio
    entre WhatsApp y la línea inferior.
@@ -4488,10 +4431,8 @@ body {
         gap:6px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-mobile-featured-actions-under-address-only">
+/* ===== CONSOLIDADO: urbanex-mobile-featured-actions-under-address-only ===== */
 /* ÚNICOS CAMBIOS EN CELULAR:
    - Teléfono, web real y correo debajo de la dirección
    - cada dato aparece debajo de su etiqueta
@@ -4607,10 +4548,8 @@ body {
         bottom:1px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-mobile-featured-proportion-adjust-only">
+/* ===== CONSOLIDADO: urbanex-mobile-featured-proportion-adjust-only ===== */
 /* ÚNICOS CAMBIOS EN CELULAR:
    - pequeño margen superior
    - texto alineado con la parte superior del logotipo
@@ -4688,10 +4627,8 @@ body {
         bottom:1px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-large-professional-navigation-only">
+/* ===== CONSOLIDADO: urbanex-featured-large-professional-navigation-only ===== */
 /* SOLO TABLET Y COMPUTADOR:
    - elimina flechas sobre las publicidades
    - navegación por segmentos debajo de los anuncios
@@ -4809,10 +4746,8 @@ body {
         transition:none!important;
     }
 }
-</style>
 
-
-<style id="urbanex-bottom-filter-gap-only">
+/* ===== CONSOLIDADO: urbanex-bottom-filter-gap-only ===== */
 /* ÚNICO CAMBIO EN TABLET Y COMPUTADOR:
    reducir el espacio entre la barra inferior y el pie,
    sin mover ni redimensionar la imagen del Boulevard.
@@ -4822,10 +4757,8 @@ body {
         bottom:4px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-large-space-optimized-only">
+/* ===== CONSOLIDADO: urbanex-featured-large-space-optimized-only ===== */
 /* SOLO TABLET Y COMPUTADOR:
    aprovechar todo el espacio vertical disponible en Destacados.
    La vista celular no se modifica.
@@ -4950,10 +4883,8 @@ body {
         min-height:76px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-fixed-large-layout-and-featured-details-only">
+/* ===== CONSOLIDADO: urbanex-fixed-large-layout-and-featured-details-only ===== */
 /* SOLO COMPUTADOR:
    - Boulevard, Categorías y Destacados conservan una altura fija.
    - Las categorías adicionales se desplazan dentro de su propio panel.
@@ -5175,10 +5106,8 @@ body {
         white-space:nowrap!important;
     }
 }
-</style>
 
-
-<style id="urbanex-bottom-filter-translucent-only">
+/* ===== CONSOLIDADO: urbanex-bottom-filter-translucent-only ===== */
 /* ÚNICO CAMBIO: barra inferior de filtros translúcida. */
 .bottom-filter-bar{
     background:rgba(7,7,7,.48)!important;
@@ -5189,10 +5118,8 @@ body {
         0 10px 28px rgba(0,0,0,.26),
         inset 0 1px 0 rgba(255,255,255,.035)!important;
 }
-</style>
 
-
-<style id="urbanex-tablet-native-scroll-fix-only">
+/* ===== CONSOLIDADO: urbanex-tablet-native-scroll-fix-only ===== */
 /* ÚNICO AJUSTE PARA TABLET:
    recupera el desplazamiento vertical y la actualización por gesto,
    sin alterar el diseño ni la altura visual del Boulevard.
@@ -5289,10 +5216,8 @@ body {
 
     }
 }
-</style>
 
-
-<style id="urbanex-tablet-footer-gap-fix-only">
+/* ===== CONSOLIDADO: urbanex-tablet-footer-gap-fix-only ===== */
 /* ÚNICO CAMBIO PARA TABLET:
    eliminar el espacio entre el contenido y el pie,
    manteniendo el desplazamiento vertical y la actualización por gesto.
@@ -5391,10 +5316,8 @@ body {
         }
     }
 }
-</style>
 
-
-<style id="urbanex-featured-reference-exact-v92">
+/* ===== CONSOLIDADO: urbanex-featured-reference-exact-v92 ===== */
 /* =========================================================
    DESTACADOS · TABLET Y COMPUTADOR
    Composición exacta basada en la referencia cargada:
@@ -5751,10 +5674,8 @@ body {
         font-size:11.7px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-final-small-adjustments-only">
+/* ===== CONSOLIDADO: urbanex-featured-final-small-adjustments-only ===== */
 /* ÚNICOS CAMBIOS EN TABLET Y COMPUTADOR:
    - tipografía ligeramente más grande
    - mayor margen interno en el recuadro del logotipo
@@ -5809,10 +5730,8 @@ body {
         font-size:7.5px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-desktop-compact-distribution-only">
+/* ===== CONSOLIDADO: urbanex-featured-desktop-compact-distribution-only ===== */
 /* ÚNICOS CAMBIOS EN COMPUTADOR:
    - reducir la altura inútil de las tarjetas
    - mejorar la distribución vertical
@@ -5981,10 +5900,8 @@ body {
         font-size:6.8px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-tablet-compact-distribution-only">
+/* ===== CONSOLIDADO: urbanex-featured-tablet-compact-distribution-only ===== */
 /* ÚNICOS CAMBIOS EN TABLET:
    - reducir la altura inútil de las tarjetas
    - mejorar la distribución vertical
@@ -6153,10 +6070,8 @@ body {
         font-size:6.7px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-three-cards-font-match-only">
+/* ===== CONSOLIDADO: urbanex-featured-three-cards-font-match-only ===== */
 /* ÚNICO CAMBIO:
    cuando aparecen tres tarjetas, la tipografía conserva
    prácticamente el mismo tamaño utilizado cuando aparecen dos.
@@ -6228,10 +6143,8 @@ body {
         font-size:7px!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-logo-slightly-larger-only">
+/* ===== CONSOLIDADO: urbanex-featured-logo-slightly-larger-only ===== */
 /* ÚNICO CAMBIO:
    ampliar ligeramente el logotipo dentro de su mismo recuadro.
 */
@@ -6241,10 +6154,8 @@ body {
         transform-origin:center!important;
     }
 }
-</style>
 
-
-<style id="urbanex-featured-bottom-centered-only">
+/* ===== CONSOLIDADO: urbanex-featured-bottom-centered-only ===== */
 /* ÚNICO CAMBIO:
    centrar verticalmente la calificación y el estado
    dentro del espacio inferior de las tarjetas de Destacados.
@@ -6275,10 +6186,8 @@ body {
         align-self:center!important;
     }
 }
-</style>
 
-
-<style id="urbanex-tablet-responsive-orientation-v1">
+/* ===== CONSOLIDADO: urbanex-tablet-responsive-orientation-v1 ===== */
 /* ============================================================
    URBANEX · AJUSTE EXCLUSIVO PARA TABLET
    Rango objetivo: 641 px a 1366 px en dispositivos táctiles.
@@ -6951,10 +6860,8 @@ body {
         animation:none!important;
     }
 }
-</style>
 
-
-<style id="urbanex-original-paleta-clara-final">
+/* ===== CONSOLIDADO: urbanex-original-paleta-clara-final ===== */
 /* =============================================================
    URBANEX — PALETA CLARA SOBRE EL BOULEVARD ORIGINAL
    No modifica estructura, grid, tamaños ni responsive original.
@@ -7199,10 +7106,8 @@ body{
         background:linear-gradient(145deg,#424d55,#303a40) !important;
     }
 }
-</style>
 
-
-<style id="urbanex-translucido-legible-final">
+/* ===== CONSOLIDADO: urbanex-translucido-legible-final ===== */
 /* =========================================================
    AJUSTE VISUAL FINAL
    - Más transparencia donde sí conviene
@@ -7528,10 +7433,8 @@ body{
         background: rgba(255,252,246,0.78) !important;
     }
 }
-</style>
 
-
-<style id="urbanex-fullscreen-translucent-final">
+/* ===== CONSOLIDADO: urbanex-fullscreen-translucent-final ===== */
 /* =========================================================
    AJUSTE FINAL SOLICITADO
    - La imagen queda detrás de todo el layout
@@ -7550,7 +7453,7 @@ body::before{
     position:fixed;
     inset:0;
     z-index:-2;
-    background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_mañana.png'));
+    background-image:var(--urbanex-fullscreen-bg);
     background-position:center center;
     background-repeat:no-repeat;
     background-size:cover;
@@ -7800,10 +7703,8 @@ body::after{
         background:rgba(255,251,243,.52) !important;
     }
 }
-</style>
 
-
-<style id="urbanex-location-picker-legible-translucent-fix">
+/* ===== CONSOLIDADO: urbanex-location-picker-legible-translucent-fix ===== */
 /* AJUSTE SOLICITADO
    - selector superior más traslúcido
    - texto visible y legible
@@ -7883,10 +7784,8 @@ body::after{
         opacity:1 !important;
     }
 }
-</style>
 
-
-<style id="urbanex-correccion-encuadre-fullscreen">
+/* ===== CONSOLIDADO: urbanex-correccion-encuadre-fullscreen ===== */
 /* ============================================================
    CORRECCIÓN DEL FONDO
    - El Boulevard central conserva su encuadre original.
@@ -7899,7 +7798,7 @@ body::after{
 /* Fondo global: solo sirve como continuidad detrás de los paneles. */
 body::before{
     inset:-18px !important;
-    background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_mañana.png')) !important;
+    background-image:var(--urbanex-fullscreen-bg) !important;
     background-size:cover !important;
     background-position:center center !important;
     background-repeat:no-repeat !important;
@@ -7924,7 +7823,7 @@ body::after{
    El área central vuelve a dibujar la imagen en su propio espacio,
    igual que en el diseño original. */
 .main-boulevard{
-    background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_mañana.png')) !important;
+    background-image:var(--urbanex-fullscreen-bg) !important;
     background-size:cover !important;
     background-position:center center !important;
     background-repeat:no-repeat !important;
@@ -7973,7 +7872,7 @@ body::after{
     }
 
     .main-boulevard{
-        background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_mañana-Celular.png')) !important;
+        background-image:var(--urbanex-fullscreen-bg) !important;
         background-size:cover !important;
         background-position:center center !important;
         background-repeat:no-repeat !important;
@@ -7991,10 +7890,8 @@ body::after{
         background:rgba(255,251,243,.54) !important;
     }
 }
-</style>
 
-
-<style id="urbanex-fullscreen-continuo-sin-wrapper-ubicacion">
+/* ===== CONSOLIDADO: urbanex-fullscreen-continuo-sin-wrapper-ubicacion ===== */
 /* ============================================================
    AJUSTE PUNTUAL SOLICITADO
    1) Una sola imagen ocupa TODO el viewport.
@@ -8020,10 +7917,7 @@ body::before{
     z-index:-2 !important;
     pointer-events:none !important;
 
-    background-image:var(
-        --urbanex-fullscreen-bg,
-        url('/imagenes/boulevard/Boul_mañana.png')
-    ) !important;
+    background-image:var(--urbanex-fullscreen-bg) !important;
 
     background-size:cover !important;
     background-position:center center !important;
@@ -8154,10 +8048,8 @@ body::after{
         background:rgba(255,251,243,.52) !important;
     }
 }
-</style>
 
-
-<style id="urbanex-bienvenido-legible-fix">
+/* ===== CONSOLIDADO: urbanex-bienvenido-legible-fix ===== */
 /* Mejora puntual de legibilidad del bloque BIENVENIDO */
 .welcome-billboard{
     background: linear-gradient(
@@ -8217,10 +8109,8 @@ body::after{
             0 2px 8px rgba(0, 0, 0, 0.44) !important;
     }
 }
-</style>
 
-
-<style id="urbanex-solo-labels-mejorados">
+/* ===== CONSOLIDADO: urbanex-solo-labels-mejorados ===== */
 /* ============================================================
    ÚNICO CAMBIO:
    Mejorar visibilidad de:
@@ -8282,10 +8172,8 @@ body::after{
         color:#566d7d !important;
     }
 }
-</style>
 
-
-<style id="urbanex-solo-color-legible-desktop-tablet">
+/* ===== CONSOLIDADO: urbanex-solo-color-legible-desktop-tablet ===== */
 /* ÚNICO CAMBIO:
    color de texto en pantallas medianas y grandes.
    Móvil no se modifica.
@@ -8307,10 +8195,8 @@ body::after{
         color:#38566b !important;
     }
 }
-</style>
 
-
-<style id="urbanex-colores-texto-legibles-final">
+/* ===== CONSOLIDADO: urbanex-colores-texto-legibles-final ===== */
 /* ÚNICO CAMBIO:
    colores de texto en pantallas medianas y grandes.
    Móvil no se modifica.
@@ -8338,10 +8224,8 @@ body::after{
         opacity:1 !important;
     }
 }
-</style>
 
-
-<style id="urbanex-quitar-franja-destacados">
+/* ===== CONSOLIDADO: urbanex-quitar-franja-destacados ===== */
 /* ÚNICO CAMBIO:
    quitar la franja de fondo detrás de DESTACADOS.
 */
@@ -8352,20 +8236,16 @@ body::after{
         border:0 !important;
     }
 }
-</style>
 
-
-<style id="urbanex-bienvenido-mas-arriba-only">
+/* ===== CONSOLIDADO: urbanex-bienvenido-mas-arriba-only ===== */
 /* ÚNICO CAMBIO: subir el bloque BIENVENIDO en tablet y computador. */
 @media (min-width:721px){
     .welcome-billboard{
         top:18px !important;
     }
 }
-</style>
 
-
-<style id="ajuste-solo-columnas-transparentes">
+/* ===== CONSOLIDADO: ajuste-solo-columnas-transparentes ===== */
 /* SOLO este ajuste: hacer más transparentes las columnas laterales, sin tocar tarjetas internas */
 .aside-categories,
 .aside-showcase-list{
@@ -8383,10 +8263,8 @@ body::after{
         -webkit-backdrop-filter: blur(14px) saturate(108%) !important;
     }
 }
-</style>
 
-
-<style id="urbanex-categorias-texto-profesional-visible">
+/* ===== CONSOLIDADO: urbanex-categorias-texto-profesional-visible ===== */
 /* ÚNICO CAMBIO:
    mejorar de forma visible y profesional la tipografía
    de las categorías, sin tocar tarjetas, iconos ni distribución.
@@ -8449,10 +8327,8 @@ body::after{
         font-size:10.5px !important;
     }
 }
-</style>
 
-
-<style id="urbanex-categorias-solo-color-corregido">
+/* ===== CONSOLIDADO: urbanex-categorias-solo-color-corregido ===== */
 /* SOLO CAMBIO: color con mejor contraste para categorías */
 .aside-categories .category-name,
 .aside-categories .cat-all-btn .category-name{
@@ -8477,10 +8353,8 @@ body::after{
 .aside-categories .cat-all-btn.active .category-count{
     color:#374151 !important;
 }
-</style>
 
-
-<style id="urbanex-categorias-tamano-igual-only">
+/* ===== CONSOLIDADO: urbanex-categorias-tamano-igual-only ===== */
 /* ÚNICO CAMBIO:
    igualar el tamaño de letra de los nombres
    de todas las categorías.
@@ -8493,10 +8367,8 @@ body::after{
     line-height:1.15 !important;
     font-weight:700 !important;
 }
-</style>
 
-
-<style id="urbanex-categorias-tamano-estandarizado-only">
+/* ===== CONSOLIDADO: urbanex-categorias-tamano-estandarizado-only ===== */
 /* ÚNICO CAMBIO:
    reducir el tamaño de los nombres de categorías
    para aproximarlo al título "CATEGORÍAS".
@@ -8508,10 +8380,8 @@ body::after{
     font-size:11px !important;
     line-height:1.15 !important;
 }
-</style>
 
-
-<style id="urbanex-bottom-filter-numbers-legible-only">
+/* ===== CONSOLIDADO: urbanex-bottom-filter-numbers-legible-only ===== */
 /* ÚNICO CAMBIO:
    mejorar la legibilidad de los números/textos pequeños
    de la barra inferior.
@@ -8525,6 +8395,222 @@ body::after{
     text-shadow:none !important;
 }
 </style>
+
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#e5c158">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Urbanex">
+    <link rel="apple-touch-icon" href="/imagenes/icon-192.png">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </head>
 <body>
@@ -8633,7 +8719,7 @@ body::after{
                 <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/></svg></div>
                 <div class="filter-label-group"><span class="filter-label">A Domicilio</span><span class="filter-sub" id="metricDelivery">0 locales</span></div>
             </div>
-            <div class="filter-pill" id="pillParking" onclick="window.location.href='/estacionamientos/'">
+            <div class="filter-pill" id="pillParking" onclick="window.location.href='/parqueaderos.html'">
                 <div class="filter-icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h6.2c4.15 0 6.8 2.32 6.8 5.95 0 3.7-2.65 6.05-6.8 6.05H11v6H7V3zm4 3.5v5h2.05c1.9 0 2.95-.86 2.95-2.5 0-1.63-1.05-2.5-2.95-2.5H11z"/></svg></div>
                 <div class="filter-label-group"><span class="filter-label">Parqueaderos</span><span class="filter-sub">Ver espacios</span></div>
             </div>
@@ -8876,26 +8962,50 @@ function parseScheduleTimeToMinutes(value) {
     return hours * 60 + minutes;
 }
 
+function ecuadorClockNow() {
+    const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/Guayaquil',
+        weekday: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        hourCycle: 'h23'
+    }).formatToParts(new Date());
+
+    const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+    const dayMap = { Sun:0, Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6 };
+
+    return {
+        day: dayMap[values.weekday] ?? new Date().getDay(),
+        minutes: Number(values.hour || 0) * 60 + Number(values.minute || 0)
+    };
+}
+
 function isOpenNow(hours) {
     if (!hours?.length) return false;
 
-    const now = new Date();
-    const today = now.getDay();
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const now = ecuadorClockNow();
+    const today = now.day;
+    const previousDay = (today + 6) % 7;
+    const currentMinutes = now.minutes;
 
     return hours.some(row => {
-        if (Number(row.day_of_week) !== today || row.is_closed) return false;
+        if (row.is_closed) return false;
 
+        const day = Number(row.day_of_week);
         const open = parseScheduleTimeToMinutes(row.open_time);
         const close = parseScheduleTimeToMinutes(row.close_time);
-
         if (open === null || close === null) return false;
 
-        if (close >= open) {
-            return currentMinutes >= open && currentMinutes <= close;
+        if (day === today) {
+            if (close >= open) return currentMinutes >= open && currentMinutes <= close;
+            return currentMinutes >= open;
         }
 
-        return currentMinutes >= open || currentMinutes <= close;
+        if (day === previousDay && close < open) {
+            return currentMinutes <= close;
+        }
+
+        return false;
     });
 }
 function avgRating(reviews) {
@@ -9098,6 +9208,7 @@ const ECUADOR_PROVINCE_CANTONS = {
     ],
     "Morona Santiago": [
         "Morona",
+        "Sevilla Don Bosco",
         "Gualaquiza",
         "Huamboya",
         "Limón Indanza",
@@ -9188,7 +9299,20 @@ const ECUADOR_CITY_ALIASES = {
     "puerto francisco de orellana": "Orellana",
     "puyo": "Pastaza",
     "quito distrito metropolitano": "Pichincha",
+    "distrito metropolitano de quito": "Pichincha",
     "santo domingo de los colorados": "Santo Domingo de los Tsáchilas"
+};
+
+const ECUADOR_CITY_EQUIVALENTS = {
+    "distrito metropolitano de quito": "quito",
+    "quito distrito metropolitano": "quito",
+    "san jacinto de yaguachi": "yaguachi",
+    "puebloviejo": "pueblo viejo",
+    "nueva loja": "lago agrio",
+    "puerto francisco de orellana": "francisco de orellana",
+    "coca": "francisco de orellana",
+    "macas": "morona",
+    "puyo": "pastaza"
 };
 
 function normalizeLocationName(value) {
@@ -9224,23 +9348,35 @@ const ECUADOR_CITY_PROVINCE = (() => {
 })();
 
 function businessCity(business) {
-    return normalizeLocationName(business?.city || 'Loja') || 'Loja';
+    return normalizeLocationName(business?.city || '') || '';
 }
 
 function provinceForCity(city) {
     return ECUADOR_CITY_PROVINCE.get(locationKey(city)) || '';
 }
 
+function canonicalCityKey(value) {
+    const key = locationKey(value);
+    return ECUADOR_CITY_EQUIVALENTS[key] || key;
+}
+
+function businessProvince(business) {
+    const registeredProvince = normalizeLocationName(business?.province || '');
+    if (registeredProvince) return registeredProvince;
+    return provinceForCity(businessCity(business));
+}
+
 function businessMatchesLocation(business) {
     if (activeProvince === '__all__') return true;
 
-    const city = businessCity(business);
+    const province = businessProvince(business);
+    if (locationKey(province) !== locationKey(activeProvince)) return false;
 
     if (activeLocation && activeLocation !== '__province__') {
-        return locationKey(city) === locationKey(activeLocation);
+        return canonicalCityKey(businessCity(business)) === canonicalCityKey(activeLocation);
     }
 
-    return provinceForCity(city) === activeProvince;
+    return true;
 }
 
 function locationFilteredBusinesses() {
@@ -10948,7 +11084,7 @@ window.addEventListener('appinstalled', () => {
 
 
 <div id="uxFinalPwaInstall" class="ux-final-pwa-install" hidden>
-  <img src="/imagenes/Urba4.png" alt="Urbanex">
+  <img src="/imagenes/icon-192.png" alt="Urbanex">
   <div class="ux-final-pwa-info">
     <strong>Instalar Urbanex</strong>
     <span id="uxFinalPwaText">Acceda rápido desde su pantalla de inicio.</span>
@@ -11277,14 +11413,14 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
 
     const imagenes = {
         desktop: {
-            dia: '/imagenes/boulevard/Boul_mañana.png',
-            tarde: '/imagenes/boulevard/Boul_tarde.png',
-            noche: '/imagenes/boulevard/Boul_noche.png'
+            dia: '/imagenes/boulevard/Boul_manana.webp',
+            tarde: '/imagenes/boulevard/Boul_tarde.webp',
+            noche: '/imagenes/boulevard/Boul_noche.webp'
         },
         celular: {
-            dia: '/imagenes/boulevard/Boul_mañana-Celular.png',
-            tarde: '/imagenes/boulevard/Boul_tarde-Celular.png',
-            noche: '/imagenes/boulevard/Boul_noche-Celular.png'
+            dia: '/imagenes/boulevard/Boul_manana-celular.webp',
+            tarde: '/imagenes/boulevard/Boul_tarde-celular.webp',
+            noche: '/imagenes/boulevard/Boul_noche-celular.webp'
         }
     };
 
@@ -11327,14 +11463,14 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
 (function(){
     const imagenes = {
         desktop: {
-            dia: '/imagenes/boulevard/Boul_mañana.png',
-            tarde: '/imagenes/boulevard/Boul_tarde.png',
-            noche: '/imagenes/boulevard/Boul_noche.png'
+            dia: '/imagenes/boulevard/Boul_manana.webp',
+            tarde: '/imagenes/boulevard/Boul_tarde.webp',
+            noche: '/imagenes/boulevard/Boul_noche.webp'
         },
         celular: {
-            dia: '/imagenes/boulevard/Boul_mañana-Celular.png',
-            tarde: '/imagenes/boulevard/Boul_tarde-Celular.png',
-            noche: '/imagenes/boulevard/Boul_noche-Celular.png'
+            dia: '/imagenes/boulevard/Boul_manana-celular.webp',
+            tarde: '/imagenes/boulevard/Boul_tarde-celular.webp',
+            noche: '/imagenes/boulevard/Boul_noche-celular.webp'
         }
     };
     const mediaCelular = window.matchMedia('(max-width: 720px)');
@@ -11360,7 +11496,9 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
 })();
 </script>
 
-<style id="urbanex-labels-claros-solo-titulos">
+<style id="urbanex-boulevard-final-overrides">
+
+/* ===== CONSOLIDADO FINAL: urbanex-labels-claros-solo-titulos ===== */
 /* ÚNICO CAMBIO: mejorar legibilidad de CATEGORÍAS y DESTACADOS */
 .section-title{
   color:#0f3554 !important;
@@ -11372,9 +11510,8 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
   opacity:1 !important;
   text-shadow:0 1px 0 rgba(255,255,255,.55) !important;
 }
-</style>
 
-<style id="urbanex-titulos-laterales-legibles-final">
+/* ===== CONSOLIDADO FINAL: urbanex-titulos-laterales-legibles-final ===== */
 /* ÚNICO CAMBIO: color/contraste de CATEGORÍAS y DESTACADOS */
 .aside-categories > .section-title,
 .aside-showcase-list > .showcase-header > h2{
@@ -11388,6 +11525,8 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
     -webkit-text-stroke:0.15px rgba(0,0,0,.35) !important;
 }
 </style>
+
+
 
 </body>
 </html>
