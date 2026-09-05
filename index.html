@@ -7,7 +7,13 @@
 <title>Urbanex</title>
 <link rel="icon" type="image/png" href="/imagenes/log.png">
 <link rel="shortcut icon" type="image/png" href="/imagenes/log.png">
-<link rel="apple-touch-icon" href="/imagenes/log.png">
+<link rel="apple-touch-icon" href="/imagenes/icon-192.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#e5c158">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Urbanex">
 
 
 <style>
@@ -7605,11 +7611,31 @@ body{
 
 <body>
 
-<section class="portada" style="--portada-bg:url('/imagenes/Portada_día.png');">
+<section class="portada" id="urbanexPortadaHero">
     <img id="portadaDinamica"
-     src="/imagenes/Portada_día.png"
      alt="Portada Urbanex"
-     class="portada-img">
+     class="portada-img"
+     fetchpriority="high"
+     decoding="async">
+    <script>
+    (function(){
+        const img=document.getElementById('portadaDinamica');
+        const hero=document.getElementById('urbanexPortadaHero');
+        const mobile=window.matchMedia('(max-width: 900px)').matches;
+        const parts=new Intl.DateTimeFormat('es-EC',{timeZone:'America/Guayaquil',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+        const hourPart=parts.find(part=>part.type==='hour');
+        const hour=hourPart?Number(hourPart.value):new Date().getHours();
+        const slot=hour>=7&&hour<13?'dia':(hour>=13&&hour<19?'tarde':'noche');
+        const images={
+            desktop:{dia:'/imagenes/Portada_dia.webp',tarde:'/imagenes/Portada_tarde.webp',noche:'/imagenes/Portada_noche.webp'},
+            celular:{dia:'/imagenes/Portada_dia-celular.webp',tarde:'/imagenes/Portada_tarde-celular.webp',noche:'/imagenes/Portada_noche-celular.webp'}
+        };
+        const path=images[mobile?'celular':'desktop'][slot];
+        if(hero)hero.style.setProperty('--portada-bg','url("'+path+'")');
+        if(img)img.src=path;
+        window.__urbanexPortadaInicial=path;
+    })();
+    </script>
 
     <!-- BLOQUE SOLO PARA PANTALLAS GRANDES -->
 
@@ -7679,7 +7705,7 @@ body{
                     <strong>Mapa</strong>
                 </a>
 
-                <a href="https://urbanex.app/estacionamientos/" class="desktop-reference-v2__quick-card">
+                <a href="/parqueaderos.html" class="desktop-reference-v2__quick-card">
                     <span class="desktop-reference-v2__quick-icon">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M6 3h7.5a5.5 5.5 0 0 1 0 11H10v7H6V3zm4 4v3h3.5a1.5 1.5 0 0 0 0-3H10z"/>
@@ -7768,23 +7794,23 @@ body{
             </div>
 
             <div class="desktop-feature-grid">
-                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Gastronomía.png');">
+                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Gastronomia.webp');">
                     <span class="desktop-feature-card__label">Gastronomía</span>
                 </a>
 
-                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Turismo.png');">
+                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Turismo.webp');">
                     <span class="desktop-feature-card__label">Turismo</span>
                 </a>
 
-                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Comercio.png');">
+                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Comercio.webp');">
                     <span class="desktop-feature-card__label">Comercio</span>
                 </a>
 
-                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Salud.png');">
+                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Salud.webp');">
                     <span class="desktop-feature-card__label">Salud</span>
                 </a>
 
-                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Movilidad.png');">
+                <a class="desktop-feature-card" href="https://urbanex.app/boulevard.html" style="--feature-image:url('/imagenes/Movilidad.webp');">
                     <span class="desktop-feature-card__label">Movilidad</span>
                 </a>
             </div>
@@ -7826,7 +7852,7 @@ body{
             <span>Mapa</span>
         </a>
 
-        <a class="item-caracteristica" href="https://urbanex.app/estacionamientos/" title="Ver parqueaderos" onclick="event.stopPropagation();">
+        <a class="item-caracteristica" href="/parqueaderos.html" title="Ver parqueaderos" onclick="event.stopPropagation();">
             <svg viewBox="0 0 24 24"><path d="M6 3h7.5a5.5 5.5 0 0 1 0 11H10v7H6V3zm4 4v3h3.5a1.5 1.5 0 0 0 0-3H10z"/></svg>
             <span>Parqueaderos</span>
         </a>
@@ -7853,15 +7879,15 @@ body{
 
     const imagenes = {
         desktop: {
-            dia: '/imagenes/Portada_día.png',
-            tarde: '/imagenes/Portada_tarde.png',
-            noche: '/imagenes/Portada_noche.png'
+            dia: '/imagenes/Portada_dia.webp',
+            tarde: '/imagenes/Portada_tarde.webp',
+            noche: '/imagenes/Portada_noche.webp'
         },
 
         celular: {
-            dia: '/imagenes/Portada_diacelular.png',
-            tarde: '/imagenes/Portada_tardecelular.png',
-            noche: '/imagenes/Portada_nochecelular.png'
+            dia: '/imagenes/Portada_dia-celular.webp',
+            tarde: '/imagenes/Portada_tarde-celular.webp',
+            noche: '/imagenes/Portada_noche-celular.webp'
         }
     };
 
@@ -7951,6 +7977,15 @@ body{
     setInterval(actualizarBranding, 60000);
 
 })();
+</script>
+
+
+<script id="urbanex-service-worker-registration">
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(error => console.warn('Urbanex SW:', error));
+    }, { once:true });
+}
 </script>
 
 </body>
