@@ -39,7 +39,7 @@
     align-items:center;
     padding:32px 16px 60px;
   }
- 
+
   header{
     width:100%; max-width:760px;
     display:flex; align-items:center; justify-content:space-between;
@@ -60,7 +60,7 @@
     margin:0; font-weight:600; color:var(--text-main); text-transform:uppercase;
   }
   .brand p{ margin:2px 0 0; font-size:10.5px; color:var(--text-dark); letter-spacing:0.05em; }
- 
+
   .conn-pill{
     font-family:var(--font-sans); font-size:10.5px; letter-spacing:0.04em;
     color:var(--text-dark);
@@ -74,11 +74,11 @@
   .conn-pill.ok{ color:var(--green); }
   .conn-pill.err .dot{ background:var(--red); box-shadow:0 0 6px var(--red); }
   .conn-pill.err{ color:var(--red); }
- 
+
   main{ width:100%; max-width:760px; display:flex; flex-direction:column; align-items:center; }
- 
+
   .orb-wrap{ position:relative; width:120px; height:120px; display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
- 
+
   .mic-btn{
     position:relative; width:92px; height:92px; border-radius:50%;
     border:1.5px solid var(--gold-dim); cursor:pointer;
@@ -101,7 +101,7 @@
     50%{ box-shadow:0 0 0 16px rgba(229,193,88,0.04), 0 0 30px rgba(229,193,88,0.5); }
   }
   .mic-btn.processing{ border-color:var(--text-dark); color:var(--text-muted); animation:none; }
- 
+
   .state-label{
     font-size:11px; letter-spacing:0.16em; color:var(--text-dark); text-transform:uppercase;
     margin-bottom:6px; min-height:15px; font-weight:600;
@@ -111,7 +111,7 @@
     margin-bottom:20px; max-width:580px; line-height:1.4;
   }
   .transcript.placeholder{ color:var(--text-dark); font-size:13.5px; font-weight:300; }
- 
+
   .input-row{ width:100%; display:flex; gap:8px; margin-bottom:16px; }
   .input-row input{
     flex:1; background:var(--bg-card); border:1px solid var(--gold-soft); color:var(--text-main);
@@ -130,14 +130,14 @@
     border-radius:10px; padding:0 14px; cursor:pointer;
   }
   .mute-btn.active{ color:var(--gold); border-color:var(--gold-dim); }
- 
+
   .chips{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:26px; }
   .chip{
     font-size:11px; color:var(--text-dark); border:1px solid var(--gold-soft); background:var(--bg-card);
     padding:7px 12px; border-radius:99px; cursor:pointer; transition:border-color .2s, color .2s;
   }
   .chip:hover{ border-color:var(--gold-dim); color:var(--gold); }
- 
+
   .results-header{
     width:100%; display:flex; align-items:baseline; justify-content:space-between;
     margin-bottom:10px; border-bottom:1px solid var(--gold-soft); padding-bottom:8px;
@@ -147,7 +147,7 @@
     margin:0; color:var(--gold); font-weight:600;
   }
   .results-header span{ font-size:11px; color:var(--text-dark); }
- 
+
   .results{ width:100%; display:flex; flex-direction:column; gap:10px; }
   .card{
     background:var(--bg-card); border:1px solid var(--gold-soft); border-radius:var(--radius);
@@ -176,15 +176,15 @@
     border:1px solid var(--gold-soft); transition:border-color .2s, color .2s;
   }
   .badge-link:hover{ color:var(--gold); border-color:var(--gold-dim); }
- 
+
   .empty-state{ width:100%; text-align:center; color:var(--text-dark); font-size:13px; padding:18px 0; }
- 
+
   .footnote{
     margin-top:32px; font-size:10.5px; color:var(--text-dark); text-align:center; max-width:580px;
     line-height:1.6; border-top:1px dashed var(--gold-soft); padding-top:14px;
   }
   .footnote a{ color:var(--gold-dim); }
- 
+
   @media (max-width:480px){
     .orb-wrap{ width:100px; height:100px; }
     .mic-btn{ width:78px; height:78px; }
@@ -193,7 +193,7 @@
 </style>
 </head>
 <body>
- 
+
 <header>
   <div class="brand">
     <div class="brand-mark"></div>
@@ -204,7 +204,7 @@
   </div>
   <div class="conn-pill" id="connPill"><span class="dot"></span><span id="connLabel">CONECTANDO…</span></div>
 </header>
- 
+
 <main>
   <div class="orb-wrap">
     <button class="mic-btn" id="micBtn" aria-label="Activar micrófono">
@@ -215,18 +215,18 @@
       </svg>
     </button>
   </div>
- 
+
   <div class="state-label" id="stateLabel">CARGANDO DATOS…</div>
   <div class="transcript placeholder" id="transcript">Diga algo como «busca restaurantes abiertos ahora» o «farmacias con oferta»</div>
- 
+
   <div class="input-row">
     <input type="text" id="textInput" placeholder="O escriba su búsqueda aquí…" disabled>
     <button id="sendBtn" disabled>Buscar</button>
     <button class="mute-btn active" id="muteBtn" title="Silenciar respuesta hablada">🔊</button>
   </div>
- 
+
   <div class="chips" id="chips"></div>
- 
+
   <div class="results-header">
     <h2>Resultados</h2>
     <span id="resultCount">—</span>
@@ -234,31 +234,31 @@
   <div class="results" id="results">
     <div class="empty-state">Cargando negocios desde Urbanex…</div>
   </div>
- 
+
   <div class="footnote">
     Conectado en vivo a la base de datos real de Urbanex en Supabase (tablas <code>businesses</code>, <code>categories</code>, <code>products</code>, <code>business_hours</code>, <code>reviews</code>, <code>promotions</code>). El motor de intención usa coincidencia de palabras clave, sin modelo de lenguaje. Datos y disponibilidad reflejan lo publicado por cada negocio en <a href="https://urbanex.app" target="_blank" rel="noopener">urbanex.app</a>.
   </div>
 </main>
- 
+
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
- 
+
 /* ============ CONEXIÓN REAL A SUPABASE DE URBANEX ============ */
 const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
- 
+
 const BUSINESS_SELECT = `
   *,
   categories!category_id(id,name,icon),
   subcategories:categories!subcategory_id(id,name,icon)
 `;
- 
+
 let categories = [];      // todas las categorías (raíz + sub)
 let businesses = [];      // negocios activos con detalles enriquecidos
 let cityList = [];        // ciudades detectadas en los datos reales
 let detailsReady = false; // true cuando horarios/reseñas/promos ya cargaron (evita falsos negativos en filtros)
- 
+
 /* ---- Helpers replicados de la lógica real de boulevard.html ---- */
 function parseScheduleTimeToMinutes(value) {
   const text = String(value || '').trim().toLowerCase().replace('h', ':');
@@ -302,7 +302,7 @@ function waLink(rawPhone){
   const digits = String(rawPhone).replace(/[^\d]/g, '');
   return digits ? `https://wa.me/${digits}` : null;
 }
- 
+
 /* ============ CARGA DE DATOS REALES ============ */
 const connPill = document.getElementById('connPill');
 const connLabel = document.getElementById('connLabel');
@@ -315,35 +315,67 @@ const resultCountEl = document.getElementById('resultCount');
 const textInput = document.getElementById('textInput');
 const sendBtn = document.getElementById('sendBtn');
 const muteBtn = document.getElementById('muteBtn');
- 
+
+// FIX: Supabase/PostgREST limita el número de filas por consulta (por defecto suele ser
+// 1000, pero puede ser menor según la configuración del proyecto). Sin paginar, categorías
+// con muchos negocios (típicamente "Comida y Bebida") podían quedar truncadas: el negocio
+// no llegaba al array `businesses`, y por eso sus productos se descartaban en silencio en
+// buscarProductos() al no encontrar `full = businesses.find(...)`.
+async function fetchAllBusinesses() {
+  const PAGE_SIZE = 1000;
+  let from = 0;
+  let all = [];
+  while (true) {
+    const { data, error } = await supabase
+      .from('businesses')
+      .select(BUSINESS_SELECT)
+      .eq('is_active', true)
+      .order('is_featured', { ascending: false })
+      .order('name', { ascending: true })
+      .range(from, from + PAGE_SIZE - 1);
+    if (error) throw error;
+    all = all.concat(data || []);
+    if (!data || data.length < PAGE_SIZE) break; // última página
+    from += PAGE_SIZE;
+  }
+  return all;
+}
+
 async function boot() {
   try {
-    const [catsRes, bizRes] = await Promise.all([
+    const [catsRes, countRes, bizRows] = await Promise.all([
       supabase.from('categories').select('id,name,icon,parent_id,sort_order').order('sort_order').order('name'),
-      supabase.from('businesses').select(BUSINESS_SELECT).eq('is_active', true).order('is_featured', { ascending:false }).order('name', { ascending:true })
+      supabase.from('businesses').select('id', { count: 'exact', head: true }).eq('is_active', true),
+      fetchAllBusinesses()
     ]);
- 
+
     if (catsRes.error) throw catsRes.error;
-    if (bizRes.error) throw bizRes.error;
- 
+
     categories = catsRes.data || [];
-    businesses = (bizRes.data || []).map(b => ({
+    businesses = bizRows.map(b => ({
       ...b,
       business_hours: b.business_hours || [],
       reviews: b.reviews || [],
       promotions: b.promotions || [],
       _open: false, _rating: null, _promo: false
     }));
- 
+
+    // Diagnóstico: si esto no coincide, sigue habiendo un problema de paginación/RLS
+    // que impide cargar todos los negocios activos.
+    const totalReal = countRes.count ?? null;
+    if (totalReal !== null && totalReal !== businesses.length) {
+      console.warn(`Urbanex: se esperaban ${totalReal} negocios activos pero se cargaron ${businesses.length}. Revisa límites de fila (db-max-rows) o políticas RLS en Supabase.`);
+    }
+
     connPill.classList.add('ok');
     connLabel.textContent = `${businesses.length} NEGOCIOS EN VIVO`;
- 
+
     // Ciudades reales presentes en los datos (sin inventar una lista fija)
     cityList = [...new Set(businesses.map(b => normalizar(b.city)).filter(Boolean))];
- 
+
     buildDynamicChips();
     renderResultados(businesses.filter(b=>b.is_featured).slice(0,6), { label: 'destacados' });
- 
+
     // Cargar detalles (horarios, reseñas, promociones) igual que el sitio real
     await loadBusinessDetails();
     detailsReady = true;
@@ -358,30 +390,30 @@ async function boot() {
       `<div class="empty-state">No se pudo conectar a la base de datos de Urbanex (${esc(err.message||'error desconocido')}). Verifique la conexión o las políticas RLS de Supabase.</div>`;
   }
 }
- 
+
 function enableInputs(){
   textInput.disabled = false;
   sendBtn.disabled = false;
   textInput.placeholder = 'Escriba su búsqueda aquí…';
 }
- 
+
 async function loadBusinessDetails() {
   const ids = businesses.map(b => b.id).filter(id => id !== null && id !== undefined);
   if (!ids.length) return;
- 
+
   const [hoursRes, reviewsRes, promosRes] = await Promise.all([
     supabase.from('business_hours').select('business_id,day_of_week,open_time,close_time,is_closed').in('business_id', ids),
     supabase.from('reviews').select('business_id,is_approved,rating').eq('is_approved', true).in('business_id', ids),
     supabase.from('promotions').select('business_id,is_active,end_date').eq('is_active', true).in('business_id', ids),
   ]);
- 
+
   const groupBy = (rows) => {
     const map = new Map();
     (rows || []).forEach(r => { if (!map.has(r.business_id)) map.set(r.business_id, []); map.get(r.business_id).push(r); });
     return map;
   };
   const hoursMap = groupBy(hoursRes.data), reviewsMap = groupBy(reviewsRes.data), promosMap = groupBy(promosRes.data);
- 
+
   businesses = businesses.map(b => {
     const hours = hoursMap.get(b.id) || [];
     const reviews = reviewsMap.get(b.id) || [];
@@ -390,7 +422,7 @@ async function loadBusinessDetails() {
       _open: isOpenNow(hours), _rating: avgRating(reviews), _promo: hasPromo(promos) };
   });
 }
- 
+
 /* ============ MOTOR DE INTENCIÓN (sin LLM, basado en datos reales) ============ */
 // Construye el mapa de categorías -> palabras clave a partir de los nombres reales de Urbanex,
 // más sinónimos comunes en español para mejorar la coincidencia por voz.
@@ -404,41 +436,41 @@ const SYNONYMS = {
   turismo: ["turismo","hotel","hoteles","hostal","hospedaje","tour"],
   automotriz: ["auto","autos","taller","mecanico","mecánico","llantas"],
 };
- 
+
 function categoriaKeywordsFor(cat){
   const base = [normalizar(cat.name)];
   const key = Object.keys(SYNONYMS).find(k => normalizar(cat.name).includes(k));
   if (key) base.push(...SYNONYMS[key]);
   return base;
 }
- 
+
 function parseComando(rawText){
   const t = normalizar(rawText);
   let intent = 'buscar';
   let categoria = null, ciudad = null;
   let abiertoAhora=false, domicilio=false, oferta=false;
- 
+
   if (/ayuda|que puedes hacer|comandos|opciones/.test(t)) intent = 'ayuda';
   else if (/^hola\b|buenos dias|buenas tardes|buenas noches/.test(t)) intent = 'saludo';
- 
+
   // Categoría: contra el nombre real de cada categoría en la base de Urbanex
   for (const cat of categories){
     const keywords = categoriaKeywordsFor(cat);
     if (keywords.some(k => k && t.includes(k))) { categoria = cat; break; }
   }
- 
+
   // Ciudad: contra las ciudades reales presentes en los negocios cargados
   ciudad = cityList.find(c => t.includes(c)) || null;
- 
+
   // Requiere la palabra "ahora" explícita para no confundir "farmacia abierta" (horario genérico)
   // con una petición real de disponibilidad inmediata.
   if (/abiert[oa]s?\s+ahora\b/.test(t)) abiertoAhora = true;
   if (/domicilio|delivery|entrega/.test(t)) domicilio = true;
   if (/oferta|ofertas|descuento|promocion/.test(t)) oferta = true;
- 
+
   return { intent, categoria, ciudad, abiertoAhora, domicilio, oferta, raw: rawText };
 }
- 
+
 function buscarNegocios(slots){
   let r = businesses.slice();
   if (slots.categoria) {
@@ -451,7 +483,7 @@ function buscarNegocios(slots){
   r.sort((a,b) => (b._rating||0) - (a._rating||0) || (b.is_featured?1:0) - (a.is_featured?1:0));
   return r;
 }
- 
+
 // Stopwords genéricas: verbos de comando, muletillas, artículos.
 // OJO: esta lista NO incluye sinónimos de categoría a propósito — ver limpiarTerminoParaProducto().
 const STOPWORDS = new Set(["busca","buscar","encuentra","encontrar","quiero","necesito","dame","muestrame",
@@ -459,7 +491,7 @@ const STOPWORDS = new Set(["busca","buscar","encuentra","encontrar","quiero","ne
   "negocio","negocios","local","locales","tienda","tiendas","de","en","con","que","tengan","tenga","cerca",
   "abierto","abiertos","abierta","ahora","domicilio","delivery","entrega","oferta","ofertas","descuento",
   "promocion","promoción","un","una","unos","unas","el","la","los","las","y","o","del","al"]);
- 
+
 // Término para filtros de nombre/dirección de negocio: aquí SÍ quitamos las palabras
 // de la categoría detectada, porque si el usuario dijo "restaurantes" no tiene sentido
 // buscar "restaurantes" dentro del nombre del negocio.
@@ -476,7 +508,7 @@ function limpiarTermino(texto, categoria){
   });
   return kept.join(' ').trim();
 }
- 
+
 // FIX: término específico para buscar en la tabla `products`. A diferencia de limpiarTermino(),
 // NO elimina las palabras que coinciden con sinónimos de categoría. Antes, buscar "pizza" o
 // "hamburguesa" detectaba la categoría Comida y esa misma palabra se borraba del término antes
@@ -493,7 +525,7 @@ function limpiarTerminoParaProducto(texto){
   });
   return kept.join(' ').trim();
 }
- 
+
 async function buscarProductos(rawText){
   const q = rawText.trim();
   if (q.length < 3) return [];
@@ -518,14 +550,14 @@ async function buscarProductos(rawText){
     return [];
   }
 }
- 
+
 function construirRespuestaHablada(slots, resultados, matchedProductsByBiz){
   if (slots.intent === 'ayuda') {
     return 'Puedo buscar negocios reales de Urbanex por categoría, ciudad, si están abiertos ahora, si tienen servicio a domicilio, o si tienen ofertas. También puedo buscar directamente por producto, por ejemplo hamburguesas o pizza.';
   }
   if (slots.intent === 'saludo') return 'Hola. Soy el asistente de Urbanex. Dígame qué negocio o producto está buscando.';
   if (!resultados.length) return 'No encontré negocios ni productos que coincidan con esa búsqueda en la base de datos de Urbanex.';
- 
+
   const top = resultados[0];
   const topProductos = matchedProductsByBiz.get(top.id);
   let frase = `Encontré ${resultados.length} resultado${resultados.length===1?'':'s'}`;
@@ -535,13 +567,13 @@ function construirRespuestaHablada(slots, resultados, matchedProductsByBiz){
   else frase += `. El mejor calificado es ${top.name}${top._rating ? `, con ${top._rating.toFixed(1)} estrellas` : ''}.`;
   return frase;
 }
- 
+
 /* ============ INTERFAZ ============ */
 let muted = false;
 let searching = false; // evita búsquedas superpuestas (doble tap / doble enter)
- 
+
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
- 
+
 function setState(label, mode){
   stateLabel.textContent = label;
   micBtn.classList.remove('listening','processing');
@@ -552,7 +584,7 @@ function setState(label, mode){
     'Activar micrófono'
   );
 }
- 
+
 function buildDynamicChips(){
   const roots = categories.filter(c=>!c.parent_id).slice(0,3);
   const chips = ['Qué puedes hacer', 'Busca hamburguesas'];
@@ -569,7 +601,7 @@ function buildDynamicChips(){
     chipsEl.appendChild(chip);
   });
 }
- 
+
 function renderResultados(list, { label, matchedProductsByBiz = new Map() } = {}){
   resultCountEl.textContent = label ? `${list.length} · ${label}` : `${list.length} resultado${list.length===1?'':'s'}`;
   resultsEl.innerHTML = '';
@@ -605,7 +637,7 @@ function renderResultados(list, { label, matchedProductsByBiz = new Map() } = {}
     resultsEl.appendChild(card);
   });
 }
- 
+
 function hablar(texto){
   if (muted || !('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
@@ -614,31 +646,31 @@ function hablar(texto){
   u.rate = 1.02;
   window.speechSynthesis.speak(u);
 }
- 
+
 async function procesarComando(texto){
   if (searching || !detailsReady) return;
   searching = true;
- 
+
   transcriptEl.classList.remove('placeholder');
   transcriptEl.textContent = `"${texto}"`;
   setState('PROCESANDO', 'processing');
- 
+
   try {
     const slots = parseComando(texto);
     const terminoNegocio = limpiarTermino(texto, slots.categoria);
     const terminoNegocioNorm = normalizar(terminoNegocio);
     const terminoProducto = limpiarTerminoParaProducto(texto);
- 
+
     let resultados = [];
     const matchedProductsByBiz = new Map();
- 
+
     if (slots.intent === 'buscar') {
       // 1. Filtros estructurales: categoría/ciudad/abierto/domicilio/oferta
       resultados = slots.categoria || slots.ciudad || slots.abiertoAhora || slots.domicilio || slots.oferta
         ? buscarNegocios(slots)
         : [];
       const idsPresentes = new Set(resultados.map(b => b.id));
- 
+
       // 2. Coincidencia libre por nombre/dirección/categoría del negocio (ej. "El Fogón")
       if (terminoNegocioNorm.length >= 3) {
         businesses.forEach(b => {
@@ -651,7 +683,7 @@ async function procesarComando(texto){
           if (haystack.includes(terminoNegocioNorm)) { resultados.push(b); idsPresentes.add(b.id); }
         });
       }
- 
+
       // 3. Coincidencia por producto real en la tabla `products` (ej. "hamburguesas", "pizza")
       //    Usa terminoProducto (sin filtrar sinónimos de categoría) para no perder el producto.
       if (normalizar(terminoProducto).length >= 3) {
@@ -667,13 +699,13 @@ async function procesarComando(texto){
           if (!idsPresentes.has(full.id)) { resultados.push(full); idsPresentes.add(full.id); }
         });
       }
- 
+
       // Si no había ningún filtro ni término, muestra destacados
       if (!resultados.length && !slots.categoria && !slots.ciudad &&
           terminoNegocioNorm.length < 3 && normalizar(terminoProducto).length < 3) {
         resultados = businesses.filter(b => b.is_featured);
       }
- 
+
       // Orden: coincidencias de producto primero, luego rating, luego destacados
       resultados.sort((a,b)=>{
         const aProd = matchedProductsByBiz.has(a.id) ? 1 : 0;
@@ -682,10 +714,10 @@ async function procesarComando(texto){
         return (b._rating||0) - (a._rating||0) || (b.is_featured?1:0) - (a.is_featured?1:0);
       });
       resultados = resultados.slice(0, 12);
- 
+
       renderResultados(resultados, { matchedProductsByBiz });
     }
- 
+
     const respuesta = construirRespuestaHablada(slots, resultados, matchedProductsByBiz);
     hablar(respuesta);
     console.log('Slots detectados (motor de reglas, sin LLM):', slots,
@@ -696,7 +728,7 @@ async function procesarComando(texto){
     searching = false;
   }
 }
- 
+
 sendBtn.addEventListener('click', ()=>{
   const val = textInput.value.trim();
   if (!val) return;
@@ -704,24 +736,24 @@ sendBtn.addEventListener('click', ()=>{
   textInput.value = '';
 });
 textInput.addEventListener('keydown', e => { if (e.key==='Enter') sendBtn.click(); });
- 
+
 muteBtn.addEventListener('click', ()=>{
   muted = !muted;
   muteBtn.textContent = muted ? '🔇' : '🔊';
   muteBtn.classList.toggle('active', !muted);
   if (muted) window.speechSynthesis.cancel();
 });
- 
+
 /* ============ RECONOCIMIENTO DE VOZ ============ */
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null, listening = false;
- 
+
 if (SpeechRecognition) {
   recognition = new SpeechRecognition();
   recognition.lang = 'es-EC';
   recognition.continuous = false;
   recognition.interimResults = true;
- 
+
   recognition.onstart = () => {
     listening = true;
     setState('ESCUCHANDO…', 'listening');
@@ -760,9 +792,8 @@ if (SpeechRecognition) {
   micBtn.style.cursor = 'not-allowed';
   transcriptEl.textContent = 'Este navegador no soporta reconocimiento de voz. Use el campo de texto abajo.';
 }
- 
+
 boot();
 </script>
 </body>
 </html>
- 
