@@ -7944,10 +7944,13 @@ body::after{
         ) !important;
 }
 
-/* El bloque central deja de dibujar una segunda imagen.
-   Así no hay cortes ni diferencias de encuadre. */
+/* El Boulevard central mantiene la fotografía visible.
+   La misma variable conserva la lógica mañana/tarde/noche. */
 .main-boulevard{
-    background-image:none !important;
+    background-image:var(--urbanex-fullscreen-bg) !important;
+    background-size:cover !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
     background-color:transparent !important;
 }
 
@@ -8033,7 +8036,10 @@ body::after{
     }
 
     .main-boulevard{
-        background-image:none !important;
+        background-image:var(--urbanex-fullscreen-bg) !important;
+        background-size:cover !important;
+        background-position:center center !important;
+        background-repeat:no-repeat !important;
         background-color:transparent !important;
     }
 
@@ -8721,7 +8727,7 @@ body::after{
             </div>
             <div class="filter-pill" id="pillParking" onclick="window.location.href='/parqueaderos.html'">
                 <div class="filter-icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h6.2c4.15 0 6.8 2.32 6.8 5.95 0 3.7-2.65 6.05-6.8 6.05H11v6H7V3zm4 3.5v5h2.05c1.9 0 2.95-.86 2.95-2.5 0-1.63-1.05-2.5-2.95-2.5H11z"/></svg></div>
-                <div class="filter-label-group"><span class="filter-label">Parqueaderos</span><span class="filter-sub">Ver espacios</span></div>
+                <div class="filter-label-group"><span class="filter-label">Parqueaderos</span><span class="filter-sub" id="metricParking">Ver disponibilidad</span></div>
             </div>
             <div class="filter-pill" id="pillPromo" onclick="window.location.href='informativos/ofertas.html'">
                 <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg></div>
@@ -8868,6 +8874,8 @@ let fullDirectoryLoaded = false;
 let fullDirectoryLoadPromise = null;
 let offerProductCountByBusiness = new Map();
 let offerMetricsLoaded = false;
+let parkingAvailabilityByBusiness = new Map();
+let parkingMetricsLoaded = false;
 let activeProvince = '__all__';
 let activeLocation = '__all__';
 const URBANEX_LOCATION_STORAGE_KEY = 'urbanex_location_selection_v1';
@@ -8940,6 +8948,10 @@ function toNum(v) { const n = Number(v); return isNaN(n) ? null : n; }
 function businessKey(v) { return String(v ?? '').trim(); }
 function businessOfferProductCount(business) { return offerProductCountByBusiness.get(businessKey(business?.id)) || 0; }
 function businessHasOfferProduct(business) { return businessOfferProductCount(business) > 0; }
+function businessParkingAvailable(business) {
+    const row = parkingAvailabilityByBusiness.get(businessKey(business?.id));
+    return row && row.is_open !== false ? Math.max(0, Number(row.available_spaces) || 0) : 0;
+}
 
 // ── Helpers ───────────────────────────────────────────────────
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -9914,6 +9926,7 @@ async function boot() {
     // Carga detalles solo de destacados para no bloquear la apertura.
     runLater(() => loadBusinessDetails(allBusinesses.filter(business => business.is_featured === true).map(business => business.id)));
     runLater(() => loadOfferMetrics());
+    runLater(() => loadParkingMetrics());
 }
 
 async function ensureAllBusinessesLoaded(renderAfterLoad = true) {
@@ -10082,6 +10095,28 @@ async function loadOfferMetrics() {
 }
 
 
+async function loadParkingMetrics() {
+    try {
+        const { data, error } = await supabase
+            .from('parking_availability')
+            .select('business_id,available_spaces,is_open')
+            .eq('is_published', true);
+
+        if (error) {
+            console.warn('Urbanex: módulo de parqueaderos no disponible.', error.message);
+            return;
+        }
+
+        parkingAvailabilityByBusiness = new Map(
+            (data || []).map(row => [businessKey(row.business_id), row])
+        );
+        parkingMetricsLoaded = true;
+        updateMetrics();
+    } catch (error) {
+        console.warn('Urbanex: carga de parqueaderos omitida.', error);
+    }
+}
+
 // ── Árbol de categorías ───────────────────────────────────────
 function renderCatTree() {
     const list = document.getElementById('categoriesList');
@@ -10226,6 +10261,15 @@ function updateMetrics() {
     document.getElementById('metricDelivery').textContent= base.filter(b=>b.delivery_available).length + ' locales';
     const offerTotal = offerMetricsLoaded ? base.reduce((total, business) => total + businessOfferProductCount(business), 0) : base.filter(b=>b._promo).length;
     document.getElementById('metricOffers').textContent  = offerTotal + (offerTotal === 1 ? ' oferta' : ' ofertas');
+    const parkingMetric = document.getElementById('metricParking');
+    if (parkingMetric) {
+        if (!parkingMetricsLoaded) {
+            parkingMetric.textContent = 'Ver disponibilidad';
+        } else {
+            const availableSpaces = base.reduce((total, business) => total + businessParkingAvailable(business), 0);
+            parkingMetric.textContent = availableSpaces + (availableSpaces === 1 ? ' lugar disponible' : ' lugares disponibles');
+        }
+    }
 }
 
 // Solo filtro de categoría (sin quick filter) para las métricas
