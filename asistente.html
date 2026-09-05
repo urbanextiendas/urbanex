@@ -688,16 +688,28 @@ async function procesarComando(texto){
       //    Usa terminoProducto (sin filtrar sinónimos de categoría) para no perder el producto.
       if (normalizar(terminoProducto).length >= 3) {
         const prodGroups = await buscarProductos(terminoProducto);
+        // Diagnóstico: si prodGroups tiene datos pero terminan 0 agregados, el producto
+        // existe pero su negocio quedó excluido (is_active=false, RLS, o negocio no cargado).
+        let agregados = 0;
         prodGroups.forEach(({ biz, productos }) => {
           const full = businesses.find(b => b.id === biz.id);
-          if (!full) return;
+          if (!full) {
+            console.warn(`Urbanex: producto "${productos[0]}" encontrado en negocio "${biz.name}" (id ${biz.id}), pero ese negocio no está en la lista de negocios activos cargados. Revisa is_active o RLS de ese negocio.`);
+            return;
+          }
           if (slots.ciudad && normalizar(full.city) !== slots.ciudad) return;
           if (slots.abiertoAhora && !full._open) return;
           if (slots.domicilio && !full.delivery_available) return;
           if (slots.oferta && !full._promo) return;
           matchedProductsByBiz.set(full.id, productos);
+          agregados++;
           if (!idsPresentes.has(full.id)) { resultados.push(full); idsPresentes.add(full.id); }
         });
+        if (prodGroups.length === 0) {
+          console.info(`Urbanex: la búsqueda de producto "${terminoProducto}" no encontró ninguna fila en la tabla products (o is_available=false para todas).`);
+        } else if (agregados === 0) {
+          console.info(`Urbanex: la búsqueda de producto "${terminoProducto}" encontró ${prodGroups.length} negocio(s) en products, pero ninguno pasó los filtros o el negocio no estaba activo/cargado. Ver advertencias arriba.`);
+        }
       }
 
       // Si no había ningún filtro ni término, muestra destacados
