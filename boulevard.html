@@ -10,7 +10,35 @@
     <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
     <link rel="preconnect" href="https://esm.sh" crossorigin>
     <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
-    <link rel="preload" as="image" href="imagenes/boulevard/Boul_mañana.png" fetchpriority="high">
+    <script id="urbanex-boulevard-background-bootstrap">
+    (function(){
+        const mobile = window.matchMedia('(max-width: 720px)').matches;
+        const parts = new Intl.DateTimeFormat('es-EC', { timeZone:'America/Guayaquil', hour:'2-digit', hourCycle:'h23' }).formatToParts(new Date());
+        const hourPart = parts.find(part => part.type === 'hour');
+        const hour = hourPart ? Number(hourPart.value) : new Date().getHours();
+        const period = hour >= 7 && hour < 13 ? 'dia' : (hour >= 13 && hour < 19 ? 'tarde' : 'noche');
+        const images = {
+            desktop:{
+                dia:'/imagenes/boulevard/Boul_mañana.png',
+                tarde:'/imagenes/boulevard/Boul_tarde.png',
+                noche:'/imagenes/boulevard/Boul_noche.png'
+            },
+            celular:{
+                dia:'/imagenes/boulevard/Boul_mañana-Celular.png',
+                tarde:'/imagenes/boulevard/Boul_tarde-Celular.png',
+                noche:'/imagenes/boulevard/Boul_noche-Celular.png'
+            }
+        };
+        const route = images[mobile ? 'celular' : 'desktop'][period];
+        document.documentElement.style.setProperty('--urbanex-fullscreen-bg', 'url("' + route + '")');
+        const preload = document.createElement('link');
+        preload.rel = 'preload';
+        preload.as = 'image';
+        preload.href = route;
+        preload.fetchPriority = 'high';
+        document.head.appendChild(preload);
+    })();
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
@@ -8633,9 +8661,9 @@ body::after{
                 <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/></svg></div>
                 <div class="filter-label-group"><span class="filter-label">A Domicilio</span><span class="filter-sub" id="metricDelivery">0 locales</span></div>
             </div>
-            <div class="filter-pill" id="pillParking" onclick="window.location.href='/estacionamientos/'">
+            <div class="filter-pill" id="pillParking" onclick="openParkingAvailability()" role="button" tabindex="0" aria-label="Ver parqueaderos disponibles">
                 <div class="filter-icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h6.2c4.15 0 6.8 2.32 6.8 5.95 0 3.7-2.65 6.05-6.8 6.05H11v6H7V3zm4 3.5v5h2.05c1.9 0 2.95-.86 2.95-2.5 0-1.63-1.05-2.5-2.95-2.5H11z"/></svg></div>
-                <div class="filter-label-group"><span class="filter-label">Parqueaderos</span><span class="filter-sub">Ver espacios</span></div>
+                <div class="filter-label-group"><span class="filter-label">Parqueaderos disponibles</span><span class="filter-sub" id="metricParking">0 disponibles</span></div>
             </div>
             <div class="filter-pill" id="pillPromo" onclick="window.location.href='informativos/ofertas.html'">
                 <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg></div>
@@ -8663,6 +8691,24 @@ body::after{
         ></nav>
     </aside>
 
+</div>
+
+
+<!-- PARQUEADEROS DISPONIBLES · SOLO CONSULTA PÚBLICA -->
+<div id="parkingModal" class="uxp-modal" aria-hidden="true">
+    <section class="uxp-shell" role="dialog" aria-modal="true" aria-labelledby="parkingTitle">
+        <header class="uxp-header">
+            <div>
+                <span class="uxp-eyebrow">Urbanex · Disponibilidad en tiempo real</span>
+                <h2 id="parkingTitle">Parqueaderos disponibles</h2>
+                <p id="parkingMeta">Consultando disponibilidad...</p>
+            </div>
+            <button id="parkingCloseButton" class="uxp-close" type="button" onclick="closeParkingAvailability()" aria-label="Cerrar">×</button>
+        </header>
+        <div id="parkingGrid" class="uxp-grid" aria-live="polite">
+            <div class="uxp-empty">Consultando parqueaderos disponibles...</div>
+        </div>
+    </section>
 </div>
 
 <!-- MODAL DIRECTORIO -->
@@ -8782,6 +8828,10 @@ let fullDirectoryLoaded = false;
 let fullDirectoryLoadPromise = null;
 let offerProductCountByBusiness = new Map();
 let offerMetricsLoaded = false;
+let parkingAvailabilityByBusiness = new Map();
+let parkingMetricsLoaded = false;
+let parkingRefreshTimer = null;
+let parkingPreviousFocus = null;
 let activeProvince = '__all__';
 let activeLocation = '__all__';
 const URBANEX_LOCATION_STORAGE_KEY = 'urbanex_location_selection_v1';
@@ -9778,6 +9828,7 @@ async function boot() {
     // Carga detalles solo de destacados para no bloquear la apertura.
     runLater(() => loadBusinessDetails(allBusinesses.filter(business => business.is_featured === true).map(business => business.id)));
     runLater(() => loadOfferMetrics());
+    runLater(() => loadParkingAvailability());
 }
 
 async function ensureAllBusinessesLoaded(renderAfterLoad = true) {
@@ -9826,6 +9877,7 @@ async function ensureAllBusinessesLoaded(renderAfterLoad = true) {
 
         runLater(() => loadBusinessDetails(allActiveIds));
         runLater(() => loadOfferMetrics());
+        runLater(() => loadParkingAvailability());
     })();
 
     try {
@@ -9945,6 +9997,191 @@ async function loadOfferMetrics() {
     }
 }
 
+
+
+async function loadParkingAvailability(force = false) {
+    if (parkingMetricsLoaded && !force) return;
+
+    try {
+        const { data, error } = await supabase
+            .from('parking_availability')
+            .select('business_id,is_published,total_spaces,available_spaces,hourly_rate,is_open,notes,updated_at')
+            .eq('is_published', true)
+            .order('available_spaces', { ascending: false });
+
+        if (error) {
+            console.warn('Urbanex: disponibilidad de parqueaderos no disponible.', error.message);
+            parkingAvailabilityByBusiness = new Map();
+            parkingMetricsLoaded = false;
+            updateParkingMetric();
+            return;
+        }
+
+        parkingAvailabilityByBusiness = new Map(
+            (data || []).map(row => [businessKey(row.business_id), row])
+        );
+        parkingMetricsLoaded = true;
+        updateParkingMetric();
+    } catch (error) {
+        console.warn('Urbanex: no se pudo consultar parqueaderos.', error);
+        parkingAvailabilityByBusiness = new Map();
+        parkingMetricsLoaded = false;
+        updateParkingMetric();
+    }
+}
+
+function parkingBusinessRows() {
+    return allBusinesses
+        .filter(businessMatchesLocation)
+        .map(business => ({
+            business,
+            availability: parkingAvailabilityByBusiness.get(businessKey(business.id))
+        }))
+        .filter(item => item.availability && item.availability.is_published !== false)
+        .sort((a, b) => {
+            const aOpen = a.availability.is_open === false ? 0 : 1;
+            const bOpen = b.availability.is_open === false ? 0 : 1;
+            if (bOpen !== aOpen) return bOpen - aOpen;
+            return Number(b.availability.available_spaces || 0) - Number(a.availability.available_spaces || 0);
+        });
+}
+
+function parkingAvailableTotal() {
+    return parkingBusinessRows().reduce((total, item) => {
+        if (item.availability.is_open === false) return total;
+        return total + Math.max(0, Number(item.availability.available_spaces || 0));
+    }, 0);
+}
+
+function updateParkingMetric() {
+    const el = document.getElementById('metricParking');
+    if (!el) return;
+    const total = parkingAvailableTotal();
+    el.textContent = `${total} disponible${total === 1 ? '' : 's'}`;
+}
+
+function parkingMoney(value) {
+    const number = Number(value);
+    if (!Number.isFinite(number) || number < 0) return 'Consultar';
+    return new Intl.NumberFormat('es-EC', { style:'currency', currency:'USD', minimumFractionDigits:2 }).format(number);
+}
+
+function parkingUpdated(value) {
+    if (!value) return 'Sin actualización registrada';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Sin actualización registrada';
+    return new Intl.DateTimeFormat('es-EC', {
+        timeZone:'America/Guayaquil',
+        day:'2-digit', month:'2-digit', year:'numeric',
+        hour:'2-digit', minute:'2-digit'
+    }).format(date);
+}
+
+function renderParkingAvailability() {
+    const grid = document.getElementById('parkingGrid');
+    const meta = document.getElementById('parkingMeta');
+    if (!grid || !meta) return;
+
+    if (!parkingMetricsLoaded) {
+        meta.textContent = 'La disponibilidad todavía no ha sido publicada por los parqueaderos.';
+        grid.innerHTML = '<div class="uxp-empty">No existen datos de disponibilidad publicados en este momento.</div>';
+        return;
+    }
+
+    const rows = parkingBusinessRows();
+    const availableTotal = parkingAvailableTotal();
+    meta.textContent = `${availableTotal} lugar${availableTotal === 1 ? '' : 'es'} disponible${availableTotal === 1 ? '' : 's'} en ${getCurrentLocationLabel()}.`;
+
+    if (!rows.length) {
+        grid.innerHTML = '<div class="uxp-empty">No hay parqueaderos con disponibilidad publicada para esta ubicación.</div>';
+        return;
+    }
+
+    grid.innerHTML = rows.map(({ business, availability }) => {
+        const available = Math.max(0, Number(availability.available_spaces || 0));
+        const total = Math.max(0, Number(availability.total_spaces || 0));
+        const open = availability.is_open !== false;
+        const address = business.address || 'Dirección no registrada';
+        const city = businessCity(business);
+        const province = provinceForCity(city) || business.province || '';
+        const phone = business.whatsapp || business.phone || '';
+        const profileUrl = business.slug ? NEGOCIO_URL(business.slug) : '#';
+        const contactDigits = String(phone).replace(/\D/g, '');
+        const contactHtml = contactDigits
+            ? `<a class="uxp-contact" href="https://wa.me/${esc(contactDigits)}" target="_blank" rel="noopener noreferrer">WhatsApp</a>`
+            : '';
+
+        return `
+            <article class="uxp-card">
+                <div class="uxp-availability ${open && available > 0 ? 'is-available' : ''}">
+                    <strong>${open ? available : 0}</strong>
+                    <span>lugares disponibles</span>
+                </div>
+                <div class="uxp-info">
+                    <div class="uxp-title-row">
+                        <div>
+                            <span class="uxp-category">Parqueadero</span>
+                            <h3>${esc(business.name || 'Parqueadero')}</h3>
+                        </div>
+                        <span class="uxp-status ${open ? 'is-open' : 'is-closed'}">${open ? 'Abierto' : 'Cerrado'}</span>
+                    </div>
+                    <p class="uxp-address">📍 ${esc(address)}</p>
+                    <p class="uxp-location">${esc([city, province].filter(Boolean).join(' · '))}</p>
+                    <div class="uxp-data">
+                        <div><span>Capacidad</span><strong>${total} espacios</strong></div>
+                        <div><span>Tarifa</span><strong>${esc(parkingMoney(availability.hourly_rate))}</strong></div>
+                    </div>
+                    ${availability.notes ? `<p class="uxp-notes">${esc(availability.notes)}</p>` : ''}
+                    <div class="uxp-footer">
+                        <small>Actualizado: ${esc(parkingUpdated(availability.updated_at))}</small>
+                        <div class="uxp-actions">${contactHtml}<a class="uxp-profile" href="${profileUrl}">Ver negocio</a></div>
+                    </div>
+                </div>
+            </article>`;
+    }).join('');
+}
+
+function getCurrentLocationLabel() {
+    if (activeProvince === '__all__') return 'Todo Ecuador';
+    if (activeLocation && activeLocation !== '__province__') return activeLocation;
+    return activeProvince;
+}
+
+window.openParkingAvailability = async () => {
+    const modal = document.getElementById('parkingModal');
+    const closeButton = document.getElementById('parkingCloseButton');
+    if (!modal) return;
+
+    parkingPreviousFocus = document.activeElement;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    await ensureAllBusinessesLoaded(false);
+    await loadParkingAvailability(true);
+    renderParkingAvailability();
+
+    window.clearInterval(parkingRefreshTimer);
+    parkingRefreshTimer = window.setInterval(async () => {
+        if (!modal.classList.contains('open')) return;
+        await loadParkingAvailability(true);
+        renderParkingAvailability();
+    }, 45000);
+
+    window.setTimeout(() => closeButton?.focus(), 0);
+};
+
+window.closeParkingAvailability = () => {
+    const modal = document.getElementById('parkingModal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    window.clearInterval(parkingRefreshTimer);
+    parkingRefreshTimer = null;
+    if (parkingPreviousFocus instanceof HTMLElement) parkingPreviousFocus.focus();
+    parkingPreviousFocus = null;
+};
 
 // ── Árbol de categorías ───────────────────────────────────────
 function renderCatTree() {
@@ -10090,6 +10327,7 @@ function updateMetrics() {
     document.getElementById('metricDelivery').textContent= base.filter(b=>b.delivery_available).length + ' locales';
     const offerTotal = offerMetricsLoaded ? base.reduce((total, business) => total + businessOfferProductCount(business), 0) : base.filter(b=>b._promo).length;
     document.getElementById('metricOffers').textContent  = offerTotal + (offerTotal === 1 ? ' oferta' : ' ofertas');
+    updateParkingMetric();
 }
 
 // Solo filtro de categoría (sin quick filter) para las métricas
@@ -10892,7 +11130,22 @@ document.addEventListener('click', e => {
     if (!e.target.closest('.search-wrapper')) hideResults();
 });
 document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') hideResults();
+    if (e.key === 'Escape') {
+        hideResults();
+        const parkingModal = document.getElementById('parkingModal');
+        if (parkingModal?.classList.contains('open')) closeParkingAvailability();
+    }
+});
+
+document.getElementById('parkingModal')?.addEventListener('click', event => {
+    if (event.target.id === 'parkingModal') closeParkingAvailability();
+});
+
+document.getElementById('pillParking')?.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openParkingAvailability();
+    }
 });
 </script>
 
@@ -11270,93 +11523,32 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
 </script>
 
 
-<script id="urbanex-boulevard-horario-original">
-(function(){
-    const boulevard = document.querySelector('.main-boulevard');
-    if (!boulevard) return;
-
-    const imagenes = {
-        desktop: {
-            dia: '/imagenes/boulevard/Boul_mañana.png',
-            tarde: '/imagenes/boulevard/Boul_tarde.png',
-            noche: '/imagenes/boulevard/Boul_noche.png'
-        },
-        celular: {
-            dia: '/imagenes/boulevard/Boul_mañana-Celular.png',
-            tarde: '/imagenes/boulevard/Boul_tarde-Celular.png',
-            noche: '/imagenes/boulevard/Boul_noche-Celular.png'
-        }
-    };
-
-    const mediaCelular = window.matchMedia('(max-width: 720px)');
-
-    function horaEcuador(){
-        const partes = new Intl.DateTimeFormat('es-EC', {
-            timeZone:'America/Guayaquil',
-            hour:'2-digit',
-            hourCycle:'h23'
-        }).formatToParts(new Date());
-        const parte = partes.find(p => p.type === 'hour');
-        return parte ? Number(parte.value) : new Date().getHours();
-    }
-
-    function franja(hora){
-        if (hora >= 7 && hora < 13) return 'dia';
-        if (hora >= 13 && hora < 19) return 'tarde';
-        return 'noche';
-    }
-
-    function actualizar(){
-        const tipo = mediaCelular.matches ? 'celular' : 'desktop';
-        boulevard.style.setProperty(
-            'background-image',
-            'url("' + imagenes[tipo][franja(horaEcuador())] + '")',
-            'important'
-        );
-    }
-
-    actualizar();
-    setInterval(actualizar, 60000);
-    if (mediaCelular.addEventListener) mediaCelular.addEventListener('change', actualizar);
-    else if (mediaCelular.addListener) mediaCelular.addListener(actualizar);
-})();
-</script>
 
 
 <script id="urbanex-fullscreen-bg-sync">
 (function(){
-    const imagenes = {
-        desktop: {
-            dia: '/imagenes/boulevard/Boul_mañana.png',
-            tarde: '/imagenes/boulevard/Boul_tarde.png',
-            noche: '/imagenes/boulevard/Boul_noche.png'
-        },
-        celular: {
-            dia: '/imagenes/boulevard/Boul_mañana-Celular.png',
-            tarde: '/imagenes/boulevard/Boul_tarde-Celular.png',
-            noche: '/imagenes/boulevard/Boul_noche-Celular.png'
-        }
+    const images = {
+        desktop:{dia:'/imagenes/boulevard/Boul_mañana.png',tarde:'/imagenes/boulevard/Boul_tarde.png',noche:'/imagenes/boulevard/Boul_noche.png'},
+        celular:{dia:'/imagenes/boulevard/Boul_mañana-Celular.png',tarde:'/imagenes/boulevard/Boul_tarde-Celular.png',noche:'/imagenes/boulevard/Boul_noche-Celular.png'}
     };
-    const mediaCelular = window.matchMedia('(max-width: 720px)');
-    function horaEcuador(){
-        const partes = new Intl.DateTimeFormat('es-EC', {timeZone:'America/Guayaquil', hour:'2-digit', hourCycle:'h23'}).formatToParts(new Date());
-        const parte = partes.find(p => p.type === 'hour');
-        return parte ? Number(parte.value) : new Date().getHours();
+    const media = window.matchMedia('(max-width: 720px)');
+    function ecuadorHour(){
+        const parts = new Intl.DateTimeFormat('es-EC',{timeZone:'America/Guayaquil',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+        const hour = parts.find(part => part.type === 'hour');
+        return hour ? Number(hour.value) : new Date().getHours();
     }
-    function franja(hora){
-        if (hora >= 7 && hora < 13) return 'dia';
-        if (hora >= 13 && hora < 19) return 'tarde';
-        return 'noche';
+    function period(hour){
+        return hour >= 7 && hour < 13 ? 'dia' : (hour >= 13 && hour < 19 ? 'tarde' : 'noche');
     }
-    function actualizarFondoCompleto(){
-        const tipo = mediaCelular.matches ? 'celular' : 'desktop';
-        const ruta = imagenes[tipo][franja(horaEcuador())];
-        document.documentElement.style.setProperty('--urbanex-fullscreen-bg', 'url("' + ruta + '")');
+    function update(){
+        const route = images[media.matches ? 'celular' : 'desktop'][period(ecuadorHour())];
+        document.documentElement.style.setProperty('--urbanex-fullscreen-bg','url("' + route + '")');
     }
-    actualizarFondoCompleto();
-    setInterval(actualizarFondoCompleto, 60000);
-    if (mediaCelular.addEventListener) mediaCelular.addEventListener('change', actualizarFondoCompleto);
-    else if (mediaCelular.addListener) mediaCelular.addListener(actualizarFondoCompleto);
+    update();
+    const timer = window.setInterval(update, 60000);
+    if (media.addEventListener) media.addEventListener('change', update);
+    else if (media.addListener) media.addListener(update);
+    window.addEventListener('pagehide', () => window.clearInterval(timer), { once:true });
 })();
 </script>
 
@@ -11386,6 +11578,77 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
         0 2px 6px rgba(0,0,0,.78),
         0 0 12px rgba(0,0,0,.35) !important;
     -webkit-text-stroke:0.15px rgba(0,0,0,.35) !important;
+}
+</style>
+
+
+<style id="urbanex-boulevard-original-final-fix">
+/* Corrección final basada en boulevard original: la fotografía se dibuja directamente
+   en el área central aunque el fondo global no pueda renderizarse. */
+.main-boulevard{
+    background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_mañana.png')) !important;
+    background-size:cover !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+}
+@media(max-width:720px){
+    .main-boulevard{
+        background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_mañana-Celular.png')) !important;
+        background-position:center center !important;
+    }
+}
+
+/* Parqueaderos: consulta pública, sin controles de edición. */
+.uxp-modal{
+    position:fixed;inset:0;z-index:2147483500;display:none;align-items:center;justify-content:center;
+    padding:18px;background:rgba(15,25,34,.34);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.uxp-modal.open{display:flex;}
+.uxp-shell{
+    width:min(980px,100%);max-height:min(760px,calc(100svh - 36px));display:grid;grid-template-rows:auto minmax(0,1fr);
+    overflow:hidden;border:1px solid rgba(188,143,34,.34);border-radius:20px;background:rgba(250,248,244,.97);
+    box-shadow:0 30px 80px rgba(22,37,48,.25);font-family:var(--font-sans);
+}
+.uxp-header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 20px;border-bottom:1px solid rgba(188,143,34,.20);background:rgba(255,252,247,.98);}
+.uxp-eyebrow{display:block;color:#a06f13;font-size:8px;font-weight:800;letter-spacing:1.35px;text-transform:uppercase;margin-bottom:4px;}
+.uxp-header h2{margin:0;color:#1c435c;font-size:22px;line-height:1.1;}
+.uxp-header p{margin:5px 0 0;color:#6d8191;font-size:10px;}
+.uxp-close{width:38px;height:38px;flex:0 0 38px;border:1px solid rgba(188,143,34,.28);border-radius:11px;background:#fff;color:#36566d;font-size:24px;line-height:1;cursor:pointer;}
+.uxp-grid{min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:14px;}
+.uxp-card{min-width:0;display:grid;grid-template-columns:132px minmax(0,1fr);overflow:hidden;border:1px solid rgba(188,143,34,.22);border-radius:16px;background:#fff;box-shadow:0 10px 24px rgba(31,57,76,.08);}
+.uxp-availability{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:15px;background:linear-gradient(145deg,#eef2f5,#e5e9ed);color:#5d6e7c;text-align:center;}
+.uxp-availability.is-available{background:linear-gradient(145deg,#e9f8ef,#dff2e7);color:#127646;}
+.uxp-availability strong{font-size:34px;line-height:1;font-weight:800;}
+.uxp-availability span{margin-top:6px;font-size:8px;font-weight:800;line-height:1.25;text-transform:uppercase;}
+.uxp-info{min-width:0;padding:13px 14px;display:flex;flex-direction:column;gap:7px;}
+.uxp-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:9px;}
+.uxp-category{display:block;color:#a06f13;font-size:7px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;}
+.uxp-title-row h3{margin:3px 0 0;color:#1c435c;font-size:13px;line-height:1.2;}
+.uxp-status{flex:0 0 auto;padding:4px 7px;border-radius:999px;font-size:7px;font-weight:800;}
+.uxp-status.is-open{color:#087443;background:#eaf8f0;border:1px solid #c8ead7;}
+.uxp-status.is-closed{color:#a13d47;background:#fff0f2;border:1px solid #f0d1d5;}
+.uxp-address,.uxp-location,.uxp-notes{margin:0;color:#52697a;font-size:8.5px;line-height:1.38;}
+.uxp-location{color:#7a8d9b;}
+.uxp-notes{padding-top:6px;border-top:1px solid #edf0f2;}
+.uxp-data{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding-top:6px;border-top:1px solid #edf0f2;}
+.uxp-data div{min-width:0;display:flex;flex-direction:column;gap:2px;}
+.uxp-data span{color:#8293a1;font-size:6.5px;font-weight:800;text-transform:uppercase;}
+.uxp-data strong{color:#1c435c;font-size:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.uxp-footer{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:8px;padding-top:6px;border-top:1px solid #edf0f2;}
+.uxp-footer small{color:#8796a2;font-size:6.5px;line-height:1.3;}
+.uxp-actions{display:flex;gap:5px;flex:0 0 auto;}
+.uxp-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:27px;padding:0 8px;border-radius:8px;text-decoration:none;font-size:7px;font-weight:800;}
+.uxp-contact{color:#087443;background:#eaf8f0;border:1px solid #c8ead7;}
+.uxp-profile{color:#1c435c;background:#f8f3e9;border:1px solid rgba(188,143,34,.25);}
+.uxp-empty{grid-column:1/-1;min-height:180px;display:grid;place-items:center;padding:28px;border:1px dashed rgba(188,143,34,.32);border-radius:15px;background:#fff;color:#667b8c;text-align:center;font-size:11px;line-height:1.5;}
+@media(max-width:720px){
+    .uxp-modal{padding:0;align-items:stretch;}
+    .uxp-shell{width:100%;height:100svh;max-height:none;border:0;border-radius:0;}
+    .uxp-header{padding:14px 14px;}
+    .uxp-header h2{font-size:19px;}
+    .uxp-grid{grid-template-columns:1fr;padding:10px;gap:10px;}
+    .uxp-card{grid-template-columns:108px minmax(0,1fr);}
+    .uxp-availability strong{font-size:29px;}
 }
 </style>
 
