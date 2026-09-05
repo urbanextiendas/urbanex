@@ -10,73 +10,11 @@
     <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
     <link rel="preconnect" href="https://esm.sh" crossorigin>
     <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
+    <link rel="preload" as="image" href="imagenes/boulevard/Boul_mañana.png" fetchpriority="high">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <script id="urbanex-boulevard-background-loader">
-    (function(){
-        const mq = window.matchMedia('(max-width: 720px)');
-        const images = {
-            desktop: {
-                dia: '/imagenes/boulevard/Boul_mañana.png',
-                tarde: '/imagenes/boulevard/Boul_tarde.png',
-                noche: '/imagenes/boulevard/Boul_noche.png'
-            },
-            mobile: {
-                dia: '/imagenes/boulevard/Boul_mañana-Celular.png',
-                tarde: '/imagenes/boulevard/Boul_tarde-Celular.png',
-                noche: '/imagenes/boulevard/Boul_noche-Celular.png'
-            }
-        };
-        let currentPath = '';
-
-        function ecuadorHour(){
-            try {
-                const parts = new Intl.DateTimeFormat('es-EC', {
-                    timeZone: 'America/Guayaquil',
-                    hour: '2-digit',
-                    hourCycle: 'h23'
-                }).formatToParts(new Date());
-                const hour = parts.find(part => part.type === 'hour');
-                return hour ? Number(hour.value) : new Date().getHours();
-            } catch (_) {
-                return new Date().getHours();
-            }
-        }
-
-        function slot(hour){
-            if (hour >= 7 && hour < 13) return 'dia';
-            if (hour >= 13 && hour < 19) return 'tarde';
-            return 'noche';
-        }
-
-        function updateBackground(preload){
-            const device = mq.matches ? 'mobile' : 'desktop';
-            const path = images[device][slot(ecuadorHour())];
-            if (path === currentPath) return;
-            currentPath = path;
-            document.documentElement.style.setProperty('--urbanex-fullscreen-bg', 'url("' + path + '")');
-            if (preload) {
-                const link = document.createElement('link');
-                link.rel = 'preload';
-                link.as = 'image';
-                link.href = path;
-                link.fetchPriority = 'high';
-                document.head.appendChild(link);
-            }
-        }
-
-        updateBackground(true);
-        window.setInterval(function(){ updateBackground(false); }, 60000);
-        const onMediaChange = function(){ updateBackground(true); };
-        if (mq.addEventListener) mq.addEventListener('change', onMediaChange);
-        else if (mq.addListener) mq.addListener(onMediaChange);
-    })();
-    </script>
-
-    <style id="urbanex-boulevard-consolidated">
-
-/* ===== CONSOLIDADO: base-1 ===== */
-:root {
+    <style>
+        :root {
             --bg-main: #020202;
             --bg-panels-glass: rgba(6, 6, 6, 0.42);
             --bg-cards-glass: rgba(20, 20, 20, 0.32);
@@ -234,7 +172,7 @@
         /* ── MAIN BOULEVARD ── */
         .main-boulevard {
             grid-area: main; position: relative; overflow: hidden;
-            background-image: var(--urbanex-fullscreen-bg);
+            background-image: url("imagenes/boulevard/Boul_mañana.png");
             background-size: cover; background-position: center bottom;
             background-repeat: no-repeat; z-index: 2;
         }
@@ -426,7 +364,19 @@ html, body { height: 100% !important; overflow: hidden !important; }
 }
 /* === FIN URBANEX PATCH MINIMO === */
 
-/* ===== CONSOLIDADO: base-2 ===== */
+</style>
+
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#e5c158">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Urbanex">
+    <link rel="apple-touch-icon" href="/imagenes/logo.png">
+
+<style>
 /* === UX_BOULEVARD_ONLY_FIXED_BARS START === */
 html,
 body {
@@ -490,9 +440,11 @@ body {
     }
 }
 /* === UX_BOULEVARD_ONLY_FIXED_BARS END === */
+</style>
 
-/* ===== CONSOLIDADO: ux-boulevard-bars-style ===== */
-/* Solo fijar encabezado y pie. No congela todo el boulevard. */
+
+<style id="ux-boulevard-bars-style">
+  /* Solo fijar encabezado y pie. No congela todo el boulevard. */
   html,
   body {
     overflow-x: hidden !important;
@@ -524,9 +476,11 @@ body {
     min-height: calc(100vh - 24px) !important;
     padding-bottom: 24px !important;
   }
+</style>
 
-/* ===== CONSOLIDADO: ux-final-pwa-style ===== */
-.ux-final-pwa-install {
+
+<style id="ux-final-pwa-style">
+  .ux-final-pwa-install {
     position: fixed;
     left: 0;
     right: 0;
@@ -623,8 +577,10 @@ body {
       padding: 0 16px;
     }
   }
+</style>
 
-/* ===== CONSOLIDADO: ux-boulevard-final-requested ===== */
+
+<style id="ux-boulevard-final-requested">
 /* === CAMBIOS SOLICITADOS SOLO PARA BOULEVARD ===
    1) Encabezado fijo en cualquier dispositivo.
    2) Pie fijo en cualquier dispositivo.
@@ -908,8 +864,10 @@ body {
     }
 }
 /* === FIN CAMBIOS SOLICITADOS SOLO PARA BOULEVARD === */
+</style>
 
-/* ===== CONSOLIDADO: ux-boulevard-mobile-filters-visible ===== */
+
+<style id="ux-boulevard-mobile-filters-visible">
 /* SOLO CAMBIO: mostrar la barra de filtros inferiores en celular */
 @media (max-width: 760px) {
     .bottom-filter-bar {
@@ -956,8 +914,10 @@ body {
         font-size: 8px !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: ux-performance-patch ===== */
+
+<style id="ux-performance-patch">
 /* SOLO OPTIMIZACIÓN: reduce trabajo de repintado sin cambiar diseño */
 .aside-categories,
 .aside-showcase-list,
@@ -977,8 +937,10 @@ body {
         background-size: cover !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-original-focused-improvements ===== */
+
+<style id="urbanex-original-focused-improvements">
 /* Mejoras limitadas sobre el original. No sustituye tipografías ni identidad. */
 .location-selector{
     position:relative;
@@ -1113,8 +1075,10 @@ body {
         animation:none!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-province-city-picker-v1 ===== */
+
+<style id="urbanex-province-city-picker-v1">
 /* ÚNICO CAMBIO: selector de provincia y ciudad/cantón. */
 .location-picker{
     position:relative;
@@ -1259,8 +1223,10 @@ body {
         width:auto;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-location-mobile-final-v2 ===== */
+
+<style id="urbanex-location-mobile-final-v2">
 /* Ajuste puntual: ubicación visible, compacta y responsive. */
 .tool-icon.icon-corazon,
 .profile-avatar{
@@ -1427,8 +1393,10 @@ body {
         font-size:9.5px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-desktop-tablet-only-v1 ===== */
+
+<style id="urbanex-featured-desktop-tablet-only-v1">
 /* Ajustes exclusivos para computador y tablet. La vista móvil (<=640px) no se modifica. */
 @media (min-width:721px){
     .showcase-header{
@@ -1603,8 +1571,10 @@ body {
         font-size:12px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-directory-premium-v2 ===== */
+
+<style id="urbanex-directory-premium-v2">
 /* =========================================================
    URBANEX · DIRECTORIO PREMIUM V2
    Diseño compacto, comercial y coherente con index.html.
@@ -2222,8 +2192,10 @@ body {
     .uxd-close{transition:none!important;}
     .uxd-skeleton{animation:none!important;}
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-directory-category-groups-v3 ===== */
+
+<style id="urbanex-directory-category-groups-v3">
 /* Distinción visual por categoría dentro de Todos los negocios. */
 .uxd-grid{
     display:block!important;
@@ -2340,8 +2312,10 @@ body {
     .uxd-loading-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:9px;}
     .uxd-loading-grid{padding:0;}
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-category-bar-like-index ===== */
+
+<style id="urbanex-category-bar-like-index">
 /* ============================================================
    SOLO BARRA DE CATEGORÍAS
    Replica la estructura de desplazamiento usada en index.html.
@@ -2375,8 +2349,10 @@ body {
         align-items:stretch!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-logo-fit-real-only ===== */
+
+<style id="urbanex-logo-fit-real-only">
 /* ÚNICO CAMBIO: mostrar cada logotipo completo, centrado y sin recortes. */
 .uxd-card-media{
     display:flex!important;
@@ -2405,8 +2381,10 @@ body {
 .uxd-card:hover .uxd-card-media > img.uxd-business-logo-fit{
     transform:none!important;
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-single-only ===== */
+
+<style id="urbanex-featured-single-only">
 /* ÚNICOS CAMBIOS:
    - Ocultar la barra horizontal visible.
    - Mostrar un destacado por vez.
@@ -2465,13 +2443,15 @@ body {
         flex-basis:74px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-side-panels-translucent-only ===== */
+
+<style id="urbanex-side-panels-translucent-only">
 /* ÚNICO CAMBIO: paneles laterales menos transparentes en computador, tablet y celular. */
 .aside-categories{
     background:
         linear-gradient(rgba(3,3,3,.94), rgba(3,3,3,.94)),
-        url("imagenes/Boulevard.webp") left center / cover no-repeat!important;
+        url("imagenes/Boulevard.png") left center / cover no-repeat!important;
     backdrop-filter:blur(8px)!important;
     -webkit-backdrop-filter:blur(8px)!important;
 }
@@ -2479,20 +2459,24 @@ body {
 .aside-showcase-list{
     background:
         linear-gradient(rgba(3,3,3,.94), rgba(3,3,3,.94)),
-        url("imagenes/Boulevard.webp") right center / cover no-repeat!important;
+        url("imagenes/Boulevard.png") right center / cover no-repeat!important;
     backdrop-filter:blur(8px)!important;
     -webkit-backdrop-filter:blur(8px)!important;
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-mobile-category-spacing-only ===== */
+
+<style id="urbanex-mobile-category-spacing-only">
 /* ÚNICO CAMBIO: aumentar la separación entre la barra de categorías y el Boulevard en celular. */
 @media (max-width:720px){
     body{
         padding-top:200px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-mobile-header-category-gap-only ===== */
+
+<style id="urbanex-mobile-header-category-gap-only">
 /* ÚNICO CAMBIO: aumentar la separación entre las dos líneas en celular. */
 @media (max-width:720px){
     .aside-categories{
@@ -2503,8 +2487,10 @@ body {
         padding-top:214px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-footer-link-style-only ===== */
+
+<style id="urbanex-footer-link-style-only">
 /* ÚNICO CAMBIO: enlace del pie con el mismo color del texto y sin subrayado. */
 .pie-pagina a,
 .pie-pagina a:visited,
@@ -2513,8 +2499,10 @@ body {
     color:inherit!important;
     text-decoration:none!important;
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-mobile-lines-spacing-final ===== */
+
+<style id="urbanex-mobile-lines-spacing-final">
 /* ÚNICO CAMBIO: separar las líneas del encabezado sin alterar
    el espacio interno ni la posición de los nombres de categorías. */
 @media (max-width:720px){
@@ -2531,8 +2519,10 @@ body {
         padding-top:198px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-professional-large-screens-only ===== */
+
+<style id="urbanex-featured-professional-large-screens-only">
 /* ============================================================
    ÚNICO CAMBIO: presentación de DESTACADOS en tablet y computador.
    La vista celular (hasta 640px) queda completamente intacta.
@@ -2806,8 +2796,10 @@ body {
         transition:none!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-multiple-large-screens-only ===== */
+
+<style id="urbanex-featured-multiple-large-screens-only">
 /* ============================================================
    SOLO TABLET Y COMPUTADOR (641 px en adelante)
    - Tres publicidades visibles.
@@ -3009,8 +3001,10 @@ body {
         transition:none!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-card-reference-large-only ===== */
+
+<style id="urbanex-featured-card-reference-large-only">
 /* ============================================================
    SOLO TABLET Y COMPUTADOR: 721 px en adelante.
    Celular permanece intacto.
@@ -3227,8 +3221,10 @@ body {
         transition:none!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-different-times-large-only ===== */
+
+<style id="urbanex-featured-different-times-large-only">
 /* Solo tablet y computador: cada publicidad cambia de forma independiente. */
 @media (min-width:721px){
     .shop-card.featured-slot-enter{
@@ -3252,8 +3248,10 @@ body {
         animation:none!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-luxury-large-only ===== */
+
+<style id="urbanex-featured-luxury-large-only">
 /* ============================================================
    SOLO TABLET Y COMPUTADOR
    Tarjetas publicitarias completas, sin franja dorada.
@@ -3728,8 +3726,10 @@ body {
         transition:none!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-logo-fit-only ===== */
+
+<style id="urbanex-featured-logo-fit-only">
 /* ÚNICO CAMBIO: ajustar el logo al recuadro de Destacados en pantallas grandes. */
 @media (min-width:721px){
     .shop-card-ad .shop-thumb-wrapper{
@@ -3749,14 +3749,16 @@ body {
         transform:none!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-translucency-restored-only ===== */
+
+<style id="urbanex-featured-translucency-restored-only">
 /* ÚNICO CAMBIO: recuperar la translucidez de Destacados en tablet y computador. */
 @media (min-width:721px){
     .aside-showcase-list{
         background:
             linear-gradient(rgba(4,6,9,.78),rgba(4,6,9,.78)),
-            url("imagenes/Boulevard.webp") right center / cover no-repeat!important;
+            url("imagenes/Boulevard.png") right center / cover no-repeat!important;
         backdrop-filter:blur(12px) saturate(.92)!important;
         -webkit-backdrop-filter:blur(12px) saturate(.92)!important;
     }
@@ -3794,8 +3796,10 @@ body {
         -webkit-backdrop-filter:blur(10px)!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-header-width-adjust-only ===== */
+
+<style id="urbanex-featured-header-width-adjust-only">
 /* Ajuste leve exclusivo para tablet y computador. Celular intacto. */
 @media (min-width:721px){
     .dashboard-container{
@@ -3845,8 +3849,10 @@ body {
         grid-template-columns:220px 1fr 226px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-inline-arrows-only ===== */
+
+<style id="urbanex-featured-inline-arrows-only">
 /* ÚNICOS CAMBIOS:
    - flechas sin círculos
    - mejor distribución interna del destacado
@@ -3956,8 +3962,10 @@ body {
         font-size:7.8px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-only-requested-spacing-scroll ===== */
+
+<style id="urbanex-only-requested-spacing-scroll">
 /* ÚNICOS CAMBIOS:
    - reducir márgenes internos en Destacados
    - mostrar la barra únicamente en Categorías
@@ -4011,8 +4019,10 @@ body {
         border-radius:999px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-only-more-compact-margins-and-divider-arrows ===== */
+
+<style id="urbanex-only-more-compact-margins-and-divider-arrows">
 /* ÚNICOS CAMBIOS:
    - reducir mucho más los márgenes internos en Destacados
    - mover las flechas a las líneas divisorias laterales
@@ -4072,8 +4082,10 @@ body {
         right:4px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-mobile-featured-rich-card-only ===== */
+
+<style id="urbanex-mobile-featured-rich-card-only">
 /* ÚNICO CAMBIO: Destacados del celular con más información y un poco más alto. */
 @media (max-width:720px){
     .aside-showcase-list{
@@ -4356,8 +4368,10 @@ body {
         right:-2px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-mobile-featured-professional-navigation-only ===== */
+
+<style id="urbanex-mobile-featured-professional-navigation-only">
 /* ÚNICO CAMBIO:
    sustituir las flechas móviles por navegación mediante:
    - segmentos táctiles
@@ -4451,8 +4465,10 @@ body {
         touch-action:pan-y!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-mobile-featured-margins-reduced-only ===== */
+
+<style id="urbanex-mobile-featured-margins-reduced-only">
 /* ÚNICO CAMBIO: reducir márgenes del destacado móvil
    y mantener una separación uniforme similar al espacio
    entre WhatsApp y la línea inferior.
@@ -4472,8 +4488,10 @@ body {
         gap:6px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-mobile-featured-actions-under-address-only ===== */
+
+<style id="urbanex-mobile-featured-actions-under-address-only">
 /* ÚNICOS CAMBIOS EN CELULAR:
    - Teléfono, web real y correo debajo de la dirección
    - cada dato aparece debajo de su etiqueta
@@ -4589,8 +4607,10 @@ body {
         bottom:1px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-mobile-featured-proportion-adjust-only ===== */
+
+<style id="urbanex-mobile-featured-proportion-adjust-only">
 /* ÚNICOS CAMBIOS EN CELULAR:
    - pequeño margen superior
    - texto alineado con la parte superior del logotipo
@@ -4668,8 +4688,10 @@ body {
         bottom:1px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-large-professional-navigation-only ===== */
+
+<style id="urbanex-featured-large-professional-navigation-only">
 /* SOLO TABLET Y COMPUTADOR:
    - elimina flechas sobre las publicidades
    - navegación por segmentos debajo de los anuncios
@@ -4787,8 +4809,10 @@ body {
         transition:none!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-bottom-filter-gap-only ===== */
+
+<style id="urbanex-bottom-filter-gap-only">
 /* ÚNICO CAMBIO EN TABLET Y COMPUTADOR:
    reducir el espacio entre la barra inferior y el pie,
    sin mover ni redimensionar la imagen del Boulevard.
@@ -4798,8 +4822,10 @@ body {
         bottom:4px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-large-space-optimized-only ===== */
+
+<style id="urbanex-featured-large-space-optimized-only">
 /* SOLO TABLET Y COMPUTADOR:
    aprovechar todo el espacio vertical disponible en Destacados.
    La vista celular no se modifica.
@@ -4924,8 +4950,10 @@ body {
         min-height:76px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-fixed-large-layout-and-featured-details-only ===== */
+
+<style id="urbanex-fixed-large-layout-and-featured-details-only">
 /* SOLO COMPUTADOR:
    - Boulevard, Categorías y Destacados conservan una altura fija.
    - Las categorías adicionales se desplazan dentro de su propio panel.
@@ -5147,8 +5175,10 @@ body {
         white-space:nowrap!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-bottom-filter-translucent-only ===== */
+
+<style id="urbanex-bottom-filter-translucent-only">
 /* ÚNICO CAMBIO: barra inferior de filtros translúcida. */
 .bottom-filter-bar{
     background:rgba(7,7,7,.48)!important;
@@ -5159,8 +5189,10 @@ body {
         0 10px 28px rgba(0,0,0,.26),
         inset 0 1px 0 rgba(255,255,255,.035)!important;
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-tablet-native-scroll-fix-only ===== */
+
+<style id="urbanex-tablet-native-scroll-fix-only">
 /* ÚNICO AJUSTE PARA TABLET:
    recupera el desplazamiento vertical y la actualización por gesto,
    sin alterar el diseño ni la altura visual del Boulevard.
@@ -5257,8 +5289,10 @@ body {
 
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-tablet-footer-gap-fix-only ===== */
+
+<style id="urbanex-tablet-footer-gap-fix-only">
 /* ÚNICO CAMBIO PARA TABLET:
    eliminar el espacio entre el contenido y el pie,
    manteniendo el desplazamiento vertical y la actualización por gesto.
@@ -5357,8 +5391,10 @@ body {
         }
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-reference-exact-v92 ===== */
+
+<style id="urbanex-featured-reference-exact-v92">
 /* =========================================================
    DESTACADOS · TABLET Y COMPUTADOR
    Composición exacta basada en la referencia cargada:
@@ -5715,8 +5751,10 @@ body {
         font-size:11.7px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-final-small-adjustments-only ===== */
+
+<style id="urbanex-featured-final-small-adjustments-only">
 /* ÚNICOS CAMBIOS EN TABLET Y COMPUTADOR:
    - tipografía ligeramente más grande
    - mayor margen interno en el recuadro del logotipo
@@ -5771,8 +5809,10 @@ body {
         font-size:7.5px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-desktop-compact-distribution-only ===== */
+
+<style id="urbanex-featured-desktop-compact-distribution-only">
 /* ÚNICOS CAMBIOS EN COMPUTADOR:
    - reducir la altura inútil de las tarjetas
    - mejorar la distribución vertical
@@ -5941,8 +5981,10 @@ body {
         font-size:6.8px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-tablet-compact-distribution-only ===== */
+
+<style id="urbanex-featured-tablet-compact-distribution-only">
 /* ÚNICOS CAMBIOS EN TABLET:
    - reducir la altura inútil de las tarjetas
    - mejorar la distribución vertical
@@ -6111,8 +6153,10 @@ body {
         font-size:6.7px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-three-cards-font-match-only ===== */
+
+<style id="urbanex-featured-three-cards-font-match-only">
 /* ÚNICO CAMBIO:
    cuando aparecen tres tarjetas, la tipografía conserva
    prácticamente el mismo tamaño utilizado cuando aparecen dos.
@@ -6184,8 +6228,10 @@ body {
         font-size:7px!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-logo-slightly-larger-only ===== */
+
+<style id="urbanex-featured-logo-slightly-larger-only">
 /* ÚNICO CAMBIO:
    ampliar ligeramente el logotipo dentro de su mismo recuadro.
 */
@@ -6195,8 +6241,10 @@ body {
         transform-origin:center!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-featured-bottom-centered-only ===== */
+
+<style id="urbanex-featured-bottom-centered-only">
 /* ÚNICO CAMBIO:
    centrar verticalmente la calificación y el estado
    dentro del espacio inferior de las tarjetas de Destacados.
@@ -6227,8 +6275,10 @@ body {
         align-self:center!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-tablet-responsive-orientation-v1 ===== */
+
+<style id="urbanex-tablet-responsive-orientation-v1">
 /* ============================================================
    URBANEX · AJUSTE EXCLUSIVO PARA TABLET
    Rango objetivo: 641 px a 1366 px en dispositivos táctiles.
@@ -6901,8 +6951,10 @@ body {
         animation:none!important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-original-paleta-clara-final ===== */
+
+<style id="urbanex-original-paleta-clara-final">
 /* =============================================================
    URBANEX — PALETA CLARA SOBRE EL BOULEVARD ORIGINAL
    No modifica estructura, grid, tamaños ni responsive original.
@@ -7147,8 +7199,10 @@ body{
         background:linear-gradient(145deg,#424d55,#303a40) !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-translucido-legible-final ===== */
+
+<style id="urbanex-translucido-legible-final">
 /* =========================================================
    AJUSTE VISUAL FINAL
    - Más transparencia donde sí conviene
@@ -7474,8 +7528,10 @@ body{
         background: rgba(255,252,246,0.78) !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-fullscreen-translucent-final ===== */
+
+<style id="urbanex-fullscreen-translucent-final">
 /* =========================================================
    AJUSTE FINAL SOLICITADO
    - La imagen queda detrás de todo el layout
@@ -7494,7 +7550,7 @@ body::before{
     position:fixed;
     inset:0;
     z-index:-2;
-    background-image:var(--urbanex-fullscreen-bg);
+    background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_mañana.png'));
     background-position:center center;
     background-repeat:no-repeat;
     background-size:cover;
@@ -7744,8 +7800,10 @@ body::after{
         background:rgba(255,251,243,.52) !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-location-picker-legible-translucent-fix ===== */
+
+<style id="urbanex-location-picker-legible-translucent-fix">
 /* AJUSTE SOLICITADO
    - selector superior más traslúcido
    - texto visible y legible
@@ -7825,8 +7883,10 @@ body::after{
         opacity:1 !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-correccion-encuadre-fullscreen ===== */
+
+<style id="urbanex-correccion-encuadre-fullscreen">
 /* ============================================================
    CORRECCIÓN DEL FONDO
    - El Boulevard central conserva su encuadre original.
@@ -7839,7 +7899,7 @@ body::after{
 /* Fondo global: solo sirve como continuidad detrás de los paneles. */
 body::before{
     inset:-18px !important;
-    background-image:var(--urbanex-fullscreen-bg) !important;
+    background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_mañana.png')) !important;
     background-size:cover !important;
     background-position:center center !important;
     background-repeat:no-repeat !important;
@@ -7864,7 +7924,7 @@ body::after{
    El área central vuelve a dibujar la imagen en su propio espacio,
    igual que en el diseño original. */
 .main-boulevard{
-    background-image:var(--urbanex-fullscreen-bg) !important;
+    background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_mañana.png')) !important;
     background-size:cover !important;
     background-position:center center !important;
     background-repeat:no-repeat !important;
@@ -7913,7 +7973,7 @@ body::after{
     }
 
     .main-boulevard{
-        background-image:var(--urbanex-fullscreen-bg) !important;
+        background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_mañana-Celular.png')) !important;
         background-size:cover !important;
         background-position:center center !important;
         background-repeat:no-repeat !important;
@@ -7931,8 +7991,10 @@ body::after{
         background:rgba(255,251,243,.54) !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-fullscreen-continuo-sin-wrapper-ubicacion ===== */
+
+<style id="urbanex-fullscreen-continuo-sin-wrapper-ubicacion">
 /* ============================================================
    AJUSTE PUNTUAL SOLICITADO
    1) Una sola imagen ocupa TODO el viewport.
@@ -7958,7 +8020,10 @@ body::before{
     z-index:-2 !important;
     pointer-events:none !important;
 
-    background-image:var(--urbanex-fullscreen-bg) !important;
+    background-image:var(
+        --urbanex-fullscreen-bg,
+        url('/imagenes/boulevard/Boul_mañana.png')
+    ) !important;
 
     background-size:cover !important;
     background-position:center center !important;
@@ -7985,13 +8050,10 @@ body::after{
         ) !important;
 }
 
-/* El Boulevard central mantiene la fotografía visible.
-   La misma variable conserva la lógica mañana/tarde/noche. */
+/* El bloque central deja de dibujar una segunda imagen.
+   Así no hay cortes ni diferencias de encuadre. */
 .main-boulevard{
-    background-image:var(--urbanex-fullscreen-bg) !important;
-    background-size:cover !important;
-    background-position:center center !important;
-    background-repeat:no-repeat !important;
+    background-image:none !important;
     background-color:transparent !important;
 }
 
@@ -8077,10 +8139,7 @@ body::after{
     }
 
     .main-boulevard{
-        background-image:var(--urbanex-fullscreen-bg) !important;
-        background-size:cover !important;
-        background-position:center center !important;
-        background-repeat:no-repeat !important;
+        background-image:none !important;
         background-color:transparent !important;
     }
 
@@ -8095,8 +8154,10 @@ body::after{
         background:rgba(255,251,243,.52) !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-bienvenido-legible-fix ===== */
+
+<style id="urbanex-bienvenido-legible-fix">
 /* Mejora puntual de legibilidad del bloque BIENVENIDO */
 .welcome-billboard{
     background: linear-gradient(
@@ -8156,8 +8217,10 @@ body::after{
             0 2px 8px rgba(0, 0, 0, 0.44) !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-solo-labels-mejorados ===== */
+
+<style id="urbanex-solo-labels-mejorados">
 /* ============================================================
    ÚNICO CAMBIO:
    Mejorar visibilidad de:
@@ -8219,8 +8282,10 @@ body::after{
         color:#566d7d !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-solo-color-legible-desktop-tablet ===== */
+
+<style id="urbanex-solo-color-legible-desktop-tablet">
 /* ÚNICO CAMBIO:
    color de texto en pantallas medianas y grandes.
    Móvil no se modifica.
@@ -8242,8 +8307,10 @@ body::after{
         color:#38566b !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-colores-texto-legibles-final ===== */
+
+<style id="urbanex-colores-texto-legibles-final">
 /* ÚNICO CAMBIO:
    colores de texto en pantallas medianas y grandes.
    Móvil no se modifica.
@@ -8271,8 +8338,10 @@ body::after{
         opacity:1 !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-quitar-franja-destacados ===== */
+
+<style id="urbanex-quitar-franja-destacados">
 /* ÚNICO CAMBIO:
    quitar la franja de fondo detrás de DESTACADOS.
 */
@@ -8283,16 +8352,20 @@ body::after{
         border:0 !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-bienvenido-mas-arriba-only ===== */
+
+<style id="urbanex-bienvenido-mas-arriba-only">
 /* ÚNICO CAMBIO: subir el bloque BIENVENIDO en tablet y computador. */
 @media (min-width:721px){
     .welcome-billboard{
         top:18px !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: ajuste-solo-columnas-transparentes ===== */
+
+<style id="ajuste-solo-columnas-transparentes">
 /* SOLO este ajuste: hacer más transparentes las columnas laterales, sin tocar tarjetas internas */
 .aside-categories,
 .aside-showcase-list{
@@ -8310,8 +8383,10 @@ body::after{
         -webkit-backdrop-filter: blur(14px) saturate(108%) !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-categorias-texto-profesional-visible ===== */
+
+<style id="urbanex-categorias-texto-profesional-visible">
 /* ÚNICO CAMBIO:
    mejorar de forma visible y profesional la tipografía
    de las categorías, sin tocar tarjetas, iconos ni distribución.
@@ -8374,8 +8449,10 @@ body::after{
         font-size:10.5px !important;
     }
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-categorias-solo-color-corregido ===== */
+
+<style id="urbanex-categorias-solo-color-corregido">
 /* SOLO CAMBIO: color con mejor contraste para categorías */
 .aside-categories .category-name,
 .aside-categories .cat-all-btn .category-name{
@@ -8400,8 +8477,10 @@ body::after{
 .aside-categories .cat-all-btn.active .category-count{
     color:#374151 !important;
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-categorias-tamano-igual-only ===== */
+
+<style id="urbanex-categorias-tamano-igual-only">
 /* ÚNICO CAMBIO:
    igualar el tamaño de letra de los nombres
    de todas las categorías.
@@ -8414,8 +8493,10 @@ body::after{
     line-height:1.15 !important;
     font-weight:700 !important;
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-categorias-tamano-estandarizado-only ===== */
+
+<style id="urbanex-categorias-tamano-estandarizado-only">
 /* ÚNICO CAMBIO:
    reducir el tamaño de los nombres de categorías
    para aproximarlo al título "CATEGORÍAS".
@@ -8427,8 +8508,10 @@ body::after{
     font-size:11px !important;
     line-height:1.15 !important;
 }
+</style>
 
-/* ===== CONSOLIDADO: urbanex-bottom-filter-numbers-legible-only ===== */
+
+<style id="urbanex-bottom-filter-numbers-legible-only">
 /* ÚNICO CAMBIO:
    mejorar la legibilidad de los números/textos pequeños
    de la barra inferior.
@@ -8441,266 +8524,7 @@ body::after{
     opacity:1 !important;
     text-shadow:none !important;
 }
-
-
-/* =========================================================
-   BOULEVARD · FONDO DIRECTO Y PARQUEADEROS DISPONIBLES
-   ========================================================= */
-body::before,
-body::after{
-    content:none !important;
-    display:none !important;
-}
-.main-boulevard{
-    background-image:var(--urbanex-fullscreen-bg, url('/imagenes/boulevard/Boul_tarde.png')) !important;
-    background-size:cover !important;
-    background-position:center center !important;
-    background-repeat:no-repeat !important;
-    background-color:#d8d5cf !important;
-}
-body.uxp-modal-open{overflow:hidden !important;}
-.uxp-modal{position:fixed;inset:0;z-index:2147483200;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(7,13,19,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
-.uxp-shell{width:min(980px,100%);max-height:min(760px,calc(100svh - 36px));display:grid;grid-template-rows:auto minmax(0,1fr);overflow:hidden;border:1px solid rgba(207,151,39,.35);border-radius:20px;background:#f7f8fa;box-shadow:0 30px 90px rgba(0,0,0,.38);}
-.uxp-header{min-height:86px;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 18px 15px 20px;border-bottom:2px solid #e7a62b;background:linear-gradient(105deg,#102d49,#173b59);color:#fff;}
-.uxp-eyebrow{display:block;margin-bottom:4px;color:#f4bd58;font-size:8px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;}
-.uxp-header h2{margin:0;color:#fff;font-family:var(--font-sans);font-size:clamp(20px,2.4vw,29px);font-weight:800;line-height:1.08;}
-.uxp-header p{margin:6px 0 0;color:#cbd6df;font-size:10px;}
-.uxp-close{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.22);border-radius:11px;background:rgba(255,255,255,.08);color:#fff;font-size:25px;line-height:1;cursor:pointer;}
-.uxp-grid{min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:12px;padding:14px;}
-.uxp-card{min-width:0;overflow:hidden;border:1px solid #dce3ea;border-radius:15px;background:#fff;box-shadow:0 8px 22px rgba(26,49,70,.07);}
-.uxp-card-top{min-width:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;border-bottom:1px solid #e7ebef;background:#fbfcfd;}
-.uxp-card-title-wrap{min-width:0;display:flex;align-items:flex-start;gap:9px;}
-.uxp-status-dot{width:9px;height:9px;flex:0 0 9px;margin-top:5px;border-radius:50%;background:#20a464;box-shadow:0 0 0 4px rgba(32,164,100,.11);}
-.uxp-card h3{margin:0;overflow:hidden;color:#163954;font-size:13px;font-weight:800;line-height:1.2;text-overflow:ellipsis;white-space:nowrap;}
-.uxp-card-top p{margin:3px 0 0;overflow:hidden;color:#71808c;font-size:8px;text-overflow:ellipsis;white-space:nowrap;}
-.uxp-available{flex:0 0 auto;min-width:76px;padding:7px 9px;border:1px solid rgba(32,164,100,.18);border-radius:11px;background:rgba(32,164,100,.07);text-align:center;}
-.uxp-available strong{display:block;color:#0e7b49;font-size:20px;line-height:1;}
-.uxp-available span{display:block;margin-top:3px;color:#39715a;font-size:7px;font-weight:700;}
-.uxp-data-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;padding:12px 14px 14px;}
-.uxp-data-grid>div{min-width:0;display:flex;flex-direction:column;gap:3px;}
-.uxp-data-grid .uxp-wide{grid-column:1/-1;}
-.uxp-data-grid span{color:#8a98a4;font-size:6.8px;font-weight:800;letter-spacing:.45px;text-transform:uppercase;}
-.uxp-data-grid strong{min-width:0;overflow:hidden;color:#253b4d;font-size:9px;font-weight:700;line-height:1.35;text-overflow:ellipsis;}
-.uxp-empty{grid-column:1/-1;min-height:180px;display:grid;place-items:center;padding:28px;border:1px dashed #cad3dc;border-radius:14px;background:#fff;color:#687986;font-size:11px;line-height:1.5;text-align:center;}
-@media(max-width:720px){.main-boulevard{background-position:center center !important;}.uxp-modal{align-items:stretch;padding:0;background:#f7f8fa;}.uxp-shell{width:100%;height:100svh;max-height:none;border:0;border-radius:0;}.uxp-header{min-height:100px;padding:15px 14px;}.uxp-header h2{font-size:21px;}.uxp-grid{grid-template-columns:1fr;gap:10px;padding:10px;}}
-
 </style>
-
-
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#e5c158">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Urbanex">
-    <link rel="apple-touch-icon" href="/imagenes/icon-192.png">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </head>
 <body>
@@ -8809,9 +8633,9 @@ body.uxp-modal-open{overflow:hidden !important;}
                 <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/></svg></div>
                 <div class="filter-label-group"><span class="filter-label">A Domicilio</span><span class="filter-sub" id="metricDelivery">0 locales</span></div>
             </div>
-            <div class="filter-pill" id="pillParking" role="button" tabindex="0" onclick="openParkingAvailability()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openParkingAvailability();}">
+            <div class="filter-pill" id="pillParking" onclick="window.location.href='/estacionamientos/'">
                 <div class="filter-icon-box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h6.2c4.15 0 6.8 2.32 6.8 5.95 0 3.7-2.65 6.05-6.8 6.05H11v6H7V3zm4 3.5v5h2.05c1.9 0 2.95-.86 2.95-2.5 0-1.63-1.05-2.5-2.95-2.5H11z"/></svg></div>
-                <div class="filter-label-group"><span class="filter-label">Parqueaderos disponibles</span><span class="filter-sub" id="metricParking">Cargando disponibilidad...</span></div>
+                <div class="filter-label-group"><span class="filter-label">Parqueaderos</span><span class="filter-sub">Ver espacios</span></div>
             </div>
             <div class="filter-pill" id="pillPromo" onclick="window.location.href='informativos/ofertas.html'">
                 <div class="filter-icon-box"><svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 1.9-2 3v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg></div>
@@ -8914,25 +8738,6 @@ body.uxp-modal-open{overflow:hidden !important;}
     </section>
 </div>
 
-
-
-<!-- PARQUEADEROS DISPONIBLES · SOLO CONSULTA PÚBLICA -->
-<div id="parkingAvailabilityModal" class="uxp-modal" aria-hidden="true">
-    <section class="uxp-shell" role="dialog" aria-modal="true" aria-labelledby="parkingAvailabilityTitle">
-        <header class="uxp-header">
-            <div>
-                <span class="uxp-eyebrow">Urbanex · disponibilidad publicada por los parqueaderos</span>
-                <h2 id="parkingAvailabilityTitle">Parqueaderos disponibles</h2>
-                <p id="parkingAvailabilitySummary">Consultando lugares disponibles...</p>
-            </div>
-            <button type="button" class="uxp-close" onclick="closeParkingAvailability()" aria-label="Cerrar parqueaderos disponibles">×</button>
-        </header>
-        <div id="parkingAvailabilityGrid" class="uxp-grid" aria-live="polite">
-            <div class="uxp-empty">Cargando disponibilidad...</div>
-        </div>
-    </section>
-</div>
-
 <footer class="pie-pagina"><p>&copy; <span id="currentYear"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
 
 <script type="module">
@@ -8977,8 +8782,6 @@ let fullDirectoryLoaded = false;
 let fullDirectoryLoadPromise = null;
 let offerProductCountByBusiness = new Map();
 let offerMetricsLoaded = false;
-let parkingAvailabilityByBusiness = new Map();
-let parkingMetricsLoaded = false;
 let activeProvince = '__all__';
 let activeLocation = '__all__';
 const URBANEX_LOCATION_STORAGE_KEY = 'urbanex_location_selection_v1';
@@ -9051,10 +8854,6 @@ function toNum(v) { const n = Number(v); return isNaN(n) ? null : n; }
 function businessKey(v) { return String(v ?? '').trim(); }
 function businessOfferProductCount(business) { return offerProductCountByBusiness.get(businessKey(business?.id)) || 0; }
 function businessHasOfferProduct(business) { return businessOfferProductCount(business) > 0; }
-function businessParkingAvailable(business) {
-    const row = parkingAvailabilityByBusiness.get(businessKey(business?.id));
-    return row && row.is_open !== false ? Math.max(0, Number(row.available_spaces) || 0) : 0;
-}
 
 // ── Helpers ───────────────────────────────────────────────────
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -9077,50 +8876,26 @@ function parseScheduleTimeToMinutes(value) {
     return hours * 60 + minutes;
 }
 
-function ecuadorClockNow() {
-    const parts = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'America/Guayaquil',
-        weekday: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-        hourCycle: 'h23'
-    }).formatToParts(new Date());
-
-    const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
-    const dayMap = { Sun:0, Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6 };
-
-    return {
-        day: dayMap[values.weekday] ?? new Date().getDay(),
-        minutes: Number(values.hour || 0) * 60 + Number(values.minute || 0)
-    };
-}
-
 function isOpenNow(hours) {
     if (!hours?.length) return false;
 
-    const now = ecuadorClockNow();
-    const today = now.day;
-    const previousDay = (today + 6) % 7;
-    const currentMinutes = now.minutes;
+    const now = new Date();
+    const today = now.getDay();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
     return hours.some(row => {
-        if (row.is_closed) return false;
+        if (Number(row.day_of_week) !== today || row.is_closed) return false;
 
-        const day = Number(row.day_of_week);
         const open = parseScheduleTimeToMinutes(row.open_time);
         const close = parseScheduleTimeToMinutes(row.close_time);
+
         if (open === null || close === null) return false;
 
-        if (day === today) {
-            if (close >= open) return currentMinutes >= open && currentMinutes <= close;
-            return currentMinutes >= open;
+        if (close >= open) {
+            return currentMinutes >= open && currentMinutes <= close;
         }
 
-        if (day === previousDay && close < open) {
-            return currentMinutes <= close;
-        }
-
-        return false;
+        return currentMinutes >= open || currentMinutes <= close;
     });
 }
 function avgRating(reviews) {
@@ -9323,7 +9098,6 @@ const ECUADOR_PROVINCE_CANTONS = {
     ],
     "Morona Santiago": [
         "Morona",
-        "Sevilla Don Bosco",
         "Gualaquiza",
         "Huamboya",
         "Limón Indanza",
@@ -9414,20 +9188,7 @@ const ECUADOR_CITY_ALIASES = {
     "puerto francisco de orellana": "Orellana",
     "puyo": "Pastaza",
     "quito distrito metropolitano": "Pichincha",
-    "distrito metropolitano de quito": "Pichincha",
     "santo domingo de los colorados": "Santo Domingo de los Tsáchilas"
-};
-
-const ECUADOR_CITY_EQUIVALENTS = {
-    "distrito metropolitano de quito": "quito",
-    "quito distrito metropolitano": "quito",
-    "san jacinto de yaguachi": "yaguachi",
-    "puebloviejo": "pueblo viejo",
-    "nueva loja": "lago agrio",
-    "puerto francisco de orellana": "francisco de orellana",
-    "coca": "francisco de orellana",
-    "macas": "morona",
-    "puyo": "pastaza"
 };
 
 function normalizeLocationName(value) {
@@ -9463,35 +9224,23 @@ const ECUADOR_CITY_PROVINCE = (() => {
 })();
 
 function businessCity(business) {
-    return normalizeLocationName(business?.city || '') || '';
+    return normalizeLocationName(business?.city || 'Loja') || 'Loja';
 }
 
 function provinceForCity(city) {
     return ECUADOR_CITY_PROVINCE.get(locationKey(city)) || '';
 }
 
-function canonicalCityKey(value) {
-    const key = locationKey(value);
-    return ECUADOR_CITY_EQUIVALENTS[key] || key;
-}
-
-function businessProvince(business) {
-    const registeredProvince = normalizeLocationName(business?.province || '');
-    if (registeredProvince) return registeredProvince;
-    return provinceForCity(businessCity(business));
-}
-
 function businessMatchesLocation(business) {
     if (activeProvince === '__all__') return true;
 
-    const province = businessProvince(business);
-    if (locationKey(province) !== locationKey(activeProvince)) return false;
+    const city = businessCity(business);
 
     if (activeLocation && activeLocation !== '__province__') {
-        return canonicalCityKey(businessCity(business)) === canonicalCityKey(activeLocation);
+        return locationKey(city) === locationKey(activeLocation);
     }
 
-    return true;
+    return provinceForCity(city) === activeProvince;
 }
 
 function locationFilteredBusinesses() {
@@ -9590,8 +9339,6 @@ function applySelectedLocation() {
 
     const modal = document.getElementById('directorioModal');
     if (modal && modal.style.display !== 'none') renderDir();
-    const parkingModal = document.getElementById('parkingAvailabilityModal');
-    if (parkingModal && parkingModal.style.display === 'flex') renderParkingAvailability();
 }
 
 function featuredVisibleCount() {
@@ -10031,7 +9778,6 @@ async function boot() {
     // Carga detalles solo de destacados para no bloquear la apertura.
     runLater(() => loadBusinessDetails(allBusinesses.filter(business => business.is_featured === true).map(business => business.id)));
     runLater(() => loadOfferMetrics());
-    runLater(() => loadParkingMetrics());
 }
 
 async function ensureAllBusinessesLoaded(renderAfterLoad = true) {
@@ -10200,30 +9946,6 @@ async function loadOfferMetrics() {
 }
 
 
-async function loadParkingMetrics() {
-    try {
-        const { data, error } = await supabase
-            .from('parking_availability')
-            .select('business_id,total_spaces,available_spaces,hourly_rate,is_open,notes,updated_at,is_published')
-            .eq('is_published', true);
-
-        if (error) {
-            console.warn('Urbanex: módulo de parqueaderos no disponible.', error.message);
-            return;
-        }
-
-        parkingAvailabilityByBusiness = new Map(
-            (data || []).map(row => [businessKey(row.business_id), row])
-        );
-        parkingMetricsLoaded = true;
-        updateMetrics();
-        const parkingModal = document.getElementById('parkingAvailabilityModal');
-        if (parkingModal && parkingModal.style.display === 'flex') renderParkingAvailability();
-    } catch (error) {
-        console.warn('Urbanex: carga de parqueaderos omitida.', error);
-    }
-}
-
 // ── Árbol de categorías ───────────────────────────────────────
 function renderCatTree() {
     const list = document.getElementById('categoriesList');
@@ -10368,15 +10090,6 @@ function updateMetrics() {
     document.getElementById('metricDelivery').textContent= base.filter(b=>b.delivery_available).length + ' locales';
     const offerTotal = offerMetricsLoaded ? base.reduce((total, business) => total + businessOfferProductCount(business), 0) : base.filter(b=>b._promo).length;
     document.getElementById('metricOffers').textContent  = offerTotal + (offerTotal === 1 ? ' oferta' : ' ofertas');
-    const parkingMetric = document.getElementById('metricParking');
-    if (parkingMetric) {
-        if (!parkingMetricsLoaded) {
-            parkingMetric.textContent = 'Ver disponibilidad';
-        } else {
-            const availableSpaces = base.reduce((total, business) => total + businessParkingAvailable(business), 0);
-            parkingMetric.textContent = availableSpaces + (availableSpaces === 1 ? ' lugar disponible' : ' lugares disponibles');
-        }
-    }
 }
 
 // Solo filtro de categoría (sin quick filter) para las métricas
@@ -10786,125 +10499,6 @@ function normalizeDirectoryText(value) {
         .trim();
 }
 
-function parkingPublicRows() {
-    return locationFilteredBusinesses()
-        .map(business => {
-            const availability = parkingAvailabilityByBusiness.get(businessKey(business.id));
-            return availability ? { business, availability } : null;
-        })
-        .filter(Boolean)
-        .filter(item => item.availability.is_published !== false)
-        .filter(item => item.availability.is_open !== false)
-        .filter(item => Math.max(0, Number(item.availability.available_spaces) || 0) > 0)
-        .sort((a, b) => {
-            const difference = (Number(b.availability.available_spaces) || 0) - (Number(a.availability.available_spaces) || 0);
-            if (difference !== 0) return difference;
-            return String(a.business.name || '').localeCompare(String(b.business.name || ''), 'es', { sensitivity: 'base' });
-        });
-}
-
-function formatParkingRate(value) {
-    const number = Number(value);
-    if (!Number.isFinite(number) || number < 0) return 'No informada';
-    return new Intl.NumberFormat('es-EC', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2
-    }).format(number) + ' / hora';
-}
-
-function formatParkingUpdated(value) {
-    if (!value) return 'Sin hora registrada';
-    const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return 'Sin hora registrada';
-    try {
-        return new Intl.DateTimeFormat('es-EC', {
-            timeZone: 'America/Guayaquil',
-            day: '2-digit',
-            month: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-        }).format(date);
-    } catch (_) {
-        return date.toLocaleString('es-EC');
-    }
-}
-
-function renderParkingAvailability() {
-    const grid = document.getElementById('parkingAvailabilityGrid');
-    const summary = document.getElementById('parkingAvailabilitySummary');
-    if (!grid || !summary) return;
-
-    if (!parkingMetricsLoaded) {
-        summary.textContent = 'Consultando lugares disponibles...';
-        grid.innerHTML = '<div class="uxp-empty">Cargando disponibilidad...</div>';
-        return;
-    }
-
-    const rows = parkingPublicRows();
-    const totalSpaces = rows.reduce((sum, item) => sum + Math.max(0, Number(item.availability.available_spaces) || 0), 0);
-    summary.textContent = rows.length
-        ? `${rows.length} ${rows.length === 1 ? 'parqueadero' : 'parqueaderos'} · ${totalSpaces} ${totalSpaces === 1 ? 'lugar disponible' : 'lugares disponibles'}`
-        : 'No hay parqueaderos con lugares disponibles en la ubicación seleccionada.';
-
-    if (!rows.length) {
-        grid.innerHTML = '<div class="uxp-empty">En este momento no existen parqueaderos con cupos publicados para la ubicación seleccionada.</div>';
-        return;
-    }
-
-    grid.innerHTML = rows.map(({ business, availability }) => {
-        const available = Math.max(0, Number(availability.available_spaces) || 0);
-        const total = Math.max(0, Number(availability.total_spaces) || 0);
-        const city = businessCity(business) || '';
-        const province = businessProvince(business) || '';
-        const place = [city, province].filter(Boolean).join(' · ');
-        const address = String(business.address || '').trim() || 'Dirección no registrada';
-        const phone = String(business.phone || business.contact_phone || business.whatsapp || '').trim();
-        const notes = String(availability.notes || '').trim();
-
-        return `
-            <article class="uxp-card">
-                <div class="uxp-card-top">
-                    <div class="uxp-card-title-wrap">
-                        <span class="uxp-status-dot" aria-hidden="true"></span>
-                        <div>
-                            <h3>${esc(business.name || 'Parqueadero')}</h3>
-                            <p>${esc(place || 'Ecuador')}</p>
-                        </div>
-                    </div>
-                    <div class="uxp-available"><strong>${available}</strong><span>disponibles</span></div>
-                </div>
-                <div class="uxp-data-grid">
-                    <div><span>Capacidad</span><strong>${total || '—'}${total ? ' lugares' : ''}</strong></div>
-                    <div><span>Tarifa</span><strong>${esc(formatParkingRate(availability.hourly_rate))}</strong></div>
-                    <div class="uxp-wide"><span>Dirección</span><strong>${esc(address)}</strong></div>
-                    ${phone ? `<div><span>Contacto</span><strong>${esc(phone)}</strong></div>` : ''}
-                    <div><span>Actualizado</span><strong>${esc(formatParkingUpdated(availability.updated_at))}</strong></div>
-                    ${notes ? `<div class="uxp-wide"><span>Información</span><strong>${esc(notes)}</strong></div>` : ''}
-                </div>
-            </article>`;
-    }).join('');
-}
-
-window.openParkingAvailability = async () => {
-    const modal = document.getElementById('parkingAvailabilityModal');
-    if (!modal) return;
-    modal.style.display = 'flex';
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('uxp-modal-open');
-    renderParkingAvailability();
-    await loadParkingMetrics();
-    renderParkingAvailability();
-};
-
-window.closeParkingAvailability = () => {
-    const modal = document.getElementById('parkingAvailabilityModal');
-    if (!modal) return;
-    modal.style.display = 'none';
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('uxp-modal-open');
-};
-
 window.openDirectorio = async () => {
     const modal = document.getElementById('directorioModal');
     const grid = document.getElementById('dirGrid');
@@ -11121,10 +10715,6 @@ document.getElementById('directorySort')?.addEventListener('change', event => {
     renderDir();
 });
 
-document.getElementById('parkingAvailabilityModal')?.addEventListener('click', event => {
-    if (event.target.id === 'parkingAvailabilityModal') closeParkingAvailability();
-});
-
 document.getElementById('directorioModal')?.addEventListener('click', event => {
     if (event.target.id === 'directorioModal') {
         closeDirectorio();
@@ -11138,12 +10728,6 @@ document.addEventListener('keydown', event => {
         document.getElementById('directorioModal')?.style.display === 'flex'
     ) {
         closeDirectorio();
-    }
-    if (
-        event.key === 'Escape' &&
-        document.getElementById('parkingAvailabilityModal')?.style.display === 'flex'
-    ) {
-        closeParkingAvailability();
     }
 });
 
@@ -11364,7 +10948,7 @@ window.addEventListener('appinstalled', () => {
 
 
 <div id="uxFinalPwaInstall" class="ux-final-pwa-install" hidden>
-  <img src="/imagenes/icon-192.png" alt="Urbanex">
+  <img src="/imagenes/Urba4.png" alt="Urbanex">
   <div class="ux-final-pwa-info">
     <strong>Instalar Urbanex</strong>
     <span id="uxFinalPwaText">Acceda rápido desde su pantalla de inicio.</span>
@@ -11684,9 +11268,99 @@ function goBackMenu() {
 <script>
 document.getElementById('currentYear').textContent = new Date().getFullYear();
 </script>
-<style id="urbanex-boulevard-final-overrides">
 
-/* ===== CONSOLIDADO FINAL: urbanex-labels-claros-solo-titulos ===== */
+
+<script id="urbanex-boulevard-horario-original">
+(function(){
+    const boulevard = document.querySelector('.main-boulevard');
+    if (!boulevard) return;
+
+    const imagenes = {
+        desktop: {
+            dia: '/imagenes/boulevard/Boul_mañana.png',
+            tarde: '/imagenes/boulevard/Boul_tarde.png',
+            noche: '/imagenes/boulevard/Boul_noche.png'
+        },
+        celular: {
+            dia: '/imagenes/boulevard/Boul_mañana-Celular.png',
+            tarde: '/imagenes/boulevard/Boul_tarde-Celular.png',
+            noche: '/imagenes/boulevard/Boul_noche-Celular.png'
+        }
+    };
+
+    const mediaCelular = window.matchMedia('(max-width: 720px)');
+
+    function horaEcuador(){
+        const partes = new Intl.DateTimeFormat('es-EC', {
+            timeZone:'America/Guayaquil',
+            hour:'2-digit',
+            hourCycle:'h23'
+        }).formatToParts(new Date());
+        const parte = partes.find(p => p.type === 'hour');
+        return parte ? Number(parte.value) : new Date().getHours();
+    }
+
+    function franja(hora){
+        if (hora >= 7 && hora < 13) return 'dia';
+        if (hora >= 13 && hora < 19) return 'tarde';
+        return 'noche';
+    }
+
+    function actualizar(){
+        const tipo = mediaCelular.matches ? 'celular' : 'desktop';
+        boulevard.style.setProperty(
+            'background-image',
+            'url("' + imagenes[tipo][franja(horaEcuador())] + '")',
+            'important'
+        );
+    }
+
+    actualizar();
+    setInterval(actualizar, 60000);
+    if (mediaCelular.addEventListener) mediaCelular.addEventListener('change', actualizar);
+    else if (mediaCelular.addListener) mediaCelular.addListener(actualizar);
+})();
+</script>
+
+
+<script id="urbanex-fullscreen-bg-sync">
+(function(){
+    const imagenes = {
+        desktop: {
+            dia: '/imagenes/boulevard/Boul_mañana.png',
+            tarde: '/imagenes/boulevard/Boul_tarde.png',
+            noche: '/imagenes/boulevard/Boul_noche.png'
+        },
+        celular: {
+            dia: '/imagenes/boulevard/Boul_mañana-Celular.png',
+            tarde: '/imagenes/boulevard/Boul_tarde-Celular.png',
+            noche: '/imagenes/boulevard/Boul_noche-Celular.png'
+        }
+    };
+    const mediaCelular = window.matchMedia('(max-width: 720px)');
+    function horaEcuador(){
+        const partes = new Intl.DateTimeFormat('es-EC', {timeZone:'America/Guayaquil', hour:'2-digit', hourCycle:'h23'}).formatToParts(new Date());
+        const parte = partes.find(p => p.type === 'hour');
+        return parte ? Number(parte.value) : new Date().getHours();
+    }
+    function franja(hora){
+        if (hora >= 7 && hora < 13) return 'dia';
+        if (hora >= 13 && hora < 19) return 'tarde';
+        return 'noche';
+    }
+    function actualizarFondoCompleto(){
+        const tipo = mediaCelular.matches ? 'celular' : 'desktop';
+        const ruta = imagenes[tipo][franja(horaEcuador())];
+        document.documentElement.style.setProperty('--urbanex-fullscreen-bg', 'url("' + ruta + '")');
+    }
+    actualizarFondoCompleto();
+    setInterval(actualizarFondoCompleto, 60000);
+    if (mediaCelular.addEventListener) mediaCelular.addEventListener('change', actualizarFondoCompleto);
+    else if (mediaCelular.addListener) mediaCelular.addListener(actualizarFondoCompleto);
+})();
+</script>
+
+<style id="urbanex-labels-claros-solo-titulos">
 /* ÚNICO CAMBIO: mejorar legibilidad de CATEGORÍAS y DESTACADOS */
 .section-title{
   color:#0f3554 !important;
@@ -11698,8 +11372,9 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
   opacity:1 !important;
   text-shadow:0 1px 0 rgba(255,255,255,.55) !important;
 }
+</style>
 
-/* ===== CONSOLIDADO FINAL: urbanex-titulos-laterales-legibles-final ===== */
+<style id="urbanex-titulos-laterales-legibles-final">
 /* ÚNICO CAMBIO: color/contraste de CATEGORÍAS y DESTACADOS */
 .aside-categories > .section-title,
 .aside-showcase-list > .showcase-header > h2{
@@ -11713,8 +11388,6 @@ document.getElementById('currentYear').textContent = new Date().getFullYear();
     -webkit-text-stroke:0.15px rgba(0,0,0,.35) !important;
 }
 </style>
-
-
 
 </body>
 </html>
