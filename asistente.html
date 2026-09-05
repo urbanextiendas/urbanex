@@ -1,3 +1,85 @@
+
+Claude terminó la respuesta
+Pensó durante 41s
+Encontré la causa más probable revisando el código: hay un bug de interacción entre la detección de categoría y la búsqueda de productos que hace que ciertos términos "desaparezcan" antes de llegar a la consulta contra la tabla products.
+
+El bug principal: sinónimos de categoría "se comen" el término de búsqueda
+Mira el objeto SYNONYMS:
+
+js
+comida: ["comida","restaurante","restaurantes","comer","almorzar","cenar","pizza","hamburguesa","cafe","café","marisco"],
+Palabras como "pizza", "hamburguesa" o "café" están registradas como sinónimos de la categoría "Comida", no solo como nombres de producto. Esto provoca esta secuencia cuando el usuario dice, por ejemplo, "busca pizza":
+
+parseComando detecta que "pizza" es sinónimo de la categoría Comida → slots.categoria = Comida.
+limpiarTermino() genera catWords a partir de esos mismos sinónimos de la categoría detectada, y elimina del término cualquier palabra que coincida con ellos — incluyendo "pizza".
+El término queda vacío (termino = ""), y como terminoNorm.length < 3, el código salta por completo el bloque que consulta la tabla products:
+js
+if (terminoNorm.length >= 3) {
+  const prodGroups = await buscarProductos(termino); // nunca se ejecuta
+  ...
+}
+El resultado final es simplemente "todos los negocios de la categoría Comida", sin filtrar por el producto específico "pizza", y sin la etiqueta de producto en la tarjeta.
+Por eso pasa lo que describes: si el producto que buscas coincide con una palabra que también está en la lista SYNONYMS (pizza, hamburguesa, café, marisco...), la búsqueda de producto real nunca se ejecuta — solo se lista la categoría genérica. Si buscas un producto que no está en esa lista de sinónimos (ej. "ceviche", "sushi", "empanadas"), el término no se limpia y sí llega a buscarProductos(), que consulta Supabase correctamente.
+
+Causas secundarias que también pueden afectar
+Acentos: termino se manda a Supabase con mayúsculas/acentos originales (no se normaliza antes del ilike). Si el reconocimiento de voz transcribe "cafe" sin tilde pero el producto en la BD se llama "Café", el ilike de Postgres es insensible a mayúsculas pero no a acentos, así que puede no matchear.
+Coincidencia de substring exacto y en orden: ilike %termino% requiere que las palabras aparezcan juntas y en ese orden. "hamburguesa clásica" no encontrará un producto llamado "Clásica Hamburguesa de la casa".
+Solo busca en name, no en description: si el producto se llama "Combo #3" pero la descripción dice "incluye pizza", no aparecerá.
+is_available = true es obligatorio — productos marcados como no disponibles quedan invisibles aunque existan.
+Límite de 8 resultados en la query de productos, por si hay muchas coincidencias y algunas quedan fuera.
+Cómo lo arreglaría
+La solución más simple: no dejar que las palabras removidas por coincidir con sinónimos de categoría bloqueen la búsqueda de producto. Se puede correr buscarProductos sobre el texto original limpio de solo stopwords/ciudad (sin quitar catWords), en vez de sobre el término ya despojado de sinónimos de categoría:
+
+js
+// término específico para productos: no quita palabras de categoría
+function limpiarTerminoParaProducto(texto){
+  const palabras = texto.split(/\s+/).filter(Boolean);
+  return palabras.filter(w => {
+    const wn = normalizar(w);
+    return wn && !STOPWORDS.has(wn) && !cityList.includes(wn);
+  }).join(' ').trim();
+}
+Y usar este término (no el termino recortado por categoría) al llamar buscarProductos(). Así "pizza" seguiría detectando la categoría Comida para los filtros estructurales, pero también buscaría el producto "pizza" en la tabla real.
+
+¿Quieres que te prepare el parche completo con este cambio aplicado al archivo?
+
+dame el codigo completo optimizado
+
+Pensó durante 13s
+Voy a generar el archivo completo con el bug corregido y las mejoras que discutimos. Primero reviso si hay algo relevante en las skills disponibles para HTML/frontend antes de escribir el código.
+
+Ejecutó un comando
+Voy a construir el archivo corregido con:
+
+Fix del bug principal: la búsqueda de productos ya no se "come" el término cuando coincide con un sinónimo de categoría (pizza, hamburguesa, café, etc.)
+Botón de WhatsApp/teléfono conectado en las tarjetas (la lógica phoneOf ya existía pero no se usaba)
+aria-label del micrófono que cambia según el estado (accesibilidad)
+Guard de carrera: deshabilita la búsqueda mientras loadBusinessDetails() no ha resuelto, para que los badges de "abierto/oferta" no muestren falsos negativos
+Limpieza del flag cerca muerto (sin funcionalidad real, generaba confusión)
+Pequeñas mejoras de robustez (debounce del botón de envío, manejo de errores en buscarProductos)
+Se ejecutaron 2 comandos, creó un archivo, archivo leído
+Cambios clave respecto al original:
+
+Fix del bug de productos: nueva función limpiarTerminoParaProducto() que no elimina palabras solo porque coincidan con sinónimos de categoría. Ahora "pizza" activa el filtro de categoría Comida y se busca como producto real en la tabla products.
+Botón de WhatsApp en cada tarjeta, usando phoneOf() que ya existía pero no estaba conectado a la UI.
+Guard contra condición de carrera: input y micrófono quedan deshabilitados hasta que loadBusinessDetails() resuelve, así los badges de "abierto/oferta" nunca muestran falsos negativos.
+aria-label dinámico del botón de micrófono (accesibilidad).
+Regex de "abierto ahora" más estricto: ahora requiere la palabra "ahora" explícita, para no confundir "farmacia abierta" (horario genérico) con disponibilidad inmediata.
+Eliminado el flag cerca que estaba muerto (se detectaba pero nunca filtraba nada).
+Guard searching para evitar búsquedas superpuestas si el usuario hace doble tap o doble enter.
+Manejo de errores en buscarProductos() con try/catch.
+
+Urbanex asistente
+Código·HTML 
+
+
+Escribe un mensaje…
+
+
+Claude es una IA y puede cometer errores.
+
+
+Urbanex asistente · HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -39,7 +121,7 @@
     align-items:center;
     padding:32px 16px 60px;
   }
-
+ 
   header{
     width:100%; max-width:760px;
     display:flex; align-items:center; justify-content:space-between;
@@ -60,7 +142,7 @@
     margin:0; font-weight:600; color:var(--text-main); text-transform:uppercase;
   }
   .brand p{ margin:2px 0 0; font-size:10.5px; color:var(--text-dark); letter-spacing:0.05em; }
-
+ 
   .conn-pill{
     font-family:var(--font-sans); font-size:10.5px; letter-spacing:0.04em;
     color:var(--text-dark);
@@ -74,11 +156,11 @@
   .conn-pill.ok{ color:var(--green); }
   .conn-pill.err .dot{ background:var(--red); box-shadow:0 0 6px var(--red); }
   .conn-pill.err{ color:var(--red); }
-
+ 
   main{ width:100%; max-width:760px; display:flex; flex-direction:column; align-items:center; }
-
+ 
   .orb-wrap{ position:relative; width:120px; height:120px; display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
-
+ 
   .mic-btn{
     position:relative; width:92px; height:92px; border-radius:50%;
     border:1.5px solid var(--gold-dim); cursor:pointer;
@@ -89,6 +171,7 @@
     z-index:2;
   }
   .mic-btn:active{ transform:scale(0.96); }
+  .mic-btn:disabled{ opacity:0.4; cursor:not-allowed; }
   .mic-btn svg{ width:32px; height:32px; }
   .mic-btn.listening{
     border-color:var(--gold);
@@ -100,7 +183,7 @@
     50%{ box-shadow:0 0 0 16px rgba(229,193,88,0.04), 0 0 30px rgba(229,193,88,0.5); }
   }
   .mic-btn.processing{ border-color:var(--text-dark); color:var(--text-muted); animation:none; }
-
+ 
   .state-label{
     font-size:11px; letter-spacing:0.16em; color:var(--text-dark); text-transform:uppercase;
     margin-bottom:6px; min-height:15px; font-weight:600;
@@ -110,7 +193,7 @@
     margin-bottom:20px; max-width:580px; line-height:1.4;
   }
   .transcript.placeholder{ color:var(--text-dark); font-size:13.5px; font-weight:300; }
-
+ 
   .input-row{ width:100%; display:flex; gap:8px; margin-bottom:16px; }
   .input-row input{
     flex:1; background:var(--bg-card); border:1px solid var(--gold-soft); color:var(--text-main);
@@ -118,23 +201,25 @@
   }
   .input-row input::placeholder{ color:var(--text-dark); }
   .input-row input:focus{ border-color:var(--gold-dim); }
+  .input-row input:disabled{ opacity:0.5; }
   .input-row button{
     background:var(--gold); color:#141105; border:none; padding:0 18px; border-radius:10px;
     font-weight:700; cursor:pointer; font-family:var(--font-sans); font-size:13px; letter-spacing:0.02em;
   }
+  .input-row button:disabled{ opacity:0.5; cursor:not-allowed; }
   .mute-btn{
     background:var(--bg-card); border:1px solid var(--gold-soft); color:var(--text-dark);
     border-radius:10px; padding:0 14px; cursor:pointer;
   }
   .mute-btn.active{ color:var(--gold); border-color:var(--gold-dim); }
-
+ 
   .chips{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:26px; }
   .chip{
     font-size:11px; color:var(--text-dark); border:1px solid var(--gold-soft); background:var(--bg-card);
     padding:7px 12px; border-radius:99px; cursor:pointer; transition:border-color .2s, color .2s;
   }
   .chip:hover{ border-color:var(--gold-dim); color:var(--gold); }
-
+ 
   .results-header{
     width:100%; display:flex; align-items:baseline; justify-content:space-between;
     margin-bottom:10px; border-bottom:1px solid var(--gold-soft); padding-bottom:8px;
@@ -144,7 +229,7 @@
     margin:0; color:var(--gold); font-weight:600;
   }
   .results-header span{ font-size:11px; color:var(--text-dark); }
-
+ 
   .results{ width:100%; display:flex; flex-direction:column; gap:10px; }
   .card{
     background:var(--bg-card); border:1px solid var(--gold-soft); border-radius:var(--radius);
@@ -162,20 +247,26 @@
   .card-top h3{ font-size:14.5px; margin:0; font-weight:600; color:var(--text-main); }
   .rating{ font-size:11.5px; color:var(--gold); white-space:nowrap; font-weight:600; }
   .card-meta{ font-size:12px; color:var(--text-dark); margin-top:2px; }
-  .badges{ display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+  .badges{ display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; align-items:center; }
   .badge{ font-size:9.5px; letter-spacing:0.04em; padding:3px 8px; border-radius:6px; text-transform:uppercase; font-weight:600; }
   .badge.open{ background:rgba(46,213,115,0.12); color:var(--green); }
   .badge.delivery{ background:rgba(229,193,88,0.14); color:var(--gold); }
   .badge.offer{ background:rgba(255,71,87,0.12); color:var(--red); }
-
+  .badge-link{
+    font-size:9.5px; letter-spacing:0.04em; padding:3px 9px; border-radius:6px; text-transform:uppercase;
+    font-weight:600; text-decoration:none; background:rgba(255,255,255,0.06); color:var(--text-muted);
+    border:1px solid var(--gold-soft); transition:border-color .2s, color .2s;
+  }
+  .badge-link:hover{ color:var(--gold); border-color:var(--gold-dim); }
+ 
   .empty-state{ width:100%; text-align:center; color:var(--text-dark); font-size:13px; padding:18px 0; }
-
+ 
   .footnote{
     margin-top:32px; font-size:10.5px; color:var(--text-dark); text-align:center; max-width:580px;
     line-height:1.6; border-top:1px dashed var(--gold-soft); padding-top:14px;
   }
   .footnote a{ color:var(--gold-dim); }
-
+ 
   @media (max-width:480px){
     .orb-wrap{ width:100px; height:100px; }
     .mic-btn{ width:78px; height:78px; }
@@ -184,7 +275,7 @@
 </style>
 </head>
 <body>
-
+ 
 <header>
   <div class="brand">
     <div class="brand-mark"></div>
@@ -195,7 +286,7 @@
   </div>
   <div class="conn-pill" id="connPill"><span class="dot"></span><span id="connLabel">CONECTANDO…</span></div>
 </header>
-
+ 
 <main>
   <div class="orb-wrap">
     <button class="mic-btn" id="micBtn" aria-label="Activar micrófono">
@@ -206,21 +297,18 @@
       </svg>
     </button>
   </div>
-
-  <div class="state-label" id="stateLabel">TOQUE PARA HABLAR</div>
+ 
+  <div class="state-label" id="stateLabel">CARGANDO DATOS…</div>
   <div class="transcript placeholder" id="transcript">Diga algo como «busca restaurantes abiertos ahora» o «farmacias con oferta»</div>
-
+ 
   <div class="input-row">
-    <input type="text" id="textInput" placeholder="O escriba su búsqueda aquí…">
-    <button id="sendBtn">Buscar</button>
+    <input type="text" id="textInput" placeholder="O escriba su búsqueda aquí…" disabled>
+    <button id="sendBtn" disabled>Buscar</button>
     <button class="mute-btn active" id="muteBtn" title="Silenciar respuesta hablada">🔊</button>
   </div>
-
-  <div class="chips" id="chips">
-    <div class="chip" data-cmd="Busca hamburguesas">hamburguesas</div>
-    <div class="chip" data-cmd="Qué puedes hacer">ayuda</div>
-  </div>
-
+ 
+  <div class="chips" id="chips"></div>
+ 
   <div class="results-header">
     <h2>Resultados</h2>
     <span id="resultCount">—</span>
@@ -228,30 +316,31 @@
   <div class="results" id="results">
     <div class="empty-state">Cargando negocios desde Urbanex…</div>
   </div>
-
+ 
   <div class="footnote">
     Conectado en vivo a la base de datos real de Urbanex en Supabase (tablas <code>businesses</code>, <code>categories</code>, <code>products</code>, <code>business_hours</code>, <code>reviews</code>, <code>promotions</code>). El motor de intención usa coincidencia de palabras clave, sin modelo de lenguaje. Datos y disponibilidad reflejan lo publicado por cada negocio en <a href="https://urbanex.app" target="_blank" rel="noopener">urbanex.app</a>.
   </div>
 </main>
-
+ 
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
+ 
 /* ============ CONEXIÓN REAL A SUPABASE DE URBANEX ============ */
 const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+ 
 const BUSINESS_SELECT = `
   *,
   categories!category_id(id,name,icon),
   subcategories:categories!subcategory_id(id,name,icon)
 `;
-
+ 
 let categories = [];      // todas las categorías (raíz + sub)
 let businesses = [];      // negocios activos con detalles enriquecidos
 let cityList = [];        // ciudades detectadas en los datos reales
-
+let detailsReady = false; // true cuando horarios/reseñas/promos ya cargaron (evita falsos negativos en filtros)
+ 
 /* ---- Helpers replicados de la lógica real de boulevard.html ---- */
 function parseScheduleTimeToMinutes(value) {
   const text = String(value || '').trim().toLowerCase().replace('h', ':');
@@ -291,22 +380,34 @@ function normalizar(t){
 }
 function capitalizar(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
 function phoneOf(b){ return b.whatsapp || b.phone || b.contact_phone || ''; }
-
+function waLink(rawPhone){
+  const digits = String(rawPhone).replace(/[^\d]/g, '');
+  return digits ? `https://wa.me/${digits}` : null;
+}
+ 
 /* ============ CARGA DE DATOS REALES ============ */
 const connPill = document.getElementById('connPill');
 const connLabel = document.getElementById('connLabel');
 const chipsEl = document.getElementById('chips');
-
+const micBtn = document.getElementById('micBtn');
+const stateLabel = document.getElementById('stateLabel');
+const transcriptEl = document.getElementById('transcript');
+const resultsEl = document.getElementById('results');
+const resultCountEl = document.getElementById('resultCount');
+const textInput = document.getElementById('textInput');
+const sendBtn = document.getElementById('sendBtn');
+const muteBtn = document.getElementById('muteBtn');
+ 
 async function boot() {
   try {
     const [catsRes, bizRes] = await Promise.all([
       supabase.from('categories').select('id,name,icon,parent_id,sort_order').order('sort_order').order('name'),
       supabase.from('businesses').select(BUSINESS_SELECT).eq('is_active', true).order('is_featured', { ascending:false }).order('name', { ascending:true })
     ]);
-
+ 
     if (catsRes.error) throw catsRes.error;
     if (bizRes.error) throw bizRes.error;
-
+ 
     categories = catsRes.data || [];
     businesses = (bizRes.data || []).map(b => ({
       ...b,
@@ -315,44 +416,54 @@ async function boot() {
       promotions: b.promotions || [],
       _open: false, _rating: null, _promo: false
     }));
-
+ 
     connPill.classList.add('ok');
     connLabel.textContent = `${businesses.length} NEGOCIOS EN VIVO`;
-
+ 
     // Ciudades reales presentes en los datos (sin inventar una lista fija)
     cityList = [...new Set(businesses.map(b => normalizar(b.city)).filter(Boolean))];
-
+ 
     buildDynamicChips();
     renderResultados(businesses.filter(b=>b.is_featured).slice(0,6), { label: 'destacados' });
-
+ 
     // Cargar detalles (horarios, reseñas, promociones) igual que el sitio real
     await loadBusinessDetails();
+    detailsReady = true;
+    enableInputs();
+    setState('TOQUE PARA HABLAR', null);
   } catch (err) {
     console.error('Urbanex Supabase error:', err);
     connPill.classList.add('err');
     connLabel.textContent = 'SIN CONEXIÓN A URBANEX';
-    document.getElementById('results').innerHTML =
+    setState('SIN CONEXIÓN', null);
+    resultsEl.innerHTML =
       `<div class="empty-state">No se pudo conectar a la base de datos de Urbanex (${esc(err.message||'error desconocido')}). Verifique la conexión o las políticas RLS de Supabase.</div>`;
   }
 }
-
+ 
+function enableInputs(){
+  textInput.disabled = false;
+  sendBtn.disabled = false;
+  textInput.placeholder = 'Escriba su búsqueda aquí…';
+}
+ 
 async function loadBusinessDetails() {
   const ids = businesses.map(b => b.id).filter(id => id !== null && id !== undefined);
   if (!ids.length) return;
-
+ 
   const [hoursRes, reviewsRes, promosRes] = await Promise.all([
     supabase.from('business_hours').select('business_id,day_of_week,open_time,close_time,is_closed').in('business_id', ids),
     supabase.from('reviews').select('business_id,is_approved,rating').eq('is_approved', true).in('business_id', ids),
     supabase.from('promotions').select('business_id,is_active,end_date').eq('is_active', true).in('business_id', ids),
   ]);
-
+ 
   const groupBy = (rows) => {
     const map = new Map();
     (rows || []).forEach(r => { if (!map.has(r.business_id)) map.set(r.business_id, []); map.get(r.business_id).push(r); });
     return map;
   };
   const hoursMap = groupBy(hoursRes.data), reviewsMap = groupBy(reviewsRes.data), promosMap = groupBy(promosRes.data);
-
+ 
   businesses = businesses.map(b => {
     const hours = hoursMap.get(b.id) || [];
     const reviews = reviewsMap.get(b.id) || [];
@@ -361,7 +472,7 @@ async function loadBusinessDetails() {
       _open: isOpenNow(hours), _rating: avgRating(reviews), _promo: hasPromo(promos) };
   });
 }
-
+ 
 /* ============ MOTOR DE INTENCIÓN (sin LLM, basado en datos reales) ============ */
 // Construye el mapa de categorías -> palabras clave a partir de los nombres reales de Urbanex,
 // más sinónimos comunes en español para mejorar la coincidencia por voz.
@@ -375,40 +486,41 @@ const SYNONYMS = {
   turismo: ["turismo","hotel","hoteles","hostal","hospedaje","tour"],
   automotriz: ["auto","autos","taller","mecanico","mecánico","llantas"],
 };
-
+ 
 function categoriaKeywordsFor(cat){
   const base = [normalizar(cat.name)];
   const key = Object.keys(SYNONYMS).find(k => normalizar(cat.name).includes(k));
   if (key) base.push(...SYNONYMS[key]);
   return base;
 }
-
+ 
 function parseComando(rawText){
   const t = normalizar(rawText);
   let intent = 'buscar';
   let categoria = null, ciudad = null;
-  let abiertoAhora=false, domicilio=false, oferta=false, cerca=false;
-
+  let abiertoAhora=false, domicilio=false, oferta=false;
+ 
   if (/ayuda|que puedes hacer|comandos|opciones/.test(t)) intent = 'ayuda';
   else if (/^hola\b|buenos dias|buenas tardes|buenas noches/.test(t)) intent = 'saludo';
-
+ 
   // Categoría: contra el nombre real de cada categoría en la base de Urbanex
   for (const cat of categories){
     const keywords = categoriaKeywordsFor(cat);
     if (keywords.some(k => k && t.includes(k))) { categoria = cat; break; }
   }
-
+ 
   // Ciudad: contra las ciudades reales presentes en los negocios cargados
   ciudad = cityList.find(c => t.includes(c)) || null;
-
-  if (/abiert[oa]s?( ahora)?/.test(t)) abiertoAhora = true;
+ 
+  // Requiere la palabra "ahora" explícita para no confundir "farmacia abierta" (horario genérico)
+  // con una petición real de disponibilidad inmediata.
+  if (/abiert[oa]s?\s+ahora\b/.test(t)) abiertoAhora = true;
   if (/domicilio|delivery|entrega/.test(t)) domicilio = true;
   if (/oferta|ofertas|descuento|promocion/.test(t)) oferta = true;
-  if (/cerca/.test(t)) cerca = true;
-
-  return { intent, categoria, ciudad, abiertoAhora, domicilio, oferta, cerca, raw: rawText };
+ 
+  return { intent, categoria, ciudad, abiertoAhora, domicilio, oferta, raw: rawText };
 }
-
+ 
 function buscarNegocios(slots){
   let r = businesses.slice();
   if (slots.categoria) {
@@ -421,15 +533,18 @@ function buscarNegocios(slots){
   r.sort((a,b) => (b._rating||0) - (a._rating||0) || (b.is_featured?1:0) - (a.is_featured?1:0));
   return r;
 }
-
-// Quita verbos de comando, muletillas y ciudad ya detectada, dejando el término real de búsqueda
-// (por ejemplo "busca hamburguesas en Loja" -> "hamburguesas")
+ 
+// Stopwords genéricas: verbos de comando, muletillas, artículos.
+// OJO: esta lista NO incluye sinónimos de categoría a propósito — ver limpiarTerminoParaProducto().
 const STOPWORDS = new Set(["busca","buscar","encuentra","encontrar","quiero","necesito","dame","muestrame",
   "muéstrame","mostrar","ver","hay","algun","algún","alguna","algunos","algunas","por","favor","porfavor",
   "negocio","negocios","local","locales","tienda","tiendas","de","en","con","que","tengan","tenga","cerca",
   "abierto","abiertos","abierta","ahora","domicilio","delivery","entrega","oferta","ofertas","descuento",
   "promocion","promoción","un","una","unos","unas","el","la","los","las","y","o","del","al"]);
-
+ 
+// Término para filtros de nombre/dirección de negocio: aquí SÍ quitamos las palabras
+// de la categoría detectada, porque si el usuario dijo "restaurantes" no tiene sentido
+// buscar "restaurantes" dentro del nombre del negocio.
 function limpiarTermino(texto, categoria){
   const catWords = categoria ? categoriaKeywordsFor(categoria).flatMap(k => k.split(' ')).map(normalizar) : [];
   const palabras = texto.split(/\s+/).filter(Boolean);
@@ -443,34 +558,56 @@ function limpiarTermino(texto, categoria){
   });
   return kept.join(' ').trim();
 }
-
+ 
+// FIX: término específico para buscar en la tabla `products`. A diferencia de limpiarTermino(),
+// NO elimina las palabras que coinciden con sinónimos de categoría. Antes, buscar "pizza" o
+// "hamburguesa" detectaba la categoría Comida y esa misma palabra se borraba del término antes
+// de consultar `products`, así que la búsqueda de producto nunca se ejecutaba. Ahora "pizza"
+// sigue disparando el filtro de categoría Comida, pero también se busca como producto real.
+function limpiarTerminoParaProducto(texto){
+  const palabras = texto.split(/\s+/).filter(Boolean);
+  const kept = palabras.filter(w => {
+    const wn = normalizar(w);
+    if (!wn) return false;
+    if (STOPWORDS.has(wn)) return false;
+    if (cityList.includes(wn)) return false;
+    return true;
+  });
+  return kept.join(' ').trim();
+}
+ 
 async function buscarProductos(rawText){
   const q = rawText.trim();
   if (q.length < 3) return [];
-  const { data, error } = await supabase
-    .from('products')
-    .select(`name, businesses!business_id(id,name,slug,city,cover_image, categories!category_id(name,icon))`)
-    .ilike('name', `%${q}%`)
-    .eq('is_available', true)
-    .limit(8);
-  if (error) { console.warn('Urbanex products search error:', error.message); return []; }
-  const byBiz = new Map();
-  (data||[]).forEach(p => {
-    const biz = p.businesses;
-    if (!biz) return;
-    if (!byBiz.has(biz.id)) byBiz.set(biz.id, { biz, productos: [] });
-    byBiz.get(biz.id).productos.push(p.name);
-  });
-  return [...byBiz.values()];
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select(`name, businesses!business_id(id,name,slug,city,cover_image, categories!category_id(name,icon))`)
+      .ilike('name', `%${q}%`)
+      .eq('is_available', true)
+      .limit(8);
+    if (error) { console.warn('Urbanex products search error:', error.message); return []; }
+    const byBiz = new Map();
+    (data||[]).forEach(p => {
+      const biz = p.businesses;
+      if (!biz) return;
+      if (!byBiz.has(biz.id)) byBiz.set(biz.id, { biz, productos: [] });
+      byBiz.get(biz.id).productos.push(p.name);
+    });
+    return [...byBiz.values()];
+  } catch (err) {
+    console.warn('Urbanex products search exception:', err);
+    return [];
+  }
 }
-
+ 
 function construirRespuestaHablada(slots, resultados, matchedProductsByBiz){
   if (slots.intent === 'ayuda') {
     return 'Puedo buscar negocios reales de Urbanex por categoría, ciudad, si están abiertos ahora, si tienen servicio a domicilio, o si tienen ofertas. También puedo buscar directamente por producto, por ejemplo hamburguesas o pizza.';
   }
   if (slots.intent === 'saludo') return 'Hola. Soy el asistente de Urbanex. Dígame qué negocio o producto está buscando.';
   if (!resultados.length) return 'No encontré negocios ni productos que coincidan con esa búsqueda en la base de datos de Urbanex.';
-
+ 
   const top = resultados[0];
   const topProductos = matchedProductsByBiz.get(top.id);
   let frase = `Encontré ${resultados.length} resultado${resultados.length===1?'':'s'}`;
@@ -480,49 +617,41 @@ function construirRespuestaHablada(slots, resultados, matchedProductsByBiz){
   else frase += `. El mejor calificado es ${top.name}${top._rating ? `, con ${top._rating.toFixed(1)} estrellas` : ''}.`;
   return frase;
 }
-
+ 
 /* ============ INTERFAZ ============ */
-const micBtn = document.getElementById('micBtn');
-const stateLabel = document.getElementById('stateLabel');
-const transcriptEl = document.getElementById('transcript');
-const resultsEl = document.getElementById('results');
-const resultCountEl = document.getElementById('resultCount');
-const textInput = document.getElementById('textInput');
-const sendBtn = document.getElementById('sendBtn');
-const muteBtn = document.getElementById('muteBtn');
-
 let muted = false;
-
+let searching = false; // evita búsquedas superpuestas (doble tap / doble enter)
+ 
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
+ 
 function setState(label, mode){
   stateLabel.textContent = label;
   micBtn.classList.remove('listening','processing');
   if (mode) micBtn.classList.add(mode);
+  micBtn.setAttribute('aria-label',
+    mode === 'listening' ? 'Detener escucha' :
+    mode === 'processing' ? 'Procesando búsqueda' :
+    'Activar micrófono'
+  );
 }
-
+ 
 function buildDynamicChips(){
   const roots = categories.filter(c=>!c.parent_id).slice(0,3);
-  const extra = [];
-  if (roots[0]) extra.push(`${roots[0].icon||''} ${roots[0].name} abiertos ahora`.trim());
-  if (roots[1]) extra.push(`${roots[1].icon||''} ${roots[1].name} con oferta`.trim());
-  if (cityList[0]) extra.push(`Negocios en ${capitalizar(cityList[0])}`);
-  extra.push('Talleres con servicio a domicilio');
-  extra.forEach(cmd=>{
+  const chips = ['Qué puedes hacer', 'Busca hamburguesas'];
+  if (roots[0]) chips.unshift(`${roots[0].icon||''} ${roots[0].name} abiertos ahora`.trim());
+  if (roots[1]) chips.unshift(`${roots[1].icon||''} ${roots[1].name} con oferta`.trim());
+  if (cityList[0]) chips.unshift(`Negocios en ${capitalizar(cityList[0])}`);
+  chipsEl.innerHTML = '';
+  chips.forEach(cmd=>{
     const chip = document.createElement('div');
     chip.className = 'chip';
     chip.dataset.cmd = cmd;
     chip.textContent = cmd;
-    chipsEl.insertBefore(chip, chipsEl.firstChild);
-  });
-  attachChipHandlers();
-}
-function attachChipHandlers(){
-  document.querySelectorAll('.chip').forEach(chip=>{
-    chip.onclick = () => procesarComando(chip.dataset.cmd);
+    chip.onclick = () => procesarComando(cmd);
+    chipsEl.appendChild(chip);
   });
 }
-
+ 
 function renderResultados(list, { label, matchedProductsByBiz = new Map() } = {}){
   resultCountEl.textContent = label ? `${list.length} · ${label}` : `${list.length} resultado${list.length===1?'':'s'}`;
   resultsEl.innerHTML = '';
@@ -534,6 +663,8 @@ function renderResultados(list, { label, matchedProductsByBiz = new Map() } = {}
     const icon = b.subcategories?.icon || b.categories?.icon || '🏪';
     const catName = b.subcategories?.name || b.categories?.name || 'Sin categoría';
     const productos = matchedProductsByBiz.get(b.id);
+    const phone = phoneOf(b);
+    const wa = phone ? waLink(phone) : null;
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML = `
@@ -549,13 +680,14 @@ function renderResultados(list, { label, matchedProductsByBiz = new Map() } = {}
           ${b._open ? '<span class="badge open">Abierto ahora</span>' : ''}
           ${b.delivery_available ? '<span class="badge delivery">A domicilio</span>' : ''}
           ${b._promo ? '<span class="badge offer">Oferta</span>' : ''}
+          ${wa ? `<a class="badge-link" href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a>` : ''}
         </div>
       </div>
     `;
     resultsEl.appendChild(card);
   });
 }
-
+ 
 function hablar(texto){
   if (muted || !('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
@@ -564,77 +696,89 @@ function hablar(texto){
   u.rate = 1.02;
   window.speechSynthesis.speak(u);
 }
-
+ 
 async function procesarComando(texto){
+  if (searching || !detailsReady) return;
+  searching = true;
+ 
   transcriptEl.classList.remove('placeholder');
   transcriptEl.textContent = `"${texto}"`;
   setState('PROCESANDO', 'processing');
-
-  const slots = parseComando(texto);
-  const termino = limpiarTermino(texto, slots.categoria);
-  const terminoNorm = normalizar(termino);
-
-  let resultados = [];
-  const matchedProductsByBiz = new Map();
-
-  if (slots.intent === 'buscar') {
-    // 1. Filtros estructurales: categoría/ciudad/abierto/domicilio/oferta
-    resultados = slots.categoria || slots.ciudad || slots.abiertoAhora || slots.domicilio || slots.oferta
-      ? buscarNegocios(slots)
-      : [];
-    const idsPresentes = new Set(resultados.map(b => b.id));
-
-    // 2. Coincidencia libre por nombre/dirección/categoría del negocio (ej. "El Fogón")
-    if (terminoNorm.length >= 3) {
-      businesses.forEach(b => {
-        if (idsPresentes.has(b.id)) return;
-        if (slots.ciudad && normalizar(b.city) !== slots.ciudad) return;
-        if (slots.abiertoAhora && !b._open) return;
-        if (slots.domicilio && !b.delivery_available) return;
-        if (slots.oferta && !b._promo) return;
-        const haystack = normalizar(`${b.name} ${b.address||''} ${b.categories?.name||''} ${b.subcategories?.name||''}`);
-        if (haystack.includes(terminoNorm)) { resultados.push(b); idsPresentes.add(b.id); }
+ 
+  try {
+    const slots = parseComando(texto);
+    const terminoNegocio = limpiarTermino(texto, slots.categoria);
+    const terminoNegocioNorm = normalizar(terminoNegocio);
+    const terminoProducto = limpiarTerminoParaProducto(texto);
+ 
+    let resultados = [];
+    const matchedProductsByBiz = new Map();
+ 
+    if (slots.intent === 'buscar') {
+      // 1. Filtros estructurales: categoría/ciudad/abierto/domicilio/oferta
+      resultados = slots.categoria || slots.ciudad || slots.abiertoAhora || slots.domicilio || slots.oferta
+        ? buscarNegocios(slots)
+        : [];
+      const idsPresentes = new Set(resultados.map(b => b.id));
+ 
+      // 2. Coincidencia libre por nombre/dirección/categoría del negocio (ej. "El Fogón")
+      if (terminoNegocioNorm.length >= 3) {
+        businesses.forEach(b => {
+          if (idsPresentes.has(b.id)) return;
+          if (slots.ciudad && normalizar(b.city) !== slots.ciudad) return;
+          if (slots.abiertoAhora && !b._open) return;
+          if (slots.domicilio && !b.delivery_available) return;
+          if (slots.oferta && !b._promo) return;
+          const haystack = normalizar(`${b.name} ${b.address||''} ${b.categories?.name||''} ${b.subcategories?.name||''}`);
+          if (haystack.includes(terminoNegocioNorm)) { resultados.push(b); idsPresentes.add(b.id); }
+        });
+      }
+ 
+      // 3. Coincidencia por producto real en la tabla `products` (ej. "hamburguesas", "pizza")
+      //    Usa terminoProducto (sin filtrar sinónimos de categoría) para no perder el producto.
+      if (normalizar(terminoProducto).length >= 3) {
+        const prodGroups = await buscarProductos(terminoProducto);
+        prodGroups.forEach(({ biz, productos }) => {
+          const full = businesses.find(b => b.id === biz.id);
+          if (!full) return;
+          if (slots.ciudad && normalizar(full.city) !== slots.ciudad) return;
+          if (slots.abiertoAhora && !full._open) return;
+          if (slots.domicilio && !full.delivery_available) return;
+          if (slots.oferta && !full._promo) return;
+          matchedProductsByBiz.set(full.id, productos);
+          if (!idsPresentes.has(full.id)) { resultados.push(full); idsPresentes.add(full.id); }
+        });
+      }
+ 
+      // Si no había ningún filtro ni término, muestra destacados
+      if (!resultados.length && !slots.categoria && !slots.ciudad &&
+          terminoNegocioNorm.length < 3 && normalizar(terminoProducto).length < 3) {
+        resultados = businesses.filter(b => b.is_featured);
+      }
+ 
+      // Orden: coincidencias de producto primero, luego rating, luego destacados
+      resultados.sort((a,b)=>{
+        const aProd = matchedProductsByBiz.has(a.id) ? 1 : 0;
+        const bProd = matchedProductsByBiz.has(b.id) ? 1 : 0;
+        if (aProd !== bProd) return bProd - aProd;
+        return (b._rating||0) - (a._rating||0) || (b.is_featured?1:0) - (a.is_featured?1:0);
       });
+      resultados = resultados.slice(0, 12);
+ 
+      renderResultados(resultados, { matchedProductsByBiz });
     }
-
-    // 3. Coincidencia por producto real en la tabla `products` (ej. "hamburguesas", "pizza")
-    if (terminoNorm.length >= 3) {
-      const prodGroups = await buscarProductos(termino);
-      prodGroups.forEach(({ biz, productos }) => {
-        const full = businesses.find(b => b.id === biz.id);
-        if (!full) return;
-        if (slots.ciudad && normalizar(full.city) !== slots.ciudad) return;
-        if (slots.abiertoAhora && !full._open) return;
-        if (slots.domicilio && !full.delivery_available) return;
-        if (slots.oferta && !full._promo) return;
-        matchedProductsByBiz.set(full.id, productos);
-        if (!idsPresentes.has(full.id)) { resultados.push(full); idsPresentes.add(full.id); }
-      });
-    }
-
-    // Si no había ningún filtro ni término (comando vacío de intención "buscar"), muestra destacados
-    if (!resultados.length && !slots.categoria && !slots.ciudad && terminoNorm.length < 3) {
-      resultados = businesses.filter(b => b.is_featured);
-    }
-
-    // Orden: coincidencias de producto primero, luego rating, luego destacados
-    resultados.sort((a,b)=>{
-      const aProd = matchedProductsByBiz.has(a.id) ? 1 : 0;
-      const bProd = matchedProductsByBiz.has(b.id) ? 1 : 0;
-      if (aProd !== bProd) return bProd - aProd;
-      return (b._rating||0) - (a._rating||0) || (b.is_featured?1:0) - (a.is_featured?1:0);
-    });
-    resultados = resultados.slice(0, 12);
-
-    renderResultados(resultados, { matchedProductsByBiz });
+ 
+    const respuesta = construirRespuestaHablada(slots, resultados, matchedProductsByBiz);
+    hablar(respuesta);
+    console.log('Slots detectados (motor de reglas, sin LLM):', slots,
+      '| término negocio:', terminoNegocio, '| término producto:', terminoProducto,
+      '| productos encontrados:', matchedProductsByBiz);
+  } finally {
+    setState('TOQUE PARA HABLAR', null);
+    searching = false;
   }
-
-  const respuesta = construirRespuestaHablada(slots, resultados, matchedProductsByBiz);
-  hablar(respuesta);
-  setState('TOQUE PARA HABLAR', null);
-  console.log('Slots detectados (motor de reglas, sin LLM):', slots, '| término:', termino, '| productos:', matchedProductsByBiz);
 }
-
+ 
 sendBtn.addEventListener('click', ()=>{
   const val = textInput.value.trim();
   if (!val) return;
@@ -642,24 +786,24 @@ sendBtn.addEventListener('click', ()=>{
   textInput.value = '';
 });
 textInput.addEventListener('keydown', e => { if (e.key==='Enter') sendBtn.click(); });
-
+ 
 muteBtn.addEventListener('click', ()=>{
   muted = !muted;
   muteBtn.textContent = muted ? '🔇' : '🔊';
   muteBtn.classList.toggle('active', !muted);
   if (muted) window.speechSynthesis.cancel();
 });
-
+ 
 /* ============ RECONOCIMIENTO DE VOZ ============ */
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null, listening = false;
-
+ 
 if (SpeechRecognition) {
   recognition = new SpeechRecognition();
   recognition.lang = 'es-EC';
   recognition.continuous = false;
   recognition.interimResults = true;
-
+ 
   recognition.onstart = () => {
     listening = true;
     setState('ESCUCHANDO…', 'listening');
@@ -688,6 +832,7 @@ if (SpeechRecognition) {
     if (!micBtn.classList.contains('processing')) setState('TOQUE PARA HABLAR', null);
   };
   micBtn.addEventListener('click', () => {
+    if (!detailsReady) return;
     if (listening) { recognition.stop(); return; }
     try { recognition.start(); } catch(e){}
   });
@@ -697,8 +842,9 @@ if (SpeechRecognition) {
   micBtn.style.cursor = 'not-allowed';
   transcriptEl.textContent = 'Este navegador no soporta reconocimiento de voz. Use el campo de texto abajo.';
 }
-
+ 
 boot();
 </script>
 </body>
 </html>
+ 
