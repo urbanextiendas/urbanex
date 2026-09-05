@@ -236,7 +236,7 @@
   </div>
 
   <div class="footnote">
-    Conectado en vivo a la base de datos real de Urbanex en Supabase (tablas <code>businesses</code>, <code>categories</code>, <code>products</code>, <code>business_hours</code>, <code>reviews</code>, <code>promotions</code>). El motor de intención usa coincidencia de palabras clave, sin modelo de lenguaje. Datos y disponibilidad reflejan lo publicado por cada negocio en <a href="https://urbanex.app" target="_blank" rel="noopener">urbanex.app</a>.
+    Conectado en vivo a la base de datos real de Urbanex en Supabase (tablas <code>businesses</code>, <code>categories</code>, <code>business_products</code>, <code>business_hours</code>, <code>reviews</code>, <code>promotions</code>). El motor de intención usa coincidencia de palabras clave, sin modelo de lenguaje. Datos y disponibilidad reflejan lo publicado por cada negocio en <a href="https://urbanex.app" target="_blank" rel="noopener">urbanex.app</a>.
   </div>
 </main>
 
@@ -530,25 +530,44 @@ async function buscarProductos(rawText){
   const q = rawText.trim();
   if (q.length < 3) return [];
   try {
+    // FIX: la tabla real del catálogo es `business_products`, no `products`.
+    // El flag de disponibilidad se llama `is_active`, no `is_available`.
     const { data, error } = await supabase
-      .from('products')
-      .select(`name, businesses!business_id(id,name,slug,city,cover_image, categories!category_id(name,icon))`)
+      .from('business_products')
+      .select(`name, price, currency, is_on_sale, sale_price, offer_label, businesses!business_id(id,name,slug,city,cover_image, categories!category_id(name,icon))`)
       .ilike('name', `%${q}%`)
-      .eq('is_available', true)
+      .eq('is_active', true)
       .limit(8);
-    if (error) { console.warn('Urbanex products search error:', error.message); return []; }
+    if (error) { console.warn('Urbanex business_products search error:', error.message); return []; }
     const byBiz = new Map();
     (data||[]).forEach(p => {
       const biz = p.businesses;
       if (!biz) return;
       if (!byBiz.has(biz.id)) byBiz.set(biz.id, { biz, productos: [] });
-      byBiz.get(biz.id).productos.push(p.name);
+      byBiz.get(biz.id).productos.push({
+        name: p.name,
+        price: p.price,
+        currency: p.currency,
+        is_on_sale: p.is_on_sale,
+        sale_price: p.sale_price,
+        offer_label: p.offer_label
+      });
     });
     return [...byBiz.values()];
   } catch (err) {
-    console.warn('Urbanex products search exception:', err);
+    console.warn('Urbanex business_products search exception:', err);
     return [];
   }
+}
+
+function formatPrecio(p){
+  if (p.price === null || p.price === undefined) return '';
+  const symbol = (p.currency && p.currency.length <= 3) ? (p.currency === 'USD' ? '$' : p.currency) : (p.currency || '$');
+  const base = `${symbol}${Number(p.price).toFixed(2)}`;
+  if (p.is_on_sale && p.sale_price !== null && p.sale_price !== undefined) {
+    return `${symbol}${Number(p.sale_price).toFixed(2)} (antes ${base})`;
+  }
+  return base;
 }
 
 function construirRespuestaHablada(slots, resultados, matchedProductsByBiz){
@@ -563,8 +582,11 @@ function construirRespuestaHablada(slots, resultados, matchedProductsByBiz){
   let frase = `Encontré ${resultados.length} resultado${resultados.length===1?'':'s'}`;
   if (slots.categoria) frase += ` en ${slots.categoria.name}`;
   if (slots.ciudad) frase += ` en ${capitalizar(slots.ciudad)}`;
-  if (topProductos) frase += `. ${top.name} tiene ${topProductos[0]}.`;
-  else frase += `. El mejor calificado es ${top.name}${top._rating ? `, con ${top._rating.toFixed(1)} estrellas` : ''}.`;
+  if (topProductos) {
+    const p = topProductos[0];
+    const precioTxt = p.price != null ? ` por ${formatPrecio(p)}` : '';
+    frase += `. ${top.name} tiene ${p.name}${precioTxt}.`;
+  } else frase += `. El mejor calificado es ${top.name}${top._rating ? `, con ${top._rating.toFixed(1)} estrellas` : ''}.`;
   return frase;
 }
 
@@ -625,7 +647,7 @@ function renderResultados(list, { label, matchedProductsByBiz = new Map() } = {}
           ${b._rating ? `<span class="rating">★ ${b._rating.toFixed(1)}</span>` : ''}
         </div>
         <div class="card-meta">${esc(catName)}${b.city ? ' · ' + esc(capitalizar(b.city)) : ''}</div>
-        ${productos ? `<div class="card-meta" style="margin-top:4px; color:var(--gold);">Producto: ${esc(productos.slice(0,3).join(', '))}</div>` : ''}
+        ${productos ? `<div class="card-meta" style="margin-top:4px; color:var(--gold);">Producto: ${esc(productos.slice(0,3).map(p => `${p.name}${p.price != null ? ' · ' + esc(formatPrecio(p)) : ''}`).join(' · '))}</div>` : ''}
         <div class="badges">
           ${b._open ? '<span class="badge open">Abierto ahora</span>' : ''}
           ${b.delivery_available ? '<span class="badge delivery">A domicilio</span>' : ''}
@@ -684,7 +706,7 @@ async function procesarComando(texto){
         });
       }
 
-      // 3. Coincidencia por producto real en la tabla `products` (ej. "hamburguesas", "pizza")
+      // 3. Coincidencia por producto real en la tabla `business_products` (ej. "hamburguesas", "pizza")
       //    Usa terminoProducto (sin filtrar sinónimos de categoría) para no perder el producto.
       if (normalizar(terminoProducto).length >= 3) {
         const prodGroups = await buscarProductos(terminoProducto);
@@ -706,9 +728,9 @@ async function procesarComando(texto){
           if (!idsPresentes.has(full.id)) { resultados.push(full); idsPresentes.add(full.id); }
         });
         if (prodGroups.length === 0) {
-          console.info(`Urbanex: la búsqueda de producto "${terminoProducto}" no encontró ninguna fila en la tabla products (o is_available=false para todas).`);
+          console.info(`Urbanex: la búsqueda de producto "${terminoProducto}" no encontró ninguna fila en la tabla business_products (o is_active=false para todas).`);
         } else if (agregados === 0) {
-          console.info(`Urbanex: la búsqueda de producto "${terminoProducto}" encontró ${prodGroups.length} negocio(s) en products, pero ninguno pasó los filtros o el negocio no estaba activo/cargado. Ver advertencias arriba.`);
+          console.info(`Urbanex: la búsqueda de producto "${terminoProducto}" encontró ${prodGroups.length} negocio(s) en business_products, pero ninguno pasó los filtros o el negocio no estaba activo/cargado. Ver advertencias arriba.`);
         }
       }
 
