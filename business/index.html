@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#050505">
+<meta name="theme-color" content="#f7f3e9">
 <title>Urbanex - Negocio</title>
 
 <link rel="icon" type="image/png" href="../imagenes/log.png">
@@ -3626,6 +3626,379 @@ body{
 }
 </style>
 
+
+<style id="urbanex-business-boulevard-palette-final">
+/* ============================================================
+   URBANEX · BUSINESS / INDEX
+   Paleta visual alineada con boulevard.html.
+   Solo color, superficies, contraste y legibilidad.
+   No altera estructura, rutas, IDs ni lógica existente.
+   ============================================================ */
+:root{
+  --uxb-navy:#173a54;
+  --uxb-navy-2:#4d687a;
+  --uxb-gold:#bd8b1c;
+  --uxb-gold-dark:#93690f;
+  --uxb-cream:#f7f3e9;
+  --uxb-cream-glass:rgba(255,251,243,.90);
+  --uxb-card:rgba(255,253,248,.94);
+  --uxb-line:rgba(188,143,34,.32);
+  --uxb-line-soft:rgba(74,105,127,.16);
+  --uxb-muted:#617789;
+  --uxb-green:#168a57;
+  --uxb-red:#b94b55;
+  --uxb-shadow:0 10px 28px rgba(43,63,77,.11);
+}
+
+html,
+body{
+  background-color:var(--uxb-cream)!important;
+  color:var(--uxb-navy)!important;
+}
+
+body{
+  background-image:
+    linear-gradient(180deg,rgba(255,252,246,.82),rgba(246,239,224,.88)),
+    url("../imagenes/Boulevard.png")!important;
+  background-position:center bottom!important;
+  background-size:cover!important;
+  background-repeat:no-repeat!important;
+  background-attachment:fixed!important;
+}
+
+/* Encabezado: misma escala clara del Boulevard */
+.site-header,
+.header-top{
+  background:linear-gradient(180deg,rgba(255,253,248,.97),rgba(247,240,226,.94))!important;
+  border-bottom:1px solid var(--uxb-line)!important;
+  box-shadow:0 7px 22px rgba(43,63,77,.10)!important;
+  backdrop-filter:blur(14px) saturate(120%)!important;
+  -webkit-backdrop-filter:blur(14px) saturate(120%)!important;
+}
+
+.brand-box img{
+  object-fit:contain!important;
+  filter:none!important;
+}
+
+.search-input,
+#siteSearch,
+.location-picker-button,
+.location-indicator{
+  background:rgba(255,255,255,.92)!important;
+  color:var(--uxb-navy)!important;
+  border-color:rgba(188,143,34,.38)!important;
+  box-shadow:0 4px 14px rgba(43,63,77,.06)!important;
+}
+
+.search-input::placeholder,
+#siteSearch::placeholder{
+  color:#718492!important;
+}
+
+.search-input:focus,
+#siteSearch:focus,
+.location-picker-button:hover,
+.location-picker-button[aria-expanded="true"]{
+  background:#fff!important;
+  border-color:rgba(188,143,34,.72)!important;
+  color:var(--uxb-navy)!important;
+}
+
+.search-icon{
+  fill:var(--uxb-gold-dark)!important;
+}
+
+#locationPickerLabel,
+.location-picker-chevron{
+  color:var(--uxb-navy)!important;
+}
+.location-picker-button svg{
+  fill:var(--uxb-gold-dark)!important;
+}
+
+.location-picker-panel,
+.search-results-panel{
+  background:rgba(255,253,248,.98)!important;
+  color:var(--uxb-navy)!important;
+  border-color:var(--uxb-line)!important;
+  box-shadow:0 18px 45px rgba(43,63,77,.16)!important;
+}
+.location-picker-title,
+.location-picker-field>span,
+.search-result-title{
+  color:var(--uxb-navy)!important;
+}
+.location-picker-field select{
+  background:#fff!important;
+  color:var(--uxb-navy)!important;
+  border-color:rgba(74,105,127,.22)!important;
+}
+.location-picker-cancel{
+  background:rgba(255,255,255,.82)!important;
+  color:var(--uxb-navy)!important;
+  border-color:rgba(74,105,127,.22)!important;
+}
+.location-picker-apply{
+  background:var(--uxb-gold)!important;
+  color:#fff!important;
+  border-color:var(--uxb-gold)!important;
+}
+
+/* Estado de carga / ausencia */
+.loading,
+.notfound,
+.empty{
+  background:rgba(255,253,248,.94)!important;
+  color:var(--uxb-navy)!important;
+  border-color:var(--uxb-line)!important;
+  box-shadow:var(--uxb-shadow)!important;
+}
+.loading::before{
+  border-color:rgba(188,143,34,.22)!important;
+  border-top-color:var(--uxb-gold)!important;
+}
+
+/* Hero y paneles */
+.hero,
+.panel,
+.premium-surface,
+.sidebar .panel{
+  background:
+    radial-gradient(circle at 16% 0%,rgba(229,193,88,.16),transparent 30%),
+    linear-gradient(145deg,rgba(255,253,248,.95),rgba(246,239,224,.91))!important;
+  border-color:var(--uxb-line)!important;
+  color:var(--uxb-navy)!important;
+  box-shadow:var(--uxb-shadow)!important;
+  backdrop-filter:blur(13px) saturate(115%)!important;
+  -webkit-backdrop-filter:blur(13px) saturate(115%)!important;
+}
+
+.hero-copy h1,
+.panel h2,
+.panel-head h2,
+.product-card h3,
+.info-item strong,
+.review-name,
+.promo h3{
+  color:var(--uxb-navy)!important;
+  text-shadow:none!important;
+}
+
+.hero-description,
+.panel-subtitle,
+.info-item,
+.info-item span,
+.review-card p,
+.product-description,
+.product-content p,
+.promo p,
+.meta,
+.meta span{
+  color:var(--uxb-navy-2)!important;
+}
+
+.category-pill,
+.panel-kicker,
+.eyebrow,
+.product-category,
+.offer-small,
+.stars{
+  color:var(--uxb-gold-dark)!important;
+}
+
+.category-pill{
+  background:rgba(255,246,221,.88)!important;
+  border-color:rgba(188,143,34,.40)!important;
+}
+
+/* Navegación de secciones */
+.section-nav{
+  background:rgba(255,253,248,.94)!important;
+  border-color:var(--uxb-line)!important;
+  box-shadow:0 5px 18px rgba(43,63,77,.08)!important;
+  backdrop-filter:blur(12px)!important;
+  -webkit-backdrop-filter:blur(12px)!important;
+}
+.section-nav a{
+  color:var(--uxb-navy)!important;
+}
+.section-nav a:hover,
+.section-nav a:focus{
+  color:var(--uxb-gold-dark)!important;
+  background:rgba(255,246,221,.72)!important;
+}
+
+/* Botones */
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-product{
+  border-color:rgba(188,143,34,.44)!important;
+  box-shadow:none!important;
+}
+.btn-primary,
+.btn-product{
+  background:var(--uxb-navy)!important;
+  color:#fff!important;
+}
+.btn-primary:hover,
+.btn-product:hover{
+  background:#214d69!important;
+  color:#fff!important;
+}
+.btn-secondary{
+  background:rgba(255,255,255,.90)!important;
+  color:var(--uxb-navy)!important;
+}
+.btn-secondary:hover{
+  background:#fff8e9!important;
+  color:var(--uxb-gold-dark)!important;
+}
+.btn-whatsapp{
+  color:#fff!important;
+}
+
+/* Catálogo */
+.product-card,
+.review-card,
+.promo,
+.info-item{
+  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(246,239,224,.91))!important;
+  color:var(--uxb-navy)!important;
+  border-color:rgba(188,143,34,.24)!important;
+  box-shadow:0 7px 18px rgba(43,63,77,.07)!important;
+}
+.product-card:hover{
+  border-color:rgba(188,143,34,.52)!important;
+  box-shadow:0 12px 26px rgba(43,63,77,.12)!important;
+}
+.product-image,
+.product-image-box,
+.cover,
+.hero-company-logo-shell{
+  background:#fff!important;
+  border-color:rgba(188,143,34,.24)!important;
+}
+.price,
+.price-sale,
+.product-price,
+.offer-price{
+  color:var(--uxb-gold-dark)!important;
+}
+
+/* Formularios de reseña */
+.review-form input,
+.review-form textarea,
+.review-form select{
+  background:#fff!important;
+  color:var(--uxb-navy)!important;
+  border-color:rgba(74,105,127,.22)!important;
+}
+.review-form input::placeholder,
+.review-form textarea::placeholder{
+  color:#718492!important;
+}
+.review-form input:focus,
+.review-form textarea:focus{
+  border-color:rgba(188,143,34,.64)!important;
+  outline:none!important;
+}
+.rating-select button{
+  background:rgba(255,255,255,.90)!important;
+  color:var(--uxb-gold-dark)!important;
+  border-color:rgba(188,143,34,.30)!important;
+}
+.rating-select button.active{
+  background:var(--uxb-gold)!important;
+  color:#fff!important;
+}
+.notice.ok{
+  color:var(--uxb-green)!important;
+  background:rgba(22,138,87,.08)!important;
+  border-color:rgba(22,138,87,.24)!important;
+}
+.notice.error{
+  color:var(--uxb-red)!important;
+  background:rgba(185,75,85,.08)!important;
+  border-color:rgba(185,75,85,.24)!important;
+}
+
+/* Estados */
+.status.open,
+.status-open{
+  color:var(--uxb-green)!important;
+  background:rgba(22,138,87,.08)!important;
+  border-color:rgba(22,138,87,.25)!important;
+}
+.status.closed,
+.status-closed{
+  color:var(--uxb-red)!important;
+  background:rgba(185,75,85,.08)!important;
+  border-color:rgba(185,75,85,.25)!important;
+}
+
+/* Enlaces dentro de información */
+#businessWebsite,
+#businessOffers,
+.info-item a{
+  color:var(--uxb-gold-dark)!important;
+}
+#businessWebsite:hover,
+#businessOffers:hover,
+.info-item a:hover{
+  color:var(--uxb-navy)!important;
+}
+
+/* Pie exactamente en la escala del Boulevard */
+.footer,
+.pie-pagina{
+  background:rgba(255,251,243,.94)!important;
+  color:#647786!important;
+  border-top:1px solid rgba(188,143,34,.28)!important;
+  box-shadow:0 -5px 18px rgba(43,63,77,.06)!important;
+  backdrop-filter:blur(12px)!important;
+  -webkit-backdrop-filter:blur(12px)!important;
+}
+.footer p,
+.pie-pagina p,
+.footer span,
+.pie-pagina span{
+  color:#647786!important;
+}
+.footer a,
+.footer a:visited,
+.footer a:hover,
+.footer a:focus,
+.pie-pagina a,
+.pie-pagina a:visited,
+.pie-pagina a:hover,
+.pie-pagina a:focus{
+  color:var(--uxb-gold-dark)!important;
+  text-decoration:none!important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar-thumb{
+  background:rgba(188,143,34,.34)!important;
+}
+::-webkit-scrollbar-thumb:hover{
+  background:var(--uxb-gold)!important;
+}
+
+@media (max-width:720px){
+  body{
+    background-image:
+      linear-gradient(180deg,rgba(255,252,246,.88),rgba(246,239,224,.92)),
+      url("../imagenes/Boulevard.png")!important;
+  }
+  .site-header,
+  .header-top{
+    background:linear-gradient(180deg,rgba(255,253,248,.98),rgba(247,240,226,.96))!important;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -3637,7 +4010,7 @@ body{
     title="Volver al Boulevard"
     aria-label="Volver al Boulevard"
   >
-    <img src="../imagenes/logo.png" alt="Logo Urbanex">
+    <img src="../imagenes/Urba4.png" alt="Logo Urbanex">
   </a>
 
   <div class="search-wrapper">
@@ -4479,7 +4852,7 @@ trackUrbanexEvent('page_view');
 function showNotFound(){$('loading').classList.add('hidden');$('notFound').classList.remove('hidden');}
 function showReviewMessage(type,text){const box=$('reviewMessage');box.className='notice '+type;box.textContent=text;}
 $('ratingBox').addEventListener('click',e=>{const value=Number(e.target.getAttribute('data-rating'));if(!value)return;selectedRating=value;document.querySelectorAll('#ratingBox button').forEach(btn=>btn.classList.toggle('active',Number(btn.dataset.rating)<=selectedRating));});
-$('reviewForm').addEventListener('submit',async e=>{e.preventDefault();if(!business)return;if(!selectedRating)return showReviewMessage('error','Seleccione una calificación.');const comment=$('reviewComment').value.trim();if(!comment)return showReviewMessage('error','Ingrese el comentario de la reseña.');$('reviewSubmit').disabled=true;$('reviewSubmit').textContent='Enviando...';try{const reviewName=$('reviewName').value.trim()||'Cliente Urbanex';const payload={business_id:String(business.id),rating:selectedRating,author_name:reviewName,user_name:reviewName,comment:comment,is_approved:false};const {error}=await supabase.from('reviews').insert(payload);if(error)throw error;$('reviewForm').reset();selectedRating=0;document.querySelectorAll('#ratingBox button').forEach(btn=>btn.classList.remove('active'));showReviewMessage('ok','Reseña enviada correctamente. Quedará visible cuando el administrador la apruebe.');}catch(error){showReviewMessage('error',error.message||'No se pudo enviar la reseña.');}finally{$('reviewSubmit').disabled=false;$('reviewSubmit').textContent='Enviar reseña para aprobación';}});
+$('reviewForm').addEventListener('submit',async e=>{e.preventDefault();if(!business)return;if(!selectedRating)return showReviewMessage('error','Seleccione una calificación.');const comment=$('reviewComment').value.trim();if(!comment)return showReviewMessage('error','Ingrese el comentario de la reseña.');$('reviewSubmit').disabled=true;$('reviewSubmit').textContent='Enviando...';try{const reviewName=$('reviewName').value.trim()||'Cliente Urbanex';const payload={business_id:String(business.id),rating:selectedRating,author_name:reviewName,user_name:reviewName,comment:comment,is_approved:false};const {error}=await supabase.from('reviews').insert(payload);if(error)throw error;$('reviewForm').reset();selectedRating=0;document.querySelectorAll('#ratingBox button').forEach(btn=>btn.classList.remove('active'));showReviewMessage('ok','Reseña enviada correctamente. Quedará visible cuando el administrador la apruebe.');}catch(error){console.warn('Urbanex review:',error);showReviewMessage('error','No se pudo enviar la reseña. Intente nuevamente.');}finally{$('reviewSubmit').disabled=false;$('reviewSubmit').textContent='Enviar reseña para aprobación';}});
 function openLightbox(url){$('lightboxImage').src=url;$('imageLightbox').classList.add('open');$('imageLightbox').setAttribute('aria-hidden','false');}
 function closeLightbox(){$('imageLightbox').classList.remove('open');$('imageLightbox').setAttribute('aria-hidden','true');$('lightboxImage').src='';}
 document.addEventListener('click',event=>{
