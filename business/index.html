@@ -4556,6 +4556,127 @@ body{
 }
 </style>
 
+
+<style id="urbanex-business-logo-footer-exacto-boulevard">
+/* ============================================================
+   URBANEX · BUSINESS / INDEX
+   ÚNICO AJUSTE: logo y pie con las mismas proporciones de
+   boulevard.html. No modifica estructura ni lógica.
+   ============================================================ */
+
+/* Boulevard escritorio: logo 60 px. */
+.site-header.header-top .brand-box img{
+  width:auto!important;
+  max-width:none!important;
+  height:60px!important;
+  display:block!important;
+  margin:0!important;
+  object-fit:contain!important;
+  transform:none!important;
+}
+
+/* Boulevard: pie fijo de 24 px y tipografía de 11 px. */
+.footer.pie-pagina,
+.pie-pagina.footer{
+  position:fixed!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  width:100%!important;
+  height:24px!important;
+  min-height:24px!important;
+  padding:0 12px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  z-index:2147483647!important;
+  border:0!important;
+  border-top:1px solid rgba(188,143,34,.18)!important;
+  border-radius:0!important;
+  background:rgba(255,251,243,.42)!important;
+  box-shadow:0 -5px 16px rgba(33,49,61,.06)!important;
+  color:#1c435c!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-size:11px!important;
+  font-weight:400!important;
+  line-height:1!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  backdrop-filter:blur(12px)!important;
+  -webkit-backdrop-filter:blur(12px)!important;
+}
+
+.footer.pie-pagina p,
+.footer.pie-pagina span,
+.pie-pagina.footer p,
+.pie-pagina.footer span{
+  margin:0!important;
+  padding:0!important;
+  color:#1c435c!important;
+  font-size:11px!important;
+  line-height:1!important;
+}
+
+.footer.pie-pagina a,
+.footer.pie-pagina a:visited,
+.footer.pie-pagina a:hover,
+.footer.pie-pagina a:focus,
+.pie-pagina.footer a,
+.pie-pagina.footer a:visited,
+.pie-pagina.footer a:hover,
+.pie-pagina.footer a:focus{
+  color:#a06f13!important;
+  font-size:11px!important;
+  font-weight:600!important;
+  text-decoration:none!important;
+}
+
+/* Mismas proporciones responsive que Boulevard. */
+@media
+  (min-width:641px) and (max-width:1366px) and (orientation:landscape) and (pointer:coarse),
+  (min-width:641px) and (max-width:1366px) and (orientation:landscape) and (hover:none){
+  .site-header.header-top .brand-box img{
+    max-width:172px!important;
+    height:54px!important;
+  }
+}
+
+@media
+  (min-width:641px) and (max-width:1366px) and (orientation:portrait) and (pointer:coarse),
+  (min-width:641px) and (max-width:1366px) and (orientation:portrait) and (hover:none){
+  .site-header.header-top .brand-box img{
+    max-width:176px!important;
+    height:52px!important;
+  }
+}
+
+@media(max-width:720px){
+  .site-header.header-top .brand-box img{
+    width:auto!important;
+    max-width:158px!important;
+    height:48px!important;
+  }
+  .footer.pie-pagina,
+  .pie-pagina.footer,
+  .footer.pie-pagina p,
+  .footer.pie-pagina span,
+  .footer.pie-pagina a,
+  .pie-pagina.footer p,
+  .pie-pagina.footer span,
+  .pie-pagina.footer a{
+    font-size:11px!important;
+  }
+}
+
+@media(max-width:390px){
+  .site-header.header-top .brand-box img{
+    max-width:142px!important;
+    height:44px!important;
+  }
+}
+</style>
+
 </head>
 
 <body>
