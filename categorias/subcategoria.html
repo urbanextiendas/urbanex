@@ -5,16 +5,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script id="urbanex-subcategory-hourly-background">
 (function(){
-  const mobile=window.matchMedia('(max-width: 720px)').matches;
-  const parts=new Intl.DateTimeFormat('es-EC',{timeZone:'America/Guayaquil',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
-  const hourPart=parts.find(p=>p.type==='hour');
-  const hour=hourPart?Number(hourPart.value):new Date().getHours();
-  const period=hour>=7&&hour<13?'mañana':(hour>=13&&hour<19?'tarde':'noche');
-  const href='../imagenes/boulevard/Boul_'+period+(mobile?'-Celular':'')+'.png';
-  document.documentElement.style.setProperty('--page-bg','url("'+href+'")');
-  const link=document.createElement('link');
-  link.rel='preload'; link.as='image'; link.href=href; link.fetchPriority='high';
-  document.head.appendChild(link);
+  const imagenes = {
+    desktop: {
+      dia: '../imagenes/boulevard/Boul_mañana.png',
+      tarde: '../imagenes/boulevard/Boul_tarde.png',
+      noche: '../imagenes/boulevard/Boul_noche.png'
+    },
+    celular: {
+      dia: '../imagenes/boulevard/Boul_mañana-Celular.png',
+      tarde: '../imagenes/boulevard/Boul_tarde-Celular.png',
+      noche: '../imagenes/boulevard/Boul_noche-Celular.png'
+    }
+  };
+  const mediaCelular = window.matchMedia('(max-width: 720px)');
+  function horaEcuador(){
+    const partes = new Intl.DateTimeFormat('es-EC', {
+      timeZone:'America/Guayaquil',
+      hour:'2-digit',
+      hourCycle:'h23'
+    }).formatToParts(new Date());
+    const parte = partes.find(p => p.type === 'hour');
+    return parte ? Number(parte.value) : new Date().getHours();
+  }
+  function franja(hora){
+    if (hora >= 7 && hora < 13) return 'dia';
+    if (hora >= 13 && hora < 19) return 'tarde';
+    return 'noche';
+  }
+  function rutaActual(){
+    const tipo = mediaCelular.matches ? 'celular' : 'desktop';
+    return imagenes[tipo][franja(horaEcuador())];
+  }
+  function aplicar(){
+    const ruta = rutaActual();
+    document.documentElement.style.setProperty('--page-bg','url("' + ruta + '")');
+  }
+  const primeraRuta = rutaActual();
+  document.documentElement.style.setProperty('--page-bg','url("' + primeraRuta + '")');
+  const preload = document.createElement('link');
+  preload.rel='preload';
+  preload.as='image';
+  preload.href=primeraRuta;
+  preload.fetchPriority='high';
+  document.head.appendChild(preload);
+  setInterval(aplicar,60000);
+  if (mediaCelular.addEventListener) mediaCelular.addEventListener('change',aplicar);
+  else if (mediaCelular.addListener) mediaCelular.addListener(aplicar);
 })();
 </script>
 <title>Urbanex - Subcategoría</title>
