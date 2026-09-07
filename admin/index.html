@@ -3168,6 +3168,334 @@ input,textarea,select { font-family:var(--sans); }
 }
 </style>
 
+
+<style id="urbanex-admin-format-index-final">
+/* ============================================================
+   URBANEX ADMIN · FORMATO VISUAL
+   Solo presentación. No modifica lógica, IDs, consultas ni rutas.
+   Fondo: mismas portadas dinámicas de index.html principal.
+   ============================================================ */
+:root{
+  --uxa-navy:#173a54;
+  --uxa-navy-2:#4d687a;
+  --uxa-gold:#bd8b1c;
+  --uxa-gold-dark:#93690f;
+  --uxa-cream:#f7f3e9;
+  --uxa-surface:rgba(255,253,248,.94);
+  --uxa-surface-strong:rgba(255,255,255,.97);
+  --uxa-line:rgba(188,143,34,.30);
+  --uxa-line-blue:rgba(23,58,84,.14);
+  --uxa-muted:#647786;
+  --uxa-green:#168a57;
+  --uxa-red:#b94b55;
+  --uxa-shadow:0 12px 30px rgba(43,63,77,.11);
+  --urbanex-admin-footer:24px;
+  --urbanex-index-bg:url("../imagenes/Portada_día.png");
+}
+html{background:var(--uxa-cream)!important;}
+body{
+  color:var(--uxa-navy)!important;
+  background-image:
+    linear-gradient(180deg,rgba(255,252,246,.76),rgba(246,239,224,.84)),
+    var(--urbanex-index-bg)!important;
+  background-position:center center!important;
+  background-size:cover!important;
+  background-repeat:no-repeat!important;
+  background-attachment:fixed!important;
+  padding-bottom:var(--urbanex-admin-footer)!important;
+}
+a{color:inherit;}
+
+/* Logo con la misma escala de Boulevard */
+.admin-header img,
+.header .logo img,
+.logo img{
+  width:auto!important;
+  height:60px!important;
+  max-width:180px!important;
+  display:block!important;
+  object-fit:contain!important;
+  filter:none!important;
+}
+
+/* Encabezados */
+.admin-header,
+.header{
+  min-height:60px!important;
+  height:60px!important;
+  padding:0 20px!important;
+  background:rgba(255,253,248,.95)!important;
+  border-bottom:1px solid var(--uxa-line)!important;
+  box-shadow:0 7px 22px rgba(43,63,77,.10)!important;
+  backdrop-filter:blur(14px) saturate(120%)!important;
+  -webkit-backdrop-filter:blur(14px) saturate(120%)!important;
+}
+.admin-header h1,
+.header h1,
+.section-header h2,
+.hero h1,
+.panel h2{
+  color:var(--uxa-navy)!important;
+}
+.admin-user{color:var(--uxa-muted)!important;}
+
+/* Navegación y superficies */
+.admin-nav{
+  background:rgba(255,251,243,.88)!important;
+  border-right:1px solid var(--uxa-line)!important;
+  backdrop-filter:blur(12px)!important;
+  -webkit-backdrop-filter:blur(12px)!important;
+}
+.nav-item{
+  color:var(--uxa-navy-2)!important;
+  border-color:transparent!important;
+}
+.nav-item:hover{
+  background:rgba(255,255,255,.78)!important;
+  color:var(--uxa-navy)!important;
+}
+.nav-item.active{
+  background:rgba(255,246,221,.88)!important;
+  border-color:var(--uxa-gold)!important;
+  color:var(--uxa-gold-dark)!important;
+}
+.admin-main,
+#loginScreen{
+  background:transparent!important;
+}
+
+.login-box,
+.table-wrap,
+.modal,
+.review-block,
+.stat-card,
+.hero,
+.panel,
+.card{
+  background:var(--uxa-surface)!important;
+  color:var(--uxa-navy)!important;
+  border-color:var(--uxa-line)!important;
+  box-shadow:var(--uxa-shadow)!important;
+  backdrop-filter:blur(12px) saturate(115%)!important;
+  -webkit-backdrop-filter:blur(12px) saturate(115%)!important;
+}
+.login-box h1,
+.modal-header h3,
+.stat-value,
+.review-biz,
+.review-stars,
+.stars{
+  color:var(--uxa-gold-dark)!important;
+}
+.login-box p,
+.review-comment,
+.hero p,
+.card p,
+.stat-label,
+.stat-sub,
+.notice,
+.review-author{
+  color:var(--uxa-muted)!important;
+}
+.review-author,.card h3{color:var(--uxa-navy)!important;}
+
+/* Formularios */
+.field label,
+.form-group label,
+.hours-time-field label{
+  color:var(--uxa-navy)!important;
+}
+.field input,
+.form-group input,
+.form-group textarea,
+.form-group select,
+.hours-time-field input,
+input{
+  background:rgba(255,255,255,.94)!important;
+  color:var(--uxa-navy)!important;
+  border-color:rgba(23,58,84,.18)!important;
+}
+.field input:focus,
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus,
+.hours-time-field input:focus,
+input:focus{
+  border-color:var(--uxa-gold)!important;
+  box-shadow:0 0 0 3px rgba(188,139,28,.10)!important;
+  outline:none!important;
+}
+.form-group select option{background:#fff!important;color:var(--uxa-navy)!important;}
+
+/* Tablas */
+.data-table th{
+  color:var(--uxa-navy)!important;
+  background:rgba(255,246,221,.78)!important;
+  border-bottom-color:var(--uxa-line)!important;
+}
+.data-table td{
+  color:var(--uxa-navy-2)!important;
+  border-bottom-color:rgba(23,58,84,.09)!important;
+}
+.data-table tr:hover td{background:rgba(255,255,255,.58)!important;}
+
+/* Botones */
+.btn-primary,
+.btn-login{
+  background:var(--uxa-gold)!important;
+  color:#fff!important;
+}
+.btn-primary:hover,
+.btn-login:hover{background:var(--uxa-gold-dark)!important;}
+.btn-ghost,
+.pill,
+.btn{
+  border-color:rgba(188,139,28,.32)!important;
+}
+.btn-ghost,
+.pill{
+  background:rgba(255,255,255,.88)!important;
+  color:var(--uxa-navy)!important;
+}
+.btn-ghost:hover,
+.pill:hover{
+  border-color:var(--uxa-gold)!important;
+  color:var(--uxa-gold-dark)!important;
+  background:#fff8e9!important;
+}
+.btn-success,.btn.ok{
+  color:var(--uxa-green)!important;
+  background:rgba(22,138,87,.08)!important;
+  border-color:rgba(22,138,87,.30)!important;
+}
+.btn-danger,.btn.danger,.btn-logout{
+  color:var(--uxa-red)!important;
+  background:rgba(185,75,85,.08)!important;
+  border-color:rgba(185,75,85,.30)!important;
+}
+
+.badge-gold{background:rgba(188,139,28,.10)!important;color:var(--uxa-gold-dark)!important;border-color:rgba(188,139,28,.28)!important;}
+.badge-green{background:rgba(22,138,87,.08)!important;color:var(--uxa-green)!important;border-color:rgba(22,138,87,.24)!important;}
+.badge-red{background:rgba(185,75,85,.08)!important;color:var(--uxa-red)!important;border-color:rgba(185,75,85,.24)!important;}
+.badge-gray{background:rgba(23,58,84,.05)!important;color:var(--uxa-muted)!important;border-color:rgba(23,58,84,.12)!important;}
+
+.hours-row-edit,
+.hours-help{
+  background:rgba(255,253,248,.90)!important;
+  border-color:var(--uxa-line)!important;
+}
+.hours-day-name strong{color:var(--uxa-navy)!important;}
+.hours-day-name small,.hours-help{color:var(--uxa-muted)!important;}
+
+/* Revisiones */
+.header .nav{gap:8px!important;}
+.wrap{position:relative!important;z-index:1!important;}
+.card{border-radius:16px!important;}
+.notice.ok{color:var(--uxa-green)!important;background:rgba(22,138,87,.08)!important;border-color:rgba(22,138,87,.24)!important;}
+.notice.error{color:var(--uxa-red)!important;background:rgba(185,75,85,.08)!important;border-color:rgba(185,75,85,.24)!important;}
+
+/* Pie: misma proporción visual de Boulevard */
+.pie-pagina{
+  position:fixed!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  z-index:2147483647!important;
+  width:100%!important;
+  height:24px!important;
+  min-height:24px!important;
+  padding:0 10px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border:0!important;
+  border-top:1px solid rgba(188,143,34,.28)!important;
+  background:rgba(255,251,243,.95)!important;
+  color:#647786!important;
+  box-shadow:0 -5px 18px rgba(43,63,77,.06)!important;
+  backdrop-filter:blur(12px)!important;
+  -webkit-backdrop-filter:blur(12px)!important;
+  font:11px/1 Arial,Helvetica,sans-serif!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+}
+.pie-pagina a,
+.pie-pagina a:visited,
+.pie-pagina a:hover,
+.pie-pagina a:focus{
+  color:var(--uxa-gold-dark)!important;
+  font-weight:600!important;
+  text-decoration:none!important;
+}
+
+/* Reserva del pie en el panel principal */
+#adminApp{min-height:calc(100vh - 24px)!important;}
+.admin-body{height:calc(100vh - 60px - 24px)!important;}
+#loginScreen{min-height:calc(100vh - 24px)!important;}
+
+@media(max-width:760px){
+  body{
+    background-image:
+      linear-gradient(180deg,rgba(255,252,246,.78),rgba(246,239,224,.86)),
+      var(--urbanex-index-bg)!important;
+  }
+  .admin-header,
+  .header{
+    min-height:60px!important;
+    height:auto!important;
+  }
+  .admin-header img,
+  .header .logo img,
+  .logo img{
+    height:48px!important;
+    max-width:158px!important;
+  }
+  .admin-body{height:auto!important;min-height:calc(100vh - 60px - 24px)!important;}
+  .pie-pagina{font-size:11px!important;}
+}
+@media(max-width:390px){
+  .admin-header img,
+  .header .logo img,
+  .logo img{
+    height:44px!important;
+    max-width:142px!important;
+  }
+}
+</style>
+
+
+<script id="urbanex-admin-index-background">
+(function(){
+  "use strict";
+  const images={
+    desktop:{
+      dia:"../imagenes/Portada_día.png",
+      tarde:"../imagenes/Portada_tarde.png",
+      noche:"../imagenes/Portada_noche.png"
+    },
+    celular:{
+      dia:"../imagenes/Portada_diacelular.png",
+      tarde:"../imagenes/Portada_tardecelular.png",
+      noche:"../imagenes/Portada_nochecelular.png"
+    }
+  };
+  const mq=window.matchMedia("(max-width:720px)");
+  function hourEcuador(){
+    try{
+      const parts=new Intl.DateTimeFormat("es-EC",{timeZone:"America/Guayaquil",hour:"2-digit",hourCycle:"h23"}).formatToParts(new Date());
+      const h=parts.find(function(p){return p.type==="hour";});
+      return h?Number(h.value):new Date().getHours();
+    }catch(_){return new Date().getHours();}
+  }
+  function period(h){return h>=7&&h<13?"dia":(h>=13&&h<19?"tarde":"noche");}
+  function current(){return images[mq.matches?"celular":"desktop"][period(hourEcuador())];}
+  function apply(){document.documentElement.style.setProperty("--urbanex-index-bg",'url("'+current()+'")');}
+  apply();
+  setInterval(apply,60000);
+  if(mq.addEventListener)mq.addEventListener("change",apply);else if(mq.addListener)mq.addListener(apply);
+})();
+</script>
+
 </head>
 <body>
 
@@ -3194,7 +3522,7 @@ input,textarea,select { font-family:var(--sans); }
 
     <header class="admin-header">
         <div class="admin-header-left">
-            <img src="../imagenes/logo.png" alt="Urbanex">
+            <img src="../imagenes/Urba4.png" alt="Urbanex">
             <h1>PANEL DE ADMINISTRACIÓN</h1>
         </div>
         <div style="display:flex;align-items:center;gap:14px;">
@@ -10377,6 +10705,9 @@ document.getElementById('btnSaveHours').addEventListener('click', async () => {
 });
 
 </script>
+
+<footer class="pie-pagina"><p>&copy; <span class="urbanex-admin-year"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
+<script id="urbanex-admin-footer-year">document.querySelectorAll(".urbanex-admin-year").forEach(function(el){el.textContent=new Date().getFullYear();});</script>
 
 </body>
 </html>
