@@ -63,6 +63,6 @@ $('search').addEventListener('input',render);$('category').addEventListener('cha
 $('voice').addEventListener('click',()=>{const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRecognition){$('status').textContent='La búsqueda por voz no está disponible en este navegador.';return}const r=new SpeechRecognition();r.lang='es-EC';r.interimResults=false;r.onstart=()=>{$('voice').classList.add('listening');$('status').textContent='Escuchando…'};r.onresult=e=>{$('search').value=e.results[0][0].transcript;render()};r.onerror=()=>{$('status').textContent='No se pudo reconocer la voz.'};r.onend=()=>$('voice').classList.remove('listening');r.start()});
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});init();
 // Al cargar, intenta centrar el mapa en la ubicación del usuario
-setTimeout(()=>$('locate').click(),500);
+setTimeout(()=>$('locate').click(),100);
 </script>
 </body></html>
