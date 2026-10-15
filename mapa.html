@@ -33,7 +33,18 @@
 <script type="module">
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2';
 const supabase=createClient('https://mlkynawsjqmawgxeuvks.supabase.co','sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv');
-const $=id=>document.getElementById(id),map=L.map('map',{zoomControl:false}).setView([-3.99313,-79.20422],14);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);L.control.zoom({position:'bottomright'}).addTo(map);
+const $=id=>document.getElementById(id),map=L.map('map',{
+  zoomControl:false,
+  worldCopyJump:false,
+  minZoom:2,
+  maxBounds:[[-85,-180],[85,180]],
+  maxBoundsViscosity:1.0
+}).setView([-3.99313,-79.20422],14);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  maxZoom:19,
+  noWrap:true,
+  attribution:'© OpenStreetMap'
+}).addTo(map);
 let businesses=[],categories=[],filtered=[],markers=[],activeId=null,userPosition=null,userMarker=null;
 const esc=value=>String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const norm=value=>String(value||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
