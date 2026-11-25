@@ -5799,22 +5799,7 @@ async function loadDashboard() {
                     .select('*')
             ),
 
-            safeQuery(
-                'business_subscriptions',
-                async () => {
-                    const result =
-                        await subscriptionFetch(
-                            `${SUPABASE_URL}/functions/v1/gestionar-suscripcion`
-                        );
-
-                    return {
-                        data: Array.isArray(result.subscriptions)
-                            ? result.subscriptions
-                            : [],
-                        error: null,
-                    };
-                }
-            ),
+            safeQuery('business_subscriptions', () => supabase.from('business_subscriptions').select('*')),
 
             safeQuery(
                 'subscription_plans',
@@ -8676,12 +8661,7 @@ const SUBSCRIPTION_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/gestionar-suscri
 
 async function loadBusinesses() {
     const { data, error } = await supabase
-        .from('businesses')
-        .select(`
-            *,
-            categories!category_id(name, icon),
-            subcategories:categories!subcategory_id(name, icon)
-        `)
+        .from('businesses').select('*')
         .order('name');
     if (error) console.error('loadBusinesses:', error.message);
     allBusinesses = data || [];
