@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" href="../imagenes/log.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+<link rel="preconnect" href="https://vrnnlyjwenupkaetaogw.supabase.co" crossorigin>
 <link rel="preconnect" href="https://esm.sh" crossorigin>
 <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
 
@@ -5040,8 +5040,8 @@ body{
 
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-const SUPABASE_URL='https://mlkynawsjqmawgxeuvks.supabase.co';
-const SUPABASE_ANON_KEY='sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const SUPABASE_URL='https://vrnnlyjwenupkaetaogw.supabase.co';
+const SUPABASE_ANON_KEY='sb_publishable_ftfKaU4gg1csyZ0fGXW2Og_YOOLt9G7';
 const supabase=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 const $=id=>document.getElementById(id);let business=null,hours=[],products=[],promotions=[],reviews=[],selectedRating=0,extraImages=[];
 function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -5501,17 +5501,17 @@ setupBackLinks();
 const params=new URLSearchParams(window.location.search);
 const slug=params.get('slug');
 const id=params.get('id');
-let query=supabase.from('businesses').select('*,categories!category_id(name,icon),subcategories:categories!subcategory_id(name,icon)').eq('is_active',true).limit(1);
+let query=supabase.from('urbanex_catalog_recovery').select('*').eq('is_active',true).limit(1);
 if(slug){query=query.eq('slug',slug);}else if(id){query=query.eq('id',id);}else{return showNotFound();}
 const {data,error}=await query.maybeSingle();
 if(error||!data)return showNotFound();
 business=data;
 const [hoursResult,productsResult,promotionsResult,reviewsResult,imagesResult]=await Promise.all([
-supabase.from('business_hours').select('*').eq('business_id',business.id).order('day_of_week').order('session_number'),
-supabase.from('business_products').select('*').eq('business_id',String(business.id)).eq('is_active',true).order('sort_order').order('created_at'),
-supabase.from('promotions').select('*').eq('business_id',business.id).eq('is_active',true).order('created_at',{ascending:false}).limit(4),
-supabase.from('reviews').select('*').eq('business_id',String(business.id)).eq('is_approved',true).order('created_at',{ascending:false}).limit(20),
-supabase.from('business_product_images').select('*').eq('business_id',String(business.id)).order('sort_order')
+supabase.from('urbanex_public_hours').select('*').eq('business_id',business.id).order('day_of_week').order('session_number'),
+supabase.from('urbanex_public_business_products').select('*').eq('business_id',String(business.id)).eq('is_active',true).order('sort_order').order('created_at'),
+supabase.from('urbanex_public_promotions').select('*').eq('business_id',business.id).eq('is_active',true).order('created_at',{ascending:false}).limit(4),
+supabase.from('urbanex_public_reviews').select('*').eq('business_id',String(business.id)).eq('is_approved',true).order('created_at',{ascending:false}).limit(20),
+supabase.from('urbanex_public_product_images').select('*').eq('business_id',String(business.id)).order('sort_order')
 ]);
 hours=hoursResult.data||[];
 products=productsResult.data||[];
