@@ -9591,45 +9591,43 @@ searchInput.addEventListener('input', () => {
 
 async function runSearch(q) {
     const qLow = q.toLowerCase();
+    const candidates = locationFilteredBusinesses().filter(businessBelongsToCurrentRoot);
+    const bizResults = candidates.filter(b => [b.name, b.address, b.categories?.name, b.subcategories?.name].join(' ').toLowerCase().includes(qLow)).slice(0, 4);
+    const directIds = new Set(bizResults.map(b => String(b.id)));
+    const businessesById = new Map(candidates.filter(b => !directIds.has(String(b.id))).map(b => [String(b.id), b]));
+    const ids = [...businessesById.keys()];
+    const queries = [];
+    for (let offset = 0; offset < ids.length; offset += 100) {
+        const batch = ids.slice(offset, offset + 100);
+        queries.push(
+            supabase.from('business_products').select('name,business_id').in('business_id', batch).eq('is_active', true).ilike('name', '%' + q + '%').order('name').limit(6),
+            supabase.from('products').select('name,business_id').in('business_id', batch).eq('is_available', true).ilike('name', '%' + q + '%').order('name').limit(6)
+        );
+    }
+    const responses = await Promise.all(queries);
+    if (searchInput.value.trim() !== q) return;
 
-    // 1. Negocios por nombre/dirección (local)
-    const bizResults = locationFilteredBusinesses()
-        .filter(b => `${b.name} ${b.address||''} ${b.categories?.name||''} ${b.subcategories?.name||''}`.toLowerCase().includes(qLow))
-        .slice(0, 4);
-
-    // 2. Productos: buscar en datos
-    const { data: prodData } = await supabase
-        .from('products')
-        .select(`
-            name,
-            businesses!business_id(id, name, slug, city, category_id, subcategory_id,
-                categories!category_id(name, icon),
-                subcategories:categories!subcategory_id(name, icon)
-            )
-        `)
-        .ilike('name', `%${q}%`)
-        .eq('is_available', true)
-        .limit(6);
-
-    // Agrupar productos por negocio
-    const prodByBiz = new Map();
-    (prodData || []).forEach(p => {
-        const biz = p.businesses;
-        if (!biz) return;
-        if (!prodByBiz.has(biz.id)) prodByBiz.set(biz.id, { biz, products: [] });
-        prodByBiz.get(biz.id).products.push(p.name);
-    });
-
-    // Excluir negocios que ya aparecen en resultados directos
-    const bizIds = new Set(bizResults.map(b => b.id));
-    const prodResults = [...prodByBiz.values()].filter(r =>
-        !bizIds.has(r.biz.id) &&
-        businessBelongsToCurrentRoot(r.biz) &&
-        businessMatchesLocation(r.biz)
-    );
-
+    const byBusiness = new Map();
+    for (const { data, error } of responses) {
+        if (error) continue;
+        for (const product of data || []) {
+            const id = String(product.business_id);
+            const biz = businessesById.get(id);
+            if (!biz) continue;
+            if (!byBusiness.has(id)) byBusiness.set(id, { biz, products: [], seen: new Set() });
+            const entry = byBusiness.get(id);
+            const name = product.name.trim().toLowerCase();
+            if (entry.seen.has(name)) continue;
+            entry.seen.add(name);
+            entry.products.push(product.name);
+        }
+    }
+    const prodResults = [...byBusiness.values()].slice(0, 6);
     if (!bizResults.length && !prodResults.length) {
-        showResults(`<div class="search-results-status">Sin resultados para "${esc(q)}".</div>`);
+        const message = responses.some(({ error }) => error)
+            ? 'No se pudo completar la búsqueda de productos. Intente nuevamente.'
+            : 'Sin resultados para «' + esc(q) + '».';
+        showResults('<div class="search-results-status">' + message + '</div>');
         return;
     }
 
