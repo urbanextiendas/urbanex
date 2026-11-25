@@ -3645,6 +3645,7 @@ input:focus{
     #sec-dashboard .dashboard-chart-grid > :nth-child(3) { grid-column: auto; grid-row: auto; }
 }
 </style>
+<script src="/urbanex-location.js?v=address"></script>
 </head>
 <body>
 
@@ -9160,7 +9161,7 @@ window.editBusiness = async id => {
     document.getElementById('bizBusinessType').value = b.business_type || 'products';
     document.getElementById('bizProvince').value = formatAdminLocation(b.province);
     document.getElementById('bizCity').value = formatAdminLocation(b.city);
-    document.getElementById('bizAddress').value = b.address || '';
+    document.getElementById('bizAddress').value = window.urbanexLocation.formatAddress(b.address);
     document.getElementById('bizDesc').value = b.description || '';
     document.getElementById('bizPhone').value = b.phone || '';
     document.getElementById('bizWa').value = b.whatsapp || '';
@@ -9200,7 +9201,7 @@ document.getElementById('btnSaveBusiness').addEventListener('click', async () =>
         business_type: document.getElementById('bizBusinessType').value || 'products',
         province: formatAdminLocation(document.getElementById('bizProvince').value) || null,
         city: formatAdminLocation(document.getElementById('bizCity').value) || null,
-        address: document.getElementById('bizAddress').value.trim() || null,
+        address: window.urbanexLocation.formatAddress(document.getElementById('bizAddress').value) || null,
         description: document.getElementById('bizDesc').value.trim() || null,
         phone: document.getElementById('bizPhone').value.trim() || null,
         whatsapp: document.getElementById('bizWa').value.trim() || null,
@@ -10472,6 +10473,11 @@ function formatAdminLocation(value) {
             return separator + name.charAt(0).toLocaleUpperCase('es-EC') + name.slice(1);
         });
 }
+
+const adminAddressField = document.getElementById('bizAddress');
+adminAddressField.addEventListener('blur', () => {
+    adminAddressField.value = window.urbanexLocation.formatAddress(adminAddressField.value);
+});
 
 for (const id of ['bizProvince', 'bizCity']) {
     const field = document.getElementById(id);
