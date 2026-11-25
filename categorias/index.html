@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="/imagenes/log.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+    <link rel="preconnect" href="https://vrnnlyjwenupkaetaogw.supabase.co" crossorigin>
     <link rel="preconnect" href="https://esm.sh" crossorigin>
     <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
     <script id="urbanex-category-hourly-preload">
@@ -7363,8 +7363,8 @@ window.openCategoryPage = (url) => {
     window.location.href = url;
 };
 
-const SUPABASE_URL      = 'https://mlkynawsjqmawgxeuvks.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const SUPABASE_URL      = 'https://vrnnlyjwenupkaetaogw.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_ftfKaU4gg1csyZ0fGXW2Og_YOOLt9G7';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ── Estado ────────────────────────────────────────────────────
@@ -7578,9 +7578,7 @@ let featuredSlotTimers = [];
 let featuredSlotIndices = [];
 
 const BUSINESS_SELECT_FAST = `
-    *,
-    categories!category_id(name,icon),
-    subcategories:categories!subcategory_id(name,icon)
+    *
 `;
 
 function normalizeBusinessRows(rows) {
@@ -8483,14 +8481,14 @@ function ensureMobileFeaturedSwipe() {
 async function boot() {
     const [catsRes, featuredRes] = await Promise.all([
         supabase
-            .from('categories')
+            .from('urbanex_public_categories')
             .select('*')
             .eq('is_active', true)
             .order('sort_order')
             .order('name'),
 
         supabase
-            .from('businesses')
+            .from('urbanex_catalog_recovery')
             .select(BUSINESS_SELECT_FAST)
             .eq('is_active', true)
             .eq('is_featured', true)
@@ -8557,7 +8555,7 @@ async function ensureAllBusinessesLoaded(renderAfterLoad = true) {
 
     fullDirectoryLoadPromise = (async () => {
         const { data, error } = await supabase
-            .from('businesses')
+            .from('urbanex_catalog_recovery')
             .select(BUSINESS_SELECT_FAST)
             .eq('is_active', true)
             .order('is_featured', { ascending: false })
@@ -8612,18 +8610,18 @@ async function loadBusinessDetails(targetIds = null) {
     try {
         const [hoursRes, reviewsRes, promotionsRes] = await Promise.all([
             supabase
-                .from('business_hours')
+                .from('urbanex_public_hours')
                 .select('business_id,day_of_week,open_time,close_time,is_closed')
                 .in('business_id', ids),
 
             supabase
-                .from('reviews')
+                .from('urbanex_public_reviews')
                 .select('business_id,is_approved,rating')
                 .eq('is_approved', true)
                 .in('business_id', ids),
 
             supabase
-                .from('promotions')
+                .from('urbanex_public_promotions')
                 .select('business_id,is_active,end_date')
                 .eq('is_active', true)
                 .in('business_id', ids)
@@ -8677,7 +8675,7 @@ async function loadBusinessDetails(targetIds = null) {
 async function loadOfferMetrics() {
     try {
         const { data, error } = await supabase
-            .from('business_products')
+            .from('urbanex_public_business_products')
             .select('business_id')
             .eq('is_active', true)
             .eq('is_on_sale', true);
@@ -9600,8 +9598,8 @@ async function runSearch(q) {
     for (let offset = 0; offset < ids.length; offset += 100) {
         const batch = ids.slice(offset, offset + 100);
         queries.push(
-            supabase.from('business_products').select('name,business_id').in('business_id', batch).eq('is_active', true).ilike('name', '%' + q + '%').order('name').limit(6),
-            supabase.from('products').select('name,business_id').in('business_id', batch).eq('is_available', true).ilike('name', '%' + q + '%').order('name').limit(6)
+            supabase.from('urbanex_public_business_products').select('name,business_id').in('business_id', batch).eq('is_active', true).ilike('name', '%' + q + '%').order('name').limit(6),
+            supabase.from('urbanex_public_products').select('name,business_id').in('business_id', batch).eq('is_available', true).ilike('name', '%' + q + '%').order('name').limit(6)
         );
     }
     const responses = await Promise.all(queries);
