@@ -8,7 +8,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+    <link rel="preconnect" href="https://vrnnlyjwenupkaetaogw.supabase.co" crossorigin>
     <link rel="preconnect" href="https://esm.sh" crossorigin>
     <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -442,7 +442,7 @@
             <div class="location-note">Ubicación seleccionada: <strong id="locationLabel">Todo Ecuador</strong></div>
         </div>
         <div class="total-card">
-            <strong id="totalAvailable">0</strong>
+            <strong id="totalAvailable">—</strong>
             <span>Lugares disponibles</span>
         </div>
     </section>
@@ -466,8 +466,8 @@
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const SUPABASE_URL = 'https://vrnnlyjwenupkaetaogw.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_ftfKaU4gg1csyZ0fGXW2Og_YOOLt9G7';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const LOCATION_KEY = 'urbanex_location_selection_v1';
@@ -502,7 +502,7 @@ function normalizeText(value) {
 
 function money(value) {
     const number = Number(value);
-    if (!Number.isFinite(number) || number < 0) return 'Consultar';
+    if (value == null || !Number.isFinite(number) || number < 0) return 'Consultar';
     return new Intl.NumberFormat('es-EC', {
         style: 'currency',
         currency: 'USD',
@@ -594,7 +594,7 @@ function renderResults() {
         if (item.is_open === false) return sum;
         return sum + Math.max(0, Number(item.available_spaces) || 0);
     }, 0);
-    totalAvailable.textContent = total;
+    totalAvailable.textContent = filtered.some(item => item.business_id) ? String(total) : '—';
 
     if (!filtered.length) {
         resultsContainer.innerHTML = '';
@@ -626,7 +626,7 @@ function renderResults() {
                 const totalSpaces = Math.max(0, Number(item.total_spaces) || 0);
                 const isOpen = item.is_open !== false;
                 const hasSpaces = isOpen && available > 0;
-                const status = !isOpen ? 'Cerrado' : hasSpaces ? 'Disponible' : 'Sin cupos';
+                const status = !item.business_id ? 'Disponibilidad sin informar' : !isOpen ? 'Cerrado' : hasSpaces ? 'Disponible' : 'Sin cupos';
                 const statusClass = hasSpaces ? 'available' : 'unavailable';
                 const address = [item.address, item.city, item.province].filter(Boolean).join(' · ') || 'Dirección no informada';
 
@@ -639,11 +639,11 @@ function renderResults() {
                         <div class="availability-row">
                             <div class="availability-item primary">
                                 <span>Disponibles</span>
-                                <strong>${isOpen ? available : 0}</strong>
+                                <strong>${item.business_id ? (isOpen ? available : 0) : '—'}</strong>
                             </div>
                             <div class="availability-item">
                                 <span>Capacidad</span>
-                                <strong>${totalSpaces}</strong>
+                                <strong>${item.business_id ? totalSpaces : '—'}</strong>
                             </div>
                             <div class="availability-item">
                                 <span>Tarifa/hora</span>
@@ -664,7 +664,7 @@ function renderResults() {
                 <section class="city-section">
                     <div class="city-header">
                         <h2>${escapeHtml(groupName)}</h2>
-                        <span>${availableInGroup} disponibles</span>
+                        <span>${items.some(item => item.business_id) ? availableInGroup + ' disponibles' : 'Disponibilidad sin informar'}</span>
                     </div>
                     <div class="parking-grid">${cards}</div>
                 </section>
@@ -676,38 +676,33 @@ async function init() {
     locationLabel.textContent = currentLocationLabel();
 
     try {
-        const { data: availability, error: parkingError } = await supabase
-            .from('parking_availability')
-            .select('business_id,total_spaces,available_spaces,hourly_rate,is_open,notes,updated_at')
-            .eq('is_published', true)
-            .order('available_spaces', { ascending: false });
+        const [parking, catalog, categories] = await Promise.all([
+            supabase.from('parking_availability')
+                .select('business_id,total_spaces,available_spaces,hourly_rate,is_open,notes,updated_at')
+                .eq('is_published', true),
+            supabase.from('urbanex_catalog_recovery')
+                .select('id,name,slug,province,city,address,category_id,subcategory_id')
+                .eq('is_active', true),
+            supabase.from('urbanex_public_categories').select('id,name')
+        ]);
+        if (catalog.error) throw catalog.error;
+        if (parking.error) console.warn('Disponibilidad de parqueaderos:', parking.error.message);
+        if (categories.error) console.warn('Categorías de parqueaderos:', categories.error.message);
 
-        if (parkingError) throw parkingError;
+        const parkingName = /\bparqueaderos?\b/;
+        const parkingCategoryIds = new Set((categories.data || [])
+            .filter(category => parkingName.test(normalizeText(category.name)))
+            .map(category => String(category.id)));
+        const availabilityById = new Map((parking.data || [])
+            .map(row => [String(row.business_id), row]));
 
-        const businessIds = [...new Set((availability || []).map(row => row.business_id).filter(Boolean))];
-        if (!businessIds.length) {
-            allResults = [];
-            loadingState.style.display = 'none';
-            renderResults();
-            return;
-        }
-
-        const { data: businesses, error: businessError } = await supabase
-            .from('businesses')
-            .select('id,name,slug,province,city,address,is_active')
-            .in('id', businessIds)
-            .eq('is_active', true);
-
-        if (businessError) throw businessError;
-
-        const businessById = new Map((businesses || []).map(business => [String(business.id), business]));
-
-        allResults = (availability || [])
-            .map(row => ({
-                ...row,
-                ...(businessById.get(String(row.business_id)) || {})
-            }))
-            .filter(item => item.id && matchesLocation(item))
+        allResults = (catalog.data || [])
+            .filter(business => availabilityById.has(String(business.id))
+                || parkingCategoryIds.has(String(business.category_id))
+                || parkingCategoryIds.has(String(business.subcategory_id))
+                || /^parqueadero(?:s)?\b/.test(normalizeText(business.name)))
+            .filter(matchesLocation)
+            .map(business => ({ ...availabilityById.get(String(business.id)), ...business }))
             .map(item => ({
                 ...item,
                 _searchable: normalizeText([
@@ -725,7 +720,7 @@ async function init() {
         console.warn('No se pudo cargar Parqueaderos:', error);
         allResults = [];
         loadingState.style.display = 'none';
-        totalAvailable.textContent = '0';
+        totalAvailable.textContent = '—';
         resultsContainer.innerHTML = '';
         emptyState.textContent = 'No se pudo cargar la disponibilidad de parqueaderos. Intente nuevamente.';
         emptyState.style.display = 'block';
