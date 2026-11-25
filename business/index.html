@@ -4677,6 +4677,7 @@ body{
 }
 </style>
 
+<script src="/urbanex-location.js?v=address"></script>
 </head>
 
 <body>
@@ -5221,7 +5222,7 @@ business.description,
 'Conozca este negocio, sus productos, servicios y formas de contacto.'
 );
 $('businessAddress').textContent=first(
-business.address,
+window.urbanexLocation.formatAddress(business.address),
 'Dirección no registrada'
 );
 
@@ -5276,7 +5277,7 @@ $('coverBox').innerHTML=`
     </div>
     <div>
       <span>Dirección</span>
-      <strong>${esc(first(business.address,'No registrada'))}</strong>
+      <strong>${esc(first(window.urbanexLocation.formatAddress(business.address),'No registrada'))}</strong>
     </div>
     <div>
       <span>Catálogo</span>
@@ -5304,7 +5305,7 @@ const lat=first(business.latitude,business.lat);
 const lng=first(business.longitude,business.lng);
 const query=(lat&&lng)
 ?`${lat},${lng}`
-:first(business.address,business.city,'Loja Ecuador');
+:first(window.urbanexLocation.formatAddress(business.address),business.city,'Loja Ecuador');
 
 $('mapBtn').href=
 `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
