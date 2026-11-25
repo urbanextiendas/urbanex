@@ -463,6 +463,7 @@
 
 <footer class="footer"><p>&copy; <span id="currentYear"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
 
+<script src="/urbanex-location.js"></script>
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -530,17 +531,7 @@ function currentLocationLabel() {
 }
 
 function matchesLocation(business) {
-    const location = savedLocation();
-    if (location.province === '__all__') return true;
-
-    const businessProvince = normalizeText(business.province);
-    const businessCity = normalizeText(business.city);
-
-    if (location.city && !['__all__', '__province__'].includes(location.city)) {
-        return businessCity === normalizeText(location.city);
-    }
-
-    return businessProvince === normalizeText(location.province);
+    return window.urbanexLocation.matches(business);
 }
 
 function businessUrl(business) {
