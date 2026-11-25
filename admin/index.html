@@ -4447,8 +4447,8 @@ input:focus{
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL      = 'https://mlkynawsjqmawgxeuvks.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const SUPABASE_URL      = 'https://vrnnlyjwenupkaetaogw.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_ftfKaU4gg1csyZ0fGXW2Og_YOOLt9G7';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
@@ -4603,6 +4603,15 @@ document.getElementById('btnLogout').addEventListener('click', async () => {
 
 // ── BOOT ──────────────────────────────────────────────────────
 async function bootApp(user) {
+    const { data: authorized, error } = await supabase.rpc('urbanex_admin_access');
+    if (error || authorized !== true) {
+        await supabase.auth.signOut({ scope: 'local' });
+        document.getElementById('loginError').textContent = error
+            ? 'No se pudo verificar el acceso administrativo. Intente nuevamente.'
+            : 'Esta cuenta no tiene acceso administrativo.';
+        return;
+    }
+
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminApp').style.display = 'flex';
     document.getElementById('adminUserEmail').textContent = user.email;
