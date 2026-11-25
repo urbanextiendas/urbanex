@@ -7735,7 +7735,7 @@ async function loadDashboard() {
                 name: business.name || 'Negocio sin nombre',
                 slug: business.slug || businessId,
                 email: business.owner_email || business.email || '',
-                city: [business.city, business.province].filter(Boolean).join(' · ') || 'No registrada',
+                city: [business.city, business.province].map(formatAdminLocation).filter(Boolean).join(' · ') || 'No registrada',
                 logo: business.logo_url || business.logo || '',
                 planCode: plan.code,
                 planLabel: plan.label,
@@ -9105,7 +9105,7 @@ function renderBizTable() {
                 ${subscriptionLabel(b.id) ? `<span class="subscription-summary">${esc(subscriptionLabel(b.id))}</span>` : ''}
             </td>
             <td style="font-size:11.5px;">${catLabel}</td>
-            <td>${[b.province, b.city].filter(Boolean).map(esc).join(' · ') || '—'}</td>
+            <td>${[b.province, b.city].map(formatAdminLocation).filter(Boolean).map(esc).join(' ') || '—'}</td>
             <td>${statusHtml}</td>
             <td><span class="badge ${b.is_featured ? 'badge-gold' : 'badge-gray'}">${b.is_featured ? '⭐ Sí' : 'No'}</span></td>
             <td>
@@ -9158,8 +9158,8 @@ window.editBusiness = async id => {
     document.getElementById('bizSlug').value = b.slug || '';
     document.getElementById('bizOwnerEmail').value = b.owner_email || '';
     document.getElementById('bizBusinessType').value = b.business_type || 'products';
-    document.getElementById('bizProvince').value = b.province || '';
-    document.getElementById('bizCity').value = b.city || '';
+    document.getElementById('bizProvince').value = formatAdminLocation(b.province);
+    document.getElementById('bizCity').value = formatAdminLocation(b.city);
     document.getElementById('bizAddress').value = b.address || '';
     document.getElementById('bizDesc').value = b.description || '';
     document.getElementById('bizPhone').value = b.phone || '';
@@ -9198,8 +9198,8 @@ document.getElementById('btnSaveBusiness').addEventListener('click', async () =>
         name, slug,
         owner_email: document.getElementById('bizOwnerEmail').value.trim().toLowerCase() || null,
         business_type: document.getElementById('bizBusinessType').value || 'products',
-        province: document.getElementById('bizProvince').value.trim() || null,
-        city: document.getElementById('bizCity').value.trim() || null,
+        province: formatAdminLocation(document.getElementById('bizProvince').value) || null,
+        city: formatAdminLocation(document.getElementById('bizCity').value) || null,
         address: document.getElementById('bizAddress').value.trim() || null,
         description: document.getElementById('bizDesc').value.trim() || null,
         phone: document.getElementById('bizPhone').value.trim() || null,
@@ -10464,6 +10464,20 @@ window.deleteProduct = async id => {
 
 
 // ── Helpers de escape ────────────────────────────────────────
+function formatAdminLocation(value) {
+    return String(value ?? '').trim().replace(/\s+/g, ' ')
+        .toLocaleLowerCase('es-EC')
+        .replace(/(^|[\s-])(\p{L}+)/gu, (word, separator, name) => {
+            if (separator && ['de', 'del', 'la', 'las', 'los', 'y'].includes(name)) return word;
+            return separator + name.charAt(0).toLocaleUpperCase('es-EC') + name.slice(1);
+        });
+}
+
+for (const id of ['bizProvince', 'bizCity']) {
+    const field = document.getElementById(id);
+    field.addEventListener('blur', () => { field.value = formatAdminLocation(field.value); });
+}
+
 function esc(str) {
     return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
