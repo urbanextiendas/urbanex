@@ -240,6 +240,7 @@
   </div>
 </main>
 
+<script src="/urbanex-location.js"></script>
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -350,7 +351,7 @@ async function boot() {
     if (catsRes.error) throw catsRes.error;
 
     categories = catsRes.data || [];
-    businesses = bizRows.map(b => ({
+    businesses = bizRows.filter(b => window.urbanexLocation.matches(b)).map(b => ({
       ...b,
       business_hours: b.business_hours || [],
       reviews: b.reviews || [],
@@ -361,8 +362,8 @@ async function boot() {
     // Diagnóstico: si esto no coincide, sigue habiendo un problema de paginación/RLS
     // que impide cargar todos los negocios activos.
     const totalReal = countRes.count ?? null;
-    if (totalReal !== null && totalReal !== businesses.length) {
-      console.warn(`Urbanex: se esperaban ${totalReal} negocios activos pero se cargaron ${businesses.length}. Revisa límites de fila (db-max-rows) o políticas RLS en Supabase.`);
+    if (totalReal !== null && totalReal !== bizRows.length) {
+      console.warn(`Urbanex: se esperaban ${totalReal} negocios activos pero se cargaron ${bizRows.length}. Revisa límites de fila (db-max-rows) o políticas RLS en Supabase.`);
     }
 
     connPill.classList.add('ok');
