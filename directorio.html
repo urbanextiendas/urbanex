@@ -255,6 +255,7 @@ a { color:inherit; text-decoration:none; }
 <!-- ============================================================
      SUPABASE — Reemplaza SUPABASE_URL y SUPABASE_ANON_KEY
      ============================================================ -->
+<script src="/urbanex-location.js"></script>
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -298,7 +299,7 @@ function isOpenNow(hours) {
 async function loadAll() {
     const [bizRes, promoRes, catRes] = await Promise.all([
         supabase.from('urbanex_catalog_recovery').select(`
-            id, slug, name, description, cover_image, city,
+            id, slug, name, description, cover_image, city, province,
             is_featured, category_id,
             categories, business_hours
         `).eq('is_active', true).order('name'),
@@ -314,7 +315,7 @@ async function loadAll() {
 
     state.promoIds = new Set((promoRes.data||[]).map(p => p.business_id));
 
-    state.all = (bizRes.data||[]).map(b => {
+    state.all = (bizRes.data||[]).filter(b => window.urbanexLocation.matches(b)).map(b => {
         const approved = (b.reviews||[]).filter(r => r.is_approved).map(r => r.rating);
         return {
             ...b,
@@ -339,7 +340,7 @@ async function loadAll() {
         </button>`).join('');
 
     document.getElementById('heroSub').textContent =
-        `${state.all.length} comercios disponibles en Loja`;
+        `${state.all.length} comercios disponibles · ${[window.urbanexLocation.read().city, window.urbanexLocation.read().province].filter(part => part && !part.startsWith('__')).join(', ') || 'Todo Ecuador'}`;
 
     applyFilters();
 }
