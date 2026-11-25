@@ -297,5 +297,17 @@ function matches(business, selection = read()) {
     if (selection.city && ![all, provinceOnly].includes(selection.city)) return city === cantonKey(selection.city);
     return Boolean(storedProvince || (city && cantonKeysByProvince.get(province)?.has(city)));
 }
-window.urbanexLocation = { matches, read };
+const addressConnectors = new Set(['a', 'al', 'con', 'de', 'del', 'e', 'el', 'en', 'entre', 'la', 'las', 'los', 'o', 'y']);
+function formatAddress(value) {
+    const address = String(value ?? '').trim().replace(/\s+/g, ' ')
+        .replace(/(^|\s)e\/\s*/gi, '$1entre ').replace(/\bs\s*\/\s*n\b/gi, 's/n');
+    return address.replace(/s\/n|[\p{L}\p{N}]+/gu, (token, offset) => {
+        if (token === 's/n' || /\p{N}/u.test(token)) return token;
+        const word = token.toLocaleLowerCase('es-EC');
+        if (word === 'km') return 'km';
+        if (offset && addressConnectors.has(word)) return word;
+        return word.charAt(0).toLocaleUpperCase('es-EC') + word.slice(1);
+    });
+}
+window.urbanexLocation = { matches, read, formatAddress };
 })();
