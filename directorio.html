@@ -258,8 +258,8 @@ a { color:inherit; text-decoration:none; }
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL     = 'https://mlkynawsjqmawgxeuvks.supabase.co'; // ← cambia esto
-const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';                    // ← cambia esto
+const SUPABASE_URL     = 'https://vrnnlyjwenupkaetaogw.supabase.co'; // ← cambia esto
+const SUPABASE_ANON_KEY = 'sb_publishable_ftfKaU4gg1csyZ0fGXW2Og_YOOLt9G7';                    // ← cambia esto
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -297,21 +297,19 @@ function isOpenNow(hours) {
 // ── CARGA DE DATOS ──────────────────────────────────────────
 async function loadAll() {
     const [bizRes, promoRes, catRes] = await Promise.all([
-        supabase.from('businesses').select(`
+        supabase.from('urbanex_catalog_recovery').select(`
             id, slug, name, description, cover_image, city,
             is_featured, category_id,
-            categories(name, icon),
-            business_hours(day_of_week, open_time, close_time, is_closed),
-            reviews(rating, is_approved)
+            categories, business_hours
         `).eq('is_active', true).order('name'),
 
-        supabase.from('promotions')
+        supabase.from('urbanex_public_promotions')
             .select('business_id')
             .eq('is_active', true)
             .lte('start_date', new Date().toISOString().slice(0,10))
             .gte('end_date', new Date().toISOString().slice(0,10)),
 
-        supabase.from('categories').select('id, name, icon').order('name'),
+        supabase.from('urbanex_public_categories').select('id, name, icon').order('name'),
     ]);
 
     state.promoIds = new Set((promoRes.data||[]).map(p => p.business_id));
