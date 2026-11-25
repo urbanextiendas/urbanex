@@ -3533,6 +3533,32 @@ input:focus{
     #sec-businesses .filter-bar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 </style>
+<style id="urbanex-dashboard-type">
+#adminApp .admin-main:has(#sec-dashboard.active) { padding: clamp(12px, 1.6vw, 24px) !important; }
+#sec-dashboard { max-width: 1440px !important; width: 100% !important; margin-inline: auto !important; box-sizing: border-box; }
+#sec-dashboard .dashboard-topbar { padding: 16px 18px !important; border-radius: 12px !important; gap: 14px !important; margin-bottom: 14px !important; box-shadow: none !important; }
+#sec-dashboard .dashboard-heading h2 { font-size: clamp(21px, 2.2vw, 28px) !important; line-height: 1.18 !important; margin: 3px 0 5px !important; letter-spacing: -.035em !important; }
+#sec-dashboard .dashboard-heading p { margin: 0 !important; font-size: 13px !important; line-height: 1.45 !important; }
+#sec-dashboard .dashboard-section-kicker, #sec-dashboard .dashboard-period-control span { font-size: 11px !important; }
+#sec-dashboard .dashboard-topbar-actions { gap: 8px !important; }
+#sec-dashboard .dashboard-period-control select, #sec-dashboard .dashboard-topbar-actions .btn { min-height: 34px !important; padding: 6px 9px !important; font-size: 12px !important; }
+#sec-dashboard .dashboard-section { padding: 14px !important; margin-bottom: 14px !important; border-radius: 11px !important; box-shadow: none !important; }
+#sec-dashboard .dashboard-section-heading { gap: 8px 14px !important; margin-bottom: 12px !important; }
+#sec-dashboard .dashboard-section h3 { font-size: 17px !important; line-height: 1.3 !important; margin: 2px 0 0 !important; }
+#sec-dashboard .dashboard-section-heading p { font-size: 12px !important; line-height: 1.45 !important; }
+#sec-dashboard .executive-kpi-grid { grid-template-columns: repeat(4,minmax(0,1fr)) !important; gap: 8px !important; }
+#sec-dashboard .executive-kpi-card { padding: 11px 12px !important; min-height: 0 !important; border-radius: 10px !important; box-shadow: none !important; }
+#sec-dashboard .executive-kpi-card.skeleton { height: 92px !important; }
+#sec-dashboard .executive-kpi-label { font-size: 11px !important; line-height: 1.35 !important; margin: 0 !important; }
+#sec-dashboard .executive-kpi-value { font-size: 24px !important; line-height: 1.15 !important; margin: 5px 0 3px !important; }
+#sec-dashboard .executive-kpi-detail { font-size: 11px !important; line-height: 1.4 !important; }
+#sec-dashboard .executive-kpi-trend { font-size: 10px !important; padding: 2px 6px !important; margin-top: 5px !important; }
+.admin-header-left #adminHome { display: inline-flex; align-items: center; gap: 5px; width: auto; padding: 0 8px; font: 600 12px/1 system-ui; border-color: transparent; background: transparent; color: #284761; }
+.admin-header-left #adminHome:hover { background: #edf3f8; color: #15324a; }
+.admin-header-left #adminHome svg { flex: none; }
+@media(max-width: 900px) { #sec-dashboard .executive-kpi-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; } }
+@media(max-width: 460px) { #sec-dashboard .dashboard-topbar { padding: 12px !important; } #sec-dashboard .dashboard-section { padding: 10px !important; } #sec-dashboard .executive-kpi-card { padding: 8px !important; } .admin-header-left #adminHome span { display: none; } }
+</style>
 </head>
 <body>
 
@@ -3560,7 +3586,7 @@ input:focus{
     <header class="admin-header">
         <div class="admin-header-left">
             <button type="button" class="admin-nav-control" id="adminMenuToggle" aria-label="Abrir menú de administración" aria-expanded="false" aria-controls="adminMenu">☰</button>
-            <a href="./" class="admin-nav-control" id="adminHome" aria-label="Volver al inicio del administrador" title="Volver al inicio">←</a>
+            <a href="./" class="admin-nav-control" id="adminHome" aria-label="Volver al inicio del administrador" title="Volver al inicio"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m11 6-6 6 6 6M5 12h14"/></svg><span>Inicio</span></a>
             <img src="../imagenes/Urba4.png" alt="Urbanex">
             <h1>PANEL DE ADMINISTRACIÓN</h1>
         </div>
