@@ -464,6 +464,7 @@
 
 <footer class="footer"><p>&copy; <span id="currentYear"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
 
+<script src="/urbanex-location.js"></script>
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -531,22 +532,6 @@ function readSavedUrbanexLocation() {
     } catch (_) {
         return { province: '__all__', city: '__all__' };
     }
-}
-
-function businessMatchesSavedLocation(business) {
-    if (!savedLocation || savedLocation.province === '__all__') return true;
-
-    const businessProvince = normalizeText(firstDefined(business, ['province','provincia']));
-    const businessCity = normalizeText(firstDefined(business, ['city','ciudad','canton','cantón']));
-    const selectedProvince = normalizeText(savedLocation.province);
-    const selectedCity = normalizeText(savedLocation.city);
-
-    if (savedLocation.city && !['__all__','__province__'].includes(savedLocation.city)) {
-        return businessCity === selectedCity || businessCity.includes(selectedCity) || selectedCity.includes(businessCity);
-    }
-
-    if (businessProvince) return businessProvince === selectedProvince || businessProvince.includes(selectedProvince) || selectedProvince.includes(businessProvince);
-    return true;
 }
 
 function fallbackLocationLabel() {
@@ -798,7 +783,6 @@ function canBeNear(business) {
 
     // Respaldo: si el navegador no entrega geolocalización, no dejamos la página vacía.
     // Priorizamos la ubicación seleccionada en Boulevard y negocios con datos de ubicación.
-    if (!businessMatchesSavedLocation(business)) return false;
     return Boolean(coords || business.address || business.city);
 }
 
@@ -833,7 +817,7 @@ function enrichBusiness(business) {
 }
 
 function businessMatchesFilter(business) {
-    if (!business || business.is_active === false) return false;
+    if (!business || business.is_active === false || !window.urbanexLocation.matches(business)) return false;
 
     if (FILTER_TYPE === "abiertos") return business._openNow === true;
     if (FILTER_TYPE === "domicilio") return business._hasDelivery === true;
