@@ -3496,6 +3496,15 @@ input:focus{
 })();
 </script>
 
+<style id="urbanex-admin-navigation">
+#adminMenu[hidden] { display: none !important; }
+#adminMenu:not([hidden]) { position: fixed !important; inset: var(--admin-menu-top, 60px) auto 0 0 !important; width: min(300px, 88vw) !important; height: auto !important; z-index: 90; display: flex !important; flex-direction: column !important; overflow: auto !important; box-sizing: border-box; }
+#adminMenu .nav-item { width: 100%; }
+#adminMenu .nav-item > span { display: inline !important; }
+#adminApp .admin-main { flex: 1 1 0; min-width: 0; width: auto !important; }
+.admin-nav-control { display: inline-grid; place-items: center; flex: 0 0 auto; width: 34px; height: 34px; border: 1px solid #cbd6e2; border-radius: 9px; background: #fff; color: #152e4a; font: 700 19px/1 system-ui; text-decoration: none; cursor: pointer; }
+.admin-nav-control:focus-visible, #adminMenu .nav-item:focus-visible { outline: 2px solid #b36b00; outline-offset: 2px; }
+</style>
 </head>
 <body>
 
@@ -3522,6 +3531,8 @@ input:focus{
 
     <header class="admin-header">
         <div class="admin-header-left">
+            <button type="button" class="admin-nav-control" id="adminMenuToggle" aria-label="Abrir menú de administración" aria-expanded="false" aria-controls="adminMenu">☰</button>
+            <a href="./" class="admin-nav-control" id="adminHome" aria-label="Volver al inicio del administrador" title="Volver al inicio">←</a>
             <img src="../imagenes/Urba4.png" alt="Urbanex">
             <h1>PANEL DE ADMINISTRACIÓN</h1>
         </div>
@@ -3534,7 +3545,7 @@ input:focus{
     <div class="admin-body">
 
         <!-- NAV -->
-        <nav class="admin-nav">
+        <nav class="admin-nav" id="adminMenu" aria-label="Administración" hidden>
             <div class="nav-item active" data-section="dashboard">
                 <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
                 <span>Dashboard</span>
@@ -3568,7 +3579,7 @@ input:focus{
         </nav>
 
         <!-- MAIN -->
-        <main class="admin-main">
+        <main class="admin-main" tabindex="-1">
 
             <!-- DASHBOARD -->
             <div class="section active" id="sec-dashboard">
@@ -10698,5 +10709,55 @@ document.getElementById('btnSaveHours').addEventListener('click', async () => {
 <footer class="pie-pagina"><p>&copy; <span class="urbanex-admin-year"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
 <script id="urbanex-admin-footer-year">document.querySelectorAll(".urbanex-admin-year").forEach(function(el){el.textContent=new Date().getFullYear();});</script>
 
+<script>
+(() => {
+    const menu = document.getElementById('adminMenu');
+    const toggle = document.getElementById('adminMenuToggle');
+    const home = document.getElementById('adminHome');
+    const main = document.querySelector('.admin-main');
+    function positionMenu() {
+        menu.style.setProperty('--admin-menu-top', document.querySelector('.admin-header').getBoundingClientRect().bottom + 'px');
+    }
+    function setMenu(open) {
+        if (open) positionMenu();
+        menu.hidden = !open;
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Cerrar menú de administración' : 'Abrir menú de administración');
+    }
+    for (const item of menu.querySelectorAll('.nav-item')) {
+        item.setAttribute('role','button');
+        item.tabIndex = 0;
+        item.addEventListener('keydown', event => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+            event.preventDefault();
+            item.click();
+        });
+    }
+    toggle.addEventListener('click', () => {
+        setMenu(menu.hidden);
+        if (!menu.hidden) menu.querySelector('.nav-item.active')?.focus();
+    });
+    menu.addEventListener('click', event => {
+        if (!event.target.closest('.nav-item')) return;
+        setMenu(false);
+        main.focus({ preventScroll: true });
+    });
+    home.addEventListener('click', event => {
+        event.preventDefault();
+        menu.querySelector('[data-section="dashboard"]').click();
+        main.scrollTop = 0;
+        window.scrollTo(0, 0);
+    });
+    document.addEventListener('pointerdown', event => {
+        if (!menu.hidden && !menu.contains(event.target) && !toggle.contains(event.target)) setMenu(false);
+    });
+    document.addEventListener('keydown', event => {
+        if (event.key !== 'Escape' || menu.hidden) return;
+        setMenu(false);
+        toggle.focus();
+    });
+    window.addEventListener('resize', () => { if (!menu.hidden) positionMenu(); });
+})();
+</script>
 </body>
 </html>
