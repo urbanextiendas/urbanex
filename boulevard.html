@@ -8526,6 +8526,21 @@ body::after{
 }
 </style>
 
+<style id="urbanex-business-logo-standard">
+.shop-thumb-wrapper > img.shop-thumb,
+.ux-featured-logo-box > img.ux-featured-logo,
+.uxd-card-media > img.uxd-business-logo-fit {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    box-sizing: border-box;
+    padding: 8%;
+    object-fit: contain !important;
+    object-position: center !important;
+    transform: none !important;
+}
+</style>
 </head>
 <body>
 
@@ -10175,8 +10190,8 @@ function shopCardHtml(b) {
         ? `<span class="status-open">Abierto</span>`
         : `<span class="status-closed">Cerrado</span>`;
 
-    const basicImgEl = b.cover_image
-        ? `<div class="shop-thumb-wrapper"><img class="shop-thumb" src="${esc(b.cover_image)}" alt="${esc(b.name)}" loading="lazy"></div>`
+    const basicImgEl = b.logo_url
+        ? `<div class="shop-thumb-wrapper"><img class="shop-thumb" src="${esc(b.logo_url)}" alt="${esc(b.name)}" loading="lazy"></div>`
         : `<div class="shop-thumb-wrapper">${b.subcategories?.icon||b.categories?.icon||'🏪'}</div>`;
 
     const addressLabel = String(
@@ -10323,11 +10338,11 @@ function shopCardHtml(b) {
         `;
     }
 
-    const desktopImgEl = b.cover_image
+    const desktopImgEl = b.logo_url
         ? `<div class="ux-featured-logo-box">
                 <img
                     class="ux-featured-logo"
-                    src="${esc(b.cover_image)}"
+                    src="${esc(b.logo_url)}"
                     alt="${esc(b.name)}"
                     loading="lazy"
                 >
@@ -10589,11 +10604,11 @@ window.closeDirectorio = () => {
 };
 
 function dirCardHtml(b) {
-    const media = b.cover_image
+    const media = b.logo_url
         ? `
             <img
                 class="uxd-business-logo-fit"
-                src="${esc(b.cover_image)}"
+                src="${esc(b.logo_url)}"
                 alt="${esc(b.name)}"
                 loading="lazy"
                 decoding="async"
