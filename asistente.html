@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Urbanex · Asistente de voz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+<link rel="preconnect" href="https://vrnnlyjwenupkaetaogw.supabase.co" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -244,14 +244,12 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 /* ============ CONEXIÓN REAL A SUPABASE DE URBANEX ============ */
-const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const SUPABASE_URL = 'https://vrnnlyjwenupkaetaogw.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_ftfKaU4gg1csyZ0fGXW2Og_YOOLt9G7';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const BUSINESS_SELECT = `
-  *,
-  categories!category_id(id,name,icon),
-  subcategories:categories!subcategory_id(id,name,icon)
+  *
 `;
 
 let categories = [];      // todas las categorías (raíz + sub)
@@ -327,7 +325,7 @@ async function fetchAllBusinesses() {
   let all = [];
   while (true) {
     const { data, error } = await supabase
-      .from('businesses')
+      .from('urbanex_catalog_recovery')
       .select(BUSINESS_SELECT)
       .eq('is_active', true)
       .order('is_featured', { ascending: false })
@@ -344,8 +342,8 @@ async function fetchAllBusinesses() {
 async function boot() {
   try {
     const [catsRes, countRes, bizRows] = await Promise.all([
-      supabase.from('categories').select('id,name,icon,parent_id,sort_order').order('sort_order').order('name'),
-      supabase.from('businesses').select('id', { count: 'exact', head: true }).eq('is_active', true),
+      supabase.from('urbanex_public_categories').select('id,name,icon,parent_id,sort_order').order('sort_order').order('name'),
+      supabase.from('urbanex_catalog_recovery').select('id', { count: 'exact', head: true }).eq('is_active', true),
       fetchAllBusinesses()
     ]);
 
@@ -402,9 +400,9 @@ async function loadBusinessDetails() {
   if (!ids.length) return;
 
   const [hoursRes, reviewsRes, promosRes] = await Promise.all([
-    supabase.from('business_hours').select('business_id,day_of_week,open_time,close_time,is_closed').in('business_id', ids),
-    supabase.from('reviews').select('business_id,is_approved,rating').eq('is_approved', true).in('business_id', ids),
-    supabase.from('promotions').select('business_id,is_active,end_date').eq('is_active', true).in('business_id', ids),
+    supabase.from('urbanex_public_hours').select('business_id,day_of_week,open_time,close_time,is_closed').in('business_id', ids),
+    supabase.from('urbanex_public_reviews').select('business_id,is_approved,rating').eq('is_approved', true).in('business_id', ids),
+    supabase.from('urbanex_public_promotions').select('business_id,is_active,end_date').eq('is_active', true).in('business_id', ids),
   ]);
 
   const groupBy = (rows) => {
@@ -537,7 +535,7 @@ async function buscarProductos(rawText){
     // `businesses` ya cargado en memoria, comparando IDs como string para evitar problemas
     // de tipo (uuid vs text).
     const { data, error } = await supabase
-      .from('business_products')
+      .from('urbanex_public_business_products')
       .select('name, price, currency, is_on_sale, sale_price, offer_label, business_id')
       .ilike('name', `%${q}%`)
       .eq('is_active', true)
