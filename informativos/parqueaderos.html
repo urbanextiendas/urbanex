@@ -463,7 +463,7 @@
 
 <footer class="footer"><p>&copy; <span id="currentYear"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
 
-<script src="/urbanex-location.js"></script>
+<script src="/urbanex-location.js?v=address"></script>
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -619,7 +619,7 @@ function renderResults() {
                 const hasSpaces = isOpen && available > 0;
                 const status = !item.business_id ? 'Disponibilidad sin informar' : !isOpen ? 'Cerrado' : hasSpaces ? 'Disponible' : 'Sin cupos';
                 const statusClass = hasSpaces ? 'available' : 'unavailable';
-                const address = [item.address, item.city, item.province].filter(Boolean).join(' · ') || 'Dirección no informada';
+                const address = [window.urbanexLocation.formatAddress(item.address), item.city, item.province].filter(Boolean).join(' · ') || 'Dirección no informada';
 
                 return `
                     <article class="parking-card">
