@@ -8,7 +8,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+    <link rel="preconnect" href="https://vrnnlyjwenupkaetaogw.supabase.co" crossorigin>
     <link rel="preconnect" href="https://esm.sh" crossorigin>
     <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -425,8 +425,8 @@
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const SUPABASE_URL = 'https://vrnnlyjwenupkaetaogw.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_ftfKaU4gg1csyZ0fGXW2Og_YOOLt9G7';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const FILTER_TYPE = "abiertos";
@@ -440,9 +440,7 @@ const searchInput = document.getElementById("globalSearch");
 const categoryFilter = document.getElementById("categoryFilter");
 
 const BUSINESS_SELECT = `
-    *,
-    categories!category_id(id,name,icon,parent_id),
-    subcategories:categories!subcategory_id(id,name,icon,parent_id)
+    *
 `;
 
 let allResults = [];
@@ -903,18 +901,18 @@ async function loadDetailsForBusinesses(businesses) {
 
     const [hoursResult, reviewsResult, promotionsResult] = await Promise.allSettled([
         supabase
-            .from("business_hours")
+            .from("urbanex_public_hours")
             .select("business_id,day_of_week,open_time,close_time,is_closed")
             .in("business_id", ids),
 
         supabase
-            .from("reviews")
+            .from("urbanex_public_reviews")
             .select("business_id,is_approved,rating")
             .eq("is_approved", true)
             .in("business_id", ids),
 
         supabase
-            .from("promotions")
+            .from("urbanex_public_promotions")
             .select("*")
             .in("business_id", ids)
     ]);
@@ -944,13 +942,13 @@ async function init() {
         const [position, categoriesResult, businessesResult] = await Promise.all([
             getUserPositionIfNeeded(),
             supabase
-                .from("categories")
+                .from("urbanex_public_categories")
                 .select("id,name,icon,parent_id,sort_order")
                 .order("sort_order", { ascending: true })
                 .order("name", { ascending: true }),
 
             supabase
-                .from("businesses")
+                .from("urbanex_catalog_recovery")
                 .select(BUSINESS_SELECT)
                 .eq("is_active", true)
                 .order("name", { ascending: true })
