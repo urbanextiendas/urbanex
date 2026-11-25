@@ -3559,6 +3559,21 @@ input:focus{
 @media(max-width: 900px) { #sec-dashboard .executive-kpi-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; } }
 @media(max-width: 460px) { #sec-dashboard .dashboard-topbar { padding: 12px !important; } #sec-dashboard .dashboard-section { padding: 10px !important; } #sec-dashboard .executive-kpi-card { padding: 8px !important; } .admin-header-left #adminHome span { display: none; } }
 </style>
+<style id="urbanex-admin-full-width">
+#adminApp .admin-body > .admin-main {
+    box-sizing: border-box;
+    flex: 1 1 100% !important;
+    margin-inline: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+}
+#adminApp .admin-main > .section { width: 100% !important; max-width: none !important; margin-inline: 0 !important; box-sizing: border-box; }
+#adminApp:has(#sec-dashboard.active) #adminHome { display: none !important; }
+@media (min-width: 1650px) {
+    #sec-dashboard .executive-kpi-grid { grid-template-columns: repeat(7, minmax(0, 1fr)) !important; }
+}
+</style>
 </head>
 <body>
 
