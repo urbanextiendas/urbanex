@@ -3574,6 +3574,77 @@ input:focus{
     #sec-dashboard .executive-kpi-grid { grid-template-columns: repeat(7, minmax(0, 1fr)) !important; }
 }
 </style>
+<style id="urbanex-analytics-layout">
+#sec-dashboard {
+    --analytics-border: #dce5ee;
+    --analytics-ink: #14314b;
+    --analytics-muted: #52677c;
+    --analytics-surface: #fff;
+    font-family: system-ui, sans-serif;
+    color: var(--analytics-ink);
+}
+#sec-dashboard .dashboard-topbar {
+    background: var(--analytics-surface) !important;
+    border: 1px solid var(--analytics-border);
+    color: var(--analytics-ink) !important;
+}
+#sec-dashboard .dashboard-heading h2 { color: var(--analytics-ink) !important; }
+#sec-dashboard .dashboard-heading p,
+#sec-dashboard .dashboard-period-control span { color: var(--analytics-muted) !important; }
+#sec-dashboard .dashboard-period-control select,
+#sec-dashboard .dashboard-site-link {
+    background: #f4f7fa !important;
+    color: var(--analytics-ink) !important;
+    border: 1px solid var(--analytics-border) !important;
+}
+#sec-dashboard .dashboard-site-link:hover { background: #e8eff6 !important; }
+#sec-dashboard .dashboard-section { border: 1px solid var(--analytics-border); }
+#sec-dashboard .dashboard-executive-section {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+}
+#sec-dashboard .executive-kpi-grid { gap: 12px !important; }
+#sec-dashboard .executive-kpi-card {
+    border: 1px solid var(--analytics-border) !important;
+    background: var(--analytics-surface) !important;
+    padding: 14px !important;
+}
+#sec-dashboard .executive-kpi-card::before {
+    inset: 0 0 auto !important;
+    width: auto !important;
+    height: 2px !important;
+}
+#sec-dashboard .executive-kpi-value { font-variant-numeric: tabular-nums; }
+#sec-dashboard .dashboard-chart-grid {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) !important;
+    gap: 12px !important;
+}
+#sec-dashboard .dashboard-chart-wide { grid-column: auto !important; }
+#sec-dashboard .dashboard-chart-grid > :nth-child(3) { grid-column: 2; grid-row: 2; }
+#sec-dashboard .dashboard-chart-card {
+    min-width: 0;
+    background: #f8fafc !important;
+    border: 1px solid var(--analytics-border) !important;
+    padding: 12px !important;
+    border-radius: 9px !important;
+}
+#sec-dashboard .chart-card-heading h4 { font-size: 14px !important; }
+#sec-dashboard .chart-card-heading p { font-size: 12px !important; }
+#sec-dashboard .dashboard-chart { min-height: 155px !important; }
+#sec-dashboard .dashboard-chart-donut { min-height: 155px !important; }
+#sec-dashboard .chart-empty { min-height: 145px !important; font-size: 12px !important; }
+#sec-dashboard .statistical-card,
+#sec-dashboard .dashboard-details { border: 1px solid var(--analytics-border); }
+#sec-dashboard .dashboard-data-table { font-variant-numeric: tabular-nums; }
+#sec-dashboard .dashboard-data-table th,
+#sec-dashboard .dashboard-data-table td { padding: 8px 10px !important; font-size: 12px !important; }
+#sec-dashboard .dashboard-data-table tbody tr:nth-child(even) { background: #f7f9fc; }
+@media (max-width: 850px) {
+    #sec-dashboard .dashboard-chart-grid { grid-template-columns: minmax(0, 1fr) !important; }
+    #sec-dashboard .dashboard-chart-grid > :nth-child(3) { grid-column: auto; grid-row: auto; }
+}
+</style>
 </head>
 <body>
 
@@ -3654,7 +3725,7 @@ input:focus{
             <div class="section active" id="sec-dashboard">
                 <div class="dashboard-topbar">
                     <div class="dashboard-heading">
-                        <span class="dashboard-eyebrow">Inteligencia comercial</span>
+                        
                         <h2>Dashboard ejecutivo</h2>
                         <p>Resumen estadístico para controlar audiencia, conversión, negocios y suscripciones.</p>
                     </div>
@@ -3678,8 +3749,8 @@ input:focus{
                 <section class="dashboard-section dashboard-executive-section" aria-labelledby="executiveTitle">
                     <div class="dashboard-section-heading">
                         <div>
-                            <span class="dashboard-section-kicker">Resumen principal</span>
-                            <h3 id="executiveTitle">Indicadores para toma de decisiones</h3>
+                            
+                            <h3 id="executiveTitle">Indicadores principales</h3>
                         </div>
                         <p><strong>Ingresos totales</strong> contabiliza todas las entradas. <strong>Visitantes únicos</strong> identifica personas o dispositivos distintos.</p>
                     </div>
@@ -3696,7 +3767,7 @@ input:focus{
                 <section class="dashboard-section" aria-labelledby="chartsTitle">
                     <div class="dashboard-section-heading">
                         <div>
-                            <span class="dashboard-section-kicker">Análisis visual</span>
+                            
                             <h3 id="chartsTitle">Comportamiento y rendimiento</h3>
                         </div>
                         <p>Las gráficas se calculan con los eventos registrados en el periodo seleccionado.</p>
@@ -3708,7 +3779,7 @@ input:focus{
                                     <h4>Tendencia diaria</h4>
                                     <p>Ingresos, visitantes únicos y contactos únicos.</p>
                                 </div>
-                                <span class="chart-badge">Serie temporal</span>
+                                
                             </div>
                             <div class="dashboard-chart" id="dailyTrendChart" aria-live="polite"></div>
                         </article>
