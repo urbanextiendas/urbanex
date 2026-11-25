@@ -8755,6 +8755,7 @@ body::after{
 
 <footer class="pie-pagina"><p>&copy; <span id="currentYear"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
 
+<script src="/urbanex-location.js"></script>
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -9247,15 +9248,7 @@ function provinceForCity(city) {
 }
 
 function businessMatchesLocation(business) {
-    if (activeProvince === '__all__') return true;
-
-    const city = businessCity(business);
-
-    if (activeLocation && activeLocation !== '__province__') {
-        return locationKey(city) === locationKey(activeLocation);
-    }
-
-    return provinceForCity(city) === activeProvince;
+    return window.urbanexLocation.matches(business, { province: activeProvince, city: activeLocation });
 }
 
 function locationFilteredBusinesses() {
