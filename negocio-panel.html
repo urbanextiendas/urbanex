@@ -30,6 +30,7 @@
 .password-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:760px){.plan-grid,.password-grid{grid-template-columns:1fr 1fr}}
 </style>
+<script src="/urbanex-location.js?v=address"></script>
 </head>
 <body>
 <header class="header"><a class="logo" href="index.html"><img src="imagenes/logo.png" alt="Urbanex"></a><nav class="nav"><a href="index.html">Inicio</a><a href="boulevard.html">Boulevard</a><button id="logoutBtn" class="pill-btn hidden" type="button">Cerrar sesión</button></nav></header>
@@ -416,7 +417,7 @@ function renderBusinessForm() {
 
   $('businessName').value = business.name ?? '';
   $('businessCity').value = business.city ?? '';
-  $('businessAddress').value = business.address ?? '';
+  $('businessAddress').value = window.urbanexLocation.formatAddress(business.address);
   $('businessDescription').value =
     business.description ?? '';
   $('businessPhone').value = business.phone ?? '';
@@ -864,7 +865,7 @@ async function saveBusiness() {
       business_id: String(state.currentBusiness.id),
       name: $('businessName').value.trim(),
       city: $('businessCity').value.trim(),
-      address: $('businessAddress').value.trim(),
+      address: window.urbanexLocation.formatAddress($('businessAddress').value),
       description: $('businessDescription').value.trim(),
       phone: $('businessPhone').value.trim() || null,
       whatsapp: $('businessWhatsapp').value.trim() || null,
