@@ -1,7 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const SUPABASE_URL = 'https://vrnnlyjwenupkaetaogw.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_ftfKaU4gg1csyZ0fGXW2Og_YOOLt9G7';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const ROOT_IMAGES = {
@@ -368,14 +368,14 @@ async function boot() {
 
     const [categoriesResult, businessesResult] = await Promise.all([
         supabase
-            .from('categories')
+            .from('urbanex_public_categories')
             .select('*')
             .eq('is_active', true)
             .order('sort_order', { ascending: true })
             .order('name', { ascending: true }),
 
         supabase
-            .from('businesses')
+            .from('urbanex_catalog_recovery')
             .select('*')
             .eq('is_active', true)
     ]);
