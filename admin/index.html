@@ -4281,7 +4281,7 @@ input:focus{
                 </select>
             </div>
             <div class="form-group"><label>Dirección de red social</label><input type="text" id="bizSocialUrl" placeholder="https://..."></div>
-            <div class="form-group"><label>Logotipo</label><input type="text" id="bizLogo" placeholder="https://..."></div>
+            <div class="form-group"><label for="bizLogoFile">Logotipo</label><input type="file" id="bizLogoFile" accept="image/jpeg,image/png,image/webp"><input type="hidden" id="bizLogo"><img id="bizLogoPreview" alt="Vista previa del logotipo" width="90" height="90" style="object-fit:contain" hidden><small id="bizLogoStatus" role="status"></small></div>
             <!-- Imagen portada — tabs URL / Subir -->
             <div class="form-group full">
                 <label>Imagen de portada</label>
@@ -4302,6 +4302,22 @@ input:focus{
                     <div class="img-upload-status" id="bizImgStatus"></div>
                 </div>
                 <img id="bizImgPreview" class="img-preview" alt="Vista previa portada">
+            </div>
+            <div class="form-group full" style="grid-column:1/-1">
+                <label>Sucursales</label>
+                <div id="bizBranchList"></div>
+                <button class="btn btn-ghost" type="button" id="addBizBranch">Agregar sucursal</button>
+                <template id="bizBranchTemplate">
+                    <fieldset style="margin:8px 0;padding:10px;border:1px solid var(--border);border-radius:10px;display:grid;gap:8px">
+                        <legend>Sucursal</legend>
+                        <label>Nombre <input data-branch="name" maxlength="120" required></label>
+                        <label>Provincia <input data-branch="province" maxlength="80"></label>
+                        <label>Ciudad o cantón <input data-branch="city" maxlength="80"></label>
+                        <label>Dirección <input data-branch="address" maxlength="240" required></label>
+                        <label>Teléfono <input data-branch="phone" type="tel" maxlength="35"></label>
+                        <button class="btn btn-ghost" type="button">Quitar sucursal</button>
+                    </fieldset>
+                </template>
             </div>
             <div class="form-group"><label>Latitud</label><input type="number" id="bizLat" placeholder="-3.993" step="any"></div>
             <div class="form-group"><label>Longitud</label><input type="number" id="bizLng" placeholder="-79.204" step="any"></div>
@@ -9139,12 +9155,14 @@ document.getElementById('btnNewBusiness').addEventListener('click', () => {
     document.getElementById('bizBusinessType').value = 'products';
     document.getElementById('bizSocialNetwork').value = '';
     document.getElementById('bizCat').value = '';
+    loadBizBranches();
     onBizCatChange();
     document.getElementById('bizSubCat').value = '';
     document.getElementById('bizFeatured').checked = false;
     document.getElementById('bizDelivery').checked = false;
     document.getElementById('bizActive').checked = true;
     resetBizImgUploader();
+    logoInput.value = ''; logoStatus.textContent = ''; refreshLogoPreview();
     openModal('bizModal');
 });
 
@@ -9175,6 +9193,7 @@ window.editBusiness = async id => {
     document.getElementById('bizSocialNetwork').value = b.social_network || '';
     document.getElementById('bizSocialUrl').value = b.social_url || '';
     document.getElementById('bizLogo').value = b.logo_url || '';
+    loadBizBranches(b.branches);
     document.getElementById('bizImg').value = b.cover_image || '';
     resetBizImgUploader();
     if (b.cover_image) {
@@ -9192,6 +9211,7 @@ window.editBusiness = async id => {
     onBizCatChange();
     document.getElementById('bizSubCat').value = b.subcategory_id || '';
 
+    logoInput.value = ''; logoStatus.textContent = ''; refreshLogoPreview();
     openModal('bizModal');
 };
 
@@ -9212,8 +9232,11 @@ document.getElementById('btnSaveBusiness').addEventListener('click', async () =>
         return;
     }
 
+    if (logoUploading) { toast('Espere a que termine la carga del logotipo.', 'error'); return; }
+    const branches = collectBizBranches();
+    if (branches.some(branch => !branch.name || !branch.address)) { toast('Complete el nombre y la dirección de cada sucursal.', 'error'); return; }
     const payload = {
-        name, slug,
+        name, slug, branches,
         owner_email: document.getElementById('bizOwnerEmail').value.trim().toLowerCase() || null,
         business_type: document.getElementById('bizBusinessType').value || 'products',
         province: formatAdminLocation(document.getElementById('bizProvince').value) || null,
@@ -9658,6 +9681,63 @@ document.getElementById('btnNewProduct').addEventListener('click', () => {
 
 // ── Imagen portada de negocio ─────────────────────────────────
 const BIZ_BUCKET = 'business-images';
+let logoUploading = false;
+const logoField = document.getElementById('bizLogo');
+const logoInput = document.getElementById('bizLogoFile');
+const logoPreview = document.getElementById('bizLogoPreview');
+const logoStatus = document.getElementById('bizLogoStatus');
+function refreshLogoPreview() {
+    logoPreview.hidden = !logoField.value;
+    if (logoField.value) logoPreview.src = logoField.value;
+    else logoPreview.removeAttribute('src');
+}
+logoInput.addEventListener('change', async () => {
+    const file = logoInput.files[0];
+    if (!file || logoUploading) return;
+    logoUploading = true;
+    const businessId = document.getElementById('bizId').value;
+    logoStatus.textContent = 'Optimizando y subiendo logotipo…';
+    try {
+        const image = await createImageBitmap(file);
+        let png;
+        try {
+            const scale = Math.min(1, 512 / Math.max(image.width, image.height));
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.max(1, Math.round(image.width * scale));
+            canvas.height = Math.max(1, Math.round(image.height * scale));
+            canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+            png = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        } finally { image.close(); }
+        if (!png) throw new Error('No se pudo preparar la imagen.');
+        const bucket = supabase.storage.from('business-images');
+        const path = 'covers/logo-' + crypto.randomUUID() + '.png';
+        const { error } = await bucket.upload(path, png, { contentType: 'image/png' });
+        if (error) throw error;
+        if (!document.getElementById('bizModal').classList.contains('open') || document.getElementById('bizId').value !== businessId) return;
+        logoField.value = bucket.getPublicUrl(path).data.publicUrl;
+        refreshLogoPreview();
+        logoStatus.textContent = 'Logotipo listo para guardar.';
+    } catch (error) {
+        logoStatus.textContent = 'No se pudo subir el logotipo: ' + error.message;
+    } finally { logoUploading = false; logoInput.value = ''; }
+});
+const branchList = document.getElementById('bizBranchList');
+function addBizBranch(branch = {}) {
+    if (branchList.children.length >= 150) return toast('Máximo 150 sucursales por negocio.', 'error');
+    const row = document.getElementById('bizBranchTemplate').content.firstElementChild.cloneNode(true);
+    for (const input of row.querySelectorAll('[data-branch]')) input.value = branch[input.dataset.branch] || '';
+    row.querySelector('button').onclick = () => row.remove();
+    branchList.append(row);
+}
+function loadBizBranches(branches = []) {
+    branchList.replaceChildren();
+    if (Array.isArray(branches)) branches.forEach(addBizBranch);
+}
+document.getElementById('addBizBranch').onclick = () => addBizBranch();
+function collectBizBranches() {
+    return Array.from(branchList.children, row => Object.fromEntries(Array.from(row.querySelectorAll('[data-branch]'), input => [input.dataset.branch, input.value.trim()])));
+}
+
 
 window.switchBizImgTab = (tab) => {
     document.querySelectorAll('#bizModal .img-upload-tab').forEach(t =>
