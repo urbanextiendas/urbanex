@@ -11,7 +11,7 @@
 <link rel="icon" type="image/png" href="imagenes/log.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+<link rel="preconnect" href="https://vrnnlyjwenupkaetaogw.supabase.co" crossorigin>
 <link rel="preconnect" href="https://esm.sh" crossorigin>
 <style id="leaflet-inline-css">
 /* required styles */
@@ -1194,6 +1194,7 @@ select option,
 </script>
 
 <script src="/urbanex-location.js?v=address"></script>
+<style>#activityField[hidden]{display:none}</style>
 </head>
 <body>
 <header class="header"><a class="brand" href="index.html"><img src="imagenes/Urba4.png" alt="Urbanex"></a><div class="header-links"><a class="pill" href="index.html">Inicio</a><a class="pill" href="boulevard.html">Boulevard</a></div></header>
@@ -1275,7 +1276,7 @@ select option,
        id="progressTrack"
        role="progressbar"
        aria-valuemin="1"
-       aria-valuemax="6"
+       aria-valuemax="4"
        aria-valuenow="1">
     <div class="progress-fill" id="progressFill"></div>
   </div>
@@ -1288,7 +1289,7 @@ select option,
 <div class="grid">
 <div class="field"><div class="field-label"><label for="name">Nombre del negocio</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><input id="name" type="text" maxlength="120" required placeholder="Ej.: Electromás"></div>
 <div class="field"><div class="field-label"><label for="ruc">Número de RUC</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><input id="ruc" name="ruc" type="text" inputmode="numeric" autocomplete="off" minlength="13" maxlength="13" pattern="[0-9]{13}" required placeholder="Ej.: 1101234567001"><div class="help">Ingrese los 13 dígitos del Registro Único de Contribuyentes.</div></div>
-<div class="field"><div class="field-label"><label for="owner_email">Correo del propietario</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><input id="owner_email" type="email" maxlength="160" required placeholder="propietario@correo.com"><div class="help">Se utilizará para notificar la aprobación o solicitar correcciones.</div></div>
+<div class="field"><div class="field-label"><label for="owner_email">Correo para ingresar a Urbanex</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><input id="owner_email" type="email" maxlength="160" required placeholder="propietario@correo.com"><div class="help">Usará este correo para entrar al panel cuando se apruebe la solicitud.</div></div>
 <div class="field"><div class="field-label"><label for="business_type">Tipo de negocio</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div>
 <select id="business_type" required>
 <option value="">Seleccione el tipo de negocio</option>
@@ -1300,6 +1301,11 @@ select option,
 </div>
 <div class="field"><div class="field-label"><label for="category">Categoría</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><select id="category" required><option value="">Seleccione una categoría</option><option value="1">🍽️ Comida y Bebida</option><option value="2">🛍️ Comercio</option><option value="3">🔧 Servicios</option><option value="4">💊 Salud y Bienestar</option><option value="5">🎭 Entretenimiento</option><option value="6">🏨 Alojamiento</option></select><div class="help" id="categoryStatus">Categorías disponibles. La lista se actualizará automáticamente desde la plataforma.</div></div>
 <div class="field"><div class="field-label"><label for="subcategory">Subcategoría</label><span id="subcategoryMark"></span></div><select id="subcategory" disabled><option value="">Seleccione primero una categoría</option></select><div class="help" id="subcategoryHelp">Será obligatoria cuando la categoría tenga subcategorías.</div></div>
+<div class="field full" id="activityField" hidden>
+<label id="activityLabel" for="activityDetail"></label>
+<input id="activityDetail" maxlength="160" disabled>
+</div>
+
 <div class="field full"><div class="field-label"><label for="description">Descripción</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><textarea id="description" maxlength="1000" required placeholder="Describa los productos, servicios y características principales del negocio."></textarea></div>
 <label class="check-card field full" for="delivery_available"><input id="delivery_available" type="checkbox"><span><strong>Ofrece servicio a domicilio </strong><small>Permitirá que el negocio aparezca en el filtro “A domicilio”.</small></span></label>
 </div>
@@ -1325,20 +1331,19 @@ select option,
 <div class="section-head"><div><h3>Fotos y documentos</h3></div><p>Puede seleccionar un archivo, tomar una foto en el instante, pegar una imagen o arrastrarla. Verifique visualmente que las cédulas sean legibles.</p></div>
 <div class="photo-grid" id="mainPhotoGrid"></div>
 <div class="card" style="margin-top:14px"><div class="help"><strong style="color:var(--gold)">Recomendación:</strong> coloque el documento sobre una superficie plana, use buena iluminación, evite reflejos y asegúrese de que los datos se lean completos. Las cédulas se almacenan de forma privada.</div></div>
-</section>
-
-<section class="form-step" data-step="4">
+<hr style="margin:24px 0;border:0;border-top:1px solid #e4d7b9">
 <div class="section-head"><div><h3>Horarios de atención</h3></div><p>Todos los horarios están vacíos. Active únicamente los días que atiende y complete una o dos jornadas.</p></div>
 <div class="schedule-list" id="scheduleList"></div>
 </section>
 
-<section class="form-step" data-step="5">
+
+
+<section class="form-step" data-step="4">
+<details style="margin-bottom:18px"><summary style="cursor:pointer;font-weight:700">Agregar productos o servicios (opcional)</summary>
 <div class="section-head"><div><h3 id="offerSectionTitle">Productos o servicios</h3></div><p id="offerSectionDescription">Seleccione primero el tipo de negocio. Esta sección es opcional y permite registrar hasta cuatro elementos.</p></div>
 <div class="product-toolbar"><span></span><button id="addProductBtn" class="add-btn" type="button">Agregar producto o servicio</button></div>
 <div id="productsBox"><div class="empty-products">Seleccione el tipo de negocio para registrar productos o servicios.</div></div>
-</section>
-
-<section class="form-step" data-step="6">
+</details>
 <div class="section-head"><div><h3>Revisión y envío</h3></div><p>Revise la información antes de enviar. Puede volver a cualquier paso para corregirla.</p></div>
 <div id="reviewGrid" class="review-grid"></div>
 <div class="security">
@@ -1348,7 +1353,7 @@ select option,
 </div>
 </section>
 
-<div class="nav"><a class="pill" href="index.html">Cancelar</a><div class="nav-right"><button id="prevBtn" class="nav-btn" type="button" hidden>Anterior</button><button id="nextBtn" class="nav-btn primary" type="button">Siguiente</button><div><div id="submitState" class="submit-state">Enviando...</div><button id="submitBtn" class="nav-btn primary" type="submit" hidden>Enviar solicitud</button></div></div></div>
+<div class="nav"><a class="pill" href="/negocio-panel.html">Ya tengo acceso</a><div class="nav-right"><button id="prevBtn" class="nav-btn" type="button" hidden>Anterior</button><button id="nextBtn" class="nav-btn primary" type="button">Siguiente</button><div><div id="submitState" class="submit-state">Enviando...</div><button id="submitBtn" class="nav-btn primary" type="submit" hidden>Enviar solicitud</button></div></div></div>
 </form>
 </section>
 </main>
@@ -1362,10 +1367,10 @@ select option,
 //# sourceMappingURL=leaflet.js.map
 </script>
 <script>
-const SUPABASE_URL='https://mlkynawsjqmawgxeuvks.supabase.co';
-const SUPABASE_ANON_KEY='sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const SUPABASE_URL='https://vrnnlyjwenupkaetaogw.supabase.co';
+const SUPABASE_ANON_KEY='sb_publishable_ftfKaU4gg1csyZ0fGXW2Og_YOOLt9G7';
 const EDGE_REGISTRATION_URL=`${SUPABASE_URL}/functions/v1/registrar-negocio`;
-const FALLBACK_CATEGORIES=[{"id":1,"name":"Comida y Bebida","icon":"🍽️","parent_id":null,"sort_order":1,"is_active":true},{"id":2,"name":"Comercio","icon":"🛍️","parent_id":null,"sort_order":2,"is_active":true},{"id":3,"name":"Servicios","icon":"🔧","parent_id":null,"sort_order":3,"is_active":true},{"id":4,"name":"Salud y Bienestar","icon":"💊","parent_id":null,"sort_order":4,"is_active":true},{"id":5,"name":"Entretenimiento","icon":"🎭","parent_id":null,"sort_order":5,"is_active":true},{"id":6,"name":"Alojamiento","icon":"🏨","parent_id":null,"sort_order":6,"is_active":true},{"id":7,"name":"Restaurantes","icon":"🍴","parent_id":1,"sort_order":1,"is_active":true},{"id":8,"name":"Cafeterías","icon":"☕","parent_id":1,"sort_order":2,"is_active":true},{"id":9,"name":"Pizzerías","icon":"🍕","parent_id":1,"sort_order":3,"is_active":true},{"id":10,"name":"Pollerías","icon":"🍗","parent_id":1,"sort_order":4,"is_active":true},{"id":11,"name":"Comida rápida","icon":"🍔","parent_id":1,"sort_order":5,"is_active":true},{"id":12,"name":"Heladerías","icon":"🍦","parent_id":1,"sort_order":6,"is_active":true},{"id":13,"name":"Bares","icon":"🍷","parent_id":1,"sort_order":7,"is_active":true},{"id":14,"name":"Panaderías","icon":"🥐","parent_id":1,"sort_order":8,"is_active":true},{"id":15,"name":"Ropa y Moda","icon":"👗","parent_id":2,"sort_order":1,"is_active":true},{"id":16,"name":"Calzado","icon":"👟","parent_id":2,"sort_order":2,"is_active":true},{"id":17,"name":"Electrónica","icon":"📱","parent_id":2,"sort_order":3,"is_active":true},{"id":18,"name":"Supermercados","icon":"🛒","parent_id":2,"sort_order":4,"is_active":true},{"id":19,"name":"Ferreterías","icon":"🛠️","parent_id":2,"sort_order":5,"is_active":true},{"id":20,"name":"Farmacias","icon":"💊","parent_id":2,"sort_order":6,"is_active":true},{"id":39,"name":"Electrodomésticos","icon":"🔌","parent_id":2,"sort_order":7,"is_active":true},{"id":21,"name":"Peluquerías","icon":"✂️","parent_id":3,"sort_order":1,"is_active":true},{"id":22,"name":"Mecánicas","icon":"🔧","parent_id":3,"sort_order":2,"is_active":true},{"id":23,"name":"Lavanderías","icon":"🧺","parent_id":3,"sort_order":3,"is_active":true},{"id":24,"name":"Imprentas","icon":"🖨️","parent_id":3,"sort_order":4,"is_active":true},{"id":25,"name":"Fotografía","icon":"📷","parent_id":3,"sort_order":5,"is_active":true},{"id":38,"name":"Consultoras","icon":"📊","parent_id":3,"sort_order":6,"is_active":true},{"id":26,"name":"Clínicas","icon":"🏥","parent_id":4,"sort_order":1,"is_active":true},{"id":27,"name":"Odontología","icon":"🦷","parent_id":4,"sort_order":2,"is_active":true},{"id":28,"name":"Ópticas","icon":"👓","parent_id":4,"sort_order":3,"is_active":true},{"id":29,"name":"Gimnasios","icon":"🏋️","parent_id":4,"sort_order":4,"is_active":true},{"id":30,"name":"Spas","icon":"💆","parent_id":4,"sort_order":5,"is_active":true},{"id":31,"name":"Cines","icon":"🎬","parent_id":5,"sort_order":1,"is_active":true},{"id":32,"name":"Canchas","icon":"⚽","parent_id":5,"sort_order":2,"is_active":true},{"id":33,"name":"Karaoke","icon":"🎤","parent_id":5,"sort_order":3,"is_active":true},{"id":34,"name":"Juegos","icon":"🎮","parent_id":5,"sort_order":4,"is_active":true},{"id":35,"name":"Hoteles","icon":"🏨","parent_id":6,"sort_order":1,"is_active":true},{"id":36,"name":"Hostales","icon":"🛏️","parent_id":6,"sort_order":2,"is_active":true},{"id":37,"name":"Cabañas","icon":"🏡","parent_id":6,"sort_order":3,"is_active":true}];
+const FALLBACK_CATEGORIES=[{"id":1,"name":"Comida y Bebida","icon":"🍽️","parent_id":null,"sort_order":1,"is_active":true},{"id":2,"name":"Comercio","icon":"🛍️","parent_id":null,"sort_order":2,"is_active":true},{"id":3,"name":"Servicios","icon":"🔧","parent_id":null,"sort_order":3,"is_active":true},{"id":4,"name":"Salud y Bienestar","icon":"💊","parent_id":null,"sort_order":4,"is_active":true},{"id":5,"name":"Entretenimiento","icon":"🎭","parent_id":null,"sort_order":5,"is_active":true},{"id":6,"name":"Alojamiento","icon":"🏨","parent_id":null,"sort_order":6,"is_active":true},{"id":7,"name":"Restaurantes","icon":"🍴","parent_id":1,"sort_order":1,"is_active":true},{"id":8,"name":"Cafeterías","icon":"☕","parent_id":1,"sort_order":2,"is_active":true},{"id":9,"name":"Pizzerías","icon":"🍕","parent_id":1,"sort_order":3,"is_active":true},{"id":10,"name":"Pollerías","icon":"🍗","parent_id":1,"sort_order":4,"is_active":true},{"id":11,"name":"Comida rápida","icon":"🍔","parent_id":1,"sort_order":5,"is_active":true},{"id":12,"name":"Heladerías","icon":"🍦","parent_id":1,"sort_order":6,"is_active":true},{"id":13,"name":"Bares","icon":"🍷","parent_id":1,"sort_order":7,"is_active":true},{"id":14,"name":"Panaderías","icon":"🥐","parent_id":1,"sort_order":8,"is_active":true},{"id":15,"name":"Ropa y Moda","icon":"👗","parent_id":2,"sort_order":1,"is_active":true},{"id":16,"name":"Calzado","icon":"👟","parent_id":2,"sort_order":2,"is_active":true},{"id":17,"name":"Electrónica","icon":"📱","parent_id":2,"sort_order":3,"is_active":true},{"id":18,"name":"Supermercados","icon":"🛒","parent_id":2,"sort_order":4,"is_active":true},{"id":19,"name":"Ferreterías","icon":"🛠️","parent_id":2,"sort_order":5,"is_active":true},{"id":20,"name":"Farmacias","icon":"💊","parent_id":2,"sort_order":6,"is_active":true},{"id":39,"name":"Electrodomésticos","icon":"🔌","parent_id":2,"sort_order":7,"is_active":true},{"id":21,"name":"Peluquerías","icon":"✂️","parent_id":3,"sort_order":1,"is_active":true},{"id":22,"name":"Mecánicas","icon":"🔧","parent_id":3,"sort_order":2,"is_active":true},{"id":23,"name":"Lavanderías","icon":"🧺","parent_id":3,"sort_order":3,"is_active":true},{"id":24,"name":"Imprentas","icon":"🖨️","parent_id":3,"sort_order":4,"is_active":true},{"id":25,"name":"Fotografía","icon":"📷","parent_id":3,"sort_order":5,"is_active":true},{"id":38,"name":"Consultoras","icon":"📊","parent_id":3,"sort_order":6,"is_active":true},{"id":26,"name":"Clínicas","icon":"🏥","parent_id":4,"sort_order":1,"is_active":true},{"id":27,"name":"Odontología","icon":"🦷","parent_id":4,"sort_order":2,"is_active":true},{"id":28,"name":"Ópticas","icon":"👓","parent_id":4,"sort_order":3,"is_active":true},{"id":29,"name":"Gimnasios","icon":"🏋️","parent_id":4,"sort_order":4,"is_active":true},{"id":30,"name":"Spas","icon":"💆","parent_id":4,"sort_order":5,"is_active":true},{"id":31,"name":"Cines","icon":"🎬","parent_id":5,"sort_order":1,"is_active":true},{"id":32,"name":"Canchas","icon":"⚽","parent_id":5,"sort_order":2,"is_active":true},{"id":33,"name":"Karaoke","icon":"🎤","parent_id":5,"sort_order":3,"is_active":true},{"id":34,"name":"Juegos","icon":"🎮","parent_id":5,"sort_order":4,"is_active":true},{"id":35,"name":"Hoteles","icon":"🏨","parent_id":6,"sort_order":1,"is_active":true},{"id":36,"name":"Hostales","icon":"🛏️","parent_id":6,"sort_order":2,"is_active":true},{"id":37,"name":"Cabañas","icon":"🏡","parent_id":6,"sort_order":3,"is_active":true},{"id":54,"name":"Parqueaderos","icon":"🚗","parent_id":3,"sort_order":1,"is_active":true}];
 const TURNSTILE_SITE_KEY='';
 const ECUADOR_LOCATIONS={"Azuay": ["Cuenca", "Girón", "Gualaceo", "Nabón", "Paute", "Pucara", "San Fernando", "Santa Isabel", "Sígsig", "Oña", "Chordeleg", "El Pan", "Sevilla de Oro", "Guachapala", "Camilo Ponce Enríquez"], "Bolívar": ["Guaranda", "Chillanes", "Chimbo", "Echeandía", "San Miguel", "Caluma", "Las Naves"], "Cañar": ["Azogues", "Biblián", "Cañar", "La Troncal", "El Tambo", "Déleg", "Suscal"], "Carchi": ["Tulcán", "Bolívar", "Espejo", "Mira", "Montúfar", "San Pedro de Huaca"], "Cotopaxi": ["Latacunga", "La Maná", "Pangua", "Pujili", "Salcedo", "Saquisilí", "Sigchos"], "Chimborazo": ["Riobamba", "Alausi", "Colta", "Chambo", "Chunchi", "Guamote", "Guano", "Pallatanga", "Penipe", "Cumandá"], "El Oro": ["Machala", "Arenillas", "Atahualpa", "Balsas", "Chilla", "El Guabo", "Huaquillas", "Marcabelí", "Pasaje", "Piñas", "Portovelo", "Santa Rosa", "Zaruma", "Las Lajas"], "Esmeraldas": ["Esmeraldas", "Eloy Alfaro", "Muisne", "Quinindé", "San Lorenzo", "Atacames", "Ríoverde"], "Guayas": ["Guayaquil", "Alfredo Baquerizo Moreno", "Balao", "Balzar", "Colimes", "Daule", "Durán", "El Empalme", "El Triunfo", "Milagro", "Naranjal", "Naranjito", "Palestina", "Pedro Carbo", "Samborondón", "Santa Lucía", "Salitre", "San Jacinto de Yaguachi", "Playas", "Simón Bolívar", "Coronel Marcelino Maridueña", "Lomas de Sargentillo", "Nobol", "General Antonio Elizalde", "Isidro Ayora"], "Imbabura": ["Ibarra", "Antonio Ante", "Cotacachi", "Otavalo", "Pimampiro", "San Miguel de Urcuquí"], "Loja": ["Loja", "Calvas", "Catamayo", "Celica", "Chaguarpamba", "Espíndola", "Gonzanamá", "Macará", "Paltas", "Puyango", "Saraguro", "Sozoranga", "Zapotillo", "Pindal", "Quilanga", "Olmedo"], "Los Ríos": ["Babahoyo", "Baba", "Montalvo", "Puebloviejo", "Quevedo", "Urdaneta", "Ventanas", "Vinces", "Palenque", "Buena Fé", "Valencia", "Mocache", "Quinsaloma"], "Manabí": ["Portoviejo", "Bolívar", "Chone", "El Carmen", "Flavio Alfaro", "Jipijapa", "Junín", "Manta", "Montecristi", "Paján", "Pichincha", "Rocafuerte", "Santa Ana", "Sucre", "Tosagua", "24 de Mayo", "Pedernales", "Olmedo", "Puerto López", "Jama", "Jaramijó", "San Vicente"], "Morona Santiago": ["Morona", "Gualaquiza", "Limón Indanza", "Palora", "Santiago", "Sucúa", "Huamboya", "San Juan Bosco", "Taisha", "Logroño", "Pablo Sexto", "Tiwintza", "Sevilla Don Bosco"], "Napo": ["Tena", "Archidona", "El Chaco", "Quijos", "Carlos Julio Arosemena Tola"], "Pastaza": ["Pastaza", "Mera", "Santa Clara", "Arajuno"], "Pichincha": ["Distrito Metropolitano de Quito", "Cayambe", "Mejia", "Pedro Moncayo", "Rumiñahui", "San Miguel de los Bancos", "Pedro Vicente Maldonado", "Puerto Quito"], "Tungurahua": ["Ambato", "Baños de Agua Santa", "Cevallos", "Mocha", "Patate", "Quero", "San Pedro de Pelileo", "Santiago de Píllaro", "Tisaleo"], "Zamora Chinchipe": ["Zamora", "Chinchipe", "Nangaritza", "Yacuambi", "Yantzaza", "El Pangui", "Centinela del Cóndor", "Palanda", "Paquisha"], "Galápagos": ["San Cristóbal", "Isabela", "Santa Cruz"], "Sucumbíos": ["Lago Agrio", "Gonzalo Pizarro", "Putumayo", "Shushufindi", "Sucumbíos", "Cascales", "Cuyabeno"], "Orellana": ["Francisco de Orellana", "Aguarico", "La Joya de los Sachas", "Loreto"], "Santo Domingo de los Tsáchilas": ["Santo Domingo"], "Santa Elena": ["Santa Elena", "La Libertad", "Salinas"]};
 const MAX_FILE_BYTES=5*1024*1024;
@@ -1394,18 +1399,18 @@ function buildWebsite(v){let value=String(v||'').trim();if(!value)return null;va
 function buildSocial(network,value){const raw=String(value||'').trim();if(!network&&!raw)return null;if(!network||!raw)throw new Error('Seleccione la red social y complete su dirección o usuario.');if(/^https?:\/\//i.test(raw))return raw;const user=raw.replace(/^@/,'').replace(/^\//,'');const bases={Instagram:'https://instagram.com/',Facebook:'https://facebook.com/',TikTok:'https://tiktok.com/@',LinkedIn:'https://linkedin.com/in/',YouTube:'https://youtube.com/@',X:'https://x.com/'};return network==='Otra'?raw:(bases[network]||'')+user}
 function selectedCity(){return $('city').value==='__OTHER__'?$('other_city').value.trim():$('city').value}
 function setStep(step){
-currentStep=Math.max(1,Math.min(6,step));
+currentStep=Math.max(1,Math.min(4,step));
 highestStep=Math.max(highestStep,currentStep);
-const progress=Math.max(0,Math.min(100,(currentStep/6)*100));
+const progress=Math.max(0,Math.min(100,(currentStep/4)*100));
 $('progressFill').style.width=`${progress}%`;
 $('progressTrack').setAttribute('aria-valuenow',String(currentStep));
 document.querySelectorAll('.form-step').forEach(section=>section.classList.toggle('active',Number(section.dataset.step)===currentStep));
 document.querySelectorAll('.step-button').forEach(button=>{const number=Number(button.dataset.step);button.classList.toggle('active',number===currentStep);button.classList.toggle('done',number<currentStep)});
 $('prevBtn').hidden=currentStep===1;
-$('nextBtn').hidden=currentStep===6;
-$('submitBtn').hidden=currentStep!==6;
+$('nextBtn').hidden=currentStep===4;
+$('submitBtn').hidden=currentStep!==4;
 if(currentStep===2)setTimeout(ensureMapReady,80);
-if(currentStep===6)renderReview();
+if(currentStep===4)renderReview();
 window.scrollTo({top:document.querySelector('.shell').offsetTop-72,behavior:'smooth'});
 clearMessage();
 }
@@ -1414,10 +1419,8 @@ function validateSelectedPhotoQuality(){return true}
 function validateStep(step){
 if(step===1){if(!$('name').value.trim())fieldInvalid('name','Ingrese el nombre del negocio.');if(!validRuc($('ruc').value))fieldInvalid('ruc','Ingrese un número de RUC válido de 13 dígitos.');if(!$('owner_email').checkValidity())fieldInvalid('owner_email','Ingrese un correo electrónico válido.');if(!$('business_type').value)fieldInvalid('business_type','Seleccione el tipo de negocio.');if(!$('category').value)fieldInvalid('category','Seleccione una categoría.');if(!$('subcategory').disabled&&!$('subcategory').value)fieldInvalid('subcategory','Seleccione una subcategoría.');if(!$('description').value.trim())fieldInvalid('description','Ingrese la descripción del negocio.');}
 if(step===2){if(!$('province').value)fieldInvalid('province','Seleccione una provincia.');if(!$('city').value)fieldInvalid('city','Seleccione una ciudad o cantón.');if($('city').value==='__OTHER__'&&!$('other_city').value.trim())fieldInvalid('other_city','Escriba la ciudad o localidad.');buildEcuadorPhone($('phone_local').value,'el teléfono',false);buildEcuadorPhone($('whatsapp_local').value,'el número de WhatsApp',true);buildWebsite($('website_domain').value);buildSocial($('social_network').value,$('social_value').value);if(!$('address').value.trim())fieldInvalid('address','Ingrese la dirección del negocio.');if(!$('latitude').value||!$('longitude').value)fieldInvalid('address','Seleccione la ubicación exacta en el mapa.');}
-if(step===3){for(const id of ['cedula_front','cedula_back']){const file=$(id).files?.[0];if(!file)throw new Error('Cargue las fotografías frontal y posterior de la cédula.');}}
-if(step===4){collectHours();}
-if(step===5){collectProducts();}
-if(step===6){if(!$('accept_terms').checked||!$('accept_privacy').checked)throw new Error('Acepte las confirmaciones obligatorias antes de enviar.');}
+if(step===3){for(const id of ['cedula_front','cedula_back']){const file=$(id).files?.[0];if(!file)throw new Error('Cargue las fotografías frontal y posterior de la cédula.');}collectHours();}
+if(step===4){collectProducts();if(!$('accept_terms').checked||!$('accept_privacy').checked)throw new Error('Acepte las confirmaciones obligatorias antes de enviar.');}
 return true}
 function renderLocations(){const p=$('province');p.innerHTML='<option value="">Seleccione una provincia</option>'+Object.keys(ECUADOR_LOCATIONS).map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('')}
 function renderCities(){const prov=$('province').value,c=$('city');if(!prov){c.disabled=true;c.innerHTML='<option value="">Seleccione primero una provincia</option>';return}c.disabled=false;c.innerHTML='<option value="">Seleccione una ciudad / cantón</option>'+ECUADOR_LOCATIONS[prov].map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('')+'<option value="__OTHER__">Otra ciudad o localidad</option>'}
@@ -1463,6 +1466,7 @@ if(previousSubcategory&&!$('subcategory').disabled){
 const exists=[...$('subcategory').options].some(option=>String(option.value)===String(previousSubcategory));
 if(exists)$('subcategory').value=previousSubcategory;
 }
+updateActivity();
 categoryLoadState(
 source==='live'
 ?`${roots.length} categorías actualizadas desde la plataforma.`
@@ -1542,6 +1546,35 @@ true
 );
 }
 }
+function updateActivity() {
+const category = categories.find(row => String(row.id) === $('category').value);
+const subcategory = categories.find(row => String(row.id) === $('subcategory').value);
+const name = category?.name || '';
+const kind = /^parqueader/i.test(subcategory?.name || '') ? 'parking' : /alojamiento/i.test(name) ? 'hotel' : /comercio/i.test(name) ? 'shop' : '';
+const settings = {
+parking: ['Cupos disponibles al solicitar el ingreso', 'Ej.: 12 cupos disponibles de 20', 'Cupos al solicitar el ingreso', 'services'],
+hotel: ['Disponibilidad de habitaciones al solicitar el ingreso', 'Ej.: 3 habitaciones dobles disponibles', 'Habitaciones al solicitar el ingreso', 'services'],
+shop: ['¿Qué productos vende?', 'Ej.: ropa, calzado y accesorios', 'Productos que vende', 'products']
+};
+const input = $('activityDetail');
+if (input.dataset.kind !== kind) input.value = '';
+input.dataset.kind = kind;
+$('activityField').hidden = !kind;
+input.disabled = !kind;
+if (!kind) return;
+const [label, placeholder, prefix, type] = settings[kind];
+$('activityLabel').textContent = label;
+input.placeholder = placeholder;
+input.dataset.prefix = prefix;
+$('business_type').value = type;
+renderOfferSection();
+}
+function registrationDescription() {
+const base = $('description').value.trim();
+const input = $('activityDetail');
+return !input.disabled && input.value.trim() ? base + '\n' + input.dataset.prefix + ': ' + input.value.trim() : base;
+}
+
 function renderSubcategories(){const root=$('category').value;const children=categories.filter(c=>String(c.parent_id)===String(root));const s=$('subcategory');if(!root){s.disabled=true;s.required=false;s.innerHTML='<option value="">Seleccione primero una categoría</option>'}else if(!children.length){s.disabled=true;s.required=false;s.innerHTML='<option value="">Esta categoría no tiene subcategorías</option>'}else{s.disabled=false;s.required=true;s.innerHTML='<option value="">Seleccione una subcategoría</option>'+children.map(c=>`<option value="${esc(c.id)}">${esc(c.icon||'')} ${esc(c.name)}</option>`).join('')}$('subcategoryMark').className=s.required?'required-star':'';$('subcategoryMark').textContent=s.required?'*':'';$('subcategoryMark').setAttribute('aria-label',s.required?'Campo obligatorio':'')}
 let activeTileLayer=null,tileProviderIndex=0,tileErrorCount=0;
 const TILE_PROVIDERS=[
@@ -1650,8 +1683,33 @@ async function decodeImage(file){
     return {source:image,width:image.naturalWidth,height:image.naturalHeight,close:()=>URL.revokeObjectURL(url)};
   } catch(error){URL.revokeObjectURL(url);throw error}
 }
-async function standardizeImage(file){if(file.size>MAX_FILE_BYTES)throw new Error('La imagen supera 5 MB.');if(['image/jpeg','image/png'].includes(file.type))return file;if(!file.type.startsWith('image/'))throw new Error('Seleccione una imagen válida.');const decoded=await decodeImage(file);try{const max=2200,scale=Math.min(1,max/Math.max(decoded.width,decoded.height));const canvas=document.createElement('canvas');canvas.width=Math.round(decoded.width*scale);canvas.height=Math.round(decoded.height*scale);canvas.getContext('2d').drawImage(decoded.source,0,0,canvas.width,canvas.height);const blob=await new Promise(r=>canvas.toBlob(r,'image/jpeg',.9));if(!blob)throw new Error('No se pudo convertir la imagen.');return new File([blob],`foto-${Date.now()}.jpg`,{type:'image/jpeg'})}finally{decoded.close()}}
-async function assignPhoto(target,file){try{const clean=await standardizeImage(file);const dt=new DataTransfer();dt.items.add(clean);$(target).files=dt.files;await processPhoto(target,clean);formDirty=true}catch(e){showMessage('error',e.message||'No se pudo procesar la imagen.')}}
+let photosProcessing = 0;
+async function standardizeImage(file, target) {
+    if (!file.type.startsWith('image/')) throw new Error('Seleccione una imagen válida.');
+    const documentPhoto = target.startsWith('cedula_');
+    const preserveAlpha = target === 'logo_image_file';
+    const maxSide = documentPhoto ? 2000 : 1440;
+    const decoded = await decodeImage(file);
+    try {
+        const scale = Math.min(1, maxSide / Math.max(decoded.width, decoded.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(decoded.width * scale));
+        canvas.height = Math.max(1, Math.round(decoded.height * scale));
+        const ctx = canvas.getContext('2d', { alpha: preserveAlpha });
+        if (!preserveAlpha) {
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        ctx.drawImage(decoded.source, 0, 0, canvas.width, canvas.height);
+        const mime = preserveAlpha ? 'image/webp' : 'image/jpeg';
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, mime, documentPhoto ? .88 : .80));
+        if (!blob || blob.size > MAX_FILE_BYTES) throw new Error('No se pudo optimizar la imagen. Intente con otra foto.');
+        if (file.size <= blob.size && scale === 1 && ['image/jpeg','image/png','image/webp'].includes(file.type)) return file;
+        const extension = blob.type === 'image/webp' ? 'webp' : blob.type === 'image/png' ? 'png' : 'jpg';
+        return new File([blob], 'foto.' + extension, { type: blob.type });
+    } finally { decoded.close(); }
+}
+async function assignPhoto(target,file){photosProcessing++;try{const clean=await standardizeImage(file,target);const dt=new DataTransfer();dt.items.add(clean);$(target).files=dt.files;await processPhoto(target,clean);formDirty=true}catch(e){$(target).value='';showMessage('error',e.message||'No se pudo procesar la imagen.')}finally{photosProcessing--;}}
 async function processPhoto(id,file){
 if(fileUrls.has(id))URL.revokeObjectURL(fileUrls.get(id));
 const url=URL.createObjectURL(file);
@@ -1853,10 +1911,11 @@ const rows=[
 $('reviewGrid').innerHTML=rows.map(([t,c])=>`<div class="review-card"><h4>${t}</h4>${c}</div>`).join('');
 }
 function totalFileBytes(){return [...form.querySelectorAll('input[type=file]')].reduce((sum,i)=>sum+(i.files?.[0]?.size||0),0)}
-async function submitForm(e){e.preventDefault();if(isSubmitting)return;clearMessage();try{for(let s=1;s<=6;s++)validateStep(s);const {categoryId,subcategoryId}={categoryId:$('category').value,subcategoryId:$('subcategory').disabled?null:$('subcategory').value};const phone=buildEcuadorPhone($('phone_local').value,'el teléfono',false),whatsapp=buildEcuadorPhone($('whatsapp_local').value,'el número de WhatsApp',true),website=buildWebsite($('website_domain').value),socialUrl=buildSocial($('social_network').value,$('social_value').value),hours=collectHours(),{products,files}=collectProducts();if(totalFileBytes()>MAX_TOTAL_BYTES)throw new Error('El peso total de las imágenes supera 30 MB.');const business={name:$('name').value.trim(),ruc:normalizeRuc($('ruc').value),owner_email:$('owner_email').value.trim().toLowerCase(),business_type:$('business_type').value,category_id:categoryId,subcategory_id:subcategoryId,province:$('province').value,city:selectedCity(),address:window.urbanexLocation.formatAddress($('address').value),description:$('description').value.trim(),phone,whatsapp,website,social_network:$('social_network').value||null,social_url:socialUrl,latitude:Number($('latitude').value),longitude:Number($('longitude').value),delivery_available:$('delivery_available').checked};const data=new FormData();data.append('payload',JSON.stringify({business,hours,products}));data.append('company_website',$('company_website').value);for(const id of ['logo_image_file','cover_image_file','cedula_front','cedula_back']){const f=$(id).files?.[0];if(f)data.append(id,f,f.name)}files.forEach(x=>data.append(x.key,x.file,x.file.name));if(window.turnstile&&turnstileWidgetId!==null){const token=window.turnstile.getResponse(turnstileWidgetId);if(token)data.append('turnstile_token',token)}isSubmitting=true;$('submitBtn').disabled=true;$('submitState').classList.add('visible');const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),120000);let response;try{response=await fetch(EDGE_REGISTRATION_URL,{method:'POST',headers:{apikey:SUPABASE_ANON_KEY,Authorization:`Bearer ${SUPABASE_ANON_KEY}`},body:data,signal:controller.signal})}finally{clearTimeout(timeout)}const result=await response.json().catch(()=>({}));if(!response.ok||!result.success)throw new Error(result.error||`No se pudo registrar. Código ${response.status}.`);formDirty=false;form.reset();qualityState.clear();fileUrls.forEach(URL.revokeObjectURL);fileUrls.clear();productCount=0;$('productsBox').innerHTML=`<div class="empty-products">${emptyOfferMessage()}</div>`;renderOfferSection();renderCities();renderSubcategories();renderSchedule();renderMainPhotos();if(map){if(marker){map.removeLayer(marker);marker=null}map.setView([-3.99313,-79.20422],13);setTimeout(()=>map.invalidateSize(true),80)}setStep(1);showMessage('ok','Solicitud enviada correctamente. Quedó pendiente de aprobación administrativa.')}catch(err){console.error(err);showMessage('error',err?.name==='AbortError'?'La carga tardó demasiado. Revise su conexión.':err.message||'No se pudo enviar la solicitud.')}finally{isSubmitting=false;$('submitBtn').disabled=false;$('submitState').classList.remove('visible')}}
+async function submitForm(e){e.preventDefault();if(isSubmitting)return;if(photosProcessing){showMessage('error','Espere a que terminen de optimizarse las imágenes.');return;}clearMessage();try{for(let s=1;s<=4;s++)validateStep(s);const {categoryId,subcategoryId}={categoryId:$('category').value,subcategoryId:$('subcategory').disabled?null:$('subcategory').value};const phone=buildEcuadorPhone($('phone_local').value,'el teléfono',false),whatsapp=buildEcuadorPhone($('whatsapp_local').value,'el número de WhatsApp',true),website=buildWebsite($('website_domain').value),socialUrl=buildSocial($('social_network').value,$('social_value').value),hours=collectHours(),{products,files}=collectProducts();if(totalFileBytes()>MAX_TOTAL_BYTES)throw new Error('El peso total de las imágenes supera 30 MB.');const business={name:$('name').value.trim(),ruc:normalizeRuc($('ruc').value),owner_email:$('owner_email').value.trim().toLowerCase(),business_type:$('business_type').value,category_id:categoryId,subcategory_id:subcategoryId,province:$('province').value,city:selectedCity(),address:window.urbanexLocation.formatAddress($('address').value),description:registrationDescription(),phone,whatsapp,website,social_network:$('social_network').value||null,social_url:socialUrl,latitude:Number($('latitude').value),longitude:Number($('longitude').value),delivery_available:$('delivery_available').checked};const data=new FormData();data.append('payload',JSON.stringify({business,hours,products}));data.append('company_website',$('company_website').value);for(const id of ['logo_image_file','cover_image_file','cedula_front','cedula_back']){const f=$(id).files?.[0];if(f)data.append(id,f,f.name)}files.forEach(x=>data.append(x.key,x.file,x.file.name));if(window.turnstile&&turnstileWidgetId!==null){const token=window.turnstile.getResponse(turnstileWidgetId);if(token)data.append('turnstile_token',token)}isSubmitting=true;$('submitBtn').disabled=true;$('submitState').classList.add('visible');const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),120000);let response;try{response=await fetch(EDGE_REGISTRATION_URL,{method:'POST',headers:{apikey:SUPABASE_ANON_KEY,Authorization:`Bearer ${SUPABASE_ANON_KEY}`},body:data,signal:controller.signal})}finally{clearTimeout(timeout)}const result=await response.json().catch(()=>({}));if(!response.ok||!result.success)throw new Error(result.error||`No se pudo registrar. Código ${response.status}.`);formDirty=false;form.reset();qualityState.clear();fileUrls.forEach(URL.revokeObjectURL);fileUrls.clear();productCount=0;$('productsBox').innerHTML=`<div class="empty-products">${emptyOfferMessage()}</div>`;renderOfferSection();renderCities();renderSubcategories();renderSchedule();renderMainPhotos();if(map){if(marker){map.removeLayer(marker);marker=null}map.setView([-3.99313,-79.20422],13);setTimeout(()=>map.invalidateSize(true),80)}setStep(1);showMessage('ok','Solicitud enviada correctamente. Quedó pendiente de aprobación. El acceso se habilitará con el correo registrado.')}catch(err){console.error(err);showMessage('error',err?.name==='AbortError'?'La carga tardó demasiado. Revise su conexión.':err.message||'No se pudo enviar la solicitud.')}finally{isSubmitting=false;$('submitBtn').disabled=false;$('submitState').classList.remove('visible')}}
 function loadTurnstile(){if(!TURNSTILE_SITE_KEY)return;$('turnstileWrap').hidden=false;const s=document.createElement('script');s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';s.async=true;s.onload=()=>{turnstileWidgetId=window.turnstile.render('#turnstileWidget',{sitekey:TURNSTILE_SITE_KEY,theme:'dark'})};document.head.appendChild(s)}
 $('nextBtn').onclick=()=>{try{validateStep(currentStep);setStep(currentStep+1)}catch(e){showMessage('error',e.message)}};$('prevBtn').onclick=()=>setStep(currentStep-1);document.querySelectorAll('.step-button').forEach(b=>b.onclick=()=>{const n=Number(b.dataset.step);if(n<=highestStep)setStep(n)});$('province').onchange=()=>{renderCities();$('otherCityField').hidden=true};$('city').onchange=()=>{$('otherCityField').hidden=$('city').value!=='__OTHER__'};$('business_type').onchange=renderOfferSection;
-$('category').onchange=renderSubcategories;
+$('category').onchange=()=>{renderSubcategories();updateActivity();};
+$('subcategory').onchange=updateActivity;
 let categoryRetryRunning=false;
 const retryCategories=async()=>{
 if($('category').dataset.loadFailed!=='true'||categoryRetryRunning)return;
