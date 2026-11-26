@@ -9875,10 +9875,24 @@ function availableProductImageSlots() {
         .map(item => item.index);
 }
 
+async function optimizeCatalogPhoto(file) {
+    if (!PRODUCT_IMAGE_TYPES.has(file.type)) return file;
+    const image = await createImageBitmap(file);
+    try {
+        const canvas = document.createElement('canvas');
+        canvas.width = image.width;
+        canvas.height = image.height;
+        canvas.getContext('2d').drawImage(image, 0, 0);
+        const png = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        return png && png.size < file.size ? new File([png], 'foto.png', { type: 'image/png' }) : file;
+    } finally { image.close(); }
+}
+
 async function uploadProductImageFile(
     file,
     slotIndex
 ) {
+    file = await optimizeCatalogPhoto(file);
     validateProductImageFile(file);
 
     const extension =
