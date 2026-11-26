@@ -4548,6 +4548,7 @@ input:focus{
     <input type="hidden" id="subscriptionBusinessId">
     <div id="subscriptionCurrent" class="subscription-card"></div>
     <div class="subscription-options" style="margin-top:14px;">
+      <button class="btn btn-ghost" type="button" onclick="runSubscriptionAction('activate_free',0)">Activar gratuito</button>
       <button class="btn btn-primary" type="button" onclick="runSubscriptionAction('activate_paid',1)">Activar plan mensual</button>
       <button class="btn btn-primary" type="button" onclick="runSubscriptionAction('activate_paid',12)">Activar plan anual</button>
       <button id="extendTrialBtn" class="btn btn-ghost" type="button" onclick="runSubscriptionAction('extend_trial',1)">Extender prueba 1 mes</button>
@@ -8808,7 +8809,6 @@ async function loadDashboard() {
 // ── NEGOCIOS ─────────────────────────────────────────────────
 let allBusinesses = [];
 let subscriptionByBusiness = new Map();
-const SUBSCRIPTION_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/gestionar-suscripcion`;
 
 async function loadBusinesses() {
     const { data, error } = await supabase
@@ -8841,47 +8841,12 @@ async function loadBusinesses() {
 
 
 
-async function subscriptionFetch(url, options = {}) {
-    const { data: sessionData } = await supabase.auth.getSession();
-    const token = sessionData?.session?.access_token;
-    if (!token) throw new Error('Debe iniciar sesión como administrador.');
-
-    const response = await fetch(url, {
-        ...options,
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'apikey': SUPABASE_ANON_KEY,
-            ...(options.headers || {}),
-        },
-    });
-
-    const raw = await response.text();
-    let result = {};
-
-    try {
-        result = raw ? JSON.parse(raw) : {};
-    } catch {
-        result = {};
-    }
-
-    if (!response.ok || result.success !== true) {
-        const detail =
-            result.error ||
-            result.message ||
-            raw ||
-            `Error HTTP ${response.status}`;
-
-        throw new Error(detail);
-    }
-
-    return result;
-}
-
 async function loadSubscriptionSummaries() {
     try {
-        const result = await subscriptionFetch(SUBSCRIPTION_FUNCTION_URL);
+        const { data: subscriptions, error } = await supabase.rpc('admin_subscription_summaries');
+        if (error) throw error;
         subscriptionByBusiness = new Map(
-            (result.subscriptions || []).map(row => [String(row.business_id), row])
+            (subscriptions || []).map(row => [String(row.business_id), row])
         );
     } catch (error) {
         console.warn('Suscripciones:', error);
@@ -8992,25 +8957,13 @@ window.runSubscriptionAction = async (action, months) => {
     }
 
     try {
-        let message = 'Plan actualizado.';
-        const result = await subscriptionFetch(
-            SUBSCRIPTION_FUNCTION_URL,
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action,
-                    business_id: String(businessId),
-                    months,
-                    payment_provider:
-                        action === 'activate_paid' ? 'manual' : null,
-                }),
-            }
-        );
-
-        message = result.message || message;
-
-        toast(message);
+        const { data, error } = await supabase.rpc('admin_change_subscription', {
+            p_business: businessId,
+            p_action: action,
+            p_months: months,
+        });
+        if (error) throw error;
+        toast(data?.message || 'Plan actualizado.');
         closeModal('subscriptionModal');
         await loadBusinesses();
     } catch (error) {
