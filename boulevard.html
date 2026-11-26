@@ -10184,8 +10184,8 @@ function shopCardHtml(b) {
         ? `<span class="status-open">Abierto</span>`
         : `<span class="status-closed">Cerrado</span>`;
 
-    const basicImgEl = b.logo_url
-        ? `<div class="shop-thumb-wrapper"><img class="shop-thumb" src="${esc(b.logo_url)}" alt="${esc(b.name)}" loading="lazy"></div>`
+    const basicImgEl = (b.logo_url || b.cover_image)
+        ? `<div class="shop-thumb-wrapper"><img class="shop-thumb" src="${esc(b.logo_url || b.cover_image)}" alt="${esc(b.name)}" loading="lazy"></div>`
         : `<div class="shop-thumb-wrapper">${b.subcategories?.icon||b.categories?.icon||'🏪'}</div>`;
 
     const addressLabel = String(
@@ -10332,11 +10332,11 @@ function shopCardHtml(b) {
         `;
     }
 
-    const desktopImgEl = b.logo_url
+    const desktopImgEl = (b.logo_url || b.cover_image)
         ? `<div class="ux-featured-logo-box">
                 <img
                     class="ux-featured-logo"
-                    src="${esc(b.logo_url)}"
+                    src="${esc(b.logo_url || b.cover_image)}"
                     alt="${esc(b.name)}"
                     loading="lazy"
                 >
@@ -10598,11 +10598,11 @@ window.closeDirectorio = () => {
 };
 
 function dirCardHtml(b) {
-    const media = b.logo_url
+    const media = (b.logo_url || b.cover_image)
         ? `
             <img
                 class="uxd-business-logo-fit"
-                src="${esc(b.logo_url)}"
+                src="${esc(b.logo_url || b.cover_image)}"
                 alt="${esc(b.name)}"
                 loading="lazy"
                 decoding="async"
