@@ -9709,8 +9709,11 @@ document.getElementById('bizImgFile').addEventListener('change', async (e) => {
             const canvas = document.createElement('canvas');
             canvas.width = Math.max(1, Math.round(image.width * ratio));
             canvas.height = Math.max(1, Math.round(image.height * ratio));
-            canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
-            optimized = await new Promise(resolve => canvas.toBlob(resolve, 'image/webp', .82));
+            const context = canvas.getContext('2d', { alpha: false });
+            context.fillStyle = '#fff';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+            optimized = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', .82));
             if (!optimized || optimized.size > 5 * 1024 * 1024) throw new Error('No se pudo optimizar esta imagen.');
         } finally { image.close(); }
     } catch (error) {
@@ -9718,7 +9721,7 @@ document.getElementById('bizImgFile').addEventListener('change', async (e) => {
         progress.classList.remove('visible');
         return;
     }
-    const extension = optimized.type === 'image/webp' ? 'webp' : 'png';
+    const extension = optimized.type === 'image/jpeg' ? 'jpg' : 'png';
     const path = `covers/${crypto.randomUUID()}.${extension}`;
     bar.style.width = '50%';
 
