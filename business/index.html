@@ -5316,11 +5316,7 @@ const query=(lat&&lng)
 $('mapBtn').href=
 `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 
-const website=first(
-business.website,
-business.web,
-business.instagram
-);
+const website=business.publicWebsite;
 
 if(website){
 $('businessWebsite').href=normalizeExternalUrl(website);
@@ -5459,6 +5455,16 @@ rel="noopener"
 `;
 }).join('');
 
+for (const img of $('productsList').querySelectorAll('[data-product-image]')) {
+    const showPlaceholder = () => {
+        const gallery = img.closest('.product-gallery');
+        if (!gallery) return;
+        img.remove();
+        if (!gallery.querySelector('img')) gallery.innerHTML = '<div class="product-image-placeholder"><small>Fotografía no disponible</small></div>';
+    };
+    img.addEventListener('error', showPlaceholder, { once: true });
+    if (img.complete && img.naturalWidth === 0) showPlaceholder();
+}
 initPremiumInteractions();
 }
 function renderReviews(){$('reviewBadge').textContent=`${reviews.length} reseña${reviews.length===1?'':'s'}`;if(!reviews.length){$('reviewsList').innerHTML='<div class="empty">Aún no hay reseñas aprobadas. Sea el primero en opinar.</div>';return;}$('reviewsList').innerHTML=reviews.map(r=>`<article class="review-card"><div class="review-top"><span class="review-name">${esc(first(r.author_name,r.user_name,r.name,'Cliente Urbanex'))}</span><span class="stars">${'★'.repeat(Number(r.rating||0))}${'☆'.repeat(5-Number(r.rating||0))}</span></div><p>${esc(first(r.comment,r.review,''))}</p></article>`).join('');}
@@ -5543,14 +5549,16 @@ if(slug){query=query.eq('slug',slug);}else if(id){query=query.eq('id',id);}else{
 const {data,error}=await query.maybeSingle();
 if(error||!data)return showNotFound();
 business=data;
-const [hoursResult,productsResult,promotionsResult,reviewsResult,imagesResult,branchesResult]=await Promise.all([
+const [hoursResult,productsResult,promotionsResult,reviewsResult,imagesResult,branchesResult,websiteResult]=await Promise.all([
 supabase.from('urbanex_public_hours').select('*').eq('business_id',business.id).order('day_of_week').order('session_number'),
 supabase.from('urbanex_public_business_products').select('*').eq('business_id',String(business.id)).eq('is_active',true).order('sort_order').order('created_at'),
 supabase.from('urbanex_public_promotions').select('*').eq('business_id',business.id).eq('is_active',true).order('created_at',{ascending:false}).limit(4),
 supabase.from('urbanex_public_reviews').select('*').eq('business_id',String(business.id)).eq('is_approved',true).order('created_at',{ascending:false}).limit(20),
 supabase.from('urbanex_public_product_images').select('*').eq('business_id',String(business.id)).order('sort_order'),
-supabase.from('urbanex_public_business_branches').select('branches').eq('business_id',business.id).maybeSingle()
+supabase.from('urbanex_public_business_branches').select('branches').eq('business_id',business.id).maybeSingle(),
+supabase.from('urbanex_public_web_link').select('website').eq('business_id',business.id).maybeSingle()
 ]);
+business.publicWebsite=websiteResult.data?.website;
 hours=hoursResult.data||[];
 products=productsResult.data||[];
 promotions=promotionsResult.data||[];
