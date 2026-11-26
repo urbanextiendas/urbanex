@@ -4044,6 +4044,7 @@ input:focus{
                     <select id="bizPlanFilter">
                         <option value="">Todos los planes</option>
                         <option value="paid">Plan pagado</option>
+                        <option value="free">Plan gratuito</option>
                         <option value="trial">Prueba activa</option>
                         <option value="trial_expired">Prueba vencida</option>
                         <option value="paid_expired">Plan vencido</option>
@@ -4295,7 +4296,7 @@ input:focus{
                     <div class="img-dropzone" id="bizImgDropzone">
                         <input type="file" id="bizImgFile" accept="image/jpeg,image/png,image/webp,image/gif">
                         <div class="img-dropzone-icon">🖼️</div>
-                        <div class="img-dropzone-text"><strong>Haz clic o arrastra</strong> una imagen aquí<br>JPG, PNG, WebP — máx. 5 MB</div>
+                        <div class="img-dropzone-text"><strong>Haz clic o arrastra</strong> una imagen aquí<br>JPG, PNG o WebP · optimización automática</div>
                     </div>
                     <div class="img-upload-progress" id="bizImgProgress"><div class="img-upload-progress-bar" id="bizImgBar"></div></div>
                     <div class="img-upload-status" id="bizImgStatus"></div>
@@ -4551,8 +4552,8 @@ input:focus{
     <input type="hidden" id="subscriptionBusinessId">
     <div id="subscriptionCurrent" class="subscription-card"></div>
     <div class="subscription-options" style="margin-top:14px;">
-      <button class="btn btn-primary" type="button" onclick="runSubscriptionAction('activate_paid',1)">Activar pagado 1 mes</button>
-      <button class="btn btn-primary" type="button" onclick="runSubscriptionAction('activate_paid',12)">Activar pagado 12 meses</button>
+      <button class="btn btn-primary" type="button" onclick="runSubscriptionAction('activate_paid',1)">Activar plan mensual</button>
+      <button class="btn btn-primary" type="button" onclick="runSubscriptionAction('activate_paid',12)">Activar plan anual</button>
       <button id="extendTrialBtn" class="btn btn-ghost" type="button" onclick="runSubscriptionAction('extend_trial',1)">Extender prueba 1 mes</button>
       <button class="btn btn-danger" type="button" onclick="runSubscriptionAction('cancel',0)">Cancelar plan</button>
     </div>
@@ -8892,7 +8893,7 @@ async function loadSubscriptionSummaries() {
 
 function subscriptionState(businessId) {
     const row = subscriptionByBusiness.get(String(businessId));
-    if (!row) return { code: 'trial', label: 'Prueba', row: null };
+    if (!row) return { code: 'none', label: 'Sin plan asignado', row: null };
 
     if (row.status === 'cancelled') {
         return { code: 'cancelled', label: 'Plan cancelado', row };
@@ -8901,6 +8902,8 @@ function subscriptionState(businessId) {
     const now = new Date();
     const trialEnd = row.trial_end_at ? new Date(row.trial_end_at) : null;
     const paidEnd = row.current_period_end ? new Date(row.current_period_end) : null;
+
+    if (row.plan_code === 'free') return { code: 'free', label: 'Gratuito sin vencimiento', row };
 
     if (row.plan_code === 'paid') {
         if (row.status === 'active' && (!paidEnd || paidEnd >= now)) {
@@ -8939,6 +8942,7 @@ function subscriptionLabel(businessId) {
 function subscriptionBadge(businessId) {
     const state = subscriptionState(businessId);
     const classes = {
+        free: 'badge-blue',
         paid: 'badge-green',
         trial: 'badge-gold',
         trial_expired: 'badge-red',
@@ -9674,7 +9678,6 @@ bizDropzone.addEventListener('drop', e => { e.preventDefault(); bizDropzone.clas
 document.getElementById('bizImgFile').addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { toast('La imagen no puede superar 5 MB.', 'error'); return; }
     if (!file.type.startsWith('image/')) { toast('Solo se permiten archivos de imagen.', 'error'); return; }
 
     const progress = document.getElementById('bizImgProgress');
@@ -9687,14 +9690,30 @@ document.getElementById('bizImgFile').addEventListener('change', async (e) => {
     status.textContent = 'Subiendo imagen...';
     status.style.color = 'var(--dark)';
 
-    const ext  = file.name.split('.').pop().toLowerCase();
-    const safe = file.name.replace(/[^a-z0-9]/gi, '-').toLowerCase().slice(0, 40);
-    const path = `covers/${Date.now()}-${safe}.${ext}`;
+    let optimized;
+    try {
+        const image = await createImageBitmap(file);
+        try {
+            const ratio = Math.min(1, 1440 / Math.max(image.width, image.height));
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.max(1, Math.round(image.width * ratio));
+            canvas.height = Math.max(1, Math.round(image.height * ratio));
+            canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+            optimized = await new Promise(resolve => canvas.toBlob(resolve, 'image/webp', .82));
+            if (!optimized || optimized.size > 5 * 1024 * 1024) throw new Error('No se pudo optimizar esta imagen.');
+        } finally { image.close(); }
+    } catch (error) {
+        status.textContent = error.message;
+        progress.classList.remove('visible');
+        return;
+    }
+    const extension = optimized.type === 'image/webp' ? 'webp' : 'png';
+    const path = `covers/${crypto.randomUUID()}.${extension}`;
     bar.style.width = '50%';
 
     const { data: uploaded, error: uploadErr } = await supabase.storage
         .from(BIZ_BUCKET)
-        .upload(path, file, { upsert: false, contentType: file.type });
+        .upload(path, optimized, { upsert: false, contentType: optimized.type });
 
     if (uploadErr) {
         bar.style.width = '0%';
