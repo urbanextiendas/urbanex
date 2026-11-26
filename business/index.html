@@ -5254,11 +5254,7 @@ const weeklyHoursHtml=weekDays.map((day,index)=>{
   return `<div class="hero-company-hour-row${index===todayNumber?' is-today':''}"><b>${day}</b><span>${esc(label)}</span></div>`;
 }).join('');
 
-const cover=first(
-business.logo_url,
-business.cover_image,
-business.image_url
-);
+const cover=first(business.logo_url, business.cover_image, business.image_url, '/imagenes/Urba4.png');
 
 $('coverBox').innerHTML=`
 <div class="hero-company-card">
