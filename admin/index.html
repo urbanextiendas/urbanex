@@ -9200,6 +9200,17 @@ document.getElementById('btnSaveBusiness').addEventListener('click', async () =>
     const name = document.getElementById('bizName').value.trim();
     const slug = document.getElementById('bizSlug').value.trim();
     if (!name || !slug) { toast('Nombre y slug son obligatorios.', 'error'); return; }
+    const categoryId = document.getElementById('bizCat').value;
+    const subcategoryId = document.getElementById('bizSubCat').value;
+    const subcategories = subMap[categoryId] || [];
+    if (!rootCategories.some(category => String(category.id) === categoryId)) {
+        toast('Seleccione una categoría válida.', 'error');
+        return;
+    }
+    if (subcategories.length && !subcategories.some(category => String(category.id) === subcategoryId)) {
+        toast('Seleccione una subcategoría de la categoría elegida.', 'error');
+        return;
+    }
 
     const payload = {
         name, slug,
@@ -9218,8 +9229,8 @@ document.getElementById('btnSaveBusiness').addEventListener('click', async () =>
         cover_image: document.getElementById('bizImg').value.trim() || null,
         latitude: parseFloat(document.getElementById('bizLat').value) || null,
         longitude: parseFloat(document.getElementById('bizLng').value) || null,
-        category_id: document.getElementById('bizCat').value || null,
-        subcategory_id: document.getElementById('bizSubCat').value || null,
+        category_id: categoryId,
+        subcategory_id: subcategoryId || null,
         is_featured: document.getElementById('bizFeatured').checked,
         delivery_available: document.getElementById('bizDelivery').checked,
         is_active: document.getElementById('bizActive').checked,
