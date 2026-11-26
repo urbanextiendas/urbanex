@@ -14,6 +14,12 @@
 <link rel="stylesheet" href="/informativos/urbanex-boulevard-palette.css">
 <style>
 :root {
+    --font-sans: 'Montserrat', sans-serif;
+    --font-serif: 'Cinzel', serif;
+    --border-color: rgba(229, 193, 88, 0.22);
+    --gold: #e5c158;
+    --transition: all 0.25s ease;
+    --blur: blur(18px);
     --map-ink: var(--ux-clear-navy, #173a54);
     --map-muted: var(--ux-clear-navy-2, #4d687a);
     --map-gold: var(--ux-clear-gold-dark, #93690f);
@@ -21,27 +27,59 @@
     --map-shadow: var(--ux-clear-shadow, 0 10px 26px rgba(43,63,77,.12));
 }
 * { box-sizing: border-box; }
-body.map-page {
-    margin: 0;
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    background: #f5f0e5 !important;
-    font: 14px/1.5 Montserrat, system-ui, sans-serif;
-}
+body.map-page { margin: 0; min-height: 100vh; padding-bottom: 24px; font-family: var(--font-sans); }
+.map-page a { color: inherit; text-decoration: none; }
 .header-top {
-    min-height: 64px;
-    padding: 7px clamp(12px, 3vw, 42px);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    border-bottom: 1px solid var(--map-line);
-    z-index: 1001;
-}
-.brand img { display: block; width: 115px; height: auto; }
-.back-link, .location-btn, .actions a {
+            height: 60px;
+            background: rgba(6, 6, 6, 0.45);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+.brand-box img {
+            height: 60px;
+            width: auto;
+            display: block;
+        }
+.back-link {
+            border: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.42);
+            color: #ffffff;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 11px;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+.back-link:hover {
+            border-color: var(--gold);
+            background: rgba(229, 193, 88, 0.10);
+        }
+.footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 24px;
+            background-color: #000000;
+            color: #8c8c8c;
+            font-size: 11px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-top: 1px solid #1a1a1a;
+            z-index: 50;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+.location-btn, .actions a {
     border: 1px solid var(--map-line);
     border-radius: 999px;
     padding: 8px 15px;
@@ -59,8 +97,8 @@ body.map-page {
     grid-template-columns: clamp(255px, 22vw, 320px) minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
     gap: clamp(10px, 1.5vw, 20px);
-    height: calc(100vh - 100px);
-    height: calc(100dvh - 100px);
+    height: calc(100vh - 84px);
+    height: calc(100dvh - 84px);
     min-height: 490px;
 }
 .sidebar, .map-wrap {
@@ -104,7 +142,7 @@ body.map-page {
 .business-distance { color: var(--map-muted); }
 .arrow { color: var(--map-gold); font-size: 20px; }
 .empty { padding: 24px 10px; text-align: center; color: var(--map-muted); font-size: 13px; }
-.map-wrap { position: relative; }
+.map-wrap { position: relative; isolation: isolate; }
 .map { width: 100%; height: 100%; background: #e9e5d9; }
 .map-count {
     position: absolute; z-index: 700; top: 12px; left: 12px; max-width: calc(100% - 65px);
@@ -132,20 +170,9 @@ body.map-page {
 .ux-pin b { font-size: 16px; transform: rotate(45deg); }
 .user-pin span { display: block; width: 20px; height: 20px; border-radius: 50%; background: #2389da; border: 4px solid #fff; box-shadow: 0 0 0 5px rgba(35,137,218,.28); }
 .leaflet-control-attribution a { color: var(--map-ink); }
-.map-page .footer {
-    position: static !important;
-    min-height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px 12px;
-    margin-top: auto;
-    border-top: 1px solid var(--map-line);
-    text-align: center;
-    font: 12px/1.4 system-ui, sans-serif;
-}
 .map-page .footer p { margin: 0; }
 @media (max-width: 720px) {
+    .header-top { height: auto; padding: 12px; gap: 10px; flex-direction: column; }
     .layout { height: auto; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto; }
     .map-wrap { grid-row: 1; height: clamp(245px, 42dvh, 450px); }
     .sidebar { max-height: 46rem; }
@@ -154,7 +181,13 @@ body.map-page {
 </style>
 </head>
 <body class="map-page">
-<header class="header-top"><a class="brand" href="/boulevard.html"><img src="/imagenes/Urba4.png" alt="Urbanex"></a><a class="back-link" href="/boulevard.html">Volver al Boulevard</a></header>
+<header class="header-top">
+    <a href="/boulevard.html" class="brand-box" title="Volver al Boulevard">
+        <img src="/imagenes/Urba4.png" alt="Logo Urbanex" fetchpriority="high" decoding="async">
+    </a>
+
+    <a class="back-link" href="/boulevard.html">Volver al Boulevard</a>
+</header>
 <main class="layout">
 <aside class="sidebar">
   <div class="tools"><h1>Mapa de negocios</h1><p>Encuentre negocios y obtenga indicaciones para llegar.</p>
@@ -166,8 +199,8 @@ body.map-page {
 </aside>
 <section class="map-wrap"><div id="map" class="map"></div><div class="map-count"><b id="visibleCount">0</b> negocios en el mapa</div><article id="detail" class="detail"><button id="detailClose" class="detail-close" aria-label="Cerrar">×</button><span id="detailCategory" class="detail-category"></span><h2 id="detailName"></h2><p id="detailAddress"></p><div id="detailActions" class="actions"></div></article></section>
 </main>
-<footer class="footer"><p>© <span id="mapYear"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
-<script>document.getElementById('mapYear').textContent = new Date().getFullYear();</script>
+<footer class="footer"><p>&copy; <span id="currentYear"></span> Urbanex. Desarrollado por <a href="https://neodat.net" target="_blank" rel="noopener noreferrer">NeoDat Consultores</a>.</p></footer>
+<script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="/urbanex-location.js?v=address"></script>
 <script type="module">
