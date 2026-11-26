@@ -5255,9 +5255,9 @@ const weeklyHoursHtml=weekDays.map((day,index)=>{
 }).join('');
 
 const cover=first(
+business.logo_url,
 business.cover_image,
-business.image_url,
-business.logo_url
+business.image_url
 );
 
 $('coverBox').innerHTML=`
