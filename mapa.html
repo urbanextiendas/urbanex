@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#020202">
+<meta name="theme-color" content="#f5f0e5">
 <title>Urbanex - Mapa de negocios Urbanex</title>
 <link rel="icon" type="image/png" href="/imagenes/log.png">
 <link rel="manifest" href="/manifest.json">
@@ -11,17 +11,141 @@
 <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/informativos/urbanex-boulevard-palette.css">
 <style>
-:root{--bg:#020202;--panel:rgba(7,7,7,.92);--card:rgba(20,20,20,.88);--gold:#e5c158;--gold-dim:#a68b44;--line:rgba(229,193,88,.22);--muted:#aaa;--green:#2ed573;--red:#ff4757;--serif:'Cinzel',serif;--sans:'Montserrat',sans-serif}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:var(--bg);color:#fff;font-family:var(--sans);overflow:hidden}.header{height:60px;display:flex;align-items:center;gap:20px;padding:0 20px;background:rgba(6,6,6,.96);border-bottom:1px solid var(--line);position:relative;z-index:1001}.brand img{display:block;height:58px;width:auto}.header-title{font-family:var(--serif);font-size:13px;letter-spacing:2px;color:var(--gold);text-transform:uppercase}.back{margin-left:auto;color:#fff;text-decoration:none;border:1px solid var(--line);padding:8px 13px;border-radius:999px;font-size:10px;font-weight:700}.layout{height:calc(100% - 60px);display:grid;grid-template-columns:355px 1fr}.sidebar{background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0;z-index:800}.tools{padding:16px;border-bottom:1px solid rgba(255,255,255,.07)}.tools h1{font:700 18px var(--serif);letter-spacing:1px;margin:0 0 5px;color:var(--gold)}.tools>p{font-size:10px;color:var(--muted);margin:0 0 14px;line-height:1.5}.search-row{display:grid;grid-template-columns:1fr 38px;gap:7px}.search-box{position:relative}.search-box svg{position:absolute;left:12px;top:12px;width:14px;fill:var(--muted)}#search{width:100%;height:38px;border:1px solid rgba(255,255,255,.13);border-radius:20px;background:rgba(0,0,0,.55);color:#fff;padding:0 14px 0 35px;outline:0;font-family:var(--sans);font-size:10px}#search:focus{border-color:var(--gold)}#voice{border:1px solid var(--line);border-radius:50%;background:rgba(229,193,88,.08);color:var(--gold);cursor:pointer;font-size:16px}#voice.listening{background:var(--red);border-color:var(--red);color:#fff;animation:pulse 1s infinite}@keyframes pulse{50%{transform:scale(.9)}}#category{width:100%;height:36px;margin-top:9px;border:1px solid rgba(255,255,255,.13);border-radius:20px;background:#080808;color:#fff;padding:0 12px;font:10px var(--sans);outline:0}.location-btn{width:100%;margin-top:9px;height:36px;border:0;border-radius:20px;background:var(--gold);color:#000;font:700 10px var(--sans);cursor:pointer}.status-line{min-height:30px;padding:9px 16px;font-size:9px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.06)}.results{overflow:auto;flex:1;padding:8px}.business{display:grid;grid-template-columns:38px 1fr auto;gap:9px;align-items:center;padding:10px;border:1px solid transparent;border-radius:10px;cursor:pointer;transition:.2s}.business:hover,.business.active{background:rgba(229,193,88,.08);border-color:var(--line)}.business-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:rgba(229,193,88,.1);font-size:17px}.business h2{margin:0 0 3px;font-size:11px}.business p{margin:0;font-size:8.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.business-meta{display:flex;gap:8px;margin-top:4px;font-size:8px;color:var(--gold)}.business-distance{color:#ccc}.arrow{color:var(--gold);font-size:17px}.empty{padding:36px 15px;text-align:center;color:var(--muted);font-size:11px;line-height:1.6}.map-wrap{position:relative;min-width:0}.map{width:100%;height:100%;background:#171717}.map-count{position:absolute;z-index:700;top:15px;left:15px;background:rgba(6,6,6,.9);border:1px solid var(--line);border-radius:20px;padding:9px 13px;font-size:9px;box-shadow:0 10px 25px rgba(0,0,0,.5)}.map-count b{color:var(--gold)}.detail{display:none;position:absolute;z-index:700;left:16px;bottom:18px;width:min(370px,calc(100% - 32px));background:rgba(6,6,6,.95);border:1px solid var(--line);border-radius:14px;padding:15px;box-shadow:0 18px 45px rgba(0,0,0,.65)}.detail.visible{display:block}.detail-close{position:absolute;right:9px;top:7px;background:none;border:0;color:#aaa;font-size:20px;cursor:pointer}.detail-category{font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:1px}.detail h2{font:700 16px var(--serif);margin:5px 28px 6px 0}.detail p{font-size:9px;color:#ccc;line-height:1.5;margin:0 0 12px}.actions{display:flex;gap:7px;flex-wrap:wrap}.actions a{padding:8px 11px;border-radius:7px;text-decoration:none;font-size:8.5px;font-weight:700;background:var(--gold);color:#000}.actions a.secondary{background:rgba(255,255,255,.09);color:#fff}.ux-pin{background:transparent;border:0}.ux-pin span{width:38px;height:38px;border:2px solid var(--gold);background:#080808;color:var(--gold);border-radius:50% 50% 50% 5px;display:grid;place-items:center;transform:rotate(-45deg);box-shadow:0 5px 18px rgba(0,0,0,.7)}.ux-pin b{font-size:15px;transform:rotate(45deg)}.user-pin{background:transparent;border:0}.user-pin span{display:block;width:20px;height:20px;border-radius:50%;background:#2389da;border:4px solid white;box-shadow:0 0 0 5px rgba(35,137,218,.28)}.leaflet-control-zoom a{background:#080808!important;color:var(--gold)!important;border-color:var(--line)!important}.leaflet-control-attribution{background:rgba(0,0,0,.7)!important;color:#aaa}.leaflet-control-attribution a{color:var(--gold)}
-@media(max-width:720px){.header{height:54px;padding:0 10px}.brand img{height:52px}.header-title{font-size:9px}.back{font-size:0;padding:8px}.back:after{content:'Volver';font-size:9px}.layout{height:calc(100% - 54px);display:flex;flex-direction:column}.map-wrap{height:52%;order:1}.sidebar{height:48%;order:2;border-right:0;border-top:1px solid var(--line)}.tools{padding:10px 12px}.tools h1,.tools>p{display:none}.search-row{grid-template-columns:1fr 36px}.location-btn,#category{height:32px;margin-top:6px}.status-line{padding:6px 12px;min-height:24px}.results{padding:4px 8px}.business{padding:7px}.business-icon{width:32px;height:32px}.detail{bottom:10px}.map-count{top:10px;left:10px}}
+:root {
+    --map-ink: var(--ux-clear-navy, #173a54);
+    --map-muted: var(--ux-clear-navy-2, #4d687a);
+    --map-gold: var(--ux-clear-gold-dark, #93690f);
+    --map-line: var(--ux-clear-line, #e4c98e);
+    --map-shadow: var(--ux-clear-shadow, 0 10px 26px rgba(43,63,77,.12));
+}
+* { box-sizing: border-box; }
+body.map-page {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: #f5f0e5 !important;
+    font: 14px/1.5 Montserrat, system-ui, sans-serif;
+}
+.header-top {
+    min-height: 64px;
+    padding: 7px clamp(12px, 3vw, 42px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid var(--map-line);
+    z-index: 1001;
+}
+.brand img { display: block; width: 115px; height: auto; }
+.back-link, .location-btn, .actions a {
+    border: 1px solid var(--map-line);
+    border-radius: 999px;
+    padding: 8px 15px;
+    color: var(--map-ink);
+    font: 700 12px/1.4 Montserrat, system-ui, sans-serif;
+    text-decoration: none;
+    background: #fffdf8;
+    cursor: pointer;
+}
+.layout {
+    width: 100%;
+    margin: 0 auto;
+    padding: clamp(10px, 2vw, 28px);
+    display: grid;
+    grid-template-columns: clamp(265px, 29vw, 420px) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    gap: clamp(10px, 1.5vw, 20px);
+    height: calc(100vh - 64px);
+    height: calc(100dvh - 64px);
+    min-height: 490px;
+}
+.sidebar, .map-wrap {
+    border: 1px solid var(--map-line);
+    border-radius: 20px;
+    box-shadow: var(--map-shadow);
+    overflow: hidden;
+    min-width: 0;
+    min-height: 0;
+}
+.sidebar { display: flex; flex-direction: column; background: #fffdf8; }
+.tools { padding: clamp(12px, 1.45vw, 23px); background: linear-gradient(145deg, #fffaf0, #f6eedb); }
+.tools h1 { margin: 0 0 6px; font: 700 clamp(20px, 2vw, 30px)/1.15 Cinzel, Georgia, serif; color: var(--map-ink); }
+.tools p { margin: 0 0 14px; color: var(--map-muted); font-size: 12px; }
+.search-row { display: grid; grid-template-columns: minmax(0, 1fr) 42px; gap: 8px; }
+.search-box { position: relative; }
+.search-box svg { position: absolute; left: 13px; top: 13px; width: 15px; fill: var(--map-muted); pointer-events: none; }
+#search, #category, #voice {
+    width: 100%; min-height: 42px; border: 1px solid #d5dfe6; border-radius: 22px;
+    color: var(--map-ink); background: #fff; font: inherit; font-size: 12px;
+}
+#search { padding: 0 12px 0 36px; }
+#category { margin-top: 8px; padding: 0 12px; }
+#voice { cursor: pointer; }
+#voice.listening { background: #f4dfb0; border-color: var(--map-gold); }
+.location-btn { margin-top: 8px; min-height: 40px; width: 100%; }
+.location-btn:hover, .actions a:hover { background: #fff5dc; }
+:focus-visible { outline: 2px solid var(--map-gold); outline-offset: 2px; }
+.status-line { padding: 9px 16px; color: var(--map-muted); font-size: 12px; border-block: 1px solid var(--map-line); }
+.results { overflow: auto; flex: 1; padding: 10px; }
+.business {
+    display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 10px; align-items: center;
+    margin-bottom: 7px; padding: 9px; border: 1px solid #eee3cc; border-radius: 12px;
+    background: #fff; cursor: pointer;
+}
+.business:hover, .business.active { background: #fff7e4; border-color: var(--map-line); }
+.business-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: #f7edd8; font-size: 16px; }
+.business h2 { margin: 0; font-size: 13px; line-height: 1.25; overflow-wrap: anywhere; }
+.business p, .detail p { margin: 3px 0; color: var(--map-muted); font-size: 12px; overflow-wrap: anywhere; }
+.business-meta { display: flex; flex-wrap: wrap; gap: 8px; font-size: 11px; font-weight: 600; color: var(--map-gold); }
+.business-distance { color: var(--map-muted); }
+.arrow { color: var(--map-gold); font-size: 20px; }
+.empty { padding: 24px 10px; text-align: center; color: var(--map-muted); font-size: 13px; }
+.map-wrap { position: relative; }
+.map { width: 100%; height: 100%; background: #e9e5d9; }
+.map-count {
+    position: absolute; z-index: 700; top: 12px; left: 12px; max-width: calc(100% - 65px);
+    padding: 7px 12px; border: 1px solid var(--map-line); border-radius: 999px;
+    background: #fffdf8; box-shadow: var(--map-shadow); font-size: 12px;
+}
+.map-count b, .detail-category { color: var(--map-gold); }
+.detail {
+    display: none; position: absolute; z-index: 700; left: 12px; bottom: 23px;
+    width: min(370px, calc(100% - 24px)); max-height: calc(100% - 75px); overflow: auto; padding: 15px;
+    border: 1px solid var(--map-line); border-radius: 15px; background: #fffdf8; box-shadow: var(--map-shadow);
+}
+.detail.visible { display: block; }
+.detail-close { position: absolute; right: 7px; top: 5px; width: 34px; height: 34px; border: 0; border-radius: 50%; background: transparent; color: var(--map-ink); cursor: pointer; font-size: 22px; }
+.detail h2 { margin: 4px 28px 4px 0; font: 700 17px/1.25 Montserrat, system-ui, sans-serif; }
+.detail-category { font-size: 11px; font-weight: 700; }
+.actions { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 10px; }
+.actions a:first-child { background: var(--map-ink); color: #fff; }
+.ux-pin, .user-pin { background: transparent; border: 0; }
+.ux-pin span {
+    width: 38px; height: 38px; border: 2px solid var(--map-gold); background: #fffaf0; color: var(--map-ink);
+    border-radius: 50% 50% 50% 5px; display: grid; place-items: center;
+    transform: rotate(-45deg); box-shadow: 0 3px 10px rgba(23,58,84,.3);
+}
+.ux-pin b { font-size: 16px; transform: rotate(45deg); }
+.user-pin span { display: block; width: 20px; height: 20px; border-radius: 50%; background: #2389da; border: 4px solid #fff; box-shadow: 0 0 0 5px rgba(35,137,218,.28); }
+.leaflet-control-attribution a { color: var(--map-ink); }
+@media (max-width: 720px) {
+    .layout { height: auto; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto; }
+    .map-wrap { grid-row: 1; height: clamp(245px, 42dvh, 450px); }
+    .sidebar { max-height: 46rem; }
+    .results { min-height: 130px; }
+}
 </style>
 </head>
-<body>
-<header class="header"><a class="brand" href="/boulevard.html"><img src="/imagenes/logo.png" alt="Urbanex"></a><span class="header-title">Mapa de negocios</span><a class="back" href="/index.html">Volver al Inicio</a></header>
+<body class="map-page">
+<header class="header-top"><a class="brand" href="/boulevard.html"><img src="/imagenes/Urba4.png" alt="Urbanex"></a><a class="back-link" href="/boulevard.html">Volver al Boulevard</a></header>
 <main class="layout">
 <aside class="sidebar">
-  <div class="tools"><h1>Explore cerca de usted</h1><p>Encuentre comercios registrados en Urbanex y obtenga indicaciones para llegar.</p>
-    <div class="search-row"><label class="search-box"><svg viewBox="0 0 24 24"><path d="M9.5 3a6.5 6.5 0 104.1 11.55L19.05 20 20 19.05l-5.45-5.45A6.5 6.5 0 009.5 3zm0 2a4.5 4.5 0 110 9 4.5 4.5 0 010-9z"/></svg><input id="search" type="search" placeholder="Negocio, producto, servicio o dirección" autocomplete="off"></label><button id="voice" type="button" title="Buscar por voz" aria-label="Buscar por voz">🎙</button></div>
+  <div class="tools"><h1>Mapa de negocios</h1><p>Encuentre negocios y obtenga indicaciones para llegar.</p>
+    <div class="search-row"><label class="search-box"><svg viewBox="0 0 24 24"><path d="M9.5 3a6.5 6.5 0 104.1 11.55L19.05 20 20 19.05l-5.45-5.45A6.5 6.5 0 009.5 3zm0 2a4.5 4.5 0 110 9 4.5 4.5 0 010-9z"/></svg><input id="search" type="search" placeholder="Negocio o dirección" autocomplete="off"></label><button id="voice" type="button" title="Buscar por voz" aria-label="Buscar por voz">🎙</button></div>
     <select id="category" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select>
     <button id="locate" class="location-btn" type="button">◎ Mostrar mi ubicación</button>
   </div>
@@ -41,6 +165,7 @@ const $=id=>document.getElementById(id),map=L.map('map',{
   maxBounds:[[-85,-180],[85,180]],
   maxBoundsViscosity:1.0
 }).setView([-3.99313,-79.20422],14);
+L.control.zoom({ position: 'topright' }).addTo(map);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
   maxZoom:19,
   noWrap:true,
@@ -69,8 +194,7 @@ if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(
 const ultima=(()=>{try{return JSON.parse(localStorage.getItem('urbanex_ubicacion'))}catch{return null}})();
 if(ultima)map.setView([ultima.lat,ultima.lng],16);
 init();
-// Al cargar, intenta centrar el mapa en la ubicación del usuario
-setTimeout(()=>$('locate').click(),100);
+
 </script>
 </body>
 </html>
