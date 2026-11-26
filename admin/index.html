@@ -4726,7 +4726,7 @@ function toast(msg, type = 'success') {
 window.closeModal = id => document.getElementById(id).classList.remove('open');
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 document.querySelectorAll('.modal-backdrop').forEach(m =>
-    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); })
+    m.addEventListener('click', e => { if (e.target === m && ['noContactsModal', 'subscriptionModal'].includes(m.id)) m.classList.remove('open'); })
 );
 
 // ── LOGIN ──────────────────────────────────────────────────────
@@ -9157,8 +9157,8 @@ document.getElementById('bizName').addEventListener('input', () => {
 });
 
 window.editBusiness = async id => {
-    const { data: b } = await supabase.from('businesses').select('*').eq('id', id).single();
-    if (!b) return;
+    const { data: b, error } = await supabase.rpc('admin_business_form', { p_id: id, p_data: null });
+    if (error || !b) { toast('No se pudo abrir el negocio: ' + (error?.message || 'Negocio no encontrado.'), 'error'); return; }
     document.getElementById('bizId').value = b.id;
     document.getElementById('bizModalTitle').textContent = 'Editar Negocio';
     document.getElementById('bizName').value = b.name || '';
@@ -9227,8 +9227,8 @@ document.getElementById('btnSaveBusiness').addEventListener('click', async () =>
         social_url: document.getElementById('bizSocialUrl').value.trim() || null,
         logo_url: document.getElementById('bizLogo').value.trim() || null,
         cover_image: document.getElementById('bizImg').value.trim() || null,
-        latitude: parseFloat(document.getElementById('bizLat').value) || null,
-        longitude: parseFloat(document.getElementById('bizLng').value) || null,
+        latitude: document.getElementById('bizLat').value === '' ? null : Number(document.getElementById('bizLat').value),
+        longitude: document.getElementById('bizLng').value === '' ? null : Number(document.getElementById('bizLng').value),
         category_id: categoryId,
         subcategory_id: subcategoryId || null,
         is_featured: document.getElementById('bizFeatured').checked,
@@ -9237,9 +9237,7 @@ document.getElementById('btnSaveBusiness').addEventListener('click', async () =>
         approval_status: document.getElementById('bizActive').checked ? 'approved' : 'pending',
     };
 
-    const { error } = id
-        ? await supabase.from('businesses').update(payload).eq('id', id)
-        : await supabase.from('businesses').insert(payload);
+    const { error } = await supabase.rpc('admin_business_form', { p_id: id || null, p_data: payload });
 
     if (error) { toast('Error al guardar: ' + error.message, 'error'); return; }
     toast(id ? 'Negocio actualizado ✓' : 'Negocio creado ✓');
