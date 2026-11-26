@@ -4281,28 +4281,8 @@ input:focus{
                 </select>
             </div>
             <div class="form-group"><label>Dirección de red social</label><input type="text" id="bizSocialUrl" placeholder="https://..."></div>
-            <div class="form-group"><label for="bizLogoFile">Logotipo</label><input type="file" id="bizLogoFile" accept="image/jpeg,image/png,image/webp"><input type="hidden" id="bizLogo"><img id="bizLogoPreview" alt="Vista previa del logotipo" width="90" height="90" style="object-fit:contain" hidden><small id="bizLogoStatus" role="status"></small></div>
-            <!-- Imagen portada — tabs URL / Subir -->
-            <div class="form-group full">
-                <label>Imagen de portada</label>
-                <div class="img-upload-tabs">
-                    <button class="img-upload-tab active" type="button" data-tab="url" onclick="switchBizImgTab('url')">🔗 URL</button>
-                    <button class="img-upload-tab" type="button" data-tab="file" onclick="switchBizImgTab('file')">📁 Subir archivo</button>
-                </div>
-                <div class="img-upload-panel active" id="bizImgPanelUrl">
-                    <input type="text" id="bizImg" placeholder="https://..." style="width:100%;background:rgba(0,0,0,.5);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:#fff;font-size:12.5px;outline:none;">
-                </div>
-                <div class="img-upload-panel" id="bizImgPanelFile">
-                    <div class="img-dropzone" id="bizImgDropzone">
-                        <input type="file" id="bizImgFile" accept="image/jpeg,image/png,image/webp,image/gif">
-                        <div class="img-dropzone-icon">🖼️</div>
-                        <div class="img-dropzone-text"><strong>Haz clic o arrastra</strong> una imagen aquí<br>JPG, PNG o WebP · optimización automática</div>
-                    </div>
-                    <div class="img-upload-progress" id="bizImgProgress"><div class="img-upload-progress-bar" id="bizImgBar"></div></div>
-                    <div class="img-upload-status" id="bizImgStatus"></div>
-                </div>
-                <img id="bizImgPreview" class="img-preview" alt="Vista previa portada">
-            </div>
+            <div class="form-group"><label for="bizLogoFile">Imagen del negocio</label><input type="file" id="bizLogoFile" accept="image/jpeg,image/png,image/webp"><input type="hidden" id="bizLogo"><img id="bizLogoPreview" alt="Vista previa del logotipo" width="90" height="90" style="object-fit:contain" hidden><small>La misma imagen se usa como logotipo y portada.</small><small id="bizLogoStatus" role="status"></small></div>
+            <input type="hidden" id="bizImg">
             <div class="form-group full" style="grid-column:1/-1">
                 <label>Sucursales</label>
                 <div id="bizBranchList"></div>
@@ -9161,7 +9141,6 @@ document.getElementById('btnNewBusiness').addEventListener('click', () => {
     document.getElementById('bizFeatured').checked = false;
     document.getElementById('bizDelivery').checked = false;
     document.getElementById('bizActive').checked = true;
-    resetBizImgUploader();
     logoInput.value = ''; logoStatus.textContent = ''; refreshLogoPreview();
     openModal('bizModal');
 });
@@ -9195,11 +9174,6 @@ window.editBusiness = async id => {
     document.getElementById('bizLogo').value = b.logo_url || '';
     loadBizBranches(b.branches);
     document.getElementById('bizImg').value = b.cover_image || '';
-    resetBizImgUploader();
-    if (b.cover_image) {
-        const prev = document.getElementById('bizImgPreview');
-        prev.src = b.cover_image; prev.classList.add('visible');
-    }
     document.getElementById('bizLat').value = b.latitude || '';
     document.getElementById('bizLng').value = b.longitude || '';
     document.getElementById('bizFeatured').checked = !!b.is_featured;
@@ -9680,15 +9654,15 @@ document.getElementById('btnNewProduct').addEventListener('click', () => {
 });
 
 // ── Imagen portada de negocio ─────────────────────────────────
-const BIZ_BUCKET = 'business-images';
 let logoUploading = false;
 const logoField = document.getElementById('bizLogo');
 const logoInput = document.getElementById('bizLogoFile');
 const logoPreview = document.getElementById('bizLogoPreview');
 const logoStatus = document.getElementById('bizLogoStatus');
 function refreshLogoPreview() {
-    logoPreview.hidden = !logoField.value;
-    if (logoField.value) logoPreview.src = logoField.value;
+    const url = logoField.value || document.getElementById('bizImg').value;
+    logoPreview.hidden = !url;
+    if (url) logoPreview.src = url;
     else logoPreview.removeAttribute('src');
 }
 logoInput.addEventListener('change', async () => {
@@ -9715,6 +9689,7 @@ logoInput.addEventListener('change', async () => {
         if (error) throw error;
         if (!document.getElementById('bizModal').classList.contains('open') || document.getElementById('bizId').value !== businessId) return;
         logoField.value = bucket.getPublicUrl(path).data.publicUrl;
+        document.getElementById('bizImg').value = logoField.value;
         refreshLogoPreview();
         logoStatus.textContent = 'Logotipo listo para guardar.';
     } catch (error) {
@@ -9738,107 +9713,6 @@ function collectBizBranches() {
     return Array.from(branchList.children, row => Object.fromEntries(Array.from(row.querySelectorAll('[data-branch]'), input => [input.dataset.branch, input.value.trim()])));
 }
 
-
-window.switchBizImgTab = (tab) => {
-    document.querySelectorAll('#bizModal .img-upload-tab').forEach(t =>
-        t.classList.toggle('active', t.dataset.tab === tab)
-    );
-    document.getElementById('bizImgPanelUrl').classList.toggle('active', tab === 'url');
-    document.getElementById('bizImgPanelFile').classList.toggle('active', tab === 'file');
-};
-
-// Preview desde URL de portada
-document.getElementById('bizImg').addEventListener('input', () => {
-    const url = document.getElementById('bizImg').value.trim();
-    const preview = document.getElementById('bizImgPreview');
-    if (url) {
-        preview.src = url; preview.classList.add('visible');
-        preview.onerror = () => preview.classList.remove('visible');
-    } else {
-        preview.classList.remove('visible'); preview.src = '';
-    }
-});
-
-// Drag & drop visual portada
-const bizDropzone = document.getElementById('bizImgDropzone');
-bizDropzone.addEventListener('dragover', e => { e.preventDefault(); bizDropzone.classList.add('dragover'); });
-bizDropzone.addEventListener('dragleave', () => bizDropzone.classList.remove('dragover'));
-bizDropzone.addEventListener('drop', e => { e.preventDefault(); bizDropzone.classList.remove('dragover'); });
-
-// Subida al seleccionar archivo portada
-document.getElementById('bizImgFile').addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (!file.type.startsWith('image/')) { toast('Solo se permiten archivos de imagen.', 'error'); return; }
-
-    const progress = document.getElementById('bizImgProgress');
-    const bar      = document.getElementById('bizImgBar');
-    const status   = document.getElementById('bizImgStatus');
-    const preview  = document.getElementById('bizImgPreview');
-
-    progress.classList.add('visible');
-    bar.style.width = '20%';
-    status.textContent = 'Subiendo imagen...';
-    status.style.color = 'var(--dark)';
-
-    let optimized;
-    try {
-        const image = await createImageBitmap(file);
-        try {
-            const ratio = Math.min(1, 1440 / Math.max(image.width, image.height));
-            const canvas = document.createElement('canvas');
-            canvas.width = Math.max(1, Math.round(image.width * ratio));
-            canvas.height = Math.max(1, Math.round(image.height * ratio));
-            const context = canvas.getContext('2d', { alpha: false });
-            context.fillStyle = '#fff';
-            context.fillRect(0, 0, canvas.width, canvas.height);
-            context.drawImage(image, 0, 0, canvas.width, canvas.height);
-            optimized = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', .82));
-            if (!optimized || optimized.size > 5 * 1024 * 1024) throw new Error('No se pudo optimizar esta imagen.');
-        } finally { image.close(); }
-    } catch (error) {
-        status.textContent = error.message;
-        progress.classList.remove('visible');
-        return;
-    }
-    const extension = optimized.type === 'image/jpeg' ? 'jpg' : 'png';
-    const path = `covers/${crypto.randomUUID()}.${extension}`;
-    bar.style.width = '50%';
-
-    const { data: uploaded, error: uploadErr } = await supabase.storage
-        .from(BIZ_BUCKET)
-        .upload(path, optimized, { upsert: false, contentType: optimized.type });
-
-    if (uploadErr) {
-        bar.style.width = '0%';
-        progress.classList.remove('visible');
-        status.textContent = '✗ Error: ' + uploadErr.message;
-        status.style.color = 'var(--red)';
-        toast('Error al subir imagen: ' + uploadErr.message, 'error');
-        return;
-    }
-
-    bar.style.width = '100%';
-
-    const { data: { publicUrl } } = supabase.storage.from(BIZ_BUCKET).getPublicUrl(uploaded.path);
-    document.getElementById('bizImg').value = publicUrl;
-    preview.src = publicUrl; preview.classList.add('visible');
-    status.textContent = '✓ Imagen subida correctamente';
-    status.style.color = 'var(--green)';
-    setTimeout(() => { progress.classList.remove('visible'); bar.style.width = '0%'; }, 2000);
-    toast('Imagen de portada subida ✓', 'success');
-});
-
-function resetBizImgUploader() {
-    switchBizImgTab('url');
-    const fi = document.getElementById('bizImgFile');
-    if (fi) fi.value = '';
-    document.getElementById('bizImgProgress').classList.remove('visible');
-    document.getElementById('bizImgBar').style.width = '0%';
-    document.getElementById('bizImgStatus').textContent = '';
-    document.getElementById('bizImgPreview').classList.remove('visible');
-    document.getElementById('bizImgPreview').src = '';
-}
 
 // ══════════════════════════════════════════════════════════════
 // IMÁGENES DEL PRODUCTO — hasta 3 archivos, arrastrar o pegar
