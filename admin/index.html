@@ -4796,12 +4796,13 @@ let rootCategories = [];   // solo parent_id IS NULL
 let subMap         = {};   // { parentId: [subcat, ...] }
 
 async function loadCategories() {
-    const { data } = await supabase
-        .from('categories')
+    const { data, error } = await supabase
+        .from('urbanex_public_categories')
         .select('id, name, icon, parent_id, sort_order, is_active')
         .order('sort_order')
         .order('name');
 
+    if (error) { toast('No se pudieron cargar las categorías. Intente nuevamente.', 'error'); return; }
     allCategories  = data || [];
     rootCategories = allCategories.filter(c => !c.parent_id);
     subMap         = {};
@@ -4881,9 +4882,10 @@ function populateCatSelects() {
 window.onBizCatChange = () => {
     const catId = document.getElementById('bizCat').value;
     const subs  = catId ? (subMap[catId] || []) : [];
-    document.getElementById('bizSubCat').innerHTML =
-        '<option value="">Sin subcategoría</option>' +
-        subs.map(s => `<option value="${s.id}">${s.icon||''} ${s.name}</option>`).join('');
+    const select = document.getElementById('bizSubCat');
+    select.disabled = !subs.length;
+    select.innerHTML = '<option value="">' + (subs.length ? 'Seleccione una subcategoría' : 'Sin subcategorías disponibles') + '</option>'
+        + subs.map(s => `<option value="${esc(s.id)}">${esc(s.icon || '')} ${esc(s.name)}</option>`).join('');
 };
 
 // ── Modal crear / editar categoría ───────────────────────────
