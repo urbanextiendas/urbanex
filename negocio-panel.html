@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" href="imagenes/log.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://mlkynawsjqmawgxeuvks.supabase.co" crossorigin>
+<link rel="preconnect" href="https://vrnnlyjwenupkaetaogw.supabase.co" crossorigin>
 <link rel="preconnect" href="https://esm.sh" crossorigin>
 <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -48,7 +48,7 @@
 <div class="toolbar" style="margin-top:14px;"><button id="savePasswordBtn" class="btn" type="button">Guardar contraseña e ingresar</button></div>
 </div>
 </section>
-<section id="loginPanel" class="panel"><div class="panel-head"><h2>Acceso del propietario</h2></div><div class="panel-body"><div id="loginMessage" class="notice"></div><div class="grid"><div class="field"><label for="loginEmail">Correo registrado del propietario</label><input id="loginEmail" type="email" placeholder="propietario@correo.com" autocomplete="email"></div><div class="field"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" placeholder="Contraseña temporal" autocomplete="current-password"></div><div class="field full" style="justify-content:end;"><button id="sendLoginBtn" class="btn" type="button">Ingresar al panel</button></div></div><p class="help" style="margin-top:10px;">Use como usuario el correo aprobado y la contraseña temporal enviada por Urbanex.</p></div></section>
+<section id="loginPanel" class="panel"><div class="panel-head"><h2>Acceso del propietario</h2></div><div class="panel-body"><div id="loginMessage" class="notice"></div><div class="grid"><div class="field"><label for="loginEmail">Correo registrado del propietario</label><input id="loginEmail" type="email" placeholder="propietario@correo.com" autocomplete="email"></div><div class="field"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" placeholder="Contraseña" autocomplete="current-password"></div><div class="field full" style="justify-content:end;"><button id="sendLoginBtn" class="btn" type="button">Ingresar al panel</button></div></div><p class="help" style="margin-top:10px;">Use el correo registrado y la contraseña que creó desde el enlace enviado por Urbanex.</p></div></section>
 <section id="managerPanel" class="hidden">
 <section class="panel"><div class="panel-head"><h2>Plan y período de prueba</h2><a id="upgradePlanBtn" class="btn secondary" href="mailto:urbanextiendas@gmail.com?subject=Activar%20plan%20pagado%20Urbanex">Mejorar plan</a></div>
 <div class="panel-body"><div id="planMessage" class="notice"></div><div class="plan-grid">
@@ -86,8 +86,8 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL = 'https://mlkynawsjqmawgxeuvks.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_UyYcTuSIaLDbaD73wvwOfA_TbyFlRNv';
+const SUPABASE_URL = 'https://vrnnlyjwenupkaetaogw.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_ftfKaU4gg1csyZ0fGXW2Og_YOOLt9G7';
 const PRODUCT_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/producto-negocio`;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
@@ -157,11 +157,14 @@ function requestHeaders() {
 }
 
 async function consumeAccessLink() {
-  const params = new URLSearchParams(location.search);
+  const params = new URLSearchParams(location.hash.slice(1));
   const tokenHash = params.get('token_hash');
   const type = params.get('type') || 'recovery';
 
   if (!tokenHash) return;
+  const invitationUrl = new URL(location.href);
+  invitationUrl.searchParams.set('mode','set-password');
+  history.replaceState({}, '', invitationUrl.pathname + invitationUrl.search);
 
   const { data, error } = await supabase.auth.verifyOtp({
     token_hash: tokenHash,
@@ -257,6 +260,7 @@ async function renderAuthState() {
 }
 
 async function savePassword() {
+  if (state.accessLinkError || !state.user) return;
   const password = $('newPassword').value;
   const confirmation = $('confirmPassword').value;
 
@@ -328,7 +332,7 @@ async function sendLogin() {
   if (error) {
     return showMessage(
       'loginMessage',
-      'Correo o contraseña temporal incorrectos. Copie exactamente las credenciales recibidas por correo.',
+      'Correo o contraseña incorrectos. Copie exactamente las credenciales recibidas por correo.',
       'error',
     );
   }
@@ -345,37 +349,7 @@ async function logout() {
 async function loadBusinesses() {
   hideMessage('managerMessage');
 
-  const email = String(state.user?.email ?? '').toLowerCase();
-  let linkedIds = [];
-
-  const { data: links } = await supabase
-    .from('business_owner_accounts')
-    .select('business_id,status,owner_email,auth_user_id')
-    .eq('status', 'active');
-
-  if (links?.length) {
-    linkedIds = links
-      .filter((row) =>
-        String(row.auth_user_id ?? '') === state.user?.id ||
-        String(row.owner_email ?? '').toLowerCase() === email
-      )
-      .map((row) => row.business_id)
-      .filter(Boolean);
-  }
-
-  let query = supabase
-    .from('businesses')
-    .select(
-      'id,name,slug,is_active,subscription_suspended,owner_email,business_type,city,address,description,whatsapp,phone,website,cover_image,edit_count,edit_limit',
-    );
-
-  if (linkedIds.length) {
-    query = query.in('id', linkedIds);
-  } else {
-    query = query.ilike('owner_email', email);
-  }
-
-  const { data, error } = await query;
+  const { data, error } = await supabase.rpc('owner_business_list');
 
   if (error) {
     return showMessage(
