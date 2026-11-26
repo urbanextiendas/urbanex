@@ -299,7 +299,7 @@ function isOpenNow(hours) {
 async function loadAll() {
     const [bizRes, promoRes, catRes] = await Promise.all([
         supabase.from('urbanex_catalog_recovery').select(`
-            id, slug, name, description, cover_image, city, province,
+            id, slug, name, description, logo_url, cover_image, city, province,
             is_featured, category_id,
             categories, business_hours
         `).eq('is_active', true).order('name'),
@@ -415,9 +415,7 @@ function renderPage() {
     }
 
     grid.innerHTML = page.map(b => {
-        const thumb = b.cover_image
-            ? `<img src="${esc(b.cover_image)}" alt="${esc(b.name)}" loading="lazy">`
-            : `<div class="card-thumb-placeholder">${b.categories?.icon||'🏪'}</div>`;
+        const thumb = `<img src="${esc(b.logo_url || b.cover_image || '/imagenes/Urba4.png')}" alt="${esc(b.name)}" loading="lazy">`;
         const rating = b._avgRating ? b._avgRating.toFixed(1) : '—';
 
         return `
