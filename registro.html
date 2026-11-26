@@ -1194,7 +1194,7 @@ select option,
 </script>
 
 <script src="/urbanex-location.js?v=address"></script>
-<style>#activityField[hidden]{display:none}</style>
+<style>#activityField[hidden],#availabilitySetupNote[hidden]{display:none}</style>
 </head>
 <body>
 <header class="header"><a class="brand" href="index.html"><img src="imagenes/Urba4.png" alt="Urbanex"></a><div class="header-links"><a class="pill" href="index.html">Inicio</a><a class="pill" href="boulevard.html">Boulevard</a></div></header>
@@ -1301,6 +1301,7 @@ select option,
 </div>
 <div class="field"><div class="field-label"><label for="category">Categoría</label><span class="required-star" title="Campo obligatorio" aria-label="Campo obligatorio">*</span></div><select id="category" required><option value="">Seleccione una categoría</option><option value="1">🍽️ Comida y Bebida</option><option value="2">🛍️ Comercio</option><option value="3">🔧 Servicios</option><option value="4">💊 Salud y Bienestar</option><option value="5">🎭 Entretenimiento</option><option value="6">🏨 Alojamiento</option></select><div class="help" id="categoryStatus">Categorías disponibles. La lista se actualizará automáticamente desde la plataforma.</div></div>
 <div class="field"><div class="field-label"><label for="subcategory">Subcategoría</label><span id="subcategoryMark"></span></div><select id="subcategory" disabled><option value="">Seleccione primero una categoría</option></select><div class="help" id="subcategoryHelp">Será obligatoria cuando la categoría tenga subcategorías.</div></div>
+<p id="availabilitySetupNote" class="field full" style="grid-column:1/-1" hidden>Cuando se apruebe el negocio, configure la capacidad y registre entradas y salidas desde <a href="/disponibilidad.html">Disponibilidad</a>.</p>
 <div class="field full" id="activityField" hidden>
 <label id="activityLabel" for="activityDetail"></label>
 <input id="activityDetail" maxlength="160" disabled>
@@ -1556,10 +1557,11 @@ hotel: ['Disponibilidad de habitaciones al solicitar el ingreso', 'Ej.: 3 habita
 shop: ['¿Qué productos vende?', 'Ej.: ropa, calzado y accesorios', 'Productos que vende', 'products']
 };
 const input = $('activityDetail');
+$('availabilitySetupNote').hidden = !['hotel','parking'].includes(kind);
 if (input.dataset.kind !== kind) input.value = '';
 input.dataset.kind = kind;
-$('activityField').hidden = !kind;
-input.disabled = !kind;
+$('activityField').hidden = kind !== 'shop';
+input.disabled = kind !== 'shop';
 if (!kind) return;
 const [label, placeholder, prefix, type] = settings[kind];
 $('activityLabel').textContent = label;
