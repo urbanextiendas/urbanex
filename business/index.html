@@ -4678,6 +4678,10 @@ body{
 </style>
 
 <script src="/urbanex-location.js?v=address"></script>
+<style>
+.branches-section{margin:24px 0;padding:clamp(14px,2vw,24px);border:1px solid #e8d6ac;border-radius:20px;background:#fbf8f0;color:#173a54}
+.branches-section h2{font-family:Cinzel,Georgia,serif;margin:0 0 12px}.branch-filters,.branch-grid{display:grid;gap:12px}.branch-filters{grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}.branch-filters input,.branch-filters select{width:100%;padding:10px 12px;border:1px solid #d5dfe6;border-radius:20px;color:#173a54;background:#fff;font:inherit}.branch-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}.branch-card{border:1px solid #e8d6ac;border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}.branch-card header{padding:13px 15px;color:#fff;background:#173a54;overflow-wrap:anywhere}.branch-card h3,.branch-card p{margin:0}.branch-card header p{font-size:.85em;color:#f2dfb5}.branch-card-body{display:grid;align-content:start;gap:8px;padding:14px;flex:1;overflow-wrap:anywhere}.branch-map-link{justify-self:start;border:1px solid #ddc18b;border-radius:20px;padding:6px 11px;background:#f9efd8;color:#173a54;font-weight:700}
+</style>
 </head>
 
 <body>
@@ -5018,6 +5022,12 @@ body{
       </aside>
     </div>
   </section>
+<section id="businessBranches" class="branches-section" hidden aria-labelledby="branchesTitle">
+    <h2 id="branchesTitle">Sucursales</h2>
+    <div class="branch-filters"><input id="branchSearch" type="search" aria-label="Buscar sucursal" placeholder="Buscar por nombre o dirección"><select id="branchProvince" aria-label="Filtrar sucursales por provincia"><option value="">Todas las provincias</option></select></div>
+    <p id="branchCount" role="status"></p><p id="branchEmpty" hidden>No hay sucursales para esta búsqueda.</p>
+    <div id="branchCards" class="branch-grid"></div>
+</section>
 </main>
 
 <div
@@ -5497,6 +5507,36 @@ surface.style.setProperty('--pointer-y',`${y}%`);
 });
 }
 
+function renderBranches(branches) {
+    if (!Array.isArray(branches) || !branches.length) return;
+    const section = $('businessBranches');
+    const search = $('branchSearch');
+    const province = $('branchProvince');
+    const grid = $('branchCards');
+    const normalize = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    const provinces = [...new Set(branches.map(branch => branch.province).filter(Boolean))].sort((a,b) => a.localeCompare(b,'es'));
+    provinces.forEach(name => province.add(new Option(name,name)));
+    province.hidden = !provinces.length;
+    const render = () => {
+        const query = normalize(search.value);
+        const shown = branches.filter(branch => (!province.value || province.value === branch.province)
+            && normalize([branch.name, branch.address, branch.city, branch.province].join(' ')).includes(query));
+        $('branchCount').textContent = shown.length === 1 ? '1 sucursal' : shown.length + ' sucursales';
+        grid.innerHTML = shown.map(branch => {
+            const place = [branch.city, branch.province].filter(Boolean).join(', ');
+            const mapLink = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent([branch.address, place, 'Ecuador'].filter(Boolean).join(', '));
+            const phone = String(branch.phone || '');
+            const dial = phone.replace(/[^\d+]/g,'');
+            return '<article class="branch-card"><header><h3>' + esc(branch.name) + '</h3>' + (place ? '<p>' + esc(place) + '</p>' : '') + '</header><div class="branch-card-body"><p>' + esc(branch.address) + '</p>' + (dial ? '<a href="tel:' + esc(dial) + '">' + esc(phone) + '</a>' : '') + '<a class="branch-map-link" href="' + esc(mapLink) + '" target="_blank" rel="noopener noreferrer">Cómo llegar</a></div></article>';
+        }).join('');
+        $('branchEmpty').hidden = shown.length > 0;
+    };
+    search.addEventListener('input',render);
+    province.addEventListener('change',render);
+    section.hidden = false;
+    render();
+}
+
 async function loadPage(){
 setupBackLinks();
 const params=new URLSearchParams(window.location.search);
@@ -5507,12 +5547,13 @@ if(slug){query=query.eq('slug',slug);}else if(id){query=query.eq('id',id);}else{
 const {data,error}=await query.maybeSingle();
 if(error||!data)return showNotFound();
 business=data;
-const [hoursResult,productsResult,promotionsResult,reviewsResult,imagesResult]=await Promise.all([
+const [hoursResult,productsResult,promotionsResult,reviewsResult,imagesResult,branchesResult]=await Promise.all([
 supabase.from('urbanex_public_hours').select('*').eq('business_id',business.id).order('day_of_week').order('session_number'),
 supabase.from('urbanex_public_business_products').select('*').eq('business_id',String(business.id)).eq('is_active',true).order('sort_order').order('created_at'),
 supabase.from('urbanex_public_promotions').select('*').eq('business_id',business.id).eq('is_active',true).order('created_at',{ascending:false}).limit(4),
 supabase.from('urbanex_public_reviews').select('*').eq('business_id',String(business.id)).eq('is_approved',true).order('created_at',{ascending:false}).limit(20),
-supabase.from('urbanex_public_product_images').select('*').eq('business_id',String(business.id)).order('sort_order')
+supabase.from('urbanex_public_product_images').select('*').eq('business_id',String(business.id)).order('sort_order'),
+supabase.from('urbanex_public_business_branches').select('branches').eq('business_id',business.id).maybeSingle()
 ]);
 hours=hoursResult.data||[];
 products=productsResult.data||[];
@@ -5522,6 +5563,7 @@ extraImages=imagesResult.error?[]:(imagesResult.data||[]);
 $('loading').classList.add('hidden');
 $('businessPage').classList.remove('hidden');
 renderBusiness();
+renderBranches(branchesResult.data?.branches);
 renderProducts();
 renderPromotions();
 renderReviews();
