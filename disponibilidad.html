@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Disponibilidad | Urbanex</title>
+<link rel="stylesheet" href="/informativos/urbanex-boulevard-palette.css">
+<style>
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,sans-serif}.header-top{display:flex;align-items:center;justify-content:space-between;padding:8px 20px;border-bottom:1px solid #ead7ad}.header-top img{display:block;width:115px}.back-link{border:1px solid #ead7ad;border-radius:20px;padding:6px 12px;text-decoration:none}main{margin:24px auto;padding:0 14px;max-width:750px}h1{margin:0 0 12px;font-family:Georgia,serif}.card{border:1px solid #ead7ad;border-radius:14px;background:#fffaf0;padding:18px;margin-bottom:12px}.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}label{display:grid;gap:4px;font-weight:600}input,select,button{font:inherit;color:inherit;border:1px solid #d8dfe5;border-radius:8px;min-height:40px;padding:6px 10px;background:white}button{cursor:pointer}button.primary{background:#173a54;color:#fff}button:disabled{opacity:.55;cursor:wait}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}#message{min-height:22px}#message[data-error]{color:#a02730}details{margin-top:14px}summary{cursor:pointer;font-weight:600}footer{text-align:center;padding:12px;font-size:12px}
+</style></head><body>
+<header class="header-top"><a href="/boulevard"><img src="/imagenes/Urba4.png" alt="Urbanex"></a><a class="back-link" href="/negocio-panel.html">Panel del negocio</a></header>
+<main><h1>Disponibilidad</h1>
+<form id="login" class="card" hidden><h2>Acceso del propietario</h2><div class="fields"><label>Correo registrado<input name="email" type="email" required autocomplete="email"></label><label>Contraseña<input name="password" type="password" required autocomplete="current-password"></label></div><div class="actions"><button class="primary">Ingresar</button><button id="accessLink" type="button">Recibir enlace de acceso</button></div></form>
+<div id="manager" hidden><div class="card"><label>Negocio<select id="businesses"></select></label><div class="actions"><button id="refresh" type="button">Actualizar</button><button id="logout" type="button">Cerrar sesión</button></div></div>
+<section id="capacity" class="card" hidden><h2 id="countTitle"></h2><p id="lastUpdate"></p><div id="movement" hidden><label>Cantidad<input id="quantity" type="number" min="1" max="100000" step="1" value="1"></label><div class="actions"><button type="button" class="primary" data-delta="-1">Registrar entrada</button><button type="button" data-delta="1">Registrar salida</button></div></div><details id="config"><summary>Configurar capacidad</summary><form id="setup"><div class="fields"><label>Capacidad total<input id="total" type="number" min="1" max="100000" step="1" required></label><label>Disponibles ahora<input id="available" type="number" min="0" max="100000" step="1" required></label></div><div class="actions"><button type="submit" class="primary">Guardar capacidad</button></div></form></details></section></div>
+<p id="message" role="status" aria-live="polite"></p></main>
+<footer>Urbanex · Desarrollado por <a href="https://neodat.net">NeoDat Consultores</a></footer>
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const supabase = createClient('https://vrnnlyjwenupkaetaogw.supabase.co','sb_publishable_ftfKaU4gg1csyZ0fGXW2Og_YOOLt9G7');
+const $ = id => document.getElementById(id);
+let rows = [];
+let busy = false;
+const units = { rooms: 'habitaciones', parking: 'estacionamientos', slots: 'cupos' };
+const selected = () => rows.find(item => item.id === $('businesses').value);
+function notice(text, error = false) { $('message').textContent = text; $('message').toggleAttribute('data-error',error); }
+function paint() {
+    const business = selected();
+    $('capacity').hidden = !business;
+    if (!business) return;
+    const unit = units[business.kind] || 'cupos';
+    const ready = business.total != null;
+    $('countTitle').textContent = ready ? business.available + ' de ' + business.total + ' ' + unit + ' disponibles' : 'Configure la capacidad de ' + unit;
+    $('lastUpdate').textContent = ready ? 'Actualizado ' + new Date(business.updated_at).toLocaleString('es-EC',{timeZone:'America/Guayaquil'}) : '';
+    $('total').value = business.total ?? '';
+    $('available').value = business.available ?? '';
+    $('movement').hidden = !ready;
+    $('config').open = !ready;
+}
+async function perform(task) {
+    if (busy) return;
+    busy = true;
+    document.querySelectorAll('button').forEach(button => button.disabled = true);
+    notice('');
+    try { await task(); } catch (error) { notice(error.message || 'No se pudo completar la operación.',true); }
+    finally { busy = false; document.querySelectorAll('button').forEach(button => button.disabled = false); }
+}
+async function refresh() {
+    const { data, error } = await supabase.rpc('manage_business_capacity',{});
+    if (error) throw error;
+    const previous = $('businesses').value;
+    rows = data || [];
+    $('businesses').replaceChildren(...rows.map(item => new Option(item.name,item.id)));
+    if (rows.some(item => item.id === previous)) $('businesses').value = previous;
+    paint();
+    if (!rows.length) notice('Esta cuenta aún no tiene negocios activos vinculados.');
+}
+async function showSession(session) {
+    $('login').hidden = !!session;
+    $('manager').hidden = !session;
+    if (session) await refresh();
+}
+async function change(args) {
+    const business = selected();
+    if (!business) return;
+    const { data, error } = await supabase.rpc('manage_business_capacity',{p_business:business.id,...args});
+    if (error) throw error;
+    rows = rows.map(item => item.id === business.id ? data[0] : item);
+    paint();
+    notice('Disponibilidad actualizada.');
+}
+$('login').addEventListener('submit',event => { event.preventDefault(); perform(async () => {
+    const form = event.currentTarget || $('login');
+    const { data, error } = await supabase.auth.signInWithPassword({email:form.elements.email.value.trim(),password:form.elements.password.value});
+    if (error) throw error;
+    form.elements.password.value = '';
+    await showSession(data.session);
+}); });
+$('accessLink').onclick = () => perform(async () => {
+    const field = $('login').elements.email;
+    if (!field.reportValidity()) return;
+    const { error } = await supabase.auth.signInWithOtp({email:field.value.trim(),options:{shouldCreateUser:false,emailRedirectTo:location.origin+'/disponibilidad.html'}});
+    if (error) throw error;
+    notice('Revise su correo para ingresar.');
+});
+$('logout').onclick = () => perform(async () => {const {error}=await supabase.auth.signOut();if(error)throw error;await showSession(null);});
+$('refresh').onclick = () => perform(refresh);
+$('businesses').onchange = paint;
+$('setup').onsubmit = event => {event.preventDefault();perform(() => change({p_total:Number($('total').value),p_available:Number($('available').value),p_expected:selected()?.updated_at || null}));};
+document.querySelectorAll('[data-delta]').forEach(button => button.onclick = () => {if ($('quantity').reportValidity()) perform(() => change({p_delta:Number(button.dataset.delta)*Number($('quantity').value)}));});
+perform(async () => {const {data,error}=await supabase.auth.getSession();if(error)throw error;await showSession(data.session);});
+</script></body></html>
