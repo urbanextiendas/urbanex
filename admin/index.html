@@ -8815,7 +8815,8 @@ async function loadBusinesses() {
         .from('businesses').select('*')
         .order('name');
     if (error) console.error('loadBusinesses:', error.message);
-    allBusinesses = data || [];
+    const { data: contacts } = await supabase.rpc('admin_business_contact_emails');
+    allBusinesses = (data || []).map(business => ({ ...business, owner_email: contacts?.[business.id] ?? business.owner_email }));
     await loadSubscriptionSummaries();
     renderBizTable();
 
@@ -9245,6 +9246,13 @@ window.toggleBizActive = async (id, current) => {
             result = {};
         }
 
+        if (result.approved && result.email_sent === false) {
+            await loadBusinesses();
+            loadDashboard();
+            toast(result.error, 'error');
+            return;
+        }
+
         if (!response.ok || result.success !== true || result.email_sent !== true) {
             throw new Error(
                 result.error ||
@@ -9265,7 +9273,7 @@ window.toggleBizActive = async (id, current) => {
 
 window.resendOwnerAccess = async (id, name) => {
     if (!confirm(
-        `¿Generar una nueva contraseña temporal y reenviar el acceso de ${name}? La contraseña temporal anterior dejará de funcionar.`
+        `¿Reenviar a ${name} el enlace para crear o restablecer su contraseña?`
     )) return;
 
     try {
@@ -9282,7 +9290,7 @@ window.resendOwnerAccess = async (id, name) => {
             return;
         }
 
-        toast('Generando y enviando nuevas credenciales...');
+        toast('Enviando el enlace de acceso...');
 
         const response = await fetch(
             `${SUPABASE_URL}/functions/v1/aprobar-negocio`,
