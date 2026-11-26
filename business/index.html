@@ -5022,6 +5022,10 @@ body{
       </aside>
     </div>
   </section>
+<section id="publicAvailability" class="branches-section" hidden aria-labelledby="availabilityTitle">
+    <h2 id="availabilityTitle">Disponibilidad</h2>
+    <p id="availabilityCount"></p><p id="availabilityUpdated"></p>
+</section>
 <section id="businessBranches" class="branches-section" hidden aria-labelledby="branchesTitle">
     <h2 id="branchesTitle">Sucursales</h2>
     <div class="branch-filters"><input id="branchSearch" type="search" aria-label="Buscar sucursal" placeholder="Buscar por nombre o dirección"><select id="branchProvince" aria-label="Filtrar sucursales por provincia"><option value="">Todas las provincias</option></select></div>
@@ -5549,14 +5553,15 @@ if(slug){query=query.eq('slug',slug);}else if(id){query=query.eq('id',id);}else{
 const {data,error}=await query.maybeSingle();
 if(error||!data)return showNotFound();
 business=data;
-const [hoursResult,productsResult,promotionsResult,reviewsResult,imagesResult,branchesResult,websiteResult]=await Promise.all([
+const [hoursResult,productsResult,promotionsResult,reviewsResult,imagesResult,branchesResult,websiteResult,capacityResult]=await Promise.all([
 supabase.from('urbanex_public_hours').select('*').eq('business_id',business.id).order('day_of_week').order('session_number'),
 supabase.from('urbanex_public_business_products').select('*').eq('business_id',String(business.id)).eq('is_active',true).order('sort_order').order('created_at'),
 supabase.from('urbanex_public_promotions').select('*').eq('business_id',business.id).eq('is_active',true).order('created_at',{ascending:false}).limit(4),
 supabase.from('urbanex_public_reviews').select('*').eq('business_id',String(business.id)).eq('is_approved',true).order('created_at',{ascending:false}).limit(20),
 supabase.from('urbanex_public_product_images').select('*').eq('business_id',String(business.id)).order('sort_order'),
 supabase.from('urbanex_public_business_branches').select('branches').eq('business_id',business.id).maybeSingle(),
-supabase.from('urbanex_public_web_link').select('website').eq('business_id',business.id).maybeSingle()
+supabase.from('urbanex_public_web_link').select('website').eq('business_id',business.id).maybeSingle(),
+supabase.from('urbanex_public_capacity').select('kind, total, available, updated_at').eq('business_id',business.id).maybeSingle()
 ]);
 business.publicWebsite=websiteResult.data?.website;
 hours=hoursResult.data||[];
@@ -5568,6 +5573,13 @@ $('loading').classList.add('hidden');
 $('businessPage').classList.remove('hidden');
 renderBusiness();
 renderBranches(branchesResult.data?.branches);
+if (capacityResult.data) {
+    const {kind,total,available,updated_at} = capacityResult.data;
+    const unit = {rooms:'habitaciones',parking:'estacionamientos',slots:'cupos'}[kind] || 'cupos';
+    $('availabilityCount').textContent = available + ' de ' + total + ' ' + unit + ' disponibles';
+    $('availabilityUpdated').textContent = 'Actualizado ' + new Date(updated_at).toLocaleString('es-EC',{timeZone:'America/Guayaquil'});
+    $('publicAvailability').hidden = false;
+}
 renderProducts();
 renderPromotions();
 renderReviews();
