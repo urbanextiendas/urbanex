@@ -157,14 +157,28 @@ function requestHeaders() {
 }
 
 async function consumeAccessLink() {
-  const params = new URLSearchParams(location.hash.slice(1));
+  const invitationUrl = new URL(location.href);
+  const fragment = new URLSearchParams(invitationUrl.hash.slice(1));
+  const params = fragment.has('token_hash') || fragment.has('error') || fragment.has('error_code')
+    ? fragment
+    : invitationUrl.searchParams;
   const tokenHash = params.get('token_hash');
   const type = params.get('type') || 'recovery';
+  const linkError = params.has('error') || params.has('error_code');
 
-  if (!tokenHash) return;
-  const invitationUrl = new URL(location.href);
-  invitationUrl.searchParams.set('mode','set-password');
+  if (!tokenHash && !linkError) return;
+
+  invitationUrl.searchParams.set('mode', 'set-password');
+  for (const key of ['token_hash', 'type', 'error', 'error_code', 'error_description']) {
+    invitationUrl.searchParams.delete(key);
+  }
   history.replaceState({}, '', invitationUrl.pathname + invitationUrl.search);
+
+  const invalidLink = 'El enlace de acceso no es válido, venció o ya fue utilizado. Solicite un nuevo enlace al administrador.';
+  if (linkError || !['invite', 'recovery'].includes(type)) {
+    state.accessLinkError = invalidLink;
+    return;
+  }
 
   const { data, error } = await supabase.auth.verifyOtp({
     token_hash: tokenHash,
@@ -172,23 +186,12 @@ async function consumeAccessLink() {
   });
 
   if (error || !data.session) {
-    state.accessLinkError =
-      error?.message ||
-      'El enlace de acceso no es válido o ya fue utilizado.';
+    state.accessLinkError = invalidLink;
     return;
   }
 
   state.session = data.session;
-  state.user = data.user;
-
-  const cleanUrl = new URL(location.href);
-  cleanUrl.searchParams.delete('token_hash');
-  cleanUrl.searchParams.delete('type');
-  history.replaceState(
-    {},
-    '',
-    cleanUrl.pathname + cleanUrl.search,
-  );
+  state.user = data.session.user;
 }
 
 async function initAuth() {
@@ -214,7 +217,8 @@ async function initAuth() {
 async function renderAuthState() {
   const passwordMode = isPasswordMode();
 
-  if (passwordMode && state.accessLinkError) {
+  if (passwordMode && (state.accessLinkError || !state.user)) {
+    $('savePasswordBtn').disabled = true;
     $('passwordPanel').classList.remove('hidden');
     $('loginPanel').classList.add('hidden');
     $('managerPanel').classList.add('hidden');
@@ -223,7 +227,7 @@ async function renderAuthState() {
 
     showMessage(
       'passwordMessage',
-      state.accessLinkError,
+      state.accessLinkError || 'La sesión del enlace ya no está disponible. Solicite un nuevo enlace al administrador.',
       'error',
     );
 
@@ -231,6 +235,7 @@ async function renderAuthState() {
   }
 
   if (passwordMode && state.user) {
+    $('savePasswordBtn').disabled = false;
     $('passwordPanel').classList.remove('hidden');
     $('loginPanel').classList.add('hidden');
     $('managerPanel').classList.add('hidden');
@@ -260,7 +265,7 @@ async function renderAuthState() {
 }
 
 async function savePassword() {
-  if (state.accessLinkError || !state.user) return;
+  if (!isPasswordMode() || state.accessLinkError || !state.user) return;
   const password = $('newPassword').value;
   const confirmation = $('confirmPassword').value;
 
@@ -332,7 +337,7 @@ async function sendLogin() {
   if (error) {
     return showMessage(
       'loginMessage',
-      'Correo o contraseña incorrectos. Copie exactamente las credenciales recibidas por correo.',
+      'Correo o contraseña incorrectos. Use el correo registrado y la contraseña que creó desde el enlace de acceso.',
       'error',
     );
   }
@@ -1045,3 +1050,4 @@ initAuth();
 </script>
 </body>
 </html>
+
